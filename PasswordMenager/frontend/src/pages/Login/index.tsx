@@ -32,7 +32,8 @@ const FormElement = styled.p`
     display: flex;
     flex-direction: column;
 `
-const InputLabel = styled.p`
+const InputLabel = styled.label`
+    font-size: 1.2rem;
 `
 const LoginPage = (): JSX.Element => {
   return (
@@ -41,7 +42,7 @@ const LoginPage = (): JSX.Element => {
         <Form>
           <FormTitle>Log in to account</FormTitle>
           <FormElement>
-            <label>login</label>
+            <InputLabel>login</InputLabel>
             <input type="text" />
           </FormElement>
           <FormElement>
