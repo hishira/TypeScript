@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import FormComponent from "../../components/Form/index";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -26,51 +26,57 @@ const FormContainer = styled.form`
   }
 `;
 
-interface LoginInfo {
+type RegisterInfo = {
   login: string;
   password: string;
-}
-const LoginPage = (): JSX.Element => {
-  const [infoLogin, setInfoLogin] = useState<LoginInfo>({
+  confirmpassword: string;
+};
+
+const SignUp = () => {
+  const [registerinfo, setregisterinfo] = useState<RegisterInfo>({
     login: "",
     password: "",
+    confirmpassword: "",
   });
-  
-  const passwordchange = (password: string): void => {
-    setInfoLogin({ ...infoLogin, password: password });
-  };
-  
-  const loginchange = (login: string): void => {
-    setInfoLogin({ ...infoLogin, login: login });
-  };
-  
-  const loginClickHandle = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    console.log(infoLogin);
-  };
-  
-  const redirectFunction = ()=>{
-    history.push("/signup")
-  }
-  
   const history = useHistory();
 
+  const passwordchange = (password: string): void => {
+    setregisterinfo({ ...registerinfo, password: password });
+  };
 
+  const loginchange = (login: string): void => {
+    setregisterinfo({ ...registerinfo, login: login });
+  };
+
+  const confirmPasswordhandle = (password: string): void => {
+    setregisterinfo({ ...registerinfo, confirmpassword: password });
+  };
+
+  const registerClickHandle = (e: React.MouseEvent<HTMLElement>): void => {
+    e.preventDefault();
+    console.log(registerinfo);
+  };
+
+  const redirectFunction = () => {
+    history.push("/login");
+  };
   return (
     <Container>
       <FormContainer>
         <FormComponent
           firstinputhandle={loginchange}
           secondinputhandle={passwordchange}
-          buttonmessage="Login"
-          buttonHandle={loginClickHandle}
-          secondactionastirng="create account"
+          buttonmessage="Sign Up"
+          buttonHandle={registerClickHandle}
+          secondactionastirng="Login"
           redirectfunction={redirectFunction}
-          maintitle="Log in to account"
+          maintitle="Create account"
+          confirmpassword
+          confirmpasshandle={confirmPasswordhandle}
         />
       </FormContainer>
     </Container>
   );
 };
 
-export default LoginPage;
+export default SignUp;
