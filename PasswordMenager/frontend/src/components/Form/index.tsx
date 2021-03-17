@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "../../components/Button/index";
-import { useHistory } from "react-router-dom"
 const Form = styled.form`
   display: flex;
   flex-direction: column;

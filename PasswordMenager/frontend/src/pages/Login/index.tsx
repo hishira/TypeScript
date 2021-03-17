@@ -47,6 +47,7 @@ const LoginPage = (): JSX.Element => {
   const loginClickHandle = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     console.log(infoLogin);
+    history.push("/store");
   };
   
   const redirectFunction = ()=>{
