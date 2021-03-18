@@ -4,7 +4,6 @@ import Button from "../Button";
 
 const Container = styled.div`
     display: flex;
-    border: 2px solid red;
     padding: 5px;
     & > *:not(:first-child){
         margin-left: 15px;

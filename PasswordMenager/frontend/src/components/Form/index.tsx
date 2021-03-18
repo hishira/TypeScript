@@ -1,6 +1,12 @@
 import React from "react";
-import styled from "styled-components";
+import styled,{keyframes} from "styled-components";
 import Button from "../../components/Button/index";
+
+const clippath = keyframes`
+  0% { clip-path: circle(0%); }
+  100% { clip-path: circle(100%); }
+`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -19,7 +25,8 @@ const Form = styled.form`
     width: 100%;
   }
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 50px -5px;
-  border-radius: 5px;
+  border-radius: 10px;
+  animation: ${clippath} .9s linear forwards; 
 `;
 const FormTitle = styled.p`
   font-size: 1.2rem;

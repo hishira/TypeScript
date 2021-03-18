@@ -1,0 +1,15 @@
+@keyframes aaa {
+  0% {
+    clip-path: circle(0%);
+  }
+  50% {
+    clip-path: circle(50%);
+  }
+  100% {
+    clip-path: circle(100%);
+  }
+}
+.dupa {
+  clip-path: circle(0%);
+  animation: aaa 1.5s linear forwards;
+}

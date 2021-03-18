@@ -3,18 +3,19 @@ import styled from "styled-components";
 import FormComponent from "../../components/Form/index";
 import {useHistory} from "react-router-dom";
 
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
   border: 2px solid red;
 `;
+
 const FormContainer = styled.form`
   display: flex;
   justify-content: center;
   width: 50%;
   padding: 10px;
   margin-top: 5rem;
-  border: "2px solid green";
   @media (max-width: 1200px) {
     width: 70%;
   }
