@@ -3,17 +3,18 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import HomePage from "../Home/index";
 import AppBar from "../../components/AppBar";
 import LoginPage from "../../pages/Login";
-import SignUp from "../../pages/SignUp/"
-import StorePage from "../Store/"
+import SignUp from "../../pages/SignUp/";
+import StorePage from "../Store/";
+import "./App.css"
 function App() {
   return (
     <Router>
       <div className="App">
-        <AppBar/>
+        <AppBar />
         <Route exact path="/" component={HomePage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/signup" component={SignUp} />
-        <Route path="/store" component={StorePage}/>
+        <Route path="/store" component={StorePage} />
       </div>
     </Router>
   );
