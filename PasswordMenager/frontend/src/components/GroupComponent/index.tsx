@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../Button";
-import ModalComponent from "../Modal";
+import Modal from "../Modal/";
 import FormElement from "../FormElement/";
 const Container = styled.div`
   display: flex;
@@ -26,15 +26,13 @@ const ButtonContainer = styled.div`
 `;
 
 const NewGroup = styled.div`
-  background: white;
+  background-color: white;
   padding: 15px;
   border-radius: 10px;
-  box-sizing: border-box;
-  border: "2px solid purple";
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
+  border: 2px solid purple;
+  width: 100%;
+ `;
+ 
 type ModalComponentProps = {
   func: (e: React.ChangeEvent<HTMLInputElement>) => void;
   buttonhandle: ()=>void
@@ -56,17 +54,21 @@ const ComponentToModal = ({ func,buttonhandle }: ModalComponentProps): JSX.Eleme
 const GroupComponent = () => {
   const [modal, setModal] = useState<boolean>(false);
   const [groupname, setgroupname] = useState<string>("string");
+  
   const clickHandle = (): void => {
     setModal(true);
   };
+  
   const buttonHandleClick = ()=>{
     console.log(groupname);
   };
+  
+  const closeHandle = ():void=>setModal(false);
   return (
     <Container>
-      <ModalComponent
+      <Modal
         visible={modal}
-        onClose={() => setModal(false)}
+        onClose={closeHandle}
         component={
           <ComponentToModal
             func={(e: React.ChangeEvent<HTMLInputElement>) =>

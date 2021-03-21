@@ -18,6 +18,9 @@ const EntryModalComponent = styled.div`
   border-radius: 5px;
   width: 100%;
 `;
+const PassLen = styled.div`
+  font-size: ".9rem";
+`
 const SectionContainer = styled.section`
   display: flex;
   justify-content: space-between;
@@ -61,13 +64,14 @@ const NewEntryComponent = ({
       }
     }
   };
+  const [passlen, setpasslen] = useState<number>(6);
 
   const generateHandle = (): void => {
     let alp: string = "abcdefghijklmnouprstuwzyw";
     let alpb: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
     let num: string = "0987654321";
     let password: string = "";
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < passlen; i++) {
       let type = Math.floor(Math.random() * 3);
       switch (type) {
         case 0:
@@ -102,19 +106,29 @@ const NewEntryComponent = ({
         />
         <CheckBox type="checkbox" onChange={oncheckbox} />
       </SectionContainer>
-      <SectionContainer>
+      <SectionContainer style={{position:"relative"}}>
         <Button size="small" color="lightblue" onClick={generateHandle}>
           Generate
         </Button>
         <Button size="small" color="lightblue">
           Save
         </Button>
+        <input
+          type="range"
+          min="6"
+          max="50"
+          value={passlen}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setpasslen(parseInt(e.target.value))
+          }
+        />
+        <PassLen id="passlen" >{passlen}</PassLen>
       </SectionContainer>
       <FormElement
         label={"Note"}
         inputplaceholder="note..."
         inputChange={notefunc}
-        inputtype="txt"
+        inputtype="text"
       />
     </EntryModalComponent>
   );

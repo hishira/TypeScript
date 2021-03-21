@@ -33,8 +33,20 @@ const ModalComponent = ({
     const element: HTMLElement = Array.from(
       document.getElementsByClassName("hook") as HTMLCollectionOf<HTMLElement>
     )[0];
-    if(!element.contains(event.target as Node))
+    const targetelement: Element = event.target as Element;
+    for (let i of targetelement.childNodes) {
+      if (
+        (i as Element).classList !== undefined &&
+        (i as Element).classList[0] === "hook"
+      )
+        onClose();
+    }
+    /*
+    if(!element.contains(event.target as Node)){
+      console.log("tak");
       onClose();
+    }
+    */
   };
   return (
     <Modal onClick={clickOnModal} visible={visible}>
