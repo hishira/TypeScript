@@ -19,12 +19,14 @@ type Props = {
     onChange: (e:React.ChangeEvent<HTMLInputElement>)=>void
     placeholder: string
     type: string
+    value?: string 
 }
-const InputField = ({onChange,placeholder,type}: Props):JSX.Element=>{
+const InputField = ({onChange,placeholder,type, value}: Props):JSX.Element=>{
     return <Input
         onChange={onChange}
         placeholder={placeholder}
         type={type}
+        value={value}
     />
 }
 

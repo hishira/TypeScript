@@ -16,12 +16,14 @@ type Props = {
   inputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputplaceholder: string;
   inputtype: string;
+  value?: string
 };
 const FormElement = ({
   label,
   inputChange,
   inputplaceholder,
   inputtype,
+  value
 }: Props): JSX.Element => {
   return <FormElementComponent>
       <InputLabel>{label}</InputLabel>
@@ -29,6 +31,7 @@ const FormElement = ({
         onChange={inputChange}
         placeholder={inputplaceholder}
         type={inputtype}
+        value={value}
       />
   </FormElementComponent>;
 };

@@ -32,12 +32,16 @@ type NewEntryProps = {
   usernamefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
   passwordfunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
   notefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  password?: string;
+  setpassword: any;
 };
 
 const NewEntryComponent = ({
   usernamefunc,
   passwordfunc,
   notefunc,
+  password,
+  setpassword,
 }: NewEntryProps) => {
   const oncheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
     let element: HTMLCollectionOf<HTMLInputElement> = document.getElementsByTagName(
@@ -57,6 +61,29 @@ const NewEntryComponent = ({
       }
     }
   };
+
+  const generateHandle = (): void => {
+    let alp: string = "abcdefghijklmnouprstuwzyw";
+    let alpb: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
+    let num: string = "0987654321";
+    let password: string = "";
+    for (let i = 0; i < 8; i++) {
+      let type = Math.floor(Math.random() * 3);
+      switch (type) {
+        case 0:
+          password += alp[Math.floor(Math.random() * alp.length)];
+          break;
+        case 1:
+          password += alpb[Math.floor(Math.random() * alpb.length)];
+          break;
+        case 2:
+          password += num[Math.floor(Math.random() * num.length)];
+      }
+    }
+    console.log(password);
+    setpassword(password);
+  };
+
   return (
     <EntryModalComponent>
       <FormElement
@@ -71,11 +98,12 @@ const NewEntryComponent = ({
           inputplaceholder="***"
           inputChange={passwordfunc}
           inputtype="password"
+          value={password}
         />
         <CheckBox type="checkbox" onChange={oncheckbox} />
       </SectionContainer>
       <SectionContainer>
-        <Button size="small" color="lightblue">
+        <Button size="small" color="lightblue" onClick={generateHandle}>
           Generate
         </Button>
         <Button size="small" color="lightblue">
@@ -114,6 +142,8 @@ const PassBar = (): JSX.Element => {
             notefunc={(e: React.ChangeEvent<HTMLInputElement>): void =>
               setnote(e.target.value)
             }
+            password={password}
+            setpassword={setpassword}
           />
         }
       />
