@@ -20,7 +20,7 @@ const EntryModalComponent = styled.div`
 `;
 const PassLen = styled.div`
   font-size: ".9rem";
-`
+`;
 const SectionContainer = styled.section`
   display: flex;
   justify-content: space-between;
@@ -35,6 +35,7 @@ type NewEntryProps = {
   usernamefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
   passwordfunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
   notefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  titlefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
   password?: string;
   setpassword: any;
 };
@@ -43,6 +44,7 @@ const NewEntryComponent = ({
   usernamefunc,
   passwordfunc,
   notefunc,
+  titlefunc,
   password,
   setpassword,
 }: NewEntryProps) => {
@@ -58,31 +60,33 @@ const NewEntryComponent = ({
         console.log(i.placeholder);
       }
     } else {
-      console.log(element);
       for (let i of element) {
         if (i.placeholder === "***") i.type = "password";
       }
     }
   };
   const [passlen, setpasslen] = useState<number>(6);
+  const SMALLETTERS: string = "abcdefghijklmnouprstuwzyw";
+  const BIGLETTERS: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
+  const NUMBERS: string = "0987654321";
+
+  const generatePart = (typenumber: number): string => {
+    switch (typenumber) {
+      case 0:
+        return SMALLETTERS[Math.floor(Math.random() * SMALLETTERS.length)];
+      case 1:
+        return BIGLETTERS[Math.floor(Math.random() * BIGLETTERS.length)];
+      case 2:
+        return NUMBERS[Math.floor(Math.random() * NUMBERS.length)];
+    }
+    return "";
+  };
 
   const generateHandle = (): void => {
-    let alp: string = "abcdefghijklmnouprstuwzyw";
-    let alpb: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
-    let num: string = "0987654321";
     let password: string = "";
     for (let i = 0; i < passlen; i++) {
       let type = Math.floor(Math.random() * 3);
-      switch (type) {
-        case 0:
-          password += alp[Math.floor(Math.random() * alp.length)];
-          break;
-        case 1:
-          password += alpb[Math.floor(Math.random() * alpb.length)];
-          break;
-        case 2:
-          password += num[Math.floor(Math.random() * num.length)];
-      }
+      password += generatePart(type);
     }
     console.log(password);
     setpassword(password);
@@ -90,6 +94,12 @@ const NewEntryComponent = ({
 
   return (
     <EntryModalComponent>
+      <FormElement
+        label={"Title"}
+        inputplaceholder="title name"
+        inputChange={usernamefunc}
+        inputtype="txt"
+      />
       <FormElement
         label={"Username"}
         inputplaceholder="username"
@@ -106,7 +116,7 @@ const NewEntryComponent = ({
         />
         <CheckBox type="checkbox" onChange={oncheckbox} />
       </SectionContainer>
-      <SectionContainer style={{position:"relative"}}>
+      <SectionContainer style={{ position: "relative" }}>
         <Button size="small" color="lightblue" onClick={generateHandle}>
           Generate
         </Button>
@@ -122,7 +132,7 @@ const NewEntryComponent = ({
             setpasslen(parseInt(e.target.value))
           }
         />
-        <PassLen id="passlen" >{passlen}</PassLen>
+        <PassLen id="passlen">{passlen}</PassLen>
       </SectionContainer>
       <FormElement
         label={"Note"}
@@ -139,6 +149,7 @@ const PassBar = (): JSX.Element => {
   const [username, setusername] = useState<string>("");
   const [password, setpassword] = useState<string>("");
   const [note, setnote] = useState<string>("");
+  const [title, settitle] = useState<string>("");
   const closehandle = (): void => setmodalopen(false);
   return (
     <Container>
@@ -155,6 +166,9 @@ const PassBar = (): JSX.Element => {
             }
             notefunc={(e: React.ChangeEvent<HTMLInputElement>): void =>
               setnote(e.target.value)
+            }
+            titlefunc={(e: React.ChangeEvent<HTMLInputElement>): void =>
+              settitle(e.target.value)
             }
             password={password}
             setpassword={setpassword}
