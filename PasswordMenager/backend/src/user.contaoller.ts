@@ -1,19 +1,21 @@
-import {Body,Controller,Post,Get, ValidationPipe} from "@nestjs/common"
+import {Body,Controller,Post,Get, ValidationPipe, UseGuards} from "@nestjs/common"
 import {UserService} from "./user.service";
-import {CreateUserDto} from "./schemas/dto/user.dto";
 import {IUser} from "./schemas/Interfaces/user.interface";
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller("users")
 export class UsersController{
     constructor(private readonly userServices: UserService){}
 
-    @Post()
-    async create(@Body(new ValidationPipe({transform:false})) newuser:CreateUserDto){
-        this.userServices.create(newuser);
-    }
 
+    @UseGuards(AuthGuard("accessToken"))
     @Get()
     async findAll():Promise<IUser[]>{
         return this.userServices.getAll();
+    }
+    @UseGuards(AuthGuard("refreshtoken"))
+    @Get("one")
+    async findOne():Promise<IUser[]>{
+        return this.userServices.getOne();
     }
 }
