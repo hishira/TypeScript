@@ -11,10 +11,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constans';
 import { JwtStrategy } from './accesstoken.strategy';
 import { JwtStrategy2 } from './refreshtoken.strategy';
+import {GroupModule} from "./group.module"
+import {GroupService} from "./group.service"
+import { groupProviders } from './group.providers';
 @Module({
   imports: [
     DatabaseModule,
     UserModule,
+    GroupModule,
     PassportModule.register({
       defaultStrategy: ['accessToken',],
     }),
@@ -23,7 +27,7 @@ import { JwtStrategy2 } from './refreshtoken.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, UserService, ...userProviders,JwtStrategy,JwtStrategy2],
+  providers: [GroupService, AuthService, LocalStrategy, UserService, ...userProviders,JwtStrategy,JwtStrategy2, ...groupProviders],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
