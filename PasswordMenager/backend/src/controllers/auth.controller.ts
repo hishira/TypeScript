@@ -5,6 +5,7 @@ import {
   ValidationPipe,
   UseGuards,
   Request,
+  Get,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../schemas/dto/user.dto';
@@ -31,5 +32,11 @@ export class AuthController {
     @Request() req,
   ) {
     return this.authservice.login(req.user);
+  }
+
+  @UseGuards(AuthGuard("refreshtoken"))
+  @Get("refresh")
+  async refresh(@Request() req){
+    return this.authservice.refreshaccesstoken(req.user);
   }
 }

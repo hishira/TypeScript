@@ -35,4 +35,14 @@ export class AuthService {
       }),
     };
   }
+
+  async refreshaccesstoken(user: any) {
+    const payload = user;
+    return {
+      access_token: this.jwtService.sign(payload, {
+        expiresIn: '180s',
+        secret: jwtConstants.secret,
+      }),
+    };
+  }
 }
