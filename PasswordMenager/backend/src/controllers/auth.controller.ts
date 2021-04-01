@@ -6,10 +6,10 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './schemas/dto/user.dto';
-import { AuthInfo } from './schemas/dto/auth.dto';
-import { AuthService } from './auth.service';
+import { UserService } from '../services/user.service';
+import { CreateUserDto } from '../schemas/dto/user.dto';
+import { AuthInfo } from '../schemas/dto/auth.dto';
+import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 @Controller('auth')
 export class AuthController {

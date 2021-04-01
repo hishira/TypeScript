@@ -1,9 +1,9 @@
 import { Model, NativeError } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
-import { IUser } from './schemas/Interfaces/user.interface';
-import { AuthInfo } from './schemas/dto/auth.dto';
+import { IUser } from '../schemas/Interfaces/user.interface';
+import { AuthInfo } from '../schemas/dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './constans';
+import { jwtConstants } from '../constans';
 @Injectable()
 export class AuthService {
   constructor(

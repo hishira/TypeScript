@@ -1,8 +1,8 @@
 import {Model, NativeError} from "mongoose";
 import {Injectable,Inject} from "@nestjs/common"
-import {IUser} from "./schemas/Interfaces/user.interface";
-import {CreateUserDto} from "./schemas/dto/user.dto";
-import {AuthInfo} from "./schemas/dto/auth.dto";
+import {IUser} from "../schemas/Interfaces/user.interface";
+import {CreateUserDto} from "../schemas/dto/user.dto";
+import {AuthInfo} from "../schemas/dto/auth.dto";
 
 @Injectable()
 export class UserService{

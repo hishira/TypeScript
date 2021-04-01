@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
-import { IGroup } from './schemas/Interfaces/group.interface';
-import { CreateGroupDto } from './schemas/dto/group.dto';
+import { IGroup } from '../schemas/Interfaces/group.interface';
+import { CreateGroupDto } from '../schemas/dto/group.dto';
 
 @Injectable()
 export class GroupService {

@@ -7,8 +7,8 @@ import {
     Request,
   } from '@nestjs/common';
 
-import {GroupService} from "./group.service"
-import {CreateGroupDto} from './schemas/dto/group.dto'
+import {GroupService} from "../services/group.service"
+import {CreateGroupDto} from '../schemas/dto/group.dto'
 import {AuthGuard} from "@nestjs/passport"
 
 @Controller("group")
