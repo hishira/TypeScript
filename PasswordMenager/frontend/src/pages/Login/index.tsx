@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import FormComponent from "../../components/Form/index";
-import {useHistory} from "react-router-dom";
-
-
+import { useHistory } from "react-router-dom";
+import { LoginUserHandle } from "../../utils/auth.utils";
+import { setLocalStorageToken } from "../../utils/localstorage.utils";
+import { inject, observer } from "mobx-react";
+import { IGeneral } from "../../models/General";
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -26,37 +28,42 @@ const FormContainer = styled.form`
     width: 100%;
   }
 `;
-
-interface LoginInfo {
-  login: string;
-  password: string;
+type Prop = {
+  store: IGeneral,
 }
-const LoginPage = (): JSX.Element => {
-  const [infoLogin, setInfoLogin] = useState<LoginInfo>({
+const LoginPage = ({store}:Prop): JSX.Element => {
+  const [infoLogin, setInfoLogin] = useState<UserAuth>({
     login: "",
     password: "",
   });
-  
+
   const passwordchange = (password: string): void => {
     setInfoLogin({ ...infoLogin, password: password });
   };
-  
+
   const loginchange = (login: string): void => {
     setInfoLogin({ ...infoLogin, login: login });
   };
-  
-  const loginClickHandle = (e: React.MouseEvent<HTMLElement>) => {
+
+  const loginClickHandle = async (
+    e: React.MouseEvent<HTMLElement>
+  ): Promise<void> => {
     e.preventDefault();
     console.log(infoLogin);
-    history.push("/store");
+    const response: LoginReponse = await LoginUserHandle(infoLogin);
+    if (response.status && response.response !== null) {
+      console.log(response.response?.access_token);
+      console.log(response.response?.refresh_token);
+      setLocalStorageToken(response.response);
+      console.log(store.UserActivity)
+    }
   };
-  
-  const redirectFunction = ()=>{
-    history.push("/signup")
-  }
-  
-  const history = useHistory();
 
+  const redirectFunction = () => {
+    history.push("/signup");
+  };
+
+  const history = useHistory();
 
   return (
     <Container>
@@ -75,4 +82,4 @@ const LoginPage = (): JSX.Element => {
   );
 };
 
-export default LoginPage;
+export default inject("store")(observer(LoginPage));

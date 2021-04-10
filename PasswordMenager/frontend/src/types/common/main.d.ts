@@ -1,3 +1,4 @@
+
 type UserAuth = {
     login:string,
     password:string,
@@ -10,4 +11,15 @@ type AuthTokens = {
 
 type AccessToken = {
     access_token: string,
+}
+
+type LoginReponse = {
+    status: boolean,
+    response: AuthTokens | null,
+}
+
+type IGroup = {
+    _id: string,
+    name:string,
+    userid:string,
 }
