@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "../Button";
 import Modal from "../Modal/";
 import FormElement from "../FormElement/";
-import { GetGroupsByUser } from "../../utils/group.utils";
+import { GetGroupsByUser, CreateGroupForUser } from "../../utils/group.utils";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -64,15 +64,18 @@ const ComponentToModal = ({
 };
 const GroupComponent = () => {
   const [modal, setModal] = useState<boolean>(false);
-  const [groupname, setgroupname] = useState<string>("string");
+  const [groupdto, setgroupdto] = useState<CreateGroup>({name:""});
   const [groups, setgroup] = useState<Array<IGroup>>([]);
 
   const clickHandle = (): void => {
     setModal(true);
   };
 
-  const buttonHandleClick = () => {
-    console.log(groupname);
+  const buttonHandleClick = async():Promise<void> => {
+    console.log(groupdto.name);
+    const response:CreateGroupResponse = await CreateGroupForUser(groupdto);
+    console.log(response.response.name);
+
   };
 
   const fetchGroups = async (): Promise<void> => {
@@ -92,7 +95,7 @@ const GroupComponent = () => {
         component={
           <ComponentToModal
             func={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setgroupname(e.target.value)
+              setgroupdto({ name: e.target.value})
             }
             buttonhandle={buttonHandleClick}
           />

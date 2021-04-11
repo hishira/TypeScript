@@ -26,3 +26,14 @@ type GroupResponse = {
   status: boolean;
   response: Array<IGroup>;
 };
+
+type CreateGroup = {
+    name:string,
+}
+
+type CreateGroupResponse = {
+    status: boolean,
+    response: IGroup,
+}
+
+

@@ -1,4 +1,4 @@
-import { getGroupByUser } from "../api/group.api";
+import { getGroupByUser, createGroup } from "../api/group.api";
 import { refreshToken } from "./auth.utils";
 import { getAccessToken } from "./localstorage.utils";
 const GetGroups = async (token: string): Promise<number | Array<IGroup>> => {
@@ -29,4 +29,35 @@ const GetGroupsByUser = async (): Promise<GroupResponse> => {
   return { status: false, response: [] };
 };
 
-export { GetGroupsByUser };
+const GroupCreate = async (
+  creategroup: CreateGroup,
+  accesstoken: string
+): Promise<number | IGroup> => {
+  const response = await createGroup(creategroup, accesstoken).then(
+    (resp: Response) => {
+      if (resp.status === 200 || resp.status === 201) return resp.json();
+      return resp.status;
+    }
+  );
+  return response;
+};
+
+const CreateGroupForUser = async (
+  creategroup: CreateGroup
+): Promise<CreateGroupResponse> => {
+  let accesstoken: string = getAccessToken();
+  let response: number | IGroup = await GroupCreate(creategroup, accesstoken);
+  if (response === 401) {
+    await refreshToken();
+    accesstoken = getAccessToken();
+    response = await GroupCreate(creategroup, accesstoken);
+    if (response === 401 || response === 500) {
+      return { status: false, response: { _id: "", name: "", userid: "" } };
+    }
+  } else if (response === 500) {
+    return { status: false, response: { _id: "", name: "", userid: "" } };
+  }
+  if (typeof response !== "number") return { status: true, response: response };
+  return { status: false, response: { _id: "", name: "", userid: "" } };
+};
+export { GetGroupsByUser, CreateGroupForUser };
