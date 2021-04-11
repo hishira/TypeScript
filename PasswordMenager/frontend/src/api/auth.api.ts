@@ -18,4 +18,4 @@ const refreshAccessToken = async (token: string): Promise<Response> => {
   const url: string = getUrl("auth/refresh");
   return await fetch(url, fetchGetObjectWithtoken(token));
 };
-export { login, signup };
+export { login, signup, refreshAccessToken };

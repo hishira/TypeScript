@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Button from "../Button";
 import Modal from "../Modal/";
 import FormElement from "../FormElement/";
+import { GetGroupsByUser } from "../../utils/group.utils";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,14 +32,22 @@ const NewGroup = styled.div`
   border-radius: 10px;
   border: 2px solid purple;
   width: 100%;
- `;
- 
+`;
+const GroupContainer = styled.div`
+  border: 2px solid purple;
+  padding: .5rem;
+  text-align: center;
+  margin-top: .4rem;
+`
 type ModalComponentProps = {
   func: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  buttonhandle: ()=>void
+  buttonhandle: () => void;
 };
 
-const ComponentToModal = ({ func,buttonhandle }: ModalComponentProps): JSX.Element => {
+const ComponentToModal = ({
+  func,
+  buttonhandle,
+}: ModalComponentProps): JSX.Element => {
   return (
     <NewGroup>
       <FormElement
@@ -47,23 +56,34 @@ const ComponentToModal = ({ func,buttonhandle }: ModalComponentProps): JSX.Eleme
         inputplaceholder="name"
         inputChange={func}
       />
-      <Button onClick={buttonhandle} color="lightblue" >Add group</Button>
+      <Button onClick={buttonhandle} color="lightblue">
+        Add group
+      </Button>
     </NewGroup>
   );
 };
 const GroupComponent = () => {
   const [modal, setModal] = useState<boolean>(false);
   const [groupname, setgroupname] = useState<string>("string");
-  
+  const [groups, setgroup] = useState<Array<IGroup>>([]);
+
   const clickHandle = (): void => {
     setModal(true);
   };
-  
-  const buttonHandleClick = ()=>{
+
+  const buttonHandleClick = () => {
     console.log(groupname);
   };
-  
-  const closeHandle = ():void=>setModal(false);
+
+  const fetchGroups = async (): Promise<void> => {
+    const groupresponse: GroupResponse = await GetGroupsByUser();
+    setgroup(groupresponse.response);
+    console.log(groupresponse.response);
+  };
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+  const closeHandle = (): void => setModal(false);
   return (
     <Container>
       <Modal
@@ -78,7 +98,11 @@ const GroupComponent = () => {
           />
         }
       />
-      <Groups></Groups>
+      <Groups>
+        {groups.map((group: IGroup) => (
+          <GroupContainer>{group.name}</GroupContainer>
+        ))}
+      </Groups>
       <ButtonContainer>
         <Button onClick={clickHandle} color="lightblue">
           Add new group

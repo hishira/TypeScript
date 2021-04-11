@@ -1,25 +1,28 @@
-
 type UserAuth = {
-    login:string,
-    password:string,
-}
+  login: string;
+  password: string;
+};
 
 type AuthTokens = {
-    access_token: string,
-    refresh_token: string
-}
+  access_token: string;
+  refresh_token: string;
+};
 
 type AccessToken = {
-    access_token: string,
-}
-
+  access_token: string;
+};
 type LoginReponse = {
-    status: boolean,
-    response: AuthTokens | null,
-}
+  status: boolean;
+  response: AuthTokens | null;
+};
 
 type IGroup = {
-    _id: string,
-    name:string,
-    userid:string,
-}
+  _id: string;
+  name: string;
+  userid: string;
+};
+
+type GroupResponse = {
+  status: boolean;
+  response: Array<IGroup>;
+};
