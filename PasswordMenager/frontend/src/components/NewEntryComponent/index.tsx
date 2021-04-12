@@ -79,6 +79,9 @@ const NewEntryComponent = ({
     numbers: false,
     specialChar: false,
   });
+  const [title,settitle] = useState<string>("");
+  const [username,setusername] = useState<string>("")
+  
   const SMALLETTERS: string = "abcdefghijklmnouprstuwzyw";
   const BIGLETTERS: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
   const NUMBERS: string = "0987654321";
@@ -144,6 +147,7 @@ const NewEntryComponent = ({
     let arr: Array<number> = [0, 3];
     return arr[Math.floor(Math.random() * arr.length)];
   };
+
   const generateHandle = (): void => {
     let password: string = "";
     for (let i = 0; i < passlen; i++) {
