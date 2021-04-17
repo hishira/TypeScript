@@ -38,6 +38,10 @@ const GroupContainer = styled.div`
   padding: .5rem;
   text-align: center;
   margin-top: .4rem;
+  &:hover{
+    cursor: pointer;
+    background-color: lightgray;
+  }
 `
 type ModalComponentProps = {
   func: (e: React.ChangeEvent<HTMLInputElement>) => void;

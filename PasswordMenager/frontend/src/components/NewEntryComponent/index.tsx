@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../Button";
 import FormElement from "../FormElement/";
-
+import { GetGroupsByUser } from "../../utils/group.utils";
 const EntryModalComponent = styled.div`
   background-color: white;
   padding: 1rem;
@@ -31,6 +31,25 @@ const Checkboxwithlabel = styled.div`
   align-items: center;
   margin-bottom: 0.5rem;
 `;
+const SelectLabel = styled.div`
+  padding: .6rem .6rem .6rem 0;
+  font-size: 1.05rem;
+  text-align: start;
+`
+const SelectContainer = styled.select`
+  padding: .5rem;
+  border-radius: 5px;
+  font-size: 1.05rem;
+
+`;
+const OptionContainer = styled.option`
+  padding: 1.4rem;
+  font-size: 1.05rem;
+  &:hover{
+    background-color: lightsalmon;
+  }
+`
+
 type NewEntryProps = {
   usernamefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
   passwordfunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -79,14 +98,25 @@ const NewEntryComponent = ({
     numbers: false,
     specialChar: false,
   });
-  const [title,settitle] = useState<string>("");
-  const [username,setusername] = useState<string>("")
-  
+  const [title, settitle] = useState<string>("");
+  const [username, setusername] = useState<string>("");
+  const [groups, setgroups] = useState<Array<IGroup>>([]);
   const SMALLETTERS: string = "abcdefghijklmnouprstuwzyw";
   const BIGLETTERS: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
   const NUMBERS: string = "0987654321";
   const SPECIAL: string = "*()&^%$#@!~/{}+-";
 
+  const fetchGroup = async (): Promise<void> => {
+    const response: GroupResponse = await GetGroupsByUser();
+    if (response.status) {
+      setgroups(response.response);
+    } else {
+      setgroups([]);
+    }
+  };
+  useEffect(() => {
+    fetchGroup();
+  }, []);
   const generatePart = (typenumber: number): string => {
     switch (typenumber) {
       case 0:
@@ -187,6 +217,12 @@ const NewEntryComponent = ({
         inputChange={usernamefunc}
         inputtype="txt"
       />
+      <SelectLabel>Select group</SelectLabel>
+      <SelectContainer>
+        {groups.map((group) => (
+          <OptionContainer>{group.name}</OptionContainer>
+        ))}
+      </SelectContainer>
       <SectionContainer>
         <FormElement
           label={"Password"}
