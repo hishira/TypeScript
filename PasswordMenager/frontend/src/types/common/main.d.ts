@@ -70,6 +70,10 @@ type GetEntriesResponse = {
   response: Array<IEntry>
 }
 
+type TableComponentProps = {
+  password?: boolean,
+}
+
 
 
 

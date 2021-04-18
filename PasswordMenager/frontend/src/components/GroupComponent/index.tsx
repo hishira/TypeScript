@@ -10,6 +10,9 @@ const Container = styled.div`
   justify-content: space-between;
   width: 30%;
   border-right: 0.1rem solid slategray;
+  @media (max-width: 500px){
+    width: 100%;
+  }
 `;
 const Groups = styled.div`
   height: 100%;
@@ -17,6 +20,9 @@ const Groups = styled.div`
   overflow: auto;
   border: 2px solid red;
   scroll-behavior: smooth;
+  @media (max-width: 500px){
+   max-height: initial;
+  }
 `;
 const ButtonContainer = styled.div`
   display: flex;

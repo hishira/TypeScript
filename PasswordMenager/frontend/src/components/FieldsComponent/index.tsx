@@ -6,6 +6,11 @@ const Container = styled.div`
   outline: 0.1rem solid yellow;
   overflow: auto;
   max-height: 89.5vh;
+  @media (max-width: 500px){
+    width: 100%;
+    max-height: none;
+    overflow: hidden;
+  }
 `;
 const TableContainer = styled.table`
   width: 100%;
@@ -13,9 +18,11 @@ const TableContainer = styled.table`
 const TableHead = styled.thead``;
 const TableBody = styled.tbody``;
 const TableRow = styled.tr``;
-const TableComponent = styled.td`
+
+const TableComponent = styled.td<TableComponentProps>`
   border: 2px solid red;
   text-align: center;
+  ${(props) => props.password && "cursor: pointer"}
 `;
 const FieldsContainer = ({
   selectedgroup,
@@ -38,6 +45,20 @@ const FieldsContainer = ({
   useEffect(() => {
     fetchEntries();
   }, [selectedgroup]);
+
+  const gettext = (text: string | null): string => {
+    return text ? text : "";
+  };
+  const passwordClick = (entryid: string) => {
+    let elementpass: HTMLElement | null = document.getElementById(entryid);
+    console.log(elementpass);
+    if (elementpass !== null) {
+      navigator.clipboard
+        .writeText(gettext(elementpass.textContent))
+        .then(() => console.log("ok"))
+        .catch((e)=>console.log("not ok"));
+    }
+  };
   return (
     <Container>
       <TableContainer>
@@ -54,7 +75,13 @@ const FieldsContainer = ({
             <TableRow>
               <TableComponent>{entry.title}</TableComponent>
               <TableComponent>{entry.username}</TableComponent>
-              <TableComponent>{entry.password}</TableComponent>
+              <TableComponent
+                id={entry._id}
+                onClick={() => [passwordClick(entry._id)]}
+                password
+              >
+                {entry.password}
+              </TableComponent>
               <TableComponent>{entry.note}</TableComponent>
             </TableRow>
           ))}

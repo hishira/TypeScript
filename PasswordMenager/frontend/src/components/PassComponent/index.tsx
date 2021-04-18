@@ -7,6 +7,11 @@ const Container = styled.div`
   width: 100%;
   outline: 0.1rem solid slategray;
   height: 89.5vh;
+  @media (max-width: 500px){
+    flex-direction: column;
+    height: inherit;
+  }
+  
 `;
 const PassComponent = () => {
   const [selectedgroupid, setgroupid] = useState<string>("");
