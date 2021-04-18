@@ -1,6 +1,7 @@
 import { getGroupByUser, createGroup } from "../api/group.api";
 import { refreshToken } from "./auth.utils";
 import { getAccessToken } from "./localstorage.utils";
+import {EMPTYGROUPRESPONSE} from "./constans.utils";
 const GetGroups = async (token: string): Promise<number | Array<IGroup>> => {
   const response: Promise<number | Array<IGroup>> = await getGroupByUser(
     token
@@ -52,12 +53,12 @@ const CreateGroupForUser = async (
     accesstoken = getAccessToken();
     response = await GroupCreate(creategroup, accesstoken);
     if (response === 401 || response === 500) {
-      return { status: false, response: { _id: "", name: "", userid: "" } };
+      return { status: false, response: EMPTYGROUPRESPONSE };
     }
   } else if (response === 500) {
-    return { status: false, response: { _id: "", name: "", userid: "" } };
+    return { status: false, response: EMPTYGROUPRESPONSE };
   }
   if (typeof response !== "number") return { status: true, response: response };
-  return { status: false, response: { _id: "", name: "", userid: "" } };
+  return { status: false, response: EMPTYGROUPRESPONSE };
 };
 export { GetGroupsByUser, CreateGroupForUser };

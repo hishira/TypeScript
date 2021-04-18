@@ -36,4 +36,21 @@ type CreateGroupResponse = {
     response: IGroup,
 }
 
+type CreateEntryDto = {
+  title: string,
+  username: string,
+  password: string,
+  note: string,
+  groupid: string,
+}
+
+interface IEntry extends CreateEntryDto {
+  _id: string,
+}
+
+type CreateEntryResponse = {
+  status: boolean,
+  response: IEntry,
+}
+
 

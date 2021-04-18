@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import { GetGroupsByUser } from "../../utils/group.utils";
+import {CreateNewEntryUser} from "../../utils/entry.utils";
 const EntryModalComponent = styled.div`
   background-color: white;
   padding: 1rem;
@@ -32,46 +33,28 @@ const Checkboxwithlabel = styled.div`
   margin-bottom: 0.5rem;
 `;
 const SelectLabel = styled.div`
-  padding: .6rem .6rem .6rem 0;
+  padding: 0.6rem 0.6rem 0.6rem 0;
   font-size: 1.05rem;
   text-align: start;
-`
+`;
 const SelectContainer = styled.select`
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 5px;
   font-size: 1.05rem;
-
 `;
 const OptionContainer = styled.option`
   padding: 1.4rem;
   font-size: 1.05rem;
-  &:hover{
+  &:hover {
     background-color: lightsalmon;
   }
-`
-
-type NewEntryProps = {
-  usernamefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  passwordfunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  notefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  titlefunc: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  password?: string;
-  setpassword: any;
-};
-
+`;
 type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
   specialChar: boolean;
 };
-const NewEntryComponent = ({
-  usernamefunc,
-  passwordfunc,
-  notefunc,
-  titlefunc,
-  password,
-  setpassword,
-}: NewEntryProps) => {
+const NewEntryComponent = (): JSX.Element => {
   const oncheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
     let element: HTMLCollectionOf<HTMLInputElement> = document.getElementsByTagName(
       "input"
@@ -81,7 +64,6 @@ const NewEntryComponent = ({
         if (i.type === "password") {
           i.type = "text";
         }
-        console.log(i.placeholder);
       }
     } else {
       for (let i of element) {
@@ -98,8 +80,13 @@ const NewEntryComponent = ({
     numbers: false,
     specialChar: false,
   });
-  const [title, settitle] = useState<string>("");
-  const [username, setusername] = useState<string>("");
+  const [newentry, setnewentry] = useState<CreateEntryDto>({
+    title: "",
+    username: "",
+    password: "",
+    note: "",
+    groupid: "",
+  });
   const [groups, setgroups] = useState<Array<IGroup>>([]);
   const SMALLETTERS: string = "abcdefghijklmnouprstuwzyw";
   const BIGLETTERS: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
@@ -184,13 +171,11 @@ const NewEntryComponent = ({
       let type = specialTypeGenerate();
       password += generatePart(type);
     }
-    console.log(password);
-    setpassword(password);
+    setnewentry({ ...newentry, password: password });
   };
 
   const letterscheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setpasswordcharacters({ ...passwordcharacters, letters: e.target.checked });
-    console.log(passwordcharacters);
   };
 
   const numberscheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -203,33 +188,63 @@ const NewEntryComponent = ({
       specialChar: e.target.checked,
     });
   };
+
+  const settitle = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setnewentry({ ...newentry, title: e.target.value });
+  };
+
+  const setusername = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setnewentry({ ...newentry, username: e.target.value });
+  };
+
+  const setpassword = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setnewentry({ ...newentry, password: e.target.value });
+  };
+
+  const setnote = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setnewentry({ ...newentry, note: e.target.value });
+  };
+
+  const groupset = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    setnewentry({ ...newentry, groupid: e.target.value });
+  };
+
+  const addnewentry = async (): Promise<void> => {
+    const responsenewentry: CreateEntryResponse = await CreateNewEntryUser(newentry);
+    if(responsenewentry.status){
+      console.log("OK")
+      return
+    }else{
+      console.log("Something wrong")
+    }
+  };
   return (
     <EntryModalComponent>
       <FormElement
         label={"Title"}
         inputplaceholder="title name"
-        inputChange={usernamefunc}
+        inputChange={settitle}
         inputtype="txt"
       />
       <FormElement
         label={"Username"}
         inputplaceholder="username"
-        inputChange={usernamefunc}
+        inputChange={setusername}
         inputtype="txt"
       />
       <SelectLabel>Select group</SelectLabel>
-      <SelectContainer>
+      <SelectContainer onChange={groupset}>
         {groups.map((group) => (
-          <OptionContainer>{group.name}</OptionContainer>
+          <OptionContainer value={group._id}>{group.name}</OptionContainer>
         ))}
       </SelectContainer>
       <SectionContainer>
         <FormElement
           label={"Password"}
           inputplaceholder="***"
-          inputChange={passwordfunc}
+          inputChange={setpassword}
           inputtype="password"
-          value={password}
+          value={newentry.password}
         />
         <CheckBox type="checkbox" onChange={oncheckbox} />
       </SectionContainer>
@@ -270,9 +285,12 @@ const NewEntryComponent = ({
       <FormElement
         label={"Note"}
         inputplaceholder="note..."
-        inputChange={notefunc}
+        inputChange={setnote}
         inputtype="text"
       />
+      <Button size="small" color="lightblue" onClick={addnewentry}>
+        Add
+      </Button>
     </EntryModalComponent>
   );
 };

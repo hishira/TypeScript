@@ -33,10 +33,6 @@ const CheckBox = styled.input`
 
 const PassBar = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
-  const [username, setusername] = useState<string>("");
-  const [password, setpassword] = useState<string>("");
-  const [note, setnote] = useState<string>("");
-  const [title, settitle] = useState<string>("");
   const closehandle = (): void => setmodalopen(false);
   return (
     <Container>
@@ -45,20 +41,6 @@ const PassBar = (): JSX.Element => {
         onClose={closehandle}
         component={
           <NewEntryComponent
-            usernamefunc={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              setusername(e.target.value)
-            }
-            passwordfunc={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              setpassword(e.target.value)
-            }
-            notefunc={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              setnote(e.target.value)
-            }
-            titlefunc={(e: React.ChangeEvent<HTMLInputElement>): void =>
-              settitle(e.target.value)
-            }
-            password={password}
-            setpassword={setpassword}
           />
         }
       />

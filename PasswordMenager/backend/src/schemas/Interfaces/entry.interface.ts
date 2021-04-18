@@ -1,6 +1,7 @@
 import {Document} from "mongoose";
 
 export interface IEntry extends Document{
+    readonly _id: string
     readonly title:string;
     readonly username: string,
     readonly password: string,

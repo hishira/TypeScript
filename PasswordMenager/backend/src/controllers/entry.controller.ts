@@ -22,6 +22,7 @@ export class EntryContoller {
     @Body(new ValidationPipe({ transform: true })) neweentry: CreateEntryDto,
     @Request() req,
   ): Promise<IEntry> {
+    console.log(neweentry)
     return this.entryService.create(neweentry, req.user._id);
   }
 
