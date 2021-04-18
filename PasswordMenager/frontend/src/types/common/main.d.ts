@@ -53,4 +53,23 @@ type CreateEntryResponse = {
   response: IEntry,
 }
 
+type GroupComponentProps = {
+  selectgrouphandle:Function, 
+}
+
+type FieldsComponentType = {
+  selectedgroup:string,
+}
+
+type GroupId = {
+  id:string,
+}
+
+type GetEntriesResponse = {
+  status: boolean,
+  response: Array<IEntry>
+}
+
+
+
 

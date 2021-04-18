@@ -35,14 +35,14 @@ const NewGroup = styled.div`
 `;
 const GroupContainer = styled.div`
   border: 2px solid purple;
-  padding: .5rem;
+  padding: 0.5rem;
   text-align: center;
-  margin-top: .4rem;
-  &:hover{
+  margin-top: 0.4rem;
+  &:hover {
     cursor: pointer;
     background-color: lightgray;
   }
-`
+`;
 type ModalComponentProps = {
   func: (e: React.ChangeEvent<HTMLInputElement>) => void;
   buttonhandle: () => void;
@@ -66,20 +66,19 @@ const ComponentToModal = ({
     </NewGroup>
   );
 };
-const GroupComponent = () => {
+const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const [modal, setModal] = useState<boolean>(false);
-  const [groupdto, setgroupdto] = useState<CreateGroup>({name:""});
+  const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
   const [groups, setgroup] = useState<Array<IGroup>>([]);
 
   const clickHandle = (): void => {
     setModal(true);
   };
 
-  const buttonHandleClick = async():Promise<void> => {
+  const buttonHandleClick = async (): Promise<void> => {
     console.log(groupdto.name);
-    const response:CreateGroupResponse = await CreateGroupForUser(groupdto);
+    const response: CreateGroupResponse = await CreateGroupForUser(groupdto);
     console.log(response.response.name);
-
   };
 
   const fetchGroups = async (): Promise<void> => {
@@ -99,7 +98,7 @@ const GroupComponent = () => {
         component={
           <ComponentToModal
             func={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setgroupdto({ name: e.target.value})
+              setgroupdto({ name: e.target.value })
             }
             buttonhandle={buttonHandleClick}
           />
@@ -107,7 +106,9 @@ const GroupComponent = () => {
       />
       <Groups>
         {groups.map((group: IGroup) => (
-          <GroupContainer>{group.name}</GroupContainer>
+          <GroupContainer onClick={() => selectgrouphandle(group._id)}>
+            {group.name}
+          </GroupContainer>
         ))}
       </Groups>
       <ButtonContainer>
