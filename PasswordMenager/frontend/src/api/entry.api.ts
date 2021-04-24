@@ -1,4 +1,9 @@
-import { getUrl, fetchPostObjectWithToken, fetchGetObjectWithtoken } from "./config.api";
+import {
+  getUrl,
+  fetchPostObjectWithToken,
+  fetchGetObjectWithtoken,
+  fetchDeleteObjectWithToken,
+} from "./config.api";
 
 const CreateNewEntry = async (
   newentry: CreateEntryDto,
@@ -7,12 +12,19 @@ const CreateNewEntry = async (
   const url = getUrl("entry");
   return await fetch(url, fetchPostObjectWithToken(newentry, token));
 };
-const GetEntriesByGroupID = async(groupid:GroupId, token:string):Promise<Response>=>{
-  const url = getUrl(`entry/bygroup/${groupid.id}`)
-  return await fetch(url,fetchGetObjectWithtoken(token));
-}
+const GetEntriesByGroupID = async (
+  groupid: GroupId,
+  token: string
+): Promise<Response> => {
+  const url = getUrl(`entry/bygroup/${groupid.id}`);
+  return await fetch(url, fetchGetObjectWithtoken(token));
+};
+const DeleteEntryById = async (
+  entryid: string,
+  accesstoken: string
+): Promise<Response> => {
+  const url = getUrl(`entry/byentityid/${entryid}`);
+  return await fetch(url, fetchDeleteObjectWithToken(accesstoken));
+};
 
-export {
-    CreateNewEntry,
-    GetEntriesByGroupID,
-}
+export { CreateNewEntry, GetEntriesByGroupID, DeleteEntryById };

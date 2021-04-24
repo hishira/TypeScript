@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { GetUserEntriesByGroupID } from "../../utils/entry.utils";
+import {
+  DeleteUserEntry,
+  GetUserEntriesByGroupID,
+} from "../../utils/entry.utils";
+import Button from "../Button/index";
 const Container = styled.div`
   width: 70%;
   outline: 0.1rem solid yellow;
   overflow: auto;
   max-height: 89.5vh;
-  @media (max-width: 500px){
+  @media (max-width: 500px) {
     width: 100%;
     max-height: none;
     overflow: hidden;
@@ -26,6 +30,7 @@ const TableComponent = styled.td<TableComponentProps>`
 `;
 const FieldsContainer = ({
   selectedgroup,
+  refreshgroupentities,
 }: FieldsComponentType): JSX.Element => {
   const [entries, setentries] = useState<Array<IEntry>>([]);
 
@@ -56,7 +61,15 @@ const FieldsContainer = ({
       navigator.clipboard
         .writeText(gettext(elementpass.textContent))
         .then(() => console.log("ok"))
-        .catch((e)=>console.log("not ok"));
+        .catch((e) => console.log("not ok"));
+    }
+  };
+
+  const deletehandle = async (entryid: string): Promise<void> => {
+    console.log(entryid);
+    const response: DeleteEntryResponse = await DeleteUserEntry(entryid);
+    if (response.status) {
+      refreshgroupentities();
     }
   };
   return (
@@ -68,6 +81,7 @@ const FieldsContainer = ({
             <th>Username</th>
             <th>Password</th>
             <th>Note</th>
+            <th />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -83,6 +97,14 @@ const FieldsContainer = ({
                 {entry.password}
               </TableComponent>
               <TableComponent>{entry.note}</TableComponent>
+              <TableComponent>
+                <Button
+                  onClick={() => deletehandle(entry._id)}
+                  color="lightblue"
+                >
+                  Delete
+                </Button>
+              </TableComponent>
             </TableRow>
           ))}
         </TableBody>

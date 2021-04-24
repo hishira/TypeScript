@@ -1,4 +1,8 @@
-import { CreateNewEntry, GetEntriesByGroupID } from "../api/entry.api";
+import {
+  CreateNewEntry,
+  GetEntriesByGroupID,
+  DeleteEntryById,
+} from "../api/entry.api";
 import { refreshToken } from "./auth.utils";
 import { getAccessToken } from "./localstorage.utils";
 import { EMPTYENTRYRESPONSE } from "./constans.utils";
@@ -76,4 +80,29 @@ const GetUserEntriesByGroupID = async (
   if (typeof response !== "number") return { status: true, response: response };
   return { status: false, response: [] };
 };
-export { CreateNewEntryUser, GetUserEntriesByGroupID };
+
+const DeleteEntry = async (
+  deleteid: string,
+  accesstoken: string
+): Promise<DeleteEntryResponse> => {
+  const response = await DeleteEntryById(deleteid, accesstoken).then(
+    (resp: Response) => {
+      return resp.json();
+    }
+  );
+  return response;
+};
+
+const DeleteUserEntry = async (
+  entryid: string
+): Promise<DeleteEntryResponse> => {
+  let accesstoken = getAccessToken();
+  let response: DeleteEntryResponse = await DeleteEntry(entryid, accesstoken);
+  if (response.status === false) {
+    await refreshToken();
+    accesstoken = getAccessToken();
+    response = await DeleteEntry(entryid, accesstoken);
+  }
+  return response;
+};
+export { CreateNewEntryUser, GetUserEntriesByGroupID, DeleteUserEntry };

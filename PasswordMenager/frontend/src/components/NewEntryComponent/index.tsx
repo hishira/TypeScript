@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import { GetGroupsByUser } from "../../utils/group.utils";
-import {CreateNewEntryUser} from "../../utils/entry.utils";
+import { CreateNewEntryUser } from "../../utils/entry.utils";
 const EntryModalComponent = styled.div`
   background-color: white;
   padding: 1rem;
@@ -209,13 +209,25 @@ const NewEntryComponent = (): JSX.Element => {
     setnewentry({ ...newentry, groupid: e.target.value });
   };
 
+  const clearInputData = (): void => {
+    setnewentry({
+      title: "",
+      username: "",
+      password: "",
+      note: "",
+      groupid: "",
+    });
+  };
   const addnewentry = async (): Promise<void> => {
-    const responsenewentry: CreateEntryResponse = await CreateNewEntryUser(newentry);
-    if(responsenewentry.status){
-      console.log("OK")
-      return
-    }else{
-      console.log("Something wrong")
+    const responsenewentry: CreateEntryResponse = await CreateNewEntryUser(
+      newentry
+    );
+    if (responsenewentry.status) {
+      console.log("OK");
+      clearInputData();
+      return;
+    } else {
+      console.log("Something wrong");
     }
   };
   return (

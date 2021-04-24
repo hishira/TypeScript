@@ -18,10 +18,13 @@ const PassComponent = () => {
   const selectgrouphandle = (groupid: string) => {
     setgroupid(groupid);
   };
+  const refreshentities = ():void=>{
+    setgroupid(selectedgroupid);
+  }
   return (
     <Container className="dupa">
       <GroupComponent selectgrouphandle={selectgrouphandle} />
-      <FieldsComponent selectedgroup={selectedgroupid} />
+      <FieldsComponent refreshgroupentities={refreshentities} selectedgroup={selectedgroupid} />
     </Container>
   );
 };

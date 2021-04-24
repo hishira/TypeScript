@@ -28,52 +28,54 @@ type GroupResponse = {
 };
 
 type CreateGroup = {
-    name:string,
-}
+  name: string;
+};
 
 type CreateGroupResponse = {
-    status: boolean,
-    response: IGroup,
-}
+  status: boolean;
+  response: IGroup;
+};
 
 type CreateEntryDto = {
-  title: string,
-  username: string,
-  password: string,
-  note: string,
-  groupid: string,
-}
+  title: string;
+  username: string;
+  password: string;
+  note: string;
+  groupid: string;
+};
 
 interface IEntry extends CreateEntryDto {
-  _id: string,
+  _id: string;
 }
 
 type CreateEntryResponse = {
-  status: boolean,
-  response: IEntry,
-}
+  status: boolean;
+  response: IEntry;
+};
 
 type GroupComponentProps = {
-  selectgrouphandle:Function, 
-}
+  selectgrouphandle: Function;
+};
 
 type FieldsComponentType = {
-  selectedgroup:string,
-}
+  selectedgroup: string;
+  refreshgroupentities: Function,
+};
 
 type GroupId = {
-  id:string,
-}
+  id: string;
+};
 
 type GetEntriesResponse = {
-  status: boolean,
-  response: Array<IEntry>
-}
+  status: boolean;
+  response: Array<IEntry>;
+};
 
 type TableComponentProps = {
-  password?: boolean,
-}
+  password?: boolean;
+};
 
-
-
-
+type DeleteEntryResponse = {
+  status: boolean;
+  respond: IEntry | null;
+};

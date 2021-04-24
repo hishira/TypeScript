@@ -49,10 +49,23 @@ const fetchGetObjectWithtoken = (token: string): RequestInit => {
     method: "GET",
   };
 };
+const fetchDeleteObjectWithToken = (token:string):RequestInit=>{
+  return {
+    mode: "cors",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "http://localhost:3000",
+    },
+    method: "DELETE",
+  }
+}
 export {
   getUrl,
   fetchObject,
   fetchPostObjectWithToken,
   fetchPostObject,
   fetchGetObjectWithtoken,
+  fetchDeleteObjectWithToken,
 };
