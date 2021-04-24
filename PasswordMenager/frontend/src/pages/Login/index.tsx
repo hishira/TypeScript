@@ -55,6 +55,8 @@ const LoginPage = ({store}:Prop): JSX.Element => {
       console.log(response.response?.access_token);
       console.log(response.response?.refresh_token);
       setLocalStorageToken(response.response);
+      store.setUserActive(true);
+      history.push("/store");
       console.log(store.UserActivity)
     }
   };
