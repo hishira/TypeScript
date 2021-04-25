@@ -41,6 +41,7 @@ const PassBar = (): JSX.Element => {
         onClose={closehandle}
         component={
           <NewEntryComponent
+            refreshentry={false}
           />
         }
       />

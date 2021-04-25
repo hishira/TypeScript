@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Modal from "../Modal";
+import NewEntryComponent from "../NewEntryComponent";
 import {
   DeleteUserEntry,
   GetUserEntriesByGroupID,
@@ -33,7 +35,9 @@ const FieldsContainer = ({
   refreshgroupentities,
 }: FieldsComponentType): JSX.Element => {
   const [entries, setentries] = useState<Array<IEntry>>([]);
-
+  const [editmodalopen, seteditmodalopen] = useState<boolean>(false);
+  const [entrytoedit, setentrytoedit] = useState<string>("");
+  const [refreshmodalentry, setrefreshmodalentry] = useState<boolean>(false);
   const fetchEntries = async (): Promise<void> => {
     if (selectedgroup === "") return;
     const groupid: GroupId = {
@@ -54,7 +58,7 @@ const FieldsContainer = ({
   const gettext = (text: string | null): string => {
     return text ? text : "";
   };
-  const passwordClick = (entryid: string) => {
+  const passwordClick = (entryid: string): void => {
     let elementpass: HTMLElement | null = document.getElementById(entryid);
     console.log(elementpass);
     if (elementpass !== null) {
@@ -72,8 +76,29 @@ const FieldsContainer = ({
       refreshgroupentities();
     }
   };
+
+  const onmodalclose = (): void => {
+    setrefreshmodalentry(!refreshmodalentry);
+    seteditmodalopen(false);
+  };
+
+  const onedithandle = (entryid: string): void => {
+    setentrytoedit(entryid);
+    seteditmodalopen(true);
+  };
   return (
     <Container>
+      <Modal
+        visible={editmodalopen}
+        onClose={onmodalclose}
+        component={
+          <NewEntryComponent
+            refreshentry={refreshmodalentry}
+            edit={true}
+            editentryid={entrytoedit}
+          />
+        }
+      />
       <TableContainer>
         <TableHead>
           <TableRow>
@@ -103,6 +128,13 @@ const FieldsContainer = ({
                   color="lightblue"
                 >
                   Delete
+                </Button>
+                <Button
+                  color="lightgrey"
+                  onClick={() => onedithandle(entry._id)}
+                  style={{ marginLeft: ".4rem" }}
+                >
+                  Edit
                 </Button>
               </TableComponent>
             </TableRow>

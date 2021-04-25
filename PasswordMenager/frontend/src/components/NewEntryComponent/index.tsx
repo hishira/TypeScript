@@ -3,13 +3,14 @@ import styled from "styled-components";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import { GetGroupsByUser } from "../../utils/group.utils";
-import { CreateNewEntryUser } from "../../utils/entry.utils";
+import { CreateNewEntryUser, EntryEditById } from "../../utils/entry.utils";
 const EntryModalComponent = styled.div`
   background-color: white;
   padding: 1rem;
   border-radius: 5px;
   width: 100%;
 `;
+const NormalContainer = styled.div``;
 const PassLen = styled.div`
   font-size: ".9rem";
 `;
@@ -54,7 +55,16 @@ type PasswordCharactersTypes = {
   numbers: boolean;
   specialChar: boolean;
 };
-const NewEntryComponent = (): JSX.Element => {
+type NewEntryProps = {
+  edit?: boolean;
+  editentryid?: string;
+  refreshentry: boolean;
+};
+const NewEntryComponent = ({
+  edit,
+  editentryid,
+  refreshentry,
+}: NewEntryProps): JSX.Element => {
   const oncheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
     let element: HTMLCollectionOf<HTMLInputElement> = document.getElementsByTagName(
       "input"
@@ -104,6 +114,15 @@ const NewEntryComponent = (): JSX.Element => {
   useEffect(() => {
     fetchGroup();
   }, []);
+  useEffect(() => {
+    setnewentry({
+      title: "",
+      username: "",
+      password: "",
+      note: "",
+      groupid: "",
+    });
+  }, [refreshentry]);
   const generatePart = (typenumber: number): string => {
     switch (typenumber) {
       case 0:
@@ -230,6 +249,27 @@ const NewEntryComponent = (): JSX.Element => {
       console.log("Something wrong");
     }
   };
+
+  const getRechangeObject = (): EditEntry => {
+    return {
+      _id: editentryid,
+      title: newentry.title,
+      username: newentry.username,
+      password: newentry.password,
+      note: newentry.note,
+    };
+  };
+  const edithaneld = async (): Promise<void> => {
+    if (editentryid !== "") {
+      console.log(editentryid);
+      const editedvalues: EditEntry = getRechangeObject();
+      console.log(editedvalues);
+      const response: EditEntryResponse = await EntryEditById(editedvalues);
+      if (response.status) {
+        console.log("ok");
+      }
+    }
+  };
   return (
     <EntryModalComponent>
       <FormElement
@@ -237,19 +277,25 @@ const NewEntryComponent = (): JSX.Element => {
         inputplaceholder="title name"
         inputChange={settitle}
         inputtype="txt"
+        value={newentry.title}
       />
       <FormElement
         label={"Username"}
         inputplaceholder="username"
         inputChange={setusername}
         inputtype="txt"
+        value={newentry.username}
       />
-      <SelectLabel>Select group</SelectLabel>
-      <SelectContainer onChange={groupset}>
-        {groups.map((group) => (
-          <OptionContainer value={group._id}>{group.name}</OptionContainer>
-        ))}
-      </SelectContainer>
+      {!edit ? (
+        <NormalContainer>
+          <SelectLabel>Select group</SelectLabel>
+          <SelectContainer onChange={groupset}>
+            {groups.map((group) => (
+              <OptionContainer value={group._id}>{group.name}</OptionContainer>
+            ))}
+          </SelectContainer>
+        </NormalContainer>
+      ) : null}
       <SectionContainer>
         <FormElement
           label={"Password"}
@@ -299,10 +345,17 @@ const NewEntryComponent = (): JSX.Element => {
         inputplaceholder="note..."
         inputChange={setnote}
         inputtype="text"
+        value={newentry.note}
       />
-      <Button size="small" color="lightblue" onClick={addnewentry}>
-        Add
-      </Button>
+      {!edit ? (
+        <Button size="small" color="lightblue" onClick={addnewentry}>
+          Add
+        </Button>
+      ) : (
+        <Button size="small" color="lightblue" onClick={edithaneld}>
+          Update
+        </Button>
+      )}
     </EntryModalComponent>
   );
 };

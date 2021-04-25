@@ -79,3 +79,16 @@ type DeleteEntryResponse = {
   status: boolean;
   respond: IEntry | null;
 };
+
+type EditEntry = {
+  _id: string | undefined,
+  title: string,
+  username: string,
+  password: string,
+  note: string,
+}
+
+type EditEntryResponse = {
+  status: boolean,
+  respond: IEntry
+}

@@ -4,3 +4,8 @@ type DeleteEntryResponse = {
     status: boolean,
     respond: IEntry | null,
 }
+
+type EditEntryResponse = {
+    status: boolean,
+    respond: IEntry | null
+}

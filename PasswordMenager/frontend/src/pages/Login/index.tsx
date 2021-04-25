@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import FormComponent from "../../components/Form/index";
 import { useHistory } from "react-router-dom";
@@ -67,6 +67,10 @@ const LoginPage = ({store}:Prop): JSX.Element => {
 
   const history = useHistory();
 
+  useEffect(()=>{
+    if(store.UserActivity)
+      history.push("/store");
+  },[])
   return (
     <Container>
       <FormContainer>

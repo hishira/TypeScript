@@ -2,8 +2,8 @@ import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
 import { IEntry } from '../schemas/Interfaces/entry.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
-import { DeleteEntryResponse } from 'src/types/common/main';
-
+import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
+import { EditEntryDto } from './../schemas/dto/editentry.dto';
 @Injectable()
 export class EntryService {
   constructor(
@@ -34,6 +34,44 @@ export class EntryService {
       await this.entryModel.deleteOne({ _id: entryid });
       return { status: true, respond: deletedentry };
     } catch (e) {
+      return { status: false, respond: null };
+    }
+  }
+
+  async titleedit(title: string, _id: string): Promise<void> {
+    await this.entryModel.updateOne({ _id: _id }, { $set: { title: title } });
+  }
+  async usernameedit(newusername: string, _id: string): Promise<void> {
+    await this.entryModel.updateOne(
+      { _id: _id },
+      { $set: { username: newusername } },
+    );
+  }
+  async passwordedit(newpassword: string, _id: string): Promise<void> {
+    await this.entryModel.updateOne(
+      { _id: _id },
+      { $set: { password: newpassword } },
+    );
+  }
+  async noteedit(newnote: string, _id: string): Promise<void> {
+    await this.entryModel.updateOne({ _id: _id }, { $set: { note: newnote } });
+  }
+  async editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
+    try {
+      if (neweditedentry.title !== '')
+        await this.titleedit(neweditedentry.title, neweditedentry._id);
+      if (neweditedentry.username !== '')
+        await this.usernameedit(neweditedentry.password, neweditedentry._id);
+      if (neweditedentry.password !== '')
+        await this.passwordedit(neweditedentry.password, neweditedentry._id);
+      if (neweditedentry.note !== '')
+        await this.noteedit(neweditedentry.note, neweditedentry._id);
+      const upadednoew = await this.entryModel.findOne({
+        _id: neweditedentry._id,
+      });
+      return { status: true, respond: upadednoew };
+    } catch (e) {
+      console.log(e);
       return { status: false, respond: null };
     }
   }

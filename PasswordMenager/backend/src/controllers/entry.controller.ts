@@ -8,12 +8,14 @@ import {
   Request,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { EntryService } from '../services/entry.service';
 import { IEntry } from '../schemas/Interfaces/entry.interface';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
-import { DeleteEntryResponse } from 'src/types/common/main';
+import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
+import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 @Controller('entry')
 export class EntryContoller {
   constructor(private readonly entryService: EntryService) {}
@@ -40,5 +42,15 @@ export class EntryContoller {
     @Param('id') entityid: string,
   ): Promise<DeleteEntryResponse> {
     return this.entryService.deletebyid(entityid);
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Put('/edit')
+  async editentry(
+    @Body(new ValidationPipe({ transform: true })) editedentry: EditEntryDto,
+    @Request() req,
+  ):Promise<EditEntryResponse> {
+    console.log(editedentry);
+    return this.entryService.editentry(editedentry);
   }
 }

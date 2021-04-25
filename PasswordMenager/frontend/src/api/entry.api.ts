@@ -3,6 +3,7 @@ import {
   fetchPostObjectWithToken,
   fetchGetObjectWithtoken,
   fetchDeleteObjectWithToken,
+  fetchPutObjectWithToken,
 } from "./config.api";
 
 const CreateNewEntry = async (
@@ -26,5 +27,12 @@ const DeleteEntryById = async (
   const url = getUrl(`entry/byentityid/${entryid}`);
   return await fetch(url, fetchDeleteObjectWithToken(accesstoken));
 };
+const EditEntryByID = async (
+  entrybody: EditEntry,
+  accesstoken: string
+): Promise<Response> => {
+  const url = getUrl(`entry/edit`);
+  return await fetch(url, fetchPutObjectWithToken(entrybody, accesstoken));
+};
 
-export { CreateNewEntry, GetEntriesByGroupID, DeleteEntryById };
+export { CreateNewEntry, GetEntriesByGroupID, DeleteEntryById, EditEntryByID };
