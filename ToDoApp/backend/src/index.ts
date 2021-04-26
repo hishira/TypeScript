@@ -1,11 +1,4 @@
 import express, { Request, Response } from "express";
+import {App} from "./App"
 
-const app = express();
-const PORT: number = 8080;
-app.get("/", (req: Request, res: Response) => {
-  res.send("well done");
-});
-
-app.listen(PORT, () => {
-  console.log("App work");
-});
+export default new App();
