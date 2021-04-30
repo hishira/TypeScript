@@ -12,4 +12,4 @@ export const TaskSchema = new Schema({
   content: {
     type: String,
   },
-});
+},{collection: "Tasks"});
