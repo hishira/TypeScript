@@ -10,7 +10,26 @@ export class TaskService {
   }
 
   async getall(): Promise<ITaskDocument[]> {
-    return await TaskModel.find({});
+    const tasks = await TaskModel.aggregate([
+      {
+        $project: {
+          content: 1,
+          createDate: {
+            $dateToString:{
+              format: "%Y-%m-%d",
+              date: "$createDate"
+            },
+          },
+          editDate: {
+            $dateToString:{
+              format: "%Y-%m-%d",
+              date: "$editDate"
+            },
+          },
+        },
+      },
+    ]);
+    return tasks;
   }
 
   async sortbydateasending(): Promise<ITaskDocument[]> {

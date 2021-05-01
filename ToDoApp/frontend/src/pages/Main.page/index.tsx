@@ -1,21 +1,24 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   MainPageComponent,
   MainTextComponent,
-  MainInputContainer, 
+  MainInputContainer,
   MainInput,
   TaskButton,
 } from "../../components/MainPageComponents";
+import TasksComponent from "../../components/Tasks.component";
 const MainPage: FC = (): JSX.Element => {
-  return <MainPageComponent>
+  const [refresh, setrefresh] = useState<boolean>(false);
+  return (
+    <MainPageComponent>
       <MainTextComponent>ToDo App</MainTextComponent>
       <MainInputContainer>
-          <MainInput
-          >
-              </MainInput>
-          <TaskButton>Add</TaskButton>
+        <MainInput></MainInput>
+        <TaskButton>Add</TaskButton>
       </MainInputContainer>
-  </MainPageComponent>;
+      <TasksComponent refreshtasks={refresh} />
+    </MainPageComponent>
+  );
 };
 
 export default MainPage;

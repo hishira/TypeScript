@@ -7,7 +7,7 @@ const MainPageComponent = styled.main`
   border: 2px solid red;
 `;
 const MainTextComponent = styled.p`
-  padding: 5rem 5rem 2rem 5rem;
+  padding: 5rem 0rem 2rem 0rem;
   border: 2px solid purple;
   text-align: center;
   margin: 5rem 5rem 1rem 5rem;
@@ -15,6 +15,9 @@ const MainTextComponent = styled.p`
   font-family: "Courier New", Courier, monospace;
   font-weight: 600;
   text-decoration: double;
+  @media (max-width: 650px) {
+    font-size: 1.7rem;
+  }
 `;
 const MainInputContainer = styled.div`
   border: 2px solid green;
@@ -25,16 +28,21 @@ const MainInputContainer = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-
+  @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
 const MainInput = styled.input`
-  padding: 0.8rem 2rem .8rem 3rem;
+  padding: 0.8rem 2rem 0.8rem 3rem;
   width: 25rem;
   border-radius: 10px;
   border: 0.2rem solid slateblue;
   font-size: 1.3rem;
   &:focus {
     outline: none;
+  }
+  @media (max-width: 650px) {
+    width: 14rem;
   }
 `;
 const TaskButton = styled.button`
@@ -48,30 +56,59 @@ const TaskButton = styled.button`
   &:active {
     transform: scale(0.9);
   }
+  @media (max-width: 650px) {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
 `;
 
 const ResetClick = styled.span`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid red;
+  left: 30%;
+  &::after {
+    content: " ";
     position: absolute;
     width: 20px;
-    height: 20px;
-    border: 2px solid red;
-    left: 30%;
-    &::after{
-        content: " ";
-        position: absolute;
-        width: 20px;
-        height: 3px;
-        background: black;
-        transform: rotate(45deg);
-    }
-    &::before{
-        content: " ";
-        position: absolute;
-        width: 20px;
-        height: 3px;
-        background: black;
-        transform: translateY(90%) rotate(-45deg);
-    }
+    height: 3px;
+    background: black;
+    transform: rotate(45deg);
+  }
+  &::before {
+    content: " ";
+    position: absolute;
+    width: 20px;
+    height: 3px;
+    background: black;
+    transform: translateY(90%) rotate(-45deg);
+  }
+`;
+
+const TasksContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 2px solid red;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+`;
+const Task = styled.article`
+  background-color: whitesmoke;
+  width: 90%;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+`;
+const TaskDateContainer = styled.p`
+  border-bottom: 0.01rem solid slategray;
+  padding: 0.1rem 0.3rem 0.3rem 0.3rem;
+  color: lightslategray;
+`;
+const TaskContextContainer = styled.p`
+  padding: .5rem;
+  text-align: start;
 `;
 export {
   MainPageComponent,
@@ -80,4 +117,8 @@ export {
   MainInput,
   TaskButton,
   ResetClick,
+  TasksContainer,
+  Task,
+  TaskDateContainer,
+  TaskContextContainer,
 };
