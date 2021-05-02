@@ -102,14 +102,30 @@ const Task = styled.article`
   border-radius: 10px;
 `;
 const TaskDateContainer = styled.p`
-  border-bottom: 0.01rem solid slategray;
-  padding: 0.1rem 0.3rem 0.3rem 0.3rem;
+  padding: 0rem 0.3rem 0.3rem 0.3rem;
   color: lightslategray;
 `;
 const TaskContextContainer = styled.p`
   padding: .5rem;
   text-align: start;
 `;
+const TaskUpContainer = styled.p`
+  display: flex;
+  border-bottom: 0.01rem solid slategray;
+  justify-content: space-between;
+  align-items: center;
+`
+const TaskDeleteButton = styled.button`
+  padding: .7rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  &:active{
+    background-color: grey;
+  }
+
+`
 export {
   MainPageComponent,
   MainTextComponent,
@@ -121,4 +137,6 @@ export {
   Task,
   TaskDateContainer,
   TaskContextContainer,
+  TaskUpContainer,
+  TaskDeleteButton,
 };

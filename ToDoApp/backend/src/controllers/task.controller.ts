@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { CreateTaskDTO } from "../dto/createtask.dto";
-import { ITaskDocument } from "../models/ITask";
+import { send } from "node:process";
+import { CreateTaskDTO, DeleTaskDTO } from "../dto/createtask.dto";
+import { ITaskDocument} from "../models/ITask";
 import { TaskService } from "../services/task.service";
 let taskservice:TaskService = new TaskService();
 export class TaskController {
@@ -45,6 +46,15 @@ export class TaskController {
       return resp.status(200).json(sortedtaskdesc);
     } catch (e) {
       return resp.status(505).send({ error: "Error" });
+    }
+  }
+
+  async TaskDelete(req:Request<{},{},DeleTaskDTO>, resp:Response){
+    try{
+        await taskservice.delete(req.body.taskid);
+        return resp.status(200).json({message: "OK"})
+    }catch(e){
+      return resp.status(505).send({error:"Error"});
     }
   }
 }

@@ -39,4 +39,8 @@ export class TaskService {
   async sortbydatedescending(): Promise<ITaskDocument[]> {
     return await TaskModel.aggregate([{ $sort: { createDate: 1 } }]);
   }
+
+  async delete(taskid:string):Promise<any>{
+    return await TaskModel.findOneAndDelete({_id:taskid})
+  }
 }

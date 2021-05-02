@@ -12,3 +12,13 @@ type AllTaskResponse = {
     status:boolean,
     response: Array<ITask>,
 }
+type CreateTaskDTO = {
+    content: string,
+}
+type CreateTaskResponse = {
+    status: boolean,
+    newtask: ITask | null,
+}
+type DeleteTaskDTO = {
+    taskid: string,
+}

@@ -13,6 +13,7 @@ export class TaskRouter {
     this.router.get("/", this.taskController.GetAll);
     this.router.get("/sortasc", this.taskController.SortAsc);
     this.router.get("/sortdesc", this.taskController.SortDesc);
+    this.router.delete("/",this.taskController.TaskDelete);
     return this.router;
   }
 }

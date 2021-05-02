@@ -4,13 +4,17 @@ import {
   Task,
   TaskDateContainer,
   TaskContextContainer,
+  TaskUpContainer,
+  TaskDeleteButton,
 } from "./MainPageComponents";
-import { FetchAllTasks } from "../utils/task.util";
+import { FetchAllTasks, TaskDelete } from "../utils/task.util";
 type TasksComponentType = {
   refreshtasks: boolean;
+  refresh: Function;
 };
 const TasksComponent: FC<TasksComponentType> = ({
   refreshtasks,
+  refresh,
 }: TasksComponentType) => {
   const [tasks, settasks] = useState<ITask[]>([]);
   const fetchAllTask: Function = async (): Promise<void> => {
@@ -21,11 +25,26 @@ const TasksComponent: FC<TasksComponentType> = ({
   useEffect(() => {
     fetchAllTask();
   }, [refreshtasks]);
+
+  const deleteTaskHandle = async (taskid: string): Promise<void> => {
+    const deletetask: DeleteTaskDTO = {
+      taskid: taskid,
+    };
+    const response = await TaskDelete(deletetask);
+    if (response !== false) {
+      refresh();
+    }
+  };
   return (
     <TasksContainer>
       {tasks.map((task: ITask) => (
         <Task>
-          <TaskDateContainer>{task.createDate}</TaskDateContainer>
+          <TaskUpContainer>
+            <TaskDateContainer>{task.createDate}</TaskDateContainer>
+            <TaskDeleteButton onClick={() => deleteTaskHandle(task._id)}>
+              Delete
+            </TaskDeleteButton>
+          </TaskUpContainer>
           <TaskContextContainer>{task.content}</TaskContextContainer>
         </Task>
       ))}
