@@ -22,3 +22,7 @@ type CreateTaskResponse = {
 type DeleteTaskDTO = {
     taskid: string,
 }
+type SortingResponse = {
+    status: boolean,
+    response: Array<ITask>
+}

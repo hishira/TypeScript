@@ -1,4 +1,10 @@
-import React, { FC, useState, useEffect } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  ChangeEvent,
+  ChangeEventHandler,
+} from "react";
 import {
   TasksContainer,
   Task,
@@ -6,8 +12,17 @@ import {
   TaskContextContainer,
   TaskUpContainer,
   TaskDeleteButton,
+  SelectContainer,
+  SelectLabel,
+  Select,
+  SelectOption,
 } from "./MainPageComponents";
-import { FetchAllTasks, TaskDelete } from "../utils/task.util";
+import {
+  FetchAllTasks,
+  TaskDelete,
+  TaskSortingAsc,
+  TaskSortingDesc,
+} from "../utils/task.util";
 type TasksComponentType = {
   refreshtasks: boolean;
   refresh: Function;
@@ -35,8 +50,32 @@ const TasksComponent: FC<TasksComponentType> = ({
       refresh();
     }
   };
+  const selecthandle: ChangeEventHandler<HTMLSelectElement> = async (
+    e: ChangeEvent<HTMLSelectElement>
+  ): Promise<void> => {
+    if (parseInt(e.target.value) === 10) {
+      const response = await TaskSortingAsc();
+      if (response.status) {
+        console.log(response.response);
+        settasks(response.response);
+      }
+    } else {
+      const response = await TaskSortingDesc();
+      if (response.status) {
+        console.log(response.response);
+        settasks(response.response);
+      }
+    }
+  };
   return (
     <TasksContainer>
+      <SelectContainer>
+        <SelectLabel>Sort by:</SelectLabel>
+        <Select onChange={selecthandle}>
+          <SelectOption value={10}>By date ascending</SelectOption>
+          <SelectOption value={20}>By date descending</SelectOption>
+        </Select>
+      </SelectContainer>
       {tasks.map((task: ITask) => (
         <Task>
           <TaskUpContainer>

@@ -32,8 +32,10 @@ const MainInputContainer = styled.div`
     flex-direction: column;
   }
 `;
-const MainInput = styled.input`
-  padding: 0.8rem 2rem 0.8rem 3rem;
+const MainInput = styled.textarea`
+  overflow-y: hidden;
+  resize: none;
+  padding: 0.8rem 2rem 0.8rem 1rem;
   width: 25rem;
   border-radius: 10px;
   border: 0.2rem solid slateblue;
@@ -124,7 +126,43 @@ const TaskDeleteButton = styled.button`
   &:active{
     background-color: grey;
   }
-
+`
+const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid red;
+  width: 100%;
+  padding: .5rem;
+`
+const SelectLabel = styled.label`
+  font-size: 1.15rem;
+`
+const Select = styled.select`
+  padding: 0.7rem 1.2rem;
+  width: 30%;
+  border-radius: 10px;
+  @media (max-width:  870px){
+    width: 60%; 
+  }
+  @media (max-width:  450px){
+    width: 100%; 
+  }
+  &:focus{
+    border: .1rem solid slategray;
+    border-radius: 10px;
+    outline: none;
+  }
+  &:active{
+    border: none;
+    outline: none;
+    border: .1rem solid slategray;
+    border-radius: 10px;
+  }
+`
+const SelectOption = styled.option`
+  padding: .4rem;
 `
 export {
   MainPageComponent,
@@ -139,4 +177,8 @@ export {
   TaskContextContainer,
   TaskUpContainer,
   TaskDeleteButton,
+  SelectContainer, 
+  SelectLabel,
+  Select,
+  SelectOption,
 };

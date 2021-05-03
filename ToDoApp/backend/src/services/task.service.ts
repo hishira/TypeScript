@@ -15,15 +15,15 @@ export class TaskService {
         $project: {
           content: 1,
           createDate: {
-            $dateToString:{
+            $dateToString: {
               format: "%Y-%m-%d",
-              date: "$createDate"
+              date: "$createDate",
             },
           },
           editDate: {
-            $dateToString:{
+            $dateToString: {
               format: "%Y-%m-%d",
-              date: "$editDate"
+              date: "$editDate",
             },
           },
         },
@@ -33,14 +33,40 @@ export class TaskService {
   }
 
   async sortbydateasending(): Promise<ITaskDocument[]> {
-    return await TaskModel.aggregate([{ $sort: { createDate: 1 } }]);
+    return await TaskModel.aggregate([
+      { $sort: { createDate: 1 } },
+      {
+        $project: {
+          content: 1,
+          createDate: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createDate",
+            },
+          },
+        },
+      },
+    ]);
   }
 
   async sortbydatedescending(): Promise<ITaskDocument[]> {
-    return await TaskModel.aggregate([{ $sort: { createDate: 1 } }]);
+    return await TaskModel.aggregate([
+      { $sort: { createDate: -1 } },
+      {
+        $project: {
+          content: 1,
+          createDate: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createDate",
+            },
+          },
+        },
+      },
+    ]);
   }
 
-  async delete(taskid:string):Promise<any>{
-    return await TaskModel.findOneAndDelete({_id:taskid})
+  async delete(taskid: string): Promise<any> {
+    return await TaskModel.findOneAndDelete({ _id: taskid });
   }
 }
