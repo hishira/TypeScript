@@ -4,11 +4,9 @@ const MainPageComponent = styled.main`
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: 2px solid red;
 `;
 const MainTextComponent = styled.p`
   padding: 5rem 0rem 2rem 0rem;
-  border: 2px solid purple;
   text-align: center;
   margin: 5rem 5rem 1rem 5rem;
   font-size: 2rem;
@@ -20,7 +18,6 @@ const MainTextComponent = styled.p`
   }
 `;
 const MainInputContainer = styled.div`
-  border: 2px solid green;
   padding: 3rem 3rem 2rem 3rem;
   margin: 1rem 5rem 1rem 5rem;
   margin-top: 0;
@@ -38,8 +35,9 @@ const MainInput = styled.textarea`
   padding: 0.8rem 2rem 0.8rem 1rem;
   width: 25rem;
   border-radius: 10px;
-  border: 0.2rem solid slateblue;
   font-size: 1.3rem;
+  background-color: transparent;
+  border: .1rem solid lightgray;
   &:focus {
     outline: none;
   }
@@ -68,7 +66,6 @@ const ResetClick = styled.span`
   position: absolute;
   width: 20px;
   height: 20px;
-  border: 2px solid red;
   left: 30%;
   &::after {
     content: " ";
@@ -91,7 +88,6 @@ const ResetClick = styled.span`
 const TasksContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border: 2px solid red;
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
@@ -101,7 +97,9 @@ const Task = styled.article`
   width: 90%;
   padding: 0.5rem 0;
   margin-top: 0.5rem;
+  position: relative;
   border-radius: 10px;
+  box-shadow: .2rem .2rem 0.2rem slategrey;
 `;
 const TaskDateContainer = styled.p`
   padding: 0rem 0.3rem 0.3rem 0.3rem;
@@ -117,14 +115,53 @@ const TaskUpContainer = styled.p`
   justify-content: space-between;
   align-items: center;
 `
-const TaskDeleteButton = styled.button`
+const DeleteAllTaskButton = styled.button`
   padding: .7rem;
+  margin-top: .1rem;
   border: none;
   cursor: pointer;
   border-radius: 10px;
   font-size: 1.05rem;
+  cursor: pointer;
+  background-color: lightgray;
   &:active{
     background-color: grey;
+  }
+`
+const TaskDeleteButton = styled.button`
+  padding: .7rem;
+  position: relative;
+  right: 0;
+  top: 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  transform: translateY(-2rem);
+  cursor: pointer;
+  background-color: transparent;
+  &:active{
+    background-color: grey;
+  }
+  &::before{
+    content: " ";
+    width: 100%;
+    height: 3px;
+    background-color: grey;
+    position:absolute;
+    left: 0;
+    top: 45%;
+    transform: rotate(45deg);
+  }
+  &::after{
+    content: " ";
+    width: 100%;
+    height: 3px;
+    background-color: grey;
+    position: absolute;
+    left: 0;
+    top:45%;
+    transform: rotate(-45deg);
   }
 `
 const SelectContainer = styled.div`
@@ -132,7 +169,6 @@ const SelectContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px solid red;
   width: 100%;
   padding: .5rem;
 `
@@ -181,4 +217,5 @@ export {
   SelectLabel,
   Select,
   SelectOption,
+  DeleteAllTaskButton,
 };

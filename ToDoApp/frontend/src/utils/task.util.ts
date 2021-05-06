@@ -4,6 +4,7 @@ import {
   Delete,
   SortAsc,
   SortDesc,
+  DeleteAll,
 } from "../api/task.api";
 
 const GetTasks: Function = async (): Promise<Array<ITask> | boolean> => {
@@ -73,7 +74,7 @@ const SortAscending = async (): Promise<Array<ITask> | boolean> => {
 };
 
 export const TaskSortingAsc = async (): Promise<SortingResponse> => {
-  const response:Array<ITask> | boolean = await SortAscending();
+  const response: Array<ITask> | boolean = await SortAscending();
   if (response !== false && response !== true) {
     return { status: true, response: response };
   }
@@ -89,9 +90,22 @@ const SortDescending = async (): Promise<Array<ITask> | boolean> => {
 };
 
 export const TaskSortingDesc = async (): Promise<SortingResponse> => {
-  const response:Array<ITask> | boolean = await SortDescending();
+  const response: Array<ITask> | boolean = await SortDescending();
   if (response !== false && response !== true) {
     return { status: true, response: response };
   }
   return { status: false, response: [] };
+};
+
+const DeleteAllTask = async (): Promise<boolean> => {
+  const response: boolean = await DeleteAll().then((resp: Response) => {
+    if (resp.status === 200) return true;
+    return false;
+  });
+  return response;
+};
+
+export const DeleteTaskAll = async (): Promise<boolean> => {
+  const response: boolean = await DeleteAllTask();
+  return response;
 };

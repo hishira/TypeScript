@@ -6,14 +6,14 @@ export class TaskRouter {
   constructor() {
     this.router = express.Router();
     this.taskController = new TaskController();
-    console.log(this.taskController);
   }
   initializeRoutes(): Router {
     this.router.post("/create", this.taskController.Create);
     this.router.get("/", this.taskController.GetAll);
     this.router.get("/sortasc", this.taskController.SortAsc);
     this.router.get("/sortdesc", this.taskController.SortDesc);
-    this.router.delete("/",this.taskController.TaskDelete);
+    this.router.delete("/", this.taskController.TaskDelete);
+    this.router.delete("/all", this.taskController.DeleteAllTask);
     return this.router;
   }
 }

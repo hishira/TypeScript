@@ -69,4 +69,7 @@ export class TaskService {
   async delete(taskid: string): Promise<any> {
     return await TaskModel.findOneAndDelete({ _id: taskid });
   }
+  async deleteall():Promise<any>{
+    return await TaskModel.deleteMany({})
+  }
 }

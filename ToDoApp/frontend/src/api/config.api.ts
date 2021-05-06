@@ -33,4 +33,16 @@ const GetFetchDeleteObject: Function = (obj: object): RequestInit => {
     method: "DELETE",
   };
 };
-export { getURL, fetchObject, GetFetchPostObject, GetFetchDeleteObject };
+const DeleteObject: RequestInit = {
+  mode: "cors",
+  headers: GetFetchHeader(),
+  credentials: "include",
+  method: "DELETE",
+};
+export {
+  getURL,
+  fetchObject,
+  GetFetchPostObject,
+  GetFetchDeleteObject,
+  DeleteObject,
+};

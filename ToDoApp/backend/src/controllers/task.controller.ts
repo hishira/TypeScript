@@ -57,4 +57,13 @@ export class TaskController {
       return resp.status(505).send({error:"Error"});
     }
   }
+
+  async DeleteAllTask(req:Request,resp:Response){
+    try{
+      await taskservice.deleteall();
+      return resp.status(200).json({message: "ok"})
+    }catch(e){
+      return resp.status(505).send({error: "Error"});
+    }
+  }
 }

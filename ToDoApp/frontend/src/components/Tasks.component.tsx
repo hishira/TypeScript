@@ -4,6 +4,7 @@ import React, {
   useEffect,
   ChangeEvent,
   ChangeEventHandler,
+  MouseEventHandler,
 } from "react";
 import {
   TasksContainer,
@@ -16,12 +17,14 @@ import {
   SelectLabel,
   Select,
   SelectOption,
+  DeleteAllTaskButton,
 } from "./MainPageComponents";
 import {
   FetchAllTasks,
   TaskDelete,
   TaskSortingAsc,
   TaskSortingDesc,
+  DeleteTaskAll,
 } from "../utils/task.util";
 type TasksComponentType = {
   refreshtasks: boolean;
@@ -67,6 +70,16 @@ const TasksComponent: FC<TasksComponentType> = ({
       }
     }
   };
+
+  const DeleteAllTaskHandle: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
+    console.log("delete all");
+    const response: boolean = await DeleteTaskAll();
+    if (!response) {
+      console.log("Problem");
+    }else{
+      refresh();
+    }
+  };
   return (
     <TasksContainer>
       <SelectContainer>
@@ -75,14 +88,17 @@ const TasksComponent: FC<TasksComponentType> = ({
           <SelectOption value={10}>By date ascending</SelectOption>
           <SelectOption value={20}>By date descending</SelectOption>
         </Select>
+        <DeleteAllTaskButton onClick={DeleteAllTaskHandle}>
+          Delete all
+        </DeleteAllTaskButton>
       </SelectContainer>
       {tasks.map((task: ITask) => (
         <Task>
           <TaskUpContainer>
             <TaskDateContainer>{task.createDate}</TaskDateContainer>
-            <TaskDeleteButton onClick={() => deleteTaskHandle(task._id)}>
-              Delete
-            </TaskDeleteButton>
+            <TaskDeleteButton
+              onClick={() => deleteTaskHandle(task._id)}
+            ></TaskDeleteButton>
           </TaskUpContainer>
           <TaskContextContainer>{task.content}</TaskContextContainer>
         </Task>
