@@ -27,28 +27,30 @@ const MainInputContainer = styled.div`
   position: relative;
   @media (max-width: 650px) {
     flex-direction: column;
+    margin: 0;
   }
 `;
 const MainInput = styled.textarea`
   overflow-y: hidden;
   resize: none;
   padding: 0.8rem 2rem 0.8rem 1rem;
-  width: 25rem;
+  width: 45rem;
+  height: 10rem;
   border-radius: 10px;
   font-size: 1.3rem;
   background-color: transparent;
-  border: .1rem solid lightgray;
+  border: 0.1rem solid lightgray;
   &:focus {
     outline: none;
   }
   @media (max-width: 650px) {
-    width: 14rem;
+    width: 100%;
   }
 `;
 const TaskButton = styled.button`
   padding: 0.5rem 1.5rem;
-  background-color: lightblue;
-  border: 0.1rem solid slateblue;
+  background-color: whitesmoke;
+  border: 0.1rem solid lightgray;
   border-radius: 5px;
   font-size: 1.3rem;
   cursor: pointer;
@@ -99,14 +101,14 @@ const Task = styled.article`
   margin-top: 0.5rem;
   position: relative;
   border-radius: 10px;
-  box-shadow: .2rem .2rem 0.2rem slategrey;
+  box-shadow: 0.2rem 0.2rem 0.2rem slategrey;
 `;
 const TaskDateContainer = styled.p`
   padding: 0rem 0.3rem 0.3rem 0.3rem;
   color: lightslategray;
 `;
 const TaskContextContainer = styled.p`
-  padding: .5rem;
+  padding: 0.5rem;
   text-align: start;
 `;
 const TaskUpContainer = styled.p`
@@ -114,22 +116,22 @@ const TaskUpContainer = styled.p`
   border-bottom: 0.01rem solid slategray;
   justify-content: space-between;
   align-items: center;
-`
+`;
 const DeleteAllTaskButton = styled.button`
-  padding: .7rem;
-  margin-top: .1rem;
+  padding: 0.7rem;
+  margin-top: 0.1rem;
   border: none;
   cursor: pointer;
   border-radius: 10px;
   font-size: 1.05rem;
   cursor: pointer;
   background-color: lightgray;
-  &:active{
+  &:active {
     background-color: grey;
   }
-`
+`;
 const TaskDeleteButton = styled.button`
-  padding: .7rem;
+  padding: 0.7rem;
   position: relative;
   right: 0;
   top: 0;
@@ -140,66 +142,81 @@ const TaskDeleteButton = styled.button`
   transform: translateY(-2rem);
   cursor: pointer;
   background-color: transparent;
-  &:active{
+  &:active {
     background-color: grey;
   }
-  &::before{
-    content: " ";
-    width: 100%;
-    height: 3px;
-    background-color: grey;
-    position:absolute;
-    left: 0;
-    top: 45%;
-    transform: rotate(45deg);
-  }
-  &::after{
+  &::before {
     content: " ";
     width: 100%;
     height: 3px;
     background-color: grey;
     position: absolute;
     left: 0;
-    top:45%;
+    top: 45%;
+    transform: rotate(45deg);
+  }
+  &::after {
+    content: " ";
+    width: 100%;
+    height: 3px;
+    background-color: grey;
+    position: absolute;
+    left: 0;
+    top: 45%;
     transform: rotate(-45deg);
   }
-`
+`;
 const SelectContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   width: 100%;
-  padding: .5rem;
-`
+  padding: 0.5rem;
+  & > *{
+    margin-right: .5rem;
+  }
+  @media (max-width: 500px){
+    flex-direction: column;
+    & > *{
+      margin-right:0;
+      margin-top :.4rem;
+    }
+  }
+`;
 const SelectLabel = styled.label`
   font-size: 1.15rem;
-`
+`;
 const Select = styled.select`
   padding: 0.7rem 1.2rem;
   width: 30%;
+  background-color: transparent;
   border-radius: 10px;
-  @media (max-width:  870px){
-    width: 60%; 
+  border: 0.1rem solid lightgray;
+  @media (max-width: 870px) {
+    width: 60%;
   }
-  @media (max-width:  450px){
-    width: 100%; 
+  @media (max-width: 450px) {
+    width: 100%;
   }
-  &:focus{
-    border: .1rem solid slategray;
+  &:focus {
+    border: 0.1rem solid lightgray;
     border-radius: 10px;
     outline: none;
   }
-  &:active{
+  &:active {
     border: none;
     outline: none;
-    border: .1rem solid slategray;
+    border: 0.1rem solid lightgray;
     border-radius: 10px;
   }
-`
+  &::after {
+    content: " ";
+    padding: 1rem;
+  }
+`;
 const SelectOption = styled.option`
-  padding: .4rem;
-`
+  padding: 1.4rem;
+`;
 export {
   MainPageComponent,
   MainTextComponent,
@@ -213,7 +230,7 @@ export {
   TaskContextContainer,
   TaskUpContainer,
   TaskDeleteButton,
-  SelectContainer, 
+  SelectContainer,
   SelectLabel,
   Select,
   SelectOption,
