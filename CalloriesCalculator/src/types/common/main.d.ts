@@ -1,0 +1,3 @@
+type RootStackConfiguration={
+    Home:undefined,
+}
