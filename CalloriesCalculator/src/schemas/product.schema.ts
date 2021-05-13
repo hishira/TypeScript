@@ -50,4 +50,4 @@ export class Product implements IProduct {
   }
 }
 
-export const ProduceRealm = new Realm({schema: [Product.schema]});
+export const ProductRealm = new Realm({schema: [Product.schema]});

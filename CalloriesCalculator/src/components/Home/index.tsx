@@ -1,52 +1,75 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import styled from 'styled-components/native';
-import {ProduceRealm, Product, IProduct} from '../../schemas/product.schema';
-const Container = styled.View`
+import {ProductRealm, Product, IProduct} from '../../schemas/product.schema';
+import {HomeComponentProps} from '../../types/common/main';
+export const Container = styled.View`
   display: flex;
   justify-content: center;
   width: 100%;
   align-items: center;
+  background-color: #fff8ee;
 `;
-const Button = styled.TouchableOpacity`
-  border: 1px solid slategray;
+export const Button = styled.TouchableOpacity`
+  border: 1px solid #a98c66;
   border-radius: 10px;
-  padding: 10px;
+  padding: 25px;
   width: 40%;
   margin-top: 10px;
+  background-color: #eab15b;
 `;
-const Text = styled.Text`
+export const ButtonText = styled.Text`
   width: 100%;
+  color: #504538;
+  font-size: 22px;
   text-align: center;
+  font-weight: bold;
 `;
 const Image = styled.Image`
   width: 300px;
   height: 300px;
+  margin-top: 20px;
 `;
-export const HomeComponent: React.FC = (): JSX.Element => {
-  const clickHandle = () => {
-    ProduceRealm.write(() => {
-      let p1: Product = new Product('p1', 12.32);
-      ProduceRealm.create(Product.schema.name, p1);
+const ButtonGroup = styled.View`
+  display: flex;
+  width: 100%;
+  margin-top: 40px;
+  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+export const HomeComponent: React.FC<HomeComponentProps> = ({
+  savedProductHandle,
+}: HomeComponentProps): JSX.Element => {
+  const clickHandle = (): void => {
+    ProductRealm.write(() => {
+      let products: Realm.Results<IProduct> = ProductRealm.objects('Product');
+      if (products.length <= 0) {
+        let p1: Product = new Product('p1', 12.32);
+        ProductRealm.create(Product.schema.name, p1);
+      }
     });
-    let products: Realm.Results<IProduct> = ProduceRealm.objects('Product');
-    for (const i of products) {
-      console.log(i.proteinnumber);
-    }
-    ProduceRealm.write(() => {
-      ProduceRealm.deleteAll();
+    /*ProductRealm.write(() => {
+      ProductRealm.deleteAll();
     });
+    */
+    savedProductHandle();
     console.log('hi');
   };
   return (
     <Container>
       <Image source={require('../../../public/path16.png')} />
-      <Button>
-        <Text>Callendar</Text>
-      </Button>
-      <Button onPress={clickHandle}>
-        <Text>Saved meals</Text>
-      </Button>
+      <ButtonGroup>
+        <Button>
+          <ButtonText>Callendar</ButtonText>
+        </Button>
+        <Button onPress={clickHandle}>
+          <ButtonText>Saved products</ButtonText>
+        </Button>
+        <Button>
+          <ButtonText>Saved meals</ButtonText>
+        </Button>
+      </ButtonGroup>
     </Container>
   );
 };

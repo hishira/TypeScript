@@ -1,10 +1,17 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
+import styled from 'styled-components/native';
+const ScrollView = styled.ScrollView`
+  background-color: #fff8ee;
+`;
 import {HomeComponent} from '../../components/Home/index';
-const HomeView: React.FC = (): JSX.Element => {
+import {Params} from '../../types/common/main';
+const HomeView: React.FC<Params> = ({navigation}: Params): JSX.Element => {
+  const savedProductsHandle: Function = (): void => {
+    navigation.navigate('Product');
+  };
   return (
     <ScrollView>
-      <HomeComponent />
+      <HomeComponent savedProductHandle={savedProductsHandle} />
     </ScrollView>
   );
 };
