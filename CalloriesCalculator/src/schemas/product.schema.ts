@@ -8,6 +8,23 @@ export interface IProduct {
   calories: number;
   entity: string;
 }
+
+export type ProductDTO = {
+  name: string;
+  fatnumber: string;
+  carbonumber: string;
+  proteinnumber: string;
+  calories: number;
+  entity: string;
+};
+export const EmtryProductDTO: ProductDTO = {
+  name: '',
+  fatnumber: '0.0',
+  carbonumber: '0.0',
+  proteinnumber: '0.0',
+  calories: 0.0,
+  entity: 'gram',
+};
 const ProductSchema: Realm.ObjectSchema = {
   name: 'Product',
   properties: {

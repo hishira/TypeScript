@@ -30,7 +30,7 @@ const Image = styled.Image`
   height: 300px;
   margin-top: 20px;
 `;
-const ButtonGroup = styled.View`
+export const ButtonGroup = styled.View`
   display: flex;
   width: 100%;
   margin-top: 40px;
