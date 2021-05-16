@@ -1,16 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useState} from 'react';
+import {Modal} from 'react-native';
 import styled from 'styled-components/native';
 import {EmtryProductDTO, ProductDTO} from '../../schemas/product.schema';
 import {ModalComponentProps} from '../../types/common/main';
-import {Container} from '../Home/index';
-const ModalWrapper = styled.Modal`
-  border: 2px solid red;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`;
+import {Container, ButtonGroup, Button, ButtonText} from '../Home/index';
+import {ProductRealm, Product, IProduct} from '../../schemas/product.schema';
 const ModalContaierWrapper = styled.View`
   width: 100%;
   height: 100%;
@@ -52,6 +47,7 @@ const BoxContainer = styled(NameInputeContainer)`
   width: 100%;
   justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
 `;
 const Box = styled.View`
   display: flex;
@@ -68,10 +64,16 @@ const BoxInput = styled.TextInput`
   padding: 5px;
   margin-top: 5px;
 `;
-
-export const Modal: React.FC<ModalComponentProps> = ({
+const ModelButton = styled(Button)`
+  padding: 10px;
+`;
+const ModalButtonGroup = styled(ButtonGroup)`
+  margin-top: 20px;
+`;
+export const ModalComponent: React.FC<ModalComponentProps> = ({
   open,
   closehandle,
+  refresh
 }: ModalComponentProps): JSX.Element => {
   const [newproduct, setnewproduct] = useState<ProductDTO>(EmtryProductDTO);
 
@@ -88,14 +90,54 @@ export const Modal: React.FC<ModalComponentProps> = ({
         return;
     }
   };
+
+  const getCalloriesValueByType: Function = (type: string): string => {
+    return type === 'fat'
+      ? newproduct.fatnumber
+      : type === 'carbo'
+      ? newproduct.carbonumber
+      : newproduct.proteinnumber;
+  };
   const boxnumberinpute = (textvalue: string, type: string): void => {
-    if (/^\d{0,4}\.?\d{0,3}?$/gm.test(textvalue)) {
+    if (/^\d{0,4}(\.{1}\d{0,3})?$/gm.test(textvalue)) {
       console.log(textvalue);
       whetetostore(type, textvalue);
+    } else {
+      whetetostore(type, getCalloriesValueByType(type));
+    }
+  };
+
+  const cancelHandle: Function = (): void => {
+    closehandle();
+  };
+
+  const addHandle: Function = (): void => {
+    console.log(newproduct);
+    ProductRealm.write(() => {
+      let new_prod: Product = new Product(
+        newproduct.name,
+        newproduct.calories,
+        parseFloat(newproduct.fatnumber),
+        parseFloat(newproduct.carbonumber),
+        parseFloat(newproduct.proteinnumber),
+        newproduct.entity,
+      );
+      ProductRealm.create('Product', new_prod);
+      refresh();
+      closehandle();
+    });
+  };
+  const caloriesset: Function = (newvalue: string): void => {
+    if (/^\d{0,4}(\.{1}\d{0,3})?$/gm.test(newvalue)) {
+      setnewproduct({...newproduct, calories: parseFloat(newvalue)});
+    } else if (isNaN(parseFloat(newvalue))) {
+      setnewproduct({...newproduct, calories: 0.0});
+    } else {
+      setnewproduct({...newproduct, calories: newproduct.calories});
     }
   };
   return (
-    <ModalWrapper
+    <Modal
       visible={open}
       onRequestClose={closehandle}
       animationType="fade"
@@ -119,24 +161,51 @@ export const Modal: React.FC<ModalComponentProps> = ({
           <BoxContainer>
             <Box>
               <BoxName>Fat</BoxName>
-              <BoxInput keyboardType="numbers-and-punctuation"></BoxInput>
+              <BoxInput
+                keyboardType="decimal-pad"
+                value={newproduct.fatnumber}
+                onChangeText={(text: string) => boxnumberinpute(text, 'fat')}
+              />
             </Box>
             <Box>
               <BoxName>Carbo</BoxName>
-              <BoxInput keyboardType="numbers-and-punctuation"></BoxInput>
+              <BoxInput
+                keyboardType="decimal-pad"
+                value={newproduct.carbonumber}
+                onChangeText={(text: string) => boxnumberinpute(text, 'carbo')}
+              />
             </Box>
             <Box>
               <BoxName>Protein</BoxName>
               <BoxInput
-                keyboardType="numbers-and-punctuation"
-                value={newproduct.proteinnumber.toString()}
+                keyboardType="decimal-pad"
+                value={newproduct.proteinnumber}
                 onChangeText={(text: string) =>
                   boxnumberinpute(text, 'protein')
-                }></BoxInput>
+                }
+              />
+            </Box>
+            <Box>
+              <BoxName>Calories</BoxName>
+              <BoxInput
+                keyboardType="decimal-pad"
+                value={newproduct.calories.toString()}
+                onChangeText={(text: string) => {
+                  caloriesset(text);
+                }}
+              />
             </Box>
           </BoxContainer>
+          <ModalButtonGroup>
+            <ModelButton onPress={() => addHandle()}>
+              <ButtonText>Add</ButtonText>
+            </ModelButton>
+            <ModelButton onPress={() => cancelHandle()}>
+              <ButtonText>Cancel</ButtonText>
+            </ModelButton>
+          </ModalButtonGroup>
         </ModalContainer>
       </ModalContaierWrapper>
-    </ModalWrapper>
+    </Modal>
   );
 };

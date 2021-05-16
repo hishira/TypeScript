@@ -18,4 +18,5 @@ export type ProductComponentProps = {
 export type ModalComponentProps = {
   open: boolean;
   closehandle: () => void;
+  refresh: Function;
 };

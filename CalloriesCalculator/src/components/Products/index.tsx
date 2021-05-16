@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import {Container, Button, ButtonText, ButtonGroup} from '../Home/index';
 import {IProduct, ProductRealm} from '../../schemas/product.schema';
 import {Product} from './product';
-import {Modal} from './modal';
+import {ModalComponent} from './modal';
 const ProductContainer = styled.View`
   display: flex;
   flex-direction: row;
@@ -33,13 +33,24 @@ export const ProductComponent: React.FC = (): JSX.Element => {
   const modalclose = (): void => {
     setmodalopen(false);
   };
+  const refrechfunc: Function = (): void => {
+    setrefresh(!refresh);
+  };
   return (
     <Container>
-      <Modal open={modalopen} closehandle={modalclose} />
+      <ModalComponent
+        open={modalopen}
+        closehandle={modalclose}
+        refresh={refrechfunc}
+      />
       {products !== null ? (
         <ProductContainer>
           {products.map((product: IProduct) => (
-            <Product product={product} deleteHandle={deleteHandle} />
+            <Product
+              key={product._id}
+              product={product}
+              deleteHandle={deleteHandle}
+            />
           ))}
         </ProductContainer>
       ) : null}
