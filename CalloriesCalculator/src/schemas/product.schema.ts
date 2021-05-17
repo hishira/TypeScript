@@ -14,15 +14,43 @@ export type ProductDTO = {
   fatnumber: string;
   carbonumber: string;
   proteinnumber: string;
+  calories: string;
+  entity: string;
+};
+export type EditProductDTO = {
+  _id: ObjectId;
+  name: string;
+  fatnumber: string;
+  carbonumber: string;
+  proteinnumber: string;
+  calories: string;
+  entity: string;
+};
+
+export type UpdateProductDTO = {
+  _id: ObjectId;
+  name: string;
+  fatnumber: number;
+  carbonumber: number;
+  proteinnumber: number;
   calories: number;
   entity: string;
+}
+export const EmptyEditProductDto: EditProductDTO = {
+  _id: new Realm.BSON.ObjectID(),
+  name: '',
+  fatnumber: '0.0',
+  carbonumber: '0.0',
+  proteinnumber: '0.0',
+  calories: '0.0',
+  entity: 'gram',
 };
 export const EmtryProductDTO: ProductDTO = {
   name: '',
   fatnumber: '0.0',
   carbonumber: '0.0',
   proteinnumber: '0.0',
-  calories: 0.0,
+  calories: '0.0',
   entity: 'gram',
 };
 const ProductSchema: Realm.ObjectSchema = {

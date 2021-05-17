@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/native';
-import {EmtryProductDTO, ProductDTO} from '../../schemas/product.schema';
-import {ModalComponentProps} from '../../types/common/main';
+import {EditProductDTO, UpdateProductDTO} from '../../schemas/product.schema';
+import {EditModalProps} from '../../types/common/main';
 import {Container, ButtonGroup, Button, ButtonText} from '../Home/index';
-import {ProductRealm, Product, IProduct} from '../../schemas/product.schema';
+import {
+  ProductRealm,
+  Product,
+  IProduct,
+  EmptyEditProductDto,
+} from '../../schemas/product.schema';
 const Modal = styled.Modal``;
 const ModalContaierWrapper = styled.View`
   width: 100%;
@@ -70,33 +75,37 @@ const ModelButton = styled(Button)`
 const ModalButtonGroup = styled(ButtonGroup)`
   margin-top: 20px;
 `;
-export const ModalComponent: React.FC<ModalComponentProps> = ({
+export const EditModalComponent: React.FC<EditModalProps> = ({
   open,
   closehandle,
   refresh,
-}: ModalComponentProps): JSX.Element => {
-  const [newproduct, setnewproduct] = useState<ProductDTO>(EmtryProductDTO);
+  product,
+}: EditModalProps): JSX.Element => {
+  const [editedproduct, seteditedproduct] = useState<EditProductDTO>(product);
 
+  useEffect(() => {
+    seteditedproduct(product);
+  }, [product]);
   const whetetostore = (type: string, value: string) => {
     switch (type) {
       case 'fat':
-        setnewproduct({...newproduct, fatnumber: value});
+        seteditedproduct({...editedproduct, fatnumber: value});
         return;
       case 'carbo':
-        setnewproduct({...newproduct, carbonumber: value});
+        seteditedproduct({...editedproduct, carbonumber: value});
         return;
       case 'protein':
-        setnewproduct({...newproduct, proteinnumber: value});
+        seteditedproduct({...editedproduct, proteinnumber: value});
         return;
     }
   };
 
   const getCalloriesValueByType: Function = (type: string): string => {
     return type === 'fat'
-      ? newproduct.fatnumber
+      ? editedproduct.fatnumber
       : type === 'carbo'
-      ? newproduct.carbonumber
-      : newproduct.proteinnumber;
+      ? editedproduct.carbonumber
+      : editedproduct.proteinnumber;
   };
   const boxnumberinpute = (textvalue: string, type: string): void => {
     if (/^\d{0,4}(\.{1}\d{0,3})?$/gm.test(textvalue)) {
@@ -108,32 +117,43 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
   };
 
   const cancelHandle: Function = (): void => {
-    setnewproduct(EmtryProductDTO);
+    seteditedproduct(EmptyEditProductDto);
     closehandle();
   };
 
-  const addHandle: Function = (): void => {
-    console.log(newproduct);
+  const converttoupdateproduct: Function = (): UpdateProductDTO => {
+    let up: UpdateProductDTO = {
+      _id: editedproduct._id,
+      name: editedproduct.name,
+      fatnumber: parseFloat(editedproduct.fatnumber),
+      carbonumber: parseFloat(editedproduct.carbonumber),
+      proteinnumber: parseFloat(editedproduct.proteinnumber),
+      calories: parseFloat(editedproduct.calories),
+      entity: editedproduct.entity,
+    };
+    return up;
+  };
+  const edithandle: Function = (): void => {
     ProductRealm.write(() => {
-      let new_prod: Product = new Product(
-        newproduct.name,
-        parseFloat(newproduct.calories),
-        parseFloat(newproduct.fatnumber),
-        parseFloat(newproduct.carbonumber),
-        parseFloat(newproduct.proteinnumber),
-        newproduct.entity,
-      );
-      ProductRealm.create('Product', new_prod);
-      setnewproduct(EmtryProductDTO);
-      refresh();
-      closehandle();
+      let producttoupdate = ProductRealm.objects('Product').filter(prod =>
+        prod._id.equals(editedproduct._id),
+      )[0];
+      console.log(producttoupdate);
+      const updatedprod = converttoupdateproduct(editedproduct);
+      producttoupdate.name = updatedprod.name;
+      producttoupdate.fatnumber = updatedprod.fatnumber;
+      producttoupdate.carbonumber = updatedprod.carbonumber;
+      producttoupdate.proteinnumber = updatedprod.proteinnumber;
+      producttoupdate.calories = updatedprod.calories;
+      producttoupdate.entity = updatedprod.entity;
+
     });
   };
   const caloriesset: Function = (newvalue: string): void => {
     if (/^\d{0,4}(\.{1}\d{0,3})?$/gm.test(newvalue)) {
-      setnewproduct({...newproduct, calories: newvalue});
+      seteditedproduct({...editedproduct, calories: newvalue});
     } else {
-      setnewproduct({...newproduct, calories: newproduct.calories});
+      seteditedproduct({...editedproduct, calories: editedproduct.calories});
     }
   };
   return (
@@ -145,11 +165,12 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
       transparent={true}>
       <ModalContaierWrapper>
         <ModalContainer>
-          <MainText>Add new product</MainText>
+          <MainText>Edit product</MainText>
           <NameInputeContainer>
             <NameInput
+              value={editedproduct.name}
               onChangeText={(text: string) =>
-                setnewproduct({...newproduct, name: text})
+                seteditedproduct({...editedproduct, name: text})
               }
               placeholder="Product name"
             />
@@ -157,7 +178,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
           <NameInputeContainer>
             <Picker
               onValueChange={(itemvalue: string, itemindex: number) =>
-                setnewproduct({...newproduct, entity: itemvalue})
+                seteditedproduct({...editedproduct, entity: itemvalue})
               }>
               <Picker.Item label="Gram" value="gram" />
               <Picker.Item label="Kilogram" value="Kg" />
@@ -168,7 +189,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
               <BoxName>Fat</BoxName>
               <BoxInput
                 keyboardType="decimal-pad"
-                value={newproduct.fatnumber}
+                value={editedproduct.fatnumber}
                 onChangeText={(text: string) => boxnumberinpute(text, 'fat')}
               />
             </Box>
@@ -176,7 +197,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
               <BoxName>Carbo</BoxName>
               <BoxInput
                 keyboardType="decimal-pad"
-                value={newproduct.carbonumber}
+                value={editedproduct.carbonumber}
                 onChangeText={(text: string) => boxnumberinpute(text, 'carbo')}
               />
             </Box>
@@ -184,7 +205,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
               <BoxName>Protein</BoxName>
               <BoxInput
                 keyboardType="decimal-pad"
-                value={newproduct.proteinnumber}
+                value={editedproduct.proteinnumber}
                 onChangeText={(text: string) =>
                   boxnumberinpute(text, 'protein')
                 }
@@ -194,7 +215,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
               <BoxName>Calories</BoxName>
               <BoxInput
                 keyboardType="decimal-pad"
-                value={newproduct.calories.toString()}
+                value={editedproduct.calories.toString()}
                 onChangeText={(text: string) => {
                   caloriesset(text);
                 }}
@@ -202,8 +223,8 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
             </Box>
           </BoxContainer>
           <ModalButtonGroup>
-            <ModelButton onPress={() => addHandle()}>
-              <ButtonText>Add</ButtonText>
+            <ModelButton onPress={() => edithandle()}>
+              <ButtonText>Edit</ButtonText>
             </ModelButton>
             <ModelButton onPress={() => cancelHandle()}>
               <ButtonText>Cancel</ButtonText>

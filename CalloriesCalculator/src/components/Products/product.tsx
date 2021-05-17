@@ -5,7 +5,7 @@ import {Button, ButtonText, ButtonGroup} from '../Home/index';
 import {ProductComponentProps} from '../../types/common/main';
 const ProductContainer = styled.View`
   width: 40%;
-  background-color: #dfe0df;
+  background-color: #f8eada;
   border-radius: 10px;
 `;
 const ProductName = styled.View`
@@ -35,11 +35,11 @@ const Row = styled.View`
 `;
 const Column = styled.View`
   width: 33.3%;
-  border: 1px solid slategray;
+  border: 1px solid lightgray;
 `;
 const TableBody = styled(TableHead)``;
 const TableBodyRow = styled(Row)`
-  background-color: #fff8ee;
+  background-color: whitesmoke;
 `;
 const ProductButtonGroup = styled(ButtonGroup)`
   margin-top: 0px;
@@ -72,9 +72,10 @@ const ProductInfo = styled.View`
 export const Product: React.FC<ProductComponentProps> = ({
   product,
   deleteHandle,
+  editfunction,
 }: ProductComponentProps): JSX.Element => {
   return (
-    <ProductContainer>
+    <ProductContainer elevation={3}>
       <ProductInfo>
         <ProductName>
           <Text>Product name: </Text>
@@ -114,7 +115,7 @@ export const Product: React.FC<ProductComponentProps> = ({
         </TableBody>
       </ProductInfo>
       <ProductButtonGroup>
-        <ProductButtonOne>
+        <ProductButtonOne onPress={() => editfunction(product)}>
           <SmallerButtonText>Edit</SmallerButtonText>
         </ProductButtonOne>
         <ProductButtonSecond>

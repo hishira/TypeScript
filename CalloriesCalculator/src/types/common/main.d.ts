@@ -1,5 +1,5 @@
 import {StackNavigationProp} from '@react-navigation/stack';
-import {IProduct} from '../../schemas/product.schema';
+import {IProduct, EditProductDTO} from '../../schemas/product.schema';
 export type RootStackConfiguration = {
   Home: undefined;
   Product: undefined;
@@ -13,10 +13,15 @@ export type HomeComponentProps = {
 };
 export type ProductComponentProps = {
   product: IProduct;
-  deleteHandle: (prod: IProduct) => void;
+  deleteHandle: Function;
+  editfunction: (product: IProduct) => void;
 };
 export type ModalComponentProps = {
   open: boolean;
   closehandle: () => void;
   refresh: Function;
 };
+type ExtendedToModal = {
+  product: EditProductDTO;
+};
+export type EditModalProps = ModalComponentProps & ExtendedToModal;
