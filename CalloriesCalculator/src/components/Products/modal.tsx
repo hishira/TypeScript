@@ -4,7 +4,8 @@ import styled from 'styled-components/native';
 import {EmtryProductDTO, ProductDTO} from '../../schemas/product.schema';
 import {ModalComponentProps} from '../../types/common/main';
 import {Container, ButtonGroup, Button, ButtonText} from '../Home/index';
-import {ProductRealm, Product, IProduct} from '../../schemas/product.schema';
+import {Product, IProduct} from '../../schemas/product.schema';
+import {GeneralRealm} from '../../schemas/general.schema';
 const Modal = styled.Modal``;
 const ModalContaierWrapper = styled.View`
   width: 100%;
@@ -114,7 +115,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
 
   const addHandle: Function = (): void => {
     console.log(newproduct);
-    ProductRealm.write(() => {
+    GeneralRealm.write(() => {
       let new_prod: Product = new Product(
         newproduct.name,
         parseFloat(newproduct.calories),
@@ -123,7 +124,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
         parseFloat(newproduct.proteinnumber),
         newproduct.entity,
       );
-      ProductRealm.create('Product', new_prod);
+      GeneralRealm.create('Product', new_prod);
       setnewproduct(EmtryProductDTO);
       refresh();
       closehandle();

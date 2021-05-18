@@ -3,6 +3,7 @@ import {IProduct, EditProductDTO} from '../../schemas/product.schema';
 export type RootStackConfiguration = {
   Home: undefined;
   Product: undefined;
+  Meal: undefined;
 };
 type ScreenNavigation = StackNavigationProp<RootStackConfiguration>;
 export type Params = {
@@ -10,6 +11,7 @@ export type Params = {
 };
 export type HomeComponentProps = {
   savedProductHandle: Function;
+  mealNavigateHandle: Function;
 };
 export type ProductComponentProps = {
   product: IProduct;

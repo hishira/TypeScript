@@ -5,11 +5,12 @@ import {EditProductDTO, UpdateProductDTO} from '../../schemas/product.schema';
 import {EditModalProps} from '../../types/common/main';
 import {Container, ButtonGroup, Button, ButtonText} from '../Home/index';
 import {
-  ProductRealm,
   Product,
   IProduct,
   EmptyEditProductDto,
 } from '../../schemas/product.schema';
+import {GeneralRealm} from '../../schemas/general.schema';
+
 const Modal = styled.Modal``;
 const ModalContaierWrapper = styled.View`
   width: 100%;
@@ -134,8 +135,8 @@ export const EditModalComponent: React.FC<EditModalProps> = ({
     return up;
   };
   const edithandle: Function = (): void => {
-    ProductRealm.write(() => {
-      let producttoupdate = ProductRealm.objects('Product').filter(prod =>
+    GeneralRealm.write(() => {
+      let producttoupdate = GeneralRealm.objects('Product').filter(prod =>
         prod._id.equals(editedproduct._id),
       )[0];
       console.log(producttoupdate);
@@ -146,7 +147,8 @@ export const EditModalComponent: React.FC<EditModalProps> = ({
       producttoupdate.proteinnumber = updatedprod.proteinnumber;
       producttoupdate.calories = updatedprod.calories;
       producttoupdate.entity = updatedprod.entity;
-
+      refresh();
+      closehandle();
     });
   };
   const caloriesset: Function = (newvalue: string): void => {

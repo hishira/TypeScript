@@ -6,8 +6,8 @@ import {
   EditProductDTO,
   EmptyEditProductDto,
   IProduct,
-  ProductRealm,
 } from '../../schemas/product.schema';
+import {GeneralRealm} from '../../schemas/general.schema';
 import {Product} from './product';
 import {ModalComponent} from './modal';
 import {EditModalComponent} from './editmodal';
@@ -29,14 +29,14 @@ export const ProductComponent: React.FC = (): JSX.Element => {
   const [producttoedit, setproducttoedit] =
     useState<EditProductDTO>(EmptyEditProductDto);
   useEffect(() => {
-    let allproducts: Realm.Results<IProduct> = ProductRealm.objects('Product');
+    let allproducts: Realm.Results<IProduct> = GeneralRealm.objects('Product');
     console.log(allproducts);
     setproducts(allproducts);
   }, [refresh]);
 
   const deleteHandle: Function = (product: IProduct): void => {
-    ProductRealm.write(() => {
-      ProductRealm.delete(product);
+    GeneralRealm.write(() => {
+      GeneralRealm.delete(product);
       setrefresh(!refresh);
     });
   };

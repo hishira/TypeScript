@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import styled from 'styled-components/native';
-import {ProductRealm, Product, IProduct} from '../../schemas/product.schema';
+import {Product, IProduct} from '../../schemas/product.schema';
+import {GeneralRealm} from '../../schemas/general.schema';
 import {HomeComponentProps} from '../../types/common/main';
 export const Container = styled.View`
   display: flex;
@@ -40,13 +41,14 @@ export const ButtonGroup = styled.View`
 `;
 export const HomeComponent: React.FC<HomeComponentProps> = ({
   savedProductHandle,
+  mealNavigateHandle,
 }: HomeComponentProps): JSX.Element => {
   const clickHandle = (): void => {
-    ProductRealm.write(() => {
-      let products: Realm.Results<IProduct> = ProductRealm.objects('Product');
+    GeneralRealm.write(() => {
+      let products: Realm.Results<IProduct> = GeneralRealm.objects('Product');
       if (products.length <= 0) {
         let p1: Product = new Product('p1', 12.32);
-        ProductRealm.create(Product.schema.name, p1);
+        GeneralRealm.create(Product.schema.name, p1);
       }
     });
     /*ProductRealm.write(() => {
@@ -66,7 +68,7 @@ export const HomeComponent: React.FC<HomeComponentProps> = ({
         <Button onPress={clickHandle}>
           <ButtonText>Saved products</ButtonText>
         </Button>
-        <Button>
+        <Button onPress={mealNavigateHandle}>
           <ButtonText>Saved meals</ButtonText>
         </Button>
       </ButtonGroup>

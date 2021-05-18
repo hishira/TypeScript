@@ -35,7 +35,7 @@ export type UpdateProductDTO = {
   proteinnumber: number;
   calories: number;
   entity: string;
-}
+};
 export const EmptyEditProductDto: EditProductDTO = {
   _id: new Realm.BSON.ObjectID(),
   name: '',
@@ -94,5 +94,3 @@ export class Product implements IProduct {
     this.entity = entity;
   }
 }
-
-export const ProductRealm = new Realm({schema: [Product.schema]});
