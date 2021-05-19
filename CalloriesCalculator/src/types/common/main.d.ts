@@ -27,3 +27,10 @@ type ExtendedToModal = {
   product: EditProductDTO;
 };
 export type EditModalProps = ModalComponentProps & ExtendedToModal;
+
+export type FirstTypeProps = {
+  selectMealType: Function;
+};
+export type SecondTypeProps = {
+  mealtype: string;
+};

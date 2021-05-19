@@ -1,16 +1,23 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import {GeneralRealm} from '../../schemas/general.schema';
-import {IMeal} from './../../schemas/meal.schema';
-const Meals = styled.View`
+import FirstPart from './firstpart';
+import SecondPart from './secondpart';
+const Meals = styled.ScrollView`
   display: flex;
+  height: 100%;
+  flex: 1;
 `;
 export const MealComponent: React.FC = (): JSX.Element => {
-  const [meals, setmeals] = useState<Realm.Results<IMeal> | []>([]);
-  useEffect(() => {
-    let allmeal: Realm.Results<IMeal> = GeneralRealm.objects('Meal');
-    console.log(allmeal);
-    setmeals(allmeal);
-  }, []);
-  return <Meals></Meals>;
+  const [mealtype, setmealtype] = useState<string>('breakfast');
+
+  const selectMealTypeHandle: Function = (mealtypevalue: string): void => {
+    setmealtype(mealtypevalue);
+  };
+
+  return (
+    <Meals>
+      <FirstPart selectMealType={selectMealTypeHandle} />
+      <SecondPart mealtype={mealtype} />
+    </Meals>
+  );
 };
