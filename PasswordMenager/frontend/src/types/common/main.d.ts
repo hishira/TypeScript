@@ -59,6 +59,7 @@ type GroupComponentProps = {
 
 type FieldsComponentType = {
   selectedgroup: string;
+  refreshall: boolean,
   refreshgroupentities: Function,
 };
 

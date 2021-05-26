@@ -59,16 +59,17 @@ type NewEntryProps = {
   edit?: boolean;
   editentryid?: string;
   refreshentry: boolean;
+  refresh?: Function;
 };
 const NewEntryComponent = ({
   edit,
   editentryid,
   refreshentry,
+  refresh,
 }: NewEntryProps): JSX.Element => {
   const oncheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    let element: HTMLCollectionOf<HTMLInputElement> = document.getElementsByTagName(
-      "input"
-    );
+    let element: HTMLCollectionOf<HTMLInputElement> =
+      document.getElementsByTagName("input");
     if (e.target.checked) {
       for (let i of element) {
         if (i.type === "password") {
@@ -82,14 +83,12 @@ const NewEntryComponent = ({
     }
   };
   const [passlen, setpasslen] = useState<number>(6);
-  const [
-    passwordcharacters,
-    setpasswordcharacters,
-  ] = useState<PasswordCharactersTypes>({
-    letters: false,
-    numbers: false,
-    specialChar: false,
-  });
+  const [passwordcharacters, setpasswordcharacters] =
+    useState<PasswordCharactersTypes>({
+      letters: false,
+      numbers: false,
+      specialChar: false,
+    });
   const [newentry, setnewentry] = useState<CreateEntryDto>({
     title: "",
     username: "",
@@ -267,6 +266,9 @@ const NewEntryComponent = ({
       const response: EditEntryResponse = await EntryEditById(editedvalues);
       if (response.status) {
         console.log("ok");
+        if (refresh !== undefined)
+          refresh();
+          console.log("ok");
       }
     }
   };

@@ -26,13 +26,13 @@ const TableBody = styled.tbody``;
 const TableRow = styled.tr``;
 
 const TableComponent = styled.td<TableComponentProps>`
-  border: 2px solid red;
   text-align: center;
   ${(props) => props.password && "cursor: pointer"}
 `;
 const FieldsContainer = ({
   selectedgroup,
   refreshgroupentities,
+  refreshall,
 }: FieldsComponentType): JSX.Element => {
   const [entries, setentries] = useState<Array<IEntry>>([]);
   const [editmodalopen, seteditmodalopen] = useState<boolean>(false);
@@ -53,7 +53,7 @@ const FieldsContainer = ({
   };
   useEffect(() => {
     fetchEntries();
-  }, [selectedgroup]);
+  }, [selectedgroup, refreshall]);
 
   const gettext = (text: string | null): string => {
     return text ? text : "";
@@ -86,6 +86,10 @@ const FieldsContainer = ({
     setentrytoedit(entryid);
     seteditmodalopen(true);
   };
+
+  const refreshentry: Function = (): void => {
+    refreshgroupentities();
+  };
   return (
     <Container>
       <Modal
@@ -96,6 +100,7 @@ const FieldsContainer = ({
             refreshentry={refreshmodalentry}
             edit={true}
             editentryid={entrytoedit}
+            refresh={refreshentry}
           />
         }
       />

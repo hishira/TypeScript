@@ -10,7 +10,7 @@ const Container = styled.div`
   justify-content: space-between;
   width: 30%;
   border-right: 0.1rem solid slategray;
-  @media (max-width: 500px){
+  @media (max-width: 500px) {
     width: 100%;
   }
 `;
@@ -18,16 +18,14 @@ const Groups = styled.div`
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  border: 2px solid red;
   scroll-behavior: smooth;
-  @media (max-width: 500px){
-   max-height: initial;
+  @media (max-width: 500px) {
+    max-height: initial;
   }
 `;
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  border: 2px solid purple;
   padding: 1rem;
   box-sizing: border-box;
 `;
@@ -36,11 +34,10 @@ const NewGroup = styled.div`
   background-color: white;
   padding: 15px;
   border-radius: 10px;
-  border: 2px solid purple;
   width: 100%;
 `;
 const GroupContainer = styled.div`
-  border: 2px solid purple;
+  border:0.1rem solid lightgrey;
   padding: 0.5rem;
   text-align: center;
   margin-top: 0.4rem;
@@ -76,7 +73,7 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const [modal, setModal] = useState<boolean>(false);
   const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
   const [groups, setgroup] = useState<Array<IGroup>>([]);
-
+  const [selectedgroup, setselectedgroup] = useState<string>("");
   const clickHandle = (): void => {
     setModal(true);
   };
@@ -95,6 +92,11 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   useEffect(() => {
     fetchGroups();
   }, []);
+
+  const ongroupclick: Function = (group: IGroup): void => {
+    selectgrouphandle(group._id);
+    setselectedgroup(group._id);
+  };
   const closeHandle = (): void => setModal(false);
   return (
     <Container>
@@ -112,7 +114,12 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
       />
       <Groups>
         {groups.map((group: IGroup) => (
-          <GroupContainer onClick={() => selectgrouphandle(group._id)}>
+          <GroupContainer
+            {...(selectedgroup === group._id && {
+              style: { backgroundColor: "lightslategrey" },
+            })}
+            onClick={() => ongroupclick(group)}
+          >
             {group.name}
           </GroupContainer>
         ))}
