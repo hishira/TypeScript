@@ -9,7 +9,7 @@ const Container = styled.div`
   height: 89.5vh;
   @media (max-width: 500px) {
     flex-direction: column;
-    height: inherit;
+    overflow: hidden;
   }
 `;
 const PassComponent = () => {

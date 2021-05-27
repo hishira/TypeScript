@@ -7,6 +7,7 @@ import {
   GetUserEntriesByGroupID,
 } from "../../utils/entry.utils";
 import Button from "../Button/index";
+import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
 const Container = styled.div`
   width: 70%;
   outline: 0.1rem solid yellow;
@@ -14,7 +15,6 @@ const Container = styled.div`
   max-height: 89.5vh;
   @media (max-width: 500px) {
     width: 100%;
-    max-height: none;
     overflow: hidden;
   }
 `;
@@ -23,12 +23,74 @@ const TableContainer = styled.table`
 `;
 const TableHead = styled.thead``;
 const TableBody = styled.tbody``;
-const TableRow = styled.tr``;
+const TableRow = styled.tr`
+  z-index: 1;
+`;
 
 const TableComponent = styled.td<TableComponentProps>`
   text-align: center;
   ${(props) => props.password && "cursor: pointer"}
 `;
+const TableButton = styled(Button)`
+  @media (max-width: 660px) {
+    padding: 0.1rem;
+  }
+  @media (max-width: 500px) {
+    display: none;
+  }
+`;
+const MinButton = styled(TableButton)`
+  display: none;
+  @media (max-width: 500px) {
+    display: block;
+    cursor: pointer;
+  }
+`;
+const ListComponent = styled.div`
+  display: flex;
+  border: 0.1rem solid lightslategray;
+  border-radius: 5px;
+  flex-direction: column;
+  left: 0;
+  z-index: 10;
+`;
+const ListItem = styled(Button)`
+  cursor: pointer;
+`;
+type MoreMiniModal = {
+  entry: IEntry;
+  refreshgroupentities: Function;
+  setentrytoedit: Function;
+  seteditmodalopen: Function;
+  modalClose: Function;
+};
+const ModalButtonChoicer: React.FC<MoreMiniModal> = ({
+  entry,
+  refreshgroupentities,
+  setentrytoedit,
+  seteditmodalopen,
+  modalClose,
+}: MoreMiniModal): JSX.Element => {
+  const deletehandle = async (entryid: string): Promise<void> => {
+    console.log(entryid);
+    const response: DeleteEntryResponse = await DeleteUserEntry(entryid);
+    if (response.status) {
+      refreshgroupentities();
+      modalClose();
+    }
+  };
+  const onedithandle = (entryid: string): void => {
+    setentrytoedit(entryid);
+    seteditmodalopen(true);
+    modalClose();
+  };
+  return (
+    <ListComponent id={entry._id}>
+      <ListItem onClick={() => deletehandle(entry._id)}>Delete</ListItem>
+      <ListItem onClick={() => onedithandle(entry._id)}>Edit</ListItem>
+    </ListComponent>
+  );
+};
 const FieldsContainer = ({
   selectedgroup,
   refreshgroupentities,
@@ -38,6 +100,8 @@ const FieldsContainer = ({
   const [editmodalopen, seteditmodalopen] = useState<boolean>(false);
   const [entrytoedit, setentrytoedit] = useState<string>("");
   const [refreshmodalentry, setrefreshmodalentry] = useState<boolean>(false);
+  const [smallmodalopen, setsmallmodalopen] = useState<boolean>(false);
+  const [entrywithsmallbutton,setentrywithsmallbutton] = useState<IEntry>(EMPTYENTRYRESPONSE)
   const fetchEntries = async (): Promise<void> => {
     if (selectedgroup === "") return;
     const groupid: GroupId = {
@@ -47,6 +111,17 @@ const FieldsContainer = ({
     if (response.status) {
       console.log(response.response);
       setentries(response.response);
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 500) {
+          for (const i of response.response) {
+            const listelement: HTMLElement | null = document.getElementById(
+              i._id
+            );
+            console.log(listelement);
+            if (listelement !== null) listelement.style.display = "none";
+          }
+        }
+      });
     } else {
       setentries([]);
     }
@@ -58,8 +133,10 @@ const FieldsContainer = ({
   const gettext = (text: string | null): string => {
     return text ? text : "";
   };
-  const passwordClick = (entryid: string): void => {
-    let elementpass: HTMLElement | null = document.getElementById(entryid);
+  const passwordClick = (entryid: string, groupid: string): void => {
+    let elementpass: HTMLElement | null = document.getElementById(
+      `${entryid}${groupid}`
+    );
     console.log(elementpass);
     if (elementpass !== null) {
       navigator.clipboard
@@ -82,6 +159,9 @@ const FieldsContainer = ({
     seteditmodalopen(false);
   };
 
+  const smallmodalclose = ():void=>{
+    setsmallmodalopen(false);
+  }
   const onedithandle = (entryid: string): void => {
     setentrytoedit(entryid);
     seteditmodalopen(true);
@@ -89,6 +169,13 @@ const FieldsContainer = ({
 
   const refreshentry: Function = (): void => {
     refreshgroupentities();
+  };
+
+  const moreClickHandle = (
+    entry: IEntry
+  ): void => {
+    setentrywithsmallbutton(entry)
+    setsmallmodalopen(true);
   };
   return (
     <Container>
@@ -104,6 +191,19 @@ const FieldsContainer = ({
           />
         }
       />
+       <Modal
+        visible={smallmodalopen}
+        onClose={smallmodalclose}
+        component={
+          <ModalButtonChoicer
+          entry={entrywithsmallbutton}
+          refreshgroupentities={refreshgroupentities}
+          setentrytoedit={setentrytoedit}
+          seteditmodalopen={seteditmodalopen}
+          modalClose={smallmodalclose}
+          />
+        }
+      />
       <TableContainer>
         <TableHead>
           <TableRow>
@@ -111,7 +211,7 @@ const FieldsContainer = ({
             <th>Username</th>
             <th>Password</th>
             <th>Note</th>
-            <th />
+            <th></th>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -120,27 +220,34 @@ const FieldsContainer = ({
               <TableComponent>{entry.title}</TableComponent>
               <TableComponent>{entry.username}</TableComponent>
               <TableComponent
-                id={entry._id}
-                onClick={() => [passwordClick(entry._id)]}
+                id={`${entry._id}${entry.groupid}`}
+                onClick={() => [passwordClick(entry._id, entry.groupid)]}
                 password
               >
                 {entry.password}
               </TableComponent>
               <TableComponent>{entry.note}</TableComponent>
               <TableComponent>
-                <Button
+                <TableButton
                   onClick={() => deletehandle(entry._id)}
                   color="lightblue"
                 >
                   Delete
-                </Button>
-                <Button
+                </TableButton>
+                <TableButton
                   color="lightgrey"
                   onClick={() => onedithandle(entry._id)}
                   style={{ marginLeft: ".4rem" }}
                 >
                   Edit
-                </Button>
+                </TableButton>
+                <MinButton
+                  onClick={() =>
+                    moreClickHandle(entry)
+                  }
+                >
+                  More
+                </MinButton>
               </TableComponent>
             </TableRow>
           ))}

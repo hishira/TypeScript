@@ -7,6 +7,7 @@ import NewEntryComponent from "../NewEntryComponent/index";
 const Container = styled.div`
   display: flex;
   padding: 5px;
+  justify-content: center;
   & > *:not(:first-child) {
     margin-left: 15px;
   }
@@ -48,7 +49,6 @@ const PassBar = (): JSX.Element => {
       <Button color="lightgray" onClick={() => setmodalopen(true)}>
         New entry
       </Button>
-      <Button color="lightgray">Generate</Button>
     </Container>
   );
 };
