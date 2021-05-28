@@ -10,7 +10,7 @@ const Container = styled.div`
   justify-content: space-between;
   width: 30%;
   border-right: 0.1rem solid slategray;
-  @media (max-width: 500px) {
+  @media (max-width: 650px) {
     width: 100%;
   }
 `;
@@ -19,7 +19,7 @@ const Groups = styled.div`
   max-height: 100%;
   overflow: auto;
   scroll-behavior: smooth;
-  @media (max-width: 500px) {
+  @media (max-width: 650px) {
     max-height: initial;
   }
 `;

@@ -32,7 +32,7 @@ const CheckBox = styled.input`
   transform: translate(0%, 175%);
 `;
 
-const PassBar = (): JSX.Element => {
+const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const closehandle = (): void => setmodalopen(false);
   return (
@@ -40,11 +40,7 @@ const PassBar = (): JSX.Element => {
       <Modal
         visible={modalopen}
         onClose={closehandle}
-        component={
-          <NewEntryComponent
-            refreshentry={false}
-          />
-        }
+        component={<NewEntryComponent refreshentry={false} />}
       />
       <Button color="lightgray" onClick={() => setmodalopen(true)}>
         New entry

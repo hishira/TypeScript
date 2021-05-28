@@ -42,6 +42,7 @@ const SelectContainer = styled.select`
   padding: 0.5rem;
   border-radius: 5px;
   font-size: 1.05rem;
+  width: 90%;
 `;
 const OptionContainer = styled.option`
   padding: 1.4rem;

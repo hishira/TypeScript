@@ -13,7 +13,7 @@ const Container = styled.div`
   outline: 0.1rem solid yellow;
   overflow: auto;
   max-height: 89.5vh;
-  @media (max-width: 500px) {
+  @media (max-width: 650px) {
     width: 100%;
     overflow: hidden;
   }
@@ -32,16 +32,14 @@ const TableComponent = styled.td<TableComponentProps>`
   ${(props) => props.password && "cursor: pointer"}
 `;
 const TableButton = styled(Button)`
-  @media (max-width: 660px) {
-    padding: 0.1rem;
-  }
-  @media (max-width: 500px) {
+
+  @media (max-width: 708px) {
     display: none;
   }
 `;
 const MinButton = styled(TableButton)`
   display: none;
-  @media (max-width: 500px) {
+  @media (max-width: 708px) {
     display: block;
     cursor: pointer;
   }
@@ -51,11 +49,13 @@ const ListComponent = styled.div`
   border: 0.1rem solid lightslategray;
   border-radius: 5px;
   flex-direction: column;
-  left: 0;
-  z-index: 10;
+  width: 15rem;
 `;
 const ListItem = styled(Button)`
   cursor: pointer;
+  &:not(:first-child) {
+    margin-top: 2rem;
+  }
 `;
 type MoreMiniModal = {
   entry: IEntry;
@@ -101,7 +101,16 @@ const FieldsContainer = ({
   const [entrytoedit, setentrytoedit] = useState<string>("");
   const [refreshmodalentry, setrefreshmodalentry] = useState<boolean>(false);
   const [smallmodalopen, setsmallmodalopen] = useState<boolean>(false);
-  const [entrywithsmallbutton,setentrywithsmallbutton] = useState<IEntry>(EMPTYENTRYRESPONSE)
+  const [entrywithsmallbutton, setentrywithsmallbutton] =
+    useState<IEntry>(EMPTYENTRYRESPONSE);
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 708) {
+        setsmallmodalopen(false);
+        setentrywithsmallbutton(EMPTYENTRYRESPONSE);
+      }
+    });
+  }, []);
   const fetchEntries = async (): Promise<void> => {
     if (selectedgroup === "") return;
     const groupid: GroupId = {
@@ -111,17 +120,6 @@ const FieldsContainer = ({
     if (response.status) {
       console.log(response.response);
       setentries(response.response);
-      window.addEventListener("resize", () => {
-        if (window.innerWidth > 500) {
-          for (const i of response.response) {
-            const listelement: HTMLElement | null = document.getElementById(
-              i._id
-            );
-            console.log(listelement);
-            if (listelement !== null) listelement.style.display = "none";
-          }
-        }
-      });
     } else {
       setentries([]);
     }
@@ -133,14 +131,14 @@ const FieldsContainer = ({
   const gettext = (text: string | null): string => {
     return text ? text : "";
   };
-  const passwordClick = (entryid: string, groupid: string): void => {
+  const passwordClick = (entry:IEntry): void => {
     let elementpass: HTMLElement | null = document.getElementById(
-      `${entryid}${groupid}`
+      `${entry._id}${entry.groupid}`
     );
     console.log(elementpass);
     if (elementpass !== null) {
       navigator.clipboard
-        .writeText(gettext(elementpass.textContent))
+        .writeText(gettext(entry.password))
         .then(() => console.log("ok"))
         .catch((e) => console.log("not ok"));
     }
@@ -159,9 +157,10 @@ const FieldsContainer = ({
     seteditmodalopen(false);
   };
 
-  const smallmodalclose = ():void=>{
+  const smallmodalclose = (): void => {
     setsmallmodalopen(false);
-  }
+    setentrywithsmallbutton(EMPTYENTRYRESPONSE);
+  };
   const onedithandle = (entryid: string): void => {
     setentrytoedit(entryid);
     seteditmodalopen(true);
@@ -171,10 +170,8 @@ const FieldsContainer = ({
     refreshgroupentities();
   };
 
-  const moreClickHandle = (
-    entry: IEntry
-  ): void => {
-    setentrywithsmallbutton(entry)
+  const moreClickHandle = (entry: IEntry): void => {
+    setentrywithsmallbutton(entry);
     setsmallmodalopen(true);
   };
   return (
@@ -191,16 +188,16 @@ const FieldsContainer = ({
           />
         }
       />
-       <Modal
+      <Modal
         visible={smallmodalopen}
         onClose={smallmodalclose}
         component={
           <ModalButtonChoicer
-          entry={entrywithsmallbutton}
-          refreshgroupentities={refreshgroupentities}
-          setentrytoedit={setentrytoedit}
-          seteditmodalopen={seteditmodalopen}
-          modalClose={smallmodalclose}
+            entry={entrywithsmallbutton}
+            refreshgroupentities={refreshgroupentities}
+            setentrytoedit={setentrytoedit}
+            seteditmodalopen={seteditmodalopen}
+            modalClose={smallmodalclose}
           />
         }
       />
@@ -221,10 +218,11 @@ const FieldsContainer = ({
               <TableComponent>{entry.username}</TableComponent>
               <TableComponent
                 id={`${entry._id}${entry.groupid}`}
-                onClick={() => [passwordClick(entry._id, entry.groupid)]}
+                onClick={() => [passwordClick(entry)]}
                 password
+                placeholder='*****'
               >
-                {entry.password}
+                *****
               </TableComponent>
               <TableComponent>{entry.note}</TableComponent>
               <TableComponent>
@@ -241,11 +239,7 @@ const FieldsContainer = ({
                 >
                   Edit
                 </TableButton>
-                <MinButton
-                  onClick={() =>
-                    moreClickHandle(entry)
-                  }
-                >
+                <MinButton onClick={() => moreClickHandle(entry)}>
                   More
                 </MinButton>
               </TableComponent>

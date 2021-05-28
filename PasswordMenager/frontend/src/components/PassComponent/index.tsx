@@ -7,7 +7,7 @@ const Container = styled.div`
   width: 100%;
   outline: 0.1rem solid slategray;
   height: 89.5vh;
-  @media (max-width: 500px) {
+  @media (max-width: 650px) {
     flex-direction: column;
     overflow: hidden;
   }

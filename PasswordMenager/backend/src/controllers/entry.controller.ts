@@ -49,7 +49,7 @@ export class EntryContoller {
   async editentry(
     @Body(new ValidationPipe({ transform: true })) editedentry: EditEntryDto,
     @Request() req,
-  ):Promise<EditEntryResponse> {
+  ): Promise<EditEntryResponse> {
     console.log(editedentry);
     return this.entryService.editentry(editedentry);
   }
