@@ -10,10 +10,13 @@ const View = styled.View`
   margin-bottom: 10px;
   flex: 1;
 `;
-const ThirdPart: React.FC = () => {
+type ThirdPartProps = {
+  clickhandle: Function;
+};
+const ThirdPart: React.FC<ThirdPartProps> = ({clickhandle}) => {
   return (
     <View>
-      <Button>
+      <Button onPress={clickhandle}>
         <ButtonText>Add new meal</ButtonText>
       </Button>
     </View>

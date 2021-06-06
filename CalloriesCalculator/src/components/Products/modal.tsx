@@ -6,15 +6,15 @@ import {ModalComponentProps} from '../../types/common/main';
 import {Container, ButtonGroup, Button, ButtonText} from '../Home/index';
 import {Product, IProduct} from '../../schemas/product.schema';
 import {GeneralRealm} from '../../schemas/general.schema';
-const Modal = styled.Modal``;
-const ModalContaierWrapper = styled.View`
+export const Modal = styled.Modal``;
+export const ModalContaierWrapper = styled.View`
   width: 100%;
   height: 100%;
   display: flex;
   position: relative;
   background-color: rgba(1, 1, 1, 0.5);
 `;
-const ModalContainer = styled(Container)`
+export const ModalContainer = styled(Container)`
   width: 60%;
   position: absolute;
   top: 30%;
@@ -23,18 +23,17 @@ const ModalContainer = styled(Container)`
   background-color: #dfe0df;
   padding: 20px;
 `;
-const MainText = styled.Text`
+export const MainText = styled.Text`
   font-size: 20px;
 `;
-const NameInputeContainer = styled.View`
+export const NameInputeContainer = styled.View`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
-const Picker = styled.Picker`
+export const Picker = styled.Picker`
   width: 100%;
-  background: whitesmoke;
   margin-top: 10px;
-  height: 50px;
 `;
 const NameText = styled.Text``;
 const NameInput = styled.TextInput`
