@@ -3,15 +3,29 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import HomePage from "../Home/index";
 import AppBar from "../../components/AppBar";
 import LoginPage from "../../pages/Login";
+import SignUp from "../../pages/SignUp/";
+import StorePage from "../Store/";
+import { Provider } from "mobx-react";
+import { General } from "../../models/General";
+import { getAccessToken } from "../../utils/localstorage.utils";
+import PrivateComponent from "../../components/PrivateRoute/index";
+import "./App.css";
 function App() {
+  const store = General.create({
+    useractive: getAccessToken() !== "" ? true : false,
+  });
   return (
-    <Router>
-      <div className="App">
-        <AppBar/>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/login" component={LoginPage} />
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <AppBar />
+          <Route exact path="/" component={HomePage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/signup" component={SignUp} />
+          <PrivateComponent path="/store" Component={StorePage} />
+        </div>
+      </Router>
+    </Provider>
   );
 }
 

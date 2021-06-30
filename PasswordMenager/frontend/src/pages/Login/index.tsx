@@ -1,57 +1,91 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import FormComponent from "../../components/Form/index";
+import { useHistory } from "react-router-dom";
+import { LoginUserHandle } from "../../utils/auth.utils";
+import { setLocalStorageToken } from "../../utils/localstorage.utils";
+import { inject, observer } from "mobx-react";
+import { IGeneral } from "../../models/General";
 const Container = styled.div`
   display: flex;
   justify-content: center;
   border: 2px solid red;
 `;
+
 const FormContainer = styled.form`
   display: flex;
   justify-content: center;
   width: 50%;
   padding: 10px;
   margin-top: 5rem;
+  @media (max-width: 1200px) {
+    width: 70%;
+  }
+  @media (max-width: 900px) {
+    width: 70%;
+  }
+  @media (max-width: 489px) {
+    width: 100%;
+  }
 `;
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 0.05rem solid slategray;
-  width: 50%;
-  padding: 10px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 50px -5px;
-  border-radius: 5px;
-`;
-const FormTitle = styled.p`
-  font-size: 1.2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: bold;
-`;
-const FormElement = styled.p`
-    display: flex;
-    flex-direction: column;
-`
-const InputLabel = styled.p`
-`
-const LoginPage = (): JSX.Element => {
+type Prop = {
+  store: IGeneral,
+}
+const LoginPage = ({store}:Prop): JSX.Element => {
+  const [infoLogin, setInfoLogin] = useState<UserAuth>({
+    login: "",
+    password: "",
+  });
+
+  const passwordchange = (password: string): void => {
+    setInfoLogin({ ...infoLogin, password: password });
+  };
+
+  const loginchange = (login: string): void => {
+    setInfoLogin({ ...infoLogin, login: login });
+  };
+
+  const loginClickHandle = async (
+    e: React.MouseEvent<HTMLElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    console.log(infoLogin);
+    const response: LoginReponse = await LoginUserHandle(infoLogin);
+    if (response.status && response.response !== null) {
+      console.log(response.response?.access_token);
+      console.log(response.response?.refresh_token);
+      setLocalStorageToken(response.response);
+      store.setUserActive(true);
+      history.push("/store");
+      console.log(store.UserActivity)
+    }
+  };
+
+  const redirectFunction = () => {
+    history.push("/signup");
+  };
+
+  const history = useHistory();
+
+  useEffect(()=>{
+    if(store.UserActivity)
+      history.push("/store");
+  },[])
   return (
     <Container>
       <FormContainer>
-        <Form>
-          <FormTitle>Log in to account</FormTitle>
-          <FormElement>
-            <label>login</label>
-            <input type="text" />
-          </FormElement>
-          <FormElement>
-            <label>password</label>
-            <input type="password" />
-          </FormElement>
-        </Form>
+        <FormComponent
+          firstinputhandle={loginchange}
+          secondinputhandle={passwordchange}
+          buttonmessage="Login"
+          buttonHandle={loginClickHandle}
+          secondactionastirng="create account"
+          redirectfunction={redirectFunction}
+          maintitle="Log in to account"
+        />
       </FormContainer>
     </Container>
   );
 };
 
-export default LoginPage;
+export default inject("store")(observer(LoginPage));
