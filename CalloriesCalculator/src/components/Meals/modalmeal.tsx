@@ -10,7 +10,7 @@ import {
   Picker,
 } from '../Products/modal';
 import {ModalComponentProps} from '../../types/common/main';
-import {IProduct} from '../../schemas/product.schema';
+import {EmptyEditProductDto, IProduct} from '../../schemas/product.schema';
 import {Button, ButtonText} from '../Home/index';
 const MealView = styled.View`
   width: 75%;
@@ -58,6 +58,19 @@ export const ModalMeal: React.FC<ModalComponentProps> = ({
   refresh,
 }: ModalComponentProps): JSX.Element => {
   const [products, setproducts] = useState<Realm.Results<IProduct> | []>([]);
+  const [selectedproducts, setselectedproducts] = useState<IProduct[]>([]);
+  const [productselect, setproductselect] = useState<IProduct | null>(null);
+  const productAddToList = (): void => {};
+  const setselectedProductHandle = (productid: string): void => {
+    console.log(productid);
+    let product = products.filter((p: IProduct) => p._id.equals(productid))[0];
+    console.log(product);
+    setproductselect(product);
+  };
+
+  const addproduct = () => {
+    setselectedproducts([...selectedproducts, productselect]);
+  };
   useEffect(() => {
     let allProducts: Realm.Results<IProduct> = GeneralRealm.objects('Product');
     setproducts(allProducts);
@@ -84,7 +97,10 @@ export const ModalMeal: React.FC<ModalComponentProps> = ({
           <ProductContainer>
             <ProductText>Product</ProductText>
             <ProductChoicerBackground>
-              <ProductChoicer>
+              <ProductChoicer
+                onValueChange={(itemvalue: string, itemindex: number) =>
+                  setselectedProductHandle(itemvalue)
+                }>
                 {products.map((product: IProduct) => (
                   <ProductChoicer.Item
                     label={product.name}
@@ -93,7 +109,7 @@ export const ModalMeal: React.FC<ModalComponentProps> = ({
                 ))}
               </ProductChoicer>
             </ProductChoicerBackground>
-            <ProductButton>
+            <ProductButton onPress={addproduct}>
               <ProductButtonText>+</ProductButtonText>
             </ProductButton>
           </ProductContainer>
