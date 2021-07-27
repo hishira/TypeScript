@@ -93,15 +93,23 @@ const TasksContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
+  width: 100%;
 `;
 const Task = styled.article`
   background-color: whitesmoke;
   width: 90%;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.2rem;
   margin-top: 0.5rem;
   position: relative;
   border-radius: 10px;
+  
   box-shadow: 0.2rem 0.2rem 0.2rem slategrey;
+  @media (max-width: 400px){
+    width: 100%;
+    padding: 0.3rem;
+    margin-left: 0;
+    margin-right: 0;
+  }
 `;
 const TaskDateContainer = styled.p`
   padding: 0rem 0.3rem 0.3rem 0.3rem;
@@ -115,6 +123,7 @@ const TaskUpContainer = styled.p`
   display: flex;
   border-bottom: 0.01rem solid slategray;
   justify-content: space-between;
+  margin-top: .4rem;
   align-items: center;
 `;
 const DeleteAllTaskButton = styled.button`
@@ -139,7 +148,7 @@ const TaskDeleteButton = styled.button`
   cursor: pointer;
   border-radius: 10px;
   font-size: 1.05rem;
-  transform: translateY(-2rem);
+  transform: translateY(-1.5rem) translateX(-.5rem);
   cursor: pointer;
   background-color: transparent;
   &:active {
@@ -168,9 +177,9 @@ const TaskDeleteButton = styled.button`
 `;
 const SelectContainer = styled.div`
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 50%;
   padding: 0.5rem;
   & > *{
     margin-right: .5rem;
@@ -182,13 +191,18 @@ const SelectContainer = styled.div`
       margin-top :.4rem;
     }
   }
+  @media (max-width: 830px){
+    width: 100%;
+  }
+
 `;
 const SelectLabel = styled.label`
   font-size: 1.15rem;
+  width: 5rem;
 `;
 const Select = styled.select`
   padding: 0.7rem 1.2rem;
-  width: 30%;
+  width: 50%;
   background-color: transparent;
   border-radius: 10px;
   border: 0.1rem solid lightgray;
