@@ -11,9 +11,9 @@
     - Libraries : React.js + styled-components
 # Desktop Image
 <p>
-<img src="public/desk.png">
+<img src="public/desk.PNG">
 </p>
 # Mobile image
 <p>
-<img src="public/mobile.png">
+<img src="public/mobile.PNG">
 </p>
