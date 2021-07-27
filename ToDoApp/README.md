@@ -10,7 +10,10 @@
     - Language: TypeScript
     - Libraries : React.js + styled-components
 # Desktop Image
+<p>
 <img src="public/desk.png">
-
+</p>
 # Mobile image
+<p>
 <img src="public/mobile.png">
+</p>
