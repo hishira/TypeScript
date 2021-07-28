@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import FormComponent from "../../components/Form/index";
 import { useHistory } from "react-router-dom";
-
+import {registerUser} from "../../utils/auth.utils";
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  border: 2px solid red;
 `;
 const FormContainer = styled.form`
   display: flex;
@@ -52,9 +51,18 @@ const SignUp = () => {
     setregisterinfo({ ...registerinfo, confirmpassword: password });
   };
 
-  const registerClickHandle = (e: React.MouseEvent<HTMLElement>): void => {
+  const registerClickHandle = async (e: React.MouseEvent<HTMLElement>): Promise<void> => {
     e.preventDefault();
-    console.log(registerinfo);
+    if(registerinfo.password === registerinfo.confirmpassword){
+      let response = await registerUser({login:registerinfo.login,password:registerinfo.password})
+      if(response === null || response === false)
+        console.log("server problem");
+      else
+        console.log("user created");
+    }else{
+      console.log("Password do not equal confirm password");
+    }
+      console.log(registerinfo);
   };
 
   const redirectFunction = () => {

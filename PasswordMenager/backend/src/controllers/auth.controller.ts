@@ -22,7 +22,7 @@ export class AuthController {
   async create(
     @Body(new ValidationPipe({ transform: false })) newuser: CreateUserDto,
   ) {
-    this.userServices.create(newuser);
+    return this.userServices.create(newuser);
   }
 
   @UseGuards(AuthGuard('local'))
