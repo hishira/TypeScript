@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export const ConnectionDatabase = () => {
-  const uri: string = "mongodb://localhost:27017/ToDo";
+  const uri: string = "mongodb://database:27017/ToDo";
   const Mongo: mongoose.Mongoose = new mongoose.Mongoose();
   mongoose.connect(
     uri,

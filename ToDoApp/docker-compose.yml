@@ -1,0 +1,26 @@
+version: '3'
+services:
+    server:
+        restart: always
+        build: backend
+        ports: 
+            - 8080:8080
+        links: 
+            - database
+        depends_on: 
+            - database
+    database:
+        image: mongo
+        environment: 
+            - MONGO_INIT_DATABASE=ToDo
+        ports: 
+            - 27017:27017
+    frontend:
+        restart: always
+        build: frontend
+        ports: 
+            - 3000:3000
+        depends_on: 
+            - server
+        stdin_open: true
+        container_name: frontend
