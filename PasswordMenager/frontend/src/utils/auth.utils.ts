@@ -15,7 +15,13 @@ const LoginUserHandle = async (authobj: UserAuth): Promise<LoginReponse> => {
   }
   return { status: false, response: null };
 };
-
+const registerUser = async(signupinfo: UserAuth): Promise<null | object | boolean>=>{
+  const response:boolean | object = await signup(signupinfo).then((resp:Response)=>{
+    if(resp.status === 200 || resp.status === 201) return resp.json();
+    return false;
+  })
+  return response === false? null: response;
+}
 const refreshToken = async (): Promise<void> => {
   const refreshtoken: string = getRefreshToken();
   const response: number | AccessToken = await refreshAccessToken(
@@ -29,4 +35,4 @@ const refreshToken = async (): Promise<void> => {
   }
 };
 
-export { LoginUserHandle, refreshToken };
+export { LoginUserHandle, refreshToken, registerUser };

@@ -9,7 +9,6 @@ import { IGeneral } from "../../models/General";
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  border: 2px solid red;
 `;
 
 const FormContainer = styled.form`
