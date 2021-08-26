@@ -2,10 +2,10 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 def get_pets(db:Session):
-    db.query(models.Pet).all()
+    return db.query(models.Pet).all()
 
-def create_user(db:Session,
-                newpet:schemas.PetCreate):
+def create_pet(db: Session,
+                newpet: schemas.PetCreate):
     new_pet = models.Pet(name=newpet.name,
                 weight=newpet.weight,
                 brithdate=newpet.brithdate,

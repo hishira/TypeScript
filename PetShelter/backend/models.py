@@ -1,12 +1,13 @@
-from sqlalchemy import Column,ForeignKey, Integer,String, Date
+from sqlalchemy import Column,ForeignKey, Integer,String, DateTime
 from sqlalchemy.orm import relationship
 
 from .database import Base
 
 class Pet(Base):
-    __tablename__='pet'
+    __tablename__ = "pets"
+
     id =         Column(Integer,primary_key=True,index=True)
     name =       Column(String)
     weight =     Column(Integer)
-    birthdate =  Column(Date)
+    brithdate =  Column(DateTime)
     pettype =    Column(String)

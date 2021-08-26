@@ -1,11 +1,11 @@
 from typing import List,Optional
 from pydantic import BaseModel
-from datetime import date
+from datetime import datetime
 
 class PetBase(BaseModel):
     name:       str
     weight:     str
-    brithdate:  date
+    brithdate:  datetime
     pettype:    str
 
 class PetCreate(PetBase):
