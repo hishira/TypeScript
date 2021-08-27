@@ -1,6 +1,6 @@
 <section class="firssection">
     <h3>Our centers</h3>
-    <section class="home-centers">
+    <section *ngIf="centers" class="home-centers">
         <article *ngFor="let center of centers" class="center">
             <div class="center__info">
                 <div class="center-name">

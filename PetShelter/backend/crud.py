@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
 
-def get_pets(db:Session):
+def get_pets(db: Session):
     return db.query(models.Pet).all()
 
 def create_pet(db: Session,
@@ -15,3 +15,17 @@ def create_pet(db: Session,
     db.commit()
     db.refresh(new_pet)
     return new_pet
+
+def get_centers(db: Session):
+    return db.query(models.Center).all()
+
+def create_center(db: Session,
+                  newcenter: schemas.CenterCreate):
+    new_center = models.Center( name=newcenter.name,
+                                city=newcenter.city,
+                                address=newcenter.address,
+                                phone=newcenter.phone)
+    db.add(new_center)
+    db.commit()
+    db.refresh(new_center)
+    return new_center

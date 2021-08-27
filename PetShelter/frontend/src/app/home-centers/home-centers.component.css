@@ -41,14 +41,22 @@
 .agroup > a:hover{
     transition: background-color 400ms;
     background-color: lightsteelblue;
+    color: white;
 }
 @media (min-width: 700px){
     .home-centers{
         flex-direction: row;
         flex-wrap: wrap;
-        padding: .5rem;
-        width: 100%;
-        justify-content: space-between;
+        width: 95%;
+        justify-content: space-around;
+    }
+    .center{
+        width: 45%;
+    }
+}
+@media (min-width: 1000px){
+    .home-centers{
+        width: 90%;
     }
     .center{
         width: 30%;
