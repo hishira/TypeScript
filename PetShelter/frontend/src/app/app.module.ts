@@ -6,13 +6,15 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeCentersComponent } from './home-centers/home-centers.component';
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule } from '@angular/common/http';
+import { AboutComponent } from './about/about.component'
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     HomeComponent,
-    HomeCentersComponent
+    HomeCentersComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

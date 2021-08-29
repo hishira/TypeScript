@@ -27,7 +27,40 @@ centers = [
         "address": "Wiejska 10",
         "phone": "543 890 098s" }
     ]
-url = f"http://127.0.0.1:8000/center/"
-headers = {"accept":"application/json","Content-Type":"application/json"}
+def getpete(name:str,weight:str,
+    brithdate:datetime,
+    pettype:str)->dict:
+    return {"name":name,
+        "weight":weight,
+        "brithdate":brithdate,
+        "pettype":pettype}
+
+def postcreatepet(pet:dict,url:str,headers:dict):
+  return requests.post(url,
+      headers=headers,
+      json=pet)
+
+
+baseurl: str = f"http://127.0.0.1:8000/"
+url: str = f"{baseurl}center/"
+headers:dict = {"accept":"application/json","Content-Type":"application/json"}
+
 for i in centers:
     requests.post(url,headers=headers,json=i)
+
+pets = [
+  getpete("Waldek","7.5",f"{datetime.now()}","Cat"),
+  getpete("Szczała","7.5",f"{datetime.now()}","Dog"),
+  getpete("Puszek","7.5",f"{datetime.now()}","cat"),
+  getpete("Kropeczka","7.5",f"{datetime.now()}","cat"),
+  getpete("Fiona","7.5",f"{datetime.now()}","cat"),
+  getpete("Mara","7.5",f"{datetime.now()}","cat"),
+  getpete("Hina","7.5",f"{datetime.now()}","cat"),
+]
+geturl: str = f"{baseurl}centers/"
+response = requests.get(geturl,headers=headers)
+for i in response.json():
+  print(i["id"])
+  createpeturl: str = f"{baseurl}pet/{i['id']}"
+  for i in pets:
+    postcreatepet(i,createpeturl,headers)

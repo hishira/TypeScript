@@ -30,11 +30,11 @@ def getallpets(response: Response,db: Session=Depends(getdb)):
     pets = crud.get_pets(db=db)
     return pets
 
-@app.post("/pet/",
+@app.post("/pet/{centerid}",
     response_model=schemas.Pet)
-def createpet(pet: schemas.PetCreate,db: Session=Depends(getdb)):
+def createpet(centerid: int,pet: schemas.PetCreate,db: Session=Depends(getdb)):
     print(pet)
-    return crud.create_pet(db,pet)
+    return crud.create_pet(db,centerid,pet)
 
 @app.get("/centers/",
 response_model=List[schemas.Center])

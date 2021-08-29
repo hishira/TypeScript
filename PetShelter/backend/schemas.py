@@ -20,15 +20,15 @@ class CenterCreate(CenterBase):
 class PetCreate(PetBase):
     pass
 
-
-class Center(CenterBase):
+class Pet(PetBase):
     id:         int
-
+    center_id:  int
     class Config:
         orm_mode = True
 
-class Pet(PetBase):
+class Center(CenterBase):
     id:         int
+    pets:       List[Pet]
 
     class Config:
         orm_mode = True

@@ -5,11 +5,13 @@ def get_pets(db: Session):
     return db.query(models.Pet).all()
 
 def create_pet(db: Session,
+                center_id: int,
                 newpet: schemas.PetCreate):
     new_pet = models.Pet(name=newpet.name,
                 weight=newpet.weight,
                 brithdate=newpet.brithdate,
                 pettype=newpet.pettype,
+                center_id=center_id
                 )
     db.add(new_pet)
     db.commit()
