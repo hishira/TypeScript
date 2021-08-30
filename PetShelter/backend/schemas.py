@@ -8,6 +8,10 @@ class PetBase(BaseModel):
     brithdate:  datetime
     pettype:    str
 
+class PhotoBase(BaseModel):
+    url:        str
+
+
 class CenterBase(BaseModel):
     name:       str
     city:       str
@@ -17,12 +21,23 @@ class CenterBase(BaseModel):
 class CenterCreate(CenterBase):
     pass
 
+class PhotoCreate(PhotoBase):
+    pass
+
 class PetCreate(PetBase):
     pass
 
 class Pet(PetBase):
     id:         int
     center_id:  int
+
+    class Config:
+        orm_mode = True
+
+class Photo(PhotoBase):
+    id:         int
+    pet_id:     int
+
     class Config:
         orm_mode = True
 

@@ -1,3 +1,4 @@
+from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
 from . import models, schemas
 
@@ -18,6 +19,12 @@ def create_pet(db: Session,
     db.refresh(new_pet)
     return new_pet
 
+def getpetsbycenter(db:Session,
+    centerid:int):
+    pets: Query[models.Pet] = db.query(models.Pet)
+    filteredpets = pets.filter(models.Pet.center_id==centerid).all()
+    return filteredpets
+
 def get_centers(db: Session):
     return db.query(models.Center).all()
 
@@ -31,3 +38,18 @@ def create_center(db: Session,
     db.commit()
     db.refresh(new_center)
     return new_center
+
+def create_photo(petid:int,
+            newphoto:schemas.PhotoCreate,db:Session):
+    new_photo = models.Photo(url=newphoto.url,
+            pet_id=petid)
+    db.add(new_photo)
+    db.commit()
+    db.refresh(new_photo)
+    return new_photo
+
+def get_photos(db:Session):
+    return db.query(models.Photo).all()
+
+def get_photos_bypet(db: Session, petid: int):
+    return db.query(models.Photo).filter(models.Photo.pet_id == petid).all()
