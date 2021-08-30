@@ -10,6 +10,7 @@ export class CenterService {
   private mainurl: string = "http://127.0.0.1:8000";
   private createurl: string = "/center/";
   private getalurl: string = "/centers";
+  private getcenterurl: string = `${this.mainurl}/centers/`
   private getCentersUser(): string {
     return `${this.mainurl}${this.getalurl}`
   }
@@ -18,15 +19,25 @@ export class CenterService {
   private logmessage(message: string): void {
     console.log(message);
   }
-  public getCenters(): Observable<Center[]> {
-    return this.http
-      .get<Center[]>(this.getCentersUser())
-      .pipe(catchError(this.errorHandle("getCenters", [])))
-  }
+
   private errorHandle<T>(operationname: string, whattoreturn?: T): OperatorFunction<T[], any> {
     return (err: any): Observable<T> => {
       this.logmessage(`Error at ${operationname}`)
       return of(whattoreturn as T);
     }
+  }
+
+  public getCenters(): Observable<Center[]> {
+    return this.http
+      .get<Center[]>(this.getCentersUser())
+      .pipe(catchError(this.errorHandle("getCenters", [])))
+  }
+  
+  public getcenterbyid(centerid:number):Observable<Center>{
+    return this.http
+            .get<Center>(`${this.getcenterurl}${centerid}`)
+            .pipe(catchError(
+              this.errorHandle("getcenterbyid",[])
+              ));
   }
 }

@@ -1,0 +1,19 @@
+<div *ngIf="center">
+    <div>
+        {{center.name}}
+    </div>
+    <div>
+        {{center.city}}
+    </div>
+    <div>
+        {{center.address}}
+    </div>
+    <div>
+        {{center.phone}}
+    </div>
+    <div *ngFor="let i of center.pets">
+        <div>
+            {{i.name}}
+        </div>
+    </div>
+</div>

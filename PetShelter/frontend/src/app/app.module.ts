@@ -7,14 +7,16 @@ import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeCentersComponent } from './home-centers/home-centers.component';
 import { HttpClientModule } from '@angular/common/http';
-import { AboutComponent } from './about/about.component'
+import { AboutComponent } from './about/about.component';
+import { ShelterComponent } from './shelter/shelter.component'
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     HomeComponent,
     HomeCentersComponent,
-    AboutComponent
+    AboutComponent,
+    ShelterComponent
   ],
   imports: [
     BrowserModule,

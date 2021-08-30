@@ -5,6 +5,10 @@
     flex-direction: column;
     margin-bottom: 1rem;
 }
+a{
+    color: black;
+    text-decoration: none;
+}
 .home-centers{
     display: flex;
     flex-direction: column;

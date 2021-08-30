@@ -75,3 +75,9 @@ def getphotos(db: Session=Depends(getdb)):
 def getphotosbypet(petid:int,
     db:Session=Depends(getdb)):
     return crud.get_photos_bypet(db,petid)
+
+@app.get("/centers/{id}",
+    response_model=schemas.Center)
+def getcenterbyid(id:int,
+    db:Session=Depends(getdb)):
+    return crud.getcenterinfo(db,id)

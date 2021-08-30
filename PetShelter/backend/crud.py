@@ -25,6 +25,10 @@ def getpetsbycenter(db:Session,
     filteredpets = pets.filter(models.Pet.center_id==centerid).all()
     return filteredpets
 
+def getcenterinfo(db:Session,centerid:int):
+    return db.query(models.Center).filter(models.Center.id==centerid).first()
+
+
 def get_centers(db: Session):
     return db.query(models.Center).all()
 
