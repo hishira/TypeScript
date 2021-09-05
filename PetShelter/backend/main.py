@@ -81,3 +81,8 @@ def getphotosbypet(petid:int,
 def getcenterbyid(id:int,
     db:Session=Depends(getdb)):
     return crud.getcenterinfo(db,id)
+
+@app.get("/pets/photo/{centerid}")
+def getpetwithphotos(centerid:int,
+    db:Session=Depends(getdb)):
+    return crud.getpetsbycenterwithfoto(db,centerid)

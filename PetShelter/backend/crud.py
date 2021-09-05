@@ -1,6 +1,8 @@
 from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
 from . import models, schemas
+from itertools import groupby
+from operator import attrgetter
 
 def get_pets(db: Session):
     return db.query(models.Pet).all()
@@ -24,6 +26,18 @@ def getpetsbycenter(db:Session,
     pets: Query[models.Pet] = db.query(models.Pet)
     filteredpets = pets.filter(models.Pet.center_id==centerid).all()
     return filteredpets
+
+def getpetsbycenterwithfoto(db: Session,
+    centerid: int):
+    allelements = db.query(models.Pet,models.Photo).\
+        filter(models.Pet.center_id == centerid).\
+        join(models.Photo,models.Pet.id == models.Photo.pet_id).\
+        order_by(models.Pet.id).\
+        all()
+    for k,g in groupby(allelements,attrgetter("Pet.id")):
+        print(list(g))
+    #return allelements
+    return {k:list(g) for k,g in groupby(allelements,attrgetter("Pet.id"))}
 
 def getcenterinfo(db:Session,centerid:int):
     return db.query(models.Center).filter(models.Center.id==centerid).first()

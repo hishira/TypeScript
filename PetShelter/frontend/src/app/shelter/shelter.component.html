@@ -11,9 +11,5 @@
     <div>
         {{center.phone}}
     </div>
-    <div *ngFor="let i of center.pets">
-        <div>
-            {{i.name}}
-        </div>
-    </div>
+    <app-shelterpets [shelterid]="center.id"></app-shelterpets>
 </div>

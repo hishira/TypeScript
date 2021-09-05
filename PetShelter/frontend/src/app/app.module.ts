@@ -8,7 +8,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeCentersComponent } from './home-centers/home-centers.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AboutComponent } from './about/about.component';
-import { ShelterComponent } from './shelter/shelter.component'
+import { ShelterComponent } from './shelter/shelter.component';
+import { ShelterpetsComponent } from './shelterpets/shelterpets.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,7 +17,8 @@ import { ShelterComponent } from './shelter/shelter.component'
     HomeComponent,
     HomeCentersComponent,
     AboutComponent,
-    ShelterComponent
+    ShelterComponent,
+    ShelterpetsComponent
   ],
   imports: [
     BrowserModule,
