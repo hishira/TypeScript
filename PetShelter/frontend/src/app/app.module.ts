@@ -9,7 +9,8 @@ import { HomeCentersComponent } from './home-centers/home-centers.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AboutComponent } from './about/about.component';
 import { ShelterComponent } from './shelter/shelter.component';
-import { ShelterpetsComponent } from './shelterpets/shelterpets.component'
+import { ShelterpetsComponent } from './shelterpets/shelterpets.component';
+import { PetPhotosComponent } from './pet-photos/pet-photos.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +19,8 @@ import { ShelterpetsComponent } from './shelterpets/shelterpets.component'
     HomeCentersComponent,
     AboutComponent,
     ShelterComponent,
-    ShelterpetsComponent
+    ShelterpetsComponent,
+    PetPhotosComponent
   ],
   imports: [
     BrowserModule,

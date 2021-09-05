@@ -1,5 +1,11 @@
 <section *ngIf="pets">
-    <div *ngFor="let pet of pets">
-        {{pet.name}}
-    </div>
+    <article *ngFor="let pet of pets" class="pet">
+        <app-pet-photos [petid]="pet.id"></app-pet-photos>
+        <div>{{pet.name}}</div>
+        <div>
+        </div>
+        <div>
+
+        </div>
+    </article>
 </section>

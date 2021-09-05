@@ -13,14 +13,17 @@ a{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 100%;
+    align-items: center;
 }
 .center{
     margin-top: .4rem;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, .2);
-    width: auto;
+    width: 70%;
 }
 .center-name,.center-address{
     padding: .85rem .5rem;
+    font-size: 1.3rem;
 }
 .center__info{
     padding: .5rem;
@@ -29,7 +32,7 @@ a{
     font-weight: bold;
 }
 .center-address{
-    font-size: .9rem;
+    font-size: 1rem;
     color: lightslategrey;
 }
 .agroup{
