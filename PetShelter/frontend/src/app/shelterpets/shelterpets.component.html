@@ -1,11 +1,21 @@
-<section *ngIf="pets">
-    <article *ngFor="let pet of pets" class="pet">
-        <app-pet-photos [petid]="pet.id"></app-pet-photos>
-        <div>{{pet.name}}</div>
-        <div>
-        </div>
-        <div>
-
-        </div>
-    </article>
+<section *ngIf="pets" class="pets">
+  <article *ngFor="let pet of pets" class="pet">
+    <app-pet-photos [petid]="pet.id"></app-pet-photos>
+    <div class="pet__info">
+      <div class="info">
+        <span class="first">Name</span>
+        <span class="second">{{ pet.name }}</span>
+      </div>
+      <div class="info">
+        <span class="first">Weight</span>
+        <span class="second">{{ pet.weight + " Kg" }}</span>
+      </div>
+      <div class="info">
+        <span class="first"> Brithday </span>
+        <span class="second">
+          {{ pet.brithdate | date: "shortDate" }}
+        </span>
+      </div>
+    </div>
+  </article>
 </section>
