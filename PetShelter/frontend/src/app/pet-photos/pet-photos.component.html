@@ -1,4 +1,10 @@
-<p>{{petid}}</p>
-<div *ngIf="photos">
-    <img src="{{photos[0].url}}" width="100%" height="200" alt="">
-</div>
+<article *ngIf="photos" class="photos">
+  <img src="{{ photos[photoindex].url }}" height="200" alt="" #imgelement />
+  <div class="petschoices">
+    <span
+      *ngFor="let i of photos; let index = index"
+      class="circle"
+      [class.circle__selected]="photoindex === index"
+    ></span>
+  </div>
+</article>

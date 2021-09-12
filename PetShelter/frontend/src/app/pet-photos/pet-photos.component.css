@@ -1,0 +1,40 @@
+article{
+    width: 100%;
+    position: relative;
+}
+img{
+    object-fit: cover;
+    width: 100%;
+}
+.photos{
+    display: flex;
+    justify-content: center;
+}
+.petschoices{
+    position: absolute;
+    margin: auto;
+    justify-self: center;
+    width: 60%;
+    bottom: 2rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+@media (min-width: 400px) {
+    img{
+        object-fit: fill;
+    }
+}
+.circle::after{
+    content: " ";
+    width: .4rem;
+    height: .4rem;
+    position: absolute;
+    background-color: white;
+    border: .3rem solid slategray;
+    border-radius: 100%;
+}
+
+.circle__selected::after{
+    background-color: gray;
+}
