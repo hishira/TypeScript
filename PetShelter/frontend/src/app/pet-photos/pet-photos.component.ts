@@ -12,6 +12,7 @@ export class PetPhotosComponent implements OnInit {
 
   photos?: Array<Photo>;
   photoindex: number = 0;
+  private timeout: NodeJS.Timer | null = null;
   constructor(private photoservice: PhotoService) {}
 
   ngOnInit(): void {
@@ -23,9 +24,18 @@ export class PetPhotosComponent implements OnInit {
     }
   }
 
+  circleClick(index: number): void {
+    this.photoindex = index;
+    if(this.timeout){
+      clearInterval(this.timeout);
+      setTimeout(() => {
+          this.selectPhoto()
+      }, 2000);
+    }
+  }
+
   selectPhoto(): void {
-    setInterval(() => {
-      console.log(this.photos)
+    this.timeout = setInterval(() => {
       if (this.imageelement && this.photos) {
         this.photoindex =
           this.photoindex + 1 >= this.photos.length ? 0 : this.photoindex + 1;

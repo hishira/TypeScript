@@ -5,6 +5,7 @@
       *ngFor="let i of photos; let index = index"
       class="circle"
       [class.circle__selected]="photoindex === index"
+      (click)="circleClick(index)"
     ></span>
   </div>
 </article>

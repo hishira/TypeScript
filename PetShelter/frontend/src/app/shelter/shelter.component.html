@@ -1,15 +1,18 @@
 <div *ngIf="center">
-    <div>
-        {{center.name}}
+  <div class="shelter__info">
+    <div class="info__name">
+      {{ center.name }}
     </div>
-    <div>
-        {{center.city}}
+    <div class="info__address">
+      <span class="bold">Adress:</span>
+      <span>
+        {{ center.city }},
+        {{ center.address }}
+      </span>
     </div>
-    <div>
-        {{center.address}}
+    <div class="info__phone">
+      <span class="bold">Phone: </span><span> {{ center.phone }}</span>
     </div>
-    <div>
-        {{center.phone}}
-    </div>
-    <app-shelterpets [shelterid]="center.id"></app-shelterpets>
+  </div>
+  <app-shelterpets [shelterid]="center.id"></app-shelterpets>
 </div>
