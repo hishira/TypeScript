@@ -65,7 +65,7 @@
 .button-group > a:hover{
     font-weight: 500;
     transition: background-color .5s;
-    background-color: slategrey;
+    background-color: rgba(95, 109, 122,.3);
 }
 @media (min-width: 500px) {
   .pet {
@@ -84,11 +84,15 @@
   .pets {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
   }
 }
 @media (min-width: 1000px){
     .pet {
-        width: 32%;
+        width: 25rem;
+        margin: auto;
+        margin-top: 2rem;
         box-sizing: border-box;
     }
 }

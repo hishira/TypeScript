@@ -11,6 +11,7 @@ import { AboutComponent } from './about/about.component';
 import { ShelterComponent } from './shelter/shelter.component';
 import { ShelterpetsComponent } from './shelterpets/shelterpets.component';
 import { PetPhotosComponent } from './pet-photos/pet-photos.component'
+import {PetComponent} from "./shelterpets/pet/pet.component"
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +21,8 @@ import { PetPhotosComponent } from './pet-photos/pet-photos.component'
     AboutComponent,
     ShelterComponent,
     ShelterpetsComponent,
-    PetPhotosComponent
+    PetPhotosComponent,
+    PetComponent,
   ],
   imports: [
     BrowserModule,

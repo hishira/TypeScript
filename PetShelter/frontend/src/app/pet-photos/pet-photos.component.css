@@ -1,47 +1,89 @@
-article{
-    width: 100%;
-    position: relative;
+article {
+  width: 100%;
+  position: relative;
 }
-img{
-    object-fit: cover;
-    width: 100%;
+img {
+  object-fit: cover;
+  width: 100%;
 }
-.photos{
-    display: flex;
-    justify-content: center;
-}
-.petschoices{
+.left{
     position: absolute;
-    margin: auto;
-    justify-self: center;
-    width: 60%;
-    bottom: 2rem;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+    left: 0;   
+    z-index: 100;
+}
+.right{
+    position: absolute;
+    right: 0;
+}
+.left, .right{
+    cursor: pointer;
+    top: 50%;
+    border: 2px solid red;
+    box-sizing: border-box;
+    padding: .5rem;
+}
+.imgappear {
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+  animation: appear 0.5s ease forwards;
+}
+.animationnone{
+    animation: none;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.photos {
+  display: flex;
+  justify-content: center;
+  background-color: whitesmoke;
+  box-sizing: border-box;
+}
+.petschoices {
+  position: absolute;
+  margin: auto;
+  justify-self: center;
+  width: 60%;
+  bottom: 2rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 @media (min-width: 400px) {
-    img{
-        object-fit: fill;
-    }
+  img {
+    object-fit: fill;
+  }
+  .moreimg {
+    object-fit: scale-down;
+    height: 30rem;
+  }
 }
-@media (min-width: 1000px){
-    img{
-        max-width: 100%;
-        object-fit: cover;
-    }
+@media (min-width: 1000px) {
+  img {
+    max-width: 100%;
+    object-fit: cover;
+  }
+  .moreimg {
+    object-fit: none;
+    height: 30rem;
+  }
 }
-.circle::after{
-    content: " ";
-    width: .4rem;
-    height: .4rem;
-    position: absolute;
-    background-color: white;
-    border: .3rem solid slategray;
-    border-radius: 100%;
-    cursor: pointer;
+.circle::after {
+  content: " ";
+  width: 0.4rem;
+  height: 0.4rem;
+  position: absolute;
+  background-color: white;
+  border: 0.3rem solid slategray;
+  border-radius: 100%;
+  cursor: pointer;
 }
 
-.circle__selected::after{
-    background-color: gray;
+.circle__selected::after {
+  background-color: gray;
 }

@@ -1,6 +1,6 @@
-<section *ngIf="pets" class="pets">
+<section *ngIf="pets && petsShow" class="pets">
   <article *ngFor="let pet of pets" class="pet">
-    <app-pet-photos [petid]="pet.id"></app-pet-photos>
+    <app-pet-photos [petid]="pet.id" [more]="false"></app-pet-photos>
     <div class="pet__info">
       <div class="info">
         <span class="first">Name</span>
@@ -18,8 +18,9 @@
       </div>
       <div class="button-group">
         <a>Support</a>
-        <a>More info</a>
+        <a (click)="choosePet(pet)">More info</a>
       </div>
     </div>
   </article>
 </section>
+<app-pet (backEmit)="backPageHandle()" *ngIf="selectedPet" [pet]='selectedPet'> </app-pet>
