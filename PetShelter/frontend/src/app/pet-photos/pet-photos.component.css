@@ -1,34 +1,86 @@
 article {
   width: 100%;
   position: relative;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
 img {
   object-fit: cover;
   width: 100%;
 }
-.left{
-    position: absolute;
-    left: 0;   
-    z-index: 100;
+.left {
+  position: absolute;
+  left: 0;
+  z-index: 100;
 }
-.right{
-    position: absolute;
-    right: 0;
+.left:hover, .right:hover{
+  opacity: .5;
 }
-.left, .right{
-    cursor: pointer;
-    top: 50%;
-    border: 2px solid red;
-    box-sizing: border-box;
-    padding: .5rem;
+.left::before {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  width: 20px;
+  height: 5px;
+  border: 0.1rem solid slategray;
+  background-color: slategray;
+  transform: rotateZ(45deg);
+}
+.left::after{
+  content: " ";
+  position: absolute;
+  top: calc(50% - 13px);
+  left: 15px;
+  width: 20px;
+  height: 5px;
+  border: 0.1rem solid slategray;
+  background-color: slategray;
+  transform: rotateZ(-45deg);
+}
+.right::after, .right::before{
+  content: " ";
+  position: absolute;
+  top: calc(50%);
+  right: 15px;
+  width: 20px;
+  height: 5px;
+  border: 0.1rem solid slategray;
+  background-color: slategray;
+}
+.right::after{
+  transform: rotateZ(-45deg);
+}
+.right::before{
+  transform: rotateZ(45deg);
+  top: calc(50% - 13px);
+}
+.right {
+  position: absolute;
+  right: 0;
+}
+.left,
+.right {
+  cursor: pointer;
+  box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #bfbfbf;
+  padding: 0.5rem;
+  width: 3.5rem;
+  height: 100%;
 }
 .imgappear {
   opacity: 0;
   transition: opacity 200ms ease-in-out;
   animation: appear 0.5s ease forwards;
 }
-.animationnone{
-    animation: none;
+.animationnone {
+  animation: none;
 }
 @keyframes appear {
   from {

@@ -1,6 +1,6 @@
 <section *ngIf="pets && petsShow" class="pets">
-  <article *ngFor="let pet of pets" class="pet">
-    <app-pet-photos [petid]="pet.id" [more]="false"></app-pet-photos>
+  <article *ngFor="let pet of pets" class="pet" (click)="choosePet(pet)">
+    <app-pet-photos class="photo" [petid]="pet.id" [more]="false"></app-pet-photos>
     <div class="pet__info">
       <div class="info">
         <span class="first">Name</span>
@@ -16,11 +16,8 @@
           {{ pet.brithdate | date: "shortDate" }}
         </span>
       </div>
-      <div class="button-group">
-        <a>Support</a>
-        <a (click)="choosePet(pet)">More info</a>
-      </div>
     </div>
   </article>
 </section>
-<app-pet (backEmit)="backPageHandle()" *ngIf="selectedPet" [pet]='selectedPet'> </app-pet>
+<app-pet (backEmit)="backPageHandle()" *ngIf="selectedPet" [pet]="selectedPet">
+</app-pet>

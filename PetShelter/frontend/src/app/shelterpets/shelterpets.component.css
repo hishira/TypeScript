@@ -1,17 +1,33 @@
 .pets {
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding: 0 2rem;
+  padding-bottom: 3rem;
 }
 .pet {
   display: flex;
   flex-direction: column;
   padding: 0;
+  opacity: 0;
+  transition: opacity ease-in-out 300ms;
   width: 90%;
   margin: auto;
   box-shadow: 0.2rem 0.1rem 5px slategray;
   margin-top: 0.8rem;
   border-radius: 10px;
+  padding-bottom: .5rem;
+  cursor: pointer;
+
+}
+.pet:hover{
+  opacity: .7;
+  box-sizing: border-box;
+  transform: scale(1.04); 
+}
+.pet:hover > *:not(.photo,.pet__info){
+  opacity: .7;
+  box-sizing: border-box;
+  transform: scale(1.04);
 }
 .pet__info {
   display: flex;
@@ -25,7 +41,7 @@
   display: flex;
   font-size: 1.1rem;
   justify-content: space-around;
-  padding: 0 1.2rem;
+  padding: .5rem 1rem;
   box-sizing: border-box;
 }
 .info > * {
@@ -35,44 +51,48 @@
 .first,
 .second {
   padding: 0.4rem;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 .second {
   text-align: end;
 }
 .button-group {
-    width: 100%;
-    display: flex;
+  width: 100%;
+  display: flex;
 }
-.button-group > a{
-    width: 50%;
-    text-align: center;
-    padding: .5rem 1rem;
-    font-size: 1.2rem;
-    background-color: whitesmoke;
-    cursor: pointer;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    
+.button-group > a {
+  width: 50%;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  background-color: whitesmoke;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
-.button-group > a:first-child{
-    border-right: .1rem solid lightslategrey;
-    border-bottom-right-radius: 0px;
+.button-group > a:first-child {
+  border-right: 0.1rem solid lightslategrey;
+  border-bottom-right-radius: 0px;
 }
-.button-group > a:not(:first-child){
-    border-bottom-left-radius: 0px;
+.button-group > a:not(:first-child) {
+  border-bottom-left-radius: 0px;
 }
-.button-group > a:hover{
-    font-weight: 500;
-    transition: background-color .5s;
-    background-color: rgba(95, 109, 122,.3);
+.button-group > a:hover {
+  font-weight: 500;
+  transition: background-color 0.5s;
+  background-color: rgba(95, 109, 122, 0.3);
 }
 @media (min-width: 500px) {
   .pet {
-    width: 70%;
+    width: 80%;
   }
 }
 @media (min-width: 650px) {
+  .pets{
+    padding: 0 2rem;
+  }
   .pet {
     width: 60%;
   }
@@ -88,11 +108,13 @@
     align-items: center;
   }
 }
-@media (min-width: 1000px){
-    .pet {
-        width: 25rem;
-        margin: auto;
-        margin-top: 2rem;
-        box-sizing: border-box;
-    }
+@media (min-width: 1000px) {
+  .pets {
+  }
+  .pet {
+    width: 30rem;
+    margin: auto;
+    margin-top: 2rem;
+    box-sizing: border-box;
+  }
 }

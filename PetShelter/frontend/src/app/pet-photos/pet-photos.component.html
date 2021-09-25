@@ -1,7 +1,14 @@
 <article *ngIf="photos" class="photos">
-  <div class="left" *ngIf="more" (click)="leftImage()">left</div>
-  <img [class.moreimg]='more === true' class="imgappear" src="{{ photos[photoindex].url }}" height="200" alt="" #imgelement />
-  <div class="petschoices" *ngIf='more'>
+  <div class="left" *ngIf="more" (click)="leftImage()"></div>
+  <img
+    [class.moreimg]="more === true"
+    class="imgappear"
+    src="{{ photos[photoindex].url }}"
+    height="200"
+    alt=""
+    #imgelement
+  />
+  <div class="petschoices" *ngIf="more">
     <span
       *ngFor="let i of photos; let index = index"
       class="circle"
@@ -9,7 +16,5 @@
       (click)="circleClick(index)"
     ></span>
   </div>
-  <div class="right" *ngIf="more" (click)="rightImage()">
-    right
-  </div>
+  <div class="right" *ngIf="more" (click)="rightImage()"></div>
 </article>

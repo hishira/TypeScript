@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import { PhotoService } from '../photo.service';
 import { Photo } from '../photo';
 @Component({
@@ -6,7 +13,7 @@ import { Photo } from '../photo';
   templateUrl: './pet-photos.component.html',
   styleUrls: ['./pet-photos.component.css'],
 })
-export class PetPhotosComponent implements OnInit {
+export class PetPhotosComponent implements OnInit, OnDestroy {
   @Input() petid?: number;
   @Input() more?: boolean;
   @ViewChild('imgelement', { static: false }) imageelement?: ElementRef;
@@ -24,22 +31,43 @@ export class PetPhotosComponent implements OnInit {
         .subscribe((photos) => (this.photos = photos));
       this.selectPhoto();
     }
+    if (this.more) {
+      document.addEventListener(
+        'keydown',
+        (ev: KeyboardEvent) => this.keyDownHandle(ev),
+        true
+      );
+    }
+  }
+
+  private keyDownHandle(ev: KeyboardEvent): void {
+    if (ev.code === 'ArrowRight') {
+      this.rightImage();
+    } else if (ev.code === 'ArrowLeft') {
+      this.leftImage();
+    }
   }
   ngOnDestroy() {
     if (this.timeout) {
       clearInterval(this.timeout);
     }
+    document.removeEventListener(
+      'keydown',
+      (ev: KeyboardEvent) => this.keyDownHandle(ev),
+      true
+    );
   }
+
   private intervalClear(): void {
     if (this.timeout) {
       clearInterval(this.timeout);
-      if(this.timer)
-        clearTimeout(this.timer);
+      if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         this.selectPhoto();
       }, 2000);
     }
   }
+
   circleClick(index: number): void {
     this.photoindex = index;
     this.intervalClear();
