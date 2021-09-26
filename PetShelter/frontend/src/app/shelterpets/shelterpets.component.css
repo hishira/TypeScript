@@ -34,27 +34,36 @@
   flex-direction: column;
   align-self: center;
   align-items: center;
+  box-sizing: border-box;
+  padding: .3rem;
   width: 100%;
 }
 .info {
   width: 100%;
   display: flex;
-  font-size: 1.1rem;
-  justify-content: space-around;
-  padding: .5rem 1rem;
+  font-size: 1.05rem;
+  justify-content: left;
+  padding: 0 .5rem;
   box-sizing: border-box;
 }
-.info > * {
-  width: 50%;
+
+.info__name{
+  width: 100%;
+  text-align: left;
+  padding: .5rem .5rem;
+  box-sizing: border-box;
   font-size: 1.2rem;
+  font-weight: bold;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .first,
 .second {
-  padding: 0.4rem;
+  margin: .5rem 0rem;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 .second {
   text-align: end;
+  margin-left: .4rem;
 }
 .button-group {
   width: 100%;
@@ -85,22 +94,17 @@
   background-color: rgba(95, 109, 122, 0.3);
 }
 @media (min-width: 500px) {
-  .pet {
-    width: 80%;
+  .pet{
+    width: 20rem;
   }
 }
 @media (min-width: 650px) {
   .pets{
     padding: 0 2rem;
   }
-  .pet {
-    width: 60%;
-  }
+  
 }
 @media (min-width: 850px) {
-  .pet {
-    width: 45%;
-  }
   .pets {
     flex-direction: row;
     flex-wrap: wrap;
@@ -110,9 +114,14 @@
 }
 @media (min-width: 1000px) {
   .pets {
+    justify-content: space-around;
+    flex: 1 0 1;
+    margin-left: 10rem;
+    margin-right: 10rem;
+    margin-bottom: 5rem;
   }
   .pet {
-    width: 30rem;
+    width: 20rem;
     margin: auto;
     margin-top: 2rem;
     box-sizing: border-box;

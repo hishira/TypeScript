@@ -2,9 +2,8 @@
   <article *ngFor="let pet of pets" class="pet" (click)="choosePet(pet)">
     <app-pet-photos class="photo" [petid]="pet.id" [more]="false"></app-pet-photos>
     <div class="pet__info">
-      <div class="info">
-        <span class="first">Name</span>
-        <span class="second">{{ pet.name }}</span>
+      <div class="info__name">
+        <span>{{ pet.name }}</span>
       </div>
       <div class="info">
         <span class="first">Weight</span>
@@ -19,5 +18,5 @@
     </div>
   </article>
 </section>
-<app-pet (backEmit)="backPageHandle()" *ngIf="selectedPet" [pet]="selectedPet">
+<app-pet (backEmit)="backPageHandle()" *ngIf="selectedPet && !petsShow" [pet]="selectedPet">
 </app-pet>
