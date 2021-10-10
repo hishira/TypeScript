@@ -1,7 +1,6 @@
 .shelter__info{
     padding: .5rem 1.4rem;
     font-size: 1.1rem;
-    border: 2px solid red;
 }
 .shelter__info > *{
     width: 100%;
