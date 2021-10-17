@@ -12,7 +12,7 @@ import { ShelterComponent } from './components/shelter/shelter.component';
 import { ShelterpetsComponent } from './components/shelterpets/shelterpets.component';
 import { PetPhotosComponent } from './components/pet-photos/pet-photos.component';
 import { PetComponent } from './components/shelterpets/pet/pet.component';
-import { CatsComponent } from './components/pets/cats/cats.component';
+import { PetsComponent } from './components/pets/pets/pets.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +24,7 @@ import { CatsComponent } from './components/pets/cats/cats.component';
     ShelterpetsComponent,
     PetPhotosComponent,
     PetComponent,
-    CatsComponent,
+    PetsComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],

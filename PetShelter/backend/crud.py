@@ -28,7 +28,10 @@ def getpetsbycenter(db:Session,
     return filteredpets
 
 def getPetOnlyCats(db:Session):
-    return db.query(models.Pet).filter(models.Pet.pettype == "Cat").all();
+    return db.query(models.Pet).filter(models.Pet.pettype == "Cat").all()
+
+def getPetOnlyDog(db: Session):
+    return db.query(models.Pet).filter(models.Pet.pettype == "Dog").all()
 
 def getpetsbycenterwithfoto(db: Session,
     centerid: int):

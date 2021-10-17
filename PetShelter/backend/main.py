@@ -91,3 +91,8 @@ def getpetwithphotos(centerid:int,
     response_model=List[schemas.Pet])
 def getAllCats(db: Session=Depends(getdb)):
     return crud.getPetOnlyCats(db)
+
+@app.get("/pet/getalldog",
+    response_model=List[schemas.Pet])
+def getAllDogs(db: Session=Depends(getdb)):
+    return crud.getPetOnlyDog(db)

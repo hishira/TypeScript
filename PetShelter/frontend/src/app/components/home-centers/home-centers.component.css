@@ -54,7 +54,7 @@ a{
 }
 .agroup > a:hover{
     transition: background-color 400ms;
-    background-color: lightsteelblue;
+    background-color: silver;
     color: white;
 }
 @media (min-width: 700px){

@@ -130,8 +130,9 @@ article{
         padding: 0 5rem;
     }
     section{
-        height: 100vh;
+        height: 120vh;
     }
+
 }
 @media (min-width: 1200px){
     article{
