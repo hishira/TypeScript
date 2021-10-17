@@ -6,8 +6,8 @@ import {
   ElementRef,
   OnDestroy,
 } from '@angular/core';
-import { PhotoService } from '../photo.service';
-import { Photo } from '../photo';
+import { PhotoService } from '../../services/photo.service';
+import { Photo } from '../../photo';
 @Component({
   selector: 'app-pet-photos',
   templateUrl: './pet-photos.component.html',

@@ -3,6 +3,8 @@ header{
     justify-content: space-between;
     padding: .4rem;
     box-shadow: 0 8px 6px -6px lightgrey;
+    position: relative;
+    z-index: 2;
 }
 nav{
     padding: .4rem;

@@ -2,16 +2,17 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { HomeComponent } from './home/home.component';
+import { HeaderComponent } from './components/header/header.component';
+import { HomeComponent } from './components/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HomeCentersComponent } from './home-centers/home-centers.component';
+import { HomeCentersComponent } from './components/home-centers/home-centers.component';
 import { HttpClientModule } from '@angular/common/http';
-import { AboutComponent } from './about/about.component';
-import { ShelterComponent } from './shelter/shelter.component';
-import { ShelterpetsComponent } from './shelterpets/shelterpets.component';
-import { PetPhotosComponent } from './pet-photos/pet-photos.component'
-import {PetComponent} from "./shelterpets/pet/pet.component"
+import { AboutComponent } from './components/about/about.component';
+import { ShelterComponent } from './components/shelter/shelter.component';
+import { ShelterpetsComponent } from './components/shelterpets/shelterpets.component';
+import { PetPhotosComponent } from './components/pet-photos/pet-photos.component';
+import { PetComponent } from './components/shelterpets/pet/pet.component';
+import { CatsComponent } from './components/pets/cats/cats.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,13 +24,10 @@ import {PetComponent} from "./shelterpets/pet/pet.component"
     ShelterpetsComponent,
     PetPhotosComponent,
     PetComponent,
+    CatsComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

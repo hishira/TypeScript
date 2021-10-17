@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
-import {CenterService} from "../center.service"
-import {Center} from "../center";
+import {CenterService} from "../../services/center.service"
+import {Center} from "../../center";
 @Component({
   selector: 'app-shelter',
   templateUrl: './shelter.component.html',

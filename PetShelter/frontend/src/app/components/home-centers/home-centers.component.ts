@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Center } from "../center";
-import { CenterService } from "../center.service";
+import { Center } from "../../center";
+import { CenterService } from "../../services/center.service";
 
 @Component({
   selector: 'app-home-centers',

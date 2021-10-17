@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PetService } from '../pet.service';
-import { Pet } from '../pet';
+import { PetService } from '../../services/pet.service';
+import { Pet } from '../../pet';
 @Component({
   selector: 'app-shelterpets',
   templateUrl: './shelterpets.component.html',

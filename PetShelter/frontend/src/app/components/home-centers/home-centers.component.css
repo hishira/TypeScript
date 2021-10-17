@@ -4,6 +4,13 @@
     align-items: center;
     flex-direction: column;
     margin-bottom: 1rem;
+    margin-top: 5rem;
+
+}
+@media (min-width: 1000px){
+    .firssection{
+        padding: 0 5rem;
+    }
 }
 a{
     color: black;
@@ -54,11 +61,11 @@ a{
     .home-centers{
         flex-direction: row;
         flex-wrap: wrap;
-        width: 95%;
+        width: 100%;
         justify-content: space-around;
     }
     .center{
-        width: 45%;
+        width: 55%;
     }
 }
 @media (min-width: 1000px){
@@ -66,6 +73,6 @@ a{
         width: 90%;
     }
     .center{
-        width: 30%;
+        width: 35%;
     }
 }

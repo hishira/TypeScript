@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { Pet } from '../../pet';
+import { Pet } from '../../../pet';
 @Component({
   selector: 'app-pet',
   templateUrl: './pet.component.html',
