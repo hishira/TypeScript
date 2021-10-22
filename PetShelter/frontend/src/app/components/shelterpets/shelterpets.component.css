@@ -15,55 +15,82 @@
   box-shadow: 0.2rem 0.1rem 5px slategray;
   margin-top: 0.8rem;
   border-radius: 10px;
-  padding-bottom: .5rem;
   cursor: pointer;
-
+  position: relative;
 }
-.pet:hover{
-  opacity: .7;
-  box-sizing: border-box;
-  transform: scale(1.04); 
+.photo {
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  opacity: 1;
+  transition: opacity 300ms;
 }
-.pet:hover > *:not(.photo,.pet__info){
-  opacity: .7;
-  box-sizing: border-box;
-  transform: scale(1.04);
+.pet:hover > .photo {
+  animation: up 500ms ease forwards
+}
+@keyframes up {
+  from{
+    opacity: 1;
+  }
+  to{
+    opacity: 0;
+  }
+  
 }
 .pet__info {
   display: flex;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 300ms;
+  position: absolute;
   flex-direction: column;
+  justify-content: center;
   align-self: center;
   align-items: center;
   box-sizing: border-box;
-  padding: .3rem;
+  padding: 0.3rem;
+  
   width: 100%;
 }
+.pet:hover > .pet__info{
+  animation: appear 500ms ease forwards;
+}
+@keyframes appear {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+
 .info {
   width: 100%;
   display: flex;
   font-size: 1.05rem;
-  justify-content: left;
-  padding: 0 .5rem;
+  justify-content: center;
+  padding: 0 0.5rem;
   box-sizing: border-box;
 }
 
-.info__name{
+.info__name {
   width: 100%;
-  text-align: left;
-  padding: .5rem .5rem;
+  text-align: start;
+  padding: 0.75rem 2.5rem;
   box-sizing: border-box;
   font-size: 1.2rem;
   font-weight: bold;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 .first,
 .second {
-  margin: .5rem 0rem;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  width: 45%;
+  margin: 0.75rem 2rem;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 .second {
   text-align: end;
-  margin-left: .4rem;
+  margin-left: 0.4rem;
 }
 .button-group {
   width: 100%;
@@ -94,15 +121,14 @@
   background-color: rgba(95, 109, 122, 0.3);
 }
 @media (min-width: 500px) {
-  .pet{
+  .pet {
     width: 20rem;
   }
 }
 @media (min-width: 650px) {
-  .pets{
+  .pets {
     padding: 0 2rem;
   }
-  
 }
 @media (min-width: 850px) {
   .pets {
