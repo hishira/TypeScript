@@ -1,5 +1,6 @@
 from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from . import models, schemas
 from itertools import groupby
 from operator import attrgetter
@@ -28,10 +29,10 @@ def getpetsbycenter(db:Session,
     return filteredpets
 
 def getPetOnlyCats(db:Session):
-    return db.query(models.Pet).filter(models.Pet.pettype == "Cat").all()
+    return db.query(models.Pet).filter(or_(models.Pet.pettype == 'Cat',models.Pet.pettype == 'cat')).all()
 
 def getPetOnlyDog(db: Session):
-    return db.query(models.Pet).filter(models.Pet.pettype == "Dog").all()
+    return db.query(models.Pet).filter(or_(models.Pet.pettype == 'Dog',models.Pet.pettype == 'dog')).all()
 
 def getpetsbycenterwithfoto(db: Session,
     centerid: int):

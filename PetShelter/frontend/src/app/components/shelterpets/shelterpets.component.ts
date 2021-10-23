@@ -7,8 +7,7 @@ import { Pet } from '../../pet';
   styleUrls: ['./shelterpets.component.css'],
 })
 export class ShelterpetsComponent implements OnInit {
-  @Input() shelterid?: number;
-  public pets?: Array<Pet>;
+  @Input() pets?: Array<Pet>;
   public selectedPet: Pet | undefined;
   public petsShow: boolean = true;
   private intervalCheck: NodeJS.Timer | null = null;
@@ -25,7 +24,7 @@ export class ShelterpetsComponent implements OnInit {
     }, 50);
   }
   ngOnInit(): void {
-    this.getPetbyCenter();
+    console.log(this.pets)
     this.intervalStart();
   }
 
@@ -54,13 +53,6 @@ export class ShelterpetsComponent implements OnInit {
       this.appearPetElement(petelement as HTMLCollectionOf<HTMLElement>);
       clearInterval(this.intervalCheck);
     }
-  }
-
-  private getPetbyCenter(): void {
-    if (this.shelterid)
-      this.petService
-        .getPetsByCenter(this.shelterid)
-        .subscribe((pets) => (this.pets = pets));
   }
 
   choosePet(pet: Pet): void {

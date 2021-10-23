@@ -1,5 +1,3 @@
 <ng-container *ngIf="pets">
-  <div *ngFor="let cat of pets">
-    <span>{{ cat.name }}</span>
-  </div>
+  <app-shelterpets [pets]='pets'></app-shelterpets>
 </ng-container>

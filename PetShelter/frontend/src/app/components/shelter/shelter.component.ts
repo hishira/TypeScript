@@ -3,6 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {CenterService} from "../../services/center.service"
 import {Center} from "../../center";
+import {Pet} from "../../pet";
 @Component({
   selector: 'app-shelter',
   templateUrl: './shelter.component.html',
@@ -10,6 +11,7 @@ import {Center} from "../../center";
 })
 export class ShelterComponent implements OnInit {
   center?: Center;
+  pets?: Array<Pet>
   constructor(private route: ActivatedRoute,
     private location: Location,
     private centerservice: CenterService) { }
@@ -22,7 +24,10 @@ export class ShelterComponent implements OnInit {
     let shelterid:number = Number(this.route.snapshot.paramMap.get("id"));
     this.centerservice
         .getcenterbyid(shelterid)
-        .subscribe(center=>this.center=center)
+        .subscribe(center=>{
+          this.center=center
+          this.pets = center.pets;
+        })
 
   }
 }
