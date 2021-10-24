@@ -17,9 +17,18 @@ export class HeaderComponent implements OnInit {
     this.nestednav = document.getElementsByClassName('nasted')[0] as HTMLElement;
   }
 
+  private checkBodyOverflow(): void {
+    console.log(document.body.style.getPropertyValue('overflow'))
+    if(document.body.style.getPropertyValue('overflow') === 'hidden'){
+      document.body.style.overflow = 'auto';
+    }else{
+      document.body.style.overflow = 'hidden';
+    }
+  }
   hamburgerClick(): void {
     this.hamburgerElement?.classList.toggle(this.HAMBURGEROPEN);
-    this.nestednav?.classList.toggle('nested-open')
+    this.nestednav?.classList.toggle('nested-open');
+    this.checkBodyOverflow();
   }
 
   resetCSSClasses(): void {

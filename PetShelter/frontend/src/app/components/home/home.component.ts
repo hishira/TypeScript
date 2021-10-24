@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
+  readonly title: string = 'Pet shelter';
+  readonly subtitle: string = 'Adoption is a good choice!';
   constructor() { }
 
   ngOnInit(): void {

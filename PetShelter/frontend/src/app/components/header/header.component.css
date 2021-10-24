@@ -4,6 +4,7 @@ header{
     padding: .4rem;
     box-shadow: 0 8px 6px -6px lightgrey;
     position: relative;
+    box-sizing: border-box;
     z-index: 200;
     background-color: white;
     width: 100%;
@@ -19,14 +20,14 @@ nav  > div > a{
     cursor: pointer;
     color: black;
     text-decoration: none;
+    transition: font-weight 100ms;
 }
 .nasted{
     display: flex;
     position: relative;
-    border: 2px solid red;
 }
 nav > div > a:hover{
-    font-weight: bold;
+    color: lightslategrey;
 }
 .hamburger{
     display: none;

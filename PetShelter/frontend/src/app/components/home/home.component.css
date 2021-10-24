@@ -8,6 +8,31 @@ section{
     display: flex;
     flex-direction: column;
 }
+.info__span, .info__span_ver{
+    font-size: 24px;
+    color: white;
+    font-weight: 400;
+    border-radius: 5px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: rgba(0,0,0,.4);
+    font-style: oblique;
+    padding: 1rem 3rem;
+    padding-left: 1.5rem;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur( 4px );
+}
+.info__span_ver{
+    top: 100px;
+}
+@media (min-width: 550px){
+    .info__span, .info__span_ver{
+        font-size: 32px;
+        left: 100px;
+    }
+}
 @keyframes appear{
     from{
         opacity: 0;
@@ -18,7 +43,7 @@ section{
 article{
     background-image: url("/assets/main_pet.jpg");
     background-size: 100% 100%;
-    height: 50vh;
+    height: 40vh;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -28,12 +53,11 @@ article{
 
 .info__button__min{
     position: absolute;
-    bottom: -5rem;
+    bottom: -7rem;
     width: 100%;
-    padding: inherit;
     box-sizing: border-box;
 
-    justify-content: space-between;
+    justify-content: space-around;
     display: none;
     z-index: 1000;
 }
@@ -41,12 +65,13 @@ article{
 .info__button{
     display: flex;
     flex-direction: column;
+    padding: 1rem;
 }
 .square{
     position: relative;
     background-color: whitesmoke;
     box-shadow: 0 8px 6px -6px lightgrey;
-    padding: 3rem 5rem 3rem 5rem;
+    padding: 4rem 5rem 4rem 5rem;
     top: 0;
     border-radius: 5px;
     transition: top ease 400ms, background-color ease 400ms;
@@ -129,37 +154,35 @@ article{
     }
    
 }
+
 @media (min-width: 900px){
     article{
         height: 75vh;
         background-clip: content-box;
         background-repeat: round;
-
     }
+    
 }
 @media (min-width: 1000px){
+  
     article{
         height: 75vh;
         background-clip: content-box;
         background-repeat: round;
-        padding: 0 5rem;
     }
     section{
         height: 120vh;
     }
+    
 
 }
 @media (min-width: 1200px){
     article{
-        padding: 0 12rem;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-   
-        height: 130vh;
-
+        padding: 0 5rem;
+        height: 110vh;
     }
     section{
-        height: 120vh;
+        height: 110vh;
     }
 }
 
