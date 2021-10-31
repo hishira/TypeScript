@@ -5,6 +5,15 @@ from . import models, schemas
 from itertools import groupby
 from operator import attrgetter
 
+
+def createBreed(db: Session, newbreed: schemas.BreedBase):
+    newBreed = models.Breed(value=newbreed.value, pettype=newbreed.pettype)
+    db.add(newBreed)
+    db.commit()
+    db.refresh(newBreed)
+    return newBreed
+
+
 def get_pets(db: Session):
     return db.query(models.Pet).all()
 

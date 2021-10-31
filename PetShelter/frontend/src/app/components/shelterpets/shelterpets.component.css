@@ -10,13 +10,15 @@
   padding: 0;
   opacity: 0;
   transition: opacity ease-in-out 300ms;
-  width: 90%;
+  width: 100%;
   margin: auto;
   box-shadow: 0.2rem 0.1rem 5px slategray;
   margin-top: 0.8rem;
   border-radius: 10px;
   cursor: pointer;
   position: relative;
+  height: 15rem;
+  contain: content;
 }
 .photo {
   height: 100%;
@@ -122,7 +124,7 @@
 }
 @media (min-width: 500px) {
   .pet {
-    width: 20rem;
+    width: 23rem;
   }
 }
 @media (min-width: 650px) {
@@ -141,13 +143,10 @@
 @media (min-width: 1000px) {
   .pets {
     justify-content: space-around;
-    flex: 1 0 1;
-    margin-left: 10rem;
-    margin-right: 10rem;
     margin-bottom: 5rem;
   }
   .pet {
-    width: 20rem;
+    width: 25rem;
     margin: auto;
     margin-top: 2rem;
     box-sizing: border-box;

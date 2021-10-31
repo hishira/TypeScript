@@ -7,6 +7,9 @@ class PetBase(BaseModel):
     weight:     str
     brithdate:  datetime
     pettype:    str
+    size:       str
+    gender:     str
+
 
 class PhotoBase(BaseModel):
     url:        str
@@ -17,6 +20,10 @@ class CenterBase(BaseModel):
     city:       str
     address:    str
     phone:      str
+
+class BreedBase(BaseModel):
+    value:      str
+    pettype:    str
 
 class CenterCreate(CenterBase):
     pass
@@ -29,6 +36,7 @@ class PetCreate(PetBase):
 
 class Pet(PetBase):
     id:         int
+    breed:      int
     center_id:  int
 
     class Config:
@@ -44,6 +52,12 @@ class Photo(PhotoBase):
 class Center(CenterBase):
     id:         int
     pets:       List[Pet]
+
+    class Config:
+        orm_mode = True
+
+class Breed(BreedBase):
+    id:        int
 
     class Config:
         orm_mode = True

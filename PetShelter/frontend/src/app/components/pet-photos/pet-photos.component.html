@@ -2,6 +2,7 @@
   <div class="left" *ngIf="more" (click)="leftImage()"></div>
   <img
     [class.moreimg]="more === true"
+    [class.full-height]="more === false"
     class="imgappear"
     src="{{ photos[photoindex].url }}"
     height="200"

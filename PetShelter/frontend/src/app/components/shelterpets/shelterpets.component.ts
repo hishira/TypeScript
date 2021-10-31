@@ -7,6 +7,7 @@ import { Pet } from '../../pet';
   styleUrls: ['./shelterpets.component.css'],
 })
 export class ShelterpetsComponent implements OnInit {
+  
   @Input() pets?: Array<Pet>;
   public selectedPet: Pet | undefined;
   public petsShow: boolean = true;

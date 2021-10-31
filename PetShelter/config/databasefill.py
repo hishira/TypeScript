@@ -8,7 +8,9 @@ url: str = f"{baseurl}center/"
 headers:dict = {"accept":"application/json","Content-Type":"application/json"}
 geturl: str = f"{baseurl}centers/"
 getpetsurl: str = f"{baseurl}pets/"
-
+CATBREEDS: str = './cats-breeds.txt'
+DOGBREEDS: str = './dogs-breeds.txt'
+breedurl: str = f"{baseurl}breed"
 '''
 print(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
 url = f"http://127.0.0.1:8000/pet/"
@@ -88,5 +90,17 @@ def createsecond():
       print(photourl,newphoto)
       requests.post(photourl,headers=headers,json=newphoto)
 
+def createDogBreeds():
+  with open(DOGBREEDS) as file:
+    for i in file.readlines():
+      requests.post(breedurl,headers=headers,json={"value":i,"pettype":"dog"})
+
+def createCatsBreeds():
+  with open(CATBREEDS) as file:
+    for i in file.readlines():
+      requests.post(breedurl,headers=headers,json={"value":i,"pettype":"cat"})
+
+#createDogBreeds()
+createCatsBreeds()
 #createfirst()
-createsecond()
+#createsecond()
