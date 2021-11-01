@@ -11,9 +11,9 @@ class PetSize(enum.Enum):
     extralarge  = "Extra Large (16 kg or more)"
 
 class PetType(enum.Enum):
-    dog         = "Dog"
-    cat         = "Cat"
-    other       = "Other"
+    Dog         = "Dog"
+    Cat         = "Cat"
+    Other       = "Other"
 
 from .database import Base
 
@@ -21,21 +21,22 @@ class Breed(Base):
     __tablename__ = "breeds"
     id          = Column(Integer, primary_key=True, index=True)
     value       = Column(String, unique=True)
-    pettype     = Column(String, Enum(PetType))
+    pettype     = Column(String, Enum(PetType, values_callable=lambda x: [str(e.value) for e in PetType]))
+
 class Pet(Base):
     __tablename__ = "pets"
 
-    id          =     Column(Integer,primary_key=True,index=True)
+    id          =     Column(Integer, primary_key=True, index=True)
     name        =     Column(String)
     weight      =     Column(Integer)
     brithdate   =     Column(DateTime)
-    pettype     =     Column(String, Enum(PetType))
-    breed       =     Column(Integer, ForeignKey("breeds.id"))
-    size        =     Column("size_value", Enum(PetSize))
-    gender      =     Column("gender_value",Enum(PetGender))
-    center_id   =     Column(Integer,ForeignKey("centers.id"))
-    center      =     relationship("Center", back_populates="pets")
-    photos      =     relationship("Photo", back_populates="pet")
+    pettype     =     Column(String)#Column(Enum(PetType, values_callable=lambda x: [str(e.value) for e in PetType]))
+    size        =     Column(String)#Column(Enum(PetSize, values_callable=lambda x: [str(e.value) for e in PetSize]))
+    gender      =     Column(String)#Column(Enum(PetGender, values_callable=lambda x: [str(e.value) for e in PetGender]))
+    breed_id    =     Column(Integer, ForeignKey("breeds.id"))
+    center_id   =     Column(Integer, ForeignKey("centers.id"))
+    breed       =     relationship("Breed")
+    center      =     relationship("Center")
 
 class Photo(Base):
     __tablename__ = "photos"
@@ -43,7 +44,7 @@ class Photo(Base):
     id      =        Column(Integer,primary_key=True,index=True)
     url     =        Column(String)
     pet_id  =        Column(Integer,ForeignKey("pets.id"))
-    pet     =        relationship("Pet", back_populates="photos")
+    pet     =        relationship("Pet")
 
 class Center(Base):
     __tablename__ = "centers"
@@ -53,4 +54,3 @@ class Center(Base):
     city    =   Column(String)
     address =   Column(String)
     phone   =   Column(String)
-    pets    =   relationship("Pet", back_populates="center")

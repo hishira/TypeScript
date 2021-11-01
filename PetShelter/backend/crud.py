@@ -5,7 +5,6 @@ from . import models, schemas
 from itertools import groupby
 from operator import attrgetter
 
-
 def createBreed(db: Session, newbreed: schemas.BreedBase):
     newBreed = models.Breed(value=newbreed.value, pettype=newbreed.pettype)
     db.add(newBreed)
@@ -13,6 +12,11 @@ def createBreed(db: Session, newbreed: schemas.BreedBase):
     db.refresh(newBreed)
     return newBreed
 
+def getDogBreeds(db: Session):
+    return db.query(models.Breed).filter(models.Breed.pettype == 'Dog').all()
+
+def getCatBreeds(db: Session):
+    return db.query(models.Breed).filter(models.Breed.pettype == "Cat").all()
 
 def get_pets(db: Session):
     return db.query(models.Pet).all()
@@ -24,6 +28,9 @@ def create_pet(db: Session,
                 weight=newpet.weight,
                 brithdate=newpet.brithdate,
                 pettype=newpet.pettype,
+                breed_id=newpet.breed_id,
+                size=newpet.size,
+                gender=newpet.gender,
                 center_id=center_id
                 )
     db.add(new_pet)

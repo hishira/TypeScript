@@ -3,14 +3,19 @@ from typing import List
 import requests
 from random import randint
 from datetime import datetime
+from random import choice
+
+from requests.api import request
 baseurl: str = f"http://127.0.0.1:8000/"
 url: str = f"{baseurl}center/"
 headers:dict = {"accept":"application/json","Content-Type":"application/json"}
-geturl: str = f"{baseurl}centers/"
+geturl: str = f"{baseurl}centers"
 getpetsurl: str = f"{baseurl}pets/"
 CATBREEDS: str = './cats-breeds.txt'
 DOGBREEDS: str = './dogs-breeds.txt'
 breedurl: str = f"{baseurl}breed"
+getdogsbreed: str = f"{baseurl}breed/dog"
+getcatbreeds: str = f"{baseurl}breed/cat"
 '''
 print(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
 url = f"http://127.0.0.1:8000/pet/"
@@ -23,20 +28,32 @@ obj = {
 '''
 #requests.post(url,headers={"accept":"application/json","Content-Type":"application/json"},json=obj)
 
-def getpete(name:str,weight:str,
+petgender = ["Male", "Female"]
+petsize   = ["Small (0-4 kg)","Medium (5 - 8 kg)","Large (9-15 kg)","Extra Large (16 kg or more)"]
+
+def getpete(name:str,
+    weight:str,
     brithdate:datetime,
-    pettype:str)->dict:
-    return {"name":name,
-        "weight":weight,
-        "brithdate":brithdate,
-        "pettype":pettype}
+    pettype:str,
+    gender: str,
+    size: str,
+    breed: int,
+    )->dict:
+    return {"name": name,
+        "weight": weight,
+        "brithdate": brithdate,
+        "pettype": pettype,
+        "size": size,
+        "gender": gender,
+        "breed_id": breed
+        }
 
 def postcreatepet(pet:dict,url:str,headers:dict):
   return requests.post(url,
       headers=headers,
       json=pet)
 
-def createfirst():
+def createCenters():
   centers = [
       { "name": "Wesoła łapa",
         "city": "Kraków",
@@ -54,15 +71,18 @@ def createfirst():
   for i in centers:
       requests.post(url,headers=headers,json=i)
 
+def createfirst(catbreeds,dogbreeds):
+  
   pets = [
-    getpete("Waldek","7.5",f"{datetime.now()}","Cat"),
-    getpete("Szczała","7.5",f"{datetime.now()}","Dog"),
-    getpete("Puszek","7.5",f"{datetime.now()}","cat"),
-    getpete("Kropeczka","7.5",f"{datetime.now()}","cat"),
-    getpete("Fiona","7.5",f"{datetime.now()}","cat"),
-    getpete("Mara","7.5",f"{datetime.now()}","cat"),
-    getpete("Hina","7.5",f"{datetime.now()}","cat"),
+    getpete("Waldek","7.5",f"{datetime.now()}","Cat", choice(petgender),choice(petsize),choice(catbreeds)),
+    getpete("Szczała","7.5",f"{datetime.now()}","Dog",choice(petgender),choice(petsize),choice(dogbreeds)),
+    getpete("Puszek","7.5",f"{datetime.now()}","Cat",choice(petgender),choice(petsize),choice(catbreeds)),
+    getpete("Kropeczka","7.5",f"{datetime.now()}","Dog",choice(petgender),choice(petsize),choice(dogbreeds)),
+    getpete("Fiona","7.5",f"{datetime.now()}","Cat",choice(petgender),choice(petsize),choice(catbreeds)),
+    getpete("Mara","7.5",f"{datetime.now()}","Dog",choice(petgender),choice(petsize),choice(dogbreeds)),
+    getpete("Hina","7.5",f"{datetime.now()}","Cat",choice(petgender),choice(petsize),choice(catbreeds)),
   ]
+  print(pets)
   response = requests.get(geturl,headers=headers)
   for i in response.json():
     print(i["id"])
@@ -93,14 +113,19 @@ def createsecond():
 def createDogBreeds():
   with open(DOGBREEDS) as file:
     for i in file.readlines():
-      requests.post(breedurl,headers=headers,json={"value":i,"pettype":"dog"})
+      requests.post(breedurl,headers=headers,json={"value":i,"pettype":"Dog"})
 
 def createCatsBreeds():
   with open(CATBREEDS) as file:
     for i in file.readlines():
-      requests.post(breedurl,headers=headers,json={"value":i,"pettype":"cat"})
+      requests.post(breedurl,headers=headers,json={"value":i,"pettype":"Cat"})
 
 #createDogBreeds()
-createCatsBreeds()
-#createfirst()
-#createsecond()
+#createCatsBreeds()
+#dogsbreed = [x['id'] for x in requests.get(getdogsbreed,headers=headers).json()]
+#catsbreeds = [x['id'] for x in requests.get(getcatbreeds,headers=headers).json()]
+#print(dogsbreed)
+#print(catsbreeds)
+#createCenters()
+#createfirst(catsbreeds,dogsbreed)
+createsecond()

@@ -1,0 +1,4 @@
+DELETE FROM breeds;
+DELETE FROM pets;
+DELETE FROM photos;
+DELETE FROM centers;

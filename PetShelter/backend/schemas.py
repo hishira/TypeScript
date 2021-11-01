@@ -32,11 +32,11 @@ class PhotoCreate(PhotoBase):
     pass
 
 class PetCreate(PetBase):
+    breed_id:   int
     pass
 
 class Pet(PetBase):
     id:         int
-    breed:      int
     center_id:  int
 
     class Config:
@@ -51,8 +51,6 @@ class Photo(PhotoBase):
 
 class Center(CenterBase):
     id:         int
-    pets:       List[Pet]
-
     class Config:
         orm_mode = True
 

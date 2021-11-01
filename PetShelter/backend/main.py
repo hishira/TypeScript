@@ -27,6 +27,14 @@ def read_root():
 def addDogBreed(breed: schemas.BreedBase,db: Session=Depends(getdb)):
     return crud.createBreed(db,breed)
 
+@app.get("/breed/dog", response_model=List[schemas.Breed])
+def getDogBreeds(db: Session=Depends(getdb)):
+    return crud.getDogBreeds(db)
+
+@app.get("/breed/cat", response_model=List[schemas.Breed])
+def getCatBreeds(db: Session=Depends(getdb)):
+    return crud.getCatBreeds(db)
+
 @app.get("/pets/",
     response_model=List[schemas.Pet])
 def getallpets(response: Response,db: Session=Depends(getdb)):
@@ -48,8 +56,7 @@ def createpet(centerid: int,pet: schemas.PetCreate,db: Session=Depends(getdb)):
     print(pet)
     return crud.create_pet(db,centerid,pet)
 
-@app.get("/centers/",
-response_model=List[schemas.Center])
+@app.get("/centers", response_model=List[schemas.Center])
 def getcenters(db:Session=Depends(getdb)):
     return crud.get_centers(db)
 
@@ -60,7 +67,7 @@ def createcenter(center: schemas.CenterCreate,
     return crud.create_center(db,center)
 
 @app.post("/photos/{petid}",
-    response_model=schemas.PhotoCreate)
+    response_model=schemas.Photo)
 def createphoto(petid: int,
                 photo: schemas.PhotoCreate,
                 db: Session=Depends(getdb)):
