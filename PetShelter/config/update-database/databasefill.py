@@ -8,11 +8,13 @@ from random import choice
 from requests.api import request
 baseurl: str = f"http://127.0.0.1:8000/"
 url: str = f"{baseurl}center/"
-headers:dict = {"accept":"application/json","Content-Type":"application/json"}
+headers:dict = {"accept":"application/json","Content-Type":"application/json","dataType": "json"}
 geturl: str = f"{baseurl}centers"
 getpetsurl: str = f"{baseurl}pets/"
 CATBREEDS: str = './cats-breeds.txt'
 DOGBREEDS: str = './dogs-breeds.txt'
+pettypes: str = f"{baseurl}pettypes"
+petgenders: str = f"{baseurl}gender"
 breedurl: str = f"{baseurl}breed"
 getdogsbreed: str = f"{baseurl}breed/dog"
 getcatbreeds: str = f"{baseurl}breed/cat"
@@ -28,23 +30,32 @@ obj = {
 '''
 #requests.post(url,headers={"accept":"application/json","Content-Type":"application/json"},json=obj)
 
-petgender = ["Male", "Female"]
-petsize   = ["Small (0-4 kg)","Medium (5 - 8 kg)","Large (9-15 kg)","Extra Large (16 kg or more)"]
+def getPetTypes():
+  return requests.get(pettypes,headers=headers).json()
+
+def getPetGenders():
+  return requests.get(petgenders,headers=headers).json()
+
+def getPetTypeDogId():
+  return list(filter(lambda x: x['name'] == "Dog", getPetTypes())).pop()['id']
+
+def getPetTypeCatId():
+  return list(filter(lambda x: x['name'] == 'Cat', getPetTypes())).pop()['id']
 
 def getpete(name:str,
     weight:str,
     brithdate:datetime,
-    pettype:str,
-    gender: str,
-    size: str,
+    pettype:int,
+    gender: int,
+    size: int,
     breed: int,
     )->dict:
     return {"name": name,
         "weight": weight,
         "brithdate": brithdate,
-        "pettype": pettype,
-        "size": size,
-        "gender": gender,
+        "pettype_id": pettype,
+        "size_id": size,
+        "gender_id": gender,
         "breed_id": breed
         }
 
@@ -71,16 +82,16 @@ def createCenters():
   for i in centers:
       requests.post(url,headers=headers,json=i)
 
-def createfirst(catbreeds,dogbreeds):
+def createfirst(catbreeds,dogbreeds, petgender, petsize):
   
   pets = [
-    getpete("Waldek","7.5",f"{datetime.now()}","Cat", choice(petgender),choice(petsize),choice(catbreeds)),
-    getpete("Szczała","7.5",f"{datetime.now()}","Dog",choice(petgender),choice(petsize),choice(dogbreeds)),
-    getpete("Puszek","7.5",f"{datetime.now()}","Cat",choice(petgender),choice(petsize),choice(catbreeds)),
-    getpete("Kropeczka","7.5",f"{datetime.now()}","Dog",choice(petgender),choice(petsize),choice(dogbreeds)),
-    getpete("Fiona","7.5",f"{datetime.now()}","Cat",choice(petgender),choice(petsize),choice(catbreeds)),
-    getpete("Mara","7.5",f"{datetime.now()}","Dog",choice(petgender),choice(petsize),choice(dogbreeds)),
-    getpete("Hina","7.5",f"{datetime.now()}","Cat",choice(petgender),choice(petsize),choice(catbreeds)),
+    getpete("Waldek","7.5",f"{datetime.now()}",choice([1,2]), choice(petgender),choice(petsize),choice(catbreeds)),
+    getpete("Szczała","7.5",f"{datetime.now()}",choice([1,2]),choice(petgender),choice(petsize),choice(dogbreeds)),
+    getpete("Puszek","7.5",f"{datetime.now()}",choice([1,2]),choice(petgender),choice(petsize),choice(catbreeds)),
+    getpete("Kropeczka","7.5",f"{datetime.now()}",choice([1,2]),choice(petgender),choice(petsize),choice(dogbreeds)),
+    getpete("Fiona","7.5",f"{datetime.now()}",choice([1,2]),choice(petgender),choice(petsize),choice(catbreeds)),
+    getpete("Mara","7.5",f"{datetime.now()}",choice([1,2]),choice(petgender),choice(petsize),choice(dogbreeds)),
+    getpete("Hina","7.5",f"{datetime.now()}",choice([1,2]),choice(petgender),choice(petsize),choice(catbreeds)),
   ]
   print(pets)
   response = requests.get(geturl,headers=headers)
@@ -111,14 +122,16 @@ def createsecond():
       requests.post(photourl,headers=headers,json=newphoto)
 
 def createDogBreeds():
+  dogid = getPetTypeDogId()
   with open(DOGBREEDS) as file:
     for i in file.readlines():
-      requests.post(breedurl,headers=headers,json={"value":i,"pettype":"Dog"})
+      requests.post(breedurl,headers=headers,json={"value":i,"pettype_id":dogid,})
 
 def createCatsBreeds():
+  catid = getPetTypeCatId()
   with open(CATBREEDS) as file:
     for i in file.readlines():
-      requests.post(breedurl,headers=headers,json={"value":i,"pettype":"Cat"})
+      requests.post(breedurl,headers=headers,json={"value":i,"pettype_id":catid})
 
 #createDogBreeds()
 #createCatsBreeds()
@@ -127,5 +140,6 @@ def createCatsBreeds():
 #print(dogsbreed)
 #print(catsbreeds)
 #createCenters()
-#createfirst(catsbreeds,dogsbreed)
+#createfirst(catsbreeds,dogsbreed,[1,2],[1,2,3,4])
 createsecond()
+#print(getPetTypeCatId())

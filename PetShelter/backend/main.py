@@ -23,11 +23,23 @@ def getdb():
 def read_root():
     return {"Hello":"world"}
 
+@app.get("/pettypes", response_model=List[schemas.PetType])
+def getPetTypes(db: Session=Depends(getdb)):
+    return crud.getPetTypes(db)
+
+@app.get("/gender", response_model=List[schemas.Gender])
+def getPetGender(db: Session=Depends(getdb)):
+    return crud.getGender(db)
+
+@app.get("/petsize", response_model=List[schemas.Size])
+def getPetSize(db: Session=Depends(getdb)):
+    return crud.getPetSize(db)
+
 @app.post("/breed", response_model=schemas.Breed)
 def addDogBreed(breed: schemas.BreedBase,db: Session=Depends(getdb)):
     return crud.createBreed(db,breed)
 
-@app.get("/breed/dog", response_model=List[schemas.Breed])
+@app.get("/breed/dog")
 def getDogBreeds(db: Session=Depends(getdb)):
     return crud.getDogBreeds(db)
 

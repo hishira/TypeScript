@@ -6,17 +6,32 @@ from itertools import groupby
 from operator import attrgetter
 
 def createBreed(db: Session, newbreed: schemas.BreedBase):
-    newBreed = models.Breed(value=newbreed.value, pettype=newbreed.pettype)
+    newBreed = models.Breed(value=newbreed.value, pettype_id=newbreed.pettype_id)
     db.add(newBreed)
     db.commit()
     db.refresh(newBreed)
     return newBreed
 
+def getPetTypes(db: Session):
+    return db.query(models.PetType).all()
+
 def getDogBreeds(db: Session):
-    return db.query(models.Breed).filter(models.Breed.pettype == 'Dog').all()
+    return db.query(models.Breed). \
+        join(models.PetType, models.Breed.pettype_id == models.PetType.id). \
+        filter(models.PetType.name == "Dog"). \
+        all()
+
+def getGender(db: Session):
+    return db.query(models.PetGender).all()
+
+def getPetSize(db: Session):
+    return db.query(models.PetSize).all()
 
 def getCatBreeds(db: Session):
-    return db.query(models.Breed).filter(models.Breed.pettype == "Cat").all()
+    return db.query(models.Breed). \
+        join(models.PetType, models.Breed.pettype_id == models.PetType.id). \
+        filter(models.PetType.name == "Cat"). \
+        all()
 
 def get_pets(db: Session):
     return db.query(models.Pet).all()
@@ -27,10 +42,10 @@ def create_pet(db: Session,
     new_pet = models.Pet(name=newpet.name,
                 weight=newpet.weight,
                 brithdate=newpet.brithdate,
-                pettype=newpet.pettype,
+                pettype_id=newpet.pettype_id,
                 breed_id=newpet.breed_id,
-                size=newpet.size,
-                gender=newpet.gender,
+                size_id=newpet.size_id,
+                gender_id=newpet.gender_id,
                 center_id=center_id
                 )
     db.add(new_pet)
