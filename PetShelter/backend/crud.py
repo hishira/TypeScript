@@ -60,11 +60,16 @@ def getpetsbycenter(db:Session,
     return filteredpets
 
 def getPetOnlyCats(db:Session):
-    return db.query(models.Pet).filter(or_(models.Pet.pettype == 'Cat',models.Pet.pettype == 'cat')).all()
+    return db.query(models.Pet). \
+        join(models.PetType, models.Pet.pettype_id == models.PetType.id). \
+            filter(models.PetType.name == "Dog"). \
+            all()
 
 def getPetOnlyDog(db: Session):
-    return db.query(models.Pet).filter(or_(models.Pet.pettype == 'Dog',models.Pet.pettype == 'dog')).all()
-
+    return db.query(models.Pet). \
+        join(models.PetType, models.Pet.pettype_id == models.PetType.id). \
+        filter(models.PetType.name == "Cat"). \
+        all()
 def getpetsbycenterwithfoto(db: Session,
     centerid: int):
     allelements = db.query(models.Pet,models.Photo).\

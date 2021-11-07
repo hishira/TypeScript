@@ -1,3 +1,6 @@
 <ng-container *ngIf="pets">
-  <app-shelterpets [pets]='pets'></app-shelterpets>
+  <section>
+    <pet-filter></pet-filter>
+    <app-shelterpets [pets]="pets"></app-shelterpets>
+  </section>
 </ng-container>

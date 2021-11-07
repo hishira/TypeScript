@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PetService } from '../../../services/pet.service';
-import { Pet } from '../../../pet';
+import { Pet } from '../../../models/pet.model';
 @Component({
   selector: 'pet-cats',
   templateUrl: './pets.component.html',

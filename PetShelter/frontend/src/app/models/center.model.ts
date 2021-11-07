@@ -1,4 +1,4 @@
-import { Pet } from "./pet";
+import { Pet } from "./pet.model";
 export interface Center {
     id: number,
     name: string;

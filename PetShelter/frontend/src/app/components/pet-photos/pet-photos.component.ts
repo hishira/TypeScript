@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { PhotoService } from '../../services/photo.service';
-import { Photo } from '../../photo';
+import { Photo } from '../../models/photo.model';
 @Component({
   selector: 'app-pet-photos',
   templateUrl: './pet-photos.component.html',

@@ -1,0 +1,7 @@
+.pet-filter-section{
+    display: flex;
+    flex-direction: column;
+    padding: 0 2rem;
+    margin-top: 2rem;
+    width: 30%;
+}

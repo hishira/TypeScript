@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http"
-import { Center } from "../center";
+import { Center } from "../models/center.model";
 import { Observable, of, OperatorFunction } from "rxjs"
 import { catchError } from "rxjs/operators"
 @Injectable({
