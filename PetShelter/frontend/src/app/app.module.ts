@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HomeComponent } from './components/home/home.component';
@@ -13,7 +13,7 @@ import { ShelterpetsComponent } from './components/shelterpets/shelterpets.compo
 import { PetPhotosComponent } from './components/pet-photos/pet-photos.component';
 import { PetComponent } from './components/shelterpets/pet/pet.component';
 import { PetsComponent } from './components/pets/pets/pets.component';
-import {PetFilter} from "./components/filter/pet-filter.component";
+import { PetFilter } from './components/filter/pet-filter.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,9 +26,15 @@ import {PetFilter} from "./components/filter/pet-filter.component";
     PetPhotosComponent,
     PetComponent,
     PetsComponent,
-    PetFilter
+    PetFilter,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

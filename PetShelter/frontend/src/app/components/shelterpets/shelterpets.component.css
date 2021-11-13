@@ -4,6 +4,9 @@
   padding: 0 2rem;
   padding-bottom: 3rem;
 }
+.appear {
+  opacity: 1!important;
+}
 .pet {
   display: flex;
   flex-direction: column;

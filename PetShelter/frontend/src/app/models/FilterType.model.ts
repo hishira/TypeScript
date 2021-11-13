@@ -1,0 +1,1 @@
+export type PetFilterType = 'gender' | 'breed' | 'size';

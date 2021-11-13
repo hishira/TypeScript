@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { PetService } from '../../services/pet.service';
 import { Pet } from '../../models/pet.model';
 @Component({
@@ -6,12 +6,13 @@ import { Pet } from '../../models/pet.model';
   templateUrl: './shelterpets.component.html',
   styleUrls: ['./shelterpets.component.css'],
 })
-export class ShelterpetsComponent implements OnInit {
+export class ShelterpetsComponent implements OnInit, OnChanges {
   
   @Input() pets?: Array<Pet>;
   public selectedPet: Pet | undefined;
   public petsShow: boolean = true;
   private intervalCheck: NodeJS.Timer | null = null;
+  private afterFilterInterval: NodeJS.Timer | null = null;
   private petAppearInterval: number = 0;
   constructor(private petService: PetService) {}
 
@@ -24,9 +25,23 @@ export class ShelterpetsComponent implements OnInit {
       }
     }, 50);
   }
+  // TODO Fix problem with filter pet array
   ngOnInit(): void {
-    console.log(this.pets)
+    this.pets = this.pets;
+    this.petAppearInterval = 0;
+    this.petsShow = true;
     this.intervalStart();
+    console.log(this.pets)
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(!changes.pets.firstChange && changes.pets.currentValue !== []) {
+        this.pets = changes.pets.currentValue;
+        this.petAppearInterval = 0;
+        this.intervalCheck = null
+        this.brokenIntervalAfterFilter();
+    }
+
   }
 
   private conditionCheck(elements: HTMLCollectionOf<Element>): boolean {
@@ -38,20 +53,33 @@ export class ShelterpetsComponent implements OnInit {
   }
 
   private setPetOpacity(pet: HTMLElement) {
-    pet.style.opacity = '1';
+    pet.classList.add('appear')
   }
 
+  // TODO Check if we can fix it, after filter from empty to something get
+  // into loop
+  private brokenIntervalAfterFilter(): void {
+    this.afterFilterInterval = setInterval( ()=>{
+      const elements: HTMLCollectionOf<Element> =
+      document.getElementsByClassName('pet');
+      console.log("Searching")
+      if(elements && this.afterFilterInterval){
+        this.appearPetElement(elements as HTMLCollectionOf<HTMLElement>);
+        clearInterval(this.afterFilterInterval)
+      }
+    },50)
+  }
   private appearPetElement(petelement: HTMLCollectionOf<HTMLElement>) {
     Array.from(petelement).forEach((pet) => {
       setTimeout(() => {this.setPetOpacity(pet)}, this.petAppearInterval);
       this.petAppearInterval += 200;
-      console.log(this.petAppearInterval)
+      console.log(this.petAppearInterval);
     });
   }
 
   private checkEvrything(petelement: HTMLCollectionOf<Element>) {
+    this.appearPetElement(petelement as HTMLCollectionOf<HTMLElement>);
     if (this.intervalCheck) {
-      this.appearPetElement(petelement as HTMLCollectionOf<HTMLElement>);
       clearInterval(this.intervalCheck);
     }
   }

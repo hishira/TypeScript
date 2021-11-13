@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PetService } from '../../../services/pet.service';
 import { Pet } from '../../../models/pet.model';
+import { PetFilterEvent } from 'src/app/models/pet-filter-event.model';
+import { PetFilterService } from '../../../services/pet-filter.service';
 @Component({
   selector: 'pet-cats',
   templateUrl: './pets.component.html',
@@ -9,9 +11,11 @@ import { Pet } from '../../../models/pet.model';
 })
 export class PetsComponent implements OnInit {
   pets?: Pet[];
+  public filteredPets?: Pet[]
   constructor(
     private petsservice: PetService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private filterService: PetFilterService,
   ) {}
 
   ngOnInit(): void {
@@ -23,15 +27,21 @@ export class PetsComponent implements OnInit {
       }
     })
   }
-  private getDogs():void {
+  private getDogs(): void {
     this.petsservice.getOnlyDogs().subscribe((dogs: Pet[])=>{
-      this.pets = dogs;
+      this.pets = this.filteredPets = dogs;
     })
   }
 
   private getCats(): void {
     this.petsservice.getOnlyCats().subscribe((cats: Pet[]) => {
-      this.pets = cats;
+      this.pets = this.filteredPets = cats;
     });
+  }
+
+  public getFilterInfo(filterEvent: PetFilterEvent): void {
+    this.filteredPets = this.pets ? 
+      this.filterService.tableFilter(this.pets,filterEvent) :
+      this.filteredPets;
   }
 }
