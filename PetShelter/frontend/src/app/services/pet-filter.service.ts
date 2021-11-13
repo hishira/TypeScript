@@ -8,6 +8,7 @@ import { Breed } from '../models/breed.model';
 import { Pet } from '../models/pet.model';
 import { PetFilterType } from '../models/FilterType.model';
 import { PetFilterEvent } from '../models/pet-filter-event.model';
+import { PetType } from '../models/PetType.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,11 +31,22 @@ export class PetFilterService extends ApiService {
     return this.getArrayOf<PetSize>(this.petSize);
   }
 
-  public getDogBreeds(): Observable<Breed[]> {
+  public getBreeds(pettype: PetType): Observable<Breed[]> {
+    switch(pettype){
+      case 'Dog' :
+        return this.getDogBreeds();
+      case 'Cat' :
+        return this.getCatsBreeds();
+      default :
+        return this.getDogBreeds();
+    }
+  }
+
+  private getDogBreeds(): Observable<Breed[]> {
     return this.getArrayOf<Breed>(this.dogBreeds);
   }
 
-  public getCatsBreeds(): Observable<Breed[]> {
+  private getCatsBreeds(): Observable<Breed[]> {
     return this.getArrayOf<Breed>(this.catBreeds);
   }
 
@@ -42,6 +54,7 @@ export class PetFilterService extends ApiService {
     pettable: Array<Pet>,
     petFilterInfo: PetFilterEvent
   ): Array<Pet> {
+    console.log(petFilterInfo.id)
     switch (petFilterInfo.filterType) {
       case 'breed':
         return pettable.filter((pet) => pet.breed_id === petFilterInfo.id);

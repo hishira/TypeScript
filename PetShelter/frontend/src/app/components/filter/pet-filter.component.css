@@ -2,8 +2,9 @@
     display: flex;
     flex-direction: column;
     padding: 0 2rem;
+    box-sizing: border-box;
     margin-top: 2rem;
-    width: 30%;
+    width: 100%;
 }
 .select-component {
     display: flex;
@@ -14,6 +15,9 @@
 }
 label{
     width: 100%;
+    font-size: 18px;
+    color: rgba(1, 1, 1, .8);
+    text-align: center;
 }
 select{
     margin-top: .4rem;

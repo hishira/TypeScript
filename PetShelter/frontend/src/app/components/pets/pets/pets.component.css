@@ -1,5 +1,4 @@
 section {
     display: flex;
-    border: 2px solid red;
-    flex-shrink: 1;
+    flex-shrink: 0;
 }

@@ -1,6 +1,6 @@
-<ng-container *ngIf="filteredPets">
-  <section>
-    <pet-filter (filterEvent)='getFilterInfo($event)'></pet-filter>
+<ng-container *ngIf="filteredPets && pettype">
+  <section >
+    <pet-filter [pettype]="pettype" (filterEvent)='getFilterInfo($event)'></pet-filter>
     <app-shelterpets [pets]="filteredPets" ></app-shelterpets>
   </section>
 </ng-container>

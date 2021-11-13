@@ -4,6 +4,7 @@ import { PetService } from '../../../services/pet.service';
 import { Pet } from '../../../models/pet.model';
 import { PetFilterEvent } from 'src/app/models/pet-filter-event.model';
 import { PetFilterService } from '../../../services/pet-filter.service';
+import { PetType } from 'src/app/models/PetType.model';
 @Component({
   selector: 'pet-cats',
   templateUrl: './pets.component.html',
@@ -11,6 +12,7 @@ import { PetFilterService } from '../../../services/pet-filter.service';
 })
 export class PetsComponent implements OnInit {
   pets?: Pet[];
+  pettype?: PetType;
   public filteredPets?: Pet[]
   constructor(
     private petsservice: PetService,
@@ -30,12 +32,14 @@ export class PetsComponent implements OnInit {
   private getDogs(): void {
     this.petsservice.getOnlyDogs().subscribe((dogs: Pet[])=>{
       this.pets = this.filteredPets = dogs;
+      this.pettype = 'Dog';
     })
   }
 
   private getCats(): void {
     this.petsservice.getOnlyCats().subscribe((cats: Pet[]) => {
       this.pets = this.filteredPets = cats;
+      this.pettype = 'Cat'
     });
   }
 

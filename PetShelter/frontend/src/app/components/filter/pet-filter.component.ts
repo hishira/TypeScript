@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PetFilterService } from '../../services/pet-filter.service';
 import { forkJoin } from 'rxjs';
 import { Gender } from 'src/app/models/gender.model';
@@ -7,6 +7,7 @@ import { Breed } from 'src/app/models/breed.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PetFilterEvent } from 'src/app/models/pet-filter-event.model';
 import { PetFilterType } from 'src/app/models/FilterType.model';
+import { PetType } from 'src/app/models/PetType.model';
 @Component({
   selector: 'pet-filter',
   templateUrl: './pet-filter.component.html',
@@ -15,6 +16,7 @@ import { PetFilterType } from 'src/app/models/FilterType.model';
 export class PetFilter implements OnInit {
   
   @Output() filterEvent: EventEmitter<PetFilterEvent> = new EventEmitter()
+  @Input() pettype?: PetType;
   genders: Array<Gender> = [];
   petsize: Array<PetSize> = [];
   petBreeds: Array<Breed> = [];
@@ -35,7 +37,7 @@ export class PetFilter implements OnInit {
     forkJoin([
       this.petFilterService.getGenderPet(),
       this.petFilterService.getPetSize(),
-      this.petFilterService.getDogBreeds(),
+      this.petFilterService.getBreeds(this.pettype? this.pettype : 'Dog'),
     ]).subscribe((res) => {
       if (res.length === 3) {
         this.genders = res[0];
