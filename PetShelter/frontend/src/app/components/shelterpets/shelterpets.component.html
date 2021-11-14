@@ -1,7 +1,4 @@
-<!-- 
-  TODO fix problem with nopet not full width component
--->
-<div *ngIf="pets && petsShow" class="pets">
+<ng-container *ngIf="pets && petsShow" class="pets">
   <section *ngIf="pets.length > 0; else noPet" class="pets">
     <article *ngFor="let pet of pets" class="pet" (click)="choosePet(pet)">
       <app-pet-photos
@@ -26,10 +23,10 @@
       </div>
     </article>
   </section>
-  <ng-template #noPet class="pets">
-    <div class="nopet"><div>No pet found</div></div>
-  </ng-template>
-</div>
+</ng-container>
+<ng-template #noPet>
+  <div class="nopet"><div>No pet found</div></div>
+</ng-template>
 
 <app-pet
   (backEmit)="backPageHandle()"
