@@ -43,9 +43,10 @@ export class PetsComponent implements OnInit {
     });
   }
 
-  public getFilterInfo(filterEvent: PetFilterEvent): void {
+  public getFilterInfo(filterMap: Map<string, (pet: Pet)=>boolean>): void {
     this.filteredPets = this.pets ? 
-      this.filterService.tableFilter(this.pets,filterEvent) :
+      this.filterService.tableFilter(this.pets,filterMap) :
       this.filteredPets;
+    console.log(this.filteredPets)
   }
 }

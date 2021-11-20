@@ -52,18 +52,17 @@ export class PetFilterService extends ApiService {
 
   public tableFilter(
     pettable: Array<Pet>,
-    petFilterInfo: PetFilterEvent
+    petFilterMap: Map<string, (pet: Pet)=>boolean> 
   ): Array<Pet> {
-    console.log(petFilterInfo.id)
-    switch (petFilterInfo.filterType) {
-      case 'breed':
-        return pettable.filter((pet) => pet.breed_id === petFilterInfo.id);
-      case 'gender':
-        return pettable.filter((pet) => pet.gender_id === petFilterInfo.id);
-      case 'size':
-        return pettable.filter((pet) => pet.size_id === petFilterInfo.id);
-      default:
-        return pettable;
+    return pettable.filter(i=>this.allOf(i,petFilterMap));
+  }
+
+  private allOf(i:Pet,map: Map<string, (pet: Pet)=>boolean>): boolean {
+    let funtions = map.values();
+    for(let f of funtions){
+      if(!f(i))
+        return false;
     }
+    return true;
   }
 }

@@ -1,28 +1,34 @@
 <section class="pet-filter-section">
   <form [formGroup]="filterForm">
     <div class="select-component">
-      <label for="breed" class="label">Breed</label>
-      <select formControlName="breed" name="breed" id="breed-select">
+      <label for="breed_id" class="label">Breed</label>
+      <select formControlName="breed_id" name="breed_id" id="breed-select">
         <option [value]="breed.id" *ngFor="let breed of petBreeds">
           {{ breed.value }}
         </option>
       </select>
     </div>
     <div class="select-component">
-      <label for="gender" class="label">Gender</label>
-      <select name="gender" id="gender-select" formControlName="gender">
+      <label for="gender_id" class="label">Gender</label>
+      <select name="gender_id" id="gender-select" formControlName="gender_id">
         <option [value]="gender.id" *ngFor="let gender of genders">
           {{ gender.value }}
         </option>
       </select>
     </div>
     <div class="select-component">
-      <label for="size" class="label">Size</label>
-      <select name="size" id="pet-size" formControlName="size">
+      <label for="size_id" class="label">Size</label>
+      <select name="size_id" id="pet-size" formControlName="size_id">
         <option [value]="size.id" *ngFor="let size of petsize">
           {{ size.value }}
         </option>
       </select>
+    </div>
+    <div *ngIf="clearButtonVisible()">
+      <label for=""></label>
+      <button (click)="buttonClearEvent()">
+        Clear filters
+      </button>
     </div>
   </form>
 </section>
