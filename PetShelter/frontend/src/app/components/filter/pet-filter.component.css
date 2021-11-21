@@ -1,37 +1,62 @@
-.pet-filter-section{
-    display: flex;
-    flex-direction: column;
-    padding: 0 2rem;
-    box-sizing: border-box;
-    margin-top: 2rem;
-    width: 100%;
+.pet-filter-section {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  margin-top: 2rem;
+  width: 100%;
 }
 .select-component {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    box-sizing: border-box;
-    padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
 }
-label{
-    width: 100%;
-    font-size: 18px;
-    color: rgba(1, 1, 1, .8);
-    text-align: center;
+label {
+  width: 100%;
+  font-size: 18px;
+  color: rgba(1, 1, 1, 0.8);
+  text-align: center;
 }
-select{
-    margin-top: .4rem;
-    border: none;
-    border: .1rem solid lightslategray;
-    padding: .4rem;
-    border-radius: 10px;
-    width: 10rem;
-    position: relative;
-    height: 2.4rem;
+select {
+  margin-top: 0.4rem;
+  border: none;
+  border: 0.1rem solid lightslategray;
+  padding: 0.4rem;
+  border-radius: 10px;
+  width: 10rem;
+  position: relative;
+  height: 2.4rem;
+  cursor: pointer;
 }
-select:focus{
+select:focus {
+  outline: none;
+}
+option {
+  padding: 0.1rem;
+}
+.button-component {
+    margin-top: 2rem;
+}
+.clear_button {
     outline: none;
+    border: 0.1rem solid lightslategray;
+    border-radius: 15px;
+    background-color: transparent;
+    padding: .3rem;
+    cursor: pointer;
+    font-size: 16px;
 }
-option{
-    padding: .1rem;
+.clear_button:hover {
+    background-color: lightgray;
+    font-weight: 550;
+    transition: background-color 200ms;
+}
+select::after {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 85%;
+    padding: .5rem;
 }

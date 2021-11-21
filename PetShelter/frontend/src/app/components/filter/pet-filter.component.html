@@ -24,9 +24,9 @@
         </option>
       </select>
     </div>
-    <div *ngIf="clearButtonVisible()">
+    <div *ngIf="clearButtonVisible()" class="select-component button-component">
       <label for=""></label>
-      <button (click)="buttonClearEvent()">
+      <button (click)="buttonClearEvent()" class="clear_button">
         Clear filters
       </button>
     </div>
