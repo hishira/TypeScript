@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { PetService } from '../../services/pet.service';
 import { Pet } from '../../models/pet.model';
+import { Router } from '@angular/router'; 
 @Component({
   selector: 'app-shelterpets',
   templateUrl: './shelterpets.component.html',
@@ -14,7 +15,8 @@ export class ShelterpetsComponent implements OnInit, OnChanges {
   private intervalCheck: NodeJS.Timer | null = null;
   private afterFilterInterval: NodeJS.Timer | null = null;
   private petAppearInterval: number = 0;
-  constructor(private petService: PetService) {}
+  constructor(private petService: PetService,
+      private router: Router) {}
 
   private intervalStart():void{
     this.intervalCheck = setInterval(() => {
@@ -84,9 +86,10 @@ export class ShelterpetsComponent implements OnInit, OnChanges {
     }
   }
 
-  choosePet(pet: Pet): void {
-    this.selectedPet = pet;
-    this.petsShow = false;
+  choosePet(pet: Pet): string {
+    //this.selectedPet = pet;
+    //this.petsShow = false;
+    return `${pet.id}`;
   }
 
   backPageHandle(): void {

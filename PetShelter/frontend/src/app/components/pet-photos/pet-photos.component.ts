@@ -14,7 +14,7 @@ import { Photo } from '../../models/photo.model';
   styleUrls: ['./pet-photos.component.css'],
 })
 export class PetPhotosComponent implements OnInit, OnDestroy {
-  @Input() petid?: number;
+  @Input() petid?: number | undefined;
   @Input() more?: boolean;
   @ViewChild('imgelement', { static: false }) imageelement?: ElementRef;
 
