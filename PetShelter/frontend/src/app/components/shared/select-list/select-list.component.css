@@ -1,0 +1,27 @@
+.select-list {
+    border: .15rem solid slategray;
+    padding: .5rem;
+    border-radius: 5px;
+}
+.select-list--span {
+    color: gray;
+}
+button {
+    float: right;
+    align-self: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+button:hover{
+    transform: scale(1.2);
+}
+.select-list--element {
+    margin-top: .5rem;
+    padding: .4rem .5rem;
+}
+.select-list--element:hover {
+    cursor: pointer;
+    padding: .4rem 0;
+    background: rgba(192,192,192,0.5);
+}
