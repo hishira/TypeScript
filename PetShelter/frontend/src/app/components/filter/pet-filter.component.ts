@@ -80,4 +80,17 @@ export class PetFilter implements OnInit {
     this.filterMap.clear();
     this.filterEvent.emit(this.filterMap)
   }
+
+  selectPetSizeHandle(petsize: PetSize) {
+    this.filterForm.controls['size_id'].setValue(petsize.id)
+  }
+
+  selectPetGenderHandle(petgender: Gender) {
+    this.filterForm.controls['gender_id'].setValue(petgender.id)
+  }
+
+  selectPetBreedHandle(breed: Breed) {
+    this.filterForm.controls['breed_id'].setValue(breed.id);
+  }
+  
 }

@@ -4,7 +4,10 @@
   padding: 0 2rem;
   box-sizing: border-box;
   margin-top: 2rem;
-  width: 100%;
+  width: 15rem;
+}
+sh-select-list {
+  padding: 1.5rem
 }
 .select-component {
   display: flex;

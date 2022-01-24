@@ -1,8 +1,11 @@
-<div class="select-list">
-  <span class="select-list--span">{{ placeholder }}</span>
+<div class="select-list" (click)="down=!down">
+  <div class="select-list--useroption">
+  <span class="select-list--span"
+    [class.spanblacktext]='spanColorChange'
+  >{{ placeholder }}</span>
 
   <ng-container *ngIf="down; else up">
-    <button (click)="down=!down">
+    <button>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -19,11 +22,11 @@
     </button>
   </ng-container>
   <ng-template #up>
-    <button (click)="down=!down">
+    <button>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
-        height="16"
+        height="100%"
         fill="currentColor"
         class="bi bi-arrow-up-short"
         viewBox="0 0 16 16"
@@ -35,9 +38,10 @@
       </svg>
     </button>
   </ng-template>
+  </div>
   <ng-container *ngIf="!down">
-      <div class="select-list--element" *ngFor="let i of selectList">
-        {{i}}
+      <div (click)='elementClick($event,i)' class="select-list--element" *ngFor="let i of selectList">
+        {{i[key]}}
       </div>
   </ng-container>
   <!--<div *ngFor='let i of selectList'>{{i}}</div>-->

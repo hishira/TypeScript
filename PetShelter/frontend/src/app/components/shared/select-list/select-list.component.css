@@ -1,7 +1,19 @@
 .select-list {
     border: .15rem solid slategray;
-    padding: .5rem;
     border-radius: 5px;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: pointer;
+
+}
+.select-list:hover {
+    border-color: grey;
+}
+.select-list--useroption {
+    display: flex;
+    padding: .5rem;
+    justify-content: space-between;
+    align-items: center;
 }
 .select-list--span {
     color: gray;
@@ -18,10 +30,12 @@ button:hover{
 }
 .select-list--element {
     margin-top: .5rem;
-    padding: .4rem .5rem;
+    padding: .5rem;
 }
 .select-list--element:hover {
     cursor: pointer;
-    padding: .4rem 0;
     background: rgba(192,192,192,0.5);
+}
+.spanblacktext {
+    color: black;
 }

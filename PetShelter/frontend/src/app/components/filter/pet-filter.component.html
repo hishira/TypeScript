@@ -1,29 +1,5 @@
 <section class="pet-filter-section">
   <form [formGroup]="filterForm">
-    <div class="select-component">
-      <label for="breed_id" class="label">Breed</label>
-      <select formControlName="breed_id" name="breed_id" id="breed-select">
-        <option [value]="breed.id" *ngFor="let breed of petBreeds">
-          {{ breed.value }}
-        </option>
-      </select>
-    </div>
-    <div class="select-component">
-      <label for="gender_id" class="label">Gender</label>
-      <select name="gender_id" id="gender-select" formControlName="gender_id">
-        <option [value]="gender.id" *ngFor="let gender of genders">
-          {{ gender.value }}
-        </option>
-      </select>
-    </div>
-    <div class="select-component">
-      <label for="size_id" class="label">Size</label>
-      <select name="size_id" id="pet-size" formControlName="size_id">
-        <option [value]="size.id" *ngFor="let size of petsize">
-          {{ size.value }}
-        </option>
-      </select>
-    </div>
     <div *ngIf="clearButtonVisible()" class="select-component button-component">
       <label for=""></label>
       <button (click)="buttonClearEvent()" class="clear_button">
@@ -31,8 +7,28 @@
       </button>
     </div>
     <sh-select-list
+      label="Size"
+      (selectEmit)="selectPetBreedHandle($event)"
+      placeholder="Pet breed"
+      [key]="'value'"
+      [selectList]="petBreeds"
+      [control] = "filterForm.controls['breed_id']"
+    ></sh-select-list>
+    <sh-select-list
+      label="Size"
+      (selectEmit)="selectPetGenderHandle($event)"
       placeholder="Pet size"
-      [selectList]="['de','aeawe','asdasd']"
+      [key]="'value'"
+      [selectList]="genders"
+      [control] = "filterForm.controls['breed_id']"
+    ></sh-select-list>
+    <sh-select-list
+      label="Size"
+      (selectEmit)="selectPetSizeHandle($event)"
+      placeholder="Pet size"
+      [key]="'value'"
+      [selectList]="petsize"
+      [control] = "filterForm.controls['breed_id']"
     ></sh-select-list>
   </form>
 </section>
