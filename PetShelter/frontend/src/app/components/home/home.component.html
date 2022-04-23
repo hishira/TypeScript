@@ -1,12 +1,14 @@
 <section>
   <article>
-    <span class="info__span">{{title}}</span>
-    <span class="info__span_ver">{{subtitle}}</span>
+    <div class="ingo__image">
+      <img src="{{ imgsrc }}" width="1200px" height="500px" />
+      <span class="info__span">{{ title }}</span>
+      <span class="info__span_ver">{{ subtitle }}</span>
+    </div>
     <div class="info__button__min">
       <div class="square" routerLink="pets/dogs">
         <img class="min_img" src="/assets/dog.svg" />
         <span class="info__min__span">Dogs</span>
-
       </div>
       <div class="square" routerLink="pets/cats">
         <img class="min_img" src="/assets/cat.svg" />
