@@ -8,17 +8,19 @@ import { SelectListModalComponent } from './select-list-modal/select-list-modal.
   styleUrls: ['./select-list.component.css'],
 })
 export class SelectListComponent implements OnInit {
-  @Input() selectList: Array<any> = [];
-  @Input() placeholder: string = '';
-  @Output() selectEmit: EventEmitter<any> = new EventEmitter<any>();
-  @Input() key: string = '';
   @Input() control: AbstractControl | null = null;
-
+  @Input() key: string = '';
+  @Input() placeholder: string = '';
+  @Input() selectList: Array<any> = [];
+  
+  @Output() selectEmit: EventEmitter<any> = new EventEmitter<any>();
+  
   public down: boolean = true;
-  public spanColorChange: boolean = false;
   public placeholderSave: string = '';
+  public spanColorChange: boolean = false;
 
   constructor(private modalService: ModalService) {}
+  
   elementClick(event: any, value: any): void {
     event.stopPropagation();
     this.spanColorChange = true;
@@ -39,7 +41,14 @@ export class SelectListComponent implements OnInit {
 
   openList() {
     if (this.selectList.length > 10) {
-        this.modalService.open(SelectListModalComponent, {});
+        this.modalService.open(
+          SelectListModalComponent, 
+          {
+            selectList: this.selectList,
+            placeholder: this.placeholder,
+            key: this.key,
+            control: this.control,
+          });
     } else {
       this.down = !this.down;
     }

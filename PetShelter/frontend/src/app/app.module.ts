@@ -15,6 +15,7 @@ import { PetComponent } from './components/shelterpets/pet/pet.component';
 import { PetsComponent } from './components/pets/pets/pets.component';
 import { PetFilter } from './components/filter/pet-filter.component';
 import {SharedModule} from "./components/shared/shared.module"
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +37,7 @@ import {SharedModule} from "./components/shared/shared.module"
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    CommonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

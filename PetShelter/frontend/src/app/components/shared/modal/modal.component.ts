@@ -1,25 +1,36 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, Injector, OnInit, Type } from '@angular/core';
+import { Subject } from 'rxjs';
+import { ModalProps } from 'src/app/models/modal-props.model';
 import { ModalService } from 'src/app/services/modal.service';
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css']
+  styleUrls: ['./modal.component.css'],
 })
 export class ModalComponent implements OnInit {
-
   modalContent: Type<Component>;
-  props: any;
+  componentInjector: Injector;
   open: boolean = false;
-  constructor(private modalService: ModalService) { }
+
+  constructor(private modalService: ModalService) {}
 
   ngOnInit(): void {
-    this.modalService.getContent().subscribe((value: {component: Type<Component>, props: any}) => {
-      this.modalContent = value.component;
-      this.props = value.props;
-    })
-    this.modalService.checkDialogOpen().subscribe((value: boolean)=>{
+    this.modalService
+      .getContent()
+      .subscribe((value: { component: Type<Component>; props: ModalProps }) => {
+        this.modalContent = value.component;
+        //console.log(value.props);
+      });
+    this.modalService.checkDialogOpen().subscribe((value: boolean) => {
       this.open = value;
-    })
+    });
   }
 
+  get propsValue() {
+    return this.modalService.getProps();
+  }
+
+  close(){
+    this.modalService.close()
+  }
 }
