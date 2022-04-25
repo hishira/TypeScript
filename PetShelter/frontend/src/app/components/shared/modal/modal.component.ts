@@ -2,6 +2,7 @@ import { Component, Injector, OnInit, Type } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ModalProps } from 'src/app/models/modal-props.model';
 import { ModalService } from 'src/app/services/modal.service';
+import { DocumentService } from 'src/app/services/document.service';
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
@@ -12,7 +13,9 @@ export class ModalComponent implements OnInit {
   componentInjector: Injector;
   open: boolean = false;
 
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+    private documentService: DocumentService) {}
 
   ngOnInit(): void {
     this.modalService
@@ -23,7 +26,13 @@ export class ModalComponent implements OnInit {
       });
     this.modalService.checkDialogOpen().subscribe((value: boolean) => {
       this.open = value;
+      if(this.open === true) {
+        this.documentService.changeTagCssProperty('body', 'overflow', 'hidden');
+      } else {
+        this.documentService.changeTagCssProperty('body', 'overflow', 'auto');
+      }
     });
+   
   }
 
   get propsValue() {

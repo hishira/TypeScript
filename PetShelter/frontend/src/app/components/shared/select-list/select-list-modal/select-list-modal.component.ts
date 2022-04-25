@@ -7,18 +7,17 @@ import { FilterService } from './../../../../services/filter.service';
   selector: 'sh-select-list-modal',
   templateUrl: './select-list-modal.component.html',
 })
-export class SelectListModalComponent extends ModalComponent implements OnInit {
+export class SelectListModalComponent implements OnInit {
   selectList: Array<any> = [];
   placeholder: string = '';
   key: string = '';
   control: AbstractControl | null = null;
 
   constructor(
-    modalService: ModalService,
+    private modalService: ModalService,
     private filterService: FilterService
   ) {
-    super(modalService);
-    if(modalService.props){
+    if(this.modalService.props){
       const mappedProps = this.filterService.selectFilterModalMapper(modalService.props);
       this.selectList = mappedProps.selectList;
       this.placeholder = mappedProps.placeholder;

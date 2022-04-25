@@ -1,29 +1,34 @@
 .modal_wrapper{
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
+    overflow: hidden;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 10;
-    background-color: blanchedalmond;
+    bottom: 0;
+    z-index: 2000;
+    background-color: rgba(0,0,0,.6);
 }
 .modal{
-    position: absolute;
-    top: 50%;
+    position: fixed;
+    top:50%;
     left: 50%;
     z-index: 9999;
     padding: .5rem;
     background-color: white;
     border-radius: 10px;
     border: .3rem solid rgba(192,192,192,0.5);
+    display: flex;
+    flex-direction: column;
+    padding: .8rem;
 }
-.modal_header{
+.modal__header{
     width: 100%;
     display: flex;
-    justify-items: end;
-    padding: 2rem;
+    justify-content: end;
+    align-items: center;
+    
 }
-.modal_close_icon{
-    float: right;
+.modal__close_icon{
 }
