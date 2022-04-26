@@ -63,3 +63,7 @@ select::after {
     left: 85%;
     padding: .5rem;
 }
+.chip-container{
+  display: flex;
+  flex-wrap: wrap;
+}

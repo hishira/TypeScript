@@ -30,5 +30,13 @@
       [selectList]="petsize"
       [control]="filterForm.controls['breed_id']"
     ></sh-select-list>
+    <ng-container>
+      <div class="chip-container">
+        <chip
+          *ngFor="let filterVal of savedFilterValue"
+          [label]="filterVal"
+        ></chip>
+      </div>
+    </ng-container>
   </form>
 </section>

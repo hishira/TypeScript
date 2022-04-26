@@ -16,13 +16,16 @@ import { Pet } from 'src/app/models/pet.model';
 })
 export class PetFilter implements OnInit {
   
-  @Output() filterEvent: EventEmitter<Map<string, (pet: Pet)=>boolean>> = new EventEmitter()
   @Input() pettype?: PetType;
-  genders: Array<Gender> = [];
-  petsize: Array<PetSize> = [];
-  petBreeds: Array<Breed> = [];
-  filterMap: Map<string, (pet:Pet)=>boolean> = new Map();
+  
+  @Output() filterEvent: EventEmitter<Map<string, (pet: Pet)=>boolean>> = new EventEmitter()
+  
   filterForm: FormGroup;
+  filterMap: Map<string, (pet:Pet)=>boolean> = new Map();
+  genders: Array<Gender> = [];
+  petBreeds: Array<Breed> = [];
+  petsize: Array<PetSize> = [];
+  savedFilterValue: string[] = []
   constructor(
     private petFilterService: PetFilterService,
     private formBuilder: FormBuilder
@@ -82,14 +85,17 @@ export class PetFilter implements OnInit {
   }
 
   selectPetSizeHandle(petsize: PetSize) {
+    this.savedFilterValue.push(petsize.value)
     this.filterForm.controls['size_id'].setValue(petsize.id)
   }
 
   selectPetGenderHandle(petgender: Gender) {
+    this.savedFilterValue.push(petgender.value);
     this.filterForm.controls['gender_id'].setValue(petgender.id)
   }
 
   selectPetBreedHandle(breed: Breed) {
+    this.savedFilterValue.push(breed.value);
     this.filterForm.controls['breed_id'].setValue(breed.id);
   }
   

@@ -1,0 +1,7 @@
+.chip{
+    padding: .2rem;
+    border: .14rem solid slategray;
+    border-radius: 10px;
+    display: inline-block;
+    margin: .3rem .1rem;
+}
