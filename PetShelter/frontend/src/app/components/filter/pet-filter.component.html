@@ -35,7 +35,8 @@
         <chip
           *ngFor="let filterVal of savedFilterValue"
           [label]="filterVal"
-          [closeHandle]="true"
+          [closable]="true"
+          (closeHandle)="chipCloseHandle()"
         ></chip>
       </div>
     </ng-container>

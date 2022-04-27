@@ -8,7 +8,8 @@ import { Component, Input } from "@angular/core";
 export class ChipComponent {
 
     @Input() label: string;
-    @Input() closeHandle? : boolean = false
+    @Input() closable? : boolean = false
+    @Input() closeHandle?: ()=>void = undefined;
     constructor(){
     }
 }

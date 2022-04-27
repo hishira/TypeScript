@@ -15,17 +15,17 @@ import { Pet } from 'src/app/models/pet.model';
   styleUrls: ['./pet-filter.component.css'],
 })
 export class PetFilter implements OnInit {
-  
   @Input() pettype?: PetType;
-  
-  @Output() filterEvent: EventEmitter<Map<string, (pet: Pet)=>boolean>> = new EventEmitter()
-  
+
+  @Output() filterEvent: EventEmitter<Map<string, (pet: Pet) => boolean>> =
+    new EventEmitter();
+
   filterForm: FormGroup;
-  filterMap: Map<string, (pet:Pet)=>boolean> = new Map();
+  filterMap: Map<string, (pet: Pet) => boolean> = new Map();
   genders: Array<Gender> = [];
   petBreeds: Array<Breed> = [];
   petsize: Array<PetSize> = [];
-  savedFilterValue: string[] = []
+  savedFilterValue: string[] = [];
   constructor(
     private petFilterService: PetFilterService,
     private formBuilder: FormBuilder
@@ -42,7 +42,7 @@ export class PetFilter implements OnInit {
     forkJoin([
       this.petFilterService.getGenderPet(),
       this.petFilterService.getPetSize(),
-      this.petFilterService.getBreeds(this.pettype? this.pettype : 'Dog'),
+      this.petFilterService.getBreeds(this.pettype ? this.pettype : 'Dog'),
     ]).subscribe((res) => {
       if (res.length === 3) {
         this.genders = res[0];
@@ -53,17 +53,22 @@ export class PetFilter implements OnInit {
   }
 
   // TODO when evrything goes ok, delete this
-  private preparePetEvent(filterType: PetFilterType, id: number): PetFilterEvent {
-    return {filterType, id};
+  private preparePetEvent(
+    filterType: PetFilterType,
+    id: number
+  ): PetFilterEvent {
+    return { filterType, id };
   }
 
   private OnChanges() {
-    for(let control of Object.keys(this.filterForm.controls)){
-      this.filterForm.get(control)
-         ?.valueChanges.subscribe( (id: string) => {
-           this.filterMap.set(control,(pet:Pet)=>({ ...pet}[control]) === parseInt(id));
-           this.filterEvent.emit(this.filterMap);
-      })
+    for (let control of Object.keys(this.filterForm.controls)) {
+      this.filterForm.get(control)?.valueChanges.subscribe((id: string) => {
+        this.filterMap.set(
+          control,
+          (pet: Pet) => ({ ...pet }[control] === parseInt(id))
+        );
+        this.filterEvent.emit(this.filterMap);
+      });
     }
   }
 
@@ -76,27 +81,28 @@ export class PetFilter implements OnInit {
       breed_id: 0,
       gender_id: 0,
       size_id: 0,
-    })
+    });
   }
-  public buttonClearEvent(): void {
+
+  chipCloseHandle() {}
+  buttonClearEvent(): void {
     this.clearFilterForm();
     this.filterMap.clear();
-    this.filterEvent.emit(this.filterMap)
+    this.filterEvent.emit(this.filterMap);
   }
 
   selectPetSizeHandle(petsize: PetSize) {
-    this.savedFilterValue.push(petsize.value)
-    this.filterForm.controls['size_id'].setValue(petsize.id)
+    this.savedFilterValue.push(petsize.value);
+    this.filterForm.controls['size_id'].setValue(petsize.id);
   }
 
   selectPetGenderHandle(petgender: Gender) {
     this.savedFilterValue.push(petgender.value);
-    this.filterForm.controls['gender_id'].setValue(petgender.id)
+    this.filterForm.controls['gender_id'].setValue(petgender.id);
   }
 
   selectPetBreedHandle(breed: Breed) {
     this.savedFilterValue.push(breed.value);
     this.filterForm.controls['breed_id'].setValue(breed.id);
   }
-  
 }

@@ -1,5 +1,5 @@
 .chip{
-    padding: .2rem;
+    padding: .2rem .25rem;
     border: .14rem solid slategray;
     border-radius: 15px;
     display: inline-flex;

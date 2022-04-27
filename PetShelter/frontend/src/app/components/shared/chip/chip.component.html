@@ -1,7 +1,8 @@
 <div class="chip">
   <span class="chip-label">{{ label }}</span>
-  <ng-container *ngIf="closeHandle">
+  <ng-container *ngIf="closable && closeHandle">
     <svg
+      (click)="closeHandle()";
       xmlns="http://www.w3.org/2000/svg"
       width="16"
       height="16"
