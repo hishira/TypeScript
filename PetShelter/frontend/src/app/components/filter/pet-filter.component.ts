@@ -84,7 +84,9 @@ export class PetFilter implements OnInit {
     });
   }
 
-  chipCloseHandle() {}
+  chipCloseHandle(label: string): void {
+    console.log(label);
+  }
   buttonClearEvent(): void {
     this.clearFilterForm();
     this.filterMap.clear();

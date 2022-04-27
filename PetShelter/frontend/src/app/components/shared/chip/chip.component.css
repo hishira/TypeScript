@@ -9,6 +9,7 @@
     margin: .3rem .1rem;
     align-items: center;
 }
-.chip > svg:hover {
+.chip__close{
+    display: inline-flex;
     cursor: pointer;
 }
