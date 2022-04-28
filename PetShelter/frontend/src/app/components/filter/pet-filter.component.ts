@@ -85,7 +85,7 @@ export class PetFilter implements OnInit {
   }
 
   chipCloseHandle(label: string): void {
-    console.log(label);
+    this.savedFilterValue = this.savedFilterValue.filter(filterName=>filterName !== label);
   }
   buttonClearEvent(): void {
     this.clearFilterForm();
@@ -94,17 +94,17 @@ export class PetFilter implements OnInit {
   }
 
   selectPetSizeHandle(petsize: PetSize) {
-    this.savedFilterValue.push(petsize.value);
+    !this.savedFilterValue.includes(petsize.value) && this.savedFilterValue.push(petsize.value);
     this.filterForm.controls['size_id'].setValue(petsize.id);
   }
 
   selectPetGenderHandle(petgender: Gender) {
-    this.savedFilterValue.push(petgender.value);
+    !this.savedFilterValue.includes(petgender.value) && this.savedFilterValue.push(petgender.value);
     this.filterForm.controls['gender_id'].setValue(petgender.id);
   }
 
   selectPetBreedHandle(breed: Breed) {
-    this.savedFilterValue.push(breed.value);
+    !this.savedFilterValue.includes(breed.value) && this.savedFilterValue.push(breed.value);
     this.filterForm.controls['breed_id'].setValue(breed.id);
   }
 }
