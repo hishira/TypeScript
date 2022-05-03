@@ -1,10 +1,12 @@
 .pet-filter-section {
+  position: sticky;
   display: flex;
   flex-direction: column;
   padding: 0 2rem;
   box-sizing: border-box;
   margin-top: 2rem;
   width: 15rem;
+  height: 100%;
 }
 sh-select-list {
   padding: 1.5rem

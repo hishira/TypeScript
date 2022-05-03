@@ -52,15 +52,11 @@ export class PetFilter implements OnInit {
     });
   }
 
-  // TODO when evrything goes ok, delete this
-  private preparePetEvent(
-    filterType: PetFilterType,
-    id: number
-  ): PetFilterEvent {
-    return { filterType, id };
+  private OnChanges() {
+    this.filterFormChanges();
   }
 
-  private OnChanges() {
+  private filterFormChanges(){
     for (let control of Object.keys(this.filterForm.controls)) {
       this.filterForm.get(control)?.valueChanges.subscribe((id: string) => {
         this.filterMap.set(
@@ -75,7 +71,7 @@ export class PetFilter implements OnInit {
   public clearButtonVisible(): boolean {
     return this.filterMap.size > 0;
   }
-
+  
   private clearFilterForm(): void {
     this.filterForm.setValue({
       breed_id: 0,
@@ -85,26 +81,34 @@ export class PetFilter implements OnInit {
   }
 
   chipCloseHandle(label: string): void {
-    this.savedFilterValue = this.savedFilterValue.filter(filterName=>filterName !== label);
+    this.savedFilterValue = this.savedFilterValue.filter(
+      (filterName) => filterName !== label
+    );
+    this.filterEvent.emit(this.filterMap);
   }
+  
   buttonClearEvent(): void {
     this.clearFilterForm();
     this.filterMap.clear();
+    this.savedFilterValue = []
     this.filterEvent.emit(this.filterMap);
   }
 
   selectPetSizeHandle(petsize: PetSize) {
-    !this.savedFilterValue.includes(petsize.value) && this.savedFilterValue.push(petsize.value);
+    !this.savedFilterValue.includes(petsize.value) &&
+      this.savedFilterValue.push(petsize.value);
     this.filterForm.controls['size_id'].setValue(petsize.id);
   }
 
   selectPetGenderHandle(petgender: Gender) {
-    !this.savedFilterValue.includes(petgender.value) && this.savedFilterValue.push(petgender.value);
+    !this.savedFilterValue.includes(petgender.value) &&
+      this.savedFilterValue.push(petgender.value);
     this.filterForm.controls['gender_id'].setValue(petgender.id);
   }
 
   selectPetBreedHandle(breed: Breed) {
-    !this.savedFilterValue.includes(breed.value) && this.savedFilterValue.push(breed.value);
+    !this.savedFilterValue.includes(breed.value) &&
+      this.savedFilterValue.push(breed.value);
     this.filterForm.controls['breed_id'].setValue(breed.id);
   }
 }
