@@ -1,10 +1,7 @@
-from typing import List
-from fastapi import FastAPI, Depends, Response, status
-from sqlalchemy.orm import Session
-from . import crud, models, schemas
+from fastapi import FastAPI
+from . import models
 from .utils.database_connection import engine
 from fastapi.middleware.cors import CORSMiddleware
-from .utils.database import getdb
 from .routers import breed, others, pet
 models.Base.metadata.create_all(bind=engine)
 
