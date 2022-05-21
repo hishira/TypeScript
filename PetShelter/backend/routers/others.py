@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 
 from backend import crud, schemas
 from ..utils.database import getdb;
-from requests import Response, Session
+from requests import Session
 
 router = APIRouter()
 
@@ -22,7 +22,6 @@ def getPetSize(db: Session=Depends(getdb)):
 @router.get("/pets/",
     response_model=List[schemas.Pet])
 def getallpets(db: Session=Depends(getdb)):
-    #response.status_code = status.HTTP_200_OK 
     pets = crud.get_pets(db=db)
     return pets
 
