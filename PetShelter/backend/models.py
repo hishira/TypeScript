@@ -19,7 +19,7 @@ class PetType(enum.Enum):
     Cat         = "Cat"
     Other       = "Other"
 
-from .database import Base
+from .utils.database_connection import Base
 
 class PetType(Base):
     __tablename__ = "pettype"

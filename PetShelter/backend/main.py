@@ -1,9 +1,11 @@
-from typing import Optional, List
-from fastapi import FastAPI, Depends, HTTPException, Response, status
+from typing import List
+from fastapi import FastAPI, Depends, Response, status
 from sqlalchemy.orm import Session
 from . import crud, models, schemas
-from .database import SessionLocal, engine
+from .utils.database_connection import engine
 from fastapi.middleware.cors import CORSMiddleware
+from .utils.database import getdb
+from .routers import breed, others, pet
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -12,110 +14,10 @@ origins = [
 ]
 app.add_middleware( CORSMiddleware,
                     allow_origins=origins)
-def getdb():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
+app.include_router(breed.router)
+app.include_router(others.router)
+app.include_router(pet.router)
 @app.get("/")
 def read_root():
     return {"Hello":"world"}
 
-@app.get("/pettypes", response_model=List[schemas.PetType])
-def getPetTypes(db: Session=Depends(getdb)):
-    return crud.getPetTypes(db)
-
-@app.get("/gender", response_model=List[schemas.Gender])
-def getPetGender(db: Session=Depends(getdb)):
-    return crud.getGender(db)
-
-@app.get("/petsize", response_model=List[schemas.Size])
-def getPetSize(db: Session=Depends(getdb)):
-    return crud.getPetSize(db)
-
-@app.post("/breed", response_model=schemas.Breed)
-def addDogBreed(breed: schemas.BreedBase,db: Session=Depends(getdb)):
-    return crud.createBreed(db,breed)
-
-@app.get("/breed/dog")
-def getDogBreeds(db: Session=Depends(getdb)):
-    return crud.getDogBreeds(db)
-
-@app.get("/breed/cat", response_model=List[schemas.Breed])
-def getCatBreeds(db: Session=Depends(getdb)):
-    return crud.getCatBreeds(db)
-
-@app.get("/pets/",
-    response_model=List[schemas.Pet])
-def getallpets(response: Response,db: Session=Depends(getdb)):
-    response.status_code = status.HTTP_200_OK 
-    pets = crud.get_pets(db=db)
-    return pets
-
-@app.get("/pets/{centerid}",
-    response_model=List[schemas.Pet])
-def getpetsbycenter(centerid:int,
-    response: Response,
-    db: Session=Depends(getdb)):
-    petsbysesion: List[schemas.Pet] = crud.getpetsbycenter(db,centerid)
-    return petsbysesion
-
-@app.post("/pet/{centerid}",
-    response_model=schemas.Pet)
-def createpet(centerid: int,pet: schemas.PetCreate,db: Session=Depends(getdb)):
-    print(pet)
-    return crud.create_pet(db,centerid,pet)
-
-@app.get("/centers", response_model=List[schemas.Center])
-def getcenters(db:Session=Depends(getdb)):
-    return crud.get_centers(db)
-
-@app.post("/center/",
-    response_model=schemas.Center)
-def createcenter(center: schemas.CenterCreate,
-                db:Session=Depends(getdb)):
-    return crud.create_center(db,center)
-
-@app.post("/photos/{petid}",
-    response_model=schemas.Photo)
-def createphoto(petid: int,
-                photo: schemas.PhotoCreate,
-                db: Session=Depends(getdb)):
-    try:
-        return crud.create_photo(petid,photo,db)
-    except Exception:
-        print(str(Exception.args))
-
-@app.get("/photos/",
-    response_model=List[schemas.Photo])
-def getphotos(db: Session=Depends(getdb)):
-    return crud.get_photos(db)
-
-@app.get("/pet/photos/{petid}",
-    response_model=List[schemas.Photo])
-def getphotosbypet(petid:int,
-    db:Session=Depends(getdb)):
-    return crud.get_photos_bypet(db,petid)
-
-@app.get("/centers/{id}",
-    response_model=schemas.Center)
-def getcenterbyid(id:int,
-    db:Session=Depends(getdb)):
-    return crud.getcenterinfo(db,id)
-
-@app.get("/pets/photo/{centerid}")
-def getpetwithphotos(centerid:int,
-    db:Session=Depends(getdb)):
-    return crud.getpetsbycenterwithfoto(db,centerid)
-
-@app.get("/pet/getallcat",
-    response_model=List[schemas.Pet])
-def getAllCats(db: Session=Depends(getdb)):
-    return crud.getPetOnlyCats(db)
-
-@app.get("/pet/getalldog",
-    response_model=List[schemas.Pet])
-def getAllDogs(db: Session=Depends(getdb)):
-    return crud.getPetOnlyDog(db)
