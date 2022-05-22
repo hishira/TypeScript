@@ -28,3 +28,7 @@ def getAllCats(db: Session=Depends(getdb)):
     response_model=List[schemas.Pet])
 def getAllDogs(db: Session=Depends(getdb)):
     return crud.getPetOnlyDog(db)
+
+@router.get("/petpossiblefilters")
+def getAllPossibleFilter(db: Session=Depends(getdb)):
+    return crud.getPossiblePetFilter(db)

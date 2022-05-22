@@ -113,3 +113,6 @@ def get_photos(db:Session):
 
 def get_photos_bypet(db: Session, petid: int):
     return db.query(models.Photo).filter(models.Photo.pet_id == petid).all()
+
+def getPossiblePetFilter(db: Session):
+    return db.query(models.Pet, models.Breed).join(models.Breed).with_entities(models.Pet.breed_id, models.Breed.value)
