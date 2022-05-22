@@ -72,6 +72,7 @@ article > div > img {
 .info__button {
   display: flex;
   flex-direction: column;
+  flex: 1 0 1;
   padding: 1rem;
 }
 
@@ -88,9 +89,13 @@ article > div > img {
   font-size: 32px;
   text-align: center;
 }
+.info__image {
+  object-fit: cover;
+  width: 100%;
+}
 
 .info__button > .square {
-  height: 5rem;
+  height: 4rem;
 }
 
 .info__button > .square > img {
@@ -100,10 +105,10 @@ article > div > img {
 }
 
 .info__button__min > .square {
-  height: 4rem;
-  width: 7.5rem;
+  height: 2rem;
+  width: 3.5rem;
   display: flex;
-  font-size: 28px;
+  font-size: 24px;
   flex-direction: column;
   position: relative;
 }
