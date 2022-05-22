@@ -40,17 +40,6 @@ export class SelectListComponent implements OnInit {
   }
 
   openList() {
-    if (this.selectList.length > 10) {
-        this.modalService.open(
-          SelectListModalComponent, 
-          {
-            selectList: this.selectList,
-            placeholder: this.placeholder,
-            key: this.key,
-            control: this.control,
-          });
-    } else {
       this.down = !this.down;
-    }
   }
 }

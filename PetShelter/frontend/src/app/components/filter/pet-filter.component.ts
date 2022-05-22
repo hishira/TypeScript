@@ -5,8 +5,6 @@ import { Gender } from 'src/app/models/gender.model';
 import { PetSize } from 'src/app/models/petsize.model';
 import { Breed } from 'src/app/models/breed.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PetFilterEvent } from 'src/app/models/pet-filter-event.model';
-import { PetFilterType } from 'src/app/models/FilterType.model';
 import { PetType } from 'src/app/models/PetType.model';
 import { Pet } from 'src/app/models/pet.model';
 @Component({
