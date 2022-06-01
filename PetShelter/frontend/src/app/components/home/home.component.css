@@ -62,8 +62,7 @@ article > div > img {
 .info__button__min {
   width: 100%;
   box-sizing: border-box;
-  position: absolute;
-  top: 20rem;
+  margin-top: -7.5rem;
   justify-content: space-around;
   display: none;
   z-index: 1000;
@@ -144,7 +143,7 @@ article > div > img {
 }
 
 .info__button > .square:hover > img {
-  filter: brightness(0) invert(1);
+  filter: brightness(1) invert(1);
 }
 
 @media (min-width: 950px) {
@@ -174,7 +173,7 @@ article > div > img {
   }
 
   .info__button__min > .square:hover > img {
-    filter: brightness(0) invert(1);
+    filter: brightness(1) invert(1);
   }
 
   .info__button {

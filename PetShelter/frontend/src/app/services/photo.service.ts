@@ -13,11 +13,13 @@ export class PhotoService {
     private http: HttpClient,
   ) { }
 
-  private getPetPhotoUrl(petid:number):string{
-    return `${this.photourl}/${petid}`
-  }
+  
 
   public getPetPhotos(petid: number):Observable<Photo[]>{
     return this.http.get<Photo[]>(this.getPetPhotoUrl(petid))
+  }
+
+  private getPetPhotoUrl(petid:number):string{
+    return `${this.photourl}/${petid}`
   }
 }

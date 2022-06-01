@@ -50,32 +50,8 @@ export class PetFilter implements OnInit {
     });
   }
 
-  private OnChanges() {
-    this.filterFormChanges();
-  }
-
-  private filterFormChanges(){
-    for (let control of Object.keys(this.filterForm.controls)) {
-      this.filterForm.get(control)?.valueChanges.subscribe((id: string) => {
-        this.filterMap.set(
-          control,
-          (pet: Pet) => ({ ...pet }[control] === parseInt(id))
-        );
-        this.filterEvent.emit(this.filterMap);
-      });
-    }
-  }
-
-  public clearButtonVisible(): boolean {
+  clearButtonVisible(): boolean {
     return this.filterMap.size > 0;
-  }
-  
-  private clearFilterForm(): void {
-    this.filterForm.setValue({
-      breed_id: 0,
-      gender_id: 0,
-      size_id: 0,
-    });
   }
 
   chipCloseHandle(label: string): void {
@@ -84,11 +60,11 @@ export class PetFilter implements OnInit {
     );
     this.filterEvent.emit(this.filterMap);
   }
-  
+
   buttonClearEvent(): void {
     this.clearFilterForm();
     this.filterMap.clear();
-    this.savedFilterValue = []
+    this.savedFilterValue = [];
     this.filterEvent.emit(this.filterMap);
   }
 
@@ -108,5 +84,29 @@ export class PetFilter implements OnInit {
     !this.savedFilterValue.includes(breed.value) &&
       this.savedFilterValue.push(breed.value);
     this.filterForm.controls['breed_id'].setValue(breed.id);
+  }
+
+  private clearFilterForm(): void {
+    this.filterForm.setValue({
+      breed_id: 0,
+      gender_id: 0,
+      size_id: 0,
+    });
+  }
+
+  private OnChanges() {
+    this.filterFormChanges();
+  }
+
+  private filterFormChanges() {
+    for (let control of Object.keys(this.filterForm.controls)) {
+      this.filterForm.get(control)?.valueChanges.subscribe((id: string) => {
+        this.filterMap.set(
+          control,
+          (pet: Pet) => ({ ...pet }[control] === parseInt(id))
+        );
+        this.filterEvent.emit(this.filterMap);
+      });
+    }
   }
 }

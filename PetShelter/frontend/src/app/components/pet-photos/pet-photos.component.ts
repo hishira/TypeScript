@@ -40,13 +40,6 @@ export class PetPhotosComponent implements OnInit, OnDestroy {
     }
   }
 
-  private keyDownHandle(ev: KeyboardEvent): void {
-    if (ev.code === 'ArrowRight') {
-      this.rightImage();
-    } else if (ev.code === 'ArrowLeft') {
-      this.leftImage();
-    }
-  }
   ngOnDestroy() {
     if (this.timeout) {
       clearInterval(this.timeout);
@@ -56,27 +49,6 @@ export class PetPhotosComponent implements OnInit, OnDestroy {
       (ev: KeyboardEvent) => this.keyDownHandle(ev),
       true
     );
-  }
-
-  private intervalClear(): void {
-    if (this.timeout) {
-      clearInterval(this.timeout);
-      if (this.timer) clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
-        this.selectPhoto();
-      }, 2000);
-    }
-  }
-
-  circleClick(index: number): void {
-    this.photoindex = index;
-    this.intervalClear();
-  }
-
-  private classToggle(...classes: string[]): void {
-    for (let i of classes) {
-      this.imageelement?.nativeElement.classList.toggle(i);
-    }
   }
   leftImage(): void {
     if (this.photos) {
@@ -110,4 +82,35 @@ export class PetPhotosComponent implements OnInit, OnDestroy {
       }, 2000);
     }
   }
+  circleClick(index: number): void {
+    this.photoindex = index;
+    this.intervalClear();
+  }
+  private keyDownHandle(ev: KeyboardEvent): void {
+    if (ev.code === 'ArrowRight') {
+      this.rightImage();
+    } else if (ev.code === 'ArrowLeft') {
+      this.leftImage();
+    }
+  }
+ 
+
+  private intervalClear(): void {
+    if (this.timeout) {
+      clearInterval(this.timeout);
+      if (this.timer) clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.selectPhoto();
+      }, 2000);
+    }
+  }
+
+ 
+
+  private classToggle(...classes: string[]): void {
+    for (let i of classes) {
+      this.imageelement?.nativeElement.classList.toggle(i);
+    }
+  }
+  
 }

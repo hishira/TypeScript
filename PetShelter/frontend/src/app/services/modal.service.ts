@@ -6,11 +6,11 @@ import { ModalProps } from '../models/modal-props.model';
   providedIn: 'root',
 })
 export class ModalService {
+  modalProps: ModalProps;
   private _open: Subject<boolean> = new Subject<boolean>();
   private _bodyContent: Subject<{ component: Type<any>; props: any }> =
     new Subject();
   private _props: Subject<ModalProps> = new Subject();
-  modalProps: ModalProps;
   constructor() {
     this._props.subscribe(next=>this.modalProps = next)
   }

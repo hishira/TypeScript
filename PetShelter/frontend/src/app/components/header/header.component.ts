@@ -17,6 +17,22 @@ export class HeaderComponent implements OnInit {
     this.nestednav = document.getElementsByClassName('nasted')[0] as HTMLElement;
   }
 
+  resetCSSClasses(): void {
+    if(this.nestednav?.classList.contains('nested-open')){
+      this.nestednav?.classList.remove('nested-open')
+    }
+    if(this.hamburgerElement?.classList.contains(this.HAMBURGEROPEN)){
+      this.hamburgerElement?.classList.remove(this.HAMBURGEROPEN)
+    }
+  }
+  
+  hamburgerClick(): void {
+    this.hamburgerElement?.classList.toggle(this.HAMBURGEROPEN);
+    this.nestednav?.classList.toggle('nested-open');
+    this.checkBodyOverflow();
+  }
+  
+  
   private checkBodyOverflow(): void {
     console.log(document.body.style.getPropertyValue('overflow'))
     if(document.body.style.getPropertyValue('overflow') === 'hidden'){
@@ -25,19 +41,6 @@ export class HeaderComponent implements OnInit {
       document.body.style.overflow = 'hidden';
     }
   }
-  hamburgerClick(): void {
-    this.hamburgerElement?.classList.toggle(this.HAMBURGEROPEN);
-    this.nestednav?.classList.toggle('nested-open');
-    this.checkBodyOverflow();
-  }
 
-  resetCSSClasses(): void {
-    if(this.nestednav?.classList.contains('nested-open')){
-      this.nestednav?.classList.remove('nested-open')
-    }
-    if(this.hamburgerElement?.classList.contains(this.HAMBURGEROPEN)){
-      this.hamburgerElement?.classList.remove(this.HAMBURGEROPEN)
-    }
-
-  }
+  
 }

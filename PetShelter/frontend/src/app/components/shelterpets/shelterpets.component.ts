@@ -18,15 +18,7 @@ export class ShelterpetsComponent implements OnInit, OnChanges {
   constructor(private petService: PetService,
       private router: Router) {}
 
-  private intervalStart():void{
-    this.intervalCheck = setInterval(() => {
-      const elements: HTMLCollectionOf<Element> =
-        document.getElementsByClassName('pet');
-      if (this.conditionCheck(elements)) {
-        this.checkEvrything(elements);
-      }
-    }, 50);
-  }
+ 
   // TODO Fix problem with filter pet array
   ngOnInit(): void {
     this.pets = this.pets;
@@ -45,7 +37,17 @@ export class ShelterpetsComponent implements OnInit, OnChanges {
     }
 
   }
+  choosePet(pet: Pet): string {
+    //this.selectedPet = pet;
+    //this.petsShow = false;
+    return `${pet.id}`;
+  }
 
+  backPageHandle(): void {
+    this.petsShow = true;
+    this.petAppearInterval = 0;
+    this.intervalStart();
+  }
   private conditionCheck(elements: HTMLCollectionOf<Element>): boolean {
     return (
       this.pets !== undefined &&
@@ -85,16 +87,14 @@ export class ShelterpetsComponent implements OnInit, OnChanges {
       clearInterval(this.intervalCheck);
     }
   }
-
-  choosePet(pet: Pet): string {
-    //this.selectedPet = pet;
-    //this.petsShow = false;
-    return `${pet.id}`;
+  private intervalStart():void{
+    this.intervalCheck = setInterval(() => {
+      const elements: HTMLCollectionOf<Element> =
+        document.getElementsByClassName('pet');
+      if (this.conditionCheck(elements)) {
+        this.checkEvrything(elements);
+      }
+    }, 50);
   }
-
-  backPageHandle(): void {
-    this.petsShow = true;
-    this.petAppearInterval = 0;
-    this.intervalStart();
-  }
+  
 }

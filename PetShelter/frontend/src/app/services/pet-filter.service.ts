@@ -6,8 +6,6 @@ import { Gender } from '../models/gender.model';
 import { PetSize } from '../models/petsize.model';
 import { Breed } from '../models/breed.model';
 import { Pet } from '../models/pet.model';
-import { PetFilterType } from '../models/FilterType.model';
-import { PetFilterEvent } from '../models/pet-filter-event.model';
 import { PetType } from '../models/PetType.model';
 
 @Injectable({
@@ -32,37 +30,35 @@ export class PetFilterService extends ApiService {
   }
 
   public getBreeds(pettype: PetType): Observable<Breed[]> {
-    switch(pettype){
-      case 'Dog' :
+    switch (pettype) {
+      case 'Dog':
         return this.getDogBreeds();
-      case 'Cat' :
+      case 'Cat':
         return this.getCatsBreeds();
-      default :
+      default:
         return this.getDogBreeds();
     }
   }
 
+  public tableFilter(
+    pettable: Array<Pet>,
+    petFilterMap: Map<string, (pet: Pet) => boolean>
+  ): Array<Pet> {
+    return pettable.filter((i) => this.allOf(i, petFilterMap));
+  }
+
+  private allOf(i: Pet, map: Map<string, (pet: Pet) => boolean>): boolean {
+    let funtions = map.values();
+    for (let f of funtions) {
+      if (!f(i)) return false;
+    }
+    return true;
+  }
   private getDogBreeds(): Observable<Breed[]> {
     return this.getArrayOf<Breed>(this.dogBreeds);
   }
 
   private getCatsBreeds(): Observable<Breed[]> {
     return this.getArrayOf<Breed>(this.catBreeds);
-  }
-
-  public tableFilter(
-    pettable: Array<Pet>,
-    petFilterMap: Map<string, (pet: Pet)=>boolean> 
-  ): Array<Pet> {
-    return pettable.filter(i=>this.allOf(i,petFilterMap));
-  }
-
-  private allOf(i:Pet,map: Map<string, (pet: Pet)=>boolean>): boolean {
-    let funtions = map.values();
-    for(let f of funtions){
-      if(!f(i))
-        return false;
-    }
-    return true;
   }
 }
