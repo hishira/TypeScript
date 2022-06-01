@@ -1,9 +1,9 @@
 import { Pet } from "./pet.model";
 export interface Center {
+    address: string;
+    city: string;
     id: number,
     name: string;
-    city: string;
-    address: string;
-    phone: string;
     pets: Array<Pet>;
+    phone: string;
 }

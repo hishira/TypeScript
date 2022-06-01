@@ -4,8 +4,8 @@ import { Pet } from '../../models/pet.model';
 import { Router } from '@angular/router'; 
 @Component({
   selector: 'app-shelterpets',
-  templateUrl: './shelterpets.component.html',
   styleUrls: ['./shelterpets.component.css'],
+  templateUrl: './shelterpets.component.html',
 })
 export class ShelterpetsComponent implements OnInit, OnChanges {
   

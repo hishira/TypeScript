@@ -3,6 +3,9 @@
   "ignorePatterns": [
     "projects/**/*"
   ],
+  "plugins": [
+    "typescript-sort-keys"
+  ],
   "overrides": [
     {
       "files": [
@@ -37,20 +40,32 @@
         ],
         "@typescript-eslint/member-ordering": [
           "error",
-          { "default": [
-            "signature",
-
-            // Fields
-            "public-decorated-field",
-            "private-decorated-field",
-            "public-decorated-method",
-            "private-decorated-method",
-            "public-field",
-            "private-field",
-            "public-method",
-            "method",
-            "private-method"
-            ] }
+          {
+            "default": [
+              "signature",
+              // Fields
+              "public-decorated-field",
+              "private-decorated-field",
+              "public-decorated-method",
+              "private-decorated-method",
+              "public-field",
+              "private-field",
+              "public-method",
+              "method",
+              "private-method"
+            ]
+          }
+        ],
+        "typescript-sort-keys/interface": "error",
+        "typescript-sort-keys/string-enum": "error",
+        "sort-keys": [
+          "error",
+          "asc",
+          {
+            "caseSensitive": true,
+            "natural": false,
+            "minKeys": 2
+          }
         ]
       }
     },
@@ -62,22 +77,25 @@
         "plugin:@angular-eslint/template/recommended"
       ],
       "rules": {
+        "typescript-sort-keys/interface": "error",
+        "typescript-sort-keys/string-enum": "error",
         "@typescript-eslint/member-ordering": [
           "error",
-          { "default": [
-            "signature",
-
-            // Fields
-            "public-decorated-field",
-            "private-decorated-field",
-            "public-decorated-method",
-            "private-decorated-method",
-            "public-field",
-            "private-field",
-            "public-method",
-            "method",
-            "private-method"
-            ] }
+          {
+            "default": [
+              "signature",
+              // Fields
+              "public-decorated-field",
+              "private-decorated-field",
+              "public-decorated-method",
+              "private-decorated-method",
+              "public-field",
+              "private-field",
+              "public-method",
+              "method",
+              "private-method"
+            ]
+          }
         ]
       }
     }

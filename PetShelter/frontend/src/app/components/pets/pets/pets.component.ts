@@ -7,8 +7,8 @@ import { PetFilterService } from '../../../services/pet-filter.service';
 import { PetType } from 'src/app/models/PetType.model';
 @Component({
   selector: 'pet-cats',
-  templateUrl: './pets.component.html',
   styleUrls: ['./pets.component.css'],
+  templateUrl: './pets.component.html',
 })
 export class PetsComponent implements OnInit {
   pets?: Pet[];
