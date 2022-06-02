@@ -41,7 +41,8 @@
         "@typescript-eslint/member-ordering": [
           "error",
           {
-            "default": [
+            "default": {
+              "memberTypes":[
               "signature",
               // Fields
               "public-decorated-field",
@@ -53,7 +54,9 @@
               "public-method",
               "method",
               "private-method"
-            ]
+              ],
+            "order": "alphabetically"
+            }
           }
         ],
         "typescript-sort-keys/interface": "error",
