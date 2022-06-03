@@ -1,0 +1,5 @@
+<ng-container>
+  <div *ngFor="let item of elements">
+    <app-select-item [label]="item" [selectItem]="item" (addItem)="append($event)" (removeItem)="deleteItem($event)"></app-select-item>
+  </div>
+</ng-container>
