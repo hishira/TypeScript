@@ -9,24 +9,27 @@
     <sh-select-list
       label="Size"
       placeholder="Pet breed"
-      [elements]="petBreedOnlyValue"
+      [elements]="petBreeds"
       formControlName="breed_id"
-    ></sh-select-list>
+      key="value"
+      select="id"></sh-select-list>
     <sh-select-list
       label="Size"
       placeholder="Pet gender"
-      [elements]="petGenderOnlyValue"
+      [elements]="genders"
       formControlName="gender_id"
-      ></sh-select-list>
+      key="value"
+      select="id"></sh-select-list>
     <sh-select-list
       label="Size"
       placeholder="Pet size"
-      [elements]="petSizeOnlyvalue"
+      [elements]="petsize"
       formControlName="size_id"
-      >
-        <ul *ngFor="let item of petsize">
+      key="value"
+      select="id">
+        <!--<ul *ngFor="let item of petsize">
           <li select-item-directive>{{item.value}}</li>
-        </ul>
+        </ul>-->
     </sh-select-list>
     <app-select-multiple-list formControlName="el" [elements]="petSizeOnlyvalue"></app-select-multiple-list>
     <ng-container>

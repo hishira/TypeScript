@@ -18,8 +18,10 @@ const noneFunction = () => {};
 export class SelectListComponent implements ControlValueAccessor, AfterViewInit {
   @Input() elements: Array<any> = [];
   @ViewChildren('select-item-directive') elementsRefs: ElementRef;
+  @Input() key: string = '';
   @ViewChildren(SelectItemDirective) myDirective!: QueryList<SelectItemDirective>;
   @Input() placeholder: string = '';
+  @Input() select: string = ''; 
   down: boolean = true;
   placeholderSave: string = '';
   selfValue: any;
@@ -31,11 +33,6 @@ export class SelectListComponent implements ControlValueAccessor, AfterViewInit 
   constructor() {
   }
   
-  ngAfterViewInit(): void {
-    this.myDirective.forEach(e=>console.log(e));
-    console.log(this.elementsRefs.nativeElement)
-  }
-
   get value() {
     return this.selfValue;
   }
@@ -47,11 +44,16 @@ export class SelectListComponent implements ControlValueAccessor, AfterViewInit 
 
   elementClick(value: any): void {
     console.log(value)
-    this.selfValue = value;
-    this.value=value;
+    this.selfValue = value.select;
+    this.value=value.select;
     this.spanColorChange = true;
-    this.placeholder = value;
+    this.placeholder = value.placeholder;
     this.down = !this.down;
+  }
+  
+  ngAfterViewInit(): void {
+    this.myDirective.forEach(e=>console.log(e));
+    console.log(this.elementsRefs.nativeElement)
   }
 
   openList() {
