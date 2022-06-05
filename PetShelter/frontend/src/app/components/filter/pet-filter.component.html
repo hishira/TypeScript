@@ -8,28 +8,26 @@
     </div>
     <sh-select-list
       label="Size"
-      (selectEmit)="selectPetBreedHandle($event)"
       placeholder="Pet breed"
-      [key]="'value'"
-      [selectList]="petBreeds"
-      [control]="filterForm.controls['breed_id']"
+      [elements]="petBreedOnlyValue"
+      formControlName="breed_id"
     ></sh-select-list>
     <sh-select-list
       label="Size"
-      (selectEmit)="selectPetGenderHandle($event)"
-      placeholder="Pet size"
-      [key]="'value'"
-      [selectList]="genders"
-      [control]="filterForm.controls['breed_id']"
-    ></sh-select-list>
+      placeholder="Pet gender"
+      [elements]="petGenderOnlyValue"
+      formControlName="gender_id"
+      ></sh-select-list>
     <sh-select-list
       label="Size"
-      (selectEmit)="selectPetSizeHandle($event)"
       placeholder="Pet size"
-      [key]="'value'"
-      [selectList]="petsize"
-      [control]="filterForm.controls['breed_id']"
-    ></sh-select-list>
+      [elements]="petSizeOnlyvalue"
+      formControlName="size_id"
+      >
+        <ul *ngFor="let item of petsize">
+          <li select-item-directive>{{item.value}}</li>
+        </ul>
+    </sh-select-list>
     <app-select-multiple-list formControlName="el" [elements]="petSizeOnlyvalue"></app-select-multiple-list>
     <ng-container>
       <div class="chip-container">

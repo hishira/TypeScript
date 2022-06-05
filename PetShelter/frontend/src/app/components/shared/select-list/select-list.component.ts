@@ -1,44 +1,72 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
-import { ModalService } from 'src/app/services/modal.service';
-import { SelectListModalComponent } from './select-list-modal/select-list-modal.component';
+import { AfterViewInit, Component, ContentChild, ContentChildren, ElementRef, forwardRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { SelectItemDirective } from '../directives/select-item.directive';
+const noneFunction = () => {};
+
 @Component({
+  providers: [
+    {
+      multi: true,
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(()=>SelectListComponent)
+    }
+  ],
   selector: 'sh-select-list',
   styleUrls: ['./select-list.component.css'],
   templateUrl: './select-list.component.html',
 })
-export class SelectListComponent implements OnInit {
-  @Input() control: AbstractControl | null = null;
-  @Input() key: string = '';
+export class SelectListComponent implements ControlValueAccessor, AfterViewInit {
+  @Input() elements: Array<any> = [];
+  @ViewChildren('select-item-directive') elementsRefs: ElementRef;
+  @ViewChildren(SelectItemDirective) myDirective!: QueryList<SelectItemDirective>;
   @Input() placeholder: string = '';
-  @Output() selectEmit: EventEmitter<any> = new EventEmitter<any>();
-  @Input() selectList: Array<any> = [];
-  
-  public down: boolean = true;
-  public placeholderSave: string = '';
-  public spanColorChange: boolean = false;
+  down: boolean = true;
+  placeholderSave: string = '';
+  selfValue: any;
+  spanColorChange: boolean = false;
 
-  constructor(private modalService: ModalService) {}
+  private onChangeCallback: (_: any) => void = noneFunction;
+  private onTouchedCallback: () => void = noneFunction;
+
+  constructor() {
+  }
   
-  elementClick(event: any, value: any): void {
-    event.stopPropagation();
-    this.spanColorChange = true;
-    this.placeholder = value[this.key] as string;
-    this.down = !this.down;
-    this.selectEmit.emit(value);
+  ngAfterViewInit(): void {
+    this.myDirective.forEach(e=>console.log(e));
+    console.log(this.elementsRefs.nativeElement)
   }
 
-  ngOnInit() {
-    this.placeholderSave = this.placeholder;
-    this.control?.valueChanges.subscribe((value) => {
-      if (!value) {
-        this.placeholder = this.placeholderSave;
-        this.spanColorChange = false;
-      }
-    });
+  get value() {
+    return this.selfValue;
+  }
+  set value(newValue: any) {
+    this.selfValue = newValue;
+    this.onChangeCallback(newValue);
+    this.onTouchedCallback();
+  }
+
+  elementClick(value: any): void {
+    console.log(value)
+    this.selfValue = value;
+    this.value=value;
+    this.spanColorChange = true;
+    this.placeholder = value;
+    this.down = !this.down;
   }
 
   openList() {
-      this.down = !this.down;
+    this.down = !this.down;
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChangeCallback = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouchedCallback = fn;
+  }
+  
+  writeValue(obj: any): void {
+    this.selfValue = obj;
   }
 }

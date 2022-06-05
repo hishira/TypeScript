@@ -8,6 +8,8 @@ import { ChipComponent } from './chip/chips.component';
 import { SelectMultipleListComponent } from './select-multiple-list/select-multiple-list.component';
 import { FormsModule } from '@angular/forms';
 import { SelectItemComponent } from './select-multiple-list/select-item/select-item.component';
+import { SelectListItemComponent } from './select-list/select-list-item/select-list-item.component';
+import { SelectItemDirective } from './directives/select-item.directive';
 @NgModule({
   declarations: [
     SelectListComponent,
@@ -15,7 +17,9 @@ import { SelectItemComponent } from './select-multiple-list/select-item/select-i
     ModalComponent,
     ChipComponent,
     SelectMultipleListComponent,
-    SelectItemComponent
+    SelectItemComponent,
+    SelectListItemComponent,
+    SelectItemDirective
   ],
   exports: [
     SelectListComponent,
@@ -23,7 +27,9 @@ import { SelectItemComponent } from './select-multiple-list/select-item/select-i
     ModalComponent,
     ChipComponent,
     SelectMultipleListComponent,
-    SelectItemComponent
+    SelectItemComponent,
+    SelectListItemComponent,
+    SelectItemDirective
   ],
   imports: [CommonModule, BrowserModule, FormsModule],
 })

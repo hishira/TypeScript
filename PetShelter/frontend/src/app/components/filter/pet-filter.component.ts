@@ -28,6 +28,15 @@ export class PetFilter implements OnInit {
     get petSizeOnlyvalue() {
         return this.petsize.map((size) => size.value);
     }
+
+    get petBreedOnlyValue() {
+        return this.petBreeds.map((breed)=>breed.value);
+    }
+
+    get petGenderOnlyValue() {
+        return this.genders.map((gender)=>gender.value);
+    }
+    
     constructor(
         private petFilterService: PetFilterService,
         private formBuilder: FormBuilder
