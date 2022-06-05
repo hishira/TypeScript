@@ -5,6 +5,8 @@ from datetime import datetime
 
 class PetBase(BaseModel):
     name: str
+    short_description: str
+    description: str
     weight: str
     brithdate: datetime
 

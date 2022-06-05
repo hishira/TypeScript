@@ -40,6 +40,8 @@ def create_pet(db: Session,
                 center_id: int,
                 newpet: schemas.PetCreate):
     new_pet = models.Pet(name=newpet.name,
+                short_description=newpet.short_description,
+                description=newpet.description,
                 weight=newpet.weight,
                 brithdate=newpet.brithdate,
                 pettype_id=newpet.pettype_id,

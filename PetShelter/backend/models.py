@@ -60,6 +60,8 @@ class Pet(Base):
     weight      =     Column(Integer)
     brithdate   =     Column(DateTime)
     pettype_id  =     Column(Integer, ForeignKey("pettype.id"))
+    short_description =     Column(String)
+    description =     Column(String)
 
     breed_id    =     Column(Integer, ForeignKey("breeds.id"))#Column(Enum(PetType, values_callable=lambda x: [str(e.value) for e in PetType]))
     size_id     =     Column(Integer, ForeignKey("petsize.id"))#Column(Enum(PetSize, values_callable=lambda x: [str(e.value) for e in PetSize]))

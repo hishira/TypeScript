@@ -56,7 +56,9 @@ def getpete(name:str,
         "pettype_id": pettype,
         "size_id": size,
         "gender_id": gender,
-        "breed_id": breed
+        "breed_id": breed,
+        "short_description": "Short description",
+        "description": "Description long term description"
         }
 
 def postcreatepet(pet:dict,url:str,headers:dict):
@@ -141,5 +143,5 @@ def createCatsBreeds():
 #print(catsbreeds)
 #createCenters()
 #createfirst(catsbreeds,dogsbreed,[1,2],[1,2,3,4])
-createsecond()
+#createsecond()
 #print(getPetTypeCatId())
