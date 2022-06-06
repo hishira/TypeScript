@@ -5,10 +5,19 @@
         class="photo"
         [petid]="pet.id"
         [more]="false"
-      ></app-pet-photos>
+      >
+      <div class="pet__name__photo">
+        <span>{{pet.name}}</span>
+      </div>
+    </app-pet-photos>
       <div class="pet__info">
         <div class="info__name">
           <span>{{ pet.name }}</span>
+        </div>
+        <div class="pet__description">
+          <span>
+            {{ pet.short_description }}
+          </span>
         </div>
         <div class="info">
           <span class="first">Weight</span>
@@ -27,4 +36,3 @@
 <ng-template #noPet>
   <div class="nopet"><div>No pet found</div></div>
 </ng-template>
-

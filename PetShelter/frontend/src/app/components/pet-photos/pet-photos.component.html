@@ -1,5 +1,6 @@
 <article *ngIf="photos" class="photos" [class.round]='!more'>
   <div class="left" *ngIf="more" (click)="leftImage()"></div>
+  <ng-content></ng-content>
   <img
     [class.moreimg]="more === true"
     [class.full-height]="more === false"

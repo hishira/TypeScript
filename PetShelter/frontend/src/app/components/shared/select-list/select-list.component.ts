@@ -18,6 +18,7 @@ const noneFunction = () => {};
 export class SelectListComponent implements ControlValueAccessor, AfterViewInit {
   @Input() elements: Array<any> = [];
   @ViewChildren('select-item-directive') elementsRefs: ElementRef;
+  //TODO check if we can make it better
   @Input() key: string = '';
   @ViewChildren(SelectItemDirective) myDirective!: QueryList<SelectItemDirective>;
   @Input() placeholder: string = '';

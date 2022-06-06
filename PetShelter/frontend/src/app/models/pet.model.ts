@@ -1,11 +1,13 @@
 export interface Pet{
+    breed_id: number;
+    brithdate: Date;
+    center_id: number;
+    description: string,
+    gender_id: number;
     id: number;
     name: string;
-    weight: number;
-    brithdate: Date;
     pettype_id: number;
-    breed_id: number;
+    short_description: string,
     size_id: number;
-    gender_id: number;
-    center_id: number;
+    weight: number;
 }
