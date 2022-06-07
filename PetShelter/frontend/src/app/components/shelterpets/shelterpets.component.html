@@ -1,15 +1,11 @@
 <ng-container *ngIf="pets && petsShow" class="pets">
   <section *ngIf="pets.length > 0; else noPet" class="pets">
     <article *ngFor="let pet of pets" class="pet" [routerLink]="choosePet(pet)">
-      <app-pet-photos
-        class="photo"
-        [petid]="pet.id"
-        [more]="false"
-      >
-      <div class="pet__name__photo">
-        <span>{{pet.name}}</span>
-      </div>
-    </app-pet-photos>
+      <app-pet-photos class="photo" [petid]="pet.id" [more]="false">
+        <div class="pet__name__photo">
+          <span>{{ pet.name }}</span>
+        </div>
+      </app-pet-photos>
       <div class="pet__info">
         <div class="info__name">
           <span>{{ pet.name }}</span>

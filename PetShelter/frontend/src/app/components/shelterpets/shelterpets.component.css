@@ -66,6 +66,7 @@
   z-index: 3000;
   line-height: 29px;
   isolation: isolate;
+  background-color: ;
 }
 .photo {
   height: 100%;
@@ -97,7 +98,7 @@
   align-items: center;
   box-sizing: border-box;
   padding: 0.3rem;
-
+  background: linear-gradient(30deg, rgb(167, 184, 200) 50%, white  50%);
   width: 100%;
 }
 .pet:hover > .pet__info {
