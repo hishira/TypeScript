@@ -101,6 +101,11 @@
   background: linear-gradient(30deg, rgb(167, 184, 200) 50%, white  50%);
   width: 100%;
 }
+.icons--pet{
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
 .pet:hover > .pet__info {
   animation: appear 500ms ease forwards;
 }
