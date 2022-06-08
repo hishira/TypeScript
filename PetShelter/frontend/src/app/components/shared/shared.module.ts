@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectItemComponent } from './select-multiple-list/select-item/select-item.component';
 import { SelectListItemComponent } from './select-list/select-list-item/select-list-item.component';
 import { SelectItemDirective } from './directives/select-item.directive';
+import { IconComponent } from './icon-component/icon.component';
 @NgModule({
   declarations: [
     SelectListComponent,
@@ -19,7 +20,8 @@ import { SelectItemDirective } from './directives/select-item.directive';
     SelectMultipleListComponent,
     SelectItemComponent,
     SelectListItemComponent,
-    SelectItemDirective
+    SelectItemDirective,
+    IconComponent
   ],
   exports: [
     SelectListComponent,
@@ -29,7 +31,8 @@ import { SelectItemDirective } from './directives/select-item.directive';
     SelectMultipleListComponent,
     SelectItemComponent,
     SelectListItemComponent,
-    SelectItemDirective
+    SelectItemDirective,
+    IconComponent
   ],
   imports: [CommonModule, BrowserModule, FormsModule],
 })

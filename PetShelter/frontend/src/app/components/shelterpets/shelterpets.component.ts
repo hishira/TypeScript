@@ -8,6 +8,7 @@ import {
 import { PetService } from '../../services/pet.service';
 import { Pet } from '../../models/pet.model';
 import { Router } from '@angular/router';
+import { Icons } from 'src/app/models/icons.model';
 @Component({
   selector: 'app-shelterpets',
   styleUrls: ['./shelterpets.component.css'],
@@ -15,12 +16,12 @@ import { Router } from '@angular/router';
 })
 export class ShelterpetsComponent implements OnInit, OnChanges {
   @Input() pets?: Array<Pet>;
+  iconsTypes = Icons;
   public petsShow: boolean = true;
   public selectedPet: Pet | undefined;
   private afterFilterInterval: NodeJS.Timer | null = null;
   private intervalCheck: NodeJS.Timer | null = null;
   private petAppearInterval: number = 0;
-
   constructor(private petService: PetService, private router: Router) {}
 
   backPageHandle(): void {

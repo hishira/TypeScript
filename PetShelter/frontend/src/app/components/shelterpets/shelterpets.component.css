@@ -76,7 +76,7 @@
   transition: opacity 300ms;
 }
 .pet:hover > .photo {
-  animation: up 500ms ease forwards;
+  animation: up 500ms ease-in-out forwards;
 }
 @keyframes up {
   from {
@@ -98,7 +98,7 @@
   align-items: center;
   box-sizing: border-box;
   padding: 0.3rem;
-  background: linear-gradient(30deg, rgb(167, 184, 200) 50%, white  50%);
+  background: linear-gradient(30deg, rgb(212, 212, 213) 50%, white  50%);
   width: 100%;
 }
 .icons--pet{
