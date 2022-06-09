@@ -1,12 +1,9 @@
-<div class="select-list" (click)="openList()">
-  <div class="select-list--useroption">
-    <span class="select-list--span" [class.spanblacktext]="spanColorChange">{{
-      placeholder
-    }}</span>
-    <div #listElements>
-      <ng-content></ng-content>
-    </div>
-    <ng-container *ngIf="down; else up">
+<div class="select-list" >
+  <div class="select-list--useroption" (click)="openList($event)">
+    <span class="select-list--span" [class.spanblacktext]="spanColorChange">
+      {{ placeholder }}
+    </span>
+    <ng-container *ngIf="!down; else up">
       <button>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +38,7 @@
       </button>
     </ng-template>
   </div>
-  <ng-container *ngIf="!down">
+  <ng-container *ngIf="down">
     <ng-container *ngFor="let item of elements">
       <select-list-item
         [selectItem]="item"

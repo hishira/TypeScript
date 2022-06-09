@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChild, ContentChildren, ElementRef, forwardRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ContentChildren, ElementRef, forwardRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectItemDirective } from '../directives/select-item.directive';
 const noneFunction = () => {};
@@ -15,7 +15,7 @@ const noneFunction = () => {};
   styleUrls: ['./select-list.component.css'],
   templateUrl: './select-list.component.html',
 })
-export class SelectListComponent implements ControlValueAccessor, AfterViewInit {
+export class SelectListComponent implements ControlValueAccessor, OnInit {
   @Input() elements: Array<any> = [];
   @ViewChildren('select-item-directive') elementsRefs: ElementRef;
   //TODO check if we can make it better
@@ -23,7 +23,7 @@ export class SelectListComponent implements ControlValueAccessor, AfterViewInit 
   @ViewChildren(SelectItemDirective) myDirective!: QueryList<SelectItemDirective>;
   @Input() placeholder: string = '';
   @Input() select: string = ''; 
-  down: boolean = true;
+  down: boolean = false;
   placeholderSave: string = '';
   selfValue: any;
   spanColorChange: boolean = false;
@@ -44,25 +44,26 @@ export class SelectListComponent implements ControlValueAccessor, AfterViewInit 
   }
 
   elementClick(value: any): void {
-    console.log(value)
     this.selfValue = value.select;
     this.value=value.select;
     this.spanColorChange = true;
     this.placeholder = value.placeholder;
-    this.down = !this.down;
+    this.down = false;
+    console.log(this.down)
   }
   
-  ngAfterViewInit(): void {
-    this.myDirective.forEach(e=>console.log(e));
-    console.log(this.elementsRefs.nativeElement)
+  ngOnInit(): void {
+    this.down = false;
   }
-
-  openList() {
+  
+  openList(event: any) {
+    event.preventDefault();
     this.down = !this.down;
   }
 
   registerOnChange(fn: any): void {
     this.onChangeCallback = fn;
+  
   }
 
   registerOnTouched(fn: any): void {
