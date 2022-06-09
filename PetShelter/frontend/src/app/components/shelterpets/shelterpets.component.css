@@ -50,23 +50,24 @@
   top: 0;
   left: 0;
   width: 100%;
-  color: white;
+  color: black;
   font-weight: 550;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
   font-size: 24px;
-  background: rgba(255,255,255,.4);
-  border-bottom: .1rem solid rgba(255,255,255,.2);
+  background-color: whitesmoke;
+  opacity: 0.93;
+  border-radius: 0px 0px 10px 10px; 
   padding: 0.75rem;
 }
 .pet__name__photo > span {
-  color: whitesmoke;
+  color: black;
   z-index: 3000;
   line-height: 29px;
   isolation: isolate;
-  background-color: ;
+  letter-spacing: 3px;
 }
 .photo {
   height: 100%;
