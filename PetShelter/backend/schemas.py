@@ -20,6 +20,7 @@ class CenterBase(BaseModel):
     city: str
     address: str
     phone: str
+    description: str
 
 
 class PetTypeBase(BaseModel):

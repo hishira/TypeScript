@@ -85,7 +85,9 @@ def getpetsbycenterwithfoto(db: Session,
     return {k:list(g) for k,g in groupby(allelements,attrgetter("Pet.id"))}
 
 def getcenterinfo(db:Session,centerid:int):
-    return db.query(models.Center).filter(models.Center.id==centerid).first()
+    result = db.query(models.Center).filter(models.Center.id==centerid).first()
+    print(result.description)
+    return result
 
 def get_centers(db: Session):
     return db.query(models.Center).all()
