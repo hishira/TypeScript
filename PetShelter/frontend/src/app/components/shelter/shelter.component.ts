@@ -26,6 +26,7 @@ export class ShelterComponent implements OnInit {
         .getcenterbyid(shelterid)
         .subscribe(center=>{
           this.center=center
+          console.log(center)
           this.pets = center.pets;
         })
 

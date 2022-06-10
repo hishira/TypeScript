@@ -7,9 +7,9 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class CenterService {
-  private mainurl: string = 'http://127.0.0.1:8000';
   private createurl: string = '/center/';
   private getalurl: string = '/centers';
+  private mainurl: string = 'http://127.0.0.1:8000';
   private getcenterurl: string = `${this.mainurl}/centers/`;
 
   constructor(private http: HttpClient) {}
@@ -25,9 +25,6 @@ export class CenterService {
       .get<Center>(`${this.getcenterurl}${centerid}`)
       .pipe(catchError(this.errorHandle('getcenterbyid', [])));
   }
-  private logmessage(message: string): void {
-    console.log(message);
-  }
 
   private errorHandle<T>(
     operationname: string,
@@ -40,5 +37,8 @@ export class CenterService {
   }
   private getCentersUser(): string {
     return `${this.mainurl}${this.getalurl}`;
+  }
+  private logmessage(message: string): void {
+    console.log(message);
   }
 }
