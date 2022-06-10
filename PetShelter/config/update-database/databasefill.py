@@ -71,15 +71,19 @@ def createCenters():
       { "name": "Wesoła łapa",
         "city": "Kraków",
         "address": "Kazimierz Wielkiego 10",
-        "phone": "888 323 123", },
+        "phone": "888 323 123", 
+        "description": "Exampple pet center description"
+        },
       { "name": "Wilczy szaniec",
         "city": "Białystok",
         "address": "Jana Pawła, 20",
-        "phone": "674 567 987" },
+        "phone": "674 567 987",
+        "description": "Exampple pet center description" },
       { "name": "Szara zagroda",
         "city": "Warszawa",
         "address": "Wiejska 10",
-        "phone": "543 890 098s" }
+        "phone": "543 890 098s",
+        "description": "Exampple pet center description" }
     ]
   for i in centers:
       requests.post(url,headers=headers,json=i)

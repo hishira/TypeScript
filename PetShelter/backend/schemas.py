@@ -45,6 +45,7 @@ class SizeBase(BaseModel):
 
 
 class CenterCreate(CenterBase):
+    description: str
     pass
 
 

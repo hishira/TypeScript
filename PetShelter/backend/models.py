@@ -1,4 +1,4 @@
-from sqlalchemy import Column,ForeignKey, Integer,String, DateTime, Enum
+from sqlalchemy import Column,ForeignKey, Integer,String, DateTime, Enum, text
 from sqlalchemy.orm import relationship
 import enum
 
@@ -86,4 +86,5 @@ class Center(Base):
     city    =   Column(String)
     address =   Column(String)
     phone   =   Column(String)
+    description = Column(String, default=text(""))
     pet     =   relationship("Pet")
