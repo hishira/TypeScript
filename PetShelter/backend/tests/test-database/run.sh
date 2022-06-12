@@ -1,0 +1,19 @@
+#sqlite3 '../../test.db' < select-breed.sql
+# Create pet type
+if $(sqlite3 '../../test.db' < pet-type.create.sql 2> /dev/null)
+then echo "pet type created succesfull"
+else
+    echo "Something go wrong with pet type adding to test database"
+fi
+
+if $(sqlite3 '../../test.db' < pet-breed.create.sql 2> /dev/null)
+then echo "pet breed created succesfull"
+else
+    echo "Something go wrong with pet breed adding to test database"
+fi
+
+if $(sqlite3 '../../test.db' < pet-size.create.sql 2> /dev/null)
+then echo "pet size created succesfull"
+else
+    echo "Something go wrong with pet size adding to test database"
+fi
