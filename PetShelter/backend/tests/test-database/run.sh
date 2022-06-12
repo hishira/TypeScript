@@ -17,3 +17,9 @@ then echo "pet size created succesfull"
 else
     echo "Something go wrong with pet size adding to test database"
 fi
+
+if $(sqlite3 '../../test.db' < pet-center.create.sql 2> /dev/null)
+then echo "pet ceters created succesfull"
+else
+    echo "Something go wrong with pet centers adding to test database"
+fi

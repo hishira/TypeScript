@@ -73,3 +73,31 @@ def test_pet_size_test():
     response = client.get('/petsize')
     data = response.json()
     assert len(data) == 4
+
+def test_pet_size_values():
+    response = client.get('/petsize')
+    data = response.json()
+    data_value = data[0]
+    assert 'id' in data_value
+    assert 'value' in data_value
+
+def test_get_centers_status():
+    response = client.get('/centers')
+    response_status = response.status_code;
+    assert response_status == 200
+
+def test_get_centers():
+    response = client.get('/centers')
+    data = response.json()
+    assert len(data) == 3
+
+def test_centers_values():
+    response = client.get('/centers')
+    data = response.json()
+    data_values = data[0]
+    assert 'id' in data_values
+    assert 'name' in data_values
+    assert 'city' in data_values
+    assert 'address' in data_values
+    assert 'phone' in data_values
+    assert 'description' in data_values
