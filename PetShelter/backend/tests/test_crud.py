@@ -33,14 +33,43 @@ client = TestClient(app)
 #def runScriptOnDatabase():
 #    rc = call("../../config/test_config/test-config.sh", shell=True)
 
+def test_get_pet_types():
+    response = client.get("pettypes");
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 5
+
 def test_get_cat_breed():
     response = client.get("/breed/dog")
     assert response.status_code == 200
     data = response.json()
-    assert len(data) == 0
+    # Before database update
+    #assert len(data) == 0
+    assert len(data) == 1
 
 def test_get_dog_breed():
     response = client.get("/breed/cat")
     assert response.status_code == 200
     data = response.json()
-    assert len(data) == 0
+    #Before database update
+    #assert len(data) == 0
+    assert len(data) == 1
+
+def test_cat_breed_data_values():
+    response = client.get("/breed/cat")
+    data = response.json()
+    data_value = data[0]
+    assert 'value' in data_value
+    assert 'pettype_id' in data_value
+
+def test_dog_breed_data_values():
+    response = client.get("/breed/dog")
+    data = response.json()
+    data_value = data[0]
+    assert 'value' in data_value
+    assert 'pettype_id' in data_value
+
+def test_pet_size_test():
+    response = client.get('/petsize')
+    data = response.json()
+    assert len(data) == 4
