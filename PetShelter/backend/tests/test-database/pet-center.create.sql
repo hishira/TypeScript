@@ -13,7 +13,7 @@ VALUES (
         "674 567 987",
         "Exampple pet center description"
     ),
-(
+    (
         "Szara zagroda",
         "Warszawa",
         "Wiejska 10",

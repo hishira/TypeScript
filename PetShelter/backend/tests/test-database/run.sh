@@ -23,3 +23,9 @@ then echo "pet ceters created succesfull"
 else
     echo "Something go wrong with pet centers adding to test database"
 fi
+
+if $(sqlite3 '../../test.db' < pet.create.sql)
+then echo "pet created succesfull"
+else
+    echo "Something go wrong with pet adding to test database"
+fi
