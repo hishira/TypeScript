@@ -101,3 +101,58 @@ def test_centers_values():
     assert 'address' in data_values
     assert 'phone' in data_values
     assert 'description' in data_values
+
+def test_get_cat_pets_response_status():
+    response = client.get('/pet/getallcat')
+    assert response.status_code == 200
+
+def test_get_cat_pets_length():
+    response = client.get('/pet/getallcat')
+    response_value = response.json()
+    assert len(response_value) == 1
+
+def test_get_cat_pets_value():
+    response = client.get('/pet/getallcat')
+    response_value = response.json()[0]
+    assert 'id' in response_value
+    assert 'short_description' in response_value
+    assert 'description' in response_value
+    assert 'weight' in response_value
+    assert 'brithdate' in response_value
+
+def test_get_dog_pets_response_status():
+    response = client.get('/pet/getalldog')
+    assert response.status_code == 200
+
+def test_get_dog_pets_length():
+    response = client.get('/pet/getalldog')
+    response_value = response.json()
+    assert len(response_value) == 1
+
+def test_get_dog_pets_value():
+    response = client.get('/pet/getalldog')
+    response_value = response.json()[0]
+    assert 'id' in response_value
+    assert 'short_description' in response_value
+    assert 'description' in response_value
+    assert 'weight' in response_value
+    assert 'brithdate' in response_value
+
+# For that moment
+
+def test_get_photos_pet():
+    response = client.get('/pet/getalldog')
+    response_value = response.json()[0]
+    
+    photo_response = client.get(f'/pet/photos/{response_value["id"]}')
+    assert photo_response.status_code == 200
+
+def test_check_photo_values():
+    response = client.get('/pet/getalldog')
+    response_value = response.json()[0]
+    
+    photo_response = client.get(f'/pet/photos/{response_value["id"]}')
+    photo_response = photo_response.json()[0]
+    assert 'id' in photo_response
+    assert 'url' in photo_response
+    assert 'pet_id' in photo_response
