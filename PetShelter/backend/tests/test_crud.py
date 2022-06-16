@@ -156,3 +156,27 @@ def test_check_photo_values():
     assert 'id' in photo_response
     assert 'url' in photo_response
     assert 'pet_id' in photo_response
+
+def test_pet_gende_should_status_200():
+    response = client.get('/gender')
+    assert response.status_code == 200
+
+def test_pet_gender_should_be_array():
+    response = client.get('/gender')
+    assert isinstance(response.json(),list) == True
+
+def test_pet_gender_should_be_2_value():
+    response = client.get('/gender')
+    response_value = response.json()
+    assert len(response_value) == 2
+
+def test_pet_gender_value_should_be_dict():
+    response = client.get('/gender')
+    response_value = response.json()[0]
+    assert isinstance(response_value,dict) == True
+
+def test_pet_gender_value():
+    response = client.get('/gender')
+    response_value = response.json()[0]
+    assert 'id' in response_value
+    assert 'value' in response_value
