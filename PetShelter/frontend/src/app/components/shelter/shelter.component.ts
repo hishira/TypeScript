@@ -4,6 +4,7 @@ import {Location} from "@angular/common";
 import {CenterService} from "../../services/center.service"
 import {Center} from "../../models/center.model";
 import {Pet} from "../../models/pet.model";
+import { Icons } from 'src/app/models/icons.model';
 @Component({
   selector: 'app-shelter',
   templateUrl: './shelter.component.html',
@@ -11,7 +12,9 @@ import {Pet} from "../../models/pet.model";
 })
 export class ShelterComponent implements OnInit {
   center?: Center;
+  icons = Icons
   pets?: Array<Pet>
+  
   constructor(private route: ActivatedRoute,
     private location: Location,
     private centerservice: CenterService) { }

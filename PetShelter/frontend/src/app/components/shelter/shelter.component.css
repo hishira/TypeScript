@@ -1,17 +1,40 @@
-.shelter__info{
-    padding: .5rem 1.4rem;
-    font-size: 1.1rem;
+.shelter__header {
+    display: flex;
+    align-items: cneter;
+    align-content: center;
+    margin-left: 1rem;
 }
-.shelter__info > *{
-    width: 100%;
-    padding: .3rem;
+.shelter__header > app-icon{
+    margin: auto 0;
+    fill: #bbb;
 }
-.info__name{
-    font-size: 1.6rem;
+.shelter__contact_info {
+    justify-self: flex-end;
+    margin-left: auto;
+    margin-right: 5rem;;
 }
-.info__address, .info__phone{
-    margin-top: .8rem;
+.shelter__info {
+  padding: 0.5rem 1.4rem;
+  font-size: 1.1rem;
 }
-.bold{
-    font-weight: bold;;
+.shelter__info > * {
+  width: 100%;
+  padding: 0.3rem;
+}
+.info__name {
+  font-size: 1.6rem;
+}
+.info__address,
+.info__phone {
+  margin-top: 0.8rem;
+}
+.bold {
+  font-weight: bold;
+}
+
+hr {
+  border-top: 3px solid #bbb;
+  opacity: 0.4;
+  margin: 0.5rem 1.4rem;
+  border-radius: 10px;
 }

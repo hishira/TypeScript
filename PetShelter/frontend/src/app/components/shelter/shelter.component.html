@@ -1,22 +1,28 @@
 <div *ngIf="center">
-  <div class="shelter__info">
-    <div class="info__name">
-      {{ center.name }}
+  <div class="shelter__header">
+    <app-icon [iconType]="icons.PetCenter"></app-icon>
+    <div class="shelter__info">
+      <div class="info__name">
+        {{ center.name }}
+      </div>
+      <div class="info__address">
+        <span class="bold">Adress:</span>
+        <span>
+          {{ center.city }},
+          {{ center.address }}
+        </span>
+      </div>
+      <div class="info__phone">
+        <span class="bold">Phone: </span><span> {{ center.phone }}</span>
+      </div>
     </div>
-    <div class="info__address">
-      <span class="bold">Adress:</span>
-      <span>
-        {{ center.city }},
-        {{ center.address }}
-      </span>
-    </div>
-    <div class="info__phone">
-      <span class="bold">Phone: </span><span> {{ center.phone }}</span>
+    <div class="shelter__contact_info">
+      ddd
     </div>
   </div>
-  <hr style="border-top: 3px solid #bbb;margin: .5rem 1.4rem;">
+  <hr />
   <div class="shelter__info">
-    {{center.description}}
+    {{ center.description }}
   </div>
-  <app-shelterpets [pets]='pets'></app-shelterpets>
+  <app-shelterpets [pets]="pets"></app-shelterpets>
 </div>
