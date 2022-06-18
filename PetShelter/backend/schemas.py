@@ -21,6 +21,7 @@ class CenterBase(BaseModel):
     address: str
     phone: str
     description: str
+    email: str
 
 
 class PetTypeBase(BaseModel):

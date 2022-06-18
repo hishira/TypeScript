@@ -97,7 +97,9 @@ def create_center(db: Session,
     new_center = models.Center( name=newcenter.name,
                                 city=newcenter.city,
                                 address=newcenter.address,
-                                phone=newcenter.phone)
+                                phone=newcenter.phone,
+                                email = newcenter.email
+                                )
     db.add(new_center)
     db.commit()
     db.refresh(new_center)
