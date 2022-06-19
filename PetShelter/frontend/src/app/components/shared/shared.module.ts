@@ -11,6 +11,7 @@ import { SelectItemComponent } from './select-multiple-list/select-item/select-i
 import { SelectListItemComponent } from './select-list/select-list-item/select-list-item.component';
 import { SelectItemDirective } from './directives/select-item.directive';
 import { IconComponent } from './icon-component/icon.component';
+import { MapComponent } from './map/map.component';
 @NgModule({
   declarations: [
     SelectListComponent,
@@ -21,7 +22,8 @@ import { IconComponent } from './icon-component/icon.component';
     SelectItemComponent,
     SelectListItemComponent,
     SelectItemDirective,
-    IconComponent
+    IconComponent,
+    MapComponent,
   ],
   exports: [
     SelectListComponent,
@@ -32,7 +34,8 @@ import { IconComponent } from './icon-component/icon.component';
     SelectItemComponent,
     SelectListItemComponent,
     SelectItemDirective,
-    IconComponent
+    IconComponent,
+    MapComponent,
   ],
   imports: [CommonModule, BrowserModule, FormsModule],
 })
