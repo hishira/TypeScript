@@ -3,21 +3,18 @@ import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {CenterService} from "../../services/center.service"
 import {Center} from "../../models/center.model";
-import {Pet} from "../../models/pet.model";
 import { Icons } from 'src/app/models/icons.model';
 @Component({
   selector: 'app-shelter',
+  styleUrls: ['./shelter.component.css'],
   templateUrl: './shelter.component.html',
-  styleUrls: ['./shelter.component.css']
 })
 export class ShelterComponent implements OnInit {
   center?: Center;
+  emailPath: string = '';
   icons = Icons
-  pets?: Array<Pet>
   
-  constructor(private route: ActivatedRoute,
-    private location: Location,
-    private centerservice: CenterService) { }
+  constructor(private route: ActivatedRoute,private centerservice: CenterService) { }
 
   ngOnInit(): void {
     this.getShelterinfo();
@@ -29,8 +26,7 @@ export class ShelterComponent implements OnInit {
         .getcenterbyid(shelterid)
         .subscribe(center=>{
           this.center=center
-          console.log(center)
-          this.pets = center.pets;
+          this.emailPath=`mailto: ${center.email}`;
         })
 
   }

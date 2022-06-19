@@ -17,12 +17,19 @@
       </div>
     </div>
     <div class="shelter__contact_info">
-      ddd
+      <button type="button" class="pet__button">Check our pets</button>
+      <div class="email__info">
+       <app-icon [iconType]="icons.Email"></app-icon>
+        <a [href]="this.emailPath" class="email__info__value">
+          {{ center.email }}
+        </a>
+      </div>
     </div>
   </div>
   <hr />
   <div class="shelter__info">
     {{ center.description }}
   </div>
-  <app-shelterpets [pets]="pets"></app-shelterpets>
+  <app-map></app-map>
+  <!--<app-shelterpets [pets]="pets"></app-shelterpets>-->
 </div>
