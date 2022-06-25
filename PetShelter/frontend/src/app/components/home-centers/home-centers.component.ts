@@ -5,7 +5,7 @@ import { CenterService } from "../../services/center.service";
 @Component({
   selector: 'app-home-centers',
   templateUrl: './home-centers.component.html',
-  styleUrls: ['./home-centers.component.css']
+  styleUrls: ['./home-centers.component.scss']
 })
 export class HomeCentersComponent implements OnInit {
   centers?: Center[];

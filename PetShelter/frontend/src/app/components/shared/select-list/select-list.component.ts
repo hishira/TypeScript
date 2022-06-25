@@ -12,7 +12,7 @@ const noneFunction = () => {};
     }
   ],
   selector: 'sh-select-list',
-  styleUrls: ['./select-list.component.css'],
+  styleUrls: ['./select-list.component.scss'],
   templateUrl: './select-list.component.html',
 })
 export class SelectListComponent implements ControlValueAccessor, OnInit {

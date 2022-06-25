@@ -3,7 +3,7 @@ import { Icons, IconsValues } from "src/app/models/icons.model";
 
 @Component({
     selector: 'app-icon',
-    styleUrls: ['./icon.component.css'],
+    styleUrls: ['./icon.component.scss'],
     templateUrl: './icon.component.html'
 })
 export class IconComponent implements OnInit {

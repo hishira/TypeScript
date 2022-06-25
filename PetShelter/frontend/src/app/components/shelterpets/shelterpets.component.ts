@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { Icons } from 'src/app/models/icons.model';
 @Component({
   selector: 'app-shelterpets',
-  styleUrls: ['./shelterpets.component.css'],
+  styleUrls: ['./shelterpets.component.scss'],
   templateUrl: './shelterpets.component.html',
 })
 export class ShelterpetsComponent implements OnInit, OnChanges {

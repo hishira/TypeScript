@@ -1,5 +1,5 @@
 <div *ngIf="center">
-  <div class="shelter__header">
+  <div class="shelter__header ms-3">
     <app-icon [iconType]="icons.PetCenter"></app-icon>
     <div class="shelter__info">
       <div class="info__name">
@@ -28,8 +28,12 @@
   </div>
   <hr />
   <div class="shelter__info">
-    {{ center.description }}
+    <div class="display-6 ms-3">Center location</div>
+    <app-map></app-map>
   </div>
-  <app-map></app-map>
+  <div class="shelter__info">
+    <div class="display-6 ms-3">Description</div>
+    <span class="ms-4">{{ center.description }}</span>
+  </div>
   <!--<app-shelterpets [pets]="pets"></app-shelterpets>-->
 </div>

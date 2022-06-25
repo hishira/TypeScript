@@ -6,7 +6,7 @@ import {Center} from "../../models/center.model";
 import { Icons } from 'src/app/models/icons.model';
 @Component({
   selector: 'app-shelter',
-  styleUrls: ['./shelter.component.css'],
+  styleUrls: ['./shelter.component.scss'],
   templateUrl: './shelter.component.html',
 })
 export class ShelterComponent implements OnInit {

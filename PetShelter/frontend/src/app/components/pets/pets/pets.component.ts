@@ -7,7 +7,7 @@ import { PetFilterService } from '../../../services/pet-filter.service';
 import { PetType } from 'src/app/models/PetType.model';
 @Component({
   selector: 'pet-cats',
-  styleUrls: ['./pets.component.css'],
+  styleUrls: ['./pets.component.scss'],
   templateUrl: './pets.component.html',
 })
 export class PetsComponent implements OnInit {

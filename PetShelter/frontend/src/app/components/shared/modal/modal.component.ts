@@ -5,11 +5,12 @@ import { DocumentService } from 'src/app/services/document.service';
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css'],
+  styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnInit {
-  modalContent: Type<Component>;
+  
   componentInjector: Injector;
+  modalContent: Type<Component>;
   open: boolean = false;
 
   constructor(

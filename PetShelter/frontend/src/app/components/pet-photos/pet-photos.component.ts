@@ -11,7 +11,7 @@ import { Photo } from '../../models/photo.model';
 @Component({
   selector: 'app-pet-photos',
   templateUrl: './pet-photos.component.html',
-  styleUrls: ['./pet-photos.component.css'],
+  styleUrls: ['./pet-photos.component.scss'],
 })
 export class PetPhotosComponent implements OnInit, OnDestroy {
   @Input() petid?: number | undefined;

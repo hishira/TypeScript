@@ -3,12 +3,13 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 @Component({
     selector: 'chip',
     templateUrl: './chip.component.html',
-    styleUrls: ['./chip.component.css'],
+    styleUrls: ['./chip.component.scss'],
 })
 export class ChipComponent {
 
-    @Input() label: string;
     @Input() closable? : boolean = false
+    @Input() label: string;
+    
     @Output() closeHandle: EventEmitter<any> = new EventEmitter<any>();
     constructor(){
     }

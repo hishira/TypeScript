@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 @Component({
     selector: 'select-list-item',
-    styleUrls: ['./select-list-item.component.css'],
+    styleUrls: ['./select-list-item.component.scss'],
     templateUrl: './select-list-item.component.html',
 })
 export class SelectListItemComponent {

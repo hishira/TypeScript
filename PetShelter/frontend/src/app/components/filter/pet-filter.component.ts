@@ -10,7 +10,7 @@ import { Pet } from 'src/app/models/pet.model';
 @Component({
     selector: 'pet-filter',
     templateUrl: './pet-filter.component.html',
-    styleUrls: ['./pet-filter.component.css'],
+    styleUrls: ['./pet-filter.component.scss'],
 })
 export class PetFilter implements OnInit {
     @Output() filterEvent: EventEmitter<Map<string, (pet: Pet) => boolean>> =
