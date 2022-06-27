@@ -1,27 +1,46 @@
 .shelter__header {
-    display: flex;
-    align-items: cneter;
-    align-content: center;
-    margin-left: 1rem;
-    margin-top: 1.5rem;
-}
-.shelter__header > app-icon{
+  display: flex;
+  align-items: cneter;
+  align-content: center;
+  margin-left: 1rem;
+  margin-top: 1.5rem;
+  box-sizing: border-box;
+  padding: 0 1rem;
+  &  app-icon {
     margin: auto 0;
     fill: #bbb;
+  }
+  &  button {
+    background: none;
+    border: none;
+    padding: 0.5rem 2rem;
+    border: 0.15rem solid #bbb;
+    border-radius: 15px;
+    font-size: 16px;
+  }
+
+  &  button:hover {
+    background-color: #bbb;
+    color: white;
+    cursor: pointer;
+  }
 }
+
 .shelter__contact_info {
-    justify-self: flex-end;
-    margin-left: auto;
-    margin-right: 5rem;
-    padding: 2rem
+  justify-self: flex-end;
+  margin-left: auto;
+  margin-right: 5rem;
+  padding: 2rem;
 }
 .shelter__info {
   padding: 0.5rem 1.4rem;
   font-size: 1.1rem;
-}
-.shelter__info > * {
-  width: 100%;
-  padding: 0.3rem;
+  box-sizing: border-box;
+
+  &  * {
+    width: 100%;
+    padding: 0.3rem;
+  }
 }
 .info__name {
   font-size: 1.6rem;
@@ -41,40 +60,23 @@ hr {
   border-radius: 10px;
 }
 
-button {
-  background: none;
-  border: none;
-  padding: .5rem 2rem;
-  border: .15rem solid #bbb;
-  border-radius: 15px;
-  font-size: 16px;
-}
-
-button:hover{
-    background-color: #bbb;
-    color: white;
-    cursor: pointer;
-}
-
 .email__info {
-
- font-size: 18px;
- padding-top: 1.5rem;
- display: flex;
- justify-content: space-between;
- align-items: center;
- 
+  font-size: 18px;
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &  * {
+    display: inline-block;
+    margin: 0 0.5rem;
+  }
+  &  app-icon {
+    fill: #bbb;
+    transform: scale(0.75);
+    margin: auto;
+  }
 }
 
-.email__info > *{
-  display: inline-block;
-  margin: 0 .5rem
-}
-.email__info > app-icon  {
-  fill: #bbb;
-  transform: scale(.75);
-  margin: auto;
-}
-.pet__button{
+.email__info .email__info .pet__button {
   width: 100%;
 }
