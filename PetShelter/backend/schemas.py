@@ -17,8 +17,6 @@ class PhotoBase(BaseModel):
 
 class CenterBase(BaseModel):
     name: str
-    city: str
-    address: str
     phone: str
     description: str
     email: str
@@ -98,9 +96,27 @@ class Photo(PhotoBase):
     class Config:
         orm_mode = True
 
+class AddressBase(BaseModel):
+    city: str
+    address: str
+    country: str
+    lat: Optional[float]
+    lng: Optional[float]
 
+
+class AddressCreate(AddressBase):
+    pass
+
+
+class Address(AddressBase):
+    id: int
+    center_id: int
+
+    class Config:
+        orm_mode = True
 class Center(CenterBase):
     id: int
+    address: Address = None
 
     class Config:
         orm_mode = True
@@ -111,3 +127,5 @@ class Breed(BreedBase):
 
     class Config:
         orm_mode = True
+
+

@@ -1,4 +1,5 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Enum, text
+from email.policy import default
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, DateTime, Enum, text
 from sqlalchemy.orm import relationship
 import enum
 
@@ -102,9 +103,19 @@ class Center(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True)
-    city = Column(String)
-    address = Column(String)
-    phone = Column(String)
-    description = Column(String, default=text(""))
-    email = Column(String, default=text(""))
+    phone = Column(String, default=None)
+    description = Column(String, default=None)
+    email = Column(String, default=None)
     pet = relationship("Pet")
+    address = relationship("Address", back_populates="center")
+
+
+class Address(Base):
+    __tablename__ = 'address'
+    id = Column(Integer, primary_key=True, index=True)
+    city = Column(String, nullable=False)
+    address = Column(String, nullable=False)
+    country = Column(String, nullable=False)
+    lat = Column(Float, nullable=True)
+    lng = Column(Float, nullable=True)
+    center_id = Column(Integer, ForeignKey('centers.id'))
