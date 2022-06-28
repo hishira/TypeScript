@@ -12,8 +12,8 @@ import { Icons } from 'src/app/models/icons.model';
 export class ShelterComponent implements OnInit {
   center?: Center;
   emailPath: string = '';
+  fullAddress: string = '';
   icons = Icons
-  
   constructor(private route: ActivatedRoute,private centerservice: CenterService) { }
 
   ngOnInit(): void {
@@ -26,6 +26,7 @@ export class ShelterComponent implements OnInit {
         .getcenterbyid(shelterid)
         .subscribe(center=>{
           this.center=center
+          this.fullAddress = `${this.center.address.address}, ${this.center.address.city} ${this.center.address.country}`
           this.emailPath=`mailto: ${center.email}`;
         })
 

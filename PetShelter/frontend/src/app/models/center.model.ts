@@ -1,6 +1,7 @@
+import { Address } from "./address.models";
 import { Pet } from "./pet.model";
 export interface Center {
-    address: string;
+    address: Address;
     city: string;
     description: string,
     email: string;

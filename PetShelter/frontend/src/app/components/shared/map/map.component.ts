@@ -1,11 +1,17 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import * as L from 'leaflet';
 @Component({
   selector: 'app-map',
-  templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
+  templateUrl: './map.component.html',
 })
 export class MapComponent implements AfterViewInit {
+  @Input() lat: number = 0;
+  @Input() lng: number = 0;
+  
+  public get latlng(): [number, number] {
+    return [this.lat,this.lng];
+  }
   private map?: L.Map;
 
   constructor() {}
@@ -16,7 +22,7 @@ export class MapComponent implements AfterViewInit {
 
   private initMap(): void {
     this.map = L.map('map', {
-      center: [0, 0],
+      center: this.latlng,
       zoom: 3,
     });
     const tiles: L.TileLayer = L.tileLayer(
@@ -29,5 +35,6 @@ export class MapComponent implements AfterViewInit {
       }
     );
     tiles.addTo(this.map);
+    L.marker(this.latlng).addTo(this.map)
   }
 }
