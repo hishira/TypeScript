@@ -90,7 +90,8 @@ def getcenterinfo(db:Session,centerid:int):
     return result
 
 def get_centers(db: Session):
-    return db.query(models.Center).all()
+    return db.query(models.Center).\
+        join(models.Address,models.Center.address_id==models.Address.id).all()
 
 def create_center(db: Session,
                   newcenter: schemas.CenterCreate):

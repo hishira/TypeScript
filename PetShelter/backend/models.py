@@ -107,6 +107,7 @@ class Center(Base):
     description = Column(String, default=None)
     email = Column(String, default=None)
     pet = relationship("Pet")
+    address_id = Column(Integer, ForeignKey("address.id"))  
     address = relationship("Address", back_populates="center")
 
 
@@ -118,4 +119,4 @@ class Address(Base):
     country = Column(String, nullable=False)
     lat = Column(Float, nullable=True)
     lng = Column(Float, nullable=True)
-    center_id = Column(Integer, ForeignKey('centers.id'))
+    center=relationship('Center', back_populates='address')

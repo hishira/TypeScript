@@ -107,17 +107,14 @@ class AddressBase(BaseModel):
 class AddressCreate(AddressBase):
     pass
 
-
 class Address(AddressBase):
     id: int
-    center_id: int
-
     class Config:
         orm_mode = True
 class Center(CenterBase):
     id: int
-    address: Address = None
-
+    address_id: int
+    address: Address
     class Config:
         orm_mode = True
 
@@ -127,5 +124,6 @@ class Breed(BreedBase):
 
     class Config:
         orm_mode = True
+
 
 
