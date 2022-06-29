@@ -4,19 +4,29 @@ import { CenterService } from "../../services/center.service";
 
 @Component({
   selector: 'app-home-centers',
-  templateUrl: './home-centers.component.html',
-  styleUrls: ['./home-centers.component.scss']
+  styleUrls: ['./home-centers.component.scss'],
+  templateUrl: './home-centers.component.html'
 })
 export class HomeCentersComponent implements OnInit {
+  
   centers?: Center[];
+  fullAddress: string;
   constructor(private centerService: CenterService) { }
 
+  getFullAddress(center: Center): string{
+    return `${center.address.address}, ${center.address.city} ${center.address.country}`
+  }
+  
   ngOnInit(){
     this.getCenters();
   }
+  
   private getCenters(): void {
     this.centerService
         .getCenters()
-        .subscribe(centers => this.centers = centers)
+        .subscribe(centers => {
+          this.centers = centers;
+          
+        })
   }
 }

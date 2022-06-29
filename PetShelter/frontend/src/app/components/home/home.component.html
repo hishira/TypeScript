@@ -3,35 +3,35 @@
     <div class="info__image">
       <img class="info__image" src="{{ imgsrc }}" width="auto" height="500px" />
       <span class="info__span">{{ title }}</span>
-      <span class="info__span_ver">{{ subtitle }}</span>
+      <span class="info__span_ver mt-2">{{ subtitle }}</span>
     </div>
     <div class="info__button__min">
       <div class="square" routerLink="pets/dogs">
-        <img class="min_img" src="/assets/dog.svg" />
-        <span class="info__min__span">Dogs</span>
+        <img class="min_img mb-3" src="/assets/dog.svg" />
+        <span class="info__min__span mt-5">Dogs</span>
       </div>
       <div class="square" routerLink="pets/cats">
-        <img class="min_img" src="/assets/cat.svg" />
-        <span class="info__min__span">Cats</span>
+        <img class="min_img mb-3" src="/assets/cat.svg" />
+        <span class="info__min__span mt-5">Cats</span>
       </div>
       <div class="square">
-        <img class="min_img" src="/assets/last.svg" />
-        <span class="info__min__span">Other pets</span>
+        <img class="min_img mb-3" src="/assets/last.svg" />
+        <span class="info__min__span mt-5">Other pets</span>
       </div>
     </div>
   </article>
   <div class="info__button">
     <div class="square" routerLink="pets/dogs">
       <img class="m_img" src="/assets/dog.svg" />
-      Dogs
+      <span class="info__min__span mt-5">Dogs</span>
     </div>
-    <div class="square">
-      <img class="m_img" src="/assets/cat.svg" routerLink="pets/cats" />
-      Cats
+    <div class="square" routerLink="pets/cats">
+      <img class="m_img" src="/assets/cat.svg" />
+      <span class="info__min__span mt-5">Cats</span>
     </div>
     <div class="square">
       <img class="m_img" src="/assets/last.svg" />
-      Other pets
+      <span class="info__min__span mt-5"> Other pets</span>
     </div>
   </div>
   <app-home-centers></app-home-centers>
