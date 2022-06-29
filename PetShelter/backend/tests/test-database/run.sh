@@ -23,7 +23,11 @@ then echo "pet gender created succesfull"
 else
     echo "Something go wrong with pet gender adding to test database"
 fi
-
+if $(sqlite3 '../../test.db' < pet-address.create.sql 2> /dev/null)
+then echo "Address create successfull"
+else
+    echo "Something goes wrong while address create"
+fi
 if $(sqlite3 '../../test.db' < pet-center.create.sql 2> /dev/null)
 then echo "pet ceters created succesfull"
 else
