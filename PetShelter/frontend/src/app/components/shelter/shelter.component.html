@@ -1,24 +1,26 @@
 <div *ngIf="center">
-  <div class="shelter__header">
-    <app-icon [iconType]="icons.PetCenter"></app-icon>
-    <div class="shelter__info">
-      <div class="info__name">
-        {{ center.name }}
-      </div>
-      <div class="info__address">
-        <span class="bold">Adress:</span>
-        <span>
-          {{ fullAddress }}
-        </span>
-      </div>
-      <div class="info__phone">
-        <span class="bold">Phone: </span><span> {{ center.phone }}</span>
+  <div class="shelter__header d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <div class="d-flex justify-content-center align-items-center">
+      <app-icon [iconType]="icons.PetCenter"></app-icon>
+      <div class="shelter__info">
+        <div class="info__name">
+          {{ center.name }}
+        </div>
+        <div class="info__address">
+          <span class="bold">Adress:</span>
+          <span>
+            {{ fullAddress }}
+          </span>
+        </div>
+        <div class="info__phone">
+          <span class="bold">Phone: </span><span> {{ center.phone }}</span>
+        </div>
       </div>
     </div>
-    <div class="shelter__contact_info">
+    <div class="shelter__contact_info d-flex flex-column flex-grow-1 flex-md-grow-0 justify-content-sm-center align-items-sm-center">
       <button type="button" class="pet__button btn">Check our pets</button>
       <div class="email__info">
-       <app-icon [iconType]="icons.Email"></app-icon>
+        <app-icon [iconType]="icons.Email"></app-icon>
         <a [href]="this.emailPath" class="email__info__value">
           {{ center.email }}
         </a>
@@ -28,7 +30,10 @@
   <hr />
   <div class="shelter__info">
     <div class="display-6 ms-3">Center location</div>
-    <app-map [lat]="this.center.address.lat" [lng]="this.center.address.lng"></app-map>
+    <app-map
+      [lat]="this.center.address.lat"
+      [lng]="this.center.address.lng"
+    ></app-map>
   </div>
   <div class="shelter__info">
     <div class="display-6">Description</div>

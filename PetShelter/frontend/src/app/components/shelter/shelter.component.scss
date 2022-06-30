@@ -28,8 +28,6 @@
 
 .shelter__contact_info {
   justify-self: flex-end;
-  margin-left: auto;
-  margin-right: 5rem;
   padding: 2rem;
 }
 .shelter__info {
@@ -64,7 +62,7 @@ hr {
   font-size: 18px;
   padding-top: 1.5rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   &  * {
     display: inline-block;
@@ -73,7 +71,6 @@ hr {
   &  app-icon {
     fill: #bbb;
     transform: scale(0.75);
-    margin: auto;
   }
 }
 
