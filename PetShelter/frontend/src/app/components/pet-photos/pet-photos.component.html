@@ -1,23 +1,53 @@
-<article *ngIf="photos" class="photos" [class.round]='!more'>
-  <div class="left" *ngIf="more" (click)="leftImage()"></div>
+<article
+  *ngIf="photos && !more; else moreTemplate"
+  class="photos"
+  [class.round]="!more"
+>
   <ng-content></ng-content>
   <img
-    [class.moreimg]="more === true"
     [class.full-height]="more === false"
     class="imgappear"
     src="{{ photos[photoindex].url }}"
     height="200"
     alt=""
     #imgelement
-    [class.round]='!more'
+    [class.round]="!more"
   />
-  <div class="petschoices" *ngIf="more">
-    <span
-      *ngFor="let i of photos; let index = index"
-      class="circle"
-      [class.circle__selected]="photoindex === index"
-      (click)="circleClick(index)"
-    ></span>
-  </div>
-  <div class="right" *ngIf="more" (click)="rightImage()"></div>
 </article>
+<ng-template #moreTemplate>
+  <div class="d-flex flex-grow-1 flex-fill align-items-center justify-content-center">
+    <div
+      id="carouselExampleControls"
+      class="carousel slide carousel-fade"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-inner">
+        <div
+          class="carousel-item"
+          [class.active]="i === 0"
+          *ngFor="let photo of photos; let i = index"
+        >
+          <img src="{{ photos[i].url }}" class="d-block w-auto h-auto" />
+        </div>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleControls"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

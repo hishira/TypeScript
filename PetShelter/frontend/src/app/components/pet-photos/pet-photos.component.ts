@@ -14,14 +14,17 @@ import { Photo } from '../../models/photo.model';
   styleUrls: ['./pet-photos.component.scss'],
 })
 export class PetPhotosComponent implements OnInit, OnDestroy {
-  @Input() petid?: number | undefined;
-  @Input() more?: boolean;
+  
   @ViewChild('imgelement', { static: false }) imageelement?: ElementRef;
+  
+  @Input() more?: boolean;
+  @Input() petid?: number | undefined;
 
-  photos?: Array<Photo>;
   photoindex: number = 0;
+  photos: Array<Photo> = [];
   private timeout: NodeJS.Timer | null = null;
   private timer: NodeJS.Timer | null = null;
+  
   constructor(private photoservice: PhotoService) {}
 
   ngOnInit(): void {
