@@ -37,7 +37,8 @@ class PetType(Base):
                    default=False,
                    server_default=expression.false(),
                    nullable=False)
-    pet = relationship("Pet")
+    
+    pet = relationship("Pet", back_populates="petType")
     breed = relationship("Breed")
 
 
@@ -47,7 +48,8 @@ class Breed(Base):
     id = Column(Integer, primary_key=True, index=True)
     value = Column(String, unique=True)
     pettype_id = Column(Integer, ForeignKey("pettype.id"))
-    pet = relationship("Pet")
+    
+    pet = relationship("Pet", back_populate="breed")
 
 
 class PetSize(Base):
@@ -55,7 +57,8 @@ class PetSize(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     value = Column(String, unique=True)
-    pet = relationship("Pet")
+    
+    pet = relationship("Pet", back_populate="size")
 
 
 class PetGender(Base):
@@ -63,7 +66,8 @@ class PetGender(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     value = Column(String, unique=True)
-    pet = relationship("Pet")
+    
+    pet = relationship("Pet", back_populate="gender")
 
 
 class Pet(Base):
@@ -73,20 +77,19 @@ class Pet(Base):
     name = Column(String)
     weight = Column(Integer)
     brithdate = Column(DateTime)
-    pettype_id = Column(Integer, ForeignKey("pettype.id"))
     short_description = Column(String)
     description = Column(String)
-
-    breed_id = Column(
-        Integer, ForeignKey("breeds.id")
-    )  #Column(Enum(PetType, values_callable=lambda x: [str(e.value) for e in PetType]))
-    size_id = Column(
-        Integer, ForeignKey("petsize.id")
-    )  #Column(Enum(PetSize, values_callable=lambda x: [str(e.value) for e in PetSize]))
-    gender_id = Column(
-        Integer, ForeignKey("gender.id")
-    )  #Column(Enum(PetGender, values_callable=lambda x: [str(e.value) for e in PetGender]))
+    pettype_id = Column(Integer, ForeignKey("pettype.id"))
+    breed_id = Column(Integer, ForeignKey("breeds.id"))
+    size_id = Column(Integer, ForeignKey("petsize.id"))
+    gender_id = Column(Integer, ForeignKey("gender.id"))
     center_id = Column(Integer, ForeignKey("centers.id"))
+
+    petType = relationship("PetType", back_populates="pet") 
+    breed = relationship("Breed", back_populates="pet")
+    size = relationship("PetSize", back_populates="pet")
+    gender = relationship("PetGender",back_populates="pet")
+    center = relationship("Center", back_populates="pet")
 
 
 class Photo(Base):
@@ -106,8 +109,9 @@ class Center(Base):
     phone = Column(String, default=None)
     description = Column(String, default=None)
     email = Column(String, default=None)
-    pet = relationship("Pet")
-    address_id = Column(Integer, ForeignKey("address.id"))  
+    address_id = Column(Integer, ForeignKey("address.id"))
+    
+    pet = relationship("Pet",back_populates="center")
     address = relationship("Address", back_populates="center")
 
 
@@ -119,4 +123,5 @@ class Address(Base):
     country = Column(String, nullable=False)
     lat = Column(Float, nullable=True)
     lng = Column(Float, nullable=True)
-    center=relationship('Center', back_populates='address')
+    
+    center = relationship('Center', back_populates='address')

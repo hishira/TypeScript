@@ -125,5 +125,5 @@ def get_photos_bypet(db: Session, petid: int):
 def getPossiblePetFilter(db: Session):
     return db.query(models.Pet, models.Breed).join(models.Breed).with_entities(models.Pet.breed_id, models.Breed.value)
 
-def getPetById(db: Session, petid: int) -> List[schemas.Pet]:
-    return db.query(models.Pet).filter(models.Pet.id == petid).all()
+def getPetById(db: Session, petid: int) -> schemas.Pet:
+    return db.query(models.Pet).filter(models.Pet.id == petid).one_or_none()

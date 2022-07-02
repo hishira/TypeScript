@@ -227,7 +227,7 @@ def test_pet_get_by_id():
 
 def test_pet_get_by_id_values():
     response = client.get(f"/pet/byid/{1}")
-    response_data = response.json()[0]
+    response_data = response.json()
     assert 'id' in response_data
     assert 'name' in response_data
     assert 'weight' in response_data

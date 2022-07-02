@@ -33,6 +33,6 @@ def getAllDogs(db: Session=Depends(getdb)):
 def getAllPossibleFilter(db: Session=Depends(getdb)):
     return crud.getPossiblePetFilter(db)
 
-@router.get("/byid/{id}", response_model=List[schemas.Pet])
+@router.get("/byid/{id}", response_model=schemas.Pet)
 def getPetById(id: int,db: Session=Depends(getdb)):
     return crud.getPetById(db,id)
