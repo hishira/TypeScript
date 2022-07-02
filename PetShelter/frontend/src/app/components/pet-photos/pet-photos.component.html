@@ -6,7 +6,7 @@
   <ng-content></ng-content>
   <img
     [class.full-height]="more === false"
-    class="imgappear"
+    class="imgappear img-card"
     src="{{ photos[photoindex].url }}"
     height="200"
     alt=""
@@ -15,7 +15,7 @@
   />
 </article>
 <ng-template #moreTemplate>
-  <div class="d-flex flex-grow-1 flex-fill align-items-center justify-content-center">
+  <div class="d-flex mx-auto w-50 h-50 px-auto">
     <div
       id="carouselExampleControls"
       class="carousel slide carousel-fade"
@@ -27,7 +27,7 @@
           [class.active]="i === 0"
           *ngFor="let photo of photos; let i = index"
         >
-          <img src="{{ photos[i].url }}" class="d-block w-auto h-auto" />
+          <img src="{{ photos[i].url }}" class="" />
         </div>
       </div>
       <button

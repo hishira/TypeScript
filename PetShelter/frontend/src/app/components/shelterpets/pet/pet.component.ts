@@ -1,23 +1,23 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Pet } from '../../../models/pet.model';
 import { ActivatedRoute, Router } from '@angular/router'; 
+import { PetService } from 'src/app/services/pet.service';
 @Component({
   selector: 'app-pet',
-  templateUrl: './pet.component.html',
   styleUrls: ['./pet.component.css'],
+  templateUrl: './pet.component.html',
 })
 export class PetComponent implements OnInit {
-  @Input() pet?: number | undefined;
-  @Output() backEmit: EventEmitter<string> = new EventEmitter<string>();
   
-  constructor( private activateRoute: ActivatedRoute,
-        private router: Router) {
+  @Output() backEmit: EventEmitter<string> = new EventEmitter<string>();
+  @Input() petId: number;
+  
+  pet: Pet;
+  constructor( 
+    private activateRoute: ActivatedRoute,
+    private router: Router,
+    private petService: PetService) {
 
-  }
-
-  ngOnInit(): void {
-    const id = this.activateRoute.snapshot.params['id'];
-    this.pet = id;
   }
 
   backPage() {
@@ -27,4 +27,15 @@ export class PetComponent implements OnInit {
     this.router.navigate([`/pets/${pettype}`])
     
   }
+  
+  ngOnInit(): void {
+    const id = this.activateRoute.snapshot.params['id'];
+    this.petId = id;
+    this.petService
+    .getPetById(this.petId)
+    .subscribe((pet:Pet)=>{
+      this.pet = pet;
+    })
+  }
+
 }

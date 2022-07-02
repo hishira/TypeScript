@@ -1,3 +1,6 @@
+:host{
+  background-color: #bfbfbf;
+}
 article {
   width: 100%;
   position: relative;
@@ -9,14 +12,13 @@ article {
   user-select: none; /* Non-prefixed version, currently
                         supported by Chrome, Edge, Opera and Firefox */
 }
-.round{
+.round {
   border-radius: 10px;
 }
 img {
   object-fit: fill;
-  width: 100%;
 }
-.full-height{
+.full-height {
   height: 100%;
 }
 .left {
@@ -24,8 +26,9 @@ img {
   left: 0;
   z-index: 100;
 }
-.left:hover, .right:hover{
-  opacity: .5;
+.left:hover,
+.right:hover {
+  opacity: 0.5;
 }
 .left::before {
   content: " ";
@@ -38,7 +41,7 @@ img {
   background-color: slategray;
   transform: rotateZ(45deg);
 }
-.left::after{
+.left::after {
   content: " ";
   position: absolute;
   top: calc(50% - 13px);
@@ -49,7 +52,8 @@ img {
   background-color: slategray;
   transform: rotateZ(-45deg);
 }
-.right::after, .right::before{
+.right::after,
+.right::before {
   content: " ";
   position: absolute;
   top: calc(50%);
@@ -59,16 +63,23 @@ img {
   border: 0.1rem solid slategray;
   background-color: slategray;
 }
-.right::after{
+.right::after {
   transform: rotateZ(-45deg);
 }
-.right::before{
+.right::before {
   transform: rotateZ(45deg);
   top: calc(50% - 13px);
 }
 .right {
   position: absolute;
   right: 0;
+}
+.carousel-item {
+  & > img {
+   width: 800px;
+   height: 600px;
+   object-fit: cover;
+  }
 }
 .left,
 .right {
@@ -113,16 +124,13 @@ img {
   align-items: center;
 }
 @media (min-width: 400px) {
-  img {
-    object-fit: fill;
-  }
   .moreimg {
     object-fit: scale-down;
     height: 30rem;
   }
 }
 @media (min-width: 1000px) {
-  img {
+  .img-card {
     max-width: 100%;
     object-fit: cover;
   }

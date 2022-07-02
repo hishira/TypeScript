@@ -1,6 +1,22 @@
-<article *ngIf="pet">
+<article *ngIf="pet && petId">
   <nav>
     <a (click)="backPage()">Back</a>
   </nav>
-  <app-pet-photos [petid]="pet" [more]="true"></app-pet-photos>
+  <app-pet-photos [petid]="petId" [more]="true"></app-pet-photos>
+  <div class="row gx-5 justify-content-center mt-3">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title display-6">
+            {{ pet.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card">
+        <div class="card-body">HI</div>
+      </div>
+    </div>
+  </div>
 </article>
