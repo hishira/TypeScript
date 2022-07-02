@@ -1,3 +1,4 @@
+from typing import List
 from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -123,3 +124,6 @@ def get_photos_bypet(db: Session, petid: int):
 
 def getPossiblePetFilter(db: Session):
     return db.query(models.Pet, models.Breed).join(models.Breed).with_entities(models.Pet.breed_id, models.Breed.value)
+
+def getPetById(db: Session, petid: int) -> List[schemas.Pet]:
+    return db.query(models.Pet).filter(models.Pet.id == petid).all()

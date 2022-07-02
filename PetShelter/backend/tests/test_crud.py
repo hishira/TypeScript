@@ -219,3 +219,18 @@ def test_pet_gender_value():
     response_value = response.json()[0]
     assert 'id' in response_value
     assert 'value' in response_value
+
+def test_pet_get_by_id():
+    response = client.get(f"/pet/byid/{1}")
+    response_stat = response.status_code;
+    assert response_stat == 200
+
+def test_pet_get_by_id_values():
+    response = client.get(f"/pet/byid/{1}")
+    response_data = response.json()[0]
+    assert 'id' in response_data
+    assert 'name' in response_data
+    assert 'weight' in response_data
+    assert 'brithdate' in response_data
+    assert 'short_description' in response_data
+    assert 'description' in response_data
