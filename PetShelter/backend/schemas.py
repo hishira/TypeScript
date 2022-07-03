@@ -2,6 +2,8 @@ from typing import List, Optional
 from pydantic import BaseModel
 from datetime import datetime
 
+from backend.models import PetSize
+
 
 class PetBase(BaseModel):
     name: str
@@ -81,21 +83,6 @@ class Size(SizeBase):
         orm_mode = True
 
 
-class Pet(PetCreate):
-    id: int
-    center_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class Photo(PhotoBase):
-    id: int
-    pet_id: int
-
-    class Config:
-        orm_mode = True
-
 class AddressBase(BaseModel):
     city: str
     address: str
@@ -107,14 +94,19 @@ class AddressBase(BaseModel):
 class AddressCreate(AddressBase):
     pass
 
+
 class Address(AddressBase):
     id: int
+
     class Config:
         orm_mode = True
+
+
 class Center(CenterBase):
     id: int
     address_id: int
     address: Address
+
     class Config:
         orm_mode = True
 
@@ -126,4 +118,23 @@ class Breed(BreedBase):
         orm_mode = True
 
 
+class Pet(PetCreate):
+    id: int
+    center_id: int
 
+    center: Center
+    breed: Breed
+    gender: Gender
+    size: Size
+    petType: PetType
+
+    class Config:
+        orm_mode = True
+
+
+class Photo(PhotoBase):
+    id: int
+    pet_id: int
+
+    class Config:
+        orm_mode = True

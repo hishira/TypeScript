@@ -49,7 +49,7 @@ class Breed(Base):
     value = Column(String, unique=True)
     pettype_id = Column(Integer, ForeignKey("pettype.id"))
     
-    pet = relationship("Pet", back_populate="breed")
+    pet = relationship("Pet", back_populates="breed")
 
 
 class PetSize(Base):
@@ -58,7 +58,7 @@ class PetSize(Base):
     id = Column(Integer, primary_key=True, index=True)
     value = Column(String, unique=True)
     
-    pet = relationship("Pet", back_populate="size")
+    pet = relationship("Pet", back_populates="size")
 
 
 class PetGender(Base):
@@ -67,7 +67,7 @@ class PetGender(Base):
     id = Column(Integer, primary_key=True, index=True)
     value = Column(String, unique=True)
     
-    pet = relationship("Pet", back_populate="gender")
+    pet = relationship("Pet", back_populates="gender")
 
 
 class Pet(Base):
