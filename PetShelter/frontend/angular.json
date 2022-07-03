@@ -29,10 +29,17 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./src/styles/global"
+              ]
+            },
             "styles": [
               "./node_modules/leaflet/dist/leaflet.css",
               "src/styles.scss",
-              "./node_modules/bootstrap/scss/bootstrap.scss"
+              "./node_modules/bootstrap/scss/bootstrap.scss",
+              "./node_modules/bootstrap-icons/font/bootstrap-icons.scss",
+              "./src/styles/global/global.scss"
             ],
             "scripts": [
               "./node_modules/bootstrap/dist/js/bootstrap.min.js",

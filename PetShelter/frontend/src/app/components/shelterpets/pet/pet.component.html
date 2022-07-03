@@ -12,7 +12,9 @@
           </div>
           <div class="card-subtitle mb-2 text-muted">
             <span>{{ pet.breed.value }}</span>
-            <span class="badge rounded-pill bg-light text-dark"> {{ fullAddress }}</span>
+            <span class="badge rounded-pill bg-light text-dark">
+              {{ fullAddress }}</span
+            >
           </div>
           <hr class="bg-light" />
           <div class="d-flex justify-content-between w-25 mt-2 mb-2">
@@ -24,12 +26,46 @@
             }}</span>
           </div>
           <hr clas="bg-light" />
+          <div class="row">
+            <div class="col-12">
+              <span class="display-6">Meet {{ pet.name }}</span>
+            </div>
+            <div class="col-12 mt-3">
+              {{pet.description}}
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="col-4">
       <div class="card">
-        <div class="card-body">HI</div>
+        <div class="card-body">
+          <div class="card-title text-center fs-5">
+            Considering {{ pet.name }} for adoption?
+          </div>
+          <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="button" class="btn btn-light btn-lg text-dark">
+              Start you adoption
+            </button>
+            <button type="button" class="btn btn-light btn-lg text-dark">
+              Read FAQs
+            </button>
+          </div>
+        </div>
+        <div class="card-footer p-0">
+          <div class="btn-group btn-group-lg w-100" role="group">
+            <button type="button" class="btn bt-primary w-50 p-2">
+              Sponsor
+            </button>
+            <button
+              type="button"
+              class="btn bt-primary w-50 d-flex justify-content-center align-content-center p-2"
+            >
+              <i class="bi bi-heart align-self-center"></i>
+              <span class="ms-2 mb-1">Favorite</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -5,7 +5,7 @@ import { PetService } from 'src/app/services/pet.service';
 import { getFullAddress } from 'src/app/models/address.models';
 @Component({
   selector: 'app-pet',
-  styleUrls: ['./pet.component.css'],
+  styleUrls: ['./pet.component.scss'],
   templateUrl: './pet.component.html',
 })
 export class PetComponent implements OnInit {
