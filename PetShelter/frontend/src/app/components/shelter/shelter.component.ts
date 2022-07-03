@@ -4,6 +4,7 @@ import {Location} from "@angular/common";
 import {CenterService} from "../../services/center.service"
 import {Center} from "../../models/center.model";
 import { Icons } from 'src/app/models/icons.model';
+import { getFullAddress } from 'src/app/models/address.models';
 @Component({
   selector: 'app-shelter',
   styleUrls: ['./shelter.component.scss'],
@@ -24,9 +25,9 @@ export class ShelterComponent implements OnInit {
     let shelterid:number = Number(this.route.snapshot.paramMap.get("id"));
     this.centerservice
         .getcenterbyid(shelterid)
-        .subscribe(center=>{
+        .subscribe((center: Center)=>{
           this.center=center
-          this.fullAddress = `${this.center.address.address}, ${this.center.address.city} ${this.center.address.country}`
+          this.fullAddress = getFullAddress(center.address);
           this.emailPath=`mailto: ${center.email}`;
         })
 

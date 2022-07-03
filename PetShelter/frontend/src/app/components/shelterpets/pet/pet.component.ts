@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Pet } from '../../../models/pet.model';
 import { ActivatedRoute, Router } from '@angular/router'; 
 import { PetService } from 'src/app/services/pet.service';
+import { getFullAddress } from 'src/app/models/address.models';
 @Component({
   selector: 'app-pet',
   styleUrls: ['./pet.component.css'],
@@ -12,6 +13,7 @@ export class PetComponent implements OnInit {
   @Output() backEmit: EventEmitter<string> = new EventEmitter<string>();
   @Input() petId: number;
   
+  fullAddress: string;
   pet: Pet;
   constructor( 
     private activateRoute: ActivatedRoute,
@@ -35,6 +37,7 @@ export class PetComponent implements OnInit {
     .getPetById(this.petId)
     .subscribe((pet:Pet)=>{
       this.pet = pet;
+      this.fullAddress = getFullAddress(this.pet.center.address);
     })
   }
 

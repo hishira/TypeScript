@@ -10,6 +10,20 @@
           <div class="card-title display-6">
             {{ pet.name }}
           </div>
+          <div class="card-subtitle mb-2 text-muted">
+            <span>{{ pet.breed.value }}</span>
+            <span class="badge rounded-pill bg-light text-dark"> {{ fullAddress }}</span>
+          </div>
+          <hr class="bg-light" />
+          <div class="d-flex justify-content-between w-25 mt-2 mb-2">
+            <span class="badge bg-light text-dark rounded-pill fs-6">{{
+              pet.size.value
+            }}</span>
+            <span class="badge bg-light text-dark rounded-pill fs-6 ms-3">{{
+              pet.gender.value
+            }}</span>
+          </div>
+          <hr clas="bg-light" />
         </div>
       </div>
     </div>
