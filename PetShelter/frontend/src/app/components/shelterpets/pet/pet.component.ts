@@ -3,6 +3,8 @@ import { Pet } from '../../../models/pet.model';
 import { ActivatedRoute, Router } from '@angular/router'; 
 import { PetService } from 'src/app/services/pet.service';
 import { getFullAddress } from 'src/app/models/address.models';
+import { ModalService } from 'src/app/services/modal.service';
+import { LoginComponent } from '../../login/login.component';
 @Component({
   selector: 'app-pet',
   styleUrls: ['./pet.component.scss'],
@@ -18,7 +20,9 @@ export class PetComponent implements OnInit {
   constructor( 
     private activateRoute: ActivatedRoute,
     private router: Router,
-    private petService: PetService) {
+    private petService: PetService,
+    private modalService: ModalService
+    ) {
 
   }
 
@@ -30,6 +34,10 @@ export class PetComponent implements OnInit {
     
   }
   
+  loginHandle():void{
+    this.modalService.open(LoginComponent, {});
+  }
+
   ngOnInit(): void {
     const id = this.activateRoute.snapshot.params['id'];
     this.petId = id;

@@ -1,0 +1,32 @@
+<div
+  class="row-cols-2 d-flex align-items-center justify-content-center flex-column p-2 mt-3"
+  [formGroup]="form"
+>
+  <div class="col">
+    <label class="for-label">Login/Email</label>
+    <input
+      type="email"
+      class="form-control"
+      placeholder="example@email.com"
+      formControlName="login"
+    />
+  </div>
+  <div class="col mt-3">
+    <label class="for-label">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      placeholder="example@email.com"
+      formControlName="password"
+    />
+  </div>
+  <div class="d-grid gap-2 col-6 mx-auto mt-3">
+    <button class="btn btn-light btn-lg text-dark">Login</button>
+  </div>
+  <a href="#" class="d-inline-block mx-auto text-center mt-3"
+    >Forgot password</a
+  >
+  <div class="d-inline-block mx-auto text-center mt-4">
+    <span>Need an account? <a href=""> Sign up</a></span>
+  </div>
+</div>

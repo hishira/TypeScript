@@ -4,8 +4,8 @@ import { ModalService } from 'src/app/services/modal.service';
 import { DocumentService } from 'src/app/services/document.service';
 @Component({
   selector: 'app-modal',
-  templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
+  templateUrl: './modal.component.html',
 })
 export class ModalComponent implements OnInit {
   
@@ -26,7 +26,7 @@ export class ModalComponent implements OnInit {
       });
     this.modalService.checkDialogOpen().subscribe((value: boolean) => {
       this.open = value;
-      if(this.open === true) {
+      if(this.open) {
         this.documentService.changeTagCssProperty('body', 'overflow-y', 'scroll');
       } else {
         this.documentService.changeTagCssProperty('body', 'overflow-y', 'auto');

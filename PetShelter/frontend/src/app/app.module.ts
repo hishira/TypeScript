@@ -16,6 +16,7 @@ import { PetsComponent } from './components/pets/pets/pets.component';
 import { PetFilter } from './components/filter/pet-filter.component';
 import {SharedModule} from "./components/shared/shared.module"
 import { CommonModule } from '@angular/common';
+import { LoginComponent } from './components/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +30,7 @@ import { CommonModule } from '@angular/common';
     PetComponent,
     PetsComponent,
     PetFilter,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

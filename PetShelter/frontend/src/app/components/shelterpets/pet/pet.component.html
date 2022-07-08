@@ -31,7 +31,7 @@
               <span class="display-6">Meet {{ pet.name }}</span>
             </div>
             <div class="col-12 mt-3">
-              {{pet.description}}
+              {{ pet.description }}
             </div>
           </div>
         </div>
@@ -44,7 +44,11 @@
             Considering {{ pet.name }} for adoption?
           </div>
           <div class="d-grid gap-2 col-6 mx-auto">
-            <button type="button" class="btn btn-light btn-lg text-dark">
+            <button
+              type="button"
+              (click)="loginHandle()"
+              class="btn btn-light btn-lg text-dark"
+            >
               Start you adoption
             </button>
             <button type="button" class="btn btn-light btn-lg text-dark">
