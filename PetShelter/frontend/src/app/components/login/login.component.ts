@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Form, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ModalService } from "src/app/services/modal.service";
+import { SignUpComponent } from "../signup/signup.component";
 
 @Component({
     selector: 'app-login',
@@ -9,11 +11,18 @@ import { Form, FormBuilder, FormGroup, Validators } from "@angular/forms";
 export class LoginComponent implements OnInit{
 
     form: FormGroup;
-    constructor(private formBuilder: FormBuilder){}
+    constructor(
+        private formBuilder: FormBuilder,
+        private modalService: ModalService,
+        ){}
     ngOnInit(): void {
         this.form = this.formBuilder.group({
             login: ['',Validators.required],
             password: ['',Validators.required]
         })
+    }
+
+    signUp(){
+        this.modalService.changeBodycontent(SignUpComponent,{});
     }
 }

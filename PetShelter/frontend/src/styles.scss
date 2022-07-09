@@ -3,6 +3,11 @@
 body{
     margin: 0;
     padding: 0;
+    button {
+      &:hover {
+        background-color: $base-hover-color;
+      }
+    }
 }
 
 .app-button{
@@ -18,3 +23,4 @@ body{
       border: none;
     } 
 }
+

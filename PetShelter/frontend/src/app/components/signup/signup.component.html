@@ -1,0 +1,82 @@
+<ng-container [formGroup]="form">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <label class="for-label">First name</label>
+        <input
+          type="text"
+          placeholder="John"
+          class="form-control"
+          formControlName="name"
+        />
+      </div>
+      <div class="col">
+        <label class="for-label">Second name</label>
+        <input
+          type="text"
+          placeholder="Joe"
+          class="form-control"
+          formControlName="lastName"
+        />
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <label class="for-label">Country</label>
+        <input
+          type="text"
+          placeholder="Country"
+          class="form-control"
+          formControlName="country"
+        />
+      </div>
+      <div class="col">
+        <label class="for-label">Code</label>
+        <input
+          type="text"
+          placeholder="Code"
+          class="form-control"
+          formControlName="countryCode"
+        />
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <label class="for-label">Email</label>
+        <input
+          type="email"
+          placeholder="example@example.com"
+          class="form-control"
+          formControlName="email"
+        />
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <label class="for-label">Password</label>
+        <input
+          type="password"
+          placeholder="****"
+          class="form-control"
+          formControlName="password"
+        />
+      </div>
+      <div class="col">
+        <label class="for-label">Confirm password</label>
+        <input
+          type="password"
+          placeholder="****"
+          class="form-control"
+          formControlName="confirmPassword"
+        />
+      </div>
+    </div>
+    <div class="d-grid gap-2 col-6 mx-auto mt-3">
+      <button class="btn btn-light btn-lg text-dark">Sign up</button>
+    </div>
+
+    <div class="d-inline-block mx-auto text-center mt-4 d-flex align-items-center justify-content-center" (click)="login()">
+        <span>You have an account? <a href="" (click)="$event.preventDefault()"> Login</a></span>
+      </div>
+  </div>
+</ng-container>

@@ -26,7 +26,10 @@
   <a href="#" class="d-inline-block mx-auto text-center mt-3"
     >Forgot password</a
   >
-  <div class="d-inline-block mx-auto text-center mt-4">
-    <span>Need an account? <a href=""> Sign up</a></span>
+  <div class="d-inline-block mx-auto text-center mt-4" (click)="signUp()">
+    <span>
+      Need an account?
+      <a href="" (click)="$event.preventDefault()"> Sign up</a>
+    </span>
   </div>
 </div>

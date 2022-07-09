@@ -1,0 +1,6 @@
+@import "global";
+button {
+  &:hover {
+    background-color: $base-hover-color;
+  }
+}
