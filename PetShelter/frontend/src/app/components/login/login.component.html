@@ -23,9 +23,9 @@
   <div class="d-grid gap-2 col-6 mx-auto mt-3">
     <button class="btn btn-light btn-lg text-dark">Login</button>
   </div>
-  <a href="#" class="d-inline-block mx-auto text-center mt-3"
-    >Forgot password</a
-  >
+  <div class="d-inline-block mx-auto text-center mt-3" (click)="forgetPassword()">
+    <a href="" (click)="$event.preventDefault()">Forgot password</a>
+  </div>
   <div class="d-inline-block mx-auto text-center mt-4" (click)="signUp()">
     <span>
       Need an account?
