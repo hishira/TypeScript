@@ -43,9 +43,9 @@ export class PetFilter implements OnInit {
     ) {
         this.filterForm = this.formBuilder.group({
             breed_id: [0],
+            el: [[]],
             gender_id: [0],
             size_id: [0],
-            el: [[]],
         });
         this.filterForm
             .get('el')
