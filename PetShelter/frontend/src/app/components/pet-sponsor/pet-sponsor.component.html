@@ -1,4 +1,17 @@
-<div class="row-cols-2 gx-5 justify-content-center mt-3 me-0">
-  <div class="col">Pet info</div>
-  <div class="col"></div>
-</div>
+<ng-container *ngIf="pet">
+  <div class="row-cols-2 gx-5 p-3 justify-content-center mt-3 me-0">
+    <div class="col">
+      <div class="card border-light mb-3">
+        <div class="card-header">
+          <span class="display-6"> Support {{ pet.name }}</span>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title pointer-event" [routerLink]="[shelterLink]">
+            {{ fullAddress }}
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="col"></div>
+  </div>
+</ng-container>
