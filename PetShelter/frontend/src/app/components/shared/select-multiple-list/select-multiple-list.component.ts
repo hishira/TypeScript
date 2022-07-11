@@ -11,7 +11,7 @@ const noneFunction = () => {};
     },
   ],
   selector: 'app-select-multiple-list',
-  styleUrls: ['./select-multiple-list.component.css'],
+  styleUrls: ['./select-multiple-list.component.scss'],
   templateUrl: './select-multiple-list.component.html',
 })
 export class SelectMultipleListComponent implements ControlValueAccessor {

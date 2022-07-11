@@ -3,7 +3,7 @@
     <a (click)="backPage()">Back</a>
   </nav>
   <app-pet-photos [petid]="petId" [more]="true"></app-pet-photos>
-  <div class="row gx-5 justify-content-center mt-3">
+  <div class="row gx-5 justify-content-center mt-3 me-0">
     <div class="col-6">
       <div class="card">
         <div class="card-body">
@@ -58,7 +58,7 @@
         </div>
         <div class="card-footer p-0">
           <div class="btn-group btn-group-lg w-100" role="group">
-            <button type="button" class="btn bt-primary w-50 p-2">
+            <button type="button" class="btn bt-primary w-50 p-2" (click)="petSponsor()">
               Sponsor
             </button>
             <button

@@ -18,6 +18,8 @@ import {SharedModule} from "./components/shared/shared.module"
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/signup/signup.component';
+import { PasswordForgetComponent } from './components/password-forget/password-forget.component';
+import { PetSponsorComponent } from './components/pet-sponsor/pet-sponsor.component';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -35,6 +37,8 @@ import { SignUpComponent } from './components/signup/signup.component';
     PetFilter,
     LoginComponent,
     SignUpComponent,
+    PasswordForgetComponent,
+    PetSponsorComponent,
   ],
   imports: [
     BrowserModule,

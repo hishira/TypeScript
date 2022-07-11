@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Pet } from '../../../models/pet.model';
-import { ActivatedRoute, Router } from '@angular/router'; 
+import { ActivatedRoute, Router } from '@angular/router';
 import { PetService } from 'src/app/services/pet.service';
 import { getFullAddress } from 'src/app/models/address.models';
 import { ModalService } from 'src/app/services/modal.service';
@@ -11,42 +11,39 @@ import { LoginComponent } from '../../login/login.component';
   templateUrl: './pet.component.html',
 })
 export class PetComponent implements OnInit {
-  
   @Output() backEmit: EventEmitter<string> = new EventEmitter<string>();
   @Input() petId: number;
-  
+
   fullAddress: string;
   pet: Pet;
-  constructor( 
+  constructor(
     private activateRoute: ActivatedRoute,
     private router: Router,
     private petService: PetService,
     private modalService: ModalService
-    ) {
-
-  }
+  ) {}
 
   backPage() {
     const pettype = this.activateRoute.snapshot.params['pettype'];
     console.log(pettype);
     this.backEmit.emit();
-    this.router.navigate([`/pets/${pettype}`])
-    
+    this.router.navigate([`/pets/${pettype}`]);
   }
-  
-  loginHandle():void{
+
+  loginHandle(): void {
     this.modalService.open(LoginComponent, {});
   }
 
   ngOnInit(): void {
     const id = this.activateRoute.snapshot.params['id'];
     this.petId = id;
-    this.petService
-    .getPetById(this.petId)
-    .subscribe((pet:Pet)=>{
+    this.petService.getPetById(this.petId).subscribe((pet: Pet) => {
       this.pet = pet;
       this.fullAddress = getFullAddress(this.pet.center.address);
-    })
+    });
   }
 
+  petSponsor() {
+    this.router.navigate([`sponsor/${this.petId}`],);
+  }
 }
