@@ -1,4 +1,5 @@
 from typing import List
+import typing
 from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -127,3 +128,6 @@ def getPossiblePetFilter(db: Session):
 
 def getPetById(db: Session, petid: int) -> schemas.Pet:
     return db.query(models.Pet).filter(models.Pet.id == petid).one_or_none()
+
+def getAddresses(db: Session) -> typing.List[schemas.Address]:
+    return db.query(models.Address).all()
