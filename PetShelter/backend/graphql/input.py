@@ -1,0 +1,25 @@
+from typing import Generic, List, Optional, TypeVar
+import strawberry
+from strawberry import field
+T = TypeVar('T')
+
+@strawberry.input
+class Filter(Generic[T]):
+    eq: Optional[T] = None
+
+@strawberry.input
+class GroupFilter(Filter[T]):
+    _in: List[Optional[T]] = field(name='in',default=None)
+
+@strawberry.input
+class NumberFilter(Filter[T]):
+    gt: Optional[T] = None
+    lg: Optional[T] = None
+
+@strawberry.input
+class AdressFilter:
+    id: Optional[GroupFilter[int]] = None
+    city: Optional[Filter[str]] = None
+    country: Optional[Filter[str]] = None
+    lat: Optional[NumberFilter[float]] = None
+    lng: Optional[NumberFilter[float]] = None

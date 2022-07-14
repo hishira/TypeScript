@@ -1,8 +1,10 @@
-from typing import List
+from typing import List, Optional
 import typing
 from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import and_, or_
+
+from backend.graphql.input import AdressFilter
 from . import models, schemas
 from itertools import groupby
 from operator import attrgetter
@@ -129,5 +131,27 @@ def getPossiblePetFilter(db: Session):
 def getPetById(db: Session, petid: int) -> schemas.Pet:
     return db.query(models.Pet).filter(models.Pet.id == petid).one_or_none()
 
-def getAddresses(db: Session) -> typing.List[schemas.Address]:
-    return db.query(models.Address).all()
+def getAddresses(db: Session, filter: Optional[AdressFilter]) -> typing.List[schemas.Address]:
+    return db.query(models.Address).\
+        filter(*createAdressFilter(filter)).all()
+
+def createAdressFilter(filter: Optional[AdressFilter]): 
+    results = []
+    print(filter)
+    if filter:
+        if filter.id._in:
+            results.append(models.Address.id.in_(filter.id._in))
+        if filter.city:
+            results.append(models.Address.city == filter.city.eq)
+        if filter.country:
+            results.append(models.Address.country == filter.country.eq)
+        if filter.lat and filter.lat.lg:
+            results.append(models.Address.lat < filter.lat.lg )
+        if filter.lat and filter.lat.gt:
+            results.append(models.Address.lat > filter.lat.gt )
+        if filter.lng and filter.lng.lg:
+            results.append(models.Address.lng < filter.lng.lg )
+        if filter.lng and filter.lng.gt:
+            results.append(models.Address.lng > filter.lng.gt )
+
+    return results
