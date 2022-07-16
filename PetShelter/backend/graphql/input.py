@@ -23,3 +23,9 @@ class AdressFilter:
     country: Optional[Filter[str]] = None
     lat: Optional[NumberFilter[float]] = None
     lng: Optional[NumberFilter[float]] = None
+
+@strawberry.input
+
+class GenderFilter:
+    id: Optional[GroupFilter[int]] = None
+    value: Optional[Filter[str]] = None;

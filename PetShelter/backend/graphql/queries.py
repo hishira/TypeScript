@@ -1,7 +1,7 @@
 import typing 
 import strawberry
 from .schemas import BreedSchema, GenderSchema, PetSchema, PetTypeSchema,SizeSchema,AdressSchema,CenterSchema
-from .input import AdressFilter
+from .input import AdressFilter, GenderFilter
 from strawberry.types import Info
 from ..crud import get_pets, getBreeds, getGender, getPetSize,getAddresses,get_centers, getPetTypes
 from typing import Optional
@@ -9,8 +9,8 @@ from typing import Optional
 @strawberry.type
 class Query:
     @strawberry.field
-    def genders(self,info: Info)-> typing.List[GenderSchema]:
-        return getGender(info.context['get_db'])
+    def genders(self,info: Info, filter: Optional[GenderFilter]=None)-> typing.List[GenderSchema]:
+        return getGender(info.context['get_db'], filter)
     
     @strawberry.field
     def pettypes(self, info: Info) -> typing.List[PetTypeSchema]:

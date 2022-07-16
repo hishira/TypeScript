@@ -4,7 +4,7 @@ from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from backend.graphql.input import AdressFilter
+from backend.graphql.input import AdressFilter, GenderFilter
 from . import models, schemas
 from itertools import groupby
 from operator import attrgetter
@@ -28,8 +28,21 @@ def getDogBreeds(db: Session):
         filter(models.PetType.name == "Dog"). \
         all()
 
-def getGender(db: Session):
-    return db.query(models.PetGender).all()
+def getGender(db: Session, filter: Optional[GenderFilter]):
+    return db.query(models.PetGender).\
+        filter(*getGenderFilter(filter)).\
+        all()
+
+def getGenderFilter(filter: Optional[GenderFilter]):
+    results = []
+    if filter:
+        if filter.id and filter.id._in:
+            results.append(models.PetGender.id.in_(filter.id._in))
+        if filter.id and filter.id.eq:
+            results.append(models.PetGender.id == filter.id.eq)
+        if filter.value:
+            results.append(models.PetGender.value == filter.value.eq)
+    return results
 
 def getPetSize(db: Session):
     return db.query(models.PetSize).all()
@@ -140,10 +153,11 @@ def getAddresses(db: Session, filter: Optional[AdressFilter]) -> typing.List[sch
 
 def createAdressFilter(filter: Optional[AdressFilter]): 
     results = []
-    print(filter)
     if filter:
-        if filter.id._in:
+        if filter.id and filter.id._in:
             results.append(models.Address.id.in_(filter.id._in))
+        if filter.id and filter.id.eq:
+            results.append(models.Address.id == filter.id.eq)
         if filter.city:
             results.append(models.Address.city == filter.city.eq)
         if filter.country:
