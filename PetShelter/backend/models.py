@@ -39,7 +39,8 @@ class PetType(Base):
                    nullable=False)
     
     pet = relationship("Pet", back_populates="petType")
-    breed = relationship("Breed")
+    
+    breed = relationship("Breed", back_populates="petTypeRef")
 
 
 class Breed(Base):
@@ -49,6 +50,7 @@ class Breed(Base):
     value = Column(String, unique=True)
     pettype_id = Column(Integer, ForeignKey("pettype.id"))
     
+    petTypeRef = relationship("PetType", back_populates="breed")
     pet = relationship("Pet", back_populates="breed")
 
 

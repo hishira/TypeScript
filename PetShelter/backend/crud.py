@@ -19,6 +19,9 @@ def createBreed(db: Session, newbreed: schemas.BreedBase):
 def getPetTypes(db: Session):
     return db.query(models.PetType).all()
 
+def getBreeds(db: Session):
+    return db.query(models.Breed).all()
+
 def getDogBreeds(db: Session):
     return db.query(models.Breed). \
         join(models.PetType, models.Breed.pettype_id == models.PetType.id). \

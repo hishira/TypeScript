@@ -113,7 +113,8 @@ class Center(CenterBase):
 
 class Breed(BreedBase):
     id: int
-
+    petTypeRef: PetType
+    
     class Config:
         orm_mode = True
 
