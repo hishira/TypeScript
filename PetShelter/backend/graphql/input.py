@@ -25,7 +25,18 @@ class AdressFilter:
     lng: Optional[NumberFilter[float]] = None
 
 @strawberry.input
-
 class GenderFilter:
     id: Optional[GroupFilter[int]] = None
     value: Optional[Filter[str]] = None;
+
+@strawberry.input
+class CenterFilter:
+    id: Optional[GroupFilter[int]] = None
+    name: Optional[Filter[str]] = None
+    address_id: Optional[Filter[int]] = None
+
+@strawberry.input
+class BreedFilter:
+    id: Optional[GroupFilter[int]] = None
+    value: Optional[Filter[str]] = None
+    petTypeId: Optional[Filter[int]] = None

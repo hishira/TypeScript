@@ -4,7 +4,7 @@ from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from backend.graphql.input import AdressFilter, GenderFilter
+from backend.graphql.input import AdressFilter, BreedFilter, CenterFilter, GenderFilter
 from . import models, schemas
 from itertools import groupby
 from operator import attrgetter
@@ -19,8 +19,23 @@ def createBreed(db: Session, newbreed: schemas.BreedBase):
 def getPetTypes(db: Session):
     return db.query(models.PetType).all()
 
-def getBreeds(db: Session):
-    return db.query(models.Breed).all()
+def getBreeds(db: Session, filter: Optional[BreedFilter]=None):
+    return db.query(models.Breed).\
+        filter(*createBreedsFilter(filter)).\
+        all()
+
+def createBreedsFilter(filter: Optional[BreedFilter]=None):
+    results = []
+    if filter:
+        if filter.id and filter.id._in:
+            results.append(models.Breed.id.in_(filter.id._in))
+        if filter.id and filter.id.eq:
+            results.append(models.Breed.id == filter.id.eq)
+        if filter.value:
+            results.append(models.Breed.value == filter.value.eq)
+        if filter.petTypeId:
+            results.append(models.Breed.petTypeRef.has(models.PetType.id == filter.petTypeId.eq))
+    return results
 
 def getDogBreeds(db: Session):
     return db.query(models.Breed). \
@@ -109,9 +124,23 @@ def getcenterinfo(db:Session,centerid:int):
     print(result.description)
     return result
 
-def get_centers(db: Session):
+def get_centers(db: Session, filter: Optional[CenterFilter] = None):
     return db.query(models.Center).\
-        join(models.Address,models.Center.address_id==models.Address.id).all()
+        filter(*getCenterFilter(filter)).\
+        all()
+
+def getCenterFilter(filter: Optional[CenterFilter] = None):
+    results = []
+    if filter:
+        if filter.id and filter.id._in:
+            results.append(models.Center.id.in_(filter.id._in))
+        if filter.id and filter.id.eq:
+            results.append(models.Center.id == filter.id.eq)
+        if filter.name:
+            results.append(models.Center.name == filter.name.eq)
+        if filter.address_id:
+            results.append(models.Center.address.has(models.Address.id == filter.address_id.eq))
+    return results
 
 def create_center(db: Session,
                   newcenter: schemas.CenterCreate):
