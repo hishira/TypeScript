@@ -1,3 +1,4 @@
+from optparse import Option
 from typing import Generic, List, Optional, TypeVar
 import strawberry
 from strawberry import field
@@ -40,3 +41,18 @@ class BreedFilter:
     id: Optional[GroupFilter[int]] = None
     value: Optional[Filter[str]] = None
     petTypeId: Optional[Filter[int]] = None
+
+@strawberry.input
+class PetSizeInput:
+    id: Optional[GroupFilter[int]] = None
+    value: Optional[Filter[str]] = None
+
+@strawberry.input
+class PetInput:
+    id: Optional[GroupFilter[int]] = None
+    name: Optional[Filter[str]] = None
+    petTypeId: Optional[GroupFilter[int]] = None
+    petBreedId: Optional[GroupFilter[int]] = None
+    petGenderId: Optional[GroupFilter[int]] = None
+    petSizeId: Optional[GroupFilter[int]] = None
+    centerId: Optional[GroupFilter[int]] = None

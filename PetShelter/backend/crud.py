@@ -4,7 +4,7 @@ from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from backend.graphql.input import AdressFilter, BreedFilter, CenterFilter, GenderFilter
+from backend.graphql.input import AdressFilter, BreedFilter, CenterFilter, GenderFilter, PetInput, PetSizeInput
 from . import models, schemas
 from itertools import groupby
 from operator import attrgetter
@@ -59,8 +59,19 @@ def getGenderFilter(filter: Optional[GenderFilter]):
             results.append(models.PetGender.value == filter.value.eq)
     return results
 
-def getPetSize(db: Session):
-    return db.query(models.PetSize).all()
+def getPetSize(db: Session, filter: Optional[PetSizeInput] = None):
+    return db.query(models.PetSize).filter(*getPetSizeFilter(filter)).all()
+
+def getPetSizeFilter(filter: Optional[PetSizeInput] = None):
+    results = []
+    if filter:
+        if filter.id and filter.id._in:
+            results.append(models.PetSize.id.in_(filter.id._in))
+        if filter.id and filter.id.eq:
+            results.append(models.PetSize.id == filter.id.eq)
+        if filter.value:
+            results.append(models.PetSize.value == filter.value.eq)
+    return results
 
 def getCatBreeds(db: Session):
     return db.query(models.Breed). \
@@ -68,9 +79,45 @@ def getCatBreeds(db: Session):
         filter(models.PetType.name == "Cat"). \
         all()
 
-def get_pets(db: Session):
-    return db.query(models.Pet).all()
+def get_pets(db: Session, filter: Optional[PetInput] = None):
+    return db.query(models.Pet).filter(*getPetFilter(filter)).all()
 
+def getPetFilter(filter: Optional[PetInput] = None):
+    results = []
+    if filter:
+        if filter.id and filter.id._in:
+            results.append(models.Pet.id.in_(filter.id._in))
+        if filter.id and filter.id.eq:
+            results.append(models.Pet.id == filter.id.eq)
+        if filter.name:
+            results.append(models.Pet.name == filter.name.eq)
+        if filter.petTypeId and filter.petTypeId._in:
+            results.append(models.Pet.petType.has(models.PetType.id.in_(filter.petTypeId._in)))
+        if filter.petTypeId and filter.petTypeId.eq:
+            results.append(models.Pet.petType.has(models.PetType.id == filter.petTypeId.eq))
+        
+        if filter.petBreedId and filter.petBreedId._in:
+            results.append(models.Pet.breed.has(models.Breed.id.in_(filter.petBreedId._in)))
+        if filter.petBreedId and filter.petBreedId.eq:
+            results.append(models.Pet.breed.has(models.Breed.id == filter.petBreedId.eq))
+        
+        if filter.petGenderId and filter.petGenderId._in:
+            results.append(models.Pet.gender.has(models.PetGender.id.in_(filter.petGenderId._in)))
+        if filter.petGenderId and filter.petGenderId.eq:
+            results.append(models.Pet.gender.has(models.PetGender.id == filter.petGenderId.eq))
+        
+        if filter.petSizeId and filter.petSizeId._in:
+            results.append(models.Pet.size.has(models.PetSize.id.in_(filter.petSizeId._in)))
+        if filter.petSizeId and filter.petSizeId.eq:
+            results.append(models.Pet.size.has(models.PetSize.id == filter.petSizeId.eq))
+        
+        if filter.centerId and filter.centerId._in:
+            results.append(models.Pet.center.has(models.Center.id.in_(filter.centerId._in)))
+        if filter.centerId and filter.centerId.eq:
+            results.append(models.Pet.center.has(models.Center.id == filter.centerId.eq))
+        
+        
+    return results
 def create_pet(db: Session,
                 center_id: int,
                 newpet: schemas.PetCreate):

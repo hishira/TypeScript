@@ -1,7 +1,7 @@
 import typing 
 import strawberry
 from .schemas import BreedSchema, GenderSchema, PetSchema, PetTypeSchema,SizeSchema,AdressSchema,CenterSchema
-from .input import AdressFilter, BreedFilter, CenterFilter, GenderFilter
+from .input import AdressFilter, BreedFilter, CenterFilter, GenderFilter, PetInput, PetSizeInput
 from strawberry.types import Info
 from ..crud import get_pets, getBreeds, getGender, getPetSize,getAddresses,get_centers, getPetTypes
 from typing import Optional
@@ -21,8 +21,8 @@ class Query:
         return getBreeds(info.context['get_db'], filter)
 
     @strawberry.field
-    def petsizes(self,info: Info)->typing.List[SizeSchema]:
-        return getPetSize(info.context['get_db'])
+    def petsizes(self,info: Info, filter: Optional[PetSizeInput] = None)->typing.List[SizeSchema]:
+        return getPetSize(info.context['get_db'], filter)
     
     @strawberry.field
     def addresses(self,info: Info, filter: Optional[AdressFilter] = None)->typing.List[AdressSchema]:
@@ -33,5 +33,5 @@ class Query:
         return get_centers(info.context['get_db'], filter)
     
     @strawberry.field
-    def pets(self, info: Info) ->typing.List[PetSchema]:
-        return get_pets(info.context['get_db'])
+    def pets(self, info: Info, filter: Optional[PetInput] = None) ->typing.List[PetSchema]:
+        return get_pets(info.context['get_db'], filter)
