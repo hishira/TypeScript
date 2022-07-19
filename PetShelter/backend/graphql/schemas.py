@@ -44,6 +44,13 @@ class CenterSchema:
     address: 'AdressSchema'
 
 @strawberry.type
+class PhotoSchema:
+    id: int
+    url: str
+    pet_id: int
+    pet: 'PetSchema'
+
+@strawberry.type
 class PetSchema:
     id: int
     name: str
@@ -62,3 +69,4 @@ class PetSchema:
     gender: GenderSchema
     size: SizeSchema
     petType: PetTypeSchema
+    photos: typing.List[PhotoSchema]

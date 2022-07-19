@@ -92,6 +92,7 @@ class Pet(Base):
     size = relationship("PetSize", back_populates="pet")
     gender = relationship("PetGender",back_populates="pet")
     center = relationship("Center", back_populates="pet")
+    photos = relationship("Photo", back_populates="pet")
 
 
 class Photo(Base):
@@ -100,7 +101,7 @@ class Photo(Base):
     id = Column(Integer, primary_key=True, index=True)
     url = Column(String)
     pet_id = Column(Integer, ForeignKey("pets.id"))
-    pet = relationship("Pet")
+    pet = relationship("Pet", back_populates="photos")
 
 
 class Center(Base):

@@ -1,9 +1,9 @@
 import typing 
 import strawberry
-from .schemas import BreedSchema, GenderSchema, PetSchema, PetTypeSchema,SizeSchema,AdressSchema,CenterSchema
+from .schemas import BreedSchema, GenderSchema, PetSchema, PetTypeSchema, PhotoSchema,SizeSchema,AdressSchema,CenterSchema
 from .input import AdressFilter, BreedFilter, CenterFilter, GenderFilter, PetInput, PetSizeInput
 from strawberry.types import Info
-from ..crud import get_pets, getBreeds, getGender, getPetSize,getAddresses,get_centers, getPetTypes
+from ..crud import get_pets, get_photos, getBreeds, getGender, getPetSize,getAddresses,get_centers, getPetTypes
 from typing import Optional
 
 @strawberry.type
@@ -35,3 +35,7 @@ class Query:
     @strawberry.field
     def pets(self, info: Info, filter: Optional[PetInput] = None) ->typing.List[PetSchema]:
         return get_pets(info.context['get_db'], filter)
+
+    @strawberry.field
+    def photos(self,info: Info) ->typing.List[PhotoSchema]:
+        return get_photos(info.context['get_db'])
