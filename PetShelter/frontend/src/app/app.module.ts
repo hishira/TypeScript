@@ -20,7 +20,9 @@ import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/signup/signup.component';
 import { PasswordForgetComponent } from './components/password-forget/password-forget.component';
 import { PetSponsorComponent } from './components/pet-sponsor/pet-sponsor.component';
-
+import { APOLLO_OPTIONS } from 'apollo-angular';
+import { InMemoryCache } from '@apollo/client/core';
+import {HttpLink} from 'apollo-angular/http';
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [
@@ -49,6 +51,16 @@ import { PetSponsorComponent } from './components/pet-sponsor/pet-sponsor.compon
     SharedModule,
     CommonModule,
   ],
-  providers: [],
+  providers: [{
+    provide: APOLLO_OPTIONS,
+    useFactory:(httpLink: HttpLink)=>{
+      return {
+        cache: new InMemoryCache(),
+        link: httpLink.create({
+          uri: 'http://127.0.0.1:8000/graphql'
+        })
+      }
+    }
+  }],
 })
 export class AppModule {}
