@@ -1,5 +1,5 @@
-query centers {
-  centers {
+query centers($centerId: Int!) {
+  centers(filter: {id: {eq: $centerId}}) {
     id
     name
     phone

@@ -21,18 +21,18 @@
       <button type="button" class="pet__button btn">Check our pets</button>
       <div class="email__info">
         <app-icon [iconType]="icons.Email"></app-icon>
-        <a [href]="this.emailPath" class="email__info__value">
+        <a [href]="emailPath" class="email__info__value">
           {{ center.email }}
         </a>
       </div>
     </div>
   </div>
   <hr />
-  <div class="shelter__info">
+  <div class="shelter__info" *ngIf="center.address.lat && center.address.lng">
     <div class="display-6 ms-3">Center location</div>
     <app-map
-      [lat]="this.center.address.lat"
-      [lng]="this.center.address.lng"
+      [lat]="center.address.lat"
+      [lng]="center.address.lng"
     ></app-map>
   </div>
   <div class="shelter__info">
