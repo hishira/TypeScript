@@ -10,7 +10,7 @@ class Filter(Generic[T]):
 
 @strawberry.input
 class GroupFilter(Filter[T]):
-    _in: List[Optional[T]] = field(name='in',default=None)
+    _in: Optional[List[Optional[T]]] = field(name='in',default=None)
 
 @strawberry.input
 class NumberFilter(Filter[T]):
