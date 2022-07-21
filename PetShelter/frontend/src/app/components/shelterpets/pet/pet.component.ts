@@ -5,6 +5,8 @@ import { PetService } from 'src/app/services/pet.service';
 import { getFullAddress } from 'src/app/models/address.models';
 import { ModalService } from 'src/app/services/modal.service';
 import { LoginComponent } from '../../login/login.component';
+import { PetGQL, PetSchema } from 'src/app/types/types';
+import { get } from 'lodash';
 @Component({
   selector: 'app-pet',
   styleUrls: ['./pet.component.scss'],
@@ -15,12 +17,12 @@ export class PetComponent implements OnInit {
   @Input() petId: number;
 
   fullAddress: string;
-  pet: Pet;
+  pet: PetSchema;
   constructor(
     private activateRoute: ActivatedRoute,
     private router: Router,
-    private petService: PetService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private petQuery: PetGQL,
   ) {}
 
   backPage() {
@@ -36,11 +38,15 @@ export class PetComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.activateRoute.snapshot.params['id'];
-    this.petId = id;
-    this.petService.getPetById(this.petId).subscribe((pet: Pet) => {
-      this.pet = pet;
-      this.fullAddress = getFullAddress(this.pet.center.address);
-    });
+    this.petId = parseInt(id);
+    this.petQuery.watch({
+      petId: this.petId
+    }).valueChanges.subscribe((pet)=>{
+      if(pet.data) {
+        this.pet = get(pet, 'data.pets[0]', {});
+        this.fullAddress = getFullAddress(this.pet.center.address);
+      }
+    })
   }
 
   petSponsor() {

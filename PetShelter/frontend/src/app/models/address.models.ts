@@ -1,3 +1,5 @@
+import { AdressSchema } from "../types/types";
+
 export class Address {
     address: string;
     city: string;
@@ -7,6 +9,6 @@ export class Address {
     lng: number;
 }
 
-export function getFullAddress(address: Address): string {
+export function getFullAddress(address: AdressSchema): string {
     return `${address.address}, ${address.city} ${address.country}`
 }
