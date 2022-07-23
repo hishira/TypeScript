@@ -4,7 +4,7 @@ from fastapi.param_functions import Query
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from backend.graphql.input import AdressFilter, BreedFilter, CenterFilter, GenderFilter, PetInput, PetSizeInput
+from backend.graphql.input import AdressFilter, BreedFilter, CenterFilter, GenderFilter, PetInput, PetSizeInput, PhotoInput
 from . import models, schemas
 from itertools import groupby
 from operator import attrgetter
@@ -211,8 +211,23 @@ def create_photo(petid:int,
     db.refresh(new_photo)
     return new_photo
 
-def get_photos(db:Session):
-    return db.query(models.Photo).all()
+def get_photos(db:Session, filter: Optional[PhotoInput]=None):
+    return db.query(models.Photo).\
+        filter(*getPhotoFilter(filter)).\
+        all()
+
+def getPhotoFilter(filter: Optional[PhotoInput]=None): 
+    results = []
+    if filter:
+        if filter.id and filter.id.eq:
+            results.append(models.Photo.id == filter.id.eq)
+        if filter.id and filter.id._in:
+            results.append(models.Photo.id.in_(filter.id._in))
+        if filter.petId and filter.petId.eq:
+            results.append(models.Photo.pet_id == filter.petId.eq)
+        if filter.petId and filter.petId._in:
+            results.append(models.Photo.pet.has(models.Pet.id.in_(filter.petId._in)))
+    return results
 
 def get_photos_bypet(db: Session, petid: int):
     return db.query(models.Photo).filter(models.Photo.pet_id == petid).all()

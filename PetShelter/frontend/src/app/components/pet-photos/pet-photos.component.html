@@ -5,6 +5,7 @@
 >
   <ng-content></ng-content>
   <img
+    *ngIf="photos[photoindex]?.url"
     [class.full-height]="more === false"
     class="imgappear img-card"
     src="{{ photos[photoindex].url }}"

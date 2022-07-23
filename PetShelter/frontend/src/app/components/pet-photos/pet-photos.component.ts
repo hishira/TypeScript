@@ -8,38 +8,38 @@ import {
 } from '@angular/core';
 import { PhotoService } from '../../services/photo.service';
 import { Photo } from '../../models/photo.model';
+import { PhotoSchema, PhotosGQL } from 'src/app/types/types';
 @Component({
   selector: 'app-pet-photos',
-  templateUrl: './pet-photos.component.html',
   styleUrls: ['./pet-photos.component.scss'],
+  templateUrl: './pet-photos.component.html',
 })
 export class PetPhotosComponent implements OnInit, OnDestroy {
-  
   @ViewChild('imgelement', { static: false }) imageelement?: ElementRef;
-  
+
   @Input() more?: boolean;
   @Input() petid?: number | undefined;
 
   photoindex: number = 0;
-  photos: Array<Photo> = [];
+  photos: Partial<PhotoSchema>[] = [];
   private timeout: NodeJS.Timer | null = null;
   private timer: NodeJS.Timer | null = null;
-  
-  constructor(private photoservice: PhotoService) {}
 
-  ngOnInit(): void {
-    if (this.petid) {
-      this.photoservice
-        .getPetPhotos(this.petid)
-        .subscribe((photos) => (this.photos = photos));
-      this.selectPhoto();
-    }
-    if (this.more) {
-      document.addEventListener(
-        'keydown',
-        (ev: KeyboardEvent) => this.keyDownHandle(ev),
-        true
-      );
+  constructor(
+    private photoservice: PhotoService,
+    private photosGQL: PhotosGQL
+  ) {}
+
+  circleClick(index: number): void {
+    this.photoindex = index;
+    this.intervalClear();
+  }
+
+  leftImage(): void {
+    if (this.photos) {
+      this.photoindex =
+        this.photoindex - 1 < 0 ? this.photos?.length - 1 : this.photoindex - 1;
+      this.intervalClear();
     }
   }
 
@@ -53,13 +53,26 @@ export class PetPhotosComponent implements OnInit, OnDestroy {
       true
     );
   }
-  leftImage(): void {
-    if (this.photos) {
-      this.photoindex =
-        this.photoindex - 1 < 0 ? this.photos?.length - 1 : this.photoindex - 1;
-      this.intervalClear();
+
+  ngOnInit(): void {
+    if (this.petid) {
+      this.photosGQL
+        .watch({
+          petId: this.petid,
+        })
+        .valueChanges.subscribe((photos) => (this.photos = photos.data.photos));
+
+      this.selectPhoto();
+    }
+    if (this.more) {
+      document.addEventListener(
+        'keydown',
+        (ev: KeyboardEvent) => this.keyDownHandle(ev),
+        true
+      );
     }
   }
+
   rightImage(): void {
     if (this.photos) {
       this.photoindex =
@@ -67,6 +80,7 @@ export class PetPhotosComponent implements OnInit, OnDestroy {
       this.intervalClear();
     }
   }
+
   selectPhoto(): void {
     if (this.more) {
       this.timeout = setInterval(() => {
@@ -85,18 +99,12 @@ export class PetPhotosComponent implements OnInit, OnDestroy {
       }, 2000);
     }
   }
-  circleClick(index: number): void {
-    this.photoindex = index;
-    this.intervalClear();
-  }
-  private keyDownHandle(ev: KeyboardEvent): void {
-    if (ev.code === 'ArrowRight') {
-      this.rightImage();
-    } else if (ev.code === 'ArrowLeft') {
-      this.leftImage();
+
+  private classToggle(...classes: string[]): void {
+    for (let i of classes) {
+      this.imageelement?.nativeElement.classList.toggle(i);
     }
   }
- 
 
   private intervalClear(): void {
     if (this.timeout) {
@@ -108,12 +116,11 @@ export class PetPhotosComponent implements OnInit, OnDestroy {
     }
   }
 
- 
-
-  private classToggle(...classes: string[]): void {
-    for (let i of classes) {
-      this.imageelement?.nativeElement.classList.toggle(i);
+  private keyDownHandle(ev: KeyboardEvent): void {
+    if (ev.code === 'ArrowRight') {
+      this.rightImage();
+    } else if (ev.code === 'ArrowLeft') {
+      this.leftImage();
     }
   }
-  
 }

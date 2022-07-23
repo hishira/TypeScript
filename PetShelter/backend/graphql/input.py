@@ -56,3 +56,8 @@ class PetInput:
     petGenderId: Optional[GroupFilter[int]] = None
     petSizeId: Optional[GroupFilter[int]] = None
     centerId: Optional[GroupFilter[int]] = None
+
+@strawberry.input
+class PhotoInput:
+    id: Optional[GroupFilter[int]] = None
+    petId: Optional[GroupFilter[int]] = None

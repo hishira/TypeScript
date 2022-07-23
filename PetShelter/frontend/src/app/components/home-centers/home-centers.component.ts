@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Center } from "../../models/center.model";
 import { CenterService } from "../../services/center.service";
-
+import { CenterSchema, CentersGQL } from 'src/app/types/types';
 @Component({
   selector: 'app-home-centers',
   styleUrls: ['./home-centers.component.scss'],
@@ -9,11 +9,14 @@ import { CenterService } from "../../services/center.service";
 })
 export class HomeCentersComponent implements OnInit {
   
-  centers?: Center[];
+  centers?: CenterSchema[];
   fullAddress: string;
-  constructor(private centerService: CenterService) { }
+  constructor(
+    private centerService: CenterService,
+    private centersQuery: CentersGQL
+    ) { }
 
-  getFullAddress(center: Center): string{
+  getFullAddress(center: CenterSchema): string{
     return `${center.address.address}, ${center.address.city} ${center.address.country}`
   }
   
@@ -22,11 +25,8 @@ export class HomeCentersComponent implements OnInit {
   }
   
   private getCenters(): void {
-    this.centerService
-        .getCenters()
-        .subscribe(centers => {
-          this.centers = centers;
-          
-        })
+    this.centersQuery.watch({}).valueChanges.subscribe((centers)=>{
+      this.centers = centers.data.centers;
+    })
   }
 }
