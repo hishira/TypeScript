@@ -1,5 +1,5 @@
-query pet($petId: Int!){
-  pets(filter: {id: {eq: $petId}}){
+query pet($petFilter: PetInput){
+  pets(filter: $petFilter){
     id
     name
     shortDescription

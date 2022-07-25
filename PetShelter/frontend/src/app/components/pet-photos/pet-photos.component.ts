@@ -6,8 +6,6 @@ import {
   ElementRef,
   OnDestroy,
 } from '@angular/core';
-import { PhotoService } from '../../services/photo.service';
-import { Photo } from '../../models/photo.model';
 import { PhotoSchema, PhotosGQL } from 'src/app/types/types';
 @Component({
   selector: 'app-pet-photos',
@@ -26,7 +24,6 @@ export class PetPhotosComponent implements OnInit, OnDestroy {
   private timer: NodeJS.Timer | null = null;
 
   constructor(
-    private photoservice: PhotoService,
     private photosGQL: PhotosGQL
   ) {}
 

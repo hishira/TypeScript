@@ -40,7 +40,7 @@ export class PetComponent implements OnInit {
     const id = this.activateRoute.snapshot.params['id'];
     this.petId = parseInt(id);
     this.petQuery.watch({
-      petId: this.petId
+      petFilter: {id: {eq: this.petId}}
     }).valueChanges.subscribe((pet)=>{
       if(pet.data) {
         this.pet = get(pet, 'data.pets[0]', {});

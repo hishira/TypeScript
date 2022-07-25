@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Center } from "../../models/center.model";
-import { CenterService } from "../../services/center.service";
 import { CenterSchema, CentersGQL } from 'src/app/types/types';
 @Component({
   selector: 'app-home-centers',
@@ -12,7 +10,6 @@ export class HomeCentersComponent implements OnInit {
   centers?: CenterSchema[];
   fullAddress: string;
   constructor(
-    private centerService: CenterService,
     private centersQuery: CentersGQL
     ) { }
 

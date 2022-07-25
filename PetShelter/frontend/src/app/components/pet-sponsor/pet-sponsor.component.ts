@@ -1,29 +1,27 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Pet } from "src/app/models/pet.model";
-import { PetService } from "src/app/services/pet.service";
-import { getFullAddress } from "src/app/models/address.models";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { getFullAddress } from 'src/app/models/address.models';
+import { PetGQL, PetSchema } from 'src/app/types/types';
 @Component({
-    selector: 'app-pet-sponsor',
-    styleUrls: ['./pet-sponsor.scss'],
-    templateUrl: './pet-sponsor.component.html'
+  selector: 'app-pet-sponsor',
+  styleUrls: ['./pet-sponsor.scss'],
+  templateUrl: './pet-sponsor.component.html',
 })
-export class PetSponsorComponent implements OnInit{
-    fullAddress: string = '';
-    pet: Pet;
-    shelterLink: string = ''
-    constructor(
-        private router: ActivatedRoute,
-        private petService: PetService
-    ){}
+export class PetSponsorComponent implements OnInit {
+  fullAddress: string = '';
+  pet: PetSchema;
+  shelterLink: string = '';
 
-    ngOnInit(): void {
-        const id = this.router.snapshot.params['id']
-        this.petService.getPetById(id).subscribe((pet)=>{
-           this.pet = pet as Pet;
-           console.log(pet)
-           this.fullAddress = getFullAddress(pet.center.address)
-            this.shelterLink = `/shelter/${this.pet.center.id}`
-        })
-    }
+  constructor(private router: ActivatedRoute, private petQuery: PetGQL) {}
+
+  ngOnInit(): void {
+    const id = this.router.snapshot.params['id'];
+    this.petQuery
+      .watch({ petFilter:{ id: {eq: parseInt(id)}} })
+      .valueChanges.subscribe((result) => {
+        this.pet = result.data.pets[0] as PetSchema;
+        this.fullAddress = getFullAddress(this.pet.center.address);
+        this.shelterLink = `/shelter/${this.pet.center.id}`;
+      });
+  }
 }
