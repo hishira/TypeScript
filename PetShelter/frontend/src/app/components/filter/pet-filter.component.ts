@@ -7,10 +7,11 @@ import { Breed } from 'src/app/models/breed.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PetType } from 'src/app/models/PetType.model';
 import { Pet } from 'src/app/models/pet.model';
+import { BreedSchema, GenderSchema, PetFiltersGQL, SizeSchema } from 'src/app/types/types';
 @Component({
     selector: 'pet-filter',
-    templateUrl: './pet-filter.component.html',
     styleUrls: ['./pet-filter.component.scss'],
+    templateUrl: './pet-filter.component.html',
 })
 export class PetFilter implements OnInit {
     @Output() filterEvent: EventEmitter<Map<string, (pet: Pet) => boolean>> =
@@ -19,9 +20,9 @@ export class PetFilter implements OnInit {
 
     filterForm: FormGroup;
     filterMap: Map<string, (pet: Pet) => boolean> = new Map();
-    genders: Array<Gender> = [];
-    petBreeds: Array<Breed> = [];
-    petsize: Array<PetSize> = [];
+    genders: GenderSchema[] = [];
+    petBreeds: Partial<BreedSchema>[] = [];
+    petsize: SizeSchema[] = [];
     savedFilterValue: string[] = [];
     value: any[] = [];
 
@@ -39,7 +40,8 @@ export class PetFilter implements OnInit {
     
     constructor(
         private petFilterService: PetFilterService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private petFilters: PetFiltersGQL,
     ) {
         this.filterForm = this.formBuilder.group({
             breed_id: [0],
@@ -70,31 +72,25 @@ export class PetFilter implements OnInit {
     }
 
     ngOnInit(): void {
-        forkJoin([
-            this.petFilterService.getGenderPet(),
-            this.petFilterService.getPetSize(),
-            this.petFilterService.getBreeds(
-                this.pettype ? this.pettype : 'Dog'
-            ),
-        ]).subscribe((res) => {
-            if (res.length === 3) {
-                this.genders = res[0];
-                this.petsize = res[1];
-                this.petBreeds = res[2];
-            }
-        });
+        this.petFilters.watch({
+            petTypeId: this.pettype === 'Dog'? 1:2
+        }).valueChanges.subscribe((result)=>{
+            this.genders = result.data.genders;
+            this.petsize = result.data.petsizes;
+            this.petBreeds = result.data.breeds;
+        })
     }
-    selectPetBreedHandle(breed: Breed) {
+    selectPetBreedHandle(breed: BreedSchema) {
         !this.savedFilterValue.includes(breed.value) &&
             this.savedFilterValue.push(breed.value);
         this.filterForm.controls['breed_id'].setValue(breed.id);
     }
-    selectPetGenderHandle(petgender: Gender) {
+    selectPetGenderHandle(petgender: GenderSchema) {
         !this.savedFilterValue.includes(petgender.value) &&
             this.savedFilterValue.push(petgender.value);
         this.filterForm.controls['gender_id'].setValue(petgender.id);
     }
-    selectPetSizeHandle(petsize: PetSize) {
+    selectPetSizeHandle(petsize: SizeSchema) {
         !this.savedFilterValue.includes(petsize.value) &&
             this.savedFilterValue.push(petsize.value);
         this.filterForm.controls['size_id'].setValue(petsize.id);

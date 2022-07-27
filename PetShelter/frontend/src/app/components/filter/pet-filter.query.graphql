@@ -1,0 +1,15 @@
+query petFilters($petTypeId: Int){
+  breeds:breeds(filter: {petTypeId: {eq: $petTypeId}}){
+    id
+    value
+    pettypeId
+  }
+  genders: genders{
+    id
+    value
+  }
+  petsizes: petsizes{
+    id
+    value
+  }
+}
