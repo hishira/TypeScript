@@ -10,15 +10,15 @@
         <div class="info__name">
           <span>{{ pet.name }}</span>
         </div>
-        <div class="icons--pet" *ngIf="pet.pettype_id === 2">
+        <div class="icons--pet" *ngIf="pet.pettypeId === 2">
           <app-icon [iconType]="iconsTypes.Cat"></app-icon>
         </div>
-        <div class="icons--pet" *ngIf="pet.pettype_id === 1">
+        <div class="icons--pet" *ngIf="pet.pettypeId === 1">
           <app-icon [iconType]="iconsTypes.Dog"></app-icon>
         </div>
         <div class="pet__description">
           <span>
-            {{ pet.short_description }}
+            {{ pet.shortDescription }}
           </span>
         </div>
         <div class="info">

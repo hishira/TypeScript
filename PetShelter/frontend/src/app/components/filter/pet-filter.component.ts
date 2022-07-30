@@ -1,25 +1,20 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PetFilterService } from '../../services/pet-filter.service';
-import { forkJoin } from 'rxjs';
-import { Gender } from 'src/app/models/gender.model';
-import { PetSize } from 'src/app/models/petsize.model';
-import { Breed } from 'src/app/models/breed.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PetType } from 'src/app/models/PetType.model';
 import { Pet } from 'src/app/models/pet.model';
-import { BreedSchema, GenderSchema, PetFiltersGQL, SizeSchema } from 'src/app/types/types';
+import { BreedSchema, GenderSchema, PetFiltersGQL, PetSchema, SizeSchema } from 'src/app/types/types';
 @Component({
     selector: 'pet-filter',
     styleUrls: ['./pet-filter.component.scss'],
     templateUrl: './pet-filter.component.html',
 })
 export class PetFilter implements OnInit {
-    @Output() filterEvent: EventEmitter<Map<string, (pet: Pet) => boolean>> =
+    @Output() filterEvent: EventEmitter<Map<string, (pet: Partial<PetSchema>) => boolean>> =
         new EventEmitter();
     @Input() pettype?: PetType;
 
     filterForm: FormGroup;
-    filterMap: Map<string, (pet: Pet) => boolean> = new Map();
+    filterMap: Map<string, (pet: Partial<PetSchema>) => boolean> = new Map();
     genders: GenderSchema[] = [];
     petBreeds: Partial<BreedSchema>[] = [];
     petsize: SizeSchema[] = [];
@@ -39,15 +34,14 @@ export class PetFilter implements OnInit {
     }
     
     constructor(
-        private petFilterService: PetFilterService,
         private formBuilder: FormBuilder,
         private petFilters: PetFiltersGQL,
     ) {
         this.filterForm = this.formBuilder.group({
-            breed_id: [0],
+            breedId: [1],
             el: [[]],
-            gender_id: [0],
-            size_id: [0],
+            genderId: [1],
+            sizeId: [1],
         });
         this.filterForm
             .get('el')
@@ -83,24 +77,24 @@ export class PetFilter implements OnInit {
     selectPetBreedHandle(breed: BreedSchema) {
         !this.savedFilterValue.includes(breed.value) &&
             this.savedFilterValue.push(breed.value);
-        this.filterForm.controls['breed_id'].setValue(breed.id);
+        this.filterForm.controls['breedId'].setValue(breed.id);
     }
     selectPetGenderHandle(petgender: GenderSchema) {
         !this.savedFilterValue.includes(petgender.value) &&
             this.savedFilterValue.push(petgender.value);
-        this.filterForm.controls['gender_id'].setValue(petgender.id);
+        this.filterForm.controls['genderId'].setValue(petgender.id);
     }
     selectPetSizeHandle(petsize: SizeSchema) {
         !this.savedFilterValue.includes(petsize.value) &&
             this.savedFilterValue.push(petsize.value);
-        this.filterForm.controls['size_id'].setValue(petsize.id);
+        this.filterForm.controls['sizeId'].setValue(petsize.id);
     }
 
     private clearFilterForm(): void {
         this.filterForm.setValue({
-            breed_id: 0,
-            gender_id: 0,
-            size_id: 0,
+            breedId: 0,
+            genderId: 0,
+            sizeId: 0,
         });
     }
     private filterFormChanges() {
@@ -110,7 +104,7 @@ export class PetFilter implements OnInit {
                 ?.valueChanges.subscribe((id: string) => {
                     this.filterMap.set(
                         control,
-                        (pet: Pet) => ({ ...pet }[control] === parseInt(id))
+                        (pet: Partial<PetSchema>) => ({ ...pet }[control] === parseInt(id))
                     );
                     this.filterEvent.emit(this.filterMap);
                 });

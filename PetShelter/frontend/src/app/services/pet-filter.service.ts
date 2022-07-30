@@ -7,6 +7,7 @@ import { PetSize } from '../models/petsize.model';
 import { Breed } from '../models/breed.model';
 import { Pet } from '../models/pet.model';
 import { PetType } from '../models/PetType.model';
+import { PetSchema } from '../types/types';
 
 @Injectable({
   providedIn: 'root',
@@ -41,13 +42,13 @@ export class PetFilterService extends ApiService {
   }
 
   public tableFilter(
-    pettable: Array<Pet>,
-    petFilterMap: Map<string, (pet: Pet) => boolean>
-  ): Array<Pet> {
+    pettable: Partial<PetSchema>[],
+    petFilterMap: Map<string, (pet: Partial<PetSchema>) => boolean>
+  ): Array<Partial<PetSchema>> {
     return pettable.filter((i) => this.allOf(i, petFilterMap));
   }
 
-  private allOf(i: Pet, map: Map<string, (pet: Pet) => boolean>): boolean {
+  private allOf(i: Partial<PetSchema>, map: Map<string, (pet: Partial<PetSchema>) => boolean>): boolean {
     let funtions = map.values();
     for (let f of funtions) {
       if (!f(i)) return false;

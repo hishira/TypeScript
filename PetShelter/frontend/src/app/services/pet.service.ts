@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Pet } from '../models/pet.model';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
+import { PetGQL, PetQuery, PetSchema } from '../types/types';
+import { PetTypeEnum } from '../models/PetType.model';
+import { ApolloQueryResult } from '@apollo/client/core';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,10 +16,18 @@ export class PetService extends ApiService {
   private readonly getPetByIdURL: string = this.getUrl('pet/byid/');
   private readonly getpetsbycenterurl: string = this.getUrl('pets/');
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, private petGQL: PetGQL) {
     super(http);
   }
 
+  getCats(): Observable<ApolloQueryResult<PetQuery>>{
+    return this.petGQL.watch({petFilter: {petTypeId: {eq: PetTypeEnum.Cat}}}).valueChanges
+  }
+
+  getDogs(): Observable<ApolloQueryResult<PetQuery>> {
+    return this.petGQL.watch({petFilter: {petTypeId: {eq: PetTypeEnum.Dog}}}).valueChanges;
+  }
+  
   getOnlyCats(): Observable<Pet[]> {
     const geturl: string = `${this.getAllCats}`;
     return this.getArrayOf<Pet>(geturl);

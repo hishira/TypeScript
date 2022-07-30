@@ -9,13 +9,15 @@ import { PetService } from '../../services/pet.service';
 import { Pet } from '../../models/pet.model';
 import { Router } from '@angular/router';
 import { Icons } from 'src/app/models/icons.model';
+import { PetSchema } from 'src/app/types/types';
 @Component({
   selector: 'app-shelterpets',
   styleUrls: ['./shelterpets.component.scss'],
   templateUrl: './shelterpets.component.html',
 })
 export class ShelterpetsComponent implements OnInit, OnChanges {
-  @Input() pets?: Array<Pet>;
+  
+  @Input() pets?: Partial<PetSchema>[];
   iconsTypes = Icons;
   public petsShow: boolean = true;
   public selectedPet: Pet | undefined;
@@ -30,7 +32,7 @@ export class ShelterpetsComponent implements OnInit, OnChanges {
     this.intervalStart();
   }
 
-  choosePet(pet: Pet): string {
+  choosePet(pet: Partial<PetSchema>): string {
     //this.selectedPet = pet;
     //this.petsShow = false;
     return `${pet.id}`;
