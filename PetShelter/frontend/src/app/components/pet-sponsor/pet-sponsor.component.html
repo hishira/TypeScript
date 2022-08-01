@@ -1,6 +1,8 @@
 <ng-container *ngIf="pet">
-  <div class="row-cols-2 gx-5 p-3 justify-content-center mt-3 me-0">
-    <div class="col">
+  <div
+    class="row-cols-1 row-cols-lg-2 gx-5 p-3 justify-content-center mt-3 me-0"
+  >
+    <div class="col-sm-12 col-lg">
       <div class="card border-light mb-3">
         <div class="card-header">
           <span class="display-6"> Support {{ pet.name }}</span>
@@ -9,6 +11,37 @@
           <h5 class="card-title pointer-event" [routerLink]="[shelterLink]">
             {{ fullAddress }}
           </h5>
+          <div class="row">
+            <div class="col-lg-12 col-12">
+              <img [src]="examplePhotoUrl" class="img-fluid" alt="Pet photo" />
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-12">
+              <span class="fs-5">
+                Your donation will support {{ pet.name }}. {{ pet.name }} will
+                be waiting for adoption. Donation could cover
+              </span>
+            </div>
+          </div>
+          <div class="row flex-wrap g-4 mt-2">
+            <div class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-basket"></i>
+              <span class="fs-6">Food</span>
+            </div>
+            <div class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-bandaid"></i>
+              <span class="fs-6">Healthcare</span>
+            </div>
+            <div class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-brightness-high"></i>
+              <span class="fs-6">Walks</span>
+            </div>
+            <div class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-heart-fill"></i>
+              <span class="fs-6">And more ... </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

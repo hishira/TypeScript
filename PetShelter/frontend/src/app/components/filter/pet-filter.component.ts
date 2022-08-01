@@ -48,12 +48,14 @@ export class PetFilter implements OnInit {
             ?.valueChanges.subscribe((value) => console.log(value));
         this.onChanges();
     }
+    
     buttonClearEvent(): void {
         this.clearFilterForm();
         this.filterMap.clear();
         this.savedFilterValue = [];
         this.filterEvent.emit(this.filterMap);
     }
+    
     chipCloseHandle(label: string): void {
         this.savedFilterValue = this.savedFilterValue.filter(
             (filterName) => filterName !== label
