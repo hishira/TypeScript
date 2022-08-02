@@ -1,8 +1,6 @@
 <ng-container *ngIf="pet">
-  <div
-    class="row-cols-1 row-cols-lg-2 gx-5 p-3 justify-content-center mt-3 me-0"
-  >
-    <div class="col-sm-12 col-lg">
+  <div class="row gx-5 p-3 justify-content-center mt-3 me-0">
+    <div class="col-sm-12 col-lg-6">
       <div class="card border-light mb-3">
         <div class="card-header">
           <span class="display-6"> Support {{ pet.name }}</span>
@@ -25,19 +23,27 @@
             </div>
           </div>
           <div class="row flex-wrap g-4 mt-2">
-            <div class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center">
+            <div
+              class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center"
+            >
               <i class="bi bi-basket"></i>
               <span class="fs-6">Food</span>
             </div>
-            <div class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center">
+            <div
+              class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center"
+            >
               <i class="bi bi-bandaid"></i>
               <span class="fs-6">Healthcare</span>
             </div>
-            <div class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center">
+            <div
+              class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center"
+            >
               <i class="bi bi-brightness-high"></i>
               <span class="fs-6">Walks</span>
             </div>
-            <div class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center">
+            <div
+              class="col-4 fs-3 d-flex flex-column justify-content-center align-items-center"
+            >
               <i class="bi bi-heart-fill"></i>
               <span class="fs-6">And more ... </span>
             </div>
@@ -45,6 +51,21 @@
         </div>
       </div>
     </div>
-    <div class="col"></div>
+    <div class="col-sm-12 col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Donation amount</h5>
+          <p class="card-text">Donation will be charged in dollars</p>
+          <div class="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
+            <button
+              *ngFor="let donationCost of donationValues"
+              type="button"
+              class="btn btn-outline-primary rounded-5 btn-sm p-1">
+              {{ donationCost | currency }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-container>

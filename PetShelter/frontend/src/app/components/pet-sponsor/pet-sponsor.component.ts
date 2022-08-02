@@ -9,6 +9,7 @@ import { PetGQL, PetSchema } from 'src/app/types/types';
 })
 export class PetSponsorComponent implements OnInit {
   
+  donationValues: number[] = [5, 20, 50, 100, 500];
   examplePhotoUrl: string = '';
   fullAddress: string = '';
   pet: PetSchema;
