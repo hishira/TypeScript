@@ -58,11 +58,65 @@
           <p class="card-text">Donation will be charged in dollars</p>
           <div class="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
             <button
+              (click)="selectDonationCost(donationCost)"
               *ngFor="let donationCost of donationValues"
               type="button"
-              class="btn btn-outline-primary rounded-5 btn-sm p-1">
+              class="btn btn-outline-primary rounded-5 btn-sm p-1"
+            >
               {{ donationCost | currency }}
             </button>
+          </div>
+          <div class="row flex-column mt-4">
+            <div class="col mt-4 mb-3">
+              <h5 class="card-title">Your Contact Information</h5>
+            </div>
+            <div class="col">
+              <form [formGroup]="form">
+                <div class="input-group">
+                  <span class="input-group-text"> First and last name</span>
+                  <input
+                    type="text"
+                    formControlName="firstName"
+                    class="form-control"
+                    autofocus
+                  />
+                  <input
+                    type="text"
+                    formControlName="lastName"
+                    class="form-control"
+                  />
+                </div>
+                <div class="row mt-4">
+                  <div class="col">
+                    <input
+                      formControlName="email"
+                      class="form-control"
+                      type="email"
+                      placeholder="Email"
+                      aria-label="Email"
+                    />
+                  </div>
+                  <div class="col">
+                    <input
+                      formControlName="confirmEmail"
+                      class="form-control"
+                      type="email"
+                      placeholder="Confirm email"
+                      aria-label="Confirm email"
+                    />
+                  </div>
+                </div>
+
+                <div class="row flex-column">
+                  <div class="col mt-4 mb-3">
+                    <h5 class="card-title">Message for our support team</h5>
+                  </div>
+                  <div class="col">
+                    <textarea formControlName="message" class="form-control" rows="10"></textarea>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
