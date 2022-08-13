@@ -58,11 +58,11 @@
           <p class="card-text">Donation will be charged in dollars</p>
           <div class="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
             <button
-              (click)="selectDonationCost(donationCost)"
+              (click)="selectDonationCost(donationCost, buttonElement)"
               *ngFor="let donationCost of donationValues"
               type="button"
               class="btn btn-outline-primary rounded-5 btn-sm p-1"
-            >
+              #buttonElement>
               {{ donationCost | currency }}
             </button>
           </div>
@@ -72,19 +72,28 @@
             </div>
             <div class="col">
               <form [formGroup]="form">
-                <div class="input-group">
-                  <span class="input-group-text"> First and last name</span>
-                  <input
-                    type="text"
-                    formControlName="firstName"
-                    class="form-control"
-                    autofocus
-                  />
-                  <input
-                    type="text"
-                    formControlName="lastName"
-                    class="form-control"
-                  />
+                <div class="row mt-4">
+                  <div class="col">
+                    <input
+                      type="text"
+                      formControlName="firstName"
+                      class="form-control"
+                      placeholder="First name"
+                      aria-label="First name"
+                      autofocus
+                    />
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      placeholder="First name"
+                      aria-label="First name"
+                      formControlName="lastName"
+                      placeholder="Last name"
+                      aria-label="Last name"
+                      class="form-control"
+                    />
+                  </div>
                 </div>
                 <div class="row mt-4">
                   <div class="col">
@@ -112,7 +121,11 @@
                     <h5 class="card-title">Message for our support team</h5>
                   </div>
                   <div class="col">
-                    <textarea formControlName="message" class="form-control" rows="10"></textarea>
+                    <textarea
+                      formControlName="message"
+                      class="form-control"
+                      rows="10"
+                    ></textarea>
                   </div>
                 </div>
               </form>
