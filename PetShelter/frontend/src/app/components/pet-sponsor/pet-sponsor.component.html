@@ -61,8 +61,9 @@
               (click)="selectDonationCost(donationCost, buttonElement)"
               *ngFor="let donationCost of donationValues"
               type="button"
-              class="btn btn-outline-primary rounded-5 btn-sm p-1"
-              #buttonElement>
+              class="btn btn-outline-secondary rounded-5 btn-sm p-1"
+              #buttonElement
+            >
               {{ donationCost | currency }}
             </button>
           </div>
@@ -71,7 +72,7 @@
               <h5 class="card-title">Your Contact Information</h5>
             </div>
             <div class="col">
-              <form [formGroup]="form">
+              <form [formGroup]="form" (submit)="donate()">
                 <div class="row mt-4">
                   <div class="col">
                     <input
@@ -127,6 +128,13 @@
                       rows="10"
                     ></textarea>
                   </div>
+                </div>
+                <div class="d-grid col-6 mt-4 mx-auto">
+                  <button
+                    type="submit"
+                    class="btn btn-secondary rounded-5 btn-lg">
+                    Donate
+                  </button>
                 </div>
               </form>
             </div>

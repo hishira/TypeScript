@@ -6,6 +6,7 @@ import { Optional } from 'src/app/models/core.models';
 import { PetGQL, PetSchema } from 'src/app/types/types';
 import { Validators } from '@angular/forms';
 import { DocumentService } from 'src/app/services/document.service';
+import { DEFAULT_DONATE_COST, SUPPORT_BUTTON_CLASSES } from 'src/app/utils/const';
 @Component({
   selector: 'app-pet-sponsor',
   styleUrls: ['./pet-sponsor.scss'],
@@ -19,6 +20,7 @@ export class PetSponsorComponent implements OnInit {
   lastClickedButton: HTMLButtonElement | undefined = undefined;
   pet: PetSchema;
   shelterLink: string = '';
+  
   constructor(
     private router: ActivatedRoute,
     private petQuery: PetGQL,
@@ -26,10 +28,15 @@ export class PetSponsorComponent implements OnInit {
     private documentService: DocumentService
   ) {}
 
+
+  donate():void{
+    console.log("Donate")
+  }
+
   ngOnInit(): void {
     const id = this.router.snapshot.params['id'];
     this.form = this.formBuilder.group({
-      amount: [0, Validators.required],
+      amount: [DEFAULT_DONATE_COST, Validators.required],
       confirmEmail: ['', Validators.required],
       email: ['', Validators.required],
       firstName: ['', Validators.required],
@@ -56,14 +63,12 @@ export class PetSponsorComponent implements OnInit {
     this.lastClickedButton &&
       this.documentService.togglElementClasses(
         this.lastClickedButton,
-        'btn-primary',
-        'btn-outline-primary'
+        ...SUPPORT_BUTTON_CLASSES
       );
     this.form.patchValue({ amount: donationCost });
     this.documentService.togglElementClasses(
       button,
-      'btn-primary',
-      'btn-outline-primary'
+      ...SUPPORT_BUTTON_CLASSES
     );
     this.lastClickedButton = button;
   }
