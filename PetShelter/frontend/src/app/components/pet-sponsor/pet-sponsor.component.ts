@@ -42,6 +42,7 @@ export class PetSponsorComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       message: [''],
+      cardNumber: ['',Validators.required]
     });
     this.form.valueChanges.subscribe((vlaues) => {
       console.log(vlaues);

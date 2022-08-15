@@ -129,10 +129,31 @@
                     ></textarea>
                   </div>
                 </div>
+                <div class="row mt-4">
+                  <div class="input-group">
+                    <input
+                      formControlName="cardNumber"
+                      class="form-control"
+                      type="text"
+                      placeholder="Card number"
+                      aria-label="Card number"
+                      pattern="[0-9]{1,}"
+                    />
+                    <input 
+                    type="month"
+                    placeholder="Expire date"
+                    class="form-control"/>
+                    <input
+                      type="number"
+                      placeholder="Security code"
+                      class="form-control"/>
+                  </div>
+                </div>
                 <div class="d-grid col-6 mt-4 mx-auto">
                   <button
                     type="submit"
-                    class="btn btn-secondary rounded-5 btn-lg">
+                    class="btn btn-secondary rounded-5 btn-lg"
+                  >
                     Donate
                   </button>
                 </div>
