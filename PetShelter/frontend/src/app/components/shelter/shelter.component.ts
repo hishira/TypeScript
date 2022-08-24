@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { getFullAddress } from 'src/app/models/address.models';
 import { Icons } from 'src/app/models/icons.model';
 import { CentersGQL, CenterSchema } from 'src/app/types/types';
 @Component({
@@ -30,6 +31,7 @@ export class ShelterComponent implements OnInit {
       })
       .valueChanges.subscribe((center) => {
         this.center = center.data.centers[0];
+        this.fullAddress = getFullAddress(center.data.centers[0].address)
       });
   }
 }
