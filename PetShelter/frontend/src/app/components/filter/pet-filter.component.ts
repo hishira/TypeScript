@@ -1,8 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { PetType } from 'src/app/models/PetType.model';
 import { Pet } from 'src/app/models/pet.model';
 import { BreedSchema, GenderSchema, PetFiltersGQL, PetSchema, SizeSchema } from 'src/app/types/types';
+type FilterFormGroup = {
+    breedId: FormControl<number | null>,
+    el: FormControl<number[] | null>,
+    genderId: FormControl<number | null>,
+    sizeId: FormControl<number | null>,
+}
 @Component({
     selector: 'pet-filter',
     styleUrls: ['./pet-filter.component.scss'],
@@ -13,7 +19,7 @@ export class PetFilter implements OnInit {
         new EventEmitter();
     @Input() pettype?: PetType;
 
-    filterForm: FormGroup;
+    filterForm: FormGroup<FilterFormGroup>;
     filterMap: Map<string, (pet: Partial<PetSchema>) => boolean> = new Map();
     genders: GenderSchema[] = [];
     petBreeds: Partial<BreedSchema>[] = [];
@@ -37,11 +43,11 @@ export class PetFilter implements OnInit {
         private formBuilder: FormBuilder,
         private petFilters: PetFiltersGQL,
     ) {
-        this.filterForm = this.formBuilder.group({
-            breedId: [1],
-            el: [[]],
-            genderId: [1],
-            sizeId: [1],
+        this.filterForm = this.formBuilder.group<FilterFormGroup>({
+            breedId: new FormControl(1),
+            el: new FormControl([]),
+            genderId: new FormControl(1),
+            sizeId: new FormControl(1),
         });
         this.filterForm
             .get('el')
@@ -95,6 +101,7 @@ export class PetFilter implements OnInit {
     private clearFilterForm(): void {
         this.filterForm.setValue({
             breedId: 0,
+            el: [],
             genderId: 0,
             sizeId: 0,
         });

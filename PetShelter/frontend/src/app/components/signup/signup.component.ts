@@ -1,15 +1,23 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalService } from "src/app/services/modal.service";
 import { LoginComponent } from "../login/login.component";
-
+type SignUpFormType = {
+    confirmPassword: FormControl<string>,
+    country: FormControl<string>,
+    countryCode: FormControl<string>,
+    email: FormControl<string>,
+    lastName: FormControl<string>,
+    name: FormControl<string>,
+    password: FormControl<string>,
+}
 @Component({
     selector: 'app-signup',
     styleUrls: ['./signup.component.scss'],
     templateUrl: './signup.component.html'
 })
 export class SignUpComponent implements OnInit{
-    form: FormGroup;
+    form: FormGroup<SignUpFormType>;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -21,14 +29,14 @@ export class SignUpComponent implements OnInit{
     }
 
     ngOnInit(): void {
-        this.form = this.formBuilder.group({
-            confirmPassword: [''],
-            country: ['',Validators.required],
-            countryCode: ['',Validators.required],
-            email: ['',Validators.required],
-            lastName: ['',Validators.required],
-            name: ['',Validators.required],
-            password: ['',Validators.required],
+        this.form = this.formBuilder.group<SignUpFormType>({
+            confirmPassword: new FormControl('',{nonNullable: true, validators: [Validators.required]}),
+            country: new FormControl('',{nonNullable: true, validators: [Validators.required]}),
+            countryCode: new FormControl('',{nonNullable: true, validators: [Validators.required]}),
+            email: new FormControl('',{nonNullable: true, validators: [Validators.required]}),
+            lastName: new FormControl('',{nonNullable: true, validators: [Validators.required]}),
+            name: new FormControl('',{nonNullable: true, validators: [Validators.required]}),
+            password: new FormControl('',{nonNullable: true, validators: [Validators.required]}),
         })
     }
 }

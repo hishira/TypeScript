@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ModalProps } from "../models/modal-props.model";
 import { SelectListModalProps } from './../models/selectListModalProps.mode';
 import {has, get} from 'lodash'
-import {  FormControl } from "@angular/forms";
+import {  UntypedFormControl } from "@angular/forms";
 @Injectable({
     providedIn: 'root'
 })
@@ -19,7 +19,7 @@ export class FilterService {
         mappedValue.key = get(props, 'key', '');
     }
     if(has(props, 'control')) {
-        mappedValue.control = get(props, 'control', new FormControl('',[]));
+        mappedValue.control = get(props, 'control', new UntypedFormControl('',[]));
     }
     return mappedValue;
   }  

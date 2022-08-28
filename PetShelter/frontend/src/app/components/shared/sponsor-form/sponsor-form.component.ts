@@ -1,18 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DocumentService } from 'src/app/services/document.service';
 import {
   DEFAULT_DONATE_COST,
   SUPPORT_BUTTON_CLASSES,
 } from 'src/app/utils/const';
 
+type PetSponsorForm = {
+  amount: FormControl<number>,
+  cardNumber:  FormControl<string>
+  confirmEmail: FormControl<string>,
+  email: FormControl<string>,
+  firstName: FormControl<string>,
+  lastName: FormControl<string>,
+  message: FormControl<string | null>,
+}
 @Component({
   selector: 'app-sponsor-form',
   templateUrl: './sponsor-form.component.html',
 })
 export class SponsorFormComponent implements OnInit {
   donationValues: number[] = [5, 20, 50, 100, 500];
-  form: FormGroup;
+  form: FormGroup<PetSponsorForm>;
   lastClickedButton: HTMLButtonElement | undefined = undefined;
 
   constructor(
@@ -25,14 +34,14 @@ export class SponsorFormComponent implements OnInit {
     this.form.updateValueAndValidity();
   }
   ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      amount: [DEFAULT_DONATE_COST, Validators.required],
-      cardNumber: ['', Validators.required],
-      confirmEmail: ['', Validators.required],
-      email: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      message: [''],
+    this.form = this.formBuilder.group<PetSponsorForm>({
+      amount: new FormControl(DEFAULT_DONATE_COST, {nonNullable: true, validators: [Validators.required]}),
+      cardNumber: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+      confirmEmail: new FormControl('', {nonNullable: true, validators: [Validators.required, Validators.email]}),
+      email: new FormControl('', {nonNullable: true, validators: [Validators.required, Validators.email]}),
+      firstName: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+      lastName: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
+      message :new FormControl('', {nonNullable: false}),
     });
     this.form.valueChanges.subscribe(val=>console.log(val))
   }

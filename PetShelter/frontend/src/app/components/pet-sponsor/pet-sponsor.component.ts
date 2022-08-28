@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { getFullAddress } from 'src/app/models/address.models';
 import { Optional } from 'src/app/models/core.models';
@@ -21,7 +21,7 @@ interface Sponsor {
   message: string;
 }
 type SponsorControls = { [key in keyof Sponsor]: AbstractControl };
-type SponsorForm = FormGroup & { controls: SponsorControls; value: Sponsor };
+type SponsorForm = UntypedFormGroup & { controls: SponsorControls; value: Sponsor };
 @Component({
   selector: 'app-pet-sponsor',
   styleUrls: ['./pet-sponsor.scss'],
