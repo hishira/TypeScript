@@ -1,0 +1,8 @@
+<ng-container>
+  <div class="mb-3">
+    <span class="fs-3 p-1">{{ title }}</span>
+  </div>
+  <app-sponsor-form
+    (formEmitter)="getEmitedValue($event)"
+  ></app-sponsor-form>
+</ng-container>

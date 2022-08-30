@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DocumentService } from 'src/app/services/document.service';
 import {
@@ -15,11 +15,22 @@ type PetSponsorForm = {
   lastName: FormControl<string>,
   message: FormControl<string | null>,
 }
+export type PetsponsorValue = Partial<{
+  amount: number,
+  cardNumber:  string,
+  confirmEmail: string,
+  email: string,
+  firstName: string,
+  lastName: string,
+  message: string | null,
+}>
 @Component({
   selector: 'app-sponsor-form',
   templateUrl: './sponsor-form.component.html',
 })
 export class SponsorFormComponent implements OnInit {
+
+  @Output() formEmitter: EventEmitter<PetsponsorValue> = new EventEmitter<PetsponsorValue>();
   donationValues: number[] = [5, 20, 50, 100, 500];
   form: FormGroup<PetSponsorForm>;
   lastClickedButton: HTMLButtonElement | undefined = undefined;
@@ -32,6 +43,9 @@ export class SponsorFormComponent implements OnInit {
   donate() {
     this.form.markAllAsTouched();
     this.form.updateValueAndValidity();
+    if(this.form.valid){
+      this.formEmitter.emit(this.form.value)
+    }
   }
   ngOnInit(): void {
     this.form = this.formBuilder.group<PetSponsorForm>({
@@ -41,9 +55,8 @@ export class SponsorFormComponent implements OnInit {
       email: new FormControl('', {nonNullable: true, validators: [Validators.required, Validators.email]}),
       firstName: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
       lastName: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
-      message :new FormControl('', {nonNullable: false}),
+      message : new FormControl('', {nonNullable: false}),
     });
-    this.form.valueChanges.subscribe(val=>console.log(val))
   }
 
   selectDonationCost(donationCost: number, button: HTMLButtonElement): void {

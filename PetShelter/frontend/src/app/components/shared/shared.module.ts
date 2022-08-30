@@ -13,7 +13,10 @@ import { SelectItemDirective } from './directives/select-item.directive';
 import { IconComponent } from './icon-component/icon.component';
 import { MapComponent } from './map/map.component';
 import { SponsorFormComponent } from './sponsor-form/sponsor-form.component';
+import { SponsorModalComponent } from './sponsor-modal/sponsor-modal.component';
+
 @NgModule({
+  
   declarations: [
     SelectListComponent,
     SelectListModalComponent,
@@ -26,6 +29,7 @@ import { SponsorFormComponent } from './sponsor-form/sponsor-form.component';
     IconComponent,
     MapComponent,
     SponsorFormComponent,
+    SponsorModalComponent,
   ],
   exports: [
     SelectListComponent,
@@ -39,6 +43,7 @@ import { SponsorFormComponent } from './sponsor-form/sponsor-form.component';
     IconComponent,
     MapComponent,
     SponsorFormComponent,
+    SponsorModalComponent,
   ],
   imports: [CommonModule, BrowserModule, FormsModule, ReactiveFormsModule],
 })
