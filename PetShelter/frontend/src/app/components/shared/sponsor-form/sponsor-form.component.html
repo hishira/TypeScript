@@ -26,7 +26,6 @@
                   [type]="'text'"
                   formControlName="firstName"
                   [placeholder]="'First name'"
-                  
                 ></app-input>
                 <!--<input
                   type="text"
@@ -42,7 +41,6 @@
                   [type]="'text'"
                   formControlName="lastName"
                   [placeholder]="'Last name'"
-                  
                 ></app-input>
               </div>
             </div>
@@ -52,7 +50,6 @@
                   [type]="'email'"
                   formControlName="email"
                   [placeholder]="'Email'"
-                  
                 ></app-input>
               </div>
               <div class="col">
@@ -60,7 +57,6 @@
                   [type]="'email'"
                   formControlName="confirmEmail"
                   [placeholder]="'Confirm email'"
-                  
                 ></app-input>
               </div>
             </div>
@@ -87,16 +83,17 @@
                   aria-label="Card number"
                   pattern="[0-9]{1,}"
                 />
-                <input
-                  type="month"
-                  placeholder="Expire date"
-                  class="form-control"
-                />
-                <input
-                  type="number"
-                  placeholder="Security code"
-                  class="form-control"
-                />
+                <app-input
+                  [type]="'month'"
+                  formControlName="expireDate"
+                  [placeholder]="'Expire date'"
+                ></app-input>
+
+                <app-input
+                  [type]="'number'"
+                  formControlName="cardNumber"
+                  [placeholder]="'Security code'"
+                ></app-input>
               </div>
             </div>
             <div class="d-grid col-6 mt-4 mx-auto">
