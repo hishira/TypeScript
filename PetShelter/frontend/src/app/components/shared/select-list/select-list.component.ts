@@ -37,8 +37,10 @@ export class SelectListComponent implements ControlValueAccessor, OnInit {
   get value() {
     return this.selfValue;
   }
+  
   set value(newValue: any) {
     this.selfValue = newValue;
+    console.log(newValue)
     this.onChangeCallback(newValue);
     this.onTouchedCallback();
   }

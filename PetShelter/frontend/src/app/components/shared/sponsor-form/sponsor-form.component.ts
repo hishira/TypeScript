@@ -47,6 +47,7 @@ export class SponsorFormComponent implements OnInit {
       this.formEmitter.emit(this.form.value)
     }
   }
+
   ngOnInit(): void {
     this.form = this.formBuilder.group<PetSponsorForm>({
       amount: new FormControl(DEFAULT_DONATE_COST, {nonNullable: true, validators: [Validators.required]}),
@@ -57,6 +58,9 @@ export class SponsorFormComponent implements OnInit {
       lastName: new FormControl('', {nonNullable: true, validators: [Validators.required]}),
       message : new FormControl('', {nonNullable: false}),
     });
+    this.form.valueChanges.subscribe((val)=>{
+      console.log(val)
+    })
   }
 
   selectDonationCost(donationCost: number, button: HTMLButtonElement): void {
