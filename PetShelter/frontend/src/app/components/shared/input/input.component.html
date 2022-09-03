@@ -1,7 +1,18 @@
-<input
-  [type]="type"
-  class="form-control"
-  [placeholder]="placeholder"
-  [disabled]="disabled"
-  [(ngModel)]="value"
-/>
+<ng-container>
+  <input
+    [type]="type"
+    class="form-control"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [(ngModel)]="value"
+    [ngClass]="{
+      'is-valid': valid,
+      'is-invalid': !valid
+    }"
+  />
+  <ng-container *ngIf="control?.errors">
+    <span *ngIf="control?.errors?.required" class="invalid-feedback">Required</span>
+    <span *ngIf="control?.errors?.email" class="invalid-feedback">Must be email</span>
+
+  </ng-container>
+</ng-container>
