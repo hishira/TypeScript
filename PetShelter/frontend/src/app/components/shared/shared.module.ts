@@ -15,6 +15,7 @@ import { MapComponent } from './map/map.component';
 import { SponsorFormComponent } from './sponsor-form/sponsor-form.component';
 import { SponsorModalComponent } from './sponsor-modal/sponsor-modal.component';
 import { InputComponent } from './input/input.component';
+import { InputErrorsComponent } from './input-errors/input-errors';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { InputComponent } from './input/input.component';
     SponsorFormComponent,
     SponsorModalComponent,
     InputComponent,
+    InputErrorsComponent,
   ],
   exports: [
     SelectListComponent,
@@ -46,6 +48,7 @@ import { InputComponent } from './input/input.component';
     SponsorFormComponent,
     SponsorModalComponent,
     InputComponent,
+    InputErrorsComponent,
   ],
   imports: [CommonModule, BrowserModule, FormsModule, ReactiveFormsModule],
 })

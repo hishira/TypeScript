@@ -10,9 +10,7 @@
       'is-invalid': !valid
     }"
   />
-  <ng-container *ngIf="control?.errors">
-    <span *ngIf="control?.errors?.required" class="invalid-feedback">Required</span>
-    <span *ngIf="control?.errors?.email" class="invalid-feedback">Must be email</span>
-
-  </ng-container>
+  <app-input-errors
+    [errors]="control ? control.errors : null"
+  ></app-input-errors>
 </ng-container>
