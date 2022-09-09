@@ -1,0 +1,15 @@
+GET http://127.0.0.1:8000/diesel/
+
+###
+
+POST http://127.0.0.1:8000/diesel/
+Content-Type: application/json
+
+{
+    "title": "Something",
+    "text": "Something deeper than me"
+}
+
+###
+
+GET http://127.0.0.1:8000/diesel/1
