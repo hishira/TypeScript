@@ -56,7 +56,7 @@ struct User {
     password: String,
 }
 
-#[derive(Debug, Serialize, Queryable, Insertable)]
+#[derive(Debug, Serialize, Deserialize, Queryable, Insertable)]
 #[serde(crate = "rocket::serde")]
 #[table_name = "users"]
 struct UserPartial {
@@ -80,35 +80,36 @@ async fn create(db: Db, post: Json<Post>) -> Result<Created<Json<Post>>> {
 }
 
 #[post("/user", data = "<user>")]
-async fn create_user(db: Db, user: Json<User>) -> Status  {
+async fn create_user(db: Db, user: Json<User>) -> Status {
     let user_value = user.clone();
-    let hashed = hash(&user.password, DEFAULT_COST);
     let _user_with_email = db
         .run(move |conn| {
             users::table
                 .filter(users::email.eq(&user_value.email))
-                .first::<User>(conn);
+                .first::<User>(conn)
         })
         .await;
-    //if !user_with_email {
-    match hashed {
-        Ok(pass) => {
-            println!("Hash{}", pass);
-            let mut create_clone = user.clone();
-            create_clone.password = pass;
-            db.run(move |conn| {
-                diesel::insert_into(users::table)
-                    .values(&*create_clone)
-                    .execute(conn)
-            })
-            .await;
-            Status::Ok
+    //print("User {}")
+    match _user_with_email {
+        Ok(_checked_user) => Status::Locked,
+        Err(e) => {
+            let hashed = hash(&user.password, DEFAULT_COST);
+            match hashed {
+                Ok(pass) => {
+                    let mut create_clone = user.clone();
+                    create_clone.password = pass;
+                    db.run(move |conn| {
+                        diesel::insert_into(users::table)
+                            .values(&*create_clone)
+                            .execute(conn)
+                    })
+                    .await;
+                    Status::Ok
+                }
+                Err(e) => Status::NotAcceptable,
+            }
         }
-        Err(e) => Status::NotAcceptable,
     }
-    //} else {
-    //Status::Conflict
-    //}
 }
 // #[post("/user", data="<user>")]
 // async fn create_user(db: Db,user: Json<User>)-> Result<Created<Json<User>>>{
@@ -116,17 +117,15 @@ async fn create_user(db: Db, user: Json<User>) -> Status  {
 // }
 
 #[get("/users")]
-async fn user_lists(
-    db: Db,
-) -> Option<Json<Vec<UserPartial>>> {
+async fn user_lists(db: Db) -> Option<Json<Vec<UserPartial>>> {
     db.run(move |conn| {
-            users::table
-                .select((users::id, users::name, users::last_name, users::email))
-                .load::<UserPartial>(conn)
-        })
-        .await
-        .map(Json)
-        .ok()
+        users::table
+            .select((users::id, users::name, users::last_name, users::email))
+            .load::<UserPartial>(conn)
+    })
+    .await
+    .map(Json)
+    .ok()
 }
 
 #[get("/")]
