@@ -1,7 +1,7 @@
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR,
-    lastName VARCHAR,
+    name VARCHAR DEFAULT NULL,
+    last_name VARCHAR DEFAULT NULL,
     email VARCHAR NOT NULL,
     password VARCHAR NOT NULL
 );
