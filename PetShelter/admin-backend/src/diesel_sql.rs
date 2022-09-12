@@ -1,12 +1,11 @@
 use self::diesel::prelude::*;
 use bcrypt::{hash, verify, DEFAULT_COST};
-use rocket::data::Outcome;
 use rocket::fairing::AdHoc;
 use rocket::http::Status;
 use rocket::request::{self, FromRequest, Request};
 use rocket::response::{status::Created, Debug};
 use rocket::serde::{json::Json, Deserialize, Serialize};
-use rocket::Outcome;
+use rocket::outcome::Outcome;
 use rocket::{Build, Rocket};
 use rocket_sync_db_pools::diesel;
 
@@ -127,24 +126,22 @@ enum ApiKeyError {
     BadCount,
     Missing,
 }
-impl<'a, 'r> FromRequest<'a, 'r> for JWTToken {
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for JWTToken {
     type Error = ApiKeyError;
 
-    fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
+    async fn from_request(request: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
         let token: Vec<_> = request.headers().get("Authorization").collect();
         match token.len() {
-            0 => Outcome::Failure((Status::BadRequest, ApiKeyError::Missing)),
-            1 => {
-                print!("keys {}", token[0].to_string());
-                Outcome::Success(JWTToken(token[0].to_string()))
-            },
+            0 => Outcome::Failure((Status::BadRequest, ApiKeyError::BadCount)),
+            1 => Outcome::Success(JWTToken(token[0].to_string())),
             _ => Outcome::Failure((Status::BadRequest, ApiKeyError::Missing)),
         }
     }
 }
 
 #[post("/login", data = "<userauthform>")]
-async fn login(db: Db, userauthform: Json<UserAuthForm>) -> (Status, &'static str) {
+async fn login(db: Db, userauthform: Json<UserAuthForm>, token: JWTToken) -> (Status, &'static str) {
     let email = userauthform.email.clone();
     let _user = db
         .run(move |conn| {
