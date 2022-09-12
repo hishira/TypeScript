@@ -28,3 +28,17 @@ Content-Type: application/json
     "email": "c@a.com",
     "password": "123"
 }
+
+### User login
+
+POST http://127.0.0.1:8000/diesel/login
+Content-Type: application/json
+
+{
+    "email": "a@a.com",
+    "password": "123"
+}
+
+POST http://127.0.0.1:8000/diesel/login
+Content-Type: application/json
+Authorization: "Bearer token"

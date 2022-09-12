@@ -1,11 +1,13 @@
+use self::diesel::prelude::*;
 use bcrypt::{hash, verify, DEFAULT_COST};
+use rocket::data::Outcome;
 use rocket::fairing::AdHoc;
 use rocket::http::Status;
+use rocket::request::{self, FromRequest, Request};
 use rocket::response::{status::Created, Debug};
 use rocket::serde::{json::Json, Deserialize, Serialize};
+use rocket::Outcome;
 use rocket::{Build, Rocket};
-
-use self::diesel::prelude::*;
 use rocket_sync_db_pools::diesel;
 
 #[database("diesel")]
@@ -66,6 +68,13 @@ struct UserPartial {
     email: String,
 }
 
+#[derive(Serialize, Deserialize)]
+#[serde(crate = "rocket::serde")]
+struct UserAuthForm {
+    email: String,
+    password: String,
+}
+
 #[post("/", data = "<post>")]
 async fn create(db: Db, post: Json<Post>) -> Result<Created<Json<Post>>> {
     let post_vlue = post.clone();
@@ -109,6 +118,55 @@ async fn create_user(db: Db, user: Json<User>) -> Status {
                 Err(e) => Status::NotAcceptable,
             }
         }
+    }
+}
+
+struct JWTToken(String);
+#[derive(Debug)]
+enum ApiKeyError {
+    BadCount,
+    Missing,
+}
+impl<'a, 'r> FromRequest<'a, 'r> for JWTToken {
+    type Error = ApiKeyError;
+
+    fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
+        let token: Vec<_> = request.headers().get("Authorization").collect();
+        match token.len() {
+            0 => Outcome::Failure((Status::BadRequest, ApiKeyError::Missing)),
+            1 => {
+                print!("keys {}", token[0].to_string());
+                Outcome::Success(JWTToken(token[0].to_string()))
+            },
+            _ => Outcome::Failure((Status::BadRequest, ApiKeyError::Missing)),
+        }
+    }
+}
+
+#[post("/login", data = "<userauthform>")]
+async fn login(db: Db, userauthform: Json<UserAuthForm>) -> (Status, &'static str) {
+    let email = userauthform.email.clone();
+    let _user = db
+        .run(move |conn| {
+            users::table
+                .filter(users::email.eq(email))
+                .first::<User>(conn)
+        })
+        .await;
+    match _user {
+        Ok(user) => {
+            println!("User password, {}", user.password);
+            if let Ok(value) = verify(&userauthform.password, &user.password) {
+                if value {
+                    (Status::Ok, "Password match")
+                } else {
+                    (Status::Forbidden, "Password not match")
+                }
+            } else {
+                (Status::Forbidden, "Error with login")
+            }
+        }
+        Err(e) => (Status::NotFound, "User with that email not found"),
     }
 }
 // #[post("/user", data="<user>")]
@@ -162,7 +220,7 @@ pub fn stage() -> AdHoc {
             .attach(AdHoc::on_ignite("Diesel migrations", run_migrations))
             .mount(
                 "/diesel",
-                routes![list, read, create, user_lists, create_user],
+                routes![list, read, create, user_lists, create_user, login],
             )
     })
 }
