@@ -1,23 +1,18 @@
 use self::diesel::prelude::*;
-use bcrypt::{hash, verify, DEFAULT_COST};
-use rocket::http::Status;
-use rocket::request::{self, FromRequest, Request};
-use rocket::response::{status::Created, Debug};
-use rocket::serde::{json::Json};
-use rocket::outcome::Outcome;
-use rocket_sync_db_pools::diesel;
-use jsonwebtoken::{ TokenData, Header, Validation,EncodingKey, DecodingKey};
-use chrono::Utc;
-use crate::models::user::{User, UserPartial, UserAuthForm, UserToken};
-use crate::models::post::{Post};
 use crate::config::Db;
+use crate::jwt::{decode_token, generate_token, UserJWTToken};
+use crate::models::post::Post;
+use crate::models::user::{User, UserAuthForm, UserPartial};
 use crate::schema::posts;
 use crate::schema::users;
+use bcrypt::{hash, verify, DEFAULT_COST};
+use rocket::http::Status;
+use rocket::outcome::Outcome;
+use rocket::request::{self, FromRequest, Request};
+use rocket::response::{status, status::Created, Debug};
+use rocket::serde::json::Json;
+use rocket_sync_db_pools::diesel;
 type Result<T, E = Debug<diesel::result::Error>> = std::result::Result<T, E>;
-const tokenTime: i64 = 60 * 3; // 3 minutes token
-const refreshToken: i64 = 60 * 60; // one hour token
-
-
 
 #[post("/", data = "<post>")]
 pub async fn create(db: Db, post: Json<Post>) -> Result<Created<Json<Post>>> {
@@ -79,25 +74,29 @@ impl<'r> FromRequest<'r> for JWTToken {
         let token: Vec<_> = request.headers().get("Authorization").collect();
         match token.len() {
             0 => Outcome::Failure((Status::BadRequest, ApiKeyError::BadCount)),
-            1 => Outcome::Success(JWTToken(token[0].to_string())),
+            1 => {
+                let auth_string = token[0].to_string();
+                if auth_string.starts_with("Bearer") {
+                    let user_token = auth_string[6..token[0].to_string().len()].trim();
+                    if let Ok(token_data) = decode_token(user_token.to_string()) {
+                        println!("{}", token_data.claims.user);
+                    }
+                }
+                Outcome::Success(JWTToken(token[0].to_string()))
+            }
             _ => Outcome::Failure((Status::BadRequest, ApiKeyError::Missing)),
         }
     }
 }
 
-pub fn generate_token(userForm: Json<UserAuthForm>) -> String {
-    let now  = Utc::now().timestamp_nanos() / 1_000_000_000;
-    let peyload = UserToken {
-        iat: now,
-        exp: now + tokenTime,
-        user: userForm.email.to_owned(),
-    };
-    jsonwebtoken::encode(&Header::default(), &peyload, &EncodingKey::from_secret("secret".as_ref())).unwrap()
-}
 #[post("/login", data = "<userauthform>")]
-pub async fn login(db: Db, userauthform: Json<UserAuthForm>, token: JWTToken) -> (Status,String) {
+pub async fn login(
+    db: Db,
+    userauthform: Json<UserAuthForm>,
+    token: JWTToken,
+) -> status::Custom<Json<Option<UserJWTToken>>> {
     let email = userauthform.email.clone();
-    let usefFormClone = userauthform.clone();
+    let usef_form_clone = userauthform.clone();
     let _user = db
         .run(move |conn| {
             users::table
@@ -107,18 +106,17 @@ pub async fn login(db: Db, userauthform: Json<UserAuthForm>, token: JWTToken) ->
         .await;
     match _user {
         Ok(user) => {
-            println!("User password, {}", user.password);
             if let Ok(value) = verify(&userauthform.password, &user.password) {
                 if value {
-                    (Status::Ok, generate_token(usefFormClone))
+                    status::Custom(Status::Ok, Json(generate_token(usef_form_clone)))
                 } else {
-                    (Status::Forbidden, String::from("Password not match"))
+                    status::Custom(Status::Forbidden, Json(None))
                 }
             } else {
-                (Status::Forbidden, String::from("Error with login"))
+                status::Custom(Status::Forbidden, Json(None))
             }
         }
-        Err(e) => (Status::NotFound, String::from("User with that email not found")),
+        Err(e) => status::Custom(Status::NotFound, Json(None)),
     }
 }
 // #[post("/user", data="<user>")]
@@ -154,5 +152,3 @@ pub async fn read(db: Db, id: i32) -> Option<Json<Post>> {
         .map(Json)
         .ok()
 }
-
-

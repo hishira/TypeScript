@@ -11,6 +11,7 @@ mod api;
 mod config;
 mod models;
 mod schema;
+mod jwt;
 
 #[launch]
 fn rocket() -> _ {
