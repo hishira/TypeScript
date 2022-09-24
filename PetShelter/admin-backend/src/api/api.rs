@@ -12,6 +12,7 @@ use rocket::request::{self, FromRequest, Request};
 use rocket::response::{status, status::Created, Debug};
 use rocket::serde::json::Json;
 use rocket_sync_db_pools::diesel;
+use crate::models::role::Role;
 type Result<T, E = Debug<diesel::result::Error>> = std::result::Result<T, E>;
 
 #[post("/", data = "<post>")]
@@ -46,6 +47,7 @@ pub async fn create_user(db: Db, user: Json<User>) -> Status {
                 Ok(pass) => {
                     let mut create_clone = user.clone();
                     create_clone.password = pass;
+                    create_clone.role = Role::UserRole();
                     db.run(move |conn| {
                         diesel::insert_into(users::table)
                             .values(&*create_clone)
@@ -128,7 +130,7 @@ pub async fn login(
 pub async fn user_lists(db: Db) -> Option<Json<Vec<UserPartial>>> {
     db.run(move |conn| {
         users::table
-            .select((users::id, users::name, users::last_name, users::email))
+            .select((users::id, users::name, users::last_name, users::email, users::role))
             .load::<UserPartial>(conn)
     })
     .await

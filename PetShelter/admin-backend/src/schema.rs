@@ -14,5 +14,6 @@ table! {
         last_name -> Nullable<Text>,
         email -> Text,
         password -> Text,
+        role -> Text,
     }
 }

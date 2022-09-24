@@ -1,7 +1,8 @@
 use diesel::prelude::*;
 use rocket::serde::{ Deserialize, Serialize};
 use crate::schema::users;
-#[derive(Debug, Clone, Deserialize, Serialize, Queryable, Insertable)]
+use crate::models::role::Role;
+#[derive(Debug, Clone, Deserialize, Serialize, Queryable, Insertable, Identifiable)]
 #[serde(crate = "rocket::serde")]
 #[table_name = "users"]
 pub struct User {
@@ -11,6 +12,8 @@ pub struct User {
     pub last_name: Option<String>,
     pub email: String,
     pub password: String,
+    #[serde(skip_deserializing)]
+    pub role: String
 }
 
 #[derive(Debug, Serialize, Deserialize, Queryable, Insertable)]
@@ -21,6 +24,7 @@ pub struct UserPartial {
     name: Option<String>,
     last_name: Option<String>,
     email: String,
+    role: String
 }
 
 #[derive(Serialize, Deserialize, Clone)]

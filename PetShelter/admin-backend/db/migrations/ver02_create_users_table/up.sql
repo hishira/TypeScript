@@ -3,5 +3,6 @@ CREATE TABLE users (
     name VARCHAR DEFAULT NULL,
     last_name VARCHAR DEFAULT NULL,
     email VARCHAR NOT NULL,
-    password VARCHAR NOT NULL
+    password VARCHAR NOT NULL,
+    role TEXT CHECK(role in('User', 'Admin')) NOT NULL DEFAULT 'User'
 );
