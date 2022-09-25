@@ -99,4 +99,16 @@ impl User{
         .ok()
     }
 
+    pub async fn user_by_id(db: Db, id: i32) -> Option<Json<UserPartial>> {
+        db.run(move |conn| {
+            users::table
+                .filter(users::id.eq(id))
+                .select((users::id, users::name,users::last_name, users::email, users::role ))
+                .first(conn)
+        })
+        .await
+        .map(Json)
+        .ok()
+    }
+
 }

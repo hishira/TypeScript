@@ -1,9 +1,8 @@
 table! {
-    posts (id) {
+    pets (id) {
         id -> Nullable<Integer>,
-        title -> Text,
-        text -> Text,
-        published -> Bool,
+        user_id -> Integer,
+        name -> Text,
     }
 }
 
@@ -17,3 +16,10 @@ table! {
         role -> Text,
     }
 }
+
+joinable!(pets -> users (user_id));
+
+allow_tables_to_appear_in_same_query!(
+    pets,
+    users,
+);

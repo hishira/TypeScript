@@ -1,6 +1,6 @@
 use rocket::fairing::AdHoc;
 use rocket::{Build, Rocket};
-use crate::api::api::{list, read, create, user_lists, create_user, login};
+use crate::api::api::{ user_lists, create_user, login, user_by_id};
 #[database("diesel")]
 pub struct Db(diesel::SqliteConnection);
 
@@ -21,7 +21,7 @@ pub fn stage() -> AdHoc {
             .attach(AdHoc::on_ignite("Diesel migrations", run_migrations))
             .mount(
                 "/diesel",
-                routes![list, read, create, user_lists, create_user, login],
+                routes![user_lists, create_user, login, user_by_id],
             )
     })
 }
