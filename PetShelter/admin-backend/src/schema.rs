@@ -8,7 +8,7 @@ table! {
 
 table! {
     users (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         name -> Nullable<Text>,
         last_name -> Nullable<Text>,
         email -> Text,

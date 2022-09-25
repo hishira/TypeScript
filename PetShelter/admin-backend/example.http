@@ -30,13 +30,17 @@ Content-Type: application/json
 }
 
 ### User login
-
 POST http://127.0.0.1:8000/diesel/login
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjM1MjA2NTIsImV4cCI6MTY2MzUyMDgzMiwidXNlciI6ImFAYS5jb20ifQ.yrtRfjXEKPDBh-YGCQ5qRj5_Xx-iqFt3Ze3GYtNTMmw
 
 {
-    "email": "a@a.com",
+    "email": "123@123.com",
     "password": "123"
 }
+
+### Example to check token info
+GET http://127.0.0.1:8000/diesel/tokenexample
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQxMjY2MjksImV4cCI6MTY2NDEzNzQyOSwidXNlciI6eyJpZCI6MiwiZW1haWwiOiIxMjNAMTIzLmNvbSIsInJvbGUiOiJVc2VyIn19.6Cm6DMXQDYz8kslO-7pUO1FY-fWpYMDj8uxDnN8hUX0
+
+
 

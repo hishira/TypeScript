@@ -13,7 +13,7 @@ use super::role::Role;
 #[table_name = "users"]
 pub struct User {
     #[serde(skip_deserializing)]
-    id: Option<i32>,
+    pub id: i32,
     pub name: Option<String>,
     pub last_name: Option<String>,
     pub email: String,
@@ -26,7 +26,7 @@ pub struct User {
 #[serde(crate = "rocket::serde")]
 #[table_name = "users"]
 pub struct UserPartial {
-    id: Option<i32>,
+    id: i32,
     name: Option<String>,
     last_name: Option<String>,
     email: String,
@@ -38,8 +38,6 @@ pub struct UserPartial {
 pub struct UserAuthForm {
     pub email: String,
     pub password: String,
-    pub id: i32,
-    pub role: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -61,7 +59,6 @@ pub struct UserToken {
 }
 
 impl User{
-    
     pub async fn create(db: &Db,user: Json<User>) -> Status {
         let hashes = hash(&user.password, DEFAULT_COST);
         match hashes {

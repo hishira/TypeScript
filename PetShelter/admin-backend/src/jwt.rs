@@ -1,41 +1,61 @@
 use chrono::Utc;
 use jsonwebtoken::{ TokenData, Header, Validation,EncodingKey, DecodingKey};
+use rocket::Response;
 use rocket::request::{self, FromRequest, Request};
-use crate::models::user::{UserToken,UserAuthForm, UserTokenInfo};
+use rocket::response::status;
+use crate::models::user::{UserToken,UserAuthForm, UserTokenInfo, User};
 use rocket::serde::{json::Json};
-use rocket::serde::{Deserialize, Serialize};
+use rocket::serde::{Deserialize, Serialize, json};
 use jsonwebtoken::errors::Result;
 use rocket::outcome::Outcome;
 use rocket::http::Status;
-
-const tokenTime: i64 = 60 * 3; // 3 minutes token
+use rocket::serde::json::Value;
+const tokenTime: i64 = 60 * 60 * 3; // 3 minutes token
 const refreshToken: i64 = 60 * 60; // one hour token
 
-pub struct JWTToken(String);
-#[derive(Debug)]
-pub enum ApiKeyError {
-    BadCount,
-    Missing,
-}
 #[rocket::async_trait]
-impl<'r> FromRequest<'r> for JWTToken {
-    type Error = ApiKeyError;
+impl<'r> FromRequest<'r> for UserToken {
+    type Error = status::Custom<Json<Value>>;
 
-    async fn from_request(request: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
+    async fn from_request(request: &'r Request<'_>) -> request::Outcome<Self,status::Custom<Json<Value>>> {
         let token: Vec<_> = request.headers().get("Authorization").collect();
         match token.len() {
-            0 => Outcome::Failure((Status::BadRequest, ApiKeyError::BadCount)),
+            0 =>Outcome::Failure(
+                (
+                    Status::BadRequest,
+                    status::Custom(
+                        Status::Unauthorized,
+                        Json(json::Value::Null),
+                    ),
+                )
+            ),
             1 => {
                 let auth_string = token[0].to_string();
                 if auth_string.starts_with("Bearer") {
                     let user_token = auth_string[6..token[0].to_string().len()].trim();
                     if let Ok(token_data) = decode_token(user_token.to_string()) {
-                        println!("{}", token_data.claims.user.email);
+                        return  Outcome::Success(token_data.claims);
                     }
                 }
-                Outcome::Success(JWTToken(token[0].to_string()))
+                Outcome::Failure(
+                    (
+                        Status::BadRequest,
+                        status::Custom(
+                            Status::Unauthorized,
+                            Json(json::Value::Null),
+                        ),
+                    )
+                )
             }
-            _ => Outcome::Failure((Status::BadRequest, ApiKeyError::Missing)),
+            _ => Outcome::Failure(
+                (
+                    Status::BadRequest,
+                    status::Custom(
+                        Status::Unauthorized,
+                        Json(json::Value::Null),
+                    ),
+                )
+            ),
         }
     }
 }
@@ -47,7 +67,7 @@ pub struct UserJWTToken {
     refreshToken: String,
 }
 
-pub fn generate_token(user_form: Json<UserAuthForm>) -> Option<UserJWTToken> {
+pub fn generate_token(user_form: User) -> Option<UserJWTToken> {
     let now  = Utc::now().timestamp_nanos() / 1_000_000_000;
     let token_peyload = UserToken {
         iat: now,

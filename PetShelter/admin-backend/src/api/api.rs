@@ -1,7 +1,7 @@
 use self::diesel::prelude::*;
 use crate::config::Db;
-use crate::jwt::{ generate_token, UserJWTToken, JWTToken};
-use crate::models::user::{User, UserAuthForm, UserPartial};
+use crate::jwt::{ generate_token, UserJWTToken};
+use crate::models::user::{User, UserAuthForm, UserPartial, UserToken};
 use crate::schema::users;
 use bcrypt::verify;
 use rocket::http::Status;
@@ -23,14 +23,18 @@ pub async fn create_user(db: Db, user: Json<User>) -> Status {
     }
 }
 
+#[get("/tokenexample")]
+pub async fn exampleCheck(token: UserToken) -> Status {
+    print!("Email: {}, id: {}, role: {}",token.user.email,token.user.id,token.user.role);
+    Status::Ok
+}
+
 #[post("/login", data = "<userauthform>")]
 pub async fn login(
     db: Db,
     userauthform: Json<UserAuthForm>,
-    token: JWTToken,
 ) -> status::Custom<Json<Option<UserJWTToken>>> {
     let email = userauthform.email.clone();
-    let usef_form_clone = userauthform.clone();
     let _user = db
         .run(move |conn| {
             users::table
@@ -42,7 +46,7 @@ pub async fn login(
         Ok(user) => {
             if let Ok(value) = verify(&userauthform.password, &user.password) {
                 if value {
-                    status::Custom(Status::Ok, Json(generate_token(usef_form_clone)))
+                    status::Custom(Status::Ok, Json(generate_token(user)))
                 } else {
                     status::Custom(Status::Forbidden, Json(None))
                 }
