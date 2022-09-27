@@ -3,7 +3,9 @@ use crate::config::Db;
 use crate::jwt::{ generate_token, UserJWTToken};
 use crate::models::user::{User, UserAuthForm, UserPartial, UserToken};
 use crate::schema::users;
+use crate::utils::status::{ResponseStatus};
 use bcrypt::verify;
+use rocket::Response;
 use rocket::http::Status;
 use rocket::response::{status};
 use rocket::serde::json::Json;
@@ -46,15 +48,15 @@ pub async fn login(
         Ok(user) => {
             if let Ok(value) = verify(&userauthform.password, &user.password) {
                 if value {
-                    status::Custom(Status::Ok, Json(generate_token(user)))
+                    ResponseStatus::Ok(generate_token(user))
                 } else {
-                    status::Custom(Status::Forbidden, Json(None))
+                    ResponseStatus::Forbidder_Empty_Json()
                 }
             } else {
-                status::Custom(Status::Forbidden, Json(None))
+                ResponseStatus::Forbidder_Empty_Json()
             }
         }
-        Err(e) => status::Custom(Status::NotFound, Json(None)),
+        Err(e) => ResponseStatus::Not_Found(),
     }
 }
 

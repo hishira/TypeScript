@@ -13,6 +13,25 @@ use rocket::serde::json::Value;
 const tokenTime: i64 = 60 * 60 * 3; // 3 minutes token
 const refreshToken: i64 = 60 * 60; // one hour token
 
+struct AdminGuard;
+// TODO check this
+//#[rocket::async_trait]
+//impl<'r> FromRequest<'r> for AdminGuard {
+//    type Error = status::Custom<Json<Value>>;
+
+//    async fn from_request(request: &'r Request<'_>) -> request::Outcome<Self, status::Custom<Json<Value>>> {
+//        let token: Vec<_> = request.headers().get("Authorization").collect();
+//        let auth_string = token[0].to_string();
+        
+//        let user_token = auth_string[6..token[0].to_string().len()].trim();
+//        if let Ok(token_data) = decode_token(user_token.to_string()) {
+//            print!("{}", token_data.claims.user.role);
+//        }
+//        Outcome::Success(Json(None))
+        
+//    }
+//}
+
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for UserToken {
     type Error = status::Custom<Json<Value>>;

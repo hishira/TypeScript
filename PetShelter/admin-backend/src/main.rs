@@ -12,6 +12,7 @@ mod config;
 mod models;
 mod schema;
 mod jwt;
+mod utils;
 
 #[launch]
 fn rocket() -> _ {
