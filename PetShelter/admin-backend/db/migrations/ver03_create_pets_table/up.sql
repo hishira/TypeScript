@@ -1,0 +1,6 @@
+CREATE TABLE pets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR DEFAULT NULL,
+    user_id INTEGER,
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);

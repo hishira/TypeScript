@@ -2,6 +2,7 @@ use self::diesel::prelude::*;
 use crate::config::Db;
 use crate::jwt::{ generate_token, UserJWTToken};
 use crate::models::user::{User, UserAuthForm, UserPartial, UserToken};
+use crate::models::pet::{InsertablePet,Pet,PetForm};
 use crate::schema::users;
 use crate::utils::status::{ResponseStatus};
 use bcrypt::verify;
@@ -23,6 +24,22 @@ pub async fn create_user(db: Db, user: Json<User>) -> Status {
             User::create(&db, user).await
         }
     }
+}
+
+#[post("/pet", data = "<pet>")]
+pub async fn create_pet(db: Db, pet: Json<PetForm>, token: UserToken) -> Status{
+    let user_id = token.user.id;
+    Pet::create(&db, user_id, pet).await
+}
+
+#[get("/pet_list")]
+pub async fn pet_list(db: Db) -> Option<Json<Vec<Pet>>> {
+    Pet::list(db).await
+}
+
+#[get("/pets_by_user")]
+pub async fn pets_by_user(db: Db, token: UserToken) -> Option<Json<Vec<Pet>>> {
+    Pet::list_by_user(db, token.user.id).await
 }
 
 #[get("/tokenexample")]

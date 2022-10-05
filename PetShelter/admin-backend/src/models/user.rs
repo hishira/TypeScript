@@ -8,6 +8,7 @@ use crate::schema::users;
 use crate::models::result::Result;
 use crate::config::Db;
 use super::role::Role;
+
 #[derive(Debug, Clone, Deserialize, Serialize, Queryable, Insertable, Identifiable)]
 #[serde(crate = "rocket::serde")]
 #[table_name = "users"]
@@ -22,7 +23,7 @@ pub struct User {
     pub role: String
 }
 
-#[derive(Debug, Serialize, Deserialize, Queryable, Insertable)]
+#[derive(Debug, Serialize, Deserialize, Queryable, Insertable, Identifiable)]
 #[serde(crate = "rocket::serde")]
 #[table_name = "users"]
 pub struct UserPartial {
@@ -106,6 +107,15 @@ impl User{
         .await
         .map(Json)
         .ok()
+    }
+
+    pub async fn user_id(db: &Db, id: i32) -> Result<User, diesel::result::Error> {
+        db.run(move |conn| {
+            users::table
+                .filter(users::id.eq(id))
+                .first::<User>(conn)
+        })
+        .await
     }
 
 }

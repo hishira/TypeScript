@@ -1,6 +1,6 @@
 table! {
     pets (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         user_id -> Integer,
         name -> Text,
     }

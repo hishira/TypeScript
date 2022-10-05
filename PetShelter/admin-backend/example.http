@@ -43,4 +43,19 @@ GET http://127.0.0.1:8000/diesel/tokenexample
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjQxMjY2MjksImV4cCI6MTY2NDEzNzQyOSwidXNlciI6eyJpZCI6MiwiZW1haWwiOiIxMjNAMTIzLmNvbSIsInJvbGUiOiJVc2VyIn19.6Cm6DMXQDYz8kslO-7pUO1FY-fWpYMDj8uxDnN8hUX0
 
 
+### Create pet for user
+POST http://127.0.0.1:8000/diesel/pet
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUwMDI0ODAsImV4cCI6MTY2NTAxMzI4MCwidXNlciI6eyJpZCI6MCwiZW1haWwiOiIxMjNAMTIzLmNvbSIsInJvbGUiOiJVc2VyIn19.ftCXqZNM0RzUIKNO__i78MTCIO0vmofZ2ewFRLBy52g
 
+{
+    "name": "Fiolek"
+}
+
+### Pet list
+GET http://127.0.0.1:8000/diesel/pet_list
+
+
+### Pet list by token user
+GET http://127.0.0.1:8000/diesel/pets_by_user
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjUwMDI0ODAsImV4cCI6MTY2NTAxMzI4MCwidXNlciI6eyJpZCI6MCwiZW1haWwiOiIxMjNAMTIzLmNvbSIsInJvbGUiOiJVc2VyIn19.ftCXqZNM0RzUIKNO__i78MTCIO0vmofZ2ewFRLBy52g
