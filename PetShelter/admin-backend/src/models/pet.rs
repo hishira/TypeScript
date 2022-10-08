@@ -6,13 +6,15 @@ use crate::schema::{pets, users};
 use crate::config::Db;
 
 use super::user::User;
-
+use super::pettype::PetType;
 #[derive(Identifiable, Queryable, Associations, PartialEq, Debug, Serialize)]
 #[belongs_to(User)]
+#[belongs_to(PetType, foreign_key="pettype_id")]
 #[table_name = "pets"]
 pub struct Pet {
     pub id: i32,
     pub user_id: i32,
+    pub pettype_id: i32,
     pub name: String,
 }
 
@@ -44,7 +46,7 @@ impl Pet {
     pub async fn list(db: Db) -> Option<Json<Vec<Pet>>> {
         db.run(move |conn|{
             pets::table
-                .select((pets::id, pets::user_id, pets::name))
+                .select((pets::id, pets::user_id, pets::pettype_id, pets::name))
                 .load::<Pet>(conn)
         })
         .await
