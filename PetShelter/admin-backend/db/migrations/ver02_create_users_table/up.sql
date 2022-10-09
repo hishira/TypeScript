@@ -4,5 +4,8 @@ CREATE TABLE users (
     last_name VARCHAR DEFAULT NULL,
     email VARCHAR NOT NULL,
     password VARCHAR NOT NULL,
-    role TEXT CHECK(role in('User', 'Admin')) NOT NULL DEFAULT 'User'
+    meta_id INTEGER NOT NULL,
+    role TEXT CHECK(role in('User', 'Admin')) NOT NULL DEFAULT 'User',
+    FOREIGN KEY(meta_id) REFERENCES meta(id)
+
 );

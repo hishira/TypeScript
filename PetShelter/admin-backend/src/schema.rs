@@ -1,10 +1,18 @@
 
+table! {
+    meta (id) {
+        id -> Integer,
+        create_date -> diesel::sql_types::Timestamp,
+        edit_date -> diesel::sql_types::Timestamp,
+    }
+}
 
 table! {
     pettypes (id) {
         id -> Integer,
         value -> Text,
         visible -> Bool,
+        meta_id -> Integer,
     }
 }
 
@@ -14,6 +22,7 @@ table! {
         user_id -> Integer,
         pettype_id -> Integer,
         name -> Text,
+        meta_id -> Integer,
     }
 }
 
@@ -25,6 +34,7 @@ table! {
         email -> Text,
         password -> Text,
         role -> Text,
+        meta_id -> Integer,
     }
 }
 
@@ -37,6 +47,7 @@ table! {
         lng -> Double,
         street -> Text,
         housenumber -> Text,
+        meta_id -> Integer,
     }
 }
 
@@ -48,6 +59,7 @@ table! {
         email -> Text,
         user_id -> Integer,
         address_id -> Integer,
+        meta_id -> Integer,
     }
 }
 
@@ -55,6 +67,11 @@ joinable!(pets -> users (user_id));
 joinable!(shelters -> users (user_id));
 joinable!(shelters -> addresses (address_id));
 joinable!(pets -> pettypes (pettype_id));
+joinable!(users -> meta (meta_id));
+joinable!(shelters -> meta (meta_id));
+joinable!(pets -> meta (meta_id));
+joinable!(addresses -> meta (meta_id));
+joinable!(pettypes -> meta (meta_id));
 
 allow_tables_to_appear_in_same_query!(
     pets,

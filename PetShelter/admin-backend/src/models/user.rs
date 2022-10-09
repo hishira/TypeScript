@@ -8,9 +8,10 @@ use crate::schema::users;
 use crate::models::result::Result;
 use crate::config::Db;
 use super::role::Role;
-
-#[derive(Debug, Clone, Deserialize, Serialize, Queryable, Insertable, Identifiable)]
+use super::meta::Meta;
+#[derive(Debug, Clone, Deserialize, Serialize,Associations, Queryable, Insertable, Identifiable)]
 #[serde(crate = "rocket::serde")]
+#[belongs_to(Meta, foreign_key="meta_id")]
 #[table_name = "users"]
 pub struct User {
     #[serde(skip_deserializing)]
@@ -19,8 +20,8 @@ pub struct User {
     pub last_name: Option<String>,
     pub email: String,
     pub password: String,
-    #[serde(skip_deserializing)]
-    pub role: String
+    pub meta_id: i32,
+    pub role: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Queryable, Insertable, Identifiable)]

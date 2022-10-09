@@ -5,5 +5,7 @@ CREATE TABLE addresses (
     lt REAL,
     lg REAL,
     street TEXT,
-    housenumber TEXT
+    housenumber TEXT,
+    meta_id INTEGER DEFAULT NULL,
+    FOREIGN KEY(meta_id) REFERENCES meta(id)
 );
