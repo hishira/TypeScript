@@ -68,6 +68,7 @@ impl User{
                 let mut create_clone_user = user.clone();
                 create_clone_user.password = pass;
                 create_clone_user.role = Role::UserRole();
+                create_clone_user.meta_id = 1;
                 db.run(move |conn|{
                     diesel::insert_into(users::table)
                     .values(&*create_clone_user)

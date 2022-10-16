@@ -32,8 +32,10 @@ impl Meta {
         let result  = db.run(move |conn| {
             diesel::insert_into(meta::table)
             .values(&time)
-            .execute(conn)
+            .returning(id)
+            .get_results(conn)
         }).await;
+
         
     }
 }

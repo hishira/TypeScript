@@ -6,7 +6,6 @@ use diesel::sql_types::Text;
 use rocket::serde::{ Deserialize, Serialize};
 use diesel::deserialize::{self, FromSql};
 use diesel::serialize::{self, ToSql, Output, IsNull};
-use sqlx::sqlite::SqliteValue;
 use diesel::sqlite::Sqlite;
 //#[derive(SqlType)]
 //pub struct MyType;

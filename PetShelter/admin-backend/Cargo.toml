@@ -1,27 +1,21 @@
 [package]
 name = "admin-backend"
-version = "0.1.0"
+version = "0.0.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
-rocket = { version = "0.5.0-rc.2", features=["json"]}
-diesel = { version = "1.3", features = ["sqlite", "r2d2", "chrono"] }
-diesel_migrations = "1.3"
+rocket = { path="../core/lib/", features=["json"]}
+diesel = { version = "2.0.0", features = ["sqlite", "r2d2", "chrono"] }
+diesel_migrations = "2.0.0"
 bcrypt = "0.13.0"
 jsonwebtoken = "8.1.1"
 chrono = { version = "0.4", features = ["serde"] }
 serde = { version = "1.0", features = ["derive"] }
 
-[dependencies.sqlx]
-version = "0.5.1"
-default-features = false
-features = ["macros", "offline", "migrate"]
-
-[dependencies.rocket_db_pools]
-version = "0.1.0-rc.2"
-features = ["sqlx_sqlite"]
+[dev-dependencies]
+parking_lot = "0.12"
 
 [dependencies.rocket_sync_db_pools]
-version = "0.1.0-rc.2"
-features = ["diesel_sqlite_pool", "sqlite_pool"]
+path = "../contrib/sync_db_pools/lib/"
+features = ["diesel_sqlite_pool"]
