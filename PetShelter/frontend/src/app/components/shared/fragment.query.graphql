@@ -1,0 +1,16 @@
+fragment CenterFragment on CenterSchema{
+  id
+  name
+  phone
+  description
+  email
+  addressId
+}
+fragment AddressFragment on AdressSchema{
+  id
+  city
+  address
+  country
+  lat
+  lng
+}

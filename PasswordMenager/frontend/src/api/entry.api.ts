@@ -1,9 +1,5 @@
 import {
-  getUrl,
-  fetchPostObjectWithToken,
-  fetchGetObjectWithtoken,
-  fetchDeleteObjectWithToken,
-  fetchPutObjectWithToken,
+  fetchDeleteObjectWithToken, fetchGetObjectWithtoken, fetchPostObjectWithToken, fetchPutObjectWithToken, getUrl
 } from "./config.api";
 
 const CreateNewEntry = async (
@@ -36,3 +32,4 @@ const EditEntryByID = async (
 };
 
 export { CreateNewEntry, GetEntriesByGroupID, DeleteEntryById, EditEntryByID };
+

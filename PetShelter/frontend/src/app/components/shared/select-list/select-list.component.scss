@@ -1,0 +1,41 @@
+.select-list {
+    border: .15rem solid slategray;
+    border-radius: 5px;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: pointer;
+
+}
+.select-list:hover {
+    border-color: grey;
+}
+.select-list--useroption {
+    display: flex;
+    padding: .5rem;
+    justify-content: space-between;
+    align-items: center;
+}
+.select-list--span {
+    color: gray;
+}
+button {
+    float: right;
+    align-self: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+button:hover{
+    transform: scale(1.2);
+}
+.select-list--element {
+    margin-top: .5rem;
+    padding: .5rem;
+}
+.select-list--element:hover {
+    cursor: pointer;
+    background: rgba(192,192,192,0.5);
+}
+.spanblacktext {
+    color: black;
+}

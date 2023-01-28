@@ -1,0 +1,46 @@
+<section class="pet-filter-section">
+  <form [formGroup]="filterForm">
+    <div *ngIf="clearButtonVisible()" class="select-component button-component">
+      <label for=""></label>
+      <button (click)="buttonClearEvent()" class="clear_button">
+        Clear filters
+      </button>
+    </div>
+    <sh-select-list
+      label="Size"
+      placeholder="Pet breed"
+      [elements]="petBreeds"
+      formControlName="breeId"
+      key="value"
+      select="id"></sh-select-list>
+    <sh-select-list
+      label="Size"
+      placeholder="Pet gender"
+      [elements]="genders"
+      formControlName="genderId"
+      key="value"
+      select="id"></sh-select-list>
+    <sh-select-list
+      label="Size"
+      placeholder="Pet size"
+      [elements]="petsize"
+      formControlName="sizeId"
+      key="value"
+      select="id">
+        <!--<ul *ngFor="let item of petsize">
+          <li select-item-directive>{{item.value}}</li>
+        </ul>-->
+    </sh-select-list>
+    <!--<app-select-multiple-list formControlName="el" [elements]="petSizeOnlyvalue"></app-select-multiple-list>-->
+    <ng-container>
+      <div class="chip-container">
+        <chip
+          *ngFor="let filterVal of savedFilterValue"
+          [label]="filterVal"
+          [closable]="true"
+          (closeHandle)="chipCloseHandle(filterVal)"
+        ></chip>
+      </div>
+    </ng-container>
+  </form>
+</section>

@@ -1,0 +1,113 @@
+<ng-container>
+  <form [formGroup]="form" (ngSubmit)="donate()">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Donation amount</h5>
+        <p class="card-text">Donation will be charged in dollars</p>
+        <div class="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
+          <button
+            (click)="selectDonationCost(donationCost, buttonElement)"
+            *ngFor="let donationCost of donationValues"
+            type="button"
+            class="btn btn-outline-secondary rounded-5 btn-sm p-1"
+            #buttonElement
+          >
+            {{ donationCost | currency }}
+          </button>
+        </div>
+        <div class="row flex-column mt-4">
+          <div class="col mt-4 mb-3">
+            <h5 class="card-title">Your Contact Information</h5>
+          </div>
+          <div class="col">
+            <div class="row mt-4">
+              <div class="col">
+                <app-input
+                  [type]="'text'"
+                  formControlName="firstName"
+                  [placeholder]="'First name'"
+                  [required]="true"
+                ></app-input>
+                <!--<input
+                  type="text"
+                  formControlName="firstName"
+                  class="form-control"
+                  placeholder="First name"
+                  aria-label="First name"
+                  autofocus
+                />-->
+              </div>
+              <div class="col">
+                <app-input
+                  [type]="'text'"
+                  formControlName="lastName"
+                  [placeholder]="'Last name'"
+                  [required]="true"
+                ></app-input>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col">
+                <app-input
+                  [type]="'email'"
+                  formControlName="email"
+                  [placeholder]="'Email'"
+                  [required]="true"
+                ></app-input>
+              </div>
+              <div class="col">
+                <app-input
+                  [type]="'email'"
+                  formControlName="confirmEmail"
+                  [placeholder]="'Confirm email'"
+                  [required]="true"
+                ></app-input>
+              </div>
+            </div>
+
+            <div class="row flex-column">
+              <div class="col mt-4 mb-3">
+                <h5 class="card-title">Message for our support team</h5>
+              </div>
+              <div class="col">
+                <textarea
+                  formControlName="message"
+                  class="form-control"
+                  rows="10"
+                ></textarea>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="input-group">
+                <input
+                  formControlName="cardNumber"
+                  class="form-control"
+                  type="text"
+                  placeholder="Card number"
+                  aria-label="Card number"
+                  pattern="[0-9]{1,}"
+                />
+                <app-input
+                  [type]="'month'"
+                  formControlName="expireDate"
+                  [placeholder]="'Expire date'"
+                ></app-input>
+
+                <app-input
+                  [type]="'number'"
+                  formControlName="cardNumber"
+                  [placeholder]="'Security code'"
+                ></app-input>
+              </div>
+            </div>
+            <div class="d-grid col-6 mt-4 mx-auto">
+              <button type="submit" class="btn btn-secondary rounded-5 btn-lg">
+                Donate
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-container>

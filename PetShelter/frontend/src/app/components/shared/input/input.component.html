@@ -1,0 +1,17 @@
+<ng-container>
+  <input
+    [type]="type"
+    class="form-control"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    [(ngModel)]="value"
+    [ngClass]="{
+      'is-valid': valid,
+      'is-invalid': !valid
+    }"
+  />
+  <app-input-errors
+    [errors]="control?.errors"
+  ></app-input-errors>
+
+</ng-container>

@@ -1,0 +1,18 @@
+query centers($centerId: Int) {
+  centers(filter: {id: {eq: $centerId}}) {
+    id
+    name
+    phone
+    description
+    email
+    addressId
+    address {
+      id
+      city
+      address
+      country
+      lat
+      lng
+    }
+  }
+}

@@ -5,15 +5,8 @@ import { useHistory } from "react-router-dom";
 import { inject, observer } from "mobx-react";
 import { IGeneral } from "../../models/General";
 import { removeStorage } from "../../utils/localstorage.utils";
-const Bar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 4px 10px;
-`;
-const LeftSide = styled.div``;
-const RigthSide = styled.div`
-  padding: 0.5rem;
-`;
+import { Bar, LeftSide, RigthSide } from "./component.styled";
+
 type AppBarProps = {
   store?: IGeneral;
 };
@@ -36,7 +29,9 @@ const AppBar = ({ store }: AppBarProps): JSX.Element => {
             Login
           </Button>
         ) : (
-          <Button onClick={logouthandle} color="lightblue">Logout</Button>
+          <Button onClick={logouthandle} color="lightblue">
+            Logout
+          </Button>
         )}
       </RigthSide>
     </Bar>

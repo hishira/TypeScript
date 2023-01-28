@@ -1,62 +1,24 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Modal from "../Modal";
-import NewEntryComponent from "../NewEntryComponent";
+import React, { useEffect, useState } from "react";
+import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
 import {
   DeleteUserEntry,
   GetUserEntriesByGroupID,
 } from "../../utils/entry.utils";
-import Button from "../Button/index";
-import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
-const Container = styled.div`
-  width: 70%;
-  outline: 0.1rem solid yellow;
-  overflow: auto;
-  max-height: 89.5vh;
-  @media (max-width: 650px) {
-    width: 100%;
-    overflow: hidden;
-  }
-`;
-const TableContainer = styled.table`
-  width: 100%;
-`;
-const TableHead = styled.thead``;
-const TableBody = styled.tbody``;
-const TableRow = styled.tr`
-  z-index: 1;
-`;
+import Modal from "../Modal";
+import NewEntryComponent from "../NewEntryComponent";
+import {
+  Container,
+  ListComponent,
+  ListItem,
+  MinButton,
+  TableBody,
+  TableButton,
+  TableComponent,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "./component.styled";
 
-const TableComponent = styled.td<TableComponentProps>`
-  text-align: center;
-  ${(props) => props.password && "cursor: pointer"}
-`;
-const TableButton = styled(Button)`
-
-  @media (max-width: 708px) {
-    display: none;
-  }
-`;
-const MinButton = styled(TableButton)`
-  display: none;
-  @media (max-width: 708px) {
-    display: block;
-    cursor: pointer;
-  }
-`;
-const ListComponent = styled.div`
-  display: flex;
-  border: 0.1rem solid lightslategray;
-  border-radius: 5px;
-  flex-direction: column;
-  width: 15rem;
-`;
-const ListItem = styled(Button)`
-  cursor: pointer;
-  &:not(:first-child) {
-    margin-top: 2rem;
-  }
-`;
 type MoreMiniModal = {
   entry: IEntry;
   refreshgroupentities: Function;
@@ -131,7 +93,7 @@ const FieldsContainer = ({
   const gettext = (text: string | null): string => {
     return text ? text : "";
   };
-  const passwordClick = (entry:IEntry): void => {
+  const passwordClick = (entry: IEntry): void => {
     let elementpass: HTMLElement | null = document.getElementById(
       `${entry._id}${entry.groupid}`
     );
@@ -220,7 +182,7 @@ const FieldsContainer = ({
                 id={`${entry._id}${entry.groupid}`}
                 onClick={() => [passwordClick(entry)]}
                 password
-                placeholder='*****'
+                placeholder="*****"
               >
                 *****
               </TableComponent>

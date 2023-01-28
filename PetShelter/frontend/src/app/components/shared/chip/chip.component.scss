@@ -1,0 +1,15 @@
+.chip{
+    padding: .2rem .25rem;
+    border: .14rem solid slategray;
+    border-radius: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin: .3rem .1rem;
+    align-items: center;
+}
+.chip__close{
+    display: inline-flex;
+    cursor: pointer;
+}

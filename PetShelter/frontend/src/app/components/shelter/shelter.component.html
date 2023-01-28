@@ -1,0 +1,48 @@
+<div *ngIf="center">
+  <div
+    class="shelter__header d-flex flex-wrap flex-md-nowrap justify-content-between"
+  >
+    <div class="d-flex justify-content-center align-items-center">
+      <app-icon [iconType]="icons.PetCenter"></app-icon>
+      <div class="shelter__info">
+        <div class="info__name">
+          {{ center.name }}
+        </div>
+        <div class="info__address">
+          <span class="bold">Adress:</span>
+          <span>
+            {{ fullAddress }}
+          </span>
+        </div>
+        <div class="info__phone">
+          <span class="bold">Phone: </span><span> {{ center.phone }}</span>
+        </div>
+        <div>
+          <button type="button" class="btn btn-outline-secondary rounded-5" (click)="openSponsorModal()">
+            Willing to sponsor?
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="shelter__contact_info d-flex flex-column flex-grow-1 flex-md-grow-0 justify-content-sm-center align-items-sm-center"
+    >
+      <button type="button" class="pet__button btn">Check our pets</button>
+      <div class="email__info">
+        <app-icon [iconType]="icons.Email"></app-icon>
+        <a [href]="emailPath" class="email__info__value">
+          {{ center.email }}
+        </a>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="shelter__info" *ngIf="center.address.lat && center.address.lng">
+    <div class="display-6 ms-3">Center location</div>
+    <app-map [lat]="center.address.lat" [lng]="center.address.lng"></app-map>
+  </div>
+  <div class="shelter__info">
+    <div class="display-6">Description</div>
+    <span class="d-inline-block p-3">{{ center.description }}</span>
+  </div>
+</div>

@@ -1,0 +1,220 @@
+.pets {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem;
+  padding-bottom: 3rem;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  min-height: 100%;
+  justify-content: space-between;
+  gap: 6px;
+}
+:host {
+  width: 100%;
+  height: 100%;
+}
+.appear {
+  opacity: 1 !important;
+}
+.nopet {
+  min-height: 100%;
+  box-sizing: border-box;
+  font-size: 28px;
+  color: slategray;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+}
+.pet {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  opacity: 0;
+  transition: opacity ease-in-out 300ms;
+  width: 100%;
+  margin: auto;
+  box-shadow: 0.2rem 0.1rem 5px slategray;
+  margin-top: 0.8rem;
+  border-radius: 10px;
+  flex: 1 0 1;
+  cursor: pointer;
+  position: relative;
+  height: 15rem;
+  contain: content;
+}
+.pet__name__photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: black;
+  font-weight: 550;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  font-size: 24px;
+  background-color: whitesmoke;
+  opacity: 0.93;
+  border-radius: 0px 0px 10px 10px; 
+  padding: 0.75rem;
+}
+.pet__name__photo > span {
+  color: black;
+  z-index: 3000;
+  line-height: 29px;
+  isolation: isolate;
+  letter-spacing: 3px;
+}
+.photo {
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.pet:hover > .photo {
+  animation: up 500ms ease-in-out forwards;
+}
+@keyframes up {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.pet__info {
+  display: flex;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 300ms;
+  position: absolute;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0.3rem;
+  background: linear-gradient(30deg, rgb(212, 212, 213) 50%, white  50%);
+  width: 100%;
+}
+.icons--pet{
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+.pet:hover > .pet__info {
+  animation: appear 500ms ease forwards;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.info {
+  width: 100%;
+  display: flex;
+  font-size: 1.05rem;
+  justify-content: center;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+.pet__description {
+  width: 100%;
+  float: left;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.pet__description > span {
+  max-width: 90%;
+  padding: 0.75rem 1.5rem;
+  padding-inline-start: 1.5rem;
+  padding-inline-end: 1.5rem;
+  word-spacing: 5px;
+  display: inline-block;
+}
+
+.info__name {
+  width: 100%;
+  text-align: start;
+  padding: 0.75rem 1.5rem;
+  box-sizing: border-box;
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+.first,
+.second {
+  width: 45%;
+  margin: 0.75rem 1rem;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.second {
+  text-align: end;
+  margin-left: 0.4rem;
+}
+.button-group {
+  width: 100%;
+  display: flex;
+}
+.button-group > a {
+  width: 50%;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  background-color: whitesmoke;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.button-group > a:first-child {
+  border-right: 0.1rem solid lightslategrey;
+  border-bottom-right-radius: 0px;
+}
+.button-group > a:not(:first-child) {
+  border-bottom-left-radius: 0px;
+}
+.button-group > a:hover {
+  font-weight: 500;
+  transition: background-color 0.5s;
+  background-color: rgba(95, 109, 122, 0.3);
+}
+@media (min-width: 500px) {
+  .pet {
+    width: 23rem;
+  }
+}
+@media (min-width: 650px) {
+  .pets {
+    padding: 0 2rem;
+  }
+}
+@media (min-width: 850px) {
+  .pets {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+@media (min-width: 1000px) {
+  .pets {
+    justify-content: space-around;
+    margin-bottom: 5rem;
+  }
+  .pet {
+    width: 25rem;
+    margin: auto;
+    margin-top: 2rem;
+    box-sizing: border-box;
+  }
+}

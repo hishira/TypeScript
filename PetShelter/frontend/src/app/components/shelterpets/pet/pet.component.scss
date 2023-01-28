@@ -1,0 +1,40 @@
+@import "global";
+
+article {
+}
+nav {
+  display: flex;
+  padding: 0.5rem;
+  justify-content: flex-start;
+  align-items: cetner;
+}
+nav > a {
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+nav > a:hover {
+}
+.card-body {
+  & button {
+    &:hover {
+      background-color: $base-hover-color;
+    }
+  }
+}
+.card-footer {
+  & button {
+    border: transparent;
+    &:hover {
+      background-color: $base-hover-color;
+      outline: none;
+      border: none;
+    }
+    &::after,
+    &::before {
+      outline: none;
+      border: none;
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "plugins": [
+    "typescript-sort-keys"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "default": {
+              "memberTypes":[
+              "signature",
+              // Fields
+              "public-decorated-field",
+              "private-decorated-field",
+              "public-decorated-method",
+              "private-decorated-method",
+              "public-field",
+              "private-field",
+              "public-method",
+              "method",
+              "private-method"
+              ],
+            "order": "alphabetically"
+            }
+          }
+        ],
+        "typescript-sort-keys/interface": "error",
+        "typescript-sort-keys/string-enum": "error",
+        "sort-keys": [
+          "error",
+          "asc",
+          {
+            "caseSensitive": true,
+            "natural": false,
+            "minKeys": 2
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {
+        "typescript-sort-keys/interface": "error",
+        "typescript-sort-keys/string-enum": "error",
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "default": [
+              "signature",
+              // Fields
+              "public-decorated-field",
+              "private-decorated-field",
+              "public-decorated-method",
+              "private-decorated-method",
+              "public-field",
+              "private-field",
+              "public-method",
+              "method",
+              "private-method"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

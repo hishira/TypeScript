@@ -1,0 +1,41 @@
+query pet($petFilter: PetInput){
+  pets(filter: $petFilter){
+    id
+    name
+    shortDescription
+    description
+    weight
+    brithdate
+    pettypeId
+    breedId
+    genderId
+    sizeId
+    center{
+      ...CenterFragment
+      address{
+       ...AddressFragment
+      }
+    }
+    breed{
+      id
+      value
+      pettypeId
+    }
+    gender{
+      id
+      value
+    }
+    size{
+      id
+      value
+    }
+    petType{
+      id
+      name
+    }
+    photos{
+      id
+      url
+    }
+  }
+}

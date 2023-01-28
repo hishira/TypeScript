@@ -1,0 +1,22 @@
+<section class="firssection">
+    <h3>Our centers</h3>
+    <section *ngIf="centers" class="home-centers">
+        <article *ngFor="let center of centers" class="center">
+            <div class="center__info">
+                <div class="center-name">
+                    {{center.name}}
+                </div>
+                <div class="center-address">
+                    {{getFullAddress(center)}}
+                </div>
+                <div class="center-address">
+                    Phone: {{center.phone}}
+                </div>
+            </div>
+            <div class="agroup">
+                <a class="first-link" routerLink="shelter/{{center.id}}">See pets</a>
+                <a class="second-link">More info</a>
+            </div>
+        </article>
+    </section>
+</section>

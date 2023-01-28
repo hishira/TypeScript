@@ -1,0 +1,105 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    padding: .4rem;
+    box-shadow: 0 8px 6px -6px lightgrey;
+    position: relative;
+    box-sizing: border-box;
+    z-index: 200;
+    background-color: white;
+    width: 100%;
+    top: 0;
+}
+nav{
+    padding: .4rem;
+    display: flex;
+}
+nav  > div > a{
+    padding: .5rem 1.1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+    color: black;
+    text-decoration: none;
+    transition: font-weight 100ms;
+}
+.nasted{
+    display: flex;
+    position: relative;
+}
+nav > div > a:hover{
+    color: lightslategrey;
+}
+.hamburger{
+    display: none;
+}
+@media (max-width: 550px){
+    .nasted{
+        display: none;
+    }
+    .nested-open{
+        position: absolute;
+        display: flex;
+        opacity: 0;
+        transition: opacity 100ms;
+        animation: menuappear 200ms ease forwards;
+        justify-content: center;
+        align-items: center;
+        left: 0;
+        width: 100%;
+        top: 4.0rem;
+        border: none;
+        height: calc(100vh - 4rem);
+        flex-direction: column;
+        background-color: white;
+        z-index: 100;
+        overflow: hidden;
+        
+    }
+    @keyframes menuappear {
+        from{
+            opacity: 0;
+        }
+        to{
+            opacity: 1;
+        }
+    }
+    .nested-open{
+        position: fixed;
+    }
+    header {
+        padding: .4rem 0;
+        position: sticky;
+    }
+    
+    .hamburger{
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+    }
+    .hamburger > span{
+        width: 2.5rem;
+        background-color: grey;
+        height: 5px;
+        margin-top: .3rem;
+    }
+    .first-line, .third-line{
+        transition: transform 200ms;
+    }
+    .second-line{
+        transition: display 200ms;
+    }
+    .hamburger{
+        margin-right: 1rem;
+    }
+    .hamburger-open > .second-line{
+        display: none;
+    }
+    .hamburger-open > .first-line{
+        position: relative;
+        transform: rotateZ(45deg);
+        top: calc(5px + .3rem)
+    }
+    .hamburger-open > .third-line{
+        transform: rotateZ(-45deg);
+    }
+}

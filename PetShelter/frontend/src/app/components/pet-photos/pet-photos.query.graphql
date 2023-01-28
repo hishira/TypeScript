@@ -1,0 +1,7 @@
+query photos($petId: Int){
+    photos(filter: {petId: {eq: $petId}}){
+        id
+        url
+        petId
+    }
+}

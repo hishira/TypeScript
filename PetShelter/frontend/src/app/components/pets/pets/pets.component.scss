@@ -1,0 +1,15 @@
+pet-cats{
+    min-height: 100%;
+}
+section {
+    margin-top: 4rem;
+    padding-bottom: 3rem;
+    display: flex;
+    flex-direction: row;
+    align-self: flex-start;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+}
