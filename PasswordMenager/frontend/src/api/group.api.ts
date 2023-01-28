@@ -1,7 +1,7 @@
 import {
-  getUrl,
   fetchGetObjectWithtoken,
   fetchPostObjectWithToken,
+  getUrl,
 } from "./config.api";
 
 const getGroupByUser = async (token: string) => {

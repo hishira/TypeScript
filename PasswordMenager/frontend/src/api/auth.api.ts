@@ -1,8 +1,5 @@
 import {
-  getUrl,
-  fetchPostObjectWithToken,
-  fetchPostObject,
-  fetchGetObjectWithtoken,
+  fetchGetObjectWithtoken, fetchPostObject, getUrl
 } from "./config.api";
 
 const login = async (userauth: UserAuth): Promise<Response> => {
@@ -19,3 +16,4 @@ const refreshAccessToken = async (token: string): Promise<Response> => {
   return await fetch(url, fetchGetObjectWithtoken(token));
 };
 export { login, signup, refreshAccessToken };
+
