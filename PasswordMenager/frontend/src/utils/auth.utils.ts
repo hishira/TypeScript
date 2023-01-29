@@ -19,7 +19,7 @@ const registerUser = async(signupinfo: UserAuth): Promise<null | object | boolea
   const response:boolean | object = await signup(signupinfo).then((resp:Response)=>{
     if(resp.status === 200 || resp.status === 201) return resp.json();
     return false;
-  })
+  }).catch(console.log);
   return response === false? null: response;
 }
 const refreshToken = async (): Promise<void> => {
