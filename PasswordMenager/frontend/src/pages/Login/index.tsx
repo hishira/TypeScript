@@ -6,6 +6,7 @@ import { setLocalStorageToken } from "../../utils/localstorage.utils";
 import { inject, observer } from "mobx-react";
 import { IGeneral } from "../../models/General";
 import { Container, FormContainer } from "./component.styled";
+import PopUpElement from "../../components/Popup";
 
 type Prop = {
   store: IGeneral,
@@ -62,6 +63,7 @@ const LoginPage = ({store}:Prop): JSX.Element => {
           maintitle="Log in to account"
         />
       </FormContainer>
+      <PopUpElement type='error' message="User does not exist" ></PopUpElement>
     </Container>
   );
 };

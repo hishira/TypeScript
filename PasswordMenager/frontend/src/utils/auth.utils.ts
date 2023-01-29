@@ -1,11 +1,10 @@
 import { login, signup, refreshAccessToken } from "../api/auth.api";
 import { getRefreshToken, setAccessToken } from "./localstorage.utils";
 const LoginUser = async (authinfo: UserAuth): Promise<AuthTokens> => {
-  const response = await login(authinfo).then((resp: Response) => {
+  return await login(authinfo).then((resp: Response) => {
     if (resp.status !== 201) return { access_token: "", refresh_token: "" };
     return resp.json();
   });
-  return response;
 };
 
 const LoginUserHandle = async (authobj: UserAuth): Promise<LoginReponse> => {
@@ -19,7 +18,7 @@ const registerUser = async(signupinfo: UserAuth): Promise<null | object | boolea
   const response:boolean | object = await signup(signupinfo).then((resp:Response)=>{
     if(resp.status === 200 || resp.status === 201) return resp.json();
     return false;
-  }).catch(console.log);
+  })
   return response === false? null: response;
 }
 const refreshToken = async (): Promise<void> => {
