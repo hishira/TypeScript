@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../Button";
 import Modal from "../Modal/";
-import FormElement from "../FormElement/";
 import NewEntryComponent from "../NewEntryComponent/index";
 const Container = styled.div`
   display: flex;
@@ -13,24 +12,7 @@ const Container = styled.div`
   }
 `;
 
-const EntryModalComponent = styled.div`
-  background-color: white;
-  padding: 1rem;
-  border-radius: 5px;
-  width: 100%;
-`;
-const PassLen = styled.div`
-  font-size: ".9rem";
-`;
-const SectionContainer = styled.section`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-`;
-const CheckBox = styled.input`
-  transform: translate(0%, 175%);
-`;
+
 
 const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
