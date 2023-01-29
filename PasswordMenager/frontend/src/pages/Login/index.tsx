@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
-import FormComponent from "../../components/Form/index";
+import { inject, observer } from "mobx-react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import FormComponent from "../../components/Form/index";
+import { IGeneral } from "../../models/General";
 import { LoginUserHandle } from "../../utils/auth.utils";
 import { setLocalStorageToken } from "../../utils/localstorage.utils";
-import { inject, observer } from "mobx-react";
-import { IGeneral } from "../../models/General";
 import { Container, FormContainer } from "./component.styled";
-import PopUpElement from "../../components/Popup";
 
 type Prop = {
-  store: IGeneral,
-}
-const LoginPage = ({store}:Prop): JSX.Element => {
+  store: IGeneral;
+};
+const LoginPage = ({ store }: Prop): JSX.Element => {
   const [infoLogin, setInfoLogin] = useState<UserAuth>({
     login: "",
     password: "",
@@ -30,13 +29,17 @@ const LoginPage = ({store}:Prop): JSX.Element => {
   ): Promise<void> => {
     e.preventDefault();
     const response: LoginReponse = await LoginUserHandle(infoLogin);
-    console.log(response)
+    console.log(response);
     if (response.status && response.response !== null) {
       setLocalStorageToken(response.response);
       store.setUserActive(true);
       history.push("/store");
     } else {
-      
+      store.setPopUpinfo({
+        open: true,
+        type: "error",
+        message: "User do not exists",
+      });
     }
   };
 
@@ -46,10 +49,9 @@ const LoginPage = ({store}:Prop): JSX.Element => {
 
   const history = useHistory();
 
-  useEffect(()=>{
-    if(store.UserActivity)
-      history.push("/store");
-  },[history, store.UserActivity])
+  useEffect(() => {
+    if (store.UserActivity) history.push("/store");
+  }, [history, store.UserActivity]);
   return (
     <Container>
       <FormContainer>
@@ -63,7 +65,6 @@ const LoginPage = ({store}:Prop): JSX.Element => {
           maintitle="Log in to account"
         />
       </FormContainer>
-      <PopUpElement type='error' message="User does not exist" ></PopUpElement>
     </Container>
   );
 };

@@ -5,7 +5,7 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
-export const FormContainer = styled.form`
+export const FormContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 50%;

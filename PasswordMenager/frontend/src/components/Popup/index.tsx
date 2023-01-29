@@ -1,22 +1,40 @@
+import { inject, observer } from "mobx-react";
 import { useEffect, useState } from "react";
+import { StoreType } from "../PrivateRoute";
 import { PopupContent, PopupElement, PopupHeader } from "./component.styled";
 
-type Props = {
-  type: PopupType;
-  message: string;
-};
-const PopUpElement = ({ type, message }: Props): JSX.Element => {
+interface Props extends StoreType {
+  type?: PopupType;
+  message?: string;
+}
+const PopUpElement = ({ type, message, store }: Props): JSX.Element => {
   const [popUpType, setPopUptype] = useState("success");
+  const [messagePopup, setMessagePopup] = useState("");
+  const [visibility, setVisibility] = useState(false);
 
   useEffect(() => {
-    setPopUptype(type);
-  }, [setPopUptype, type]);
+    if (store && store.PopUpModelInfo?.open) {
+      setVisibility(true);
+      setPopUptype(store.PopUpModelInfo.type);
+      setMessagePopup(store.PopUpModelInfo.message);
+      setTimeout(
+        () => {
+          store.setPopUpinfo({ open: false, message: "", type: "" })
+          console.log('wykonano')
+        },
+        1000
+      );
+    }else {
+      setVisibility(false);
+    }
+  }, [store, store?.PopUpModelInfo?.open]);
+
   return (
-    <PopupElement type={type}>
+    <PopupElement type={type ?? "info"} visible={visibility}>
       <PopupHeader>{popUpType}</PopupHeader>
-      <PopupContent>{message}</PopupContent>
+      <PopupContent>{messagePopup}</PopupContent>
     </PopupElement>
   );
 };
 
-export default PopUpElement;
+export default inject("store")(observer(PopUpElement));
