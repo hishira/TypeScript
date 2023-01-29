@@ -41,12 +41,6 @@ const ModalComponent = ({
       )
         onClose();
     }
-    /*
-    if(!element.contains(event.target as Node)){
-      console.log("tak");
-      onClose();
-    }
-    */
   };
   return (
     <Modal onClick={clickOnModal} visible={visible}>

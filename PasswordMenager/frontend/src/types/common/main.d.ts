@@ -93,3 +93,8 @@ type EditEntryResponse = {
   status: boolean,
   respond: IEntry
 }
+type PopupType = 'success' | 'error' | 'info'
+
+type PopUpElementProps = {
+  type: PopupType
+}

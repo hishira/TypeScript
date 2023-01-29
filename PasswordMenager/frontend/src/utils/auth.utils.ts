@@ -1,11 +1,10 @@
 import { login, signup, refreshAccessToken } from "../api/auth.api";
 import { getRefreshToken, setAccessToken } from "./localstorage.utils";
 const LoginUser = async (authinfo: UserAuth): Promise<AuthTokens> => {
-  const response = await login(authinfo).then((resp: Response) => {
+  return await login(authinfo).then((resp: Response) => {
     if (resp.status !== 201) return { access_token: "", refresh_token: "" };
     return resp.json();
   });
-  return response;
 };
 
 const LoginUserHandle = async (authobj: UserAuth): Promise<LoginReponse> => {

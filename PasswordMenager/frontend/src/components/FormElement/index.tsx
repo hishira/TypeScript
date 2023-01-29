@@ -1,5 +1,5 @@
 import React from "react";
-import InputField from "../InputField/";
+import InputField from "../InputField/index";
 import { FormElementComponent, InputLabel } from "./component.styled";
 
 type Props = {

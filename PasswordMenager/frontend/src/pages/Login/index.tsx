@@ -1,32 +1,13 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import FormComponent from "../../components/Form/index";
 import { useHistory } from "react-router-dom";
 import { LoginUserHandle } from "../../utils/auth.utils";
 import { setLocalStorageToken } from "../../utils/localstorage.utils";
 import { inject, observer } from "mobx-react";
 import { IGeneral } from "../../models/General";
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+import { Container, FormContainer } from "./component.styled";
+import PopUpElement from "../../components/Popup";
 
-const FormContainer = styled.form`
-  display: flex;
-  justify-content: center;
-  width: 50%;
-  padding: 10px;
-  margin-top: 5rem;
-  @media (max-width: 1200px) {
-    width: 70%;
-  }
-  @media (max-width: 900px) {
-    width: 70%;
-  }
-  @media (max-width: 489px) {
-    width: 100%;
-  }
-`;
 type Prop = {
   store: IGeneral,
 }
@@ -48,15 +29,14 @@ const LoginPage = ({store}:Prop): JSX.Element => {
     e: React.MouseEvent<HTMLElement>
   ): Promise<void> => {
     e.preventDefault();
-    console.log(infoLogin);
     const response: LoginReponse = await LoginUserHandle(infoLogin);
+    console.log(response)
     if (response.status && response.response !== null) {
-      console.log(response.response?.access_token);
-      console.log(response.response?.refresh_token);
       setLocalStorageToken(response.response);
       store.setUserActive(true);
       history.push("/store");
-      console.log(store.UserActivity)
+    } else {
+      
     }
   };
 
@@ -69,7 +49,7 @@ const LoginPage = ({store}:Prop): JSX.Element => {
   useEffect(()=>{
     if(store.UserActivity)
       history.push("/store");
-  },[])
+  },[history, store.UserActivity])
   return (
     <Container>
       <FormContainer>
@@ -83,6 +63,7 @@ const LoginPage = ({store}:Prop): JSX.Element => {
           maintitle="Log in to account"
         />
       </FormContainer>
+      <PopUpElement type='error' message="User does not exist" ></PopUpElement>
     </Container>
   );
 };
