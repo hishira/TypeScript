@@ -28,7 +28,7 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     e: React.MouseEvent<HTMLElement>
   ): Promise<void> => {
     e.preventDefault();
-    const response: LoginReponse = await LoginUserHandle(infoLogin);
+    const response: any = await LoginUserHandle(infoLogin);
     console.log(response);
     //if (response?.status && response?.response !== null) {
     //  setLocalStorageToken(response.response);
@@ -38,7 +38,7 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
       store.setPopUpinfo({
         open: true,
         type: "info",
-        message: "User do not exists",
+        message: response.response.message,
       });
     //}
   };
