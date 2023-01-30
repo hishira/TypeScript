@@ -15,16 +15,13 @@ const PopUpElement = ({ type, message, store }: Props): JSX.Element => {
   useEffect(() => {
     if (store && store.PopUpModelInfo?.open) {
       setVisibility(true);
-      setPopUptype(store.PopUpModelInfo.type);
+      setPopUptype(store.PopUpModelInfo.type.toUpperCase());
       setMessagePopup(store.PopUpModelInfo.message);
       setTimeout(
-        () => {
-          store.setPopUpinfo({ open: false, message: "", type: "" })
-          console.log('wykonano')
-        },
+        () => store.setPopUpinfo({ open: false, message: "", type: "" }),
         1000
       );
-    }else {
+    } else {
       setVisibility(false);
     }
   }, [store, store?.PopUpModelInfo?.open]);

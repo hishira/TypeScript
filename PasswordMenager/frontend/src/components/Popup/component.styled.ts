@@ -24,7 +24,7 @@ export const PopupElement = styled.div<PopUpElementProps>`
         `;
       case "info":
         return css`
-          background-color: lightyellow;
+          background-color: lightgoldenrodyellow;
         `;
     }
   }}

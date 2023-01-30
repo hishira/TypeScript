@@ -1,18 +1,21 @@
 import {
   Body,
   Controller,
-  Post,
-  ValidationPipe,
-  UseGuards,
-  Request,
   Get,
+  Post,
+  Request,
+  UseFilters,
+  UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { UserService } from '../services/user.service';
-import { CreateUserDto } from '../schemas/dto/user.dto';
-import { AuthInfo } from '../schemas/dto/auth.dto';
-import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { UnknownUserExceptionFilter } from 'src/errors/UnknownUserFilter';
+import { AuthInfo } from '../schemas/dto/auth.dto';
+import { CreateUserDto } from '../schemas/dto/user.dto';
+import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 @Controller('auth')
+@UseFilters(new UnknownUserExceptionFilter())
 export class AuthController {
   constructor(
     private readonly userServices: UserService,
@@ -25,8 +28,8 @@ export class AuthController {
     return this.userServices.create(newuser);
   }
 
-  @UseGuards(AuthGuard('local'))
   @Post('login')
+  @UseGuards(AuthGuard('local'))
   async login(
     @Body(new ValidationPipe({ transform: false })) authinfo: AuthInfo,
     @Request() req,
@@ -34,9 +37,9 @@ export class AuthController {
     return this.authservice.login(req.user);
   }
 
-  @UseGuards(AuthGuard("refreshtoken"))
-  @Get("refresh")
-  async refresh(@Request() req){
+  @UseGuards(AuthGuard('refreshtoken'))
+  @Get('refresh')
+  async refresh(@Request() req) {
     return this.authservice.refreshaccesstoken(req.user);
   }
 }
