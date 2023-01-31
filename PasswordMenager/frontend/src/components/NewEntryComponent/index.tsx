@@ -1,56 +1,10 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import { GetGroupsByUser } from "../../utils/group.utils";
 import { CreateNewEntryUser, EntryEditById } from "../../utils/entry.utils";
-const EntryModalComponent = styled.div`
-  background-color: white;
-  padding: 1rem;
-  border-radius: 5px;
-  width: 100%;
-`;
-const NormalContainer = styled.div``;
-const PassLen = styled.div`
-  font-size: ".9rem";
-`;
-const SectionContainer = styled.section`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-`;
-const CheckBox = styled.input`
-  transform: translate(0%, 175%);
-`;
-const Checkboxes = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const PasswordCheckbox = styled.input``;
-const Checkboxwithlabel = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-`;
-const SelectLabel = styled.div`
-  padding: 0.6rem 0.6rem 0.6rem 0;
-  font-size: 1.05rem;
-  text-align: start;
-`;
-const SelectContainer = styled.select`
-  padding: 0.5rem;
-  border-radius: 5px;
-  font-size: 1.05rem;
-  width: 90%;
-`;
-const OptionContainer = styled.option`
-  padding: 1.4rem;
-  font-size: 1.05rem;
-  &:hover {
-    background-color: lightsalmon;
-  }
-`;
+import { CheckBox, Checkboxes, Checkboxwithlabel, EntryModalComponent, NormalContainer, OptionContainer, PassLen, PasswordCheckbox, SectionContainer, SelectContainer, SelectLabel } from "./component.styled";
+
 type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
@@ -294,7 +248,7 @@ const NewEntryComponent = ({
           <SelectLabel>Select group</SelectLabel>
           <SelectContainer onChange={groupset}>
             {groups.map((group) => (
-              <OptionContainer value={group._id}>{group.name}</OptionContainer>
+              <OptionContainer key={group._id} value={group._id}>{group.name}</OptionContainer>
             ))}
           </SelectContainer>
         </NormalContainer>
