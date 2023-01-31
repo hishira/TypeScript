@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 export const PopupElement = styled.div<PopUpElementProps>`
-  display: flex;
+  display: ${(props) => (props.visible ? "flex" : "none")};
   flex-direction: column;
   padding: 1.5rem;
   position: fixed;
@@ -24,7 +24,7 @@ export const PopupElement = styled.div<PopUpElementProps>`
         `;
       case "info":
         return css`
-          background-color: lightyellow;
+          background-color: lightgoldenrodyellow;
         `;
     }
   }}
@@ -37,4 +37,5 @@ export const PopupHeader = styled.div`
 export const PopupContent = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 1rem;
 `;

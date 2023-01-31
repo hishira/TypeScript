@@ -96,5 +96,6 @@ type EditEntryResponse = {
 type PopupType = 'success' | 'error' | 'info'
 
 type PopUpElementProps = {
-  type: PopupType
+  type: PopupType,
+  visible: boolean,
 }

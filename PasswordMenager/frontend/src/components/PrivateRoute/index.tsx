@@ -2,7 +2,7 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import { Redirect, Route } from "react-router-dom";
 import { IGeneral } from "../../models/General";
-type StoreType = {
+export type StoreType = {
   store?: IGeneral;
 };
 interface PrivateComponentType extends StoreType {

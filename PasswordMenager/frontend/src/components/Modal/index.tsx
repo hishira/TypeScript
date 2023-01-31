@@ -30,9 +30,7 @@ const ModalComponent = ({
   onClose,
 }: Props): JSX.Element => {
   const clickOnModal = (event: React.MouseEvent): void => {
-    const element: HTMLElement = Array.from(
-      document.getElementsByClassName("hook") as HTMLCollectionOf<HTMLElement>
-    )[0];
+   
     const targetelement: Element = event.target as Element;
     for (let i of targetelement.childNodes) {
       if (

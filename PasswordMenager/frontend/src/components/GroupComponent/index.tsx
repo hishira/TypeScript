@@ -3,7 +3,13 @@ import Button from "../Button";
 import Modal from "../Modal/";
 import FormElement from "../FormElement/";
 import { GetGroupsByUser, CreateGroupForUser } from "../../utils/group.utils";
-import { ButtonContainer, Container, GroupContainer, Groups, NewGroup } from "./component.styled";
+import {
+  ButtonContainer,
+  Container,
+  GroupContainer,
+  Groups,
+  NewGroup,
+} from "./component.styled";
 
 type ModalComponentProps = {
   func: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -39,8 +45,10 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
 
   const buttonHandleClick = async (): Promise<void> => {
     console.log(groupdto.name);
-    const response: CreateGroupResponse = await CreateGroupForUser(groupdto);
-    console.log(response.response.name);
+    CreateGroupForUser(groupdto).then((resp) => {
+      fetchGroups();
+      setModal(false);
+    });
   };
 
   const fetchGroups = async (): Promise<void> => {
@@ -48,9 +56,10 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
     setgroup(groupresponse.response);
     console.log(groupresponse.response);
   };
+
   useEffect(() => {
     fetchGroups();
-  }, []);
+  }, [setgroup]);
 
   const ongroupclick: Function = (group: IGroup): void => {
     selectgrouphandle(group._id);
@@ -74,6 +83,7 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
       <Groups>
         {groups.map((group: IGroup) => (
           <GroupContainer
+            key={group._id}
             {...(selectedgroup === group._id && {
               style: { backgroundColor: "lightslategrey" },
             })}

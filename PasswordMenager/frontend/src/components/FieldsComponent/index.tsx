@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
 import {
   DeleteUserEntry,
-  GetUserEntriesByGroupID,
+  GetUserEntriesByGroupID
 } from "../../utils/entry.utils";
 import Modal from "../Modal";
 import NewEntryComponent from "../NewEntryComponent";
@@ -16,7 +16,7 @@ import {
   TableComponent,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow
 } from "./component.styled";
 
 type MoreMiniModal = {
@@ -88,6 +88,7 @@ const FieldsContainer = ({
   };
   useEffect(() => {
     fetchEntries();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedgroup, refreshall]);
 
   const gettext = (text: string | null): string => {

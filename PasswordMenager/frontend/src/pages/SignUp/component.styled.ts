@@ -4,13 +4,13 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
 `;
-
 export const FormContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 50%;
   padding: 10px;
   margin-top: 5rem;
+  border: "2px solid green";
   @media (max-width: 1200px) {
     width: 70%;
   }
