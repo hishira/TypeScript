@@ -30,17 +30,17 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     e.preventDefault();
     const response: any = await LoginUserHandle(infoLogin);
     console.log(response);
-    //if (response?.status && response?.response !== null) {
-    //  setLocalStorageToken(response.response);
-    //  store.setUserActive(true);
-    //  history.push("/store");
-    //} else {
+    if (response?.status && response?.response !== null) {
+      setLocalStorageToken(response.response);
+      store.setUserActive(true);
+      history.push("/store");
+    } else {
       store.setPopUpinfo({
         open: true,
         type: "info",
         message: response.response.message,
       });
-    //}
+    }
   };
 
   const redirectFunction = () => {

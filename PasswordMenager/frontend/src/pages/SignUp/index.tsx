@@ -1,29 +1,10 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import FormComponent from "../../components/Form/index";
 import { useHistory } from "react-router-dom";
-import {registerUser} from "../../utils/auth.utils";
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-const FormContainer = styled.form`
-  display: flex;
-  justify-content: center;
-  width: 50%;
-  padding: 10px;
-  margin-top: 5rem;
-  border: "2px solid green";
-  @media (max-width: 1200px) {
-    width: 70%;
-  }
-  @media (max-width: 900px) {
-    width: 70%;
-  }
-  @media (max-width: 489px) {
-    width: 100%;
-  }
-`;
+import { registerUser } from "../../utils/auth.utils";
+import { Container, FormContainer } from "./component.styled";
+import { inject, observer } from "mobx-react";
+import { IGeneral } from "../../models/General";
 
 type RegisterInfo = {
   login: string;
@@ -31,7 +12,10 @@ type RegisterInfo = {
   confirmpassword: string;
 };
 
-const SignUp = () => {
+type Prop = {
+  store: IGeneral;
+};
+const SignUp = ({ store }: Prop) => {
   const [registerinfo, setregisterinfo] = useState<RegisterInfo>({
     login: "",
     password: "",
@@ -51,18 +35,38 @@ const SignUp = () => {
     setregisterinfo({ ...registerinfo, confirmpassword: password });
   };
 
-  const registerClickHandle = async (e: React.MouseEvent<HTMLElement>): Promise<void> => {
+  const registerClickHandle = async (
+    e: React.MouseEvent<HTMLElement>
+  ): Promise<void> => {
     e.preventDefault();
-    if(registerinfo.password === registerinfo.confirmpassword){
-      let response = await registerUser({login:registerinfo.login,password:registerinfo.password})
-      if(response === null || response === false)
-        console.log("server problem");
-      else
-        console.log("user created");
-    }else{
-      console.log("Password do not equal confirm password");
+    if (registerinfo.password.length < 6) {
+      store.setPopUpinfo({
+        open: true,
+        message: "Password min length must be 6",
+        type: "info",
+      });
+      return;
     }
-      console.log(registerinfo);
+    if (registerinfo.password !== registerinfo.confirmpassword) {
+      store.setPopUpinfo({
+        open: true,
+        message: "Passwords must be the same",
+        type: "info",
+      });
+      return;
+    }
+   registerUser({
+      login: registerinfo.login,
+      password: registerinfo.password,
+    }).then((response)=>{
+      if(!!response){
+        store.setPopUpinfo({
+          open: true,
+          message: "User created",
+          type: "success",
+        })
+      }
+    })
   };
 
   const redirectFunction = () => {
@@ -87,4 +91,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default inject("store")(observer(SignUp));
