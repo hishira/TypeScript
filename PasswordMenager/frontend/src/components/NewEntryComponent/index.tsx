@@ -1,11 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { CreateNewEntryUser, EntryEditById } from "../../utils/entry.utils";
+import { GetGroupsByUser } from "../../utils/group.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
-import { GetGroupsByUser } from "../../utils/group.utils";
-import { CreateNewEntryUser, EntryEditById } from "../../utils/entry.utils";
-import { CheckBox, Checkboxes, Checkboxwithlabel, EntryModalComponent, NormalContainer, OptionContainer, PassLen, PasswordCheckbox, SectionContainer, SelectContainer, SelectLabel } from "./component.styled";
+import {
+  CheckBox,
+  Checkboxes,
+  Checkboxwithlabel,
+  EntryModalComponent,
+  NormalContainer,
+  OptionContainer,
+  PassLen,
+  PasswordCheckbox,
+  SectionContainer,
+  SelectContainer,
+  SelectLabel
+} from "./component.styled";
+import {
+  generatePart, specialTypeGenerate
+} from "./new-entry.utils";
 
-type PasswordCharactersTypes = {
+export type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
   specialChar: boolean;
@@ -52,10 +67,6 @@ const NewEntryComponent = ({
     groupid: "",
   });
   const [groups, setgroups] = useState<Array<IGroup>>([]);
-  const SMALLETTERS: string = "abcdefghijklmnouprstuwzyw";
-  const BIGLETTERS: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
-  const NUMBERS: string = "0987654321";
-  const SPECIAL: string = "*()&^%$#@!~/{}+-";
 
   const fetchGroup = async (): Promise<void> => {
     const response: GroupResponse = await GetGroupsByUser();
@@ -77,71 +88,11 @@ const NewEntryComponent = ({
       groupid: "",
     });
   }, [refreshentry]);
-  const generatePart = (typenumber: number): string => {
-    switch (typenumber) {
-      case 0:
-        return SMALLETTERS[Math.floor(Math.random() * SMALLETTERS.length)];
-      case 1:
-        return BIGLETTERS[Math.floor(Math.random() * BIGLETTERS.length)];
-      case 2:
-        return NUMBERS[Math.floor(Math.random() * NUMBERS.length)];
-      case 3:
-        return SPECIAL[Math.floor(Math.random() * SPECIAL.length)];
-    }
-    return "";
-  };
-
-  const specialTypeGenerate = (): number => {
-    if (
-      !passwordcharacters.letters &&
-      !passwordcharacters.numbers &&
-      !passwordcharacters.specialChar
-    )
-      return Math.floor(Math.random() * 4);
-    else if (
-      passwordcharacters.letters &&
-      !passwordcharacters.numbers &&
-      !passwordcharacters.specialChar
-    )
-      return Math.floor(Math.random() * 2);
-    else if (
-      passwordcharacters.letters &&
-      passwordcharacters.numbers &&
-      !passwordcharacters.specialChar
-    )
-      return Math.floor(Math.random() * 3);
-    else if (
-      passwordcharacters.letters &&
-      passwordcharacters.numbers &&
-      passwordcharacters.specialChar
-    )
-      return Math.floor(Math.random() * 4);
-    else if (
-      !passwordcharacters.letters &&
-      passwordcharacters.numbers &&
-      !passwordcharacters.specialChar
-    )
-      return 2;
-    else if (
-      !passwordcharacters.letters &&
-      !passwordcharacters.numbers &&
-      passwordcharacters.specialChar
-    )
-      return 3;
-    else if (
-      !passwordcharacters.letters &&
-      passwordcharacters.numbers &&
-      passwordcharacters.specialChar
-    )
-      return Math.floor(Math.random() * 2 + 2);
-    let arr: Array<number> = [0, 3];
-    return arr[Math.floor(Math.random() * arr.length)];
-  };
 
   const generateHandle = (): void => {
     let password: string = "";
     for (let i = 0; i < passlen; i++) {
-      let type = specialTypeGenerate();
+      let type = specialTypeGenerate(passwordcharacters);
       password += generatePart(type);
     }
     setnewentry({ ...newentry, password: password });
@@ -192,7 +143,7 @@ const NewEntryComponent = ({
     });
   };
   const addnewentry = async (): Promise<void> => {
-    console.log(newentry)
+    console.log(newentry);
     const responsenewentry: CreateEntryResponse = await CreateNewEntryUser(
       newentry
     );
@@ -222,9 +173,8 @@ const NewEntryComponent = ({
       const response: EditEntryResponse = await EntryEditById(editedvalues);
       if (response.status) {
         console.log("ok");
-        if (refresh !== undefined)
-          refresh();
-          console.log("ok");
+        if (refresh !== undefined) refresh();
+        console.log("ok");
       }
     }
   };
@@ -249,7 +199,9 @@ const NewEntryComponent = ({
           <SelectLabel>Select group</SelectLabel>
           <SelectContainer onChange={groupset}>
             {groups.map((group) => (
-              <OptionContainer key={group._id} value={group._id}>{group.name}</OptionContainer>
+              <OptionContainer key={group._id} value={group._id}>
+                {group.name}
+              </OptionContainer>
             ))}
           </SelectContainer>
         </NormalContainer>
