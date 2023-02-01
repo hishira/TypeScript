@@ -176,7 +176,7 @@ const FieldsContainer = ({
         </TableHead>
         <TableBody>
           {entries.map((entry) => (
-            <TableRow>
+            <TableRow key={entry._id}>
               <TableComponent>{entry.title}</TableComponent>
               <TableComponent>{entry.username}</TableComponent>
               <TableComponent

@@ -67,7 +67,7 @@ const NewEntryComponent = ({
   };
   useEffect(() => {
     fetchGroup();
-  }, []);
+  }, [setgroups]);
   useEffect(() => {
     setnewentry({
       title: "",
@@ -192,6 +192,7 @@ const NewEntryComponent = ({
     });
   };
   const addnewentry = async (): Promise<void> => {
+    console.log(newentry)
     const responsenewentry: CreateEntryResponse = await CreateNewEntryUser(
       newentry
     );
