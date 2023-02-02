@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import GroupComponent from "../GroupComponent/";
 import FieldsComponent from "../FieldsComponent/";
-import { Container } from "../PassBarr/component.styled";
+import { Container } from "./component.styled";
 
 const PassComponent = () => {
   const [selectedgroupid, setgroupid] = useState<string>("");

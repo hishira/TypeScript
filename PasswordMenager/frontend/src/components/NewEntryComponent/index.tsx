@@ -17,6 +17,7 @@ import {
   SelectLabel
 } from "./component.styled";
 import {
+  checkBoxHandler,
   generatePart, specialTypeGenerate
 } from "./new-entry.utils";
 
@@ -37,21 +38,6 @@ const NewEntryComponent = ({
   refreshentry,
   refresh,
 }: NewEntryProps): JSX.Element => {
-  const oncheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    let element: HTMLCollectionOf<HTMLInputElement> =
-      document.getElementsByTagName("input");
-    if (e.target.checked) {
-      for (let i of element) {
-        if (i.type === "password") {
-          i.type = "text";
-        }
-      }
-    } else {
-      for (let i of element) {
-        if (i.placeholder === "***") i.type = "password";
-      }
-    }
-  };
   const [passlen, setpasslen] = useState<number>(6);
   const [passwordcharacters, setpasswordcharacters] =
     useState<PasswordCharactersTypes>({
@@ -214,7 +200,7 @@ const NewEntryComponent = ({
           inputtype="password"
           value={newentry.password}
         />
-        <CheckBox type="checkbox" onChange={oncheckbox} />
+        <CheckBox type="checkbox" onChange={checkBoxHandler} />
       </SectionContainer>
       <SectionContainer>
         <Checkboxes>

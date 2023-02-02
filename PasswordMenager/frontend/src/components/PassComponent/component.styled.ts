@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   width: 100%;
   outline: 0.1rem solid slategray;
