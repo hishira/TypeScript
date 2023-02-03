@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { GroupEffect } from "../../hooks/groups.hook";
+import { CreateGroupForUser } from "../../utils/group.utils";
 import Button from "../Button";
-import Modal from "../Modal/";
 import FormElement from "../FormElement/";
-import { GetGroupsByUser, CreateGroupForUser } from "../../utils/group.utils";
+import Modal from "../Modal/";
 import {
   ButtonContainer,
   Container,
@@ -37,7 +38,8 @@ const ComponentToModal = ({
 const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const [modal, setModal] = useState<boolean>(false);
   const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
-  const [groups, setgroup] = useState<Array<IGroup>>([]);
+  const [refetch, setRefetch] = useState(false);
+  const groups = GroupEffect(refetch);
   const [selectedgroup, setselectedgroup] = useState<string>("");
   const clickHandle = (): void => {
     setModal(true);
@@ -46,20 +48,10 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const buttonHandleClick = async (): Promise<void> => {
     console.log(groupdto.name);
     CreateGroupForUser(groupdto).then((resp) => {
-      fetchGroups();
+      setRefetch(!refetch);
       setModal(false);
     });
   };
-
-  const fetchGroups = async (): Promise<void> => {
-    const groupresponse: GroupResponse = await GetGroupsByUser();
-    setgroup(groupresponse.response);
-    console.log(groupresponse.response);
-  };
-
-  useEffect(() => {
-    fetchGroups();
-  }, [setgroup]);
 
   const ongroupclick: Function = (group: IGroup): void => {
     selectgrouphandle(group._id);
