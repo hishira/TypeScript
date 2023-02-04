@@ -1,59 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
-import {
-  DeleteUserEntry,
-  GetUserEntriesByGroupID
-} from "../../utils/entry.utils";
+import { DeleteUserEntry } from "../../utils/entry.utils";
+import { ModalButtonChoicer } from "../MiniModal";
 import Modal from "../Modal";
 import NewEntryComponent from "../NewEntryComponent";
 import {
   Container,
-  ListComponent,
-  ListItem,
   MinButton,
   TableBody,
   TableButton,
   TableComponent,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from "./component.styled";
 
-type MoreMiniModal = {
-  entry: IEntry;
-  refreshgroupentities: Function;
-  setentrytoedit: Function;
-  seteditmodalopen: Function;
-  modalClose: Function;
-};
-const ModalButtonChoicer: React.FC<MoreMiniModal> = ({
-  entry,
-  refreshgroupentities,
-  setentrytoedit,
-  seteditmodalopen,
-  modalClose,
-}: MoreMiniModal): JSX.Element => {
-  const deletehandle = async (entryid: string): Promise<void> => {
-    console.log(entryid);
-    const response: DeleteEntryResponse = await DeleteUserEntry(entryid);
-    if (response.status) {
-      refreshgroupentities();
-      modalClose();
-    }
-  };
-  const onedithandle = (entryid: string): void => {
-    setentrytoedit(entryid);
-    seteditmodalopen(true);
-    modalClose();
-  };
-  return (
-    <ListComponent id={entry._id}>
-      <ListItem onClick={() => deletehandle(entry._id)}>Delete</ListItem>
-      <ListItem onClick={() => onedithandle(entry._id)}>Edit</ListItem>
-    </ListComponent>
-  );
-};
 const FieldsContainer = ({
   selectedgroup,
   refreshgroupentities,
