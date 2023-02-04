@@ -1,95 +1,36 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { PasswordEntries } from "../../hooks/password-entries.hook";
+import { ResizeWindowsHandle } from "../../hooks/resize.hook";
 import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
-import {
-  DeleteUserEntry,
-  GetUserEntriesByGroupID
-} from "../../utils/entry.utils";
+import { DeleteUserEntry } from "../../utils/entry.utils";
+import { ModalButtonChoicer } from "../MiniModal";
 import Modal from "../Modal";
 import NewEntryComponent from "../NewEntryComponent";
 import {
   Container,
-  ListComponent,
-  ListItem,
   MinButton,
   TableBody,
   TableButton,
   TableComponent,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from "./component.styled";
 
-type MoreMiniModal = {
-  entry: IEntry;
-  refreshgroupentities: Function;
-  setentrytoedit: Function;
-  seteditmodalopen: Function;
-  modalClose: Function;
-};
-const ModalButtonChoicer: React.FC<MoreMiniModal> = ({
-  entry,
-  refreshgroupentities,
-  setentrytoedit,
-  seteditmodalopen,
-  modalClose,
-}: MoreMiniModal): JSX.Element => {
-  const deletehandle = async (entryid: string): Promise<void> => {
-    console.log(entryid);
-    const response: DeleteEntryResponse = await DeleteUserEntry(entryid);
-    if (response.status) {
-      refreshgroupentities();
-      modalClose();
-    }
-  };
-  const onedithandle = (entryid: string): void => {
-    setentrytoedit(entryid);
-    seteditmodalopen(true);
-    modalClose();
-  };
-  return (
-    <ListComponent id={entry._id}>
-      <ListItem onClick={() => deletehandle(entry._id)}>Delete</ListItem>
-      <ListItem onClick={() => onedithandle(entry._id)}>Edit</ListItem>
-    </ListComponent>
-  );
-};
 const FieldsContainer = ({
   selectedgroup,
   refreshgroupentities,
   refreshall,
 }: FieldsComponentType): JSX.Element => {
-  const [entries, setentries] = useState<Array<IEntry>>([]);
+  const entries = PasswordEntries(selectedgroup, refreshall);
   const [editmodalopen, seteditmodalopen] = useState<boolean>(false);
   const [entrytoedit, setentrytoedit] = useState<string>("");
   const [refreshmodalentry, setrefreshmodalentry] = useState<boolean>(false);
   const [smallmodalopen, setsmallmodalopen] = useState<boolean>(false);
   const [entrywithsmallbutton, setentrywithsmallbutton] =
     useState<IEntry>(EMPTYENTRYRESPONSE);
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 708) {
-        setsmallmodalopen(false);
-        setentrywithsmallbutton(EMPTYENTRYRESPONSE);
-      }
-    });
-  }, []);
-  const fetchEntries = async (): Promise<void> => {
-    if (selectedgroup === "") return;
-    const groupid: GroupId = {
-      id: selectedgroup,
-    };
-    const response: GetEntriesResponse = await GetUserEntriesByGroupID(groupid);
-    if (response.status) {
-      console.log(response.response);
-      setentries(response.response);
-    } else {
-      setentries([]);
-    }
-  };
-  useEffect(() => {
-    fetchEntries();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedgroup, refreshall]);
+
+  ResizeWindowsHandle(setsmallmodalopen, setentrywithsmallbutton);
 
   const gettext = (text: string | null): string => {
     return text ? text : "";

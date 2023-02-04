@@ -36,16 +36,4 @@ export const MinButton = styled(TableButton)`
     cursor: pointer;
   }
 `;
-export const ListComponent = styled.div`
-  display: flex;
-  border: 0.1rem solid lightslategray;
-  border-radius: 5px;
-  flex-direction: column;
-  width: 15rem;
-`;
-export const ListItem = styled(Button)`
-  cursor: pointer;
-  &:not(:first-child) {
-    margin-top: 2rem;
-  }
-`;
+

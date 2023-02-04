@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { GetGroupsByUser } from "../utils/group.utils";
 
 export const GroupEffect = (refetch: boolean): IGroup[] => {
