@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
 import {
   DeleteUserEntry,
@@ -58,7 +59,7 @@ const FieldsContainer = ({
   refreshgroupentities,
   refreshall,
 }: FieldsComponentType): JSX.Element => {
-  const [entries, setentries] = useState<Array<IEntry>>([]);
+  const entries = PasswordEntries(selectedgroup, refreshall);
   const [editmodalopen, seteditmodalopen] = useState<boolean>(false);
   const [entrytoedit, setentrytoedit] = useState<string>("");
   const [refreshmodalentry, setrefreshmodalentry] = useState<boolean>(false);
@@ -73,23 +74,6 @@ const FieldsContainer = ({
       }
     });
   }, []);
-  const fetchEntries = async (): Promise<void> => {
-    if (selectedgroup === "") return;
-    const groupid: GroupId = {
-      id: selectedgroup,
-    };
-    const response: GetEntriesResponse = await GetUserEntriesByGroupID(groupid);
-    if (response.status) {
-      console.log(response.response);
-      setentries(response.response);
-    } else {
-      setentries([]);
-    }
-  };
-  useEffect(() => {
-    fetchEntries();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedgroup, refreshall]);
 
   const gettext = (text: string | null): string => {
     return text ? text : "";
