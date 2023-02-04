@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
+import { ResizeWindowsHandle } from "../../hooks/resize.hook";
 import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
 import { DeleteUserEntry } from "../../utils/entry.utils";
 import { ModalButtonChoicer } from "../MiniModal";
@@ -28,14 +29,8 @@ const FieldsContainer = ({
   const [smallmodalopen, setsmallmodalopen] = useState<boolean>(false);
   const [entrywithsmallbutton, setentrywithsmallbutton] =
     useState<IEntry>(EMPTYENTRYRESPONSE);
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 708) {
-        setsmallmodalopen(false);
-        setentrywithsmallbutton(EMPTYENTRYRESPONSE);
-      }
-    });
-  }, []);
+
+  ResizeWindowsHandle(setsmallmodalopen, setentrywithsmallbutton);
 
   const gettext = (text: string | null): string => {
     return text ? text : "";
