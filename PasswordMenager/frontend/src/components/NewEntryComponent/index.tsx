@@ -20,7 +20,7 @@ import {
   checkBoxHandler,
   generatePart, specialTypeGenerate
 } from "./new-entry.utils";
-
+import {GroupEffect} from '../../hooks/groups.hook'
 export type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
@@ -52,19 +52,8 @@ const NewEntryComponent = ({
     note: "",
     groupid: "",
   });
-  const [groups, setgroups] = useState<Array<IGroup>>([]);
-
-  const fetchGroup = async (): Promise<void> => {
-    const response: GroupResponse = await GetGroupsByUser();
-    if (response.status) {
-      setgroups(response.response);
-    } else {
-      setgroups([]);
-    }
-  };
-  useEffect(() => {
-    fetchGroup();
-  }, [setgroups]);
+  const groups= GroupEffect(true);
+ 
   useEffect(() => {
     setnewentry({
       title: "",
