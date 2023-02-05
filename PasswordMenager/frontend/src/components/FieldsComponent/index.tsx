@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { ResizeWindowsHandle } from "../../hooks/resize.hook";
 import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
@@ -6,16 +6,8 @@ import { DeleteUserEntry } from "../../utils/entry.utils";
 import { ModalButtonChoicer } from "../MiniModal";
 import Modal from "../Modal";
 import NewEntryComponent from "../NewEntryComponent";
-import {
-  Container,
-  MinButton,
-  TableBody,
-  TableButton,
-  TableComponent,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "./component.styled";
+import { PasswordTableComponent } from "../PasswordTable";
+import { Container } from "./component.styled";
 
 const FieldsContainer = ({
   selectedgroup,
@@ -31,22 +23,6 @@ const FieldsContainer = ({
     useState<IEntry>(EMPTYENTRYRESPONSE);
 
   ResizeWindowsHandle(setsmallmodalopen, setentrywithsmallbutton);
-
-  const gettext = (text: string | null): string => {
-    return text ? text : "";
-  };
-  const passwordClick = (entry: IEntry): void => {
-    let elementpass: HTMLElement | null = document.getElementById(
-      `${entry._id}${entry.groupid}`
-    );
-    console.log(elementpass);
-    if (elementpass !== null) {
-      navigator.clipboard
-        .writeText(gettext(entry.password))
-        .then(() => console.log("ok"))
-        .catch((e) => console.log("not ok"));
-    }
-  };
 
   const deletehandle = async (entryid: string): Promise<void> => {
     console.log(entryid);
@@ -105,52 +81,12 @@ const FieldsContainer = ({
           />
         }
       />
-      <TableContainer>
-        <TableHead>
-          <TableRow>
-            <th>Title</th>
-            <th>Username</th>
-            <th>Password</th>
-            <th>Note</th>
-            <th></th>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {entries.map((entry) => (
-            <TableRow key={entry._id}>
-              <TableComponent>{entry.title}</TableComponent>
-              <TableComponent>{entry.username}</TableComponent>
-              <TableComponent
-                id={`${entry._id}${entry.groupid}`}
-                onClick={() => [passwordClick(entry)]}
-                password
-                placeholder="*****"
-              >
-                *****
-              </TableComponent>
-              <TableComponent>{entry.note}</TableComponent>
-              <TableComponent>
-                <TableButton
-                  onClick={() => deletehandle(entry._id)}
-                  color="lightblue"
-                >
-                  Delete
-                </TableButton>
-                <TableButton
-                  color="lightgrey"
-                  onClick={() => onedithandle(entry._id)}
-                  style={{ marginLeft: ".4rem" }}
-                >
-                  Edit
-                </TableButton>
-                <MinButton onClick={() => moreClickHandle(entry)}>
-                  More
-                </MinButton>
-              </TableComponent>
-            </TableRow>
-          ))}
-        </TableBody>
-      </TableContainer>
+      <PasswordTableComponent
+        entries={entries}
+        deletehandle={deletehandle}
+        onedithandle={onedithandle}
+        moreClickHandle={moreClickHandle}
+      />
     </Container>
   );
 };

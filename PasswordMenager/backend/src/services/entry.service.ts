@@ -41,21 +41,30 @@ export class EntryService {
   async titleedit(title: string, _id: string): Promise<void> {
     await this.entryModel.updateOne({ _id: _id }, { $set: { title: title } });
   }
+
   async usernameedit(newusername: string, _id: string): Promise<void> {
     await this.entryModel.updateOne(
       { _id: _id },
       { $set: { username: newusername } },
     );
   }
+
   async passwordedit(newpassword: string, _id: string): Promise<void> {
     await this.entryModel.updateOne(
       { _id: _id },
       { $set: { password: newpassword } },
     );
   }
+
   async noteedit(newnote: string, _id: string): Promise<void> {
     await this.entryModel.updateOne({ _id: _id }, { $set: { note: newnote } });
   }
+
+  async getByUser(userId: string): Promise<IEntry[]> {
+    const entries = await this.entryModel.find({ userid: userId });
+    return entries;
+  }
+
   async editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
     try {
       if (neweditedentry.title !== '')
