@@ -8,6 +8,7 @@ import {
 import { Multer } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { tap } from 'rxjs';
+import { CustomFileValidator } from 'src/validators/file.validator';
 @Controller('import')
 export class ImportController {
   constructor() {}
@@ -19,6 +20,7 @@ export class ImportController {
       new ParseFilePipeBuilder()
         .addFileTypeValidator({ fileType: 'csv' })
         .addMaxSizeValidator({ maxSize: 10000 })
+        .addValidator(new CustomFileValidator())
         .build(),
     )
     file: Express.Multer.File,
