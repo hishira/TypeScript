@@ -37,37 +37,12 @@ export class ExportController {
   @Get('encryptedCsv')
   @UseGuards(AuthGuard('accessToken'))
   async getEncryptCsv(@Request() req, @Res() response: Response) {
-    //this.entryService.getByUser(req.user.id).then((resp) => {
-    //  let csvData = [['title', 'password', 'note', '\r\n']];
-    //  resp.forEach((entry) => {
-    //    csvData.push([entry.title, entry.password, entry.note, '\r\n']);
-    //  });
-    //  const readable = new Readable({
-    //    read() {
-    //      this.push(csvData.shift().join(','));
-    //      if (!csvData.length) {
-    //        this.push(null);
-    //      }
-    //    },
-    //    destroy() {
-    //      csvData = null;
-    //    },
-    //  });
-    //  const archiver = Archiver('zip', {
-    //    zlib: { level: 9 },
-    //    forceLocalTime: true,
-    //  });
-    //  archiver.on('error', (err) => console.log(err));
-    //  archiver.append(readable, { name: 'users.csv' });
     response
       .set({
         'Content-Type': 'application/zip',
         'Content-Disposition': `attachment; filename="users.zip"`,
       })
       .attachment('file.zip');
-    //  archiver.pipe(response);
-    //  archiver.finalize();
-    //});
     this.exportService.getCsvFiles(req.user.id).then((resp) => {
       resp.pipe(response);
       resp.finalize();
