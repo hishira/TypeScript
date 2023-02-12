@@ -17,20 +17,14 @@ export class ExportController {
   @Get('csv')
   @UseGuards(AuthGuard('accessToken'))
   getCsv(@Request() req, @Res() response: Response) {
-    console.log(req.user);
-    //const entries = await
-    this.entryService.getByUser(req.user.id).then((resp) => {
-      let csvData = ['title', 'password', 'note'].join(', ') + '\r\n';
-      resp.forEach((entry) => {
-        csvData += [entry.title, entry.password, entry.note].join(',') + '\r\n';
-      });
+    this.exportService.getCsvFile(req.user.id).then((csvString) => {
       response
         .set({
           'Content-Type': 'text/csv',
           'Content-Disposition': `attachment; filename="users.csv"`,
         })
         .attachment('users.csv')
-        .send(csvData);
+        .send(csvString);
     });
   }
 
@@ -43,7 +37,7 @@ export class ExportController {
         'Content-Disposition': `attachment; filename="users.zip"`,
       })
       .attachment('file.zip');
-    this.exportService.getCsvFiles(req.user.id).then((resp) => {
+    this.exportService.getCsvZipedFile(req.user.id).then((resp) => {
       resp.pipe(response);
       resp.finalize();
     });

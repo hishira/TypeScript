@@ -3,12 +3,25 @@ import { Readable } from 'stream';
 import { EntryService } from './entry.service';
 import * as Archiver from 'archiver';
 import { Response } from 'express';
+import { CsvFile, DefaultCsvHeader } from 'src/utils/csv.util';
 
 @Injectable()
 export class ExportService {
   constructor(private readonly entryService: EntryService) {}
 
-  getCsvFiles(userId: string): Promise<Archiver.Archiver> {
+  getCsvFile(userId): Promise<string> {
+    let csvData = [['title', 'password', 'note', '\r\n']];
+    return this.entryService.getByUser(userId).then((resp)=>{
+      const csvRows: string[][] = []
+      resp.forEach((entry)=>{
+        csvRows.push([entry.title, entry.password, entry.note, '\r\n']);
+      })
+      console.log(csvRows);
+      const csv = new CsvFile(DefaultCsvHeader()).setRows(csvRows).getCsvAsString();
+      return csv;
+    })
+  }
+  getCsvZipedFile(userId: string): Promise<Archiver.Archiver> {
     const archiver = this.entryService.getByUser(userId).then((resp) => {
       let csvData = [['title', 'password', 'note', '\r\n']];
       resp.forEach((entry) => {
@@ -25,6 +38,7 @@ export class ExportService {
           csvData = null;
         },
       });
+      
       const archiver = Archiver('zip', {
         zlib: { level: 9 },
         forceLocalTime: true,
