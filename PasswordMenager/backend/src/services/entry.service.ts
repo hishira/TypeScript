@@ -80,7 +80,6 @@ export class EntryService {
       });
       return { status: true, respond: upadednoew };
     } catch (e) {
-      console.log(e);
       return { status: false, respond: null };
     }
   }

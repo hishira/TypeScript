@@ -16,7 +16,6 @@ export class ExportService {
       resp.forEach((entry)=>{
         csvRows.push([entry.title, entry.password, entry.note, '\r\n']);
       })
-      console.log(csvRows);
       const csv = new CsvFile(DefaultCsvHeader()).setRows(csvRows).getCsvAsString();
       return csv;
     })
@@ -43,7 +42,7 @@ export class ExportService {
         zlib: { level: 9 },
         forceLocalTime: true,
       });
-      archiver.on('error', (err) => console.log(err));
+      archiver.on('error', (err) => console.error(err));
       archiver.append(readable, { name: 'users.csv' });
       return archiver;
     });

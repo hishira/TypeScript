@@ -14,7 +14,6 @@ export const PasswordEntries = (selectedGroup: string, refreshAll: boolean) => {
         groupid
       );
       if (response.status) {
-        console.log(response.response);
         setPasswordEntries(response.response);
       } else {
         setPasswordEntries([]);

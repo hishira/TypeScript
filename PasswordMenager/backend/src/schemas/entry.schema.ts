@@ -37,18 +37,22 @@ EntrySchema.pre<IEntry>('save', function (next) {
     cipher.final(),
   ]);
   this.password = encrypted.toString('hex');
-  console.log(this.password);
   next();
 });
 EntrySchema.post('find', function (result) {
-  
- result.forEach((res)=>{
+  result.forEach((res) => {
     const encryptedPassword = res.password;
-    const decipher = crypto.createDecipheriv(algorithm,process.env.secretkey, process.env.iv);
-    const decryptedPassword = Buffer.concat([decipher.update(Buffer.from(encryptedPassword,'hex')),decipher.final()]);
-    res.password = decryptedPassword.toString()
-    
+    const decipher = crypto.createDecipheriv(
+      algorithm,
+      process.env.secretkey,
+      process.env.iv,
+    );
+    const decryptedPassword = Buffer.concat([
+      decipher.update(Buffer.from(encryptedPassword, 'hex')),
+      decipher.final(),
+    ]);
+    res.password = decryptedPassword.toString();
   });
-  return result
+  return result;
 });
 export default EntrySchema;

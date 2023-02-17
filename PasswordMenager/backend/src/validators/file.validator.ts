@@ -6,16 +6,10 @@ export class CustomFileValidator extends FileValidator<any> {
   }
   isValid(file?: any): boolean | Promise<boolean> {
     const buffer = file.buffer as Buffer;
-    //const stream = Readable.from(buffer);
-    //stream.on('data', (chunk)=>console.log(chunk));
     const stream = this.getStream(buffer);
-    let counter=0;
+    let counter = 0;
     const chunks = [];
-    stream.on('data', (chunk) => chunks.push(chunk))
-    .on('end',(_)=>{
-      let tmpBuf = Buffer.concat(chunks);
-      console.log(tmpBuf.toString('utf-8'))
-    });
+    stream.on('data', (chunk) => chunks.push(chunk));
     return false;
   }
 
