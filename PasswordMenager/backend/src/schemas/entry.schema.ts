@@ -42,20 +42,13 @@ EntrySchema.pre<IEntry>('save', function (next) {
 });
 EntrySchema.post('find', function (result) {
   
-  const resultTmp = result.map((res)=>{
-    console.log(res._doc)
+ result.forEach((res)=>{
     const encryptedPassword = res.password;
     const decipher = crypto.createDecipheriv(algorithm,process.env.secretkey, process.env.iv);
     const decryptedPassword = Buffer.concat([decipher.update(Buffer.from(encryptedPassword,'hex')),decipher.final()]);
-    console.log(decryptedPassword.toString());
-    return {
-      ...res,
-      password: decryptedPassword.toString()
-    };
+    res.password = decryptedPassword.toString()
     
   });
-  //console.log(resultTmp);
-  result = resultTmp
-  return resultTmp;
+  return result
 });
 export default EntrySchema;

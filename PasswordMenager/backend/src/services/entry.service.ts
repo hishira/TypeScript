@@ -23,7 +23,7 @@ export class EntryService {
   }
 
   async getbygroupid(groupid: string): Promise<IEntry[]> {
-    return this.entryModel.find({ groupid: groupid });
+    return this.entryModel.find({groupid: groupid});
   }
 
   async deletebyid(entryid: string): Promise<DeleteEntryResponse> {
