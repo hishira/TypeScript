@@ -28,7 +28,5 @@ export class ImportController {
         .build(),
     )
     file: Express.Multer.File,
-  ) {
-    console.log(file);
-  }
+  ) {}
 }

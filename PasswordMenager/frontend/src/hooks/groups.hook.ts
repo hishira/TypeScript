@@ -6,7 +6,6 @@ export const GroupEffect = (refetch: boolean): IGroup[] => {
   const fetchGroups = async (): Promise<void> => {
     const groupresponse: GroupResponse = await GetGroupsByUser();
     setGroups(groupresponse.response);
-    console.log(groupresponse.response);
   };
 
   useEffect(() => {

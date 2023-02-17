@@ -19,7 +19,6 @@ const GetGroupsByUser = async (): Promise<GroupResponse> => {
     await refreshToken();
     token = getAccessToken();
     response = await GetGroups(token);
-    console.log(response);
     if (response === 401 || response === 500) {
       return { status: false, response: [] };
     }

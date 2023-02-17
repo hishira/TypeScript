@@ -11,7 +11,7 @@ export class EntryService {
     private entryModel: Model<IEntry>,
   ) {}
 
-  async create(
+  create(
     entrycreateDTO: CreateEntryDto,
     userid: string,
   ): Promise<IEntry> {
@@ -23,7 +23,7 @@ export class EntryService {
   }
 
   async getbygroupid(groupid: string): Promise<IEntry[]> {
-    return this.entryModel.find({ groupid: groupid });
+    return this.entryModel.find({groupid: groupid});
   }
 
   async deletebyid(entryid: string): Promise<DeleteEntryResponse> {
@@ -80,7 +80,6 @@ export class EntryService {
       });
       return { status: true, respond: upadednoew };
     } catch (e) {
-      console.log(e);
       return { status: false, respond: null };
     }
   }
