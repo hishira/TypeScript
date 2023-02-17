@@ -11,16 +11,16 @@ export class UserService{
         private userModel:Model<IUser>,
     ){}
 
-    async create(userCreateDTO: CreateUserDto): Promise<IUser>{
+    create(userCreateDTO: CreateUserDto): Promise<IUser>{
         console.log(userCreateDTO.login);
         const createdUser = new this.userModel(userCreateDTO);
         return  createdUser.save();
     }
 
-    async getAll(): Promise<IUser[]>{
+    getAll(): Promise<IUser[]>{
         return this.userModel.find({}).exec();
     }
-    async getOne(): Promise<IUser[]>{
+    getOne(): Promise<IUser[]>{
         return this.userModel.find({}).limit(1).exec();
     }
 

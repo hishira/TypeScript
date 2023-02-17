@@ -11,7 +11,7 @@ export class GroupService {
     private groupModel: Model<IGroup>,
   ) {}
 
-  async create(
+  create(
     groupcreateDTO: CreateGroupDto,
     userid: string,
   ): Promise<CreateGroupDto> {

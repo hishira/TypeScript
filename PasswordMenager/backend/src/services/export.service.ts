@@ -46,7 +46,6 @@ export class ExportService {
       archiver.on('error', (err) => console.log(err));
       archiver.append(readable, { name: 'users.csv' });
       return archiver;
-      //archiver.finalize();
     });
     return archiver;
   }

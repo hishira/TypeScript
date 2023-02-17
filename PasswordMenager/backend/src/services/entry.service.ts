@@ -11,7 +11,7 @@ export class EntryService {
     private entryModel: Model<IEntry>,
   ) {}
 
-  async create(
+  create(
     entrycreateDTO: CreateEntryDto,
     userid: string,
   ): Promise<IEntry> {
