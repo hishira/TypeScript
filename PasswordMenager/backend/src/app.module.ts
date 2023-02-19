@@ -16,7 +16,7 @@ import { UserModule } from './modules/user.module';
     EntryModule,
     ConfigModule.forRoot(),
     ExportModule,
-    ImportModule
+    ImportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
