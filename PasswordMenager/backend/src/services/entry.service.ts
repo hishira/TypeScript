@@ -1,8 +1,8 @@
-import { Model } from 'mongoose';
-import { Injectable, Inject } from '@nestjs/common';
-import { IEntry } from '../schemas/Interfaces/entry.interface';
+import { Inject, Injectable } from '@nestjs/common';
+import { Model, UpdateWriteOpResult } from 'mongoose';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
+import { IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
 @Injectable()
 export class EntryService {
@@ -11,10 +11,7 @@ export class EntryService {
     private entryModel: Model<IEntry>,
   ) {}
 
-  create(
-    entrycreateDTO: CreateEntryDto,
-    userid: string,
-  ): Promise<IEntry> {
+  create(entrycreateDTO: CreateEntryDto, userid: string): Promise<IEntry> {
     const createdentry = new this.entryModel({
       ...entrycreateDTO,
       userid: userid,
@@ -23,46 +20,57 @@ export class EntryService {
   }
 
   async getbygroupid(groupid: string): Promise<IEntry[]> {
-    return this.entryModel.find({groupid: groupid});
+    return this.entryModel.find({ groupid: groupid });
   }
 
   async deletebyid(entryid: string): Promise<DeleteEntryResponse> {
     try {
-      const deletedentry: IEntry = await this.entryModel.findOne({
-        _id: entryid,
+      const deletedentry: Promise<IEntry> = this.entryModel
+        .findOne({
+          _id: entryid,
+        })
+        .exec();
+      const deletedPromise = this.entryModel.deleteOne({ _id: entryid }).exec();
+      return Promise.all([deletedentry, deletedPromise]).then((res) => {
+        return { status: true, respond: res[0] };
       });
-      await this.entryModel.deleteOne({ _id: entryid });
-      return { status: true, respond: deletedentry };
     } catch (e) {
       return { status: false, respond: null };
     }
   }
 
-  async titleedit(title: string, _id: string): Promise<void> {
-    await this.entryModel.updateOne({ _id: _id }, { $set: { title: title } });
+  async titleedit(title: string, _id: string): Promise<UpdateWriteOpResult> {
+    return this.entryModel
+      .updateOne({ _id: _id }, { $set: { title: title } })
+      .then((data) => data);
   }
 
-  async usernameedit(newusername: string, _id: string): Promise<void> {
-    await this.entryModel.updateOne(
-      { _id: _id },
-      { $set: { username: newusername } },
-    );
+  async usernameedit(
+    newusername: string,
+    _id: string,
+  ): Promise<UpdateWriteOpResult> {
+    return this.entryModel
+      .updateOne({ _id: _id }, { $set: { username: newusername } })
+      .then((data) => data);
   }
 
-  async passwordedit(newpassword: string, _id: string): Promise<void> {
-    await this.entryModel.updateOne(
-      { _id: _id },
-      { $set: { password: newpassword } },
-    );
+  async passwordedit(
+    newpassword: string,
+    _id: string,
+  ): Promise<UpdateWriteOpResult> {
+    return this.entryModel
+      .updateOne({ _id: _id }, { $set: { password: newpassword } })
+      .then((data) => data);
   }
 
-  async noteedit(newnote: string, _id: string): Promise<void> {
-    await this.entryModel.updateOne({ _id: _id }, { $set: { note: newnote } });
+  async noteedit(newnote: string, _id: string): Promise<UpdateWriteOpResult> {
+    return this.entryModel
+      .updateOne({ _id: _id }, { $set: { note: newnote } })
+      .then((data) => data);
   }
 
   async getByUser(userId: string): Promise<IEntry[]> {
-    const entries = await this.entryModel.find({ userid: userId });
-    return entries;
+    return this.entryModel.find({ userid: userId }).then((data) => data);
   }
 
   async editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {

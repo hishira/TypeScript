@@ -1,9 +1,9 @@
-import { Model, NativeError } from 'mongoose';
-import { Injectable, Inject } from '@nestjs/common';
-import { IUser } from '../schemas/Interfaces/user.interface';
-import { AuthInfo } from '../schemas/dto/auth.dto';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Model } from 'mongoose';
 import { jwtConstants } from '../constans';
+import { AuthInfo } from '../schemas/dto/auth.dto';
+import { IUser } from '../schemas/Interfaces/user.interface';
 @Injectable()
 export class AuthService {
   constructor(
@@ -13,13 +13,14 @@ export class AuthService {
   ) {}
 
   async valideteUser(userinfo: AuthInfo): Promise<IUser | null> {
-    const user = await this.userModel.findOne({ login: userinfo.login });
-    if (user === null) {
-      return null;
-    }
-    if (user.validatePassword(userinfo.password)) {
-      return user;
-    }
+    return this.userModel.findOne({ login: userinfo.login }).then((user) => {
+      if (user === null) {
+        return null;
+      }
+      if (user.validatePassword(userinfo.password)) {
+        return user;
+      }
+    });
   }
 
   login(user: any) {
