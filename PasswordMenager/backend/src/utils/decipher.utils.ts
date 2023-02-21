@@ -27,11 +27,4 @@ export class Decipher {
     ]);
     return decryptedBufferValue.toString();
   }
-  public encryptValue(value: string) {
-    const enryptedValue = Buffer.concat([
-      this.decipher.update(value),
-      this.decipher.final(),
-    ]);
-    return enryptedValue.toString('hex');
-  }
 }
