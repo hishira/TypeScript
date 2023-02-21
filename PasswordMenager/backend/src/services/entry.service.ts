@@ -11,12 +11,17 @@ export class EntryService {
     private entryModel: Model<IEntry>,
   ) {}
 
-  create(entrycreateDTO: CreateEntryDto, userid: string): Promise<IEntry> {
+  create(
+    entrycreateDTO: CreateEntryDto,
+    userid: string,
+  ): Promise<IEntry | { message: string }> {
     const createdentry = new this.entryModel({
       ...entrycreateDTO,
       userid: userid,
     });
-    return createdentry.save();
+    return createdentry.save().catch((_) => {
+      return { message: 'Error whice creating entry' };
+    });
   }
 
   async getbygroupid(groupid: string): Promise<IEntry[]> {
@@ -31,9 +36,16 @@ export class EntryService {
         })
         .exec();
       const deletedPromise = this.entryModel.deleteOne({ _id: entryid }).exec();
-      return Promise.all([deletedentry, deletedPromise]).then((res) => {
-        return { status: true, respond: res[0] };
-      });
+      return Promise.all([deletedentry, deletedPromise])
+        .then((res) => {
+          return { status: true, respond: res[0] };
+        })
+        .catch((err) => {
+          return {
+            status: false,
+            respond: null,
+          };
+        });
     } catch (e) {
       return { status: false, respond: null };
     }

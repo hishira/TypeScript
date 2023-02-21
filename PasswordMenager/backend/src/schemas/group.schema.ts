@@ -12,4 +12,4 @@ const GroupSchema = new mongoose.Schema({
   },
 });
 
-export default GroupSchema
+export default GroupSchema;

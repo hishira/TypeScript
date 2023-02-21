@@ -6,7 +6,7 @@ export class AppService {
     return 'Hello World!';
   }
 
-  getName():string{
-    return "Something name"
+  getName(): string {
+    return 'Something name';
   }
 }

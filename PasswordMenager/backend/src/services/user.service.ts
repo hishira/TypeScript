@@ -10,9 +10,11 @@ export class UserService {
     private userModel: Model<IUser>,
   ) {}
 
-  create(userCreateDTO: CreateUserDto): Promise<IUser> {
+  create(userCreateDTO: CreateUserDto): Promise<IUser | { message: string }> {
     const createdUser = new this.userModel(userCreateDTO);
-    return createdUser.save();
+    return createdUser.save().catch((err) => {
+      return { message: 'Problem occur while user create' };
+    });
   }
 
   getAll(): Promise<IUser[]> {
