@@ -1,5 +1,7 @@
-import * as mognoose from 'mongoose';
 import * as crypto from 'crypto';
+import * as mognoose from 'mongoose';
+import { Cipher } from 'src/utils/cipher.utils';
+import { Decipher } from 'src/utils/decipher.utils';
 import { IEntry } from './Interfaces/entry.interface';
 
 export const algorithm = 'aes-256-ctr';
@@ -27,31 +29,21 @@ const EntrySchema = new mognoose.Schema({
 });
 EntrySchema.pre<IEntry>('save', function (next) {
   const encryptedPasswod = this.password;
-  const cipher = crypto.createCipheriv(
+  this.password = new Cipher(
     algorithm,
     process.env.secretkey,
     process.env.iv,
-  );
-  const encrypted = Buffer.concat([
-    cipher.update(encryptedPasswod),
-    cipher.final(),
-  ]);
-  this.password = encrypted.toString('hex');
+  ).encryptValue(encryptedPasswod);
   next();
 });
 EntrySchema.post('find', function (result) {
   result.forEach((res) => {
     const encryptedPassword = res.password;
-    const decipher = crypto.createDecipheriv(
+    res.password = new Decipher(
       algorithm,
       process.env.secretkey,
       process.env.iv,
-    );
-    const decryptedPassword = Buffer.concat([
-      decipher.update(Buffer.from(encryptedPassword, 'hex')),
-      decipher.final(),
-    ]);
-    res.password = decryptedPassword.toString();
+    ).decryptValue(encryptedPassword);
   });
   return result;
 });
