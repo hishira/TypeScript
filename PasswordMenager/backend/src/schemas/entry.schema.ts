@@ -1,8 +1,8 @@
-import * as crypto from 'crypto';
 import * as mognoose from 'mongoose';
 import { Cipher } from 'src/utils/cipher.utils';
 import { Decipher } from 'src/utils/decipher.utils';
 import { IEntry } from './Interfaces/entry.interface';
+import { EntrySchemaUtils } from './utils/Entry.schema.utils';
 
 export const algorithm = 'aes-256-ctr';
 const EntrySchema = new mognoose.Schema({
@@ -27,24 +27,6 @@ const EntrySchema = new mognoose.Schema({
     default: '',
   },
 });
-EntrySchema.pre<IEntry>('save', function (next) {
-  const encryptedPasswod = this.password;
-  this.password = new Cipher(
-    algorithm,
-    process.env.secretkey,
-    process.env.iv,
-  ).encryptValue(encryptedPasswod);
-  next();
-});
-EntrySchema.post('find', function (result) {
-  result.forEach((res) => {
-    const encryptedPassword = res.password;
-    res.password = new Decipher(
-      algorithm,
-      process.env.secretkey,
-      process.env.iv,
-    ).decryptValue(encryptedPassword);
-  });
-  return result;
-});
+EntrySchema.pre<IEntry>('save', EntrySchemaUtils.BeforeSave);
+EntrySchema.post('find', EntrySchemaUtils.PostFind);
 export default EntrySchema;

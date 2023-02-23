@@ -23,6 +23,7 @@ export class CsvFile {
   get Titles(): TitleCsvHeader[] {
     return this._titles;
   }
+
   set Titles(value: TitleCsvHeader[]) {
     this._titles =
       value.indexOf(TitleCsvHeader.EndLine) !== -1
@@ -57,6 +58,7 @@ export class CsvFile {
     this.Rows = row;
     return this;
   }
+
   appendRow(row: string[]): CsvFile {
     this._rows.push(row);
     return this;
@@ -67,7 +69,7 @@ export class CsvFile {
     return this;
   }
 
-  getCsvAsString(): string{
+  getCsvAsString(): string {
     const csvString = this.Titles.flat().join(',') + this.Rows.flat().join(',');
     return csvString;
   }
