@@ -20,6 +20,7 @@ export class Decipher {
   public createBufferFrom(bufferedValue: string): Buffer {
     return Buffer.from(bufferedValue, 'hex');
   }
+
   public decryptValue(value: string): string {
     const decryptedBufferValue = Buffer.concat([
       this.decipher.update(this.createBufferFrom(value)),
