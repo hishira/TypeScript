@@ -1,16 +1,28 @@
 import {
+  Api,
   fetchGetObjectWithtoken,
   fetchPostObjectWithToken,
   getUrl,
 } from "./config.api";
 
-const getGroupByUser = async (token: string) => {
-  const url = getUrl("group/byuser");
-  return await fetch(url, fetchGetObjectWithtoken(token));
-};
+export class GroupApi extends Api {
+  private static instance: GroupApi | null = null;
 
-const createGroup = async (createGroup: CreateGroup, token: string) => {
-  const url = getUrl("group/");
-  return await fetch(url, fetchPostObjectWithToken(createGroup, token));
-};
-export { getGroupByUser, createGroup };
+  static getInstance(): GroupApi {
+    if (this.instance === null) {
+      this.instance = new GroupApi();
+      return this.instance;
+    }
+    return this.instance;
+  }
+
+  async getGroupByUser(token: string) {
+    const url = this.getUrl("group/byuser");
+    return await fetch(url, this.fetchGetObjectWithtoken(token));
+  }
+
+  async createGroup(createGroup: CreateGroup, token: string) {
+    const url = this.getUrl("group/");
+    return await fetch(url, this.fetchPostObjectWithToken(createGroup, token));
+  }
+}

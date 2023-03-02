@@ -2,7 +2,9 @@ export class ConfigApi {
   static getUrl = (part: string): string => {
     return `http://localhost:8080/${part}`;
   };
+  
   static frontURL: string = "http://localhost:3000";
+  
   static readonly fetchObject: RequestInit = {
     mode: "cors",
     headers: {
@@ -18,6 +20,10 @@ export class ConfigApi {
 export abstract class Api {
   static getAuthorizationToken(token: string): string {
     return `Bearer ${token}`;
+  }
+
+  getUrl(part: string): string {
+    return ConfigApi.getUrl(part);
   }
 
   fetchPostObjectWithToken(obj: any, token: string): RequestInit {

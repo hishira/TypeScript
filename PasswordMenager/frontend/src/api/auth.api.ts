@@ -1,9 +1,4 @@
-import {
-  Api,
-  fetchGetObjectWithtoken,
-  fetchPostObject,
-  getUrl,
-} from "./config.api";
+import { Api } from "./config.api";
 
 export class AuthApi extends Api {
   private static instance: AuthApi | null = null;
@@ -16,17 +11,17 @@ export class AuthApi extends Api {
     return this.instance;
   }
   async login(userauth: UserAuth): Promise<Response> {
-    const url: string = getUrl("auth/login");
+    const url: string = this.getUrl("auth/login");
     return await fetch(url, this.fetchPostObject(userauth));
   }
 
   async signup(newuserauth: UserAuth): Promise<Response> {
-    const url: string = getUrl("auth/signup");
+    const url: string = this.getUrl("auth/signup");
     return await fetch(url, this.fetchPostObject(newuserauth));
   }
 
   async refreshAccessToken(token: string): Promise<Response> {
-    const url: string = getUrl("auth/refresh");
+    const url: string = this.getUrl("auth/refresh");
     return await fetch(url, this.fetchGetObjectWithtoken(token));
   }
 }
