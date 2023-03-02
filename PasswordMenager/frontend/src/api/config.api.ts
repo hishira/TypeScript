@@ -1,4 +1,4 @@
-class ConfigApi {
+export class ConfigApi {
   static getUrl = (part: string): string => {
     return `http://localhost:8080/${part}`;
   };
@@ -15,7 +15,7 @@ class ConfigApi {
   };
 }
 
-abstract class Api {
+export abstract class Api {
   static getAuthorizationToken(token: string): string {
     return `Bearer ${token}`;
   }
