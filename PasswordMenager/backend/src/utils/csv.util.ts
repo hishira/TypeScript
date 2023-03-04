@@ -1,5 +1,6 @@
 enum TitleCsvHeader {
   Title = 'title',
+  Username = 'username',
   Password = 'password',
   Note = 'note',
   EndLine = '\r\n',
@@ -8,6 +9,7 @@ enum TitleCsvHeader {
 export const DefaultCsvHeader = (): TitleCsvHeader[] => {
   return [
     TitleCsvHeader.Title,
+    TitleCsvHeader.Username,
     TitleCsvHeader.Password,
     TitleCsvHeader.Note,
     TitleCsvHeader.EndLine,
@@ -70,7 +72,16 @@ export class CsvFile {
   }
 
   getCsvAsString(): string {
-    const csvString = this.Titles.flat().join(',') + this.Rows.flat().join(',');
+    console.log(this.Rows.flat());
+    const csvString =
+      this.Titles.slice(0, this.Titles.length - 1)
+        .flat()
+        .join(',') +
+      endRow +
+      this.Rows.map((x) => x.slice(0, x.length - 1).join(',') + endRow)
+        .flat()
+        .filter((x) => x)
+        .join('');
     return csvString;
   }
 }
