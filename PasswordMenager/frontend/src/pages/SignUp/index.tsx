@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import FormComponent from "../../components/Form/index";
 import { useHistory } from "react-router-dom";
-import { registerUser } from "../../utils/auth.utils";
+import { Auth } from "../../utils/auth.utils";
 import { Container, FormContainer } from "./component.styled";
 import { inject, observer } from "mobx-react";
 import { IGeneral } from "../../models/General";
@@ -55,18 +55,20 @@ const SignUp = ({ store }: Prop) => {
       });
       return;
     }
-   registerUser({
-      login: registerinfo.login,
-      password: registerinfo.password,
-    }).then((response)=>{
-      if(!!response){
-        store.setPopUpinfo({
-          open: true,
-          message: "User created",
-          type: "success",
-        })
-      }
-    })
+    Auth.getInstance()
+      .registerUser({
+        login: registerinfo.login,
+        password: registerinfo.password,
+      })
+      .then((response) => {
+        if (!!response) {
+          store.setPopUpinfo({
+            open: true,
+            message: "User created",
+            type: "success",
+          });
+        }
+      });
   };
 
   const redirectFunction = () => {

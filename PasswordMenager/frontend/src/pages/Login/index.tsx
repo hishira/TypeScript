@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import FormComponent from "../../components/Form/index";
 import { IGeneral } from "../../models/General";
-import { LoginUserHandle } from "../../utils/auth.utils";
+import { Auth } from "../../utils/auth.utils";
 import { setLocalStorageToken } from "../../utils/localstorage.utils";
 import { Container, FormContainer } from "./component.styled";
 
@@ -28,7 +28,7 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     e: React.MouseEvent<HTMLElement>
   ): Promise<void> => {
     e.preventDefault();
-    const response: any = await LoginUserHandle(infoLogin);
+    const response: any = await Auth.getInstance().LoginUserHandle(infoLogin);
     console.log(response);
     if (response?.status && response?.response !== null) {
       setLocalStorageToken(response.response);
