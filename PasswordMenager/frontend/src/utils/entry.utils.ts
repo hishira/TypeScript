@@ -1,9 +1,4 @@
-import {
-  CreateNewEntry,
-  GetEntriesByGroupID,
-  DeleteEntryById,
-  EditEntryByID,
-} from "../api/entry.api";
+import { EntryApi } from "../api/entry.api";
 import { refreshToken } from "./auth.utils";
 import { getAccessToken } from "./localstorage.utils";
 import { EMPTYENTRYRESPONSE } from "./constans.utils";
@@ -11,12 +6,12 @@ const CreateEntry = async (
   newentry: CreateEntryDto,
   token: string
 ): Promise<IEntry | number> => {
-  const response = await CreateNewEntry(newentry, token).then(
-    (resp: Response) => {
+  const response = await EntryApi.getInstance()
+    .CreateNewEntry(newentry, token)
+    .then((resp: Response) => {
       if (resp.status === 200 || resp.status === 201) return resp.json();
       return resp.status;
-    }
-  );
+    });
   return response;
 };
 
@@ -52,12 +47,12 @@ const GetEntries = async (
   groupid: GroupId,
   token: string
 ): Promise<number | Array<IEntry>> => {
-  const response = await GetEntriesByGroupID(groupid, token).then(
-    (resp: Response) => {
+  const response = await EntryApi.getInstance()
+    .GetEntriesByGroupID(groupid, token)
+    .then((resp: Response) => {
       if (resp.status === 200 || resp.status === 201) return resp.json();
       return resp.status;
-    }
-  );
+    });
   return response;
 };
 
@@ -86,11 +81,11 @@ const DeleteEntry = async (
   deleteid: string,
   accesstoken: string
 ): Promise<DeleteEntryResponse> => {
-  const response = await DeleteEntryById(deleteid, accesstoken).then(
-    (resp: Response) => {
+  const response = await EntryApi.getInstance()
+    .DeleteEntryById(deleteid, accesstoken)
+    .then((resp: Response) => {
       return resp.json();
-    }
-  );
+    });
   return response;
 };
 
@@ -111,12 +106,11 @@ const EditEntry = async (
   editedbody: EditEntry,
   accesstoken: string
 ): Promise<EditEntryResponse> => {
-  const response: EditEntryResponse = await EditEntryByID(
-    editedbody,
-    accesstoken
-  ).then((resp: Response) => {
-    return resp.json();
-  });
+  const response: EditEntryResponse = await EntryApi.getInstance()
+    .EditEntryByID(editedbody, accesstoken)
+    .then((resp: Response) => {
+      return resp.json();
+    });
   return response;
 };
 const EntryEditById = async (
