@@ -12,12 +12,8 @@ export const DefaultCsvHeader = (): TitleCsvHeader[] => {
     TitleCsvHeader.Username,
     TitleCsvHeader.Password,
     TitleCsvHeader.Note,
-    TitleCsvHeader.EndLine,
   ];
 };
-
-const endRow = '\r\n';
-
 export class CsvFile {
   private _titles: TitleCsvHeader[];
   private _rows: string[][];
@@ -27,10 +23,7 @@ export class CsvFile {
   }
 
   set Titles(value: TitleCsvHeader[]) {
-    this._titles =
-      value.indexOf(TitleCsvHeader.EndLine) !== -1
-        ? value
-        : [...value, TitleCsvHeader.EndLine];
+    this._titles = value;
   }
 
   get Rows(): string[][] {
@@ -38,9 +31,7 @@ export class CsvFile {
   }
 
   set Rows(value: string[][]) {
-    this._rows = value.map((row) => {
-      return row.indexOf(endRow) !== -1 ? row : [...row, endRow];
-    });
+    this._rows = value;
   }
 
   constructor(
@@ -72,16 +63,19 @@ export class CsvFile {
   }
 
   getCsvAsString(): string {
-    console.log(this.Rows.flat());
-    const csvString =
-      this.Titles.slice(0, this.Titles.length - 1)
-        .flat()
-        .join(',') +
-      endRow +
-      this.Rows.map((x) => x.slice(0, x.length - 1).join(',') + endRow)
-        .flat()
-        .filter((x) => x)
-        .join('');
+    const csvString = this.convertHeaderToString() + this.convertRowsToString();
+
     return csvString;
+  }
+
+  private convertHeaderToString(): string {
+    return this.Titles.flat().join(',') + TitleCsvHeader.EndLine;
+  }
+
+  private convertRowsToString(): string {
+    return this.Rows.map((x) => x.join(',') + TitleCsvHeader.EndLine)
+      .flat()
+      .filter((x) => x)
+      .join('');
   }
 }
