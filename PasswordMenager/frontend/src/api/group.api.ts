@@ -1,9 +1,4 @@
-import {
-  Api,
-  fetchGetObjectWithtoken,
-  fetchPostObjectWithToken,
-  getUrl,
-} from "./config.api";
+import { Api } from "./config.api";
 
 export class GroupApi extends Api {
   private static instance: GroupApi | null = null;
