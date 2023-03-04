@@ -1,19 +1,27 @@
-import {
-  fetchGetObjectWithtoken, fetchPostObject, getUrl
-} from "./config.api";
+import { Api } from "./config.api";
 
-const login = async (userauth: UserAuth): Promise<Response> => {
-  const url: string = getUrl("auth/login");
-  return await fetch(url, fetchPostObject(userauth));
-};
+export class AuthApi extends Api {
+  private static instance: AuthApi | null = null;
 
-const signup = async (newuserauth: UserAuth): Promise<Response> => {
-  const url: string = getUrl("auth/signup");
-  return await fetch(url, fetchPostObject(newuserauth));
-};
-const refreshAccessToken = async (token: string): Promise<Response> => {
-  const url: string = getUrl("auth/refresh");
-  return await fetch(url, fetchGetObjectWithtoken(token));
-};
-export { login, signup, refreshAccessToken };
+  static getInstance(): AuthApi {
+    if (this.instance === null) {
+      this.instance = new AuthApi();
+      return this.instance;
+    }
+    return this.instance;
+  }
+  async login(userauth: UserAuth): Promise<Response> {
+    const url: string = this.getUrl("auth/login");
+    return await fetch(url, this.fetchPostObject(userauth));
+  }
 
+  async signup(newuserauth: UserAuth): Promise<Response> {
+    const url: string = this.getUrl("auth/signup");
+    return await fetch(url, this.fetchPostObject(newuserauth));
+  }
+
+  async refreshAccessToken(token: string): Promise<Response> {
+    const url: string = this.getUrl("auth/refresh");
+    return await fetch(url, this.fetchGetObjectWithtoken(token));
+  }
+}

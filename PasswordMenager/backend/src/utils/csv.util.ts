@@ -1,5 +1,6 @@
 enum TitleCsvHeader {
   Title = 'title',
+  Username = 'username',
   Password = 'password',
   Note = 'note',
   EndLine = '\r\n',
@@ -8,14 +9,11 @@ enum TitleCsvHeader {
 export const DefaultCsvHeader = (): TitleCsvHeader[] => {
   return [
     TitleCsvHeader.Title,
+    TitleCsvHeader.Username,
     TitleCsvHeader.Password,
     TitleCsvHeader.Note,
-    TitleCsvHeader.EndLine,
   ];
 };
-
-const endRow = '\r\n';
-
 export class CsvFile {
   private _titles: TitleCsvHeader[];
   private _rows: string[][];
@@ -25,10 +23,7 @@ export class CsvFile {
   }
 
   set Titles(value: TitleCsvHeader[]) {
-    this._titles =
-      value.indexOf(TitleCsvHeader.EndLine) !== -1
-        ? value
-        : [...value, TitleCsvHeader.EndLine];
+    this._titles = value;
   }
 
   get Rows(): string[][] {
@@ -36,9 +31,7 @@ export class CsvFile {
   }
 
   set Rows(value: string[][]) {
-    this._rows = value.map((row) => {
-      return row.indexOf(endRow) !== -1 ? row : [...row, endRow];
-    });
+    this._rows = value;
   }
 
   constructor(
@@ -70,7 +63,19 @@ export class CsvFile {
   }
 
   getCsvAsString(): string {
-    const csvString = this.Titles.flat().join(',') + this.Rows.flat().join(',');
+    const csvString = this.convertHeaderToString() + this.convertRowsToString();
+
     return csvString;
+  }
+
+  private convertHeaderToString(): string {
+    return this.Titles.flat().join(',') + TitleCsvHeader.EndLine;
+  }
+
+  private convertRowsToString(): string {
+    return this.Rows.map((x) => x.join(',') + TitleCsvHeader.EndLine)
+      .flat()
+      .filter((x) => x)
+      .join('');
   }
 }

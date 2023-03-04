@@ -13,7 +13,6 @@ const ModalComponent = ({
   onClose,
 }: Props): JSX.Element => {
   const clickOnModal = (event: React.MouseEvent): void => {
-   
     const targetelement: Element = event.target as Element;
     for (let i of targetelement.childNodes) {
       if (

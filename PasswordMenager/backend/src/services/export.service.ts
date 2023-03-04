@@ -12,7 +12,7 @@ export class ExportService {
     return this.entryService.getByUser(userId).then((resp) => {
       const csvRows: string[][] = [];
       resp.forEach((entry) => {
-        csvRows.push([entry.title, entry.password, entry.note, '\r\n']);
+        csvRows.push([entry.title, entry.username, entry.password, entry.note]);
       });
       const csv = new CsvFile(DefaultCsvHeader())
         .setRows(csvRows)

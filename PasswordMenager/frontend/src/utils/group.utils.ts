@@ -1,14 +1,14 @@
-import { getGroupByUser, createGroup } from "../api/group.api";
+import { GroupApi } from "../api/group.api";
 import { refreshToken } from "./auth.utils";
 import { getAccessToken } from "./localstorage.utils";
-import {EMPTYGROUPRESPONSE} from "./constans.utils";
+import { EMPTYGROUPRESPONSE } from "./constans.utils";
 const GetGroups = async (token: string): Promise<number | Array<IGroup>> => {
-  const response: Promise<number | Array<IGroup>> = await getGroupByUser(
-    token
-  ).then((resp: Response) => {
-    if (resp.status === 201 || resp.status === 200) return resp.json();
-    return resp.status;
-  });
+  const response: Promise<number | Array<IGroup>> = await GroupApi.getInstance()
+    .getGroupByUser(token)
+    .then((resp: Response) => {
+      if (resp.status === 201 || resp.status === 200) return resp.json();
+      return resp.status;
+    });
   return response;
 };
 
@@ -33,12 +33,12 @@ const GroupCreate = async (
   creategroup: CreateGroup,
   accesstoken: string
 ): Promise<number | IGroup> => {
-  const response = await createGroup(creategroup, accesstoken).then(
-    (resp: Response) => {
+  const response = await GroupApi.getInstance()
+    .createGroup(creategroup, accesstoken)
+    .then((resp: Response) => {
       if (resp.status === 200 || resp.status === 201) return resp.json();
       return resp.status;
-    }
-  );
+    });
   return response;
 };
 
