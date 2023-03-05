@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GetUserEntriesByGroupID } from "../utils/entry.utils";
+import { Entry } from "../utils/entry.utils";
 
 export const PasswordEntries = (selectedGroup: string, refreshAll: boolean) => {
   const [passwordEntries, setPasswordEntries] = useState<IEntry[]>([]);
@@ -10,9 +10,8 @@ export const PasswordEntries = (selectedGroup: string, refreshAll: boolean) => {
       const groupid: GroupId = {
         id: selectedGroup,
       };
-      const response: GetEntriesResponse = await GetUserEntriesByGroupID(
-        groupid
-      );
+      const response: GetEntriesResponse =
+        await Entry.getInstance().GetUserEntriesByGroupID(groupid);
       if (response.status) {
         setPasswordEntries(response.response);
       } else {

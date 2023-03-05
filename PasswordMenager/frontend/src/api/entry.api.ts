@@ -1,35 +1,48 @@
-import {
-  fetchDeleteObjectWithToken, fetchGetObjectWithtoken, fetchPostObjectWithToken, fetchPutObjectWithToken, getUrl
-} from "./config.api";
+import { Api } from "./config.api";
 
-const CreateNewEntry = async (
-  newentry: CreateEntryDto,
-  token: string
-): Promise<Response> => {
-  const url = getUrl("entry");
-  return await fetch(url, fetchPostObjectWithToken(newentry, token));
-};
-const GetEntriesByGroupID = async (
-  groupid: GroupId,
-  token: string
-): Promise<Response> => {
-  const url = getUrl(`entry/bygroup/${groupid.id}`);
-  return await fetch(url, fetchGetObjectWithtoken(token));
-};
-const DeleteEntryById = async (
-  entryid: string,
-  accesstoken: string
-): Promise<Response> => {
-  const url = getUrl(`entry/byentityid/${entryid}`);
-  return await fetch(url, fetchDeleteObjectWithToken(accesstoken));
-};
-const EditEntryByID = async (
-  entrybody: EditEntry,
-  accesstoken: string
-): Promise<Response> => {
-  const url = getUrl(`entry/edit`);
-  return await fetch(url, fetchPutObjectWithToken(entrybody, accesstoken));
-};
+export class EntryApi extends Api {
+  private static instance: EntryApi | null = null;
 
-export { CreateNewEntry, GetEntriesByGroupID, DeleteEntryById, EditEntryByID };
+  static getInstance(): EntryApi {
+    if (this.instance === null) {
+      this.instance = new EntryApi();
+      return this.instance;
+    }
+    return this.instance;
+  }
 
+  async CreateNewEntry(
+    newentry: CreateEntryDto,
+    token: string
+  ): Promise<Response> {
+    const url = this.getUrl("entry");
+    return await fetch(url, this.fetchPostObjectWithToken(newentry, token));
+  }
+
+  async GetEntriesByGroupID(
+    groupid: GroupId,
+    token: string
+  ): Promise<Response> {
+    const url = this.getUrl(`entry/bygroup/${groupid.id}`);
+    return await fetch(url, this.fetchGetObjectWithtoken(token));
+  }
+
+  async DeleteEntryById(
+    entryid: string,
+    accesstoken: string
+  ): Promise<Response> {
+    const url = this.getUrl(`entry/byentityid/${entryid}`);
+    return await fetch(url, this.fetchDeleteObjectWithToken(accesstoken));
+  }
+
+  async EditEntryByID(
+    entrybody: EditEntry,
+    accesstoken: string
+  ): Promise<Response> {
+    const url = this.getUrl(`entry/edit`);
+    return await fetch(
+      url,
+      this.fetchPutObjectWithToken(entrybody, accesstoken)
+    );
+  }
+}

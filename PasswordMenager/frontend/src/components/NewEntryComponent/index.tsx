@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CreateNewEntryUser, EntryEditById } from "../../utils/entry.utils";
-import { GetGroupsByUser } from "../../utils/group.utils";
+import { Entry } from "../../utils/entry.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import {
@@ -14,13 +13,14 @@ import {
   PasswordCheckbox,
   SectionContainer,
   SelectContainer,
-  SelectLabel
+  SelectLabel,
 } from "./component.styled";
 import {
   checkBoxHandler,
-  generatePart, specialTypeGenerate
+  generatePart,
+  specialTypeGenerate,
 } from "./new-entry.utils";
-import {GroupEffect} from '../../hooks/groups.hook'
+import { GroupEffect } from "../../hooks/groups.hook";
 export type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
@@ -52,8 +52,8 @@ const NewEntryComponent = ({
     note: "",
     groupid: "",
   });
-  const groups= GroupEffect(true);
- 
+  const groups = GroupEffect(true);
+
   useEffect(() => {
     setnewentry({
       title: "",
@@ -119,9 +119,8 @@ const NewEntryComponent = ({
   };
   const addnewentry = async (): Promise<void> => {
     console.log(newentry);
-    const responsenewentry: CreateEntryResponse = await CreateNewEntryUser(
-      newentry
-    );
+    const responsenewentry: CreateEntryResponse =
+      await Entry.getInstance().CreateNewEntryUser(newentry);
     if (responsenewentry.status) {
       console.log("OK");
       clearInputData();
@@ -145,7 +144,8 @@ const NewEntryComponent = ({
       console.log(editentryid);
       const editedvalues: EditEntry = getRechangeObject();
       console.log(editedvalues);
-      const response: EditEntryResponse = await EntryEditById(editedvalues);
+      const response: EditEntryResponse =
+        await Entry.getInstance().EntryEditById(editedvalues);
       if (response.status) {
         console.log("ok");
         if (refresh !== undefined) refresh();

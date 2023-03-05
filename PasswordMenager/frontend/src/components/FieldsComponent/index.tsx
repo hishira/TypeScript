@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { ResizeWindowsHandle } from "../../hooks/resize.hook";
 import { EMPTYENTRYRESPONSE } from "../../utils/constans.utils";
-import { DeleteUserEntry } from "../../utils/entry.utils";
+import { Entry } from "../../utils/entry.utils";
 import { ModalButtonChoicer } from "../MiniModal";
 import Modal from "../Modal";
 import NewEntryComponent from "../NewEntryComponent";
@@ -26,7 +26,8 @@ const FieldsContainer = ({
 
   const deletehandle = async (entryid: string): Promise<void> => {
     console.log(entryid);
-    const response: DeleteEntryResponse = await DeleteUserEntry(entryid);
+    const response: DeleteEntryResponse =
+      await Entry.getInstance().DeleteUserEntry(entryid);
     if (response.status) {
       refreshgroupentities();
     }
