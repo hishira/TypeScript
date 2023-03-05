@@ -1,5 +1,5 @@
 import { GroupApi } from "../api/group.api";
-import { refreshToken } from "./auth.utils";
+import { Auth } from "./auth.utils";
 import { getAccessToken } from "./localstorage.utils";
 import { EMPTYGROUPRESPONSE } from "./constans.utils";
 const GetGroups = async (token: string): Promise<number | Array<IGroup>> => {
@@ -16,7 +16,7 @@ const GetGroupsByUser = async (): Promise<GroupResponse> => {
   let token: string = getAccessToken();
   let response: number | Array<IGroup> = await GetGroups(token);
   if (response === 401) {
-    await refreshToken();
+    await Auth.getInstance().refreshToken();
     token = getAccessToken();
     response = await GetGroups(token);
     if (response === 401 || response === 500) {
@@ -48,7 +48,7 @@ const CreateGroupForUser = async (
   let accesstoken: string = getAccessToken();
   let response: number | IGroup = await GroupCreate(creategroup, accesstoken);
   if (response === 401) {
-    await refreshToken();
+    await Auth.getInstance().refreshToken();
     accesstoken = getAccessToken();
     response = await GroupCreate(creategroup, accesstoken);
     if (response === 401 || response === 500) {
