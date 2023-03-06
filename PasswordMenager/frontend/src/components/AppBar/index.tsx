@@ -1,7 +1,7 @@
 import { inject, observer } from "mobx-react";
 import { useHistory } from "react-router-dom";
 import { IGeneral } from "../../models/General";
-import { removeStorage } from "../../utils/localstorage.utils";
+import { SessionStorage } from "../../utils/localstorage.utils";
 import Button from "../Button/index";
 import { Bar, LeftSide, RigthSide } from "./component.styled";
 
@@ -15,7 +15,7 @@ const AppBar = ({ store }: AppBarProps): JSX.Element => {
   };
   const logouthandle = () => {
     store?.setUserActive(false);
-    removeStorage();
+    SessionStorage.getInstance().removeStorage();
     hisotry.push("/login");
   };
   return (

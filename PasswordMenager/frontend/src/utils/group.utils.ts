@@ -1,6 +1,6 @@
 import { GroupApi } from "../api/group.api";
 import { Auth } from "./auth.utils";
-import { getAccessToken, SessionStorage } from "./localstorage.utils";
+import { SessionStorage } from "./localstorage.utils";
 import { EMPTYGROUPRESPONSE } from "./constans.utils";
 
 export class Group {

@@ -1,5 +1,5 @@
 import { AuthApi } from "../api/auth.api";
-import { SessionStorage, setAccessToken } from "./localstorage.utils";
+import { SessionStorage } from "./localstorage.utils";
 
 export class Auth {
   private static instance: Auth | null = null;

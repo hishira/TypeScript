@@ -1,6 +1,6 @@
 import { EntryApi } from "../api/entry.api";
 import { Auth } from "./auth.utils";
-import { getAccessToken, SessionStorage } from "./localstorage.utils";
+import { SessionStorage } from "./localstorage.utils";
 import { EMPTYENTRYRESPONSE } from "./constans.utils";
 
 export class Entry {
