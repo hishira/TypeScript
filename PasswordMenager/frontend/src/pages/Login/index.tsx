@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import FormComponent from "../../components/Form/index";
 import { IGeneral } from "../../models/General";
 import { Auth } from "../../utils/auth.utils";
-import { setLocalStorageToken } from "../../utils/localstorage.utils";
+import { SessionStorage } from "../../utils/localstorage.utils";
 import { Container, FormContainer } from "./component.styled";
 
 type Prop = {
@@ -31,7 +31,7 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     const response: any = await Auth.getInstance().LoginUserHandle(infoLogin);
     console.log(response);
     if (response?.status && response?.response !== null) {
-      setLocalStorageToken(response.response);
+      SessionStorage.getInstance().setLocalStorageToken(response.response);
       store.setUserActive(true);
       history.push("/store");
     } else {
