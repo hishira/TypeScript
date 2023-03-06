@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GroupEffect } from "../../hooks/groups.hook";
-import { CreateGroupForUser } from "../../utils/group.utils";
+import { Group } from "../../utils/group.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import Modal from "../Modal/";
@@ -47,10 +47,12 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
 
   const buttonHandleClick = async (): Promise<void> => {
     console.log(groupdto.name);
-    CreateGroupForUser(groupdto).then((resp) => {
-      setRefetch(!refetch);
-      setModal(false);
-    });
+    Group.getInstance()
+      .CreateGroupForUser(groupdto)
+      .then((resp) => {
+        setRefetch(!refetch);
+        setModal(false);
+      });
   };
 
   const ongroupclick: Function = (group: IGroup): void => {
