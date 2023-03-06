@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { GetGroupsByUser } from "../utils/group.utils";
+import { Group } from "../utils/group.utils";
 
 export const GroupEffect = (refetch: boolean): IGroup[] => {
   const [groups, setGroups] = useState<IGroup[]>([]);
   const fetchGroups = async (): Promise<void> => {
-    const groupresponse: GroupResponse = await GetGroupsByUser();
+    const groupresponse: GroupResponse =
+      await Group.getInstance().GetGroupsByUser();
     setGroups(groupresponse.response);
   };
 

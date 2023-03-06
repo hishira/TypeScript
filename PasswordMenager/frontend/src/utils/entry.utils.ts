@@ -5,10 +5,24 @@ import { EMPTYENTRYRESPONSE } from "./constans.utils";
 
 export class Entry {
   private static instance: Entry | null = null;
+  private auth: Auth;
+  private entryApi: EntryApi;
+  private readonly EMPTY = {
+    status: false,
+    response: EMPTYENTRYRESPONSE,
+  };
+  private readonly EMPTYGROUP = {
+    status: false,
+    response: [],
+  };
 
+  constructor(authInstance: Auth, entryApiInstance: EntryApi) {
+    this.auth = authInstance;
+    this.entryApi = entryApiInstance;
+  }
   static getInstance(): Entry {
     if (this.instance === null) {
-      this.instance = new Entry();
+      this.instance = new Entry(Auth.getInstance(), EntryApi.getInstance());
       return this.instance;
     }
     return this.instance;
@@ -17,7 +31,7 @@ export class Entry {
     newentry: CreateEntryDto,
     token: string
   ): Promise<IEntry | number> {
-    const response = await EntryApi.getInstance()
+    const response = await this.entryApi
       .CreateNewEntry(newentry, token)
       .then((resp: Response) => {
         if (resp.status === 200 || resp.status === 201) return resp.json();
@@ -35,34 +49,23 @@ export class Entry {
       accesstoken
     );
     if (response === 401) {
-      await Auth.getInstance().refreshToken();
+      await this.auth.refreshToken();
       accesstoken = getAccessToken();
       response = await this.CreateEntry(newentry, accesstoken);
-      if (response === 401) {
-        return {
-          status: false,
-          response: EMPTYENTRYRESPONSE,
-        };
-      } else if (response === 500) {
-        return {
-          status: false,
-          response: EMPTYENTRYRESPONSE,
-        };
+      if (response === 401 || response === 500) {
+        return this.EMPTY;
       }
     }
     if (typeof response !== "number")
       return { status: true, response: response };
-    return {
-      status: false,
-      response: EMPTYENTRYRESPONSE,
-    };
+    return this.EMPTY;
   }
 
   async GetEntries(
     groupid: GroupId,
     token: string
   ): Promise<number | Array<IEntry>> {
-    const response = await EntryApi.getInstance()
+    const response = await this.entryApi
       .GetEntriesByGroupID(groupid, token)
       .then((resp: Response) => {
         if (resp.status === 200 || resp.status === 201) return resp.json();
@@ -78,27 +81,25 @@ export class Entry {
       accesstoken
     );
     if (response === 401) {
-      await Auth.getInstance().refreshToken();
+      await this.auth.refreshToken();
       accesstoken = getAccessToken();
       response = await this.GetEntries(groupid, accesstoken);
-      if (response === 401) {
-        return { status: false, response: [] };
-      } else if (response === 500) {
-        return { status: false, response: [] };
+      if (response === 401 || response === 500) {
+        return this.EMPTYGROUP;
       }
     } else if (response === 505) {
-      return { status: false, response: [] };
+      return this.EMPTYGROUP;
     }
     if (typeof response !== "number")
       return { status: true, response: response };
-    return { status: false, response: [] };
+    return this.EMPTYGROUP;
   }
 
   async DeleteEntry(
     deleteid: string,
     accesstoken: string
   ): Promise<DeleteEntryResponse> {
-    const response = await EntryApi.getInstance()
+    const response = await this.entryApi
       .DeleteEntryById(deleteid, accesstoken)
       .then((resp: Response) => {
         return resp.json();
@@ -113,7 +114,7 @@ export class Entry {
       accesstoken
     );
     if (response.status === false) {
-      await Auth.getInstance().refreshToken();
+      await this.auth.refreshToken();
       accesstoken = getAccessToken();
       response = await this.DeleteEntry(entryid, accesstoken);
     }
@@ -124,7 +125,7 @@ export class Entry {
     editedbody: EditEntry,
     accesstoken: string
   ): Promise<EditEntryResponse> {
-    const response: EditEntryResponse = await EntryApi.getInstance()
+    const response: EditEntryResponse = await this.entryApi
       .EditEntryByID(editedbody, accesstoken)
       .then((resp: Response) => {
         return resp.json();
@@ -139,7 +140,7 @@ export class Entry {
       accesstoken
     );
     if (!response.status) {
-      await Auth.getInstance().refreshToken();
+      await this.auth.refreshToken();
       accesstoken = getAccessToken();
       response = await this.EditEntry(entrybody, accesstoken);
     }
