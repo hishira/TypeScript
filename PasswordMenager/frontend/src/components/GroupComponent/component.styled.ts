@@ -36,7 +36,9 @@ export const GroupContainer = styled.div`
   border:0.1rem solid lightgrey;
   padding: 0.5rem;
   text-align: center;
-  margin-top: 0.4rem;
+  &:not(&:first-child){
+    margin-top: 0.4rem;
+  }
   &:hover {
     cursor: pointer;
     background-color: lightgray;
