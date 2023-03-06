@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { IGeneral } from "../../models/General";
 import { SessionStorage } from "../../utils/localstorage.utils";
 import Button from "../Button/index";
+import PassBar from "../PassBarr";
 import { Bar, LeftSide, RigthSide } from "./component.styled";
 
 type AppBarProps = {
@@ -20,7 +21,9 @@ const AppBar = ({ store }: AppBarProps): JSX.Element => {
   };
   return (
     <Bar>
-      <LeftSide />
+      <LeftSide>
+        <PassBar></PassBar>
+      </LeftSide>
       <RigthSide>
         {!store?.UserActivity ? (
           <Button onClick={() => loginclick()} color="lightblue">

@@ -1,11 +1,11 @@
-import React from "react"
-import PassBar from "../../components/PassBarr";
-import PassComponent from "../../components/PassComponent"
-const StorePage = ()=>{
-    return <main>
-        <PassBar/>
-        <PassComponent/>
+import React from "react";
+import PassComponent from "../../components/PassComponent";
+const StorePage = () => {
+  return (
+    <main>
+      <PassComponent />
     </main>
-}
+  );
+};
 
 export default StorePage;
