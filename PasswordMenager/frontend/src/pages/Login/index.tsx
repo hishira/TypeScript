@@ -30,7 +30,8 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     e.preventDefault();
     const response: any = await Auth.getInstance().LoginUserHandle(infoLogin);
     console.log(response);
-    if (response?.status && response?.response !== null) {
+    // TODO: Refactor
+    if (response?.status && !Object.keys(response?.response).includes('message')) {
       SessionStorage.getInstance().setLocalStorageToken(response.response);
       store.setUserActive(true);
       history.push("/store");

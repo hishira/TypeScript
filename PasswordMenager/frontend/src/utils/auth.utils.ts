@@ -1,16 +1,24 @@
 import { AuthApi } from "../api/auth.api";
-import { getRefreshToken, setAccessToken } from "./localstorage.utils";
+import { SessionStorage, setAccessToken } from "./localstorage.utils";
 
 export class Auth {
   private static instance: Auth | null = null;
   private authApi: AuthApi;
+  private sessionStorage: SessionStorage;
 
-  constructor(authApiInstance: AuthApi) {
+  constructor(
+    authApiInstance: AuthApi,
+    sessionStorageInstance: SessionStorage
+  ) {
     this.authApi = authApiInstance;
+    this.sessionStorage = sessionStorageInstance;
   }
   static getInstance(): Auth {
     if (this.instance === null) {
-      this.instance = new Auth(AuthApi.getInstance());
+      this.instance = new Auth(
+        AuthApi.getInstance(),
+        SessionStorage.getInstance()
+      );
       return this.instance;
     }
     return this.instance;
@@ -42,7 +50,7 @@ export class Auth {
   }
 
   async refreshToken(): Promise<void> {
-    const refreshtoken: string = getRefreshToken();
+    const refreshtoken: string = this.sessionStorage.getRefreshToken();
     const response: number | AccessToken = await this.authApi
       .refreshAccessToken(refreshtoken)
       .then((resp: Response) => {
@@ -50,7 +58,9 @@ export class Auth {
         return 401;
       });
     if ((response as AccessToken).access_token !== "") {
-      setAccessToken((response as AccessToken).access_token);
+      this.sessionStorage.setAccessToken(
+        (response as AccessToken).access_token
+      );
     }
   }
 }

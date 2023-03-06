@@ -1,12 +1,13 @@
 import { EntryApi } from "../api/entry.api";
 import { Auth } from "./auth.utils";
-import { getAccessToken } from "./localstorage.utils";
+import { getAccessToken, SessionStorage } from "./localstorage.utils";
 import { EMPTYENTRYRESPONSE } from "./constans.utils";
 
 export class Entry {
   private static instance: Entry | null = null;
   private auth: Auth;
   private entryApi: EntryApi;
+  private sessionStorage: SessionStorage;
   private readonly EMPTY = {
     status: false,
     response: EMPTYENTRYRESPONSE,
@@ -16,13 +17,22 @@ export class Entry {
     response: [],
   };
 
-  constructor(authInstance: Auth, entryApiInstance: EntryApi) {
+  constructor(
+    authInstance: Auth,
+    entryApiInstance: EntryApi,
+    sessionStorageInstance: SessionStorage
+  ) {
     this.auth = authInstance;
     this.entryApi = entryApiInstance;
+    this.sessionStorage = sessionStorageInstance;
   }
   static getInstance(): Entry {
     if (this.instance === null) {
-      this.instance = new Entry(Auth.getInstance(), EntryApi.getInstance());
+      this.instance = new Entry(
+        Auth.getInstance(),
+        EntryApi.getInstance(),
+        SessionStorage.getInstance()
+      );
       return this.instance;
     }
     return this.instance;
@@ -43,14 +53,14 @@ export class Entry {
   async CreateNewEntryUser(
     newentry: CreateEntryDto
   ): Promise<CreateEntryResponse> {
-    let accesstoken: string = getAccessToken();
+    let accesstoken: string = this.sessionStorage.getAccessToken();
     let response: number | IEntry = await this.CreateEntry(
       newentry,
       accesstoken
     );
     if (response === 401) {
       await this.auth.refreshToken();
-      accesstoken = getAccessToken();
+      accesstoken = this.sessionStorage.getAccessToken();
       response = await this.CreateEntry(newentry, accesstoken);
       if (response === 401 || response === 500) {
         return this.EMPTY;
@@ -75,14 +85,14 @@ export class Entry {
   }
 
   async GetUserEntriesByGroupID(groupid: GroupId): Promise<GetEntriesResponse> {
-    let accesstoken = getAccessToken();
+    let accesstoken = this.sessionStorage.getAccessToken();
     let response: number | Array<IEntry> = await this.GetEntries(
       groupid,
       accesstoken
     );
     if (response === 401) {
       await this.auth.refreshToken();
-      accesstoken = getAccessToken();
+      accesstoken = this.sessionStorage.getAccessToken();
       response = await this.GetEntries(groupid, accesstoken);
       if (response === 401 || response === 500) {
         return this.EMPTYGROUP;
@@ -108,14 +118,14 @@ export class Entry {
   }
 
   DeleteUserEntry = async (entryid: string): Promise<DeleteEntryResponse> => {
-    let accesstoken = getAccessToken();
+    let accesstoken = this.sessionStorage.getAccessToken();
     let response: DeleteEntryResponse = await this.DeleteEntry(
       entryid,
       accesstoken
     );
     if (response.status === false) {
       await this.auth.refreshToken();
-      accesstoken = getAccessToken();
+      accesstoken = this.sessionStorage.getAccessToken();
       response = await this.DeleteEntry(entryid, accesstoken);
     }
     return response;
@@ -134,14 +144,14 @@ export class Entry {
   }
 
   async EntryEditById(entrybody: EditEntry): Promise<EditEntryResponse> {
-    let accesstoken = getAccessToken();
+    let accesstoken = this.sessionStorage.getAccessToken();
     let response: EditEntryResponse = await this.EditEntry(
       entrybody,
       accesstoken
     );
     if (!response.status) {
       await this.auth.refreshToken();
-      accesstoken = getAccessToken();
+      accesstoken = this.sessionStorage.getAccessToken();
       response = await this.EditEntry(entrybody, accesstoken);
     }
     return response;
