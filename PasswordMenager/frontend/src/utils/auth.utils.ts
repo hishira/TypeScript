@@ -3,21 +3,23 @@ import { getRefreshToken, setAccessToken } from "./localstorage.utils";
 
 export class Auth {
   private static instance: Auth | null = null;
+  private authApi: AuthApi;
 
+  constructor(authApiInstance: AuthApi) {
+    this.authApi = authApiInstance;
+  }
   static getInstance(): Auth {
     if (this.instance === null) {
-      this.instance = new Auth();
+      this.instance = new Auth(AuthApi.getInstance());
       return this.instance;
     }
     return this.instance;
   }
 
   async LoginUser(authinfo: UserAuth): Promise<AuthTokens | any> {
-    return await AuthApi.getInstance()
-      .login(authinfo)
-      .then((resp: Response) => {
-        return resp.json();
-      });
+    return await this.authApi.login(authinfo).then((resp: Response) => {
+      return resp.json();
+    });
   }
 
   async LoginUserHandle(authobj: UserAuth): Promise<LoginReponse> {
@@ -30,7 +32,7 @@ export class Auth {
   }
 
   async registerUser(signupinfo: UserAuth): Promise<null | object | boolean> {
-    const response: boolean | object = await AuthApi.getInstance()
+    const response: boolean | object = await this.authApi
       .signup(signupinfo)
       .then((resp: Response) => {
         if (resp.status === 200 || resp.status === 201) return resp.json();
@@ -41,7 +43,7 @@ export class Auth {
 
   async refreshToken(): Promise<void> {
     const refreshtoken: string = getRefreshToken();
-    const response: number | AccessToken = await AuthApi.getInstance()
+    const response: number | AccessToken = await this.authApi
       .refreshAccessToken(refreshtoken)
       .then((resp: Response) => {
         if (resp.status === 201 || resp.status === 200) return resp.json();
