@@ -11,10 +11,12 @@ import { SessionStorage } from "../../utils/localstorage.utils";
 import PrivateComponent from "../../components/PrivateRoute/index";
 import "./App.css";
 import PopUpElement from "../../components/Popup";
+const notEmpty = (value: string | null | undefined): boolean => {
+  return value !== null && value !== undefined && value !== "";
+};
 function App() {
   const store = General.create({
-    useractive:
-      SessionStorage.getInstance().getAccessToken() !== "" ? true : false,
+    useractive: notEmpty(SessionStorage.getInstance().getAccessToken()),
     popUpelement: {
       open: false,
       type: "error",

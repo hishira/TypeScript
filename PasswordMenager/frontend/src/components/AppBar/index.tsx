@@ -21,9 +21,7 @@ const AppBar = ({ store }: AppBarProps): JSX.Element => {
   };
   return (
     <Bar>
-      <LeftSide>
-        <PassBar></PassBar>
-      </LeftSide>
+      <LeftSide>{store?.UserActivity ? <PassBar></PassBar> : null}</LeftSide>
       <RigthSide>
         {!store?.UserActivity ? (
           <Button onClick={() => loginclick()} color="lightblue">
