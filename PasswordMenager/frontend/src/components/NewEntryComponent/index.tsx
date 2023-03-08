@@ -3,6 +3,7 @@ import { Entry } from "../../utils/entry.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import {
+  ButtonsRangeContainer,
   CheckBox,
   Checkboxes,
   Checkboxwithlabel,
@@ -124,7 +125,6 @@ const NewEntryComponent = ({
     if (responsenewentry.status) {
       console.log("OK");
       clearInputData();
-      return;
     } else {
       console.log("Something wrong");
     }
@@ -157,14 +157,14 @@ const NewEntryComponent = ({
     <EntryModalComponent>
       <FormElement
         label={"Title"}
-        inputplaceholder="title name"
+        inputplaceholder="Title"
         inputChange={settitle}
         inputtype="txt"
         value={newentry.title}
       />
       <FormElement
         label={"Username"}
-        inputplaceholder="username"
+        inputplaceholder="Username"
         inputChange={setusername}
         inputtype="txt"
         value={newentry.username}
@@ -207,7 +207,7 @@ const NewEntryComponent = ({
           </Checkboxwithlabel>
         </Checkboxes>
       </SectionContainer>
-      <SectionContainer style={{ position: "relative" }}>
+      <ButtonsRangeContainer style={{ position: "relative" }}>
         <Button size="small" color="lightblue" onClick={generateHandle}>
           Generate
         </Button>
@@ -224,7 +224,7 @@ const NewEntryComponent = ({
           }
         />
         <PassLen id="passlen">{passlen}</PassLen>
-      </SectionContainer>
+      </ButtonsRangeContainer>
       <FormElement
         label={"Note"}
         inputplaceholder="note..."
