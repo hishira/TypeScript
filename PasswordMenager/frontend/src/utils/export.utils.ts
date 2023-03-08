@@ -1,16 +1,24 @@
 import { ExportApi } from "../api/export.api";
+import { DocumentUtils } from "./document.utils";
 
 export class Export {
   private static instance: Export | null = null;
   private exportApi: ExportApi;
-
-  constructor(exportApiInstance: ExportApi) {
+  private documentUtils: DocumentUtils;
+  constructor(
+    exportApiInstance: ExportApi,
+    documentUtilsInstance: DocumentUtils
+  ) {
     this.exportApi = exportApiInstance;
+    this.documentUtils = documentUtilsInstance;
   }
 
   static getInstance(): Export {
     if (this.instance === null) {
-      this.instance = new Export(ExportApi.getInstance());
+      this.instance = new Export(
+        ExportApi.getInstance(),
+        DocumentUtils.getInstance()
+      );
       return this.instance;
     }
     return this.instance;
@@ -20,12 +28,13 @@ export class Export {
     return this.exportApi.getExportedEntries().then((resp) => {
       resp.blob().then((resp) => {
         const csvUrl = URL.createObjectURL(resp);
-        const anchor = document.createElement("a");
-        anchor.href = csvUrl;
-        anchor.download = "entries.csv";
-        document.body.appendChild(anchor);
+        const anchor = this.documentUtils.createDownloableLink(
+          csvUrl,
+          "entries.csv"
+        );
+        this.documentUtils.addChildElement(anchor);
         anchor.click();
-        document.body.removeChild(anchor);
+        this.documentUtils.removeChildElement(anchor);
         URL.revokeObjectURL(csvUrl);
       });
     });
