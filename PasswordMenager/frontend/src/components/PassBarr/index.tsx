@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Export } from "../../api/export.api";
+import { Export } from "../../utils/export.utils";
 import Button from "../Button";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
