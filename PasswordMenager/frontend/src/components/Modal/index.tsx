@@ -1,4 +1,5 @@
 import React from "react";
+import { EscapeModalHandle } from "../../hooks/modalEscape.hook";
 import { Modal } from "./component.styled";
 
 type Props = {
@@ -22,6 +23,7 @@ const ModalComponent = ({
         onClose();
     }
   };
+  EscapeModalHandle(onClose);
   return (
     <Modal onClick={clickOnModal} visible={visible}>
       <div className="hook">{component}</div>

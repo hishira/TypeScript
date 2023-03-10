@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { ExportEntriesCsv } from "../../api/export.api";
-import { getAccessToken } from "../../utils/localstorage.utils";
+import { Export } from "../../utils/export.utils";
 import Button from "../Button";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
@@ -10,8 +9,10 @@ const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const closehandle = (): void => setmodalopen(false);
   const exportHandle = (): void => {
-    const accesstoken = getAccessToken();
-    ExportEntriesCsv(accesstoken).then(() => {});
+    Export.getInstance()
+      .ExportEntriesCsv()
+      .then(() => {})
+      .catch(console.log);
   };
   return (
     <Container>

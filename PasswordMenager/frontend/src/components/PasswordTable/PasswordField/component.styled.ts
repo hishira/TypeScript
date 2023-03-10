@@ -16,12 +16,22 @@ export const TableContainer = styled.table`
 `;
 export const TableHead = styled.thead``;
 export const TableBody = styled.tbody``;
+// TODO: Problem with to long value
 export const TableRow = styled.tr`
   z-index: 1;
+  max-width: 100%;
+  min-width: 100%;
+  width: 100%;
+  border: 2px solid red;
 `;
 
 export const TableComponent = styled.td<TableComponentProps>`
   text-align: center;
+  max-width: 20% !important;
+  white-space: nowrap;
+  overflow: none;
+  border: 2px solid red;
+  text-overflow: ellipsis;
   ${(props) => props.password && "cursor: pointer"}
 `;
 export const TableButton = styled(Button)`

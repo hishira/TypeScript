@@ -1,21 +1,31 @@
 import { GroupApi } from "../api/group.api";
 import { Auth } from "./auth.utils";
-import { getAccessToken } from "./localstorage.utils";
+import { SessionStorage } from "./localstorage.utils";
 import { EMPTYGROUPRESPONSE } from "./constans.utils";
 
 export class Group {
   private static instance: Group | null = null;
   private auth: Auth;
+  private sessionStorage: SessionStorage;
   private groupApi: GroupApi;
 
-  constructor(authInstance: Auth, groupApiInstance: GroupApi) {
+  constructor(
+    authInstance: Auth,
+    groupApiInstance: GroupApi,
+    sessionStorageInstance: SessionStorage
+  ) {
     this.auth = authInstance;
     this.groupApi = groupApiInstance;
+    this.sessionStorage = sessionStorageInstance;
   }
 
   static getInstance(): Group {
     if (this.instance === null) {
-      this.instance = new Group(Auth.getInstance(), GroupApi.getInstance());
+      this.instance = new Group(
+        Auth.getInstance(),
+        GroupApi.getInstance(),
+        SessionStorage.getInstance()
+      );
       return this.instance;
     }
     return this.instance;
@@ -32,11 +42,11 @@ export class Group {
   }
 
   async GetGroupsByUser(): Promise<GroupResponse> {
-    let token: string = getAccessToken();
+    let token: string = this.sessionStorage.getAccessToken();
     let response: number | Array<IGroup> = await this.GetGroups(token);
     if (response === 401) {
       await this.auth.refreshToken();
-      token = getAccessToken();
+      token = this.sessionStorage.getAccessToken();
       response = await this.GetGroups(token);
       if (response === 401 || response === 500) {
         return { status: false, response: [] };
@@ -65,14 +75,14 @@ export class Group {
   async CreateGroupForUser(
     creategroup: CreateGroup
   ): Promise<CreateGroupResponse> {
-    let accesstoken: string = getAccessToken();
+    let accesstoken: string = this.sessionStorage.getAccessToken();
     let response: number | IGroup = await this.GroupCreate(
       creategroup,
       accesstoken
     );
     if (response === 401) {
       await this.auth.refreshToken();
-      accesstoken = getAccessToken();
+      accesstoken = this.sessionStorage.getAccessToken();
       response = await this.GroupCreate(creategroup, accesstoken);
       if (response === 401 || response === 500) {
         return { status: false, response: EMPTYGROUPRESPONSE };

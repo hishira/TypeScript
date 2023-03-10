@@ -4,7 +4,7 @@ export const EntryModalComponent = styled.div`
   background-color: white;
   padding: 1rem;
   border-radius: 5px;
-  width: 100%;
+  width: 35rem;
 `;
 export const NormalContainer = styled.div``;
 export const PassLen = styled.div`
@@ -16,6 +16,15 @@ export const SectionContainer = styled.section`
   align-items: center;
   align-content: center;
 `;
+export const ButtonsRangeContainer = styled.section`
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  align-content: center;
+  & > :not(:first-child) {
+    margin-left: 1rem;
+  }
+`
 export const CheckBox = styled.input`
   transform: translate(0%, 175%);
 `;
@@ -30,7 +39,7 @@ export const Checkboxwithlabel = styled.div`
   margin-bottom: 0.5rem;
 `;
 export const SelectLabel = styled.div`
-  padding: 0.6rem 0.6rem 0.6rem 0;
+  padding: 0.6rem 0.6rem 0.6rem 0.3rem;
   font-size: 1.05rem;
   text-align: start;
 `;
