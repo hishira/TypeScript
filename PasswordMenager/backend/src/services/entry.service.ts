@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model, UpdateWriteOpResult } from 'mongoose';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
@@ -9,6 +10,8 @@ export class EntryService {
   constructor(
     @Inject('ENTRY_MODEL')
     private entryModel: Model<IEntry>,
+    @Inject(Repository)
+    private readonly entryRepository: Repository<IEntry>,
   ) {}
 
   create(
@@ -19,6 +22,7 @@ export class EntryService {
       ...entrycreateDTO,
       userid: userid,
     });
+    this.entryRepository.deleteById();
     return createdentry.save().catch((_) => {
       return { message: 'Error whice creating entry' };
     });
