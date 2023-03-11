@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Model, UpdateWriteOpResult } from 'mongoose';
+import { FilterQuery, Model, UpdateWriteOpResult } from 'mongoose';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { EntryDto } from 'src/schemas/dto/entry.dto';
 import { DTO } from 'src/schemas/dto/object.interface';
+import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { IEntry } from '../schemas/Interfaces/entry.interface';
@@ -34,7 +35,13 @@ export class EntryService {
   }
 
   async getbygroupid(groupid: string): Promise<IEntry[]> {
-    return this.entryModel.find({ groupid: groupid });
+    const option: FilterOption<FilterQuery<IEntry>> = {
+      getOption() {
+        return { groupid: groupid };
+      },
+    };
+
+    return this.entryRepository.find(option);
   }
 
   async deletebyid(entryid: string): Promise<DeleteEntryResponse> {

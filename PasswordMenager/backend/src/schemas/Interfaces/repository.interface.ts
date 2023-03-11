@@ -1,9 +1,12 @@
 import { Document } from 'mongoose';
 import { DTO } from '../dto/object.interface';
+import { FilterOption } from './filteroption.interface';
 
 export interface Repository<T extends Document> {
   create(objectToSave: DTO): Promise<T>;
-  deleteById(): Promise<void>;
+  find(option: FilterOption): Promise<T[]>;
+  update(): Promise<unknown>;
+  delete(option: unknown): Promise<void>;
   getById(): Promise<T>;
 }
 
