@@ -13,6 +13,7 @@ export const Container = styled.div`
 `;
 export const TableContainer = styled.table`
   width: 100%;
+  table-layout: fixed;
 `;
 export const TableHead = styled.thead``;
 export const TableBody = styled.tbody``;
@@ -29,8 +30,7 @@ export const TableComponent = styled.td<TableComponentProps>`
   text-align: center;
   max-width: 20% !important;
   white-space: nowrap;
-  overflow: none;
-  border: 2px solid red;
+  overflow: hidden;
   text-overflow: ellipsis;
   ${(props) => props.password && "cursor: pointer"}
 `;
