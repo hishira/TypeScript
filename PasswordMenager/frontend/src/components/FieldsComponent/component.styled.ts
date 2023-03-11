@@ -13,6 +13,7 @@ export const Container = styled.div`
 `;
 export const TableContainer = styled.table`
   width: 100%;
+  table-layout: fixed;
 `;
 export const TableHead = styled.thead``;
 export const TableBody = styled.tbody``;
