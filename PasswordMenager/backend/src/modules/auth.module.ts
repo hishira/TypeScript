@@ -37,7 +37,6 @@ import { GroupRepository } from 'src/repository/group.repository';
     GroupService,
     AuthService,
     LocalStrategy,
-    UserService,
     ...userProviders,
     JwtStrategy,
     JwtStrategy2,

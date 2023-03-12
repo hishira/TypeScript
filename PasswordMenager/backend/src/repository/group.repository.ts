@@ -20,20 +20,25 @@ export class GroupRepository implements Repository<IGroup> {
 
     return createdGroup.save();
   }
+
   find(option: FilterOption<unknown>): Promise<IGroup[]> {
     return this.groupModel.find(option.getOption()).exec();
   }
+
   findById(id: string): Promise<IGroup> {
     return this.groupModel.findOne({ _id: id }).exec();
   }
+
   update(entry: Partial<IGroup>): Promise<unknown> {
     return this.groupModel
       .updateOne({ _id: entry._id }, { $set: { ...entry } })
       .then((data) => data);
   }
+
   delete(option: DeleteOption<unknown>): Promise<unknown> {
     return this.groupModel.deleteOne(option.getOption()).exec();
   }
+
   getById(): Promise<IGroup> {
     throw new Error('Method not implemented.');
   }
