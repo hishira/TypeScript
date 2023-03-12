@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
 import { DTO } from 'src/schemas/dto/object.interface';
+import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
@@ -12,16 +13,22 @@ export class EntryRepository implements Repository<IEntry> {
     private entryModel: Model<IEntry>,
   ) {}
 
+  findById(id: string): Promise<IEntry> {
+    return this.entryModel.findOne({ _id: id }).exec();
+  }
+
   find(option: FilterOption<FilterQuery<IEntry>>): Promise<IEntry[]> {
     return this.entryModel.find(option.getOption()).exec();
   }
 
-  update(): Promise<unknown> {
-    throw new Error('Method not implemented.');
+  update(entry: Partial<IEntry>): Promise<unknown> {
+    return this.entryModel
+      .updateOne({ _id: entry._id }, { $set: { ...entry } })
+      .then((data) => data);
   }
 
-  delete(option: unknown): Promise<void> {
-    throw new Error('Method not implemented.');
+  delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
+    return this.entryModel.deleteOne(option.getOption()).exec();
   }
 
   create(objectToSave: DTO): Promise<IEntry> {
