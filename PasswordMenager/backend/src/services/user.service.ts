@@ -1,26 +1,40 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { FilterQuery } from 'mongoose';
+import { DTO } from 'src/schemas/dto/object.interface';
+import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
 import { IUser } from '../schemas/Interfaces/user.interface';
 
 @Injectable()
 export class UserService {
+  private readonly allUserFilterOption: FilterOption<FilterQuery<IUser>> = {
+    getOption() {
+      return {};
+    },
+  };
   constructor(
-    @Inject('USER_MODEL')
-    private userModel: Model<IUser>,
+    @Inject(Repository)
+    private readonly userRepository: Repository<IUser>,
   ) {}
 
   create(userCreateDTO: CreateUserDto): Promise<IUser | { message: string }> {
-    const createdUser = new this.userModel(userCreateDTO);
-    return createdUser.save().catch((err) => {
+    const pureDto: DTO = {
+      toObject() {
+        return {
+          ...userCreateDTO,
+        };
+      },
+    };
+    return this.userRepository.create(pureDto).catch((err) => {
       return { message: 'Problem occur while user create' };
     });
   }
 
   getAll(): Promise<IUser[]> {
-    return this.userModel.find({}).exec();
+    return this.userRepository.find(this.allUserFilterOption);
   }
   getOne(): Promise<IUser[]> {
-    return this.userModel.find({}).limit(1).exec();
+    return this.userRepository.find(this.allUserFilterOption);
   }
 }

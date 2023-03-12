@@ -1,0 +1,9 @@
+.vscode/
+**/__pycache__
+backend/*/__pycache__
+.pytest_cache
+**/__pycache__
+admin-backend/target
+admin-backend/db/db.*
+frontend/src/app/types
+admin-backend/diagram.txt
