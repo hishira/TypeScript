@@ -1,30 +1,42 @@
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
 import { IGroup } from '../schemas/Interfaces/group.interface';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { GroupDto } from '../schemas/dto/getroup.dto';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { DTO } from 'src/schemas/dto/object.interface';
+import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 
 @Injectable()
 export class GroupService {
   constructor(
-    @Inject('GROUP_MODEL')
-    private groupModel: Model<IGroup>,
+    @Inject(Repository)
+    private readonly groupRepository: Repository<IGroup>,
   ) {}
 
   create(
     groupcreateDTO: CreateGroupDto,
     userid: string,
   ): Promise<CreateGroupDto> {
-    const createdGroup = new this.groupModel({
-      name: groupcreateDTO.name,
-      userid: userid,
-    });
-    return createdGroup.save();
+    const pureDto: DTO = {
+      toObject() {
+        return {
+          ...groupcreateDTO,
+          userid: userid,
+        };
+      },
+    };
+    return this.groupRepository.create(pureDto);
   }
 
   async getbyuser(userid: string): Promise<GroupDto[]> {
-    return this.groupModel
-      .find({ userid: userid })
-      .select({ name: 1, _id: 1, userid: 1 });
+    const filterOption: FilterOption<FilterQuery<IGroup>> = {
+      getOption() {
+        return {
+          userid: userid,
+        };
+      },
+    };
+    return this.groupRepository.find(filterOption);
   }
 }

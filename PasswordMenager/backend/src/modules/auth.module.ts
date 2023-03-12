@@ -14,6 +14,8 @@ import { JwtStrategy2 } from '../refreshtoken.strategy';
 import { GroupModule } from './group.module';
 import { GroupService } from '../services/group.service';
 import { groupProviders } from '../providers/group.providers';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { GroupRepository } from 'src/repository/group.repository';
 @Module({
   imports: [
     DatabaseModule,
@@ -28,6 +30,10 @@ import { groupProviders } from '../providers/group.providers';
   ],
   controllers: [AuthController],
   providers: [
+    {
+      provide: Repository,
+      useClass: GroupRepository,
+    },
     GroupService,
     AuthService,
     LocalStrategy,

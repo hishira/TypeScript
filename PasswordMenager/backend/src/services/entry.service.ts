@@ -80,17 +80,7 @@ export class EntryService {
 
   async editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
     try {
-      const entry: Partial<IEntry> = {
-        _id: neweditedentry._id,
-        ...(neweditedentry.title !== '' ? { title: neweditedentry.title } : {}),
-        ...(neweditedentry.password !== ''
-          ? { password: neweditedentry.password }
-          : {}),
-        ...(neweditedentry.note !== '' ? { note: neweditedentry.note } : {}),
-        ...(neweditedentry.username !== ''
-          ? { username: neweditedentry.username }
-          : {}),
-      };
+      const entry: Partial<IEntry> = this.getPartialUpdateEntry(neweditedentry);
       return this.entryRepository.update(entry).then(async (_data) => {
         console.log(_data);
         const upadednoew = await this.entryRepository.findById(
@@ -102,5 +92,19 @@ export class EntryService {
     } catch (e) {
       return { status: false, respond: null };
     }
+  }
+
+  private getPartialUpdateEntry(editEntryDTO: EditEntryDto): Partial<IEntry> {
+    return {
+      _id: editEntryDTO._id,
+      ...(editEntryDTO.title !== '' ? { title: editEntryDTO.title } : {}),
+      ...(editEntryDTO.password !== ''
+        ? { password: editEntryDTO.password }
+        : {}),
+      ...(editEntryDTO.note !== '' ? { note: editEntryDTO.note } : {}),
+      ...(editEntryDTO.username !== ''
+        ? { username: editEntryDTO.username }
+        : {}),
+    };
   }
 }
