@@ -20,7 +20,6 @@ import { GroupRepository } from 'src/repository/group.repository';
   imports: [
     DatabaseModule,
     UserModule,
-    GroupModule,
     PassportModule.register({
       defaultStrategy: ['accessToken'],
     }),
@@ -30,14 +29,8 @@ import { GroupRepository } from 'src/repository/group.repository';
   ],
   controllers: [AuthController],
   providers: [
-    {
-      provide: Repository,
-      useClass: GroupRepository,
-    },
-    GroupService,
     AuthService,
     LocalStrategy,
-    ...userProviders,
     JwtStrategy,
     JwtStrategy2,
     ...groupProviders,

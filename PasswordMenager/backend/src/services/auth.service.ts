@@ -15,6 +15,7 @@ export class AuthService {
   ) {}
 
   static getFirstUser(users: IUser[]): IUser | null {
+    console.log(users);
     if (users && users.length) {
       return users[0];
     }
