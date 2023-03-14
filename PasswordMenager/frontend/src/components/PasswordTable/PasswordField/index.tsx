@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import {
   MinButton,
   TableButton,
@@ -6,22 +7,22 @@ import {
 } from "./component.styled";
 
 const PasswordFieldsHelper = {
-    gettext: (text: string | null): string => {
-      return text ? text : "";
-    },
-    passwordClick: (entry: IEntry): void => {
-      let elementpass: HTMLElement | null = document.getElementById(
-        `${entry._id}${entry.groupid}`
-      );
-      console.log(elementpass);
-      if (elementpass !== null) {
-        navigator.clipboard
-          .writeText(PasswordFieldsHelper.gettext(entry.password))
-          .then(() => console.log("ok"))
-          .catch((e) => console.log("not ok"));
-      }
-    },
-  };
+  gettext: (text: string | null): string => {
+    return text ? text : "";
+  },
+  passwordClick: (entry: IEntry): void => {
+    let elementpass: HTMLElement | null = document.getElementById(
+      `${entry._id}${entry.groupid}`
+    );
+    console.log(elementpass);
+    if (elementpass !== null) {
+      navigator.clipboard
+        .writeText(PasswordFieldsHelper.gettext(entry.password))
+        .then(() => console.log("ok"))
+        .catch((e) => console.log("not ok"));
+    }
+  },
+};
 type PasswordFieldType = {
   entry: IEntry;
   deletehandle: Function;
@@ -34,10 +35,45 @@ export const PasswordField = ({
   onedithandle,
   moreClickHandle,
 }: PasswordFieldType) => {
+  useEffect(() => {
+    // TODO: Refactor
+    const elements: HTMLTableCellElement[] | undefined = Array.from(
+      TableRefComponent.current?.querySelectorAll("td") || []
+    );
+    elements.forEach((element) => {
+      const currentOffset = element.offsetWidth;
+      const firstChild = element.children.item(0);
+
+      if (
+        firstChild instanceof HTMLSpanElement &&
+        currentOffset < firstChild.offsetWidth
+      ) {
+        console.log(element);
+        element.addEventListener("mouseover", () => {
+          element.style.backgroundColor = "whitesmoke";
+          element.style.textOverflow = "clip";
+          element.style.overflow = 'visible';
+          element.style.position='absolute'
+        });
+        element.addEventListener('mouseleave', ()=>{
+          element.style.backgroundColor = "inherit";
+          element.style.textOverflow = "ellipsis";
+          element.style.overflow = 'hidden';
+          element.style.position='inherit'
+        })
+      }
+    });
+  }, []);
+  const TableRefComponent = useRef<HTMLTableRowElement>(null);
   return (
-    <TableRow key={entry._id}>
-      <TableComponent>{entry.title}</TableComponent>
-      <TableComponent>{entry.username}</TableComponent>
+    <TableRow ref={TableRefComponent} key={entry._id}>
+      <TableComponent>
+        <span>{entry.title}</span>
+      </TableComponent>
+      <TableComponent>
+        {" "}
+        <span>{entry.username} </span>
+      </TableComponent>
       <TableComponent
         id={`${entry._id}${entry.groupid}`}
         onClick={() => [PasswordFieldsHelper.passwordClick(entry)]}
@@ -46,7 +82,10 @@ export const PasswordField = ({
       >
         *****
       </TableComponent>
-      <TableComponent>{entry.note}</TableComponent>
+      <TableComponent>
+        {" "}
+        <span>{entry.note}</span>
+      </TableComponent>
       <TableComponent>
         <TableButton onClick={() => deletehandle(entry._id)} color="lightblue">
           Delete
