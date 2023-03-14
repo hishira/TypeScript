@@ -36,31 +36,32 @@ export const PasswordField = ({
   moreClickHandle,
 }: PasswordFieldType) => {
   useEffect(() => {
-    // TODO: Refactor
+    // TODO: Refactor and think of use other css to make it
     const elements: HTMLTableCellElement[] | undefined = Array.from(
       TableRefComponent.current?.querySelectorAll("td") || []
     );
     elements.forEach((element) => {
       const currentOffset = element.offsetWidth;
       const firstChild = element.children.item(0);
-
+      
       if (
         firstChild instanceof HTMLSpanElement &&
         currentOffset < firstChild.offsetWidth
       ) {
-        console.log(element);
-        element.addEventListener("mouseover", () => {
-          element.style.backgroundColor = "whitesmoke";
-          element.style.textOverflow = "clip";
-          element.style.overflow = 'visible';
-          element.style.position='absolute'
+        const positionFromLeft = firstChild.getBoundingClientRect().left + window.screenLeft
+        
+        element.addEventListener("mouseenter", () => {
+          element.classList.toggle("class");
+          positionFromLeft + firstChild.offsetWidth < window.outerWidth ?
+            firstChild.classList.toggle("secondClass")  :
+            firstChild.classList.toggle('thirdClass')
         });
-        element.addEventListener('mouseleave', ()=>{
-          element.style.backgroundColor = "inherit";
-          element.style.textOverflow = "ellipsis";
-          element.style.overflow = 'hidden';
-          element.style.position='inherit'
-        })
+        element.addEventListener("mouseleave", () => {
+          element.classList.toggle("class");
+          positionFromLeft + firstChild.offsetWidth < window.outerWidth ?
+            firstChild.classList.toggle("secondClass")  :
+            firstChild.classList.toggle('thirdClass')
+        });
       }
     });
   }, []);
