@@ -46,5 +46,15 @@ export const TooLongValue = (ref: RefObject<HTMLElement>) => {
       element.addEventListener("mouseenter", enter);
       element.addEventListener("mouseleave", leave);
     });
+
+    return ()=>{
+        const elements: HTMLTableCellElement[] | undefined = Array.from(
+            ref.current?.querySelectorAll("td") || []
+          );
+          elements.forEach((element) => {
+            element.removeEventListener("mouseenter", enter);
+            element.removeEventListener("mouseleave", leave);
+          });
+    }
   }, []);
 };
