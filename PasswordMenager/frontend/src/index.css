@@ -23,32 +23,27 @@ body {
   overflow: unset;
   text-overflow: clip;
   display: block;
-  top: 0;
-  left: 0;
-  bottom: 0;
   box-sizing: border-box;
-  border: 2px solid red;
+  border: 0.5px solid whitesmoke;
+  border-radius: 10px;
   padding: 1.2rem;
   z-index: 100;
   width: fit-content;
-  position: relative;
- 
+  position: absolute;
 }
 .thirdClass {
   background-color: whitesmoke;
   overflow: unset;
   text-overflow: clip;
   display: block;
-  top: 0;
-  left: 0;
-  bottom: 0;
   box-sizing: border-box;
-  border: 2px solid red;
+  border: 0.5px solid whitesmoke;
+  border-radius: 10px;
   padding: 1.2rem;
   z-index: 100;
   width: fit-content;
-  position: relative;
-  float: right
+  position: absolute;
+  right: 0;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
