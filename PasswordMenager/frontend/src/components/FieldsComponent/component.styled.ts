@@ -3,7 +3,6 @@ import Button from "../Button/index";
 
 export const Container = styled.div`
   width: 70%;
-  outline: 0.1rem solid yellow;
   overflow: auto;
   max-height: 89.5vh;
   @media (max-width: 650px) {

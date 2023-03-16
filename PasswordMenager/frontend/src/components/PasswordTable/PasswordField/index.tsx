@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { TooLongValue } from "../../../hooks/tooLongValue.hook";
 import {
   MinButton,
   TableButton,
@@ -35,37 +36,8 @@ export const PasswordField = ({
   onedithandle,
   moreClickHandle,
 }: PasswordFieldType) => {
-  useEffect(() => {
-    // TODO: Refactor and think of use other css to make it
-    const elements: HTMLTableCellElement[] | undefined = Array.from(
-      TableRefComponent.current?.querySelectorAll("td") || []
-    );
-    elements.forEach((element) => {
-      const currentOffset = element.offsetWidth;
-      const firstChild = element.children.item(0);
-      
-      if (
-        firstChild instanceof HTMLSpanElement &&
-        currentOffset < firstChild.offsetWidth
-      ) {
-        const positionFromLeft = firstChild.getBoundingClientRect().left + window.screenLeft
-        
-        element.addEventListener("mouseenter", () => {
-          element.classList.toggle("class");
-          positionFromLeft + firstChild.offsetWidth < window.outerWidth ?
-            firstChild.classList.toggle("secondClass")  :
-            firstChild.classList.toggle('thirdClass')
-        });
-        element.addEventListener("mouseleave", () => {
-          element.classList.toggle("class");
-          positionFromLeft + firstChild.offsetWidth < window.outerWidth ?
-            firstChild.classList.toggle("secondClass")  :
-            firstChild.classList.toggle('thirdClass')
-        });
-      }
-    });
-  }, []);
   const TableRefComponent = useRef<HTMLTableRowElement>(null);
+  TooLongValue(TableRefComponent);
   return (
     <TableRow ref={TableRefComponent} key={entry._id}>
       <TableComponent>
