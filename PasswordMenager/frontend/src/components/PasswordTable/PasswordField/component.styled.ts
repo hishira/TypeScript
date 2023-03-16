@@ -33,15 +33,17 @@ export const TableComponent = styled.td<TableComponentProps>`
   ${(props) => props.password && "cursor: pointer"}
 `;
 export const TableButton = styled(Button)`
-  @media (max-width: 708px) {
+  @media (max-width: 1000px) {
     display: none;
   }
 `;
 export const MinButton = styled(TableButton)`
   display: none;
-  @media (max-width: 708px) {
+  @media (max-width: 1000px) {
     display: block;
     cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
