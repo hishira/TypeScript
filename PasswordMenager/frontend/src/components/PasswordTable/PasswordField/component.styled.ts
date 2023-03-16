@@ -3,7 +3,6 @@ import Button from "../../Button/index";
 
 export const Container = styled.div`
   width: 70%;
-  outline: 0.1rem solid yellow;
   overflow: auto;
   max-height: 89.5vh;
   @media (max-width: 650px) {
@@ -23,7 +22,6 @@ export const TableRow = styled.tr`
   max-width: 100%;
   min-width: 100%;
   width: 100%;
-  border: 2px solid red;
 `;
 
 export const TableComponent = styled.td<TableComponentProps>`

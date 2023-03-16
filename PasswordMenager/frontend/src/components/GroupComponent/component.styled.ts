@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 30%;
-  border-right: 0.1rem solid slategray;
+  border-right: 0.1rem solid whitesmoke;
   @media (max-width: 650px) {
     width: 100%;
   }

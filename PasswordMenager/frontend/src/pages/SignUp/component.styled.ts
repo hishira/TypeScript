@@ -10,7 +10,6 @@ export const FormContainer = styled.div`
   width: 50%;
   padding: 10px;
   margin-top: 5rem;
-  border: "2px solid green";
   @media (max-width: 1200px) {
     width: 70%;
   }
