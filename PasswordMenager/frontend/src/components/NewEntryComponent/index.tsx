@@ -22,6 +22,7 @@ import {
   specialTypeGenerate,
 } from "./new-entry.utils";
 import { GroupEffect } from "../../hooks/groups.hook";
+import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
 export type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
@@ -40,6 +41,7 @@ const NewEntryComponent = ({
   refresh,
 }: NewEntryProps): JSX.Element => {
   const [passlen, setpasslen] = useState<number>(6);
+  const [isLoading, setLoading] = useState<boolean>(true);
   const [passwordcharacters, setpasswordcharacters] =
     useState<PasswordCharactersTypes>({
       letters: false,
@@ -55,6 +57,7 @@ const NewEntryComponent = ({
   });
   const groups = GroupEffect(true);
 
+  GetEntryForEdit(edit, editentryid, setnewentry, setLoading);
   useEffect(() => {
     setnewentry({
       title: "",
@@ -153,7 +156,7 @@ const NewEntryComponent = ({
       }
     }
   };
-  return (
+  return !isLoading ? (
     <EntryModalComponent>
       <FormElement
         label={"Title"}
@@ -242,6 +245,8 @@ const NewEntryComponent = ({
         </Button>
       )}
     </EntryModalComponent>
+  ) : (
+    <div />
   );
 };
 export default NewEntryComponent;

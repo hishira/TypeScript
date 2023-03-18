@@ -37,6 +37,7 @@ export class Entry {
     }
     return this.instance;
   }
+
   async CreateEntry(
     newentry: CreateEntryDto,
     token: string
@@ -153,6 +154,29 @@ export class Entry {
       await this.auth.refreshToken();
       accesstoken = this.sessionStorage.getAccessToken();
       response = await this.EditEntry(entrybody, accesstoken);
+    }
+    return response;
+  }
+
+  async getEntryById(entryId: string): Promise<IEntry> {
+    let accessToken = this.sessionStorage.getAccessToken();
+    let isOk = true;
+    let response = await this.entryApi
+      .getEntryById(entryId, accessToken)
+      .then((resp) => {
+        if (!resp.ok) {
+          throw Error("Error");
+        }
+        return resp;
+      })
+      .then((resp) => resp.json())
+      .catch((_) => (isOk = false));
+    if (isOk!) {
+      await this.auth.refreshToken();
+      accessToken = this.sessionStorage.getAccessToken();
+      response = await this.entryApi
+        .getEntryById(entryId, accessToken)
+        .then((resp) => resp.json());
     }
     return response;
   }

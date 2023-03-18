@@ -45,4 +45,12 @@ export class EntryApi extends Api {
       this.fetchPutObjectWithToken(entrybody, accesstoken)
     );
   }
+
+  getEntryById(entryId: string, accesstoken: string): Promise<Response> {
+    const url = this.getUrl(`entry/${entryId}`);
+
+    return fetch(url, this.fetchGetObjectWithtoken(accesstoken));
+  }
+
+ 
 }

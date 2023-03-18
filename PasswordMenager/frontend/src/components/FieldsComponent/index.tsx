@@ -57,7 +57,7 @@ const FieldsContainer = ({
   };
   return (
     <Container>
-      <Modal
+      {editmodalopen ? <Modal
         visible={editmodalopen}
         onClose={onmodalclose}
         component={
@@ -68,7 +68,7 @@ const FieldsContainer = ({
             refresh={refreshentry}
           />
         }
-      />
+      /> : null}
       <Modal
         visible={smallmodalopen}
         onClose={smallmodalclose}
