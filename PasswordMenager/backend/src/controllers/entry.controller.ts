@@ -36,6 +36,12 @@ export class EntryContoller {
   }
 
   @UseGuards(AuthGuard('accessToken'))
+  @Get('/:id')
+  async getEntryById(@Param('id') entryId: string): Promise<IEntry> {
+    return this.entryService.getById(entryId);
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
   @Delete('/byentityid/:id')
   async deletebyid(
     @Param('id') entityid: string,

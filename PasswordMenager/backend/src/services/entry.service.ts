@@ -32,6 +32,10 @@ export class EntryService {
     });
   }
 
+  async getById(entryId: string): Promise<IEntry> {
+    return this.entryRepository.findById(entryId);
+  }
+
   async getbygroupid(groupid: string): Promise<IEntry[]> {
     const option: FilterOption<FilterQuery<IEntry>> = {
       getOption() {

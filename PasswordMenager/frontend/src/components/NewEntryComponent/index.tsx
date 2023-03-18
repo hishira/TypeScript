@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Entry } from "../../utils/entry.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
@@ -18,10 +18,11 @@ import {
 } from "./component.styled";
 import {
   checkBoxHandler,
-  generatePart,
-  specialTypeGenerate,
 } from "./new-entry.utils";
 import { GroupEffect } from "../../hooks/groups.hook";
+import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
+import { Loading } from "../Loading";
+import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 export type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
@@ -32,14 +33,17 @@ type NewEntryProps = {
   editentryid?: string;
   refreshentry: boolean;
   refresh?: Function;
+  closeModalDispatcherHandle?: Dispatch<SetStateAction<boolean>>;
 };
 const NewEntryComponent = ({
   edit,
   editentryid,
   refreshentry,
   refresh,
+  closeModalDispatcherHandle,
 }: NewEntryProps): JSX.Element => {
   const [passlen, setpasslen] = useState<number>(6);
+  const [isLoading, setLoading] = useState<boolean>(true);
   const [passwordcharacters, setpasswordcharacters] =
     useState<PasswordCharactersTypes>({
       letters: false,
@@ -53,8 +57,15 @@ const NewEntryComponent = ({
     note: "",
     groupid: "",
   });
+  const editEntry: EditEntryActionDispatcher = new EditEntryActionDispatcher(
+    setnewentry,
+    setpasswordcharacters,
+    passwordcharacters,
+    newentry,
+    passlen
+  );
   const groups = GroupEffect(true);
-
+  GetEntryForEdit(edit, editentryid, setnewentry, setLoading);
   useEffect(() => {
     setnewentry({
       title: "",
@@ -65,66 +76,13 @@ const NewEntryComponent = ({
     });
   }, [refreshentry]);
 
-  const generateHandle = (): void => {
-    let password: string = "";
-    for (let i = 0; i < passlen; i++) {
-      let type = specialTypeGenerate(passwordcharacters);
-      password += generatePart(type);
-    }
-    setnewentry({ ...newentry, password: password });
-  };
-
-  const letterscheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setpasswordcharacters({ ...passwordcharacters, letters: e.target.checked });
-  };
-
-  const numberscheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setpasswordcharacters({ ...passwordcharacters, numbers: e.target.checked });
-  };
-
-  const specialcharacters = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setpasswordcharacters({
-      ...passwordcharacters,
-      specialChar: e.target.checked,
-    });
-  };
-
-  const settitle = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setnewentry({ ...newentry, title: e.target.value });
-  };
-
-  const setusername = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setnewentry({ ...newentry, username: e.target.value });
-  };
-
-  const setpassword = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setnewentry({ ...newentry, password: e.target.value });
-  };
-
-  const setnote = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setnewentry({ ...newentry, note: e.target.value });
-  };
-
-  const groupset = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    setnewentry({ ...newentry, groupid: e.target.value });
-  };
-
-  const clearInputData = (): void => {
-    setnewentry({
-      title: "",
-      username: "",
-      password: "",
-      note: "",
-      groupid: "",
-    });
-  };
   const addnewentry = async (): Promise<void> => {
     console.log(newentry);
     const responsenewentry: CreateEntryResponse =
       await Entry.getInstance().CreateNewEntryUser(newentry);
     if (responsenewentry.status) {
       console.log("OK");
-      clearInputData();
+      editEntry.clearInputData();
     } else {
       console.log("Something wrong");
     }
@@ -139,109 +97,126 @@ const NewEntryComponent = ({
       note: newentry.note,
     };
   };
+
   const edithaneld = async (): Promise<void> => {
     if (editentryid !== "") {
-      console.log(editentryid);
       const editedvalues: EditEntry = getRechangeObject();
-      console.log(editedvalues);
       const response: EditEntryResponse =
         await Entry.getInstance().EntryEditById(editedvalues);
       if (response.status) {
-        console.log("ok");
+        closeModalDispatcherHandle && closeModalDispatcherHandle(false);
         if (refresh !== undefined) refresh();
-        console.log("ok");
       }
     }
   };
+
   return (
-    <EntryModalComponent>
-      <FormElement
-        label={"Title"}
-        inputplaceholder="Title"
-        inputChange={settitle}
-        inputtype="txt"
-        value={newentry.title}
-      />
-      <FormElement
-        label={"Username"}
-        inputplaceholder="Username"
-        inputChange={setusername}
-        inputtype="txt"
-        value={newentry.username}
-      />
-      {!edit ? (
-        <NormalContainer>
-          <SelectLabel>Select group</SelectLabel>
-          <SelectContainer onChange={groupset}>
-            {groups.map((group) => (
-              <OptionContainer key={group._id} value={group._id}>
-                {group.name}
-              </OptionContainer>
-            ))}
-          </SelectContainer>
-        </NormalContainer>
-      ) : null}
-      <SectionContainer>
-        <FormElement
-          label={"Password"}
-          inputplaceholder="***"
-          inputChange={setpassword}
-          inputtype="password"
-          value={newentry.password}
-        />
-        <CheckBox type="checkbox" onChange={checkBoxHandler} />
-      </SectionContainer>
-      <SectionContainer>
-        <Checkboxes>
-          <Checkboxwithlabel>
-            <PasswordCheckbox type="checkbox" onChange={letterscheckbox} />
-            <div>Letters</div>
-          </Checkboxwithlabel>
-          <Checkboxwithlabel>
-            <PasswordCheckbox type="checkbox" onChange={numberscheckbox} />
-            <div>Numbers</div>
-          </Checkboxwithlabel>
-          <Checkboxwithlabel>
-            <PasswordCheckbox type="checkbox" onChange={specialcharacters} />
-            <div>Special characters</div>
-          </Checkboxwithlabel>
-        </Checkboxes>
-      </SectionContainer>
-      <ButtonsRangeContainer style={{ position: "relative" }}>
-        <Button size="small" color="lightblue" onClick={generateHandle}>
-          Generate
-        </Button>
-        <Button size="small" color="lightblue">
-          Save
-        </Button>
-        <input
-          type="range"
-          min="6"
-          max="50"
-          value={passlen}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setpasslen(parseInt(e.target.value))
-          }
-        />
-        <PassLen id="passlen">{passlen}</PassLen>
-      </ButtonsRangeContainer>
-      <FormElement
-        label={"Note"}
-        inputplaceholder="note..."
-        inputChange={setnote}
-        inputtype="text"
-        value={newentry.note}
-      />
-      {!edit ? (
-        <Button size="small" color="lightblue" onClick={addnewentry}>
-          Add
-        </Button>
-      ) : (
-        <Button size="small" color="lightblue" onClick={edithaneld}>
-          Update
-        </Button>
-      )}
-    </EntryModalComponent>
+    <Loading
+      loading={isLoading}
+      ComponentToLoad={
+        <EntryModalComponent>
+          <FormElement
+            label={"Title"}
+            inputplaceholder="Title"
+            inputChange={editEntry.settitle.bind(editEntry)}
+            inputtype="txt"
+            value={newentry.title}
+          />
+          <FormElement
+            label={"Username"}
+            inputplaceholder="Username"
+            inputChange={editEntry.setusername.bind(editEntry)}
+            inputtype="txt"
+            value={newentry.username}
+          />
+          {!edit ? (
+            <NormalContainer>
+              <SelectLabel>Select group</SelectLabel>
+              <SelectContainer onChange={editEntry.groupset.bind(editEntry)}>
+                {groups.map((group) => (
+                  <OptionContainer key={group._id} value={group._id}>
+                    {group.name}
+                  </OptionContainer>
+                ))}
+              </SelectContainer>
+            </NormalContainer>
+          ) : null}
+          <SectionContainer>
+            <FormElement
+              label={"Password"}
+              inputplaceholder="***"
+              inputChange={editEntry.setpassword.bind(editEntry)}
+              inputtype="password"
+              value={newentry.password}
+            />
+            <CheckBox type="checkbox" onChange={checkBoxHandler} />
+          </SectionContainer>
+          <SectionContainer>
+            <Checkboxes>
+              <Checkboxwithlabel>
+                <PasswordCheckbox
+                  type="checkbox"
+                  onChange={editEntry.letterscheckbox.bind(editEntry)}
+                />
+                <div>Letters</div>
+              </Checkboxwithlabel>
+              <Checkboxwithlabel>
+                <PasswordCheckbox
+                  type="checkbox"
+                  onChange={editEntry.numberscheckbox.bind(editEntry)}
+                />
+                <div>Numbers</div>
+              </Checkboxwithlabel>
+              <Checkboxwithlabel>
+                <PasswordCheckbox
+                  type="checkbox"
+                  onChange={editEntry.specialcharacters.bind(editEntry)}
+                />
+                <div>Special characters</div>
+              </Checkboxwithlabel>
+            </Checkboxes>
+          </SectionContainer>
+          <ButtonsRangeContainer style={{ position: "relative" }}>
+            <Button
+              size="small"
+              color="lightblue"
+              onClick={editEntry.generateHandle.bind(editEntry)}
+            >
+              Generate
+            </Button>
+            <Button size="small" color="lightblue">
+              Save
+            </Button>
+            <input
+              type="range"
+              min="6"
+              max="50"
+              value={passlen}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setpasslen(parseInt(e.target.value))
+              }
+            />
+            <PassLen id="passlen">{passlen}</PassLen>
+          </ButtonsRangeContainer>
+          <FormElement
+            label={"Note"}
+            inputplaceholder="note..."
+            inputChange={editEntry.setnote.bind(editEntry)}
+            inputtype="text"
+            value={newentry.note}
+          />
+          {!edit ? (
+            <Button size="small" color="lightblue" onClick={addnewentry}>
+              Add
+            </Button>
+          ) : (
+            <Button size="small" color="lightblue" onClick={edithaneld}>
+              Update
+            </Button>
+          )}
+        </EntryModalComponent>
+      }
+    ></Loading>
   );
 };
 export default NewEntryComponent;
