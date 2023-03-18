@@ -18,12 +18,11 @@ import {
 } from "./component.styled";
 import {
   checkBoxHandler,
-  generatePart,
-  specialTypeGenerate,
 } from "./new-entry.utils";
 import { GroupEffect } from "../../hooks/groups.hook";
 import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
 import { Loading } from "../Loading";
+import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 export type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
@@ -58,8 +57,14 @@ const NewEntryComponent = ({
     note: "",
     groupid: "",
   });
+  const editEntry: EditEntryActionDispatcher = new EditEntryActionDispatcher(
+    setnewentry,
+    setpasswordcharacters,
+    passwordcharacters,
+    newentry,
+    passlen
+  );
   const groups = GroupEffect(true);
-
   GetEntryForEdit(edit, editentryid, setnewentry, setLoading);
   useEffect(() => {
     setnewentry({
@@ -71,67 +76,13 @@ const NewEntryComponent = ({
     });
   }, [refreshentry]);
 
-  const generateHandle = (): void => {
-    let password: string = "";
-    for (let i = 0; i < passlen; i++) {
-      let type = specialTypeGenerate(passwordcharacters);
-      password += generatePart(type);
-    }
-    setnewentry({ ...newentry, password: password });
-  };
-
-  const letterscheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setpasswordcharacters({ ...passwordcharacters, letters: e.target.checked });
-  };
-
-  const numberscheckbox = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setpasswordcharacters({ ...passwordcharacters, numbers: e.target.checked });
-  };
-
-  const specialcharacters = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setpasswordcharacters({
-      ...passwordcharacters,
-      specialChar: e.target.checked,
-    });
-  };
-
-  const settitle = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setnewentry({ ...newentry, title: e.target.value });
-  };
-
-  const setusername = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setnewentry({ ...newentry, username: e.target.value });
-  };
-
-  const setpassword = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setnewentry({ ...newentry, password: e.target.value });
-  };
-
-  const setnote = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setnewentry({ ...newentry, note: e.target.value });
-  };
-
-  const groupset = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    setnewentry({ ...newentry, groupid: e.target.value });
-  };
-
-  const clearInputData = (): void => {
-    setnewentry({
-      title: "",
-      username: "",
-      password: "",
-      note: "",
-      groupid: "",
-    });
-  };
-
   const addnewentry = async (): Promise<void> => {
     console.log(newentry);
     const responsenewentry: CreateEntryResponse =
       await Entry.getInstance().CreateNewEntryUser(newentry);
     if (responsenewentry.status) {
       console.log("OK");
-      clearInputData();
+      editEntry.clearInputData();
     } else {
       console.log("Something wrong");
     }
@@ -167,21 +118,21 @@ const NewEntryComponent = ({
           <FormElement
             label={"Title"}
             inputplaceholder="Title"
-            inputChange={settitle}
+            inputChange={editEntry.settitle.bind(editEntry)}
             inputtype="txt"
             value={newentry.title}
           />
           <FormElement
             label={"Username"}
             inputplaceholder="Username"
-            inputChange={setusername}
+            inputChange={editEntry.setusername.bind(editEntry)}
             inputtype="txt"
             value={newentry.username}
           />
           {!edit ? (
             <NormalContainer>
               <SelectLabel>Select group</SelectLabel>
-              <SelectContainer onChange={groupset}>
+              <SelectContainer onChange={editEntry.groupset.bind(editEntry)}>
                 {groups.map((group) => (
                   <OptionContainer key={group._id} value={group._id}>
                     {group.name}
@@ -194,7 +145,7 @@ const NewEntryComponent = ({
             <FormElement
               label={"Password"}
               inputplaceholder="***"
-              inputChange={setpassword}
+              inputChange={editEntry.setpassword.bind(editEntry)}
               inputtype="password"
               value={newentry.password}
             />
@@ -203,24 +154,34 @@ const NewEntryComponent = ({
           <SectionContainer>
             <Checkboxes>
               <Checkboxwithlabel>
-                <PasswordCheckbox type="checkbox" onChange={letterscheckbox} />
+                <PasswordCheckbox
+                  type="checkbox"
+                  onChange={editEntry.letterscheckbox.bind(editEntry)}
+                />
                 <div>Letters</div>
               </Checkboxwithlabel>
               <Checkboxwithlabel>
-                <PasswordCheckbox type="checkbox" onChange={numberscheckbox} />
+                <PasswordCheckbox
+                  type="checkbox"
+                  onChange={editEntry.numberscheckbox.bind(editEntry)}
+                />
                 <div>Numbers</div>
               </Checkboxwithlabel>
               <Checkboxwithlabel>
                 <PasswordCheckbox
                   type="checkbox"
-                  onChange={specialcharacters}
+                  onChange={editEntry.specialcharacters.bind(editEntry)}
                 />
                 <div>Special characters</div>
               </Checkboxwithlabel>
             </Checkboxes>
           </SectionContainer>
           <ButtonsRangeContainer style={{ position: "relative" }}>
-            <Button size="small" color="lightblue" onClick={generateHandle}>
+            <Button
+              size="small"
+              color="lightblue"
+              onClick={editEntry.generateHandle.bind(editEntry)}
+            >
               Generate
             </Button>
             <Button size="small" color="lightblue">
@@ -240,7 +201,7 @@ const NewEntryComponent = ({
           <FormElement
             label={"Note"}
             inputplaceholder="note..."
-            inputChange={setnote}
+            inputChange={editEntry.setnote.bind(editEntry)}
             inputtype="text"
             value={newentry.note}
           />
