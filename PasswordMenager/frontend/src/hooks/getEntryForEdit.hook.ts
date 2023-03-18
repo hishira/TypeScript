@@ -5,7 +5,7 @@ export const GetEntryForEdit = (
   edit: boolean | undefined,
   editentryid: string | undefined,
   setEditedEntry: Dispatch<SetStateAction<CreateEntryDto>>,
-  setLoadingComponent: Dispatch<SetStateAction<boolean>>
+  setLoadingComponent: Dispatch<SetStateAction<boolean>>,
 ) => {
   useEffect(() => {
     if (edit && editentryid) {

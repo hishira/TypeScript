@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Entry } from "../../utils/entry.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
@@ -33,12 +33,14 @@ type NewEntryProps = {
   editentryid?: string;
   refreshentry: boolean;
   refresh?: Function;
+  closeModalDispatcherHandle?: Dispatch<SetStateAction<boolean>>;
 };
 const NewEntryComponent = ({
   edit,
   editentryid,
   refreshentry,
   refresh,
+  closeModalDispatcherHandle,
 }: NewEntryProps): JSX.Element => {
   const [passlen, setpasslen] = useState<number>(6);
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -151,6 +153,7 @@ const NewEntryComponent = ({
         await Entry.getInstance().EntryEditById(editedvalues);
       if (response.status) {
         console.log("ok");
+        closeModalDispatcherHandle && closeModalDispatcherHandle(false);
         if (refresh !== undefined) refresh();
         console.log("ok");
       }

@@ -66,6 +66,7 @@ const FieldsContainer = ({
             edit={true}
             editentryid={entrytoedit}
             refresh={refreshentry}
+            closeModalDispatcherHandle={seteditmodalopen}
           />
         }
       /> : null}
