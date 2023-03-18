@@ -123,6 +123,7 @@ const NewEntryComponent = ({
       groupid: "",
     });
   };
+  
   const addnewentry = async (): Promise<void> => {
     console.log(newentry);
     const responsenewentry: CreateEntryResponse =
@@ -144,21 +145,19 @@ const NewEntryComponent = ({
       note: newentry.note,
     };
   };
+
   const edithaneld = async (): Promise<void> => {
     if (editentryid !== "") {
-      console.log(editentryid);
       const editedvalues: EditEntry = getRechangeObject();
-      console.log(editedvalues);
       const response: EditEntryResponse =
         await Entry.getInstance().EntryEditById(editedvalues);
       if (response.status) {
-        console.log("ok");
         closeModalDispatcherHandle && closeModalDispatcherHandle(false);
         if (refresh !== undefined) refresh();
-        console.log("ok");
       }
     }
-  };
+  }
+
   return !isLoading ? (
     <EntryModalComponent>
       <FormElement

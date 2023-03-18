@@ -164,6 +164,7 @@ export class Entry {
     let response = await this.entryApi
       .getEntryById(entryId, accessToken)
       .then((resp) => {
+        console.log(resp);
         if (!resp.ok) {
           throw Error("Error");
         }
@@ -171,7 +172,7 @@ export class Entry {
       })
       .then((resp) => resp.json())
       .catch((_) => (isOk = false));
-    if (isOk!) {
+    if (!isOk) {
       await this.auth.refreshToken();
       accessToken = this.sessionStorage.getAccessToken();
       response = await this.entryApi
