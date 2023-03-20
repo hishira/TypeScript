@@ -9,6 +9,7 @@ export interface Repository<T extends Document> {
   findById(id: string): Promise<T>;
   update(entry: Partial<T>): Promise<unknown>;
   delete(option: DeleteOption): Promise<unknown>;
+  deleteMany?: (option: DeleteOption) => Promise<unknown>;
   getById(): Promise<T>;
 }
 

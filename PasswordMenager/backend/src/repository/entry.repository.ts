@@ -28,7 +28,11 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
-    return this.entryModel.deleteOne(option.getOption()).exec();
+    return this.entryModel.deleteMany(option.getOption()).exec();
+  }
+
+  deleteMany(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
+    return this.entryModel.deleteMany(option.getOption()).exec();
   }
 
   create(objectToSave: DTO): Promise<IEntry> {
