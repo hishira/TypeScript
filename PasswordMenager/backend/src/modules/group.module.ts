@@ -5,6 +5,7 @@ import { groupProviders } from '../providers/group.providers';
 import { DatabaseModule } from './database.module';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { GroupRepository } from 'src/repository/group.repository';
+import { EntryService } from 'src/services/entry.service';
 
 @Module({
   imports: [DatabaseModule],
@@ -15,6 +16,7 @@ import { GroupRepository } from 'src/repository/group.repository';
       useClass: GroupRepository,
     },
     GroupService,
+    EntryService,
     ...groupProviders,
   ],
 })
