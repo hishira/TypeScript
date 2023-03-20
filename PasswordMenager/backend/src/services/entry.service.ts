@@ -71,6 +71,16 @@ export class EntryService {
     }
   }
 
+  async deleteByGroup(groupid: string): Promise<unknown> {
+    return await this.entryRepository.delete({
+      getOption() {
+        return {
+          groupid: groupid,
+        };
+      },
+    });
+  }
+
   async getByUser(userId: string): Promise<IEntry[]> {
     const filterOption: FilterOption<FilterQuery<IEntry>> = {
       getOption() {
