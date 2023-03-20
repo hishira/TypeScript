@@ -49,7 +49,7 @@ export class GroupService {
         return { _id: groupId };
       },
     };
-    return await this.entityService.deleteByGroup(groupId);
-    //return await this.groupRepository.delete(deleteOption);
+    await this.entityService.deleteByGroup(groupId);
+    return await this.groupRepository.delete(deleteOption);
   }
 }
