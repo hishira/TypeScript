@@ -14,7 +14,7 @@ export class GroupService {
   constructor(
     @Inject(Repository)
     private readonly groupRepository: Repository<IGroup>,
-    private readonly entityService: EntryService
+    private readonly entityService: EntryService,
   ) {}
 
   create(
@@ -46,9 +46,10 @@ export class GroupService {
   async deleteGroup(groupId: string): Promise<unknown> {
     const deleteOption: DeleteOption<FilterQuery<IGroup>> = {
       getOption() {
-          return {id: groupId}
+        return { id: groupId };
       },
     };
-    this.groupRepository.delete(deleteOption)
+    this.entityService.deleteByGroup(groupId);
+    return this.groupRepository.delete(deleteOption);
   }
 }
