@@ -72,7 +72,7 @@ export class EntryService {
   }
 
   async deleteByGroup(groupid: string): Promise<unknown> {
-    return this.entryRepository.delete({
+    return await this.entryRepository.delete({
       getOption() {
         return {
           groupid: groupid,

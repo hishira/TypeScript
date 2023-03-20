@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -30,5 +32,11 @@ export class GroupController {
   @Get('byuser')
   async get(@Request() req): Promise<GroupDto[]> {
     return this.groupservice.getbyuser(req.user._id);
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Delete('/:id')
+  async deleteByid(@Param('id') groupId: string) {
+    return this.groupservice.deleteGroup(groupId);
   }
 }

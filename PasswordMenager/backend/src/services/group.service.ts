@@ -46,10 +46,10 @@ export class GroupService {
   async deleteGroup(groupId: string): Promise<unknown> {
     const deleteOption: DeleteOption<FilterQuery<IGroup>> = {
       getOption() {
-        return { id: groupId };
+        return { _id: groupId };
       },
     };
-    this.entityService.deleteByGroup(groupId);
-    return this.groupRepository.delete(deleteOption);
+    await this.entityService.deleteByGroup(groupId);
+    return await this.groupRepository.delete(deleteOption);
   }
 }
