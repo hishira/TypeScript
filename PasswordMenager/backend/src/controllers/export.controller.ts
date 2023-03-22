@@ -102,16 +102,8 @@ export class ExportController {
       'Content-Type': 'application/octet-stream',
     });
     res.send(encryptedData);
-    //const key = randomBytes(16);
-    //const iv = randomBytes(16);
-    //pbkdf2('123456', 'salt', 100, 32, 'sha256', (err, key) => {
-    //  const cipher = createCipheriv('aria-256-ofb', Buffer.from(key), iv);
-    //  let encrypted = cipher.update(passwords.join(','));
-    //  encrypted = Buffer.concat([encrypted, cipher.final()]);
-    //  console.log(encrypted.toString('utf-8'));
-    //});
-    //return res.send('ok');
   }
+
   @Get('encryptedCsv')
   @UseGuards(AuthGuard('accessToken'))
   async getEncryptCsv(@Request() req, @Res() response: Response) {
@@ -127,34 +119,3 @@ export class ExportController {
     });
   }
 }
-
-//import { Controller, Get, Res } from '@nestjs/common';
-//import { Response } from 'express';
-//import * as crypto from 'crypto';
-
-//@Controller('files')
-//export class FilesController {
-
-//  @Get()
-//  async downloadFile(@Res() res: Response) {
-//    const fileContent = 'This is the content of the file';
-//    const password = 'secret123';
-//    const salt = crypto.randomBytes(16); // Generate a random salt
-
-//    const key = crypto.pbkdf2Sync(password, salt, 100000, 32, 'sha256');
-//    const iv = crypto.randomBytes(16); // Generate a random IV
-
-//    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-//    let encryptedContent = cipher.update(fileContent, 'utf8', 'hex');
-//    encryptedContent += cipher.final('hex');
-
-//    const encryptedData = Buffer.concat([salt, iv, Buffer.from(encryptedContent, 'hex')]);
-
-//    res.set({
-//      'Content-Disposition': 'attachment; filename=example.txt',
-//      'Content-Type': 'application/octet-stream',
-//    });
-
-//    res.send(encryptedData);
-//  }
-//}
