@@ -91,7 +91,7 @@ export class ExportController {
     const cipher = createCipheriv('aes-256-cbc', key, iv);
     let encryptedContent = cipher.update(fileContent, 'utf8', 'hex');
     encryptedContent += cipher.final('hex');
-
+    // Save salt and iv in file
     const encryptedData = Buffer.concat([
       salt,
       iv,
