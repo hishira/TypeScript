@@ -1,32 +1,42 @@
 import {
   Body,
   Controller,
-  Post,
-  Get,
-  ValidationPipe,
-  UseGuards,
-  Request,
-  Param,
   Delete,
+  Get,
+  Param,
+  Post,
   Put,
+  Request,
+  UseFilters,
+  UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { EntryService } from '../services/entry.service';
-import { IEntry } from '../schemas/Interfaces/entry.interface';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateEntryDto } from '../schemas/dto/createentry.dto';
-import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
+import { GroupNotExistsFilter } from 'src/errors/GroupNotExistFilter';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
+import { GroupService } from 'src/services/group.service';
+import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
+import { CreateEntryDto } from '../schemas/dto/createentry.dto';
+import { IEntry } from '../schemas/Interfaces/entry.interface';
+import { EntryService } from '../services/entry.service';
 @Controller('entry')
 export class EntryContoller {
-  constructor(private readonly entryService: EntryService) {}
+  constructor(
+    private readonly entryService: EntryService,
+    private readonly groupService: GroupService,
+  ) {}
 
   @UseGuards(AuthGuard('accessToken'))
+  @UseFilters(new GroupNotExistsFilter())
   @Post()
   async create(
     @Body(new ValidationPipe({ transform: true })) neweentry: CreateEntryDto,
     @Request() req,
-  ): Promise<IEntry | { message: string }> {
-    return this.entryService.create(neweentry, req.user._id);
+  ): Promise<any> {
+    // Promise<IEntry | { message: string }> {
+    return this.groupService.checkIfexists(neweentry.groupid).then((e) => {
+      return this.entryService.create(neweentry, req.user._id);
+    });
   }
 
   @UseGuards(AuthGuard('accessToken'))
