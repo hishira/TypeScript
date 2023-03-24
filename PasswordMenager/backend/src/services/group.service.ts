@@ -8,6 +8,7 @@ import { DTO } from 'src/schemas/dto/object.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { EntryService } from './entry.service';
+import { GroupNotExists } from 'src/errors/GroupNotExists.error';
 
 @Injectable()
 export class GroupService {
@@ -30,6 +31,12 @@ export class GroupService {
       },
     };
     return this.groupRepository.create(pureDto);
+  }
+
+  async checkIfexists(groupId: string): Promise<any> {
+    return this.groupRepository.findById(groupId).then((data) => {
+      if (data === null || data === undefined) throw new GroupNotExists();
+    });
   }
 
   async getbyuser(userid: string): Promise<GroupDto[]> {
