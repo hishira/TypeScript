@@ -9,13 +9,16 @@ import {
   Request,
   UseFilters,
   UseGuards,
+  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GroupNotExistsFilter } from 'src/errors/GroupNotExistFilter';
+import { GroupGuard } from 'src/guards/GroupExists.guard';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { GroupService } from 'src/services/group.service';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
+import { CheckGroupValidation } from 'src/validators/CheckGroup.validator';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { IEntry } from '../schemas/Interfaces/entry.interface';
 import { EntryService } from '../services/entry.service';
@@ -28,15 +31,13 @@ export class EntryContoller {
 
   @UseGuards(AuthGuard('accessToken'))
   @UseFilters(new GroupNotExistsFilter())
+  @UseGuards(GroupGuard)
   @Post()
   async create(
     @Body(new ValidationPipe({ transform: true })) neweentry: CreateEntryDto,
     @Request() req,
-  ): Promise<any> {
-    // Promise<IEntry | { message: string }> {
-    return this.groupService.checkIfexists(neweentry.groupid).then((e) => {
-      return this.entryService.create(neweentry, req.user._id);
-    });
+  ): Promise<IEntry | { message: string }> {
+    return this.entryService.create(neweentry, req.user._id);
   }
 
   @UseGuards(AuthGuard('accessToken'))
