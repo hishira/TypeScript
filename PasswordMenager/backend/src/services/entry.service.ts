@@ -96,7 +96,6 @@ export class EntryService {
     try {
       const entry: Partial<IEntry> = this.getPartialUpdateEntry(neweditedentry);
       return this.entryRepository.update(entry).then(async (_data) => {
-        console.log(_data);
         const upadednoew = await this.entryRepository.findById(
           neweditedentry._id,
         );

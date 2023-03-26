@@ -164,7 +164,6 @@ export class Entry {
     let response = await this.entryApi
       .getEntryById(entryId, accessToken)
       .then((resp) => {
-        console.log(resp);
         if (!resp.ok) {
           throw Error("Error");
         }

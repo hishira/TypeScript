@@ -43,7 +43,6 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   deleteById(): Promise<void> {
-    console.log('Hi');
     return new Promise((resolve, reject) => resolve());
   }
 
