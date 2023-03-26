@@ -1,5 +1,4 @@
-import { IsString, MinLength, Validate } from 'class-validator';
-import { GroupExistsValidator } from 'src/validators/CheckGroup.validator';
+import { IsString, MinLength } from 'class-validator';
 import { DTO } from './object.interface';
 
 export class CreateEntryDto implements DTO {

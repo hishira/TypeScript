@@ -8,7 +8,7 @@ import {
 import { GroupService } from 'src/services/group.service';
 
 @Injectable()
-@ValidatorConstraint({ name: 'GroupExists', async: true })
+@ValidatorConstraint({ async: true })
 export class GroupExistsValidator implements ValidatorConstraintInterface {
   constructor(private readonly groupService: GroupService) {}
   async validate(

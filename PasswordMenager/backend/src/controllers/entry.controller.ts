@@ -9,7 +9,6 @@ import {
   Request,
   UseFilters,
   UseGuards,
-  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
