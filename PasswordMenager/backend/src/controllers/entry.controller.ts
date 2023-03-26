@@ -18,7 +18,6 @@ import { GroupGuard } from 'src/guards/GroupExists.guard';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { GroupService } from 'src/services/group.service';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
-import { CheckGroupValidation } from 'src/validators/CheckGroup.validator';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { IEntry } from '../schemas/Interfaces/entry.interface';
 import { EntryService } from '../services/entry.service';

@@ -1,15 +1,24 @@
+import { Inject, Injectable } from '@nestjs/common/decorators';
+import { forwardRef } from '@nestjs/common/utils';
 import {
-  ArgumentMetadata,
-  PipeTransform,
-  ValidationError,
-  ValidationPipe,
-} from '@nestjs/common';
-import { ValidatorOptions } from '@nestjs/common/interfaces/external/validator-options.interface';
+  ValidationArguments,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { GroupService } from 'src/services/group.service';
 
-export class CheckGroupValidation implements PipeTransform {
-  transform(value: any, metadata: ArgumentMetadata) {
-    console.log(value);
-    return value;
+@Injectable()
+@ValidatorConstraint({ name: 'GroupExists', async: true })
+export class GroupExistsValidator implements ValidatorConstraintInterface {
+  constructor(private readonly groupService: GroupService) {}
+  async validate(
+    value: string,
+    validationArguments?: ValidationArguments,
+  ): Promise<boolean> {
+    return this.groupService.checkIfexists(value).then((_) => true);
+  }
+
+  defaultMessage(validationArguments?: ValidationArguments): string {
+    return 'Group not exists';
   }
 }
