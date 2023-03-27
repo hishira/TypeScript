@@ -69,7 +69,6 @@ export class ExportController {
       decipher.update(encryptedContent),
       decipher.final(),
     ]);
-    console.log(decryptedContent.toString('utf8'));
   }
   @Get('encrypted')
   async getEncryptFile(@Res() res: Response) {
@@ -81,7 +80,6 @@ export class ExportController {
     const passwords = [];
     entries.forEach((entry) => passwords.push(entry.password));
     const fileContent = passwords.join(',');
-    console.log(fileContent);
     const password = '123456';
     const salt = randomBytes(16); // Generate a random salt
 
