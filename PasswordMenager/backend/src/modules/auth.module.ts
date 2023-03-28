@@ -1,21 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from '../controllers/auth.controller';
-import { UserService } from '../services/user.service';
-import { UserModule } from './user.module';
-import { userProviders } from '../providers/user.providers';
-import { DatabaseModule } from './database.module';
-import { AuthService } from '../services/auth.service';
-import { LocalStrategy } from '../local.strategy';
-import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from '../constans';
+import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '../accesstoken.strategy';
-import { JwtStrategy2 } from '../refreshtoken.strategy';
-import { GroupModule } from './group.module';
-import { GroupService } from '../services/group.service';
+import { jwtConstants } from '../constans';
+import { AuthController } from '../controllers/auth.controller';
+import { LocalStrategy } from '../local.strategy';
 import { groupProviders } from '../providers/group.providers';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { GroupRepository } from 'src/repository/group.repository';
+import { JwtStrategy2 } from '../refreshtoken.strategy';
+import { AuthService } from '../services/auth.service';
+import { DatabaseModule } from './database.module';
+import { UserModule } from './user.module';
 @Module({
   imports: [
     DatabaseModule,

@@ -11,21 +11,18 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   createCipheriv,
-  pbkdf2,
-  randomBytes,
-  pbkdf2Sync,
   createDecipheriv,
+  pbkdf2Sync,
+  randomBytes,
 } from 'crypto';
 import { Response } from 'express';
-import { createReadStream, createWriteStream } from 'fs';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { ExportService } from 'src/services/export.service';
-import { Readable } from 'stream';
 // TODO: Check if work as expected witth promise
 @Controller('export')
 export class ExportController {

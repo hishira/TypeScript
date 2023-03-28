@@ -5,10 +5,9 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { Multer } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CustomFileValidator } from 'src/validators/file.validator';
 import { EmptyFileValidator } from 'src/validators/emptyfile.validator';
+import { CustomFileValidator } from 'src/validators/file.validator';
 import { NotFileValidator } from 'src/validators/notfile.validator';
 @Controller('import')
 export class ImportController {

@@ -8,7 +8,6 @@ import { ExportModule } from './modules/export.module';
 import { GroupModule } from './modules/group.module';
 import { ImportModule } from './modules/import.module';
 import { UserModule } from './modules/user.module';
-import { ValidatorModule } from './validators/validator.module';
 @Module({
   imports: [
     UserModule,

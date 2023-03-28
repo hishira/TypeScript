@@ -1,10 +1,7 @@
 import * as mognoose from 'mongoose';
-import { Cipher } from 'src/utils/cipher.utils';
-import { Decipher } from 'src/utils/decipher.utils';
 import { IEntry } from './Interfaces/entry.interface';
 import { EntrySchemaUtils } from './utils/Entry.schema.utils';
 
-export const algorithm = 'aes-256-ctr';
 const EntrySchema = new mognoose.Schema({
   title: {
     type: String,
