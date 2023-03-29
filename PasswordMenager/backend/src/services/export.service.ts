@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as Archiver from 'archiver';
-import { CsvFile, DefaultCsvHeader } from 'src/utils/csv.util';
+import { CsvFile } from 'src/utils/csv.util';
 import { Readable } from 'stream';
 import { EntryService } from './entry.service';
 
@@ -14,7 +14,7 @@ export class ExportService {
       resp.forEach((entry) => {
         csvRows.push([entry.title, entry.username, entry.password, entry.note]);
       });
-      const csv = new CsvFile(DefaultCsvHeader())
+      const csv = new CsvFile(CsvFile.DefaultCsvHeader)
         .setRows(csvRows)
         .getCsvAsString();
       return csv;

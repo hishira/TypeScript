@@ -6,18 +6,16 @@ enum TitleCsvHeader {
   EndLine = '\r\n',
 }
 
-export const DefaultCsvHeader = (): TitleCsvHeader[] => {
-  return [
+export class CsvFile {
+  private _titles: TitleCsvHeader[];
+  private _rows: string[][];
+
+  static DefaultCsvHeader = [
     TitleCsvHeader.Title,
     TitleCsvHeader.Username,
     TitleCsvHeader.Password,
     TitleCsvHeader.Note,
   ];
-};
-export class CsvFile {
-  private _titles: TitleCsvHeader[];
-  private _rows: string[][];
-
   get Titles(): TitleCsvHeader[] {
     return this._titles;
   }
