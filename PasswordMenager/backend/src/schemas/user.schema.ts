@@ -18,10 +18,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  meta: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Meta',
-  },
+  meta: { type: MetaSchema, default: () => ({}) },
 });
 UserSchema.pre('save', beforeUserSave);
 UserSchema.methods.validatePassword = function <IUser>(

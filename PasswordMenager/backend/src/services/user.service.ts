@@ -15,26 +15,20 @@ export class UserService {
     },
   };
   constructor(
-    @Inject('META_MODEL')
-    private metamodel: Model<IMeta>,
     @Inject(Repository)
     private readonly userRepository: Repository<IUser>,
   ) {}
 
   create(userCreateDTO: CreateUserDto): Promise<IUser | { message: string }> {
-    const meta = new this.metamodel({});
-    return meta.save().then((meta) => {
-      const pureDto: DTO = {
-        toObject() {
-          return {
-            ...userCreateDTO,
-            meta: meta._id,
-          };
-        },
-      };
-      return this.userRepository.create(pureDto).catch((err) => {
-        return { message: 'Problem occur while user create' };
-      });
+    const pureDto: DTO = {
+      toObject() {
+        return {
+          ...userCreateDTO,
+        };
+      },
+    };
+    return this.userRepository.create(pureDto).catch((err) => {
+      return { message: 'Problem occur while user create' };
     });
   }
 
