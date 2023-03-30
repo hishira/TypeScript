@@ -1,5 +1,6 @@
 import * as bcryptjs from 'bcryptjs';
 import * as mongoose from 'mongoose';
+import { IUser } from './Interfaces/user.interface';
 import MetaSchema from './meta.schema';
 
 async function beforeUserSave<IUser>(next) {
@@ -9,7 +10,7 @@ async function beforeUserSave<IUser>(next) {
   }
   next();
 }
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema<IUser>({
   login: {
     type: String,
     required: true,
@@ -18,7 +19,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  meta: { type: MetaSchema, default: () => ({}) },
+  meta: { type: MetaSchema, require: true, default: () => ({}) },
 });
 UserSchema.pre('save', beforeUserSave);
 UserSchema.methods.validatePassword = function <IUser>(
