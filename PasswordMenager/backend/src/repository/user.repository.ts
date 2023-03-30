@@ -20,7 +20,7 @@ export class UserRepository implements Repository<IUser> {
   }
 
   find(option: FilterOption<unknown>): Promise<IUser[]> {
-    return this.userModel.find(option.getOption()).exec();
+    return this.userModel.find(option.getOption()).populate('meta').exec();
   }
 
   findById(id: string): Promise<IUser> {

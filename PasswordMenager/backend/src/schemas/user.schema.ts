@@ -1,5 +1,6 @@
 import * as bcryptjs from 'bcryptjs';
 import * as mongoose from 'mongoose';
+import MetaSchema from './meta.schema';
 
 async function beforeUserSave<IUser>(next) {
   const user = this;
@@ -16,6 +17,10 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  meta: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Meta',
   },
 });
 UserSchema.pre('save', beforeUserSave);
