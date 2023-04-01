@@ -1,7 +1,6 @@
 import * as bcryptjs from 'bcryptjs';
 import * as mongoose from 'mongoose';
 import { IUser } from './Interfaces/user.interface';
-import MetaSchema from './meta.schema';
 import UserMetaSchema from './userMeta.schema';
 
 async function beforeUserSave<IUser>(next) {
@@ -12,7 +11,7 @@ async function beforeUserSave<IUser>(next) {
     user.meta = {
       ...oldMeta,
       lastPassword: user._password,
-    }
+    };
   }
   next();
 }
@@ -24,10 +23,10 @@ const UserSchema = new mongoose.Schema<IUser>({
   password: {
     type: String,
     required: true,
-    set: function(password){
+    set: function (password: string) {
       this._password = this.password;
-      return password
-    }
+      return password;
+    },
   },
   meta: {
     type: UserMetaSchema,
