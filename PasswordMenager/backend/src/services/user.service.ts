@@ -6,6 +6,7 @@ import { IMeta } from 'src/schemas/Interfaces/meta.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
 import { IUser } from '../schemas/Interfaces/user.interface';
+import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 
 @Injectable()
 export class UserService {
@@ -20,14 +21,15 @@ export class UserService {
   ) {}
 
   create(userCreateDTO: CreateUserDto): Promise<IUser | { message: string }> {
+    const nowDate = Date.now();
     const pureDto: DTO = {
       toObject() {
         return {
           ...userCreateDTO,
           meta: {
-            createDate: Date.now(),
-            firstEditDate: Date.now(),
-            editDate: Date.now(),
+            createDate: nowDate,
+            firstEditDate: nowDate,
+            editDate: nowDate,
             lastLogin: userCreateDTO.login,
             lastPassword: null, // First password
           },
@@ -42,7 +44,15 @@ export class UserService {
   getAll(): Promise<IUser[]> {
     return this.userRepository.find(this.allUserFilterOption);
   }
+
   getOne(): Promise<IUser[]> {
     return this.userRepository.find(this.allUserFilterOption);
+  }
+
+  update(userId: string, userEditDto: EditUserDto): Promise<unknown> {
+    return this.userRepository.update({
+      _id: userId,
+      ...userEditDto,
+    });
   }
 }

@@ -35,6 +35,28 @@ const UserSchema = new mongoose.Schema<IUser>({
   },
 });
 UserSchema.pre('save', beforeUserSave);
+UserSchema.pre('updateOne', async function (next) {
+  try {
+    // TODO fix saving last password
+    const filter = this.getFilter();
+    const docToUpdate = this.getUpdate() as any;
+    console.log(docToUpdate);
+    if (docToUpdate['$set'].password) {
+      const oldMeta = docToUpdate.meta;
+      docToUpdate.password = await bcryptjs.hash(
+        docToUpdate['$set'].password,
+        10,
+      );
+      docToUpdate.meta = {
+        ...oldMeta,
+        lastPassword: docToUpdate.password,
+      };
+    }
+    next();
+  } catch (e) {
+    next(e);
+  }
+});
 UserSchema.methods.validatePassword = function <IUser>(
   password: string,
 ): boolean {
