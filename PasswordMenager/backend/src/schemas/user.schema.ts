@@ -2,11 +2,17 @@ import * as bcryptjs from 'bcryptjs';
 import * as mongoose from 'mongoose';
 import { IUser } from './Interfaces/user.interface';
 import MetaSchema from './meta.schema';
+import UserMetaSchema from './userMeta.schema';
 
 async function beforeUserSave<IUser>(next) {
   const user = this;
+  const oldMeta = user.meta;
   if (user.isModified('password')) {
     user.password = await bcryptjs.hash(user.password, 10);
+    user.meta = {
+      ...oldMeta,
+      lastPassword: user._password,
+    }
   }
   next();
 }
@@ -18,8 +24,16 @@ const UserSchema = new mongoose.Schema<IUser>({
   password: {
     type: String,
     required: true,
+    set: function(password){
+      this._password = this.password;
+      return password
+    }
   },
-  meta: { type: MetaSchema, require: true, default: () => ({}) },
+  meta: {
+    type: UserMetaSchema,
+    required: true,
+    default: () => ({}),
+  },
 });
 UserSchema.pre('save', beforeUserSave);
 UserSchema.methods.validatePassword = function <IUser>(

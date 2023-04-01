@@ -1,8 +1,8 @@
 import { Document } from 'mongoose';
-import { IMeta } from 'src/schemas/Interfaces/meta.interface';
+import { IUserMeta } from './userMeta.interface';
 export interface IUser extends Document {
   readonly login: string;
   readonly password: string;
-  readonly meta: IMeta;
+  readonly meta: IUserMeta;
   validatePassword(password: string): Promise<boolean>;
 }

@@ -24,6 +24,13 @@ export class UserService {
       toObject() {
         return {
           ...userCreateDTO,
+          meta: {
+            createDate: Date.now(),
+            firstEditDate: Date.now(),
+            editDate: Date.now(),
+            lastLogin: userCreateDTO.login,
+            lastPassword: null, // First password
+          },
         };
       },
     };
