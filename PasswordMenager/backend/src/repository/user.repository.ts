@@ -34,28 +34,27 @@ export class UserRepository implements Repository<IUser> {
       .exec()
       .then(async (user) => {
         let entryUser = {};
-        let newMeta = {};
+        const filedToUpdate = entry.password ? 'lastPassword' : 'lastLogin';
+        const lastValue = entry.password ? user.password : user.login;
         if (entry.password) {
           const hashesPassword = await bcryptjs.hash(entry.password, 10);
           entryUser = {
             password: hashesPassword,
             meta: {
-              ...user.meta,
-              lastPassword: user._password,
               editDate: Date.now(),
+              [filedToUpdate]: lastValue,
             },
           };
-          newMeta = {
-            ...user.meta,
-            lastPassword: user._password,
-            editDate: Date.now(),
-          };
         }
-        console.log(entryUser);
+        console.log(user.meta);
         return this.userModel
-          .updateOne(
+          .findOneAndUpdate(
             { _id: entry._id },
-            { $set: { ...entryUser, 'meta.$': { ...newMeta } } },
+            {
+              $set: {
+                ...entryUser,
+              },
+            },
           )
           .then((data) => data);
       });
