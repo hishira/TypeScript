@@ -16,27 +16,6 @@ async function beforeUserSave<IUser>(next) {
   next();
 }
 
-async function beforeUpdateDoc(next) {
-  try {
-    // TODO fix saving last password
-    const filter = this.getFilter();
-    const docToUpdate = this.getUpdate() as any;
-    if (docToUpdate['$set'].password) {
-      const oldMeta = docToUpdate.meta;
-      docToUpdate.password = await bcryptjs.hash(
-        docToUpdate['$set'].password,
-        10,
-      );
-      docToUpdate.meta = {
-        ...oldMeta,
-        lastPassword: docToUpdate.password,
-      };
-    }
-    next();
-  } catch (e) {
-    next(e);
-  }
-}
 const UserSchema = new mongoose.Schema<IUser>({
   login: {
     type: String,
@@ -57,7 +36,7 @@ const UserSchema = new mongoose.Schema<IUser>({
   },
 });
 UserSchema.pre('save', beforeUserSave);
-UserSchema.pre('updateOne', beforeUpdateDoc);
+//UserSchema.pre('updateOne', beforeUpdateDoc);
 UserSchema.methods.validatePassword = function <IUser>(
   password: string,
 ): boolean {

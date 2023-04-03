@@ -5,6 +5,7 @@ import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UserRepository implements Repository<IUser> {
@@ -29,8 +30,35 @@ export class UserRepository implements Repository<IUser> {
 
   update(entry: Partial<IUser>): Promise<unknown> {
     return this.userModel
-      .updateOne({ _id: entry._id }, { $set: { ...entry } })
-      .then((data) => data);
+      .findById(entry._id)
+      .exec()
+      .then(async (user) => {
+        let entryUser = {};
+        let newMeta = {};
+        if (entry.password) {
+          const hashesPassword = await bcryptjs.hash(entry.password, 10);
+          entryUser = {
+            password: hashesPassword,
+            meta: {
+              ...user.meta,
+              lastPassword: user._password,
+              editDate: Date.now(),
+            },
+          };
+          newMeta = {
+            ...user.meta,
+            lastPassword: user._password,
+            editDate: Date.now(),
+          };
+        }
+        console.log(entryUser);
+        return this.userModel
+          .updateOne(
+            { _id: entry._id },
+            { $set: { ...entryUser, 'meta.$': { ...newMeta } } },
+          )
+          .then((data) => data);
+      });
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {
