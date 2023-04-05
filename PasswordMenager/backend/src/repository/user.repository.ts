@@ -33,28 +33,21 @@ export class UserRepository implements Repository<IUser> {
     userInfo: IUser,
   ): Promise<Partial<IUser>> {
     let entryUser: Partial<IUser> = {};
-    const filedToUpdate: 'lastPassword' | 'lastLogin' = entryToEdit.password
-      ? 'lastPassword'
-      : 'lastLogin';
+    const filedToUpdate: 'meta.lastPassword' | 'meta.lastLogin' =
+      entryToEdit.password ? 'meta.lastPassword' : 'meta.lastLogin';
     const lastValue = entryToEdit.password ? userInfo.password : userInfo.login;
     if (entryToEdit.password) {
       const hashesPassword = await bcryptjs.hash(entryToEdit.password, 10);
       entryUser = {
         password: hashesPassword,
-        meta: {
-          ...userInfo.meta,
-          editDate: Date.now(),
-          [filedToUpdate]: lastValue,
-        },
+        [`meta.editDate`]: Date.now(),
+        [filedToUpdate]: lastValue,
       } as unknown as Partial<IUser>;
     } else {
       entryUser = {
         login: entryToEdit.login,
-        meta: {
-          ...userInfo.meta,
-          editDate: Date.now(),
-          [filedToUpdate]: lastValue,
-        },
+        [`meta.editDate`]: Date.now(),
+        [filedToUpdate]: lastValue,
       } as unknown as Partial<IUser>;
     }
     return entryUser;

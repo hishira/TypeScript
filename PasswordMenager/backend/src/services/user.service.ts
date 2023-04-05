@@ -21,18 +21,10 @@ export class UserService {
   ) {}
 
   create(userCreateDTO: CreateUserDto): Promise<IUser | { message: string }> {
-    const nowDate = Date.now();
     const pureDto: DTO = {
       toObject() {
         return {
           ...userCreateDTO,
-          meta: {
-            createDate: nowDate,
-            firstEditDate: nowDate,
-            editDate: nowDate,
-            lastLogin: userCreateDTO.login,
-            lastPassword: null, // First password
-          },
         };
       },
     };

@@ -32,7 +32,6 @@ const UserSchema = new mongoose.Schema<IUser>({
   },
 });
 UserSchema.pre('save', beforeUserSave);
-//UserSchema.pre('updateOne', beforeUpdateDoc);
 UserSchema.methods.validatePassword = function <IUser>(
   password: string,
 ): boolean {
