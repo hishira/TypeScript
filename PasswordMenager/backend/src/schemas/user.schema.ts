@@ -8,10 +8,6 @@ async function beforeUserSave<IUser>(next) {
   const oldMeta = user.meta;
   if (user.isModified('password')) {
     user.password = await bcryptjs.hash(user.password, 10);
-    user.meta = {
-      ...oldMeta,
-      lastPassword: user._password,
-    };
   }
   next();
 }

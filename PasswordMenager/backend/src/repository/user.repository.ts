@@ -28,31 +28,52 @@ export class UserRepository implements Repository<IUser> {
     return this.userModel.findOne({ _id: id }).exec();
   }
 
+  private async updateUserHandle(
+    entryToEdit: Partial<IUser>,
+    userInfo: IUser,
+  ): Promise<Partial<IUser>> {
+    let entryUser: Partial<IUser> = {};
+    const filedToUpdate: 'lastPassword' | 'lastLogin' = entryToEdit.password
+      ? 'lastPassword'
+      : 'lastLogin';
+    const lastValue = entryToEdit.password ? userInfo.password : userInfo.login;
+    if (entryToEdit.password) {
+      const hashesPassword = await bcryptjs.hash(entryToEdit.password, 10);
+      entryUser = {
+        password: hashesPassword,
+        meta: {
+          ...userInfo.meta,
+          editDate: Date.now(),
+          [filedToUpdate]: lastValue,
+        },
+      } as unknown as Partial<IUser>;
+    } else {
+      entryUser = {
+        login: entryToEdit.login,
+        meta: {
+          ...userInfo.meta,
+          editDate: Date.now(),
+          [filedToUpdate]: lastValue,
+        },
+      } as unknown as Partial<IUser>;
+    }
+    return entryUser;
+  }
+
   update(entry: Partial<IUser>): Promise<unknown> {
     return this.userModel
       .findById(entry._id)
       .exec()
       .then(async (user) => {
-        let entryUser = {};
-        const filedToUpdate = entry.password ? 'lastPassword' : 'lastLogin';
-        const lastValue = entry.password ? user.password : user.login;
-        if (entry.password) {
-          const hashesPassword = await bcryptjs.hash(entry.password, 10);
-          entryUser = {
-            password: hashesPassword,
-            meta: {
-              editDate: Date.now(),
-              [filedToUpdate]: lastValue,
-            },
-          };
-        }
-        console.log(user.meta);
+        // TODO: Check, not work as expected, meta should be updated on value passed by update
+        const updatedPartialUser = await this.updateUserHandle(entry, user);
+        console.log(updatedPartialUser);
         return this.userModel
           .findOneAndUpdate(
             { _id: entry._id },
             {
               $set: {
-                ...entryUser,
+                ...updatedPartialUser,
               },
             },
           )
