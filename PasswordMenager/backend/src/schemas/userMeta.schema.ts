@@ -6,9 +6,11 @@ const UserMetaSchema = new Schema<IUserMeta>({
   ...PureMetaObject,
   lastLogin: {
     type: String,
+    default: null,
   },
   lastPassword: {
     type: String,
+    default: null,
   },
 });
 

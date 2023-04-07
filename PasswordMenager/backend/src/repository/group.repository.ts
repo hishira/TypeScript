@@ -31,8 +31,17 @@ export class GroupRepository implements Repository<IGroup> {
 
   update(entry: Partial<IGroup>): Promise<unknown> {
     return this.groupModel
-      .updateOne({ _id: entry._id }, { $set: { ...entry } })
-      .then((data) => data);
+      .findById(entry._id)
+      .exec()
+      .then((group) => {
+        const entryToUpdate = {
+          ...entry,
+          ['meta.lastName']: group.name,
+        };
+        return this.groupModel
+          .updateOne({ _id: entry._id }, { $set: { ...entryToUpdate } })
+          .then((data) => data);
+      });
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {

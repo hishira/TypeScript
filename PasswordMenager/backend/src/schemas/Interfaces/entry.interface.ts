@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { IEntryMeta } from './entryMeta.interface';
 
 export interface IEntry extends Document {
   readonly _id: string;
@@ -8,4 +9,5 @@ export interface IEntry extends Document {
   readonly note: string;
   readonly groupid: string;
   readonly userid: string;
+  readonly meta: IEntryMeta;
 }

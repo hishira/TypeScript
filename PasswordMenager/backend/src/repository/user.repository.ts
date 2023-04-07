@@ -5,6 +5,7 @@ import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UserRepository implements Repository<IUser> {
@@ -27,10 +28,50 @@ export class UserRepository implements Repository<IUser> {
     return this.userModel.findOne({ _id: id }).exec();
   }
 
+  private async updateUserHandle(
+    entryToEdit: Partial<IUser>,
+    userInfo: IUser,
+  ): Promise<Partial<IUser>> {
+    let entryUser: Partial<IUser> = {};
+    const filedToUpdate: 'meta.lastPassword' | 'meta.lastLogin' =
+      entryToEdit.password ? 'meta.lastPassword' : 'meta.lastLogin';
+    const lastValue = entryToEdit.password ? userInfo.password : userInfo.login;
+    if (entryToEdit.password) {
+      const hashesPassword = await bcryptjs.hash(entryToEdit.password, 10);
+      entryUser = {
+        password: hashesPassword,
+        [`meta.editDate`]: Date.now(),
+        [filedToUpdate]: lastValue,
+      } as unknown as Partial<IUser>;
+    } else {
+      entryUser = {
+        login: entryToEdit.login,
+        [`meta.editDate`]: Date.now(),
+        [filedToUpdate]: lastValue,
+      } as unknown as Partial<IUser>;
+    }
+    return entryUser;
+  }
+
   update(entry: Partial<IUser>): Promise<unknown> {
     return this.userModel
-      .updateOne({ _id: entry._id }, { $set: { ...entry } })
-      .then((data) => data);
+      .findById(entry._id)
+      .exec()
+      .then(async (user) => {
+        // TODO: Check, not work as expected, meta should be updated on value passed by update
+        const updatedPartialUser = await this.updateUserHandle(entry, user);
+        console.log(updatedPartialUser);
+        return this.userModel
+          .findOneAndUpdate(
+            { _id: entry._id },
+            {
+              $set: {
+                ...updatedPartialUser,
+              },
+            },
+          )
+          .then((data) => data);
+      });
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {

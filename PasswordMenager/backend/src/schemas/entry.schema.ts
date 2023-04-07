@@ -1,6 +1,7 @@
 import * as mognoose from 'mongoose';
 import { IEntry } from './Interfaces/entry.interface';
 import { EntrySchemaUtils } from './utils/Entry.schema.utils';
+import EntryMetaSchema from './entryMeta.schema';
 
 const EntrySchema = new mognoose.Schema({
   title: {
@@ -22,6 +23,11 @@ const EntrySchema = new mognoose.Schema({
   groupid: {
     type: mognoose.Schema.Types.ObjectId,
     default: '',
+  },
+  meta: {
+    type: EntryMetaSchema,
+    require: true,
+    default: () => ({}),
   },
 });
 EntrySchema.pre<IEntry>('save', EntrySchemaUtils.BeforeSave);

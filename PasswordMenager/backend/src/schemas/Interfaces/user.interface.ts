@@ -4,5 +4,6 @@ export interface IUser extends Document {
   readonly login: string;
   readonly password: string;
   readonly meta: IUserMeta;
+  readonly _password?: string;
   validatePassword(password: string): Promise<boolean>;
 }
