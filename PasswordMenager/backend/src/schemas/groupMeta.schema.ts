@@ -6,6 +6,7 @@ const GroupMetaSchema = new Schema<IGroupMeta>({
   ...PureMetaObject,
   lastName: {
     type: String,
+    default: null,
   },
 });
 
