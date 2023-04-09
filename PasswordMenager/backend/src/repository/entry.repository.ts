@@ -23,8 +23,45 @@ export class EntryRepository implements Repository<IEntry> {
 
   update(entry: Partial<IEntry>): Promise<unknown> {
     return this.entryModel
-      .updateOne({ _id: entry._id }, { $set: { ...entry } })
-      .then((data) => data);
+      .findById(entry._id)
+      .exec()
+      .then((entryById) => {
+        // TODO: refactor
+        let data: any = { ...entry };
+        if (entry.note && entryById.note !== entry.note) {
+          data = {
+            ...data,
+            ['meta.lastNote']: entryById.note,
+          };
+        }
+        if (entry.password && entryById.password !== entry.password) {
+          data = {
+            ...data,
+            ['meta.lastPassword']: entryById.password,
+          };
+        }
+        if (entry.title && entryById.title !== entry.title) {
+          data = {
+            ...data,
+            ['meta.lastTitle']: entryById.title,
+          };
+        }
+        if (entry.username && entryById.username !== entry.username) {
+          data = {
+            ...data,
+            ['meta.lastUsername']: entryById.username,
+          };
+        }
+        if (entry.note && entryById.note !== entry.note) {
+          data = {
+            ...data,
+            ['meta.lastNote']: entryById.note,
+          };
+        }
+        return this.entryModel
+          .updateOne({ _id: entry._id }, { $set: { ...data } })
+          .then((data) => data);
+      });
   }
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
