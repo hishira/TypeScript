@@ -1,5 +1,8 @@
 import { Schema } from 'mongoose';
-import { IEntryMeta } from './Interfaces/entryMeta.interface';
+import {
+  IEntryMeta,
+  LastEditedVariable,
+} from './Interfaces/entryMeta.interface';
 import { PureMetaObject } from './meta.schema';
 
 const EntryMetaSchema = new Schema<IEntryMeta>({
@@ -18,6 +21,11 @@ const EntryMetaSchema = new Schema<IEntryMeta>({
   },
   lastUsername: {
     type: String,
+    default: null,
+  },
+  lastEditedVariable: {
+    type: String,
+    enum: Object.values(LastEditedVariable),
     default: null,
   },
 });

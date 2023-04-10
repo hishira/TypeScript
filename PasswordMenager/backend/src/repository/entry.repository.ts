@@ -27,37 +27,7 @@ export class EntryRepository implements Repository<IEntry> {
       .exec()
       .then((entryById) => {
         // TODO: refactor
-        let data: any = { ...entry };
-        if (entry.note && entryById.note !== entry.note) {
-          data = {
-            ...data,
-            ['meta.lastNote']: entryById.note,
-          };
-        }
-        if (entry.password && entryById.password !== entry.password) {
-          data = {
-            ...data,
-            ['meta.lastPassword']: entryById.password,
-          };
-        }
-        if (entry.title && entryById.title !== entry.title) {
-          data = {
-            ...data,
-            ['meta.lastTitle']: entryById.title,
-          };
-        }
-        if (entry.username && entryById.username !== entry.username) {
-          data = {
-            ...data,
-            ['meta.lastUsername']: entryById.username,
-          };
-        }
-        if (entry.note && entryById.note !== entry.note) {
-          data = {
-            ...data,
-            ['meta.lastNote']: entryById.note,
-          };
-        }
+        const data = this.createEditentity(entry, entryById);
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
           .then((data) => data);
@@ -85,5 +55,40 @@ export class EntryRepository implements Repository<IEntry> {
 
   getById(): Promise<IEntry> {
     throw new Error('Method not implemented.');
+  }
+
+  private createEditentity(entry: Partial<IEntry>, entryById: IEntry) {
+    let data: any = { ...entry };
+    if (entry.note && entryById.note !== entry.note) {
+      data = {
+        ...data,
+        ['meta.lastNote']: entryById.note,
+      };
+    }
+    if (entry.password && entryById.password !== entry.password) {
+      data = {
+        ...data,
+        ['meta.lastPassword']: entryById.password,
+      };
+    }
+    if (entry.title && entryById.title !== entry.title) {
+      data = {
+        ...data,
+        ['meta.lastTitle']: entryById.title,
+      };
+    }
+    if (entry.username && entryById.username !== entry.username) {
+      data = {
+        ...data,
+        ['meta.lastUsername']: entryById.username,
+      };
+    }
+    if (entry.note && entryById.note !== entry.note) {
+      data = {
+        ...data,
+        ['meta.lastNote']: entryById.note,
+      };
+    }
+    return data;
   }
 }

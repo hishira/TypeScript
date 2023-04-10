@@ -16,7 +16,6 @@ export const TableContainer = styled.table`
 `;
 export const TableHead = styled.thead``;
 export const TableBody = styled.tbody``;
-// TODO: Problem with to long value
 export const TableRow = styled.tr`
   z-index: 1;
   max-width: 100%;
