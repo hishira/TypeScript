@@ -1,9 +1,9 @@
 import { IMeta } from './meta.interface';
 export enum LastEditedVariable {
-  LASTNOTE = 'lastNote',
-  LASTPASSWORD = 'lastPassword',
-  LASTTITLE = 'lastTitle',
-  LASTUSERNAME = 'lastUsername',
+  LASTNOTE = 'note',
+  LASTPASSWORD = 'password',
+  LASTTITLE = 'title',
+  LASTUSERNAME = 'username',
 }
 
 export interface IEntryMeta extends IMeta {

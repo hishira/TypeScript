@@ -3,6 +3,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { LastEditedVariable } from 'src/schemas/Interfaces/entryMeta.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 
@@ -63,30 +64,28 @@ export class EntryRepository implements Repository<IEntry> {
       data = {
         ...data,
         ['meta.lastNote']: entryById.note,
+        ['meta.lastEditedVariable']: LastEditedVariable.LASTNOTE,
       };
     }
     if (entry.password && entryById.password !== entry.password) {
       data = {
         ...data,
         ['meta.lastPassword']: entryById.password,
+        ['meta.lastEditedVariable']: LastEditedVariable.LASTPASSWORD,
       };
     }
     if (entry.title && entryById.title !== entry.title) {
       data = {
         ...data,
         ['meta.lastTitle']: entryById.title,
+        ['meta.lastEditedVariable']: LastEditedVariable.LASTTITLE,
       };
     }
     if (entry.username && entryById.username !== entry.username) {
       data = {
         ...data,
         ['meta.lastUsername']: entryById.username,
-      };
-    }
-    if (entry.note && entryById.note !== entry.note) {
-      data = {
-        ...data,
-        ['meta.lastNote']: entryById.note,
+        ['meta.lastEditedVariable']: LastEditedVariable.LASTUSERNAME,
       };
     }
     return data;
