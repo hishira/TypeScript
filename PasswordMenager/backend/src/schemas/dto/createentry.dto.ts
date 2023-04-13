@@ -1,4 +1,4 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsDateString, IsOptional, IsString, MinLength } from 'class-validator';
 import { DTO } from './object.interface';
 
 export class CreateEntryDto implements DTO {
@@ -17,6 +17,10 @@ export class CreateEntryDto implements DTO {
 
   @IsString()
   readonly groupid;
+
+  @IsOptional()
+  @IsDateString()
+  readonly passwordExpiredDate?;
 
   toObject(): Record<string, unknown> {
     return {

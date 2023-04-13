@@ -24,6 +24,10 @@ const EntrySchema = new mognoose.Schema({
     type: mognoose.Schema.Types.ObjectId,
     default: '',
   },
+  passwordExpiredDate: {
+    type: Date,
+    default: null,
+  },
   meta: {
     type: EntryMetaSchema,
     require: true,
