@@ -6,7 +6,15 @@ import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
 import * as bcryptjs from 'bcryptjs';
-
+enum UserField {
+  LOGIN = 'login',
+  PASSWORD = 'password',
+}
+enum MetaAttributeUser {
+  LASTPASSWORD = 'meta.lastPassword',
+  LASTLOGIN = 'meta.lastLogin',
+  EDITDATE = 'meta.editDate',
+}
 @Injectable()
 export class UserRepository implements Repository<IUser> {
   constructor(
@@ -33,24 +41,31 @@ export class UserRepository implements Repository<IUser> {
     userInfo: IUser,
   ): Promise<Partial<IUser>> {
     let entryUser: Partial<IUser> = {};
-    const filedToUpdate: 'meta.lastPassword' | 'meta.lastLogin' =
-      entryToEdit.password ? 'meta.lastPassword' : 'meta.lastLogin';
-    const lastValue = entryToEdit.password ? userInfo.password : userInfo.login;
-    if (entryToEdit.password) {
+    const metaObject = this.createUserMetaObject(entryToEdit, userInfo);
+    if (UserField.PASSWORD in entryToEdit) {
       const hashesPassword = await bcryptjs.hash(entryToEdit.password, 10);
       entryUser = {
         password: hashesPassword,
-        [`meta.editDate`]: Date.now(),
-        [filedToUpdate]: lastValue,
+        ...metaObject,
       } as unknown as Partial<IUser>;
     } else {
       entryUser = {
         login: entryToEdit.login,
-        [`meta.editDate`]: Date.now(),
-        [filedToUpdate]: lastValue,
+        ...metaObject,
       } as unknown as Partial<IUser>;
     }
     return entryUser;
+  }
+
+  private createUserMetaObject(entryToEdit: Partial<IUser>, userInfo: IUser) {
+    const filedToUpdate: MetaAttributeUser = entryToEdit.password
+      ? MetaAttributeUser.LASTPASSWORD
+      : MetaAttributeUser.LASTLOGIN;
+    const lastValue = entryToEdit.password ? userInfo.password : userInfo.login;
+    return {
+      [MetaAttributeUser.EDITDATE]: Date.now(),
+      [filedToUpdate]: lastValue,
+    };
   }
 
   update(entry: Partial<IUser>): Promise<unknown> {
