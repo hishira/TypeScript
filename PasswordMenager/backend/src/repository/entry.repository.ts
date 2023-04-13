@@ -50,8 +50,8 @@ export class EntryRepository implements Repository<IEntry> {
     return createdEntry.save();
   }
 
-  deleteById(): Promise<void> {
-    return new Promise((resolve, reject) => resolve());
+  deleteById(id: string): Promise<unknown> {
+    return this.entryModel.findByIdAndDelete(id).exec();
   }
 
   getById(): Promise<IEntry> {

@@ -60,7 +60,6 @@ export class UserRepository implements Repository<IUser> {
       .then(async (user) => {
         // TODO: Check, not work as expected, meta should be updated on value passed by update
         const updatedPartialUser = await this.updateUserHandle(entry, user);
-        console.log(updatedPartialUser);
         return this.userModel
           .findOneAndUpdate(
             { _id: entry._id },
