@@ -27,7 +27,6 @@ export class EntryRepository implements Repository<IEntry> {
       .findById(entry._id)
       .exec()
       .then((entryById) => {
-        // TODO: refactor
         const data = this.createEditentity(entry, entryById);
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
