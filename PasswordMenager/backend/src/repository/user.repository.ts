@@ -6,6 +6,7 @@ import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
 import * as bcryptjs from 'bcryptjs';
+import { PasswordUtils } from 'src/utils/password.utils';
 enum UserField {
   LOGIN = 'login',
   PASSWORD = 'password',
@@ -40,10 +41,19 @@ export class UserRepository implements Repository<IUser> {
     entryToEdit: Partial<IUser>,
     userInfo: IUser,
   ): Promise<Partial<IUser>> {
-    let entryUser: Partial<IUser> = {};
     const metaObject = this.createUserMetaObject(entryToEdit, userInfo);
+    return this.createUserObject(entryToEdit, metaObject);
+  }
+
+  private async createUserObject(
+    entryToEdit: Partial<IUser>,
+    metaObject,
+  ): Promise<Partial<IUser>> {
+    let entryUser: Partial<IUser> = {};
     if (UserField.PASSWORD in entryToEdit) {
-      const hashesPassword = await bcryptjs.hash(entryToEdit.password, 10);
+      const hashesPassword = await PasswordUtils.EncryptPassword(
+        entryToEdit.password,
+      );
       entryUser = {
         password: hashesPassword,
         ...metaObject,
