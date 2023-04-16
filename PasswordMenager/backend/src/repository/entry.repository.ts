@@ -3,7 +3,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { LastEditedVariable } from 'src/schemas/Interfaces/entryMeta.interface';
+import { LastEditedVariable } from '../schemas/Interfaces/entryMeta.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 
