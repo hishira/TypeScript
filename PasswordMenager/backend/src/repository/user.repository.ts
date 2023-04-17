@@ -5,7 +5,6 @@ import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
-import * as bcryptjs from 'bcryptjs';
 import { PasswordUtils } from 'src/utils/password.utils';
 enum UserField {
   LOGIN = 'login',
