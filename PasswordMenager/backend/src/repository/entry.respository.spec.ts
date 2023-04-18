@@ -4,6 +4,8 @@ import { Model } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { EntryRepository } from './entry.repository';
 import { EntryMockModel, entryMock } from '../../test/mock/EntryMock';
+import { TestUtils } from '../../test/utils/TestUtils';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
 
 describe('EntryRepository', () => {
   let entryModel: Model<IEntry>;
@@ -47,19 +49,46 @@ describe('EntryRepository', () => {
     const user = await entryRepo.create({
       toObject: () => ({ ...entryMock() }),
     });
-    expect(user).toHaveProperty('meta');
-    expect(user.meta).toHaveProperty('lastNote');
-    expect(user.meta).toHaveProperty('lastPassword');
-    expect(user.meta).toHaveProperty('lastTitle');
-    expect(user.meta).toHaveProperty('lastUsername');
-    expect(user.meta).toHaveProperty('lastEditedVariable');
+    TestUtils.expectHasProperties(user, 'meta');
+    TestUtils.expectHasProperties(
+      user.meta,
+      'lastNote',
+      'lastPassword',
+      'lastTitle',
+      'lastUsername',
+      'lastEditedVariable',
+    );
   });
 
-  it('entry repo should use entry module', async () => {
+  it('findById should use findOne from model', async () => {
     const spy = jest.spyOn(entryModel, 'findOne').mockReturnValueOnce({
       exec: jest.fn().mockResolvedValueOnce({ name: 'other' }),
     } as any);
     await entryRepo.findById('asd123');
+    expect(spy).toBeCalled();
+  });
+
+  it('find should use find from model', async () => {
+    const spy = jest.spyOn(entryModel, 'find').mockReturnValueOnce({
+      exec: jest.fn().mockResolvedValueOnce({ name: 'other' }),
+    } as any);
+    await entryRepo.find({
+      getOption() {
+        return { _id: 'asd123' };
+      },
+    });
+    expect(spy).toBeCalled();
+  });
+
+  it('delete functions should use delete', async () => {
+    const spy = jest.spyOn(entryModel, 'deleteMany').mockReturnValueOnce({
+      exec: jest.fn().mockResolvedValueOnce(Promise.resolve(true)),
+    } as any);
+    await entryRepo.delete({
+      getOption() {
+        return { _id: 'asd' };
+      },
+    });
     expect(spy).toBeCalled();
   });
 });
