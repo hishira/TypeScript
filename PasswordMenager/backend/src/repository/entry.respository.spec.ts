@@ -105,4 +105,8 @@ describe('EntryRepository', () => {
     await entryRepo.update({ username: 'ads', _id: 'asd' });
     expect(spy).toBeCalledTimes(1);
   });
+
+  it('getById should not be implemented', async () => {
+    expect(entryRepo.getById).toThrow('Method not implemented.');
+  });
 });
