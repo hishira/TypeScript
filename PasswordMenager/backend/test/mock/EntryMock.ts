@@ -32,6 +32,19 @@ export class EntryMockModel {
   static findOneAndUpdate = jest.fn().mockResolvedValue({});
   static deleteOne = jest.fn().mockResolvedValue(true);
   static deleteMany = jest.fn().mockRejectedValue(Promise.resolve(true));
+  static findByIdAndDelete(id: string) {
+    return {
+      exec: () => Promise.resolve(true),
+    };
+  }
+  static findById(id: string) {
+    return {
+      exec: () => Promise.resolve(entryMock()),
+    };
+  }
+  static updateOne(filterOption, objectOption) {
+    return Promise.resolve(entryMock());
+  }
 
   static getValues = () => ({
     new: (val) => val, //jest.fn().mockResolvedValue(entryMock()),

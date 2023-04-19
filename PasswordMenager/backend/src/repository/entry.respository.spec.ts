@@ -27,6 +27,7 @@ describe('EntryRepository', () => {
     entryRepo = module.get<EntryRepository>(EntryRepository);
   });
 
+  beforeEach(() => jest.clearAllMocks());
   it('Entry model should be defined', () => {
     expect(entryModel).toBeDefined();
   });
@@ -90,5 +91,18 @@ describe('EntryRepository', () => {
       },
     });
     expect(spy).toBeCalled();
+  });
+
+  it('delete by id should use model function findByIdAndDelete', async () => {
+    const spy = jest.spyOn(entryModel, 'findByIdAndDelete');
+
+    await entryRepo.deleteById('cd');
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  it('On update repo should use createEditentity function', async () => {
+    const spy = jest.spyOn(entryRepo as any, 'createEditentity');
+    await entryRepo.update({ username: 'ads', _id: 'asd' });
+    expect(spy).toBeCalledTimes(1);
   });
 });
