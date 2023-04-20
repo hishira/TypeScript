@@ -1,11 +1,9 @@
-import { Inject } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { EntryRepository } from './entry.repository';
 import { EntryMockModel, entryMock } from '../../test/mock/EntryMock';
 import { TestUtils } from '../../test/utils/TestUtils';
-import { IUser } from 'src/schemas/Interfaces/user.interface';
+import { EntryRepository } from './entry.repository';
 
 describe('EntryRepository', () => {
   let entryModel: Model<IEntry>;
@@ -40,10 +38,14 @@ describe('EntryRepository', () => {
     const user = await entryRepo.create({
       toObject: () => ({ ...entryMock() }),
     });
-    expect(user).toHaveProperty('title');
-    expect(user).toHaveProperty('username');
-    expect(user).toHaveProperty('password');
-    expect(user).toHaveProperty('note');
+
+    TestUtils.expectHasProperties(
+      user,
+      'title',
+      'username',
+      'password',
+      'note',
+    );
   });
 
   it('Created entry should have meta, with specific properties', async () => {
