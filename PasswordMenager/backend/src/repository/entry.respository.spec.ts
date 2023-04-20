@@ -106,6 +106,18 @@ describe('EntryRepository', () => {
     expect(spy).toBeCalledTimes(1);
   });
 
+  it('On update model should use findById', async () => {
+    const spy = jest.spyOn(entryModel, 'findById');
+    await entryRepo.update({ username: 'ads', _id: 'asd' });
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  it('On update model should use updateOne', async () => {
+    const spy = jest.spyOn(entryModel, 'updateOne');
+    await entryRepo.update({ username: 'ads', _id: 'asd' });
+    expect(spy).toBeCalledTimes(1);
+  });
+
   it('getById should not be implemented', async () => {
     expect(entryRepo.getById).toThrow('Method not implemented.');
   });
