@@ -16,13 +16,22 @@ export const groupMock = (group?: IGroup) =>
 
 export class GroupModelMock {
   constructor(private data) {}
+
   save() {
     return this.data;
   }
 
   static exec = jest.fn();
-  static find = jest.fn().mockResolvedValue({});
-  static findOne = jest.fn().mockResolvedValue({});
+  static find(option) {
+    return {
+      exec: () => Promise.resolve(groupMock()),
+    };
+  }
+  static findOne(option) {
+    return {
+      exec: () => Promise.resolve(groupMock()),
+    };
+  }
   static findOneAndUpdate = jest.fn().mockResolvedValue({});
   static deleteOne = jest.fn().mockResolvedValue(true);
   static deleteMany = jest.fn().mockRejectedValue(Promise.resolve(true));

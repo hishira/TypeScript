@@ -40,4 +40,38 @@ describe('GroupRepository', () => {
     });
     TestUtils.expectHasProperties(group, 'name', 'userid');
   });
+
+  it('Find method should use group model find', async () => {
+    const spy = jest.spyOn(groupModel, 'find');
+    await groupRepo.find({
+      getOption() {
+        return { _id: '' };
+      },
+    });
+
+    expect(spy).toBeCalled();
+  });
+
+  it('Find by id method should use group model findOne', async () => {
+    const spy = jest.spyOn(groupModel, 'findOne');
+    await groupRepo.findById('123');
+
+    expect(spy).toBeCalled();
+  });
+
+  it('Find method should return group', async () => {
+    const group = await groupRepo.find({
+      getOption() {
+        return { _id: '' };
+      },
+    });
+
+    TestUtils.expectHasProperties(group, 'name', 'userid');
+  });
+
+  it('FindById method should return group', async () => {
+    const group = await groupRepo.findById('asd');
+
+    TestUtils.expectHasProperties(group, 'name', 'userid');
+  });
 });
