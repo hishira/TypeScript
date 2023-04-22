@@ -4,6 +4,7 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EntryRepository } from 'src/repository/entry.repository';
 import { EntryMockModel } from '../../test/mock/EntryMock';
 import { Types } from 'mongoose';
+import { TestUtils } from '../../test/utils/TestUtils';
 
 describe('EntryService', () => {
   let entryService: EntryService;
@@ -45,6 +46,12 @@ describe('EntryService', () => {
       },
       id.toString(),
     );
-    expect(entry).toHaveProperty('note');
+    TestUtils.expectHasProperties(entry, 'note', 'password', 'username');
+  });
+
+  it('getById should return object', async () => {
+    const entry = await entryService.getById(new Types.ObjectId(32).toString());
+
+    TestUtils.expectHasProperties(entry, 'note', 'password', 'username');
   });
 });
