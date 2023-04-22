@@ -24,7 +24,7 @@ export const entryMock = (entry?: IEntry) =>
 export class EntryMockModel {
   constructor(private data) {}
   save() {
-    return this.data;
+    return Promise.resolve(this.data);
   } //= jest.fn().mockResolvedValue(Promise.resolve(this.data));
   static exec = jest.fn();
   static find = jest.fn().mockResolvedValue({});
