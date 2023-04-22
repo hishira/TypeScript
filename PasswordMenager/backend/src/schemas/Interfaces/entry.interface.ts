@@ -9,5 +9,6 @@ export interface IEntry extends Document {
   readonly note: string;
   readonly groupid: string;
   readonly userid: string;
+  readonly passwordExpiredDate?: Date;
   readonly meta: IEntryMeta;
 }

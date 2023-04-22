@@ -5,8 +5,16 @@ import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
-import * as bcryptjs from 'bcryptjs';
-
+import { PasswordUtils } from 'src/utils/password.utils';
+enum UserField {
+  LOGIN = 'login',
+  PASSWORD = 'password',
+}
+enum MetaAttributeUser {
+  LASTPASSWORD = 'meta.lastPassword',
+  LASTLOGIN = 'meta.lastLogin',
+  EDITDATE = 'meta.editDate',
+}
 @Injectable()
 export class UserRepository implements Repository<IUser> {
   constructor(
@@ -32,25 +40,41 @@ export class UserRepository implements Repository<IUser> {
     entryToEdit: Partial<IUser>,
     userInfo: IUser,
   ): Promise<Partial<IUser>> {
+    const metaObject = this.createUserMetaObject(entryToEdit, userInfo);
+    return this.createUserObject(entryToEdit, metaObject);
+  }
+
+  private async createUserObject(
+    entryToEdit: Partial<IUser>,
+    metaObject,
+  ): Promise<Partial<IUser>> {
     let entryUser: Partial<IUser> = {};
-    const filedToUpdate: 'meta.lastPassword' | 'meta.lastLogin' =
-      entryToEdit.password ? 'meta.lastPassword' : 'meta.lastLogin';
-    const lastValue = entryToEdit.password ? userInfo.password : userInfo.login;
-    if (entryToEdit.password) {
-      const hashesPassword = await bcryptjs.hash(entryToEdit.password, 10);
+    if (UserField.PASSWORD in entryToEdit) {
+      const hashesPassword = await PasswordUtils.EncryptPassword(
+        entryToEdit.password,
+      );
       entryUser = {
         password: hashesPassword,
-        [`meta.editDate`]: Date.now(),
-        [filedToUpdate]: lastValue,
+        ...metaObject,
       } as unknown as Partial<IUser>;
     } else {
       entryUser = {
         login: entryToEdit.login,
-        [`meta.editDate`]: Date.now(),
-        [filedToUpdate]: lastValue,
+        ...metaObject,
       } as unknown as Partial<IUser>;
     }
     return entryUser;
+  }
+
+  private createUserMetaObject(entryToEdit: Partial<IUser>, userInfo: IUser) {
+    const filedToUpdate: MetaAttributeUser = entryToEdit.password
+      ? MetaAttributeUser.LASTPASSWORD
+      : MetaAttributeUser.LASTLOGIN;
+    const lastValue = entryToEdit.password ? userInfo.password : userInfo.login;
+    return {
+      [MetaAttributeUser.EDITDATE]: Date.now(),
+      [filedToUpdate]: lastValue,
+    };
   }
 
   update(entry: Partial<IUser>): Promise<unknown> {
@@ -58,9 +82,7 @@ export class UserRepository implements Repository<IUser> {
       .findById(entry._id)
       .exec()
       .then(async (user) => {
-        // TODO: Check, not work as expected, meta should be updated on value passed by update
         const updatedPartialUser = await this.updateUserHandle(entry, user);
-        console.log(updatedPartialUser);
         return this.userModel
           .findOneAndUpdate(
             { _id: entry._id },
