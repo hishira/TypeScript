@@ -74,4 +74,34 @@ describe('GroupRepository', () => {
 
     TestUtils.expectHasProperties(group, 'name', 'userid');
   });
+
+  it('Uptdate method should use findById method', async () => {
+    const spy = jest.spyOn(groupModel, 'findById');
+    await groupRepo.update({ _id: '123', name: 'asdasd' });
+
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  it('Uptdate method should use findById method', async () => {
+    const spy = jest.spyOn(groupModel, 'updateOne');
+    await groupRepo.update({ _id: '123', name: 'asdasd' });
+
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  it('Delete method should use model deleteOne function', async () => {
+    const spy = jest.spyOn(groupModel, 'deleteOne');
+
+    await groupRepo.delete({
+      getOption() {
+        return { _id: 'asd' };
+      },
+    });
+
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  it('getById method should not me implemented', () => {
+    expect(groupRepo.getById).toThrow('Method not implemented.');
+  });
 });

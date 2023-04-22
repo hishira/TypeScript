@@ -33,7 +33,11 @@ export class GroupModelMock {
     };
   }
   static findOneAndUpdate = jest.fn().mockResolvedValue({});
-  static deleteOne = jest.fn().mockResolvedValue(true);
+  static deleteOne(options) {
+    return {
+      exec: () => Promise.resolve(true),
+    };
+  }
   static deleteMany = jest.fn().mockRejectedValue(Promise.resolve(true));
   static findByIdAndDelete(id: string) {
     return {

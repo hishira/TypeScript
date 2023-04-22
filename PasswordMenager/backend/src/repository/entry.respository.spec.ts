@@ -120,7 +120,7 @@ describe('EntryRepository', () => {
     expect(spy).toBeCalledTimes(1);
   });
 
-  it('getById should not be implemented', async () => {
+  it('getById should not be implemented', () => {
     expect(entryRepo.getById).toThrow('Method not implemented.');
   });
 });
