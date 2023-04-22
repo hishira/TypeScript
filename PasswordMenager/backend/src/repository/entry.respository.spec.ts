@@ -13,7 +13,6 @@ describe('EntryRepository', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         EntryRepository,
-
         {
           provide: 'ENTRY_MODEL',
           useValue: EntryMockModel,
