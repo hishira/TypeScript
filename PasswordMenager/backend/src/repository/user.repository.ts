@@ -29,11 +29,38 @@ export class UserRepository implements Repository<IUser> {
   }
 
   find(option: FilterOption<unknown>): Promise<IUser[]> {
-    return this.userModel.find(option.getOption()).populate('meta').exec();
+    return this.userModel.find(option.getOption()).exec();
   }
 
   findById(id: string): Promise<IUser> {
     return this.userModel.findOne({ _id: id }).exec();
+  }
+
+  update(entry: Partial<IUser>): Promise<unknown> {
+    return this.userModel
+      .findById(entry._id)
+      .exec()
+      .then(async (user) => {
+        const updatedPartialUser = await this.updateUserHandle(entry, user);
+        return this.userModel
+          .findOneAndUpdate(
+            { _id: entry._id },
+            {
+              $set: {
+                ...updatedPartialUser,
+              },
+            },
+          )
+          .then((data) => data);
+      });
+  }
+
+  delete(option: DeleteOption<unknown>): Promise<unknown> {
+    return this.userModel.deleteOne(option.getOption()).exec();
+  }
+
+  getById(): Promise<IUser> {
+    throw new Error('Method not implemented.');
   }
 
   private async updateUserHandle(
@@ -75,32 +102,5 @@ export class UserRepository implements Repository<IUser> {
       [MetaAttributeUser.EDITDATE]: Date.now(),
       [filedToUpdate]: lastValue,
     };
-  }
-
-  update(entry: Partial<IUser>): Promise<unknown> {
-    return this.userModel
-      .findById(entry._id)
-      .exec()
-      .then(async (user) => {
-        const updatedPartialUser = await this.updateUserHandle(entry, user);
-        return this.userModel
-          .findOneAndUpdate(
-            { _id: entry._id },
-            {
-              $set: {
-                ...updatedPartialUser,
-              },
-            },
-          )
-          .then((data) => data);
-      });
-  }
-
-  delete(option: DeleteOption<unknown>): Promise<unknown> {
-    return this.userModel.deleteOne(option.getOption()).exec();
-  }
-
-  getById(): Promise<IUser> {
-    throw new Error('Method not implemented.');
   }
 }

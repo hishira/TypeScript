@@ -24,34 +24,45 @@ export class UserModelMock {
   }
 
   static exec = jest.fn();
+
   static find(option) {
     return {
       exec: () => Promise.resolve(userMock()),
     };
   }
+
   static findOne(option) {
     return {
       exec: () => Promise.resolve(userMock()),
     };
   }
-  static findOneAndUpdate = jest.fn().mockResolvedValue({});
+
   static deleteOne(options) {
     return {
       exec: () => Promise.resolve(true),
     };
   }
+
   static deleteMany = jest.fn().mockRejectedValue(Promise.resolve(true));
+
   static findByIdAndDelete(id: string) {
     return {
       exec: () => Promise.resolve(true),
     };
   }
+
   static findById(id: string) {
     return {
       exec: () => Promise.resolve(userMock()),
     };
   }
+
   static updateOne(filterOption, objectOption) {
+    return Promise.resolve(userMock());
+  }
+
+  // TODO: Check and can be better implement this mock
+  static findOneAndUpdate(option, newentry: { $set }) {
     return Promise.resolve(userMock());
   }
 }
