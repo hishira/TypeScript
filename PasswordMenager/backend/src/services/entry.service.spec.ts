@@ -54,4 +54,48 @@ describe('EntryService', () => {
 
     TestUtils.expectHasProperties(entry, 'note', 'password', 'username');
   });
+
+  it('gebygroupid function shoould return entry', async () => {
+    const entry = await entryService.getbygroupid(
+      new Types.ObjectId(32).toString(),
+    );
+    TestUtils.expectHasProperties(entry, 'note', 'password', 'username');
+  });
+
+  it('deletebyid should return object', async () => {
+    const deleterEntryInfo = await entryService.deletebyid(
+      new Types.ObjectId(32).toString(),
+    );
+    TestUtils.expectHasProperties(deleterEntryInfo, 'status', 'respond');
+  });
+
+  it('deleteByGroup should return promise', async () => {
+    const promiseDeleted = entryService.deleteByGroup(
+      new Types.ObjectId(32).toString(),
+    );
+
+    expect(promiseDeleted).resolves.toBeDefined();
+  });
+
+  // TODO: Change find model function to return arrya of object
+
+  it('getByUser should return object of entry', async () => {
+    const entryByUser = await entryService.getByUser(
+      new Types.ObjectId(32).toString(),
+    );
+
+    expect(entryByUser).toBeDefined();
+  });
+
+  it('editentry should return object', async () => {
+    const editedObjectInfo = await entryService.editentry({
+      _id: new Types.ObjectId(32).toString(),
+      note: 'example',
+      password: 'example',
+      title: 'example',
+      username: 'example',
+    });
+
+    TestUtils.expectHasProperties(editedObjectInfo, 'status', 'respond');
+  });
 });

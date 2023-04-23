@@ -23,29 +23,45 @@ export const entryMock = (entry?: IEntry) =>
   };
 export class EntryMockModel {
   constructor(private data) {}
+
   save() {
     return Promise.resolve(this.data);
   } //= jest.fn().mockResolvedValue(Promise.resolve(this.data));
+
   static exec = jest.fn();
-  static find = jest.fn().mockResolvedValue({});
+
+  static find(potion) {
+    return {
+      exec: () => Promise.resolve(entryMock()),
+    };
+  }
+
   static findOne(option) {
     return {
       exec: () => Promise.resolve(entryMock()),
     };
   }
+
   static findOneAndUpdate = jest.fn().mockResolvedValue({});
+
   static deleteOne = jest.fn().mockResolvedValue(true);
-  static deleteMany = jest.fn().mockRejectedValue(Promise.resolve(true));
+
+  static deleteMany() {
+    return { exec: () => Promise.resolve(true) };
+  }
+
   static findByIdAndDelete(id: string) {
     return {
       exec: () => Promise.resolve(true),
     };
   }
+
   static findById(id: string) {
     return {
       exec: () => Promise.resolve(entryMock()),
     };
   }
+
   static updateOne(filterOption, objectOption) {
     return Promise.resolve(entryMock());
   }
