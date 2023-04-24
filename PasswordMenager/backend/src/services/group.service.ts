@@ -36,6 +36,7 @@ export class GroupService {
   async checkIfexists(groupId: string): Promise<any> {
     return this.groupRepository.findById(groupId).then((data) => {
       if (data === null || data === undefined) throw new GroupNotExists();
+      return data;
     });
   }
 
