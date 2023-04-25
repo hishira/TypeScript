@@ -3,6 +3,8 @@ import { UserService } from './user.service';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserRepository } from 'src/repository/user.repository';
 import { UserModelMock } from '../../test/mock/UserModelMock';
+import { TestUtils } from '../../test/utils/TestUtils';
+import { Types } from 'mongoose';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -26,5 +28,38 @@ describe('UserService', () => {
 
   it('User service should be defines', () => {
     expect(userService).toBeDefined();
+  });
+
+  it('Create method should retunr user object', async () => {
+    const user = await userService.create({
+      login: 'login_user_example',
+      password: 'password_example',
+    });
+
+    TestUtils.expectHasProperties(user, 'login', 'password');
+  });
+
+  it('getAll method should retunr user object', async () => {
+    // TODO: fix mock to return in some way array
+    const user = await userService.getAll();
+
+    TestUtils.expectHasProperties(user, 'login', 'password');
+  });
+
+  it('getOne method should retunr user object', async () => {
+    const user = await userService.getOne();
+
+    TestUtils.expectHasProperties(user, 'login', 'password');
+  });
+
+  it('update method should return user object', async () => {
+    const updatedUser = await userService.update(
+      new Types.ObjectId(32).toString(),
+      {
+        login: 'updated_login',
+        password: 'updated_password',
+      },
+    );
+    TestUtils.expectHasProperties(updatedUser, 'login', 'password');
   });
 });
