@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserRepository } from 'src/repository/user.repository';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserModelMock } from '../../test/mock/UserModelMock';
+import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
-import { Types } from 'mongoose';
+import { UserService } from './user.service';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -54,7 +54,7 @@ describe('UserService', () => {
 
   it('update method should return user object', async () => {
     const updatedUser = await userService.update(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
       {
         login: 'updated_login',
         password: 'updated_password',

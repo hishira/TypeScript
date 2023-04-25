@@ -20,7 +20,7 @@ export class UserModelMock {
   constructor(private data) {}
 
   save() {
-    return this.data;
+    return Promise.resolve(this.data);
   }
 
   static exec = jest.fn();

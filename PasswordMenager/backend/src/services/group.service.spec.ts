@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GroupService } from './group.service';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { GroupRepository } from 'src/repository/group.repository';
-import { GroupModelMock } from '../../test/mock/GroupModelMock';
-import { EntryService } from './entry.service';
-import { EntryMockModel } from '../../test/mock/EntryMock';
 import { EntryRepository } from 'src/repository/entry.repository';
-import { Types } from 'mongoose';
+import { GroupRepository } from 'src/repository/group.repository';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { EntryMockModel } from '../../test/mock/EntryMock';
+import { GroupModelMock } from '../../test/mock/GroupModelMock';
+import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
+import { EntryService } from './entry.service';
+import { GroupService } from './group.service';
 
 describe('GroupService', () => {
   let groupService: GroupService;
@@ -52,7 +52,7 @@ describe('GroupService', () => {
   //});
 
   it('Create method should create group', async () => {
-    const id = new Types.ObjectId(32).toString();
+    const id = TestDataUtils.getRandomObjectIdAsString();
     const group = await groupService.create(
       {
         name: 'Test group',
@@ -64,7 +64,7 @@ describe('GroupService', () => {
 
   it('checkifexists should return group', async () => {
     const group = await groupService.checkIfexists(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
 
     TestUtils.expectHasProperties(group, 'name');
@@ -72,7 +72,7 @@ describe('GroupService', () => {
 
   it('getbyuser should return group', async () => {
     const group = await groupService.getbyuser(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
 
     TestUtils.expectHasProperties(group, 'name');
@@ -80,7 +80,7 @@ describe('GroupService', () => {
 
   it('deleteGroup should return promise', () => {
     const deletePromise = groupService.deleteGroup(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
     expect(deletePromise).resolves.toBeDefined();
   });
@@ -90,7 +90,7 @@ describe('GroupService', () => {
     // TODO: Check if we can retrive groupRepository
     //const spy2 = jest.spyOn(groupRepository, 'delete');
     const deletePromise = groupService.deleteGroup(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
     expect(spy1).toBeCalledTimes(1);
     //expect(spy2).toBeCalledTimes(1);
