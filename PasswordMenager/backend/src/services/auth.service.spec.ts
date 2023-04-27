@@ -90,5 +90,49 @@ describe('AuthService', () => {
 
       TestUtils.expectHasProperties(returnerdPayload, 'refresh_token');
     });
+    it('access_token property to be string', () => {
+      const returnerdPayload = authService.login({
+        login: 'exampleLogin',
+        password: 'examplespassword',
+      });
+
+      expect(typeof returnerdPayload.access_token).toBe('string');
+    });
+    it('refresh_token property to be string', () => {
+      const returnerdPayload = authService.login({
+        login: 'exampleLogin',
+        password: 'examplespassword',
+      });
+
+      expect(typeof returnerdPayload.refresh_token).toBe('string');
+    });
+  });
+
+  describe('refreshaccesstoken function', () => {
+    it('refreshaccesstoken function should return object', () => {
+      const returnerdPayload = authService.refreshaccesstoken({
+        login: 'exampleLogin',
+        password: 'examplespassword',
+      });
+
+      expect(returnerdPayload).toBeDefined();
+    });
+    it('retuner object should have access_token property', () => {
+      const returnerdPayload = authService.refreshaccesstoken({
+        login: 'exampleLogin',
+        password: 'examplespassword',
+      });
+
+      TestUtils.expectHasProperties(returnerdPayload, 'access_token');
+    });
+
+    it('access_token should be string', () => {
+      const returnerdPayload = authService.refreshaccesstoken({
+        login: 'exampleLogin',
+        password: 'examplespassword',
+      });
+
+      expect(typeof returnerdPayload.access_token).toBe('string');
+    });
   });
 });
