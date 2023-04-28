@@ -5,6 +5,7 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { AuthService } from 'src/services/auth.service';
 import { UserService } from 'src/services/user.service';
 import { UserModelMock } from '../../test/mock/UserModelMock';
+import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { AuthController } from './auth.controller';
 
@@ -74,6 +75,54 @@ describe('AuthController', () => {
       });
 
       TestUtils.expectHasProperties(user, 'login', 'password');
+    });
+  });
+
+  describe('Login method', () => {
+    it('Should return object', async () => {
+      const respone = await authController.login(
+        { login: 'example', password: 'example' },
+        {
+          user: {
+            login: 'example',
+            _id: TestDataUtils.getRandomObjectIdAsString(),
+          },
+        },
+      );
+      expect(respone).toBeDefined();
+    });
+    it('Should return authentication object', async () => {
+      const respone = await authController.login(
+        { login: 'example', password: 'example' },
+        {
+          user: {
+            login: 'example',
+            _id: TestDataUtils.getRandomObjectIdAsString(),
+          },
+        },
+      );
+      TestUtils.expectHasProperties(respone, 'access_token', 'refresh_token');
+    });
+  });
+
+  describe('Refresh method', () => {
+    it('Should return object', async () => {
+      const respone = await authController.refresh({
+        user: {
+          login: 'example',
+          _id: TestDataUtils.getRandomObjectIdAsString(),
+        },
+      });
+      expect(respone).toBeDefined();
+    });
+    it('Should return authentication object', async () => {
+      const respone = await authController.refresh({
+        user: {
+          login: 'example',
+          _id: TestDataUtils.getRandomObjectIdAsString(),
+        },
+      });
+      TestUtils.expectHasProperties(respone, 'access_token');
     });
   });
 });
