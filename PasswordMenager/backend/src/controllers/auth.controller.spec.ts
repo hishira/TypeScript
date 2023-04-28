@@ -13,6 +13,8 @@ describe('AuthController', () => {
   let authController: AuthController;
   let userService: UserService;
   let userRepository: UserRepository;
+  let authService: AuthService;
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
@@ -33,6 +35,7 @@ describe('AuthController', () => {
     authController = module.get<AuthController>(AuthController);
     userService = module.get<UserService>(UserService);
     userRepository = module.get<UserRepository>(Repository);
+    authService = module.get<AuthService>(AuthService);
   });
 
   beforeEach(() => jest.clearAllMocks());
@@ -47,6 +50,10 @@ describe('AuthController', () => {
 
     it('User repository should be defined', () => {
       expect(userRepository).toBeDefined();
+    });
+
+    it('Auth service should be defined', () => {
+      expect(authService).toBeDefined();
     });
   });
 
@@ -79,6 +86,22 @@ describe('AuthController', () => {
   });
 
   describe('Login method', () => {
+    it('Should use authService create login', async () => {
+      const spy = jest.spyOn(authService, 'login');
+
+      await authController.login(
+        { login: 'example', password: 'example' },
+        {
+          user: {
+            login: 'example',
+            _id: TestDataUtils.getRandomObjectIdAsString(),
+          },
+        },
+      );
+
+      expect(spy).toBeCalledTimes(1);
+    });
+
     it('Should return object', async () => {
       const respone = await authController.login(
         { login: 'example', password: 'example' },
@@ -106,6 +129,19 @@ describe('AuthController', () => {
   });
 
   describe('Refresh method', () => {
+    it('Should use authService function refreshaccesstoken', async () => {
+      const spy = jest.spyOn(authService, 'refreshaccesstoken');
+
+      await authController.refresh({
+        user: {
+          login: 'example',
+          _id: TestDataUtils.getRandomObjectIdAsString(),
+        },
+      });
+
+      expect(spy).toBeCalledTimes(1);
+    });
+
     it('Should return object', async () => {
       const respone = await authController.refresh({
         user: {
