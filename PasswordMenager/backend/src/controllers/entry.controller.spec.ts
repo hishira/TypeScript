@@ -1,11 +1,13 @@
+import { CanActivate } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { GroupGuard } from 'src/guards/GroupExists.guard';
 import { EntryRepository } from 'src/repository/entry.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EntryService } from 'src/services/entry.service';
-import { EntryMockModel } from '../../test/mock/EntryMock';
+import { CreateEntryDtoMock, EntryMockModel } from '../../test/mock/EntryMock';
+import { TestDataUtils } from '../../test/utils/TestDataUtils';
+import { TestUtils } from '../../test/utils/TestUtils';
 import { EntryContoller } from './entry.controller';
-import { CanActivate } from '@nestjs/common';
-import { GroupGuard } from 'src/guards/GroupExists.guard';
 
 class MockGroupGuard implements CanActivate {
   canActivate() {
@@ -46,6 +48,42 @@ describe('EntryController', () => {
     });
     it('Entry service should be defined', () => {
       expect(entryService).toBeDefined();
+    });
+  });
+
+  describe('Create function', () => {
+    it('Should use create function from entry service', async () => {
+      const spy = jest.spyOn(entryService, 'create');
+      await entryController.create(CreateEntryDtoMock(), {
+        user: { _id: TestDataUtils.getRandomObjectIdAsString() },
+      });
+      expect(spy).toBeCalledTimes(1);
+    });
+
+    it('Should return object', async () => {
+      const entryCreateRespone = await entryController.create(
+        CreateEntryDtoMock(),
+        {
+          user: { _id: TestDataUtils.getRandomObjectIdAsString() },
+        },
+      );
+      expect(entryCreateRespone).toBeDefined();
+    });
+
+    it('Should returned object have entry property', async () => {
+      const entryCreateRespone = await entryController.create(
+        CreateEntryDtoMock(),
+        {
+          user: { _id: TestDataUtils.getRandomObjectIdAsString() },
+        },
+      );
+      TestUtils.expectHasProperties(
+        entryCreateRespone,
+        'username',
+        'title',
+        'password',
+        'groupid',
+      );
     });
   });
 });
