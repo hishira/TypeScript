@@ -1,10 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EntryService } from './entry.service';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { EntryRepository } from 'src/repository/entry.repository';
-import { EntryMockModel } from '../../test/mock/EntryMock';
 import { Types } from 'mongoose';
+import { EntryRepository } from 'src/repository/entry.repository';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import {
+  CreateEntryDtoMock,
+  EditEntryDtoMock,
+  EntryMockModel,
+} from '../../test/mock/EntryMock';
+import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
+import { EntryService } from './entry.service';
 
 describe('EntryService', () => {
   let entryService: EntryService;
@@ -34,17 +39,9 @@ describe('EntryService', () => {
   });
 
   it('Create method shoould create entry', async () => {
-    const id = new Types.ObjectId(32);
     const entry = await entryService.create(
-      {
-        groupid: id.toString(),
-        note: 'example',
-        password: 'example',
-        title: 'example',
-        username: 'example',
-        toObject: () => ({}),
-      },
-      id.toString(),
+      CreateEntryDtoMock(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
     TestUtils.expectHasProperties(entry, 'note', 'password', 'username');
   });
@@ -57,21 +54,21 @@ describe('EntryService', () => {
 
   it('gebygroupid function shoould return entry', async () => {
     const entry = await entryService.getbygroupid(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
     TestUtils.expectHasProperties(entry, 'note', 'password', 'username');
   });
 
   it('deletebyid should return object', async () => {
     const deleterEntryInfo = await entryService.deletebyid(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
     TestUtils.expectHasProperties(deleterEntryInfo, 'status', 'respond');
   });
 
   it('deleteByGroup should return promise', async () => {
     const promiseDeleted = entryService.deleteByGroup(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
 
     expect(promiseDeleted).resolves.toBeDefined();
@@ -81,20 +78,14 @@ describe('EntryService', () => {
 
   it('getByUser should return object of entry', async () => {
     const entryByUser = await entryService.getByUser(
-      new Types.ObjectId(32).toString(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
 
     expect(entryByUser).toBeDefined();
   });
 
   it('editentry should return object', async () => {
-    const editedObjectInfo = await entryService.editentry({
-      _id: new Types.ObjectId(32).toString(),
-      note: 'example',
-      password: 'example',
-      title: 'example',
-      username: 'example',
-    });
+    const editedObjectInfo = await entryService.editentry(EditEntryDtoMock());
 
     TestUtils.expectHasProperties(editedObjectInfo, 'status', 'respond');
   });

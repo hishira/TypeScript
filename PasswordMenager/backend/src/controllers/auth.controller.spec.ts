@@ -4,7 +4,12 @@ import { UserRepository } from 'src/repository/user.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { AuthService } from 'src/services/auth.service';
 import { UserService } from 'src/services/user.service';
-import { UserModelMock } from '../../test/mock/UserModelMock';
+import {
+  AuthInfoMock,
+  CreateUserDtoMock,
+  UserModelMock,
+  UserRequestMock,
+} from '../../test/mock/UserModelMock';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { AuthController } from './auth.controller';
@@ -61,25 +66,19 @@ describe('AuthController', () => {
     it('Should use user service create method', async () => {
       const spy = jest.spyOn(userService, 'create');
 
-      await authController.create({ login: 'example', password: 'example' });
+      await authController.create(CreateUserDtoMock());
 
       expect(spy).toBeCalledTimes(1);
     });
 
     it('Method should return promise', () => {
-      const user = authController.create({
-        login: 'example',
-        password: 'example',
-      });
+      const user = authController.create(CreateUserDtoMock());
 
       expect(user).toBeInstanceOf(Promise);
     });
 
     it('Method should return as async object user', async () => {
-      const user = await authController.create({
-        login: 'example',
-        password: 'example',
-      });
+      const user = await authController.create(CreateUserDtoMock());
 
       TestUtils.expectHasProperties(user, 'login', 'password');
     });
@@ -89,40 +88,22 @@ describe('AuthController', () => {
     it('Should use authService create login', async () => {
       const spy = jest.spyOn(authService, 'login');
 
-      await authController.login(
-        { login: 'example', password: 'example' },
-        {
-          user: {
-            login: 'example',
-            _id: TestDataUtils.getRandomObjectIdAsString(),
-          },
-        },
-      );
+      await authController.login(AuthInfoMock(), UserRequestMock());
 
       expect(spy).toBeCalledTimes(1);
     });
 
     it('Should return object', async () => {
       const respone = await authController.login(
-        { login: 'example', password: 'example' },
-        {
-          user: {
-            login: 'example',
-            _id: TestDataUtils.getRandomObjectIdAsString(),
-          },
-        },
+        AuthInfoMock(),
+        UserRequestMock(),
       );
       expect(respone).toBeDefined();
     });
     it('Should return authentication object', async () => {
       const respone = await authController.login(
-        { login: 'example', password: 'example' },
-        {
-          user: {
-            login: 'example',
-            _id: TestDataUtils.getRandomObjectIdAsString(),
-          },
-        },
+        AuthInfoMock(),
+        UserRequestMock(),
       );
       TestUtils.expectHasProperties(respone, 'access_token', 'refresh_token');
     });
@@ -132,32 +113,17 @@ describe('AuthController', () => {
     it('Should use authService function refreshaccesstoken', async () => {
       const spy = jest.spyOn(authService, 'refreshaccesstoken');
 
-      await authController.refresh({
-        user: {
-          login: 'example',
-          _id: TestDataUtils.getRandomObjectIdAsString(),
-        },
-      });
+      await authController.refresh(UserRequestMock());
 
       expect(spy).toBeCalledTimes(1);
     });
 
     it('Should return object', async () => {
-      const respone = await authController.refresh({
-        user: {
-          login: 'example',
-          _id: TestDataUtils.getRandomObjectIdAsString(),
-        },
-      });
+      const respone = await authController.refresh(UserRequestMock());
       expect(respone).toBeDefined();
     });
     it('Should return authentication object', async () => {
-      const respone = await authController.refresh({
-        user: {
-          login: 'example',
-          _id: TestDataUtils.getRandomObjectIdAsString(),
-        },
-      });
+      const respone = await authController.refresh(UserRequestMock());
       TestUtils.expectHasProperties(respone, 'access_token');
     });
   });

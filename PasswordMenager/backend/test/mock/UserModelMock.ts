@@ -1,5 +1,8 @@
 import { Types } from 'mongoose';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
+import { AuthInfo } from 'src/schemas/dto/auth.dto';
+import { CreateUserDto } from 'src/schemas/dto/user.dto';
+import { TestDataUtils } from '../../test/utils/TestDataUtils';
 
 export const userMock = (user?: IUser) =>
   user ?? {
@@ -16,6 +19,21 @@ export const userMock = (user?: IUser) =>
     validatePassword: (_password) => Promise.resolve(true),
   };
 
+export const CreateUserDtoMock = (): CreateUserDto => ({
+  login: 'example',
+  password: 'example',
+});
+
+export const AuthInfoMock = (): AuthInfo => ({
+  login: 'example',
+  password: 'example',
+});
+export const UserRequestMock = () => ({
+  user: {
+    login: 'example',
+    _id: TestDataUtils.getRandomObjectIdAsString(),
+  },
+});
 export class UserModelMock {
   constructor(private data) {}
 
