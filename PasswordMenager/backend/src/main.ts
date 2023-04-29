@@ -6,7 +6,7 @@ declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
-  //useContainer(app.select(ValidatorModule), { fallback: true });
+
   await app.listen(PORT);
   if (module.hot) {
     module.hot.accept();
