@@ -4,7 +4,11 @@ import { GroupGuard } from 'src/guards/GroupExists.guard';
 import { EntryRepository } from 'src/repository/entry.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EntryService } from 'src/services/entry.service';
-import { CreateEntryDtoMock, EntryMockModel } from '../../test/mock/EntryMock';
+import {
+  CreateEntryDtoMock,
+  EditEntryDtoMock,
+  EntryMockModel,
+} from '../../test/mock/EntryMock';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { EntryContoller } from './entry.controller';
@@ -84,6 +88,104 @@ describe('EntryController', () => {
         'password',
         'groupid',
       );
+    });
+  });
+
+  describe('getbygroupid function', () => {
+    it('should use getbygroupid from entry service', async () => {
+      const spy = jest.spyOn(entryService, 'getbygroupid');
+      await entryController.getbygroupid(
+        TestDataUtils.getRandomObjectIdAsString(),
+      );
+
+      expect(spy).toBeCalledTimes(1);
+    });
+
+    it('Returned object should be defined', async () => {
+      const response = entryController.getbygroupid(
+        TestDataUtils.getRandomObjectIdAsString(),
+      );
+      expect(response).resolves.toBeDefined();
+    });
+  });
+
+  describe('getEntryById function', () => {
+    it('should use getById from entry service', async () => {
+      const spy = jest.spyOn(entryService, 'getById');
+      await entryController.getEntryById(
+        TestDataUtils.getRandomObjectIdAsString(),
+      );
+
+      expect(spy).toBeCalledTimes(1);
+    });
+
+    it('Returned object should be defined', async () => {
+      const response = entryController.getEntryById(
+        TestDataUtils.getRandomObjectIdAsString(),
+      );
+      expect(response).resolves.toBeDefined();
+    });
+
+    it('Returner object should be entry', async () => {
+      const response = await entryController.getEntryById(
+        TestDataUtils.getRandomObjectIdAsString(),
+      );
+      TestUtils.expectHasProperties(
+        response,
+        'username',
+        'title',
+        'password',
+        'groupid',
+      );
+    });
+
+    describe('deletebyid function', () => {
+      it('should use deletebyid function from service', async () => {
+        const spy = jest.spyOn(entryService, 'deletebyid');
+        await entryController.deletebyid(
+          TestDataUtils.getRandomObjectIdAsString(),
+        );
+
+        expect(spy).toBeCalledTimes(1);
+      });
+
+      it('should return promise', async () => {
+        const response = entryController.deletebyid(
+          TestDataUtils.getRandomObjectIdAsString(),
+        );
+
+        expect(response).resolves.toBeDefined();
+      });
+
+      it('shuld return delete object', async () => {
+        const response = await entryController.deletebyid(
+          TestDataUtils.getRandomObjectIdAsString(),
+        );
+
+        TestUtils.expectHasProperties(response, 'status', 'respond');
+      });
+    });
+    describe('editentry function', () => {
+      it('should use editentry function from service', async () => {
+        const spy = jest.spyOn(entryService, 'editentry');
+        await entryController.editentry(EditEntryDtoMock(), null);
+
+        expect(spy).toBeCalledTimes(1);
+      });
+
+      it('should return promise', async () => {
+        const response = entryController.editentry(EditEntryDtoMock(), null);
+        expect(response).resolves.toBeDefined();
+      });
+
+      it('shuld return delete object', async () => {
+        const response = await entryController.editentry(
+          EditEntryDtoMock(),
+          null,
+        );
+
+        TestUtils.expectHasProperties(response, 'status', 'respond');
+      });
     });
   });
 });
