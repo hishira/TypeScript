@@ -3,7 +3,10 @@ import { EntryRepository } from 'src/repository/entry.repository';
 import { GroupRepository } from 'src/repository/group.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EntryMockModel } from '../../test/mock/EntryMock';
-import { GroupModelMock } from '../../test/mock/GroupModelMock';
+import {
+  CreateGroupDtoMock,
+  GroupModelMock,
+} from '../../test/mock/GroupModelMock';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { EntryService } from './entry.service';
@@ -52,12 +55,9 @@ describe('GroupService', () => {
   //});
 
   it('Create method should create group', async () => {
-    const id = TestDataUtils.getRandomObjectIdAsString();
     const group = await groupService.create(
-      {
-        name: 'Test group',
-      },
-      id,
+      CreateGroupDtoMock(),
+      TestDataUtils.getRandomObjectIdAsString(),
     );
     TestUtils.expectHasProperties(group, 'name');
   });

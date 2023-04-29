@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
+import { CreateGroupDto } from 'src/schemas/dto/group.dto';
 
 export const groupMock = (group?: IGroup) =>
   group ?? {
@@ -14,6 +15,9 @@ export const groupMock = (group?: IGroup) =>
     },
   };
 
+export const CreateGroupDtoMock = (): CreateGroupDto => ({
+  name: 'Test group example',
+});
 export class GroupModelMock {
   constructor(private data) {}
 
