@@ -1,5 +1,8 @@
 import { Model, Types } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
+import { TestDataUtils } from '../utils/TestDataUtils';
+import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 export const entryMock = (entry?: IEntry) =>
   entry ?? {
     _id: new Types.ObjectId(32), //ObjectId(32),
@@ -21,6 +24,24 @@ export const entryMock = (entry?: IEntry) =>
       lastEditedVariable: null,
     },
   };
+
+export const CreateEntryDtoMock = (): CreateEntryDto => ({
+  title: 'title_example',
+  username: 'usernameexample',
+  password: 'password_example',
+  note: 'note_example',
+  groupid: TestDataUtils.getRandomObjectIdAsString(),
+  passwordExpiredDate: new Date(Date.now()).toLocaleDateString(),
+  toObject: () => ({}),
+});
+
+export const EditEntryDtoMock = (): EditEntryDto => ({
+  _id: TestDataUtils.getRandomObjectIdAsString(),
+  username: 'example_edited_username',
+  password: 'example_edited_password',
+  note: 'example_edited_note',
+  title: 'example_edited_title',
+});
 export class EntryMockModel {
   constructor(private data) {}
 

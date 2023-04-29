@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserRepository } from 'src/repository/user.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { UserModelMock } from '../../test/mock/UserModelMock';
+import {
+  CreateUserDtoMock,
+  EditUserDtoMock,
+  UserModelMock,
+} from '../../test/mock/UserModelMock';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { UserService } from './user.service';
@@ -31,10 +35,7 @@ describe('UserService', () => {
   });
 
   it('Create method should retunr user object', async () => {
-    const user = await userService.create({
-      login: 'login_user_example',
-      password: 'password_example',
-    });
+    const user = await userService.create(CreateUserDtoMock());
 
     TestUtils.expectHasProperties(user, 'login', 'password');
   });
@@ -55,10 +56,7 @@ describe('UserService', () => {
   it('update method should return user object', async () => {
     const updatedUser = await userService.update(
       TestDataUtils.getRandomObjectIdAsString(),
-      {
-        login: 'updated_login',
-        password: 'updated_password',
-      },
+      EditUserDtoMock(),
     );
     TestUtils.expectHasProperties(updatedUser, 'login', 'password');
   });
