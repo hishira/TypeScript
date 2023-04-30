@@ -12,10 +12,12 @@ import {
 } from '../../test/mock/GroupModelMock';
 import { UserRequestMock } from '../../test/mock/UserModelMock';
 import { GroupController } from './group.controller';
+import { TestDataUtils } from '../../test/utils/TestDataUtils';
 
 describe('GroupController', () => {
   let groupController: GroupController;
   let groupService: GroupService;
+  let entryService: EntryService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -41,7 +43,11 @@ describe('GroupController', () => {
 
     groupController = module.get<GroupController>(GroupController);
     groupService = module.get<GroupService>(GroupService);
+    entryService = module.get<EntryService>(EntryService);
   });
+
+  beforeEach(() => jest.clearAllMocks());
+
   describe('Should be defined', () => {
     it('Group controller should be defined', () => {
       expect(groupController).toBeDefined();
@@ -71,6 +77,48 @@ describe('GroupController', () => {
         UserRequestMock(),
       );
       TestUtils.expectHasProperties(response, 'name');
+    });
+  });
+
+  describe('Get function', () => {
+    it('Should use getbyuser from groupService', () => {
+      const spy = jest.spyOn(groupService, 'getbyuser');
+      groupController.get(UserRequestMock());
+      expect(spy).toBeCalledTimes(1);
+    });
+
+    it('Should return promise', () => {
+      const respone = groupController.get(UserRequestMock());
+      expect(respone).resolves.toBeDefined();
+    });
+
+    it('Should object of group', async () => {
+      const respone = await groupController.get(UserRequestMock());
+      // TODO: Change to return group
+      TestUtils.expectHasProperties(respone, 'name');
+    });
+  });
+
+  describe('deleteByid', () => {
+    it('Should use deleteGroup from groupService', () => {
+      const spy = jest.spyOn(groupService, 'deleteGroup');
+      groupController.deleteByid(TestDataUtils.getRandomObjectIdAsString());
+      expect(spy).toBeCalledTimes(1);
+    });
+
+    it('Should use getbyuser from groupService', async () => {
+      const spy = jest.spyOn(entryService, 'deleteByGroup');
+      await groupController.deleteByid(
+        TestDataUtils.getRandomObjectIdAsString(),
+      );
+      expect(spy).toBeCalledTimes(1);
+    });
+
+    it('Should return promise', () => {
+      const respone = groupController.deleteByid(
+        TestDataUtils.getRandomObjectIdAsString(),
+      );
+      expect(respone).resolves.toBeDefined();
     });
   });
 });
