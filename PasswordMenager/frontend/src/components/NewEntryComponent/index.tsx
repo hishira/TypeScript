@@ -16,9 +16,7 @@ import {
   SelectContainer,
   SelectLabel,
 } from "./component.styled";
-import {
-  checkBoxHandler,
-} from "./new-entry.utils";
+import { checkBoxHandler } from "./new-entry.utils";
 import { GroupEffect } from "../../hooks/groups.hook";
 import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
 import { Loading } from "../Loading";
@@ -78,14 +76,16 @@ const NewEntryComponent = ({
 
   const addnewentry = async (): Promise<void> => {
     console.log(newentry);
-    const responsenewentry: CreateEntryResponse =
-      await Entry.getInstance().CreateNewEntryUser(newentry);
-    if (responsenewentry.status) {
-      console.log("OK");
-      editEntry.clearInputData();
-    } else {
-      console.log("Something wrong");
-    }
+    Entry.getInstance()
+      .CreateNewEntryUser(newentry)
+      .then((responsenewentry) => {
+        if (responsenewentry.status) {
+          console.log("OK");
+          editEntry.clearInputData();
+        } else {
+          console.log("Something wrong");
+        }
+      });
   };
 
   const getRechangeObject = (): EditEntry => {
@@ -112,7 +112,8 @@ const NewEntryComponent = ({
 
   return (
     <Loading
-      loading={isLoading}
+      // TODO Ref loading
+      loading={false}
       ComponentToLoad={
         <EntryModalComponent>
           <FormElement

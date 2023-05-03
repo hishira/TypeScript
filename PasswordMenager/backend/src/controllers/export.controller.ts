@@ -4,6 +4,7 @@ import {
   Inject,
   ParseFilePipeBuilder,
   Post,
+  Req,
   Request,
   Res,
   UploadedFile,
@@ -23,7 +24,7 @@ import { Response } from 'express';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { ExportService } from 'src/services/export.service';
-// TODO: Check if work as expected witth promise
+// TODO: Check if work as expected witth promise, REFACTOR !!!Important
 @Controller('export')
 export class ExportController {
   constructor(
@@ -67,8 +68,10 @@ export class ExportController {
       decipher.final(),
     ]);
   }
+
+  @UseGuards(AuthGuard('accessToken'))
   @Get('encrypted')
-  async getEncryptFile(@Res() res: Response) {
+  async getEncryptFile(@Req() req, @Res() res: Response) {
     const entries = await this.entryService.find({
       getOption() {
         return {};

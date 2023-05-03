@@ -14,6 +14,13 @@ const PassBar: React.FC = (): JSX.Element => {
       .then(() => {})
       .catch(console.log);
   };
+
+  const exportEncrypted = (): void => {
+    Export.getInstance()
+      .ExportEncrypted()
+      .then(() => {})
+      .catch(console.error);
+  };
   return (
     <Container>
       <Modal
@@ -26,6 +33,9 @@ const PassBar: React.FC = (): JSX.Element => {
       </Button>
       <Button color="lightgray" onClick={exportHandle}>
         Export entries
+      </Button>
+      <Button color="lightgray" onClick={exportEncrypted}>
+        Export encrypted
       </Button>
     </Container>
   );
