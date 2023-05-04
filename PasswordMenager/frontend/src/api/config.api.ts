@@ -22,11 +22,11 @@ export abstract class Api {
     return `Bearer ${token}`;
   }
 
-  getUrl(part: string): string {
+  protected getUrl(part: string): string {
     return ConfigApi.getUrl(part);
   }
 
-  fetchPostObjectWithToken(obj: any, token: string): RequestInit {
+  protected fetchPostObjectWithToken(obj: any, token: string): RequestInit {
     return {
       mode: "cors",
       headers: {
@@ -40,7 +40,20 @@ export abstract class Api {
     };
   }
 
-  fetchPostObject(obj: any): RequestInit {
+  protected fetchPostFileWithToken(file: File, token: string): RequestInit {
+    return {
+      mode: "cors",
+      headers: {
+        Authorization: Api.getAuthorizationToken(token),
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": ConfigApi.frontURL,
+      },
+      body: file,
+      method: "POST",
+    };
+  }
+  protected fetchPostObject(obj: any): RequestInit {
     return {
       mode: "cors",
       headers: {
@@ -53,7 +66,7 @@ export abstract class Api {
     };
   }
 
-  fetchGetObjectWithtoken(token: string): RequestInit {
+  protected fetchGetObjectWithtoken(token: string): RequestInit {
     return {
       mode: "cors",
       headers: {
@@ -65,7 +78,7 @@ export abstract class Api {
       method: "GET",
     };
   }
-  fetchDeleteObjectWithToken(token: string): RequestInit {
+  protected fetchDeleteObjectWithToken(token: string): RequestInit {
     return {
       mode: "cors",
       headers: {
@@ -77,7 +90,8 @@ export abstract class Api {
       method: "DELETE",
     };
   }
-  fetchPutObjectWithToken(body: object, token: string): RequestInit {
+  
+  protected fetchPutObjectWithToken(body: object, token: string): RequestInit {
     return {
       mode: "cors",
       headers: {
