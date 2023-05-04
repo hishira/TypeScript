@@ -40,13 +40,12 @@ export abstract class Api {
     };
   }
 
-  protected fetchPostFileWithToken(file: File, token: string): RequestInit {
+  protected fetchPostFileWithToken(file: File | FormData, token: string, fileSize: number): RequestInit {
     return {
       mode: "cors",
       headers: {
         Authorization: Api.getAuthorizationToken(token),
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        "Content-Type": 'xyz',
         "Access-Control-Allow-Origin": ConfigApi.frontURL,
       },
       body: file,
@@ -90,7 +89,7 @@ export abstract class Api {
       method: "DELETE",
     };
   }
-  
+
   protected fetchPutObjectWithToken(body: object, token: string): RequestInit {
     return {
       mode: "cors",

@@ -19,7 +19,7 @@ import {
   pbkdf2Sync,
   randomBytes,
 } from 'crypto';
-import { Response } from 'express';
+import { Response, response } from 'express';
 
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
@@ -56,6 +56,7 @@ export class ExportController {
         .build(),
     )
     file: Express.Multer.File,
+    @Res() response: Response,
   ) {
     const buffer = Buffer.from(file.buffer);
     const salt = buffer.slice(0, 16);
@@ -67,6 +68,7 @@ export class ExportController {
       decipher.update(encryptedContent),
       decipher.final(),
     ]);
+    response.status(200).send(decryptedContent.toString('utf8'));
   }
 
   @UseGuards(AuthGuard('accessToken'))
