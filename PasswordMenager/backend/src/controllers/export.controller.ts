@@ -50,14 +50,11 @@ export class ExportController {
   @Post('decrypt')
   @UseInterceptors(FileInterceptor('file'))
   async decryptData(
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: 'xyz' })
-        .build({ fileIsRequired: false }),
-    )
+    @UploadedFile(new ParseFilePipeBuilder().build({ fileIsRequired: false }))
     file: Express.Multer.File,
     @Res() response: Response,
   ) {
+    console.dir(file)
     const buffer = Buffer.from(file.buffer);
     const salt = buffer.slice(0, 16);
     const iv = buffer.slice(16, 32);

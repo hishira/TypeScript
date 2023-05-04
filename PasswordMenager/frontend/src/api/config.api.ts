@@ -40,12 +40,15 @@ export abstract class Api {
     };
   }
 
-  protected fetchPostFileWithToken(file: File | FormData, token: string, fileSize: number): RequestInit {
+  protected fetchPostFileWithToken(
+    file: File | FormData,
+    token: string,
+    fileSize: number
+  ): RequestInit {
     return {
       mode: "cors",
       headers: {
         Authorization: Api.getAuthorizationToken(token),
-        "Content-Type": 'xyz',
         "Access-Control-Allow-Origin": ConfigApi.frontURL,
       },
       body: file,

@@ -9,7 +9,7 @@ export const ImportFile: React.FC = (): JSX.Element => {
     e.target.files && setFile(e.target.files[0]);
     if (file) {
       const formData = new FormData();
-      formData.set("file", file, file.name);
+      formData.set("file", file);
       Import.getInstance()
         .ImportFile(formData, file.size)
         .then(console.log)
