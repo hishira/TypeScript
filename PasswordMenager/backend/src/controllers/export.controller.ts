@@ -53,7 +53,7 @@ export class ExportController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({ fileType: 'xyz' })
-        .build(),
+        .build({ fileIsRequired: false }),
     )
     file: Express.Multer.File,
     @Res() response: Response,
