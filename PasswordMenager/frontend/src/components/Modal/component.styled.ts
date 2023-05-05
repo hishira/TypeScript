@@ -16,3 +16,7 @@ export const Modal = styled.div<ModalProps>`
   background-color: rgba(1, 1, 1, 0.2);
   z-index: 2;
 `;
+
+export const ModalContainer = styled.div`
+  background-color: whitesmoke;
+`;
