@@ -4,6 +4,7 @@ import {
   Inject,
   ParseFilePipeBuilder,
   Post,
+  Req,
   Request,
   Res,
   UploadedFile,
@@ -18,12 +19,12 @@ import {
   pbkdf2Sync,
   randomBytes,
 } from 'crypto';
-import { Response } from 'express';
+import { Response, response } from 'express';
 
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { ExportService } from 'src/services/export.service';
-// TODO: Check if work as expected witth promise
+// TODO: Check if work as expected witth promise, REFACTOR !!!Important
 @Controller('export')
 export class ExportController {
   constructor(
@@ -49,13 +50,11 @@ export class ExportController {
   @Post('decrypt')
   @UseInterceptors(FileInterceptor('file'))
   async decryptData(
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: 'xyz' })
-        .build(),
-    )
+    @UploadedFile(new ParseFilePipeBuilder().build({ fileIsRequired: false }))
     file: Express.Multer.File,
+    @Res() response: Response,
   ) {
+    console.dir(file)
     const buffer = Buffer.from(file.buffer);
     const salt = buffer.slice(0, 16);
     const iv = buffer.slice(16, 32);
@@ -66,9 +65,12 @@ export class ExportController {
       decipher.update(encryptedContent),
       decipher.final(),
     ]);
+    response.status(200).send(decryptedContent.toString('utf8'));
   }
+
+  @UseGuards(AuthGuard('accessToken'))
   @Get('encrypted')
-  async getEncryptFile(@Res() res: Response) {
+  async getEncryptFile(@Req() req, @Res() res: Response) {
     const entries = await this.entryService.find({
       getOption() {
         return {};

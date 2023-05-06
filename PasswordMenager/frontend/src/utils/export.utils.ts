@@ -5,6 +5,7 @@ export class Export {
   private static instance: Export | null = null;
   private exportApi: ExportApi;
   private documentUtils: DocumentUtils;
+
   constructor(
     exportApiInstance: ExportApi,
     documentUtilsInstance: DocumentUtils
@@ -26,17 +27,22 @@ export class Export {
 
   async ExportEntriesCsv(): Promise<void> {
     return this.exportApi.getExportedEntries().then((resp) => {
-      resp.blob().then((resp) => {
-        const csvUrl = URL.createObjectURL(resp);
-        const anchor = this.documentUtils.createDownloableLink(
-          csvUrl,
-          "entries.csv"
-        );
-        this.documentUtils.addChildElement(anchor);
-        anchor.click();
-        this.documentUtils.removeChildElement(anchor);
-        URL.revokeObjectURL(csvUrl);
-      });
+      resp.blob().then((resp) => this.downloadFile(resp, "entries.csv"));
     });
+  }
+
+  async ExportEncrypted(): Promise<unknown> {
+    return this.exportApi.getEncryptedFile().then((resp) => {
+      resp.blob().then((file) => this.downloadFile(file, "entries.xyz"));
+    });
+  }
+
+  private downloadFile(blob: Blob, filename: string) {
+    const csvUrl = URL.createObjectURL(blob);
+    const anchor = this.documentUtils.createDownloableLink(csvUrl, filename);
+    this.documentUtils.addChildElement(anchor);
+    anchor.click();
+    this.documentUtils.removeChildElement(anchor);
+    URL.revokeObjectURL(csvUrl);
   }
 }

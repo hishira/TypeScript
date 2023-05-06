@@ -28,6 +28,7 @@ export class EntryService {
       },
     };
     return this.entryRepository.create(pureDto).catch((_) => {
+      console.error(_);
       return { message: 'Error whice creating entry' };
     });
   }

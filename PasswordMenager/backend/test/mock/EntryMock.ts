@@ -5,7 +5,7 @@ import { TestDataUtils } from '../utils/TestDataUtils';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 export const entryMock = (entry?: IEntry) =>
   entry ?? {
-    _id: new Types.ObjectId(32), //ObjectId(32),
+    _id: new Types.ObjectId(32),
     title: 'test title',
     userid: 'asd123cxz',
     username: 'test username',
@@ -47,7 +47,7 @@ export class EntryMockModel {
 
   save() {
     return Promise.resolve(this.data);
-  } //= jest.fn().mockResolvedValue(Promise.resolve(this.data));
+  }
 
   static exec = jest.fn();
 
@@ -88,8 +88,8 @@ export class EntryMockModel {
   }
 
   static getValues = () => ({
-    new: (val) => val, //jest.fn().mockResolvedValue(entryMock()),
-    constructor: (val) => val, //jest.fn().mockResolvedValue(entryMock()),
+    new: (val) => val,
+    constructor: (val) => val,
     exec: jest.fn(),
     find: jest.fn().mockResolvedValue({}),
     findOne: jest.fn().mockResolvedValue({}),

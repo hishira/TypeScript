@@ -6,7 +6,10 @@ export const PasswordEntries = (selectedGroup: string, refreshAll: boolean) => {
 
   useEffect(() => {
     const fetchEntries = async (): Promise<void> => {
-      if (selectedGroup === "") setPasswordEntries([]);
+      if (selectedGroup === "") {
+        setPasswordEntries([]);
+        return;
+      }
       const groupid: GroupId = {
         id: selectedGroup,
       };

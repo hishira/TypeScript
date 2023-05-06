@@ -79,6 +79,7 @@ export class EditEntryActionDispatcher {
   }
 
   groupset(e: React.ChangeEvent<HTMLSelectElement>) {
+    console.log(e.target.value)
     this.setnewentry({ ...this.newentry, groupid: e.target.value });
   }
 }

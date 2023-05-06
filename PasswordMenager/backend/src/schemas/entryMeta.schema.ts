@@ -25,7 +25,7 @@ const EntryMetaSchema = new Schema<IEntryMeta>({
   },
   lastEditedVariable: {
     type: String,
-    enum: Object.values(LastEditedVariable),
+    enum: Object.values(LastEditedVariable).concat([null]),
     default: null,
   },
 });
