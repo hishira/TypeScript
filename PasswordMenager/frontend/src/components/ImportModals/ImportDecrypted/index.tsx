@@ -1,16 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AcceptModalComponent } from "../../Modal/AcceptModal";
 import { ImportFile } from "../../ImportFille";
+type ImportDecryptedProps = {
+  modalOpen: boolean;
+  closeModalHandle: () => void;
+};
+export const ImportDecrypted = ({
+  modalOpen,
+  closeModalHandle,
+}: ImportDecryptedProps): JSX.Element => {
+  const [importModalOpen, setImportModalOpen] = useState<boolean>(modalOpen);
+  const closeImportModalHandle = (): void => {
+    setImportModalOpen(false);
+    closeModalHandle();
+  };
+  const fileChange = (...args: File[]): void => {
+    console.log(args);
+  };
 
-export const ImportDecrypted = (): JSX.Element => {
-  const [importModalOpen, setImportModalOpen] = useState<boolean>(false);
-  const closeImportModalHandle = (): void => setImportModalOpen(false);
-
+  useEffect(() => {
+    setImportModalOpen(modalOpen);
+  }, [modalOpen]);
   return (
     <AcceptModalComponent
       visible={importModalOpen}
       onClose={closeImportModalHandle}
-      component={<ImportFile />}
+      component={<ImportFile fileChangeHandle={fileChange} />}
       acceptHandle={() => {}}
     />
   );
