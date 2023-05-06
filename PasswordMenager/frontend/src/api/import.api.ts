@@ -23,6 +23,6 @@ export class ImportApi extends Api {
     const url = this.getUrl("export/decrypt");
     const token = this.sessionStorage.getAccessToken();
 
-    return fetch(url, this.fetchPostFileWithToken(file, token, filesize) as any);
+    return fetch(url, this.fetchPostFileWithToken(file, token, filesize));
   }
 }
