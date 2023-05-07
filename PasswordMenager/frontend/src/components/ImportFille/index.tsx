@@ -18,8 +18,14 @@ export const ImportFile = ({
   }, [file]);
   return (
     <ImportContainer>
-      <div></div>
-      <ImportInput onChange={(e) => fileChange(e)}></ImportInput>
+      <div>
+        <label>Choice file</label>
+        <ImportInput onChange={(e) => fileChange(e)}></ImportInput>
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="text" />
+      </div>
     </ImportContainer>
   );
 };
