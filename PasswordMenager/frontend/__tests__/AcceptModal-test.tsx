@@ -7,12 +7,25 @@ const getContainer = (): HTMLElement => {
     <AcceptModalComponent
       visible={modalVisible}
       onClose={modalCloseHandle}
-      component={<div />}
+      component={<div className="name" />}
       acceptHandle={() => {}}
     />
   );
   return container;
 };
+
+const getNotVisibleContainer = (): HTMLElement => {
+  const { container } = render(
+    <AcceptModalComponent
+      visible={false}
+      onClose={modalCloseHandle}
+      component={<div className="name" />}
+      acceptHandle={() => {}}
+    />
+  );
+  return container;
+};
+
 
 afterEach(cleanup);
 describe("AcceptModalComponent", () => {
@@ -34,7 +47,14 @@ describe("AcceptModalComponent", () => {
     expect(buttons[1].textContent).toBe(" Accept");
   });
   it("Cancel button should hide modal", () => {
-    const container = getContainer();
+    const { container, rerender } = render(
+      <AcceptModalComponent
+        visible={modalVisible}
+        onClose={modalCloseHandle}
+        component={<div className="name" />}
+        acceptHandle={() => {}}
+      />
+    );
     const element = container.querySelector("div");
     const buttons = container.querySelectorAll("button");
     fireEvent(
@@ -44,6 +64,26 @@ describe("AcceptModalComponent", () => {
         cancelable: true,
       })
     );
+    rerender(
+      <AcceptModalComponent
+        visible={false}
+        onClose={modalCloseHandle}
+        component={<div className="name" />}
+        acceptHandle={() => {}}
+      />
+    );
     expect(element).toHaveStyle("display: none");
   });
+
+  it("Component should not be visible when pass as props false", () => {
+    const container = getNotVisibleContainer();
+    const element = container.querySelector("div");
+    expect(element).toHaveStyle("display: none");
+  });
+
+  it('Should has proper component as props', ()=>{
+    const container = getContainer();
+    const inElement = container.querySelector('.name')
+    expect(inElement).toBeTruthy();
+  })
 });
