@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { AcceptModalComponent } from "../src/components/Modal/AcceptModal";
 let modalVisible = true;
 const modalCloseHandle = () => (modalVisible = false);
@@ -29,6 +29,10 @@ const getNotVisibleContainer = (): HTMLElement => {
 
 afterEach(cleanup);
 describe("AcceptModalComponent", () => {
+  it('should render', ()=>{
+    const container = getContainer();
+    expect(screen).toBeTruthy();
+  })
   it("Element with class hook should be visible", () => {
     const container = getContainer();
     const element = container.querySelector(".hook");
