@@ -2,11 +2,12 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { ImportDecrypted } from "../src/components/ImportModals/ImportDecrypted/index";
 import userEvent from "@testing-library/user-event";
 import { Import } from "../src/utils/import.utils";
-//
-//let checkenImport = jest
-//  .spyOn(Import.prototype, "ImportFile")
-//  .mockImplementation(() => Promise.resolve(true));
-// TODO: Fix import
+
+//jest.mock('../src/utils/import.utils')
+
+let checkenImport = jest
+  .spyOn(Import.prototype, "ImportFile")
+  .mockImplementation(() => Promise.resolve(true));
 const getContainer = (): HTMLElement => {
   const { container } = render(
     <ImportDecrypted modalOpen={true} closeModalHandle={() => {}} />
@@ -16,7 +17,6 @@ const getContainer = (): HTMLElement => {
 };
 
 afterEach(cleanup);
-
 describe("ImportDecryptedModal test", () => {
   it("It should render", () => {
     const container = getContainer();
@@ -29,17 +29,12 @@ describe("ImportDecryptedModal test", () => {
     expect(buttons).toHaveLength(2);
   });
 
-  it("When file change", (done) => {
+  it("When file change", () => {
     const file = new File(["100100100"], "exampleoffile.png", {
       type: "image/png",
     });
-    render(
-      <ImportDecrypted modalOpen={true} closeModalHandle={() => {}} />
-    );
-    // TOOD: Jest has problem with spying on class :|
-    const input = screen.getByRole("fileinput");
-    let checkenImport = jest
-      .spyOn(Import, "getInstance")
+    const container = getContainer();
+    const input = container.querySelector("input");
     console.log(input);
       input &&
       fireEvent.change(input, {
@@ -47,6 +42,8 @@ describe("ImportDecryptedModal test", () => {
           files: [file],
         },
       });
+    const buttons = container.querySelectorAll('button');
+    fireEvent.click(buttons[1]);
     expect(checkenImport).toBeCalled();
   });
 });

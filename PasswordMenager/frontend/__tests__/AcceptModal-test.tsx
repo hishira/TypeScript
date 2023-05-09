@@ -2,13 +2,15 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { AcceptModalComponent } from "../src/components/Modal/AcceptModal";
 let modalVisible = true;
 const modalCloseHandle = () => (modalVisible = false);
+
+const acceptmodalHandle = jest.fn().mockReturnValue(true);
 const getContainer = (): HTMLElement => {
   const { container } = render(
     <AcceptModalComponent
       visible={modalVisible}
       onClose={modalCloseHandle}
       component={<div className="name" />}
-      acceptHandle={() => {}}
+      acceptHandle={acceptmodalHandle}
     />
   );
   return container;
@@ -26,13 +28,12 @@ const getNotVisibleContainer = (): HTMLElement => {
   return container;
 };
 
-
 afterEach(cleanup);
 describe("AcceptModalComponent", () => {
-  it('should render', ()=>{
+  it("should render", () => {
     const container = getContainer();
     expect(screen).toBeTruthy();
-  })
+  });
   it("Element with class hook should be visible", () => {
     const container = getContainer();
     const element = container.querySelector(".hook");
@@ -85,9 +86,22 @@ describe("AcceptModalComponent", () => {
     expect(element).toHaveStyle("display: none");
   });
 
-  it('Should has proper component as props', ()=>{
+  it("Should has proper component as props", () => {
     const container = getContainer();
-    const inElement = container.querySelector('.name')
+    const inElement = container.querySelector(".name");
     expect(inElement).toBeTruthy();
-  })
+  });
+
+  it("should fire proper function", () => {
+    const container = getContainer();
+    const buttons = container.querySelectorAll("button");
+    fireEvent(
+      buttons[1],
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    expect(acceptmodalHandle).toBeCalled();
+  });
 });
