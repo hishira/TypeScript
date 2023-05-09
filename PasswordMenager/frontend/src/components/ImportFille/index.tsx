@@ -21,7 +21,7 @@ export const ImportFile = ({
     <ImportContainer>
       <div>
         <label>Choice file</label>
-        <ImportInput onChange={(e) => fileChange(e)}></ImportInput>
+        <ImportInput role='fileinput' onChange={(e) => fileChange(e)}></ImportInput>
       </div>
       <div>
         <label>Password</label>
