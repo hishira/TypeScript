@@ -16,10 +16,17 @@ export const ImportFile = ({
     if (!file) return;
     fileChangeHandle(file);
   }, [file]);
+  // TODO: Improber add password improvement
   return (
     <ImportContainer>
-      <div></div>
-      <ImportInput onChange={(e) => fileChange(e)}></ImportInput>
+      <div>
+        <label>Choice file</label>
+        <ImportInput role='fileinput' onChange={(e) => fileChange(e)}></ImportInput>
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="text" />
+      </div>
     </ImportContainer>
   );
 };

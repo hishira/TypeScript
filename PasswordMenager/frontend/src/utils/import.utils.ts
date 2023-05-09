@@ -18,7 +18,7 @@ export class Import {
     return this.instance;
   }
 
-  ImportFile(file: File | FormData, fileSize: number): Promise<unknown> {
+  public ImportFile(file: File | FormData, fileSize: number): Promise<unknown> {
     return this.importApi.importFile(file, fileSize);
   }
 }

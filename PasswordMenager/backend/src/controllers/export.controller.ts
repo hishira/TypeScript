@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Inject,
@@ -53,8 +54,9 @@ export class ExportController {
     @UploadedFile(new ParseFilePipeBuilder().build({ fileIsRequired: false }))
     file: Express.Multer.File,
     @Res() response: Response,
+    @Body() restOfParams,
   ) {
-    console.dir(file)
+    console.log(restOfParams);
     const buffer = Buffer.from(file.buffer);
     const salt = buffer.slice(0, 16);
     const iv = buffer.slice(16, 32);

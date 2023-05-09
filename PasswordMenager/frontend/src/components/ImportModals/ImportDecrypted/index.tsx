@@ -24,6 +24,7 @@ export const ImportDecrypted = ({
     if (file) {
       const formData = new FormData();
       formData.set("file", file);
+      formData.set("password", "example_password_to_decrypt_data");
       setFormData(formData);
     }
   };

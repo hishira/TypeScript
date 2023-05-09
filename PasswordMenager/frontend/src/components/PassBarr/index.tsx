@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { Export } from "../../utils/export.utils";
 import Button from "../Button";
-import { ImportFile } from "../ImportFille";
+import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
 import { Container } from "./component.styled";
-import { AcceptModalComponent } from "../Modal/AcceptModal";
-import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
 const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const [importModalOpen, setImportModalOpen] = useState<boolean>(false);
@@ -35,7 +33,10 @@ const PassBar: React.FC = (): JSX.Element => {
         onClose={closehandle}
         component={<NewEntryComponent refreshentry={false} />}
       />
-      <ImportDecrypted modalOpen={importModalOpen} closeModalHandle={closeImportModalHandle} />
+      <ImportDecrypted
+        modalOpen={importModalOpen}
+        closeModalHandle={closeImportModalHandle}
+      />
       <Button color="lightgray" onClick={() => setmodalopen(true)}>
         New entry
       </Button>
