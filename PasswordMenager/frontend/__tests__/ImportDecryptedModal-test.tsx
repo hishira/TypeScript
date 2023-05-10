@@ -8,9 +8,10 @@ import { Import } from "../src/utils/import.utils";
 let checkenImport = jest
   .spyOn(Import.prototype, "ImportFile")
   .mockImplementation(() => Promise.resolve(true));
+const closeMockHandle = jest.fn();
 const getContainer = (): HTMLElement => {
   const { container } = render(
-    <ImportDecrypted modalOpen={true} closeModalHandle={() => {}} />
+    <ImportDecrypted modalOpen={true} closeModalHandle={closeMockHandle} />
   );
 
   return container;
@@ -46,4 +47,11 @@ describe("ImportDecryptedModal test", () => {
     fireEvent.click(buttons[1]);
     expect(checkenImport).toBeCalled();
   });
+
+  it('Cancel button on modal should fire close handle function', ()=>{
+    const container = getContainer();
+    const buttons = container.querySelectorAll('button');
+    fireEvent.click(buttons[0])
+    expect(closeMockHandle).toBeCalled();
+  })
 });
