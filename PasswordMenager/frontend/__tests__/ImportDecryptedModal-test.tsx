@@ -36,22 +36,21 @@ describe("ImportDecryptedModal test", () => {
     });
     const container = getContainer();
     const input = container.querySelector("input");
-    console.log(input);
-      input &&
+    input &&
       fireEvent.change(input, {
         target: {
           files: [file],
         },
       });
-    const buttons = container.querySelectorAll('button');
+    const buttons = container.querySelectorAll("button");
     fireEvent.click(buttons[1]);
     expect(checkenImport).toBeCalled();
   });
 
-  it('Cancel button on modal should fire close handle function', ()=>{
+  it("Cancel button on modal should fire close handle function", () => {
     const container = getContainer();
-    const buttons = container.querySelectorAll('button');
-    fireEvent.click(buttons[0])
+    const buttons = container.querySelectorAll("button");
+    fireEvent.click(buttons[0]);
     expect(closeMockHandle).toBeCalled();
-  })
+  });
 });

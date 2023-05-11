@@ -1,9 +1,7 @@
 import { cleanup, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ImportFile } from "../src/components/ImportFille/index";
-const fileChange = (...args: File[]): void => {
-  if (args.length <= 0) return;
-};
+const fileChange = jest.fn();
 const getContainer = (): HTMLElement => {
   const { container } = render(<ImportFile fileChangeHandle={fileChange} />);
 
@@ -16,11 +14,11 @@ const getInputElement = (): HTMLInputElement | null => {
   return input;
 };
 afterEach(cleanup);
+afterEach(() => jest.clearAllMocks());
 describe("ImportFile component test", () => {
   it("Should have input", () => {
     const container = getContainer();
     expect(container.querySelector("input")).toBeTruthy();
-    //export(container.querySelector)
   });
 
   it("Input should be type password", () => {
@@ -46,6 +44,15 @@ describe("ImportFile component test", () => {
 
     input && userEvent.upload(input, file);
     expect(input?.files[0].name).toBe("exampleoffile.png");
+  });
+
+  it("File change should trigger filechange function", () => {
+    const file = new File(["1200123012"], "exampleoffile.png", {
+      type: "image/png",
+    });
+    const input = getInputElement();
+    input && userEvent.upload(input, file);
+    expect(fileChange).toBeCalledTimes(1);
   });
 
   it("Component should has 2 labels", () => {
