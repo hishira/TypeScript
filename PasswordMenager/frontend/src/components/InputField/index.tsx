@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import styled from "styled-components";
 const Input = styled.input`
   width: 90%;
@@ -16,18 +16,25 @@ const Input = styled.input`
 `;
 
 type Props = {
-    onChange: (e:React.ChangeEvent<HTMLInputElement>)=>void
-    placeholder: string
-    type: string
-    value?: string 
-}
-const InputField = ({onChange,placeholder,type, value}: Props):JSX.Element=>{
-    return <Input
-        onChange={onChange}
-        placeholder={placeholder}
-        type={type}
-        value={value}
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  type: string;
+  value?: string;
+};
+const InputField = ({
+  onChange,
+  placeholder,
+  type,
+  value,
+}: Props): JSX.Element => {
+  return (
+    <Input
+      onChange={onChange}
+      placeholder={placeholder}
+      type={type}
+      value={value}
     />
-}
+  );
+};
 
 export default InputField;

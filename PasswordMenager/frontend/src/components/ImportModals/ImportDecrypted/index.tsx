@@ -34,7 +34,7 @@ export const ImportDecrypted = ({
     Import.getInstance()
       .ImportFile(formData, 0)
       .then(console.log)
-      .catch(console.log);
+      .catch(console.error);
   };
 
   useEffect(() => {
