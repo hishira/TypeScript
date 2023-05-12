@@ -54,4 +54,9 @@ describe("InputField component", () => {
     expect(onChangeInput).toBeCalledTimes(1);
     expect(staticObject.inputValue).toBe("Something new value");
   });
+
+  it('Placeholder should be empty', ()=>{
+    const input = getInput();
+    expect(input?.getAttribute('placeholder')).toBe('');
+  })
 });
