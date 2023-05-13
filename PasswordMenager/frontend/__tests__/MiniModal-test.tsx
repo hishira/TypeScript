@@ -34,7 +34,14 @@ const getContainer = (): HTMLElement => {
 
   return container;
 };
-afterEach(cleanup);
+//afterEach(cleanup);
+afterEach(() => {
+  ModalClose.mockClear();
+  RefreshGroupEnttities.mockClear();
+  SetEditmodalOpen.mockClear();
+  SetEntryToEdit.mockClear();
+  cleanup();
+});
 describe("MiniModal component (ModalButtonChoicer)", () => {
   it("Component should exists", () => {
     expect(getContainer()).toBeDefined();
@@ -59,23 +66,47 @@ describe("MiniModal component (ModalButtonChoicer)", () => {
     expect(id).toBe(GetEntryMock()._id);
   });
 
-  it("Edit handle should use Entry.getInstance().deleteUserEntry()", () => {
+  it("Delete handle should use Entry.getInstance().deleteUserEntry()", () => {
     const deleteButton = getContainer().querySelectorAll("button")[0];
     fireEvent.click(deleteButton);
     expect(DeleteEntrySpy).toBeCalledTimes(1);
   });
 
-  it("Edit handle RefreshGroupEnttities when status is true", () => {
+  it("Delete handle RefreshGroupEnttities when status is true", async () => {
     const deleteButton = getContainer().querySelectorAll("button")[0];
-    fireEvent.click(deleteButton);
+    fireEvent(deleteButton, new MouseEvent("click", { bubbles: true }));
+    await Promise.resolve();
     expect(RefreshGroupEnttities).toBeCalled();
-    RefreshGroupEnttities.mockClear()
   });
 
-  it("Edit handle when status is true should close modal", () => {
+  it("Delete handle when status is true should close modal", async () => {
+    const deleteButton = getContainer().querySelectorAll("button")[0];
+    fireEvent(deleteButton, new MouseEvent("click", { bubbles: true }));
+    await Promise.resolve();
+    expect(ModalClose).toBeCalled();
+  });
+
+  it("When delete and get fale status modal should not close", async () => {
     const deleteButton = getContainer().querySelectorAll("button")[0];
     fireEvent.click(deleteButton);
-    expect(ModalClose).toBeCalled();
-    ModalClose.mockClear()
+    await Promise.resolve();
+
+    expect(ModalClose).toBeCalledTimes(0);
+  });
+
+  it("When edit should run setentrytoedit", () => {
+    const deleteButton = getContainer().querySelectorAll("button")[1];
+    fireEvent.click(deleteButton);
+    expect(SetEntryToEdit).toBeCalledTimes(1);
+  });
+  it("When edit should run seteditmodalopen", () => {
+    const deleteButton = getContainer().querySelectorAll("button")[1];
+    fireEvent.click(deleteButton);
+    expect(SetEditmodalOpen).toBeCalledTimes(1);
+  });
+  it("When edit should run modalClose", () => {
+    const deleteButton = getContainer().querySelectorAll("button")[1];
+    fireEvent.click(deleteButton);
+    expect(ModalClose).toBeCalledTimes(1);
   });
 });
