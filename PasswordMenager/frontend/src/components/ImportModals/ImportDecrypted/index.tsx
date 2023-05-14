@@ -34,7 +34,7 @@ export const ImportDecrypted = ({
     Import.getInstance()
       .ImportFile(formData, 0)
       .then(console.log)
-      .catch(console.log);
+      .catch(console.error);
   };
 
   useEffect(() => {
@@ -42,12 +42,14 @@ export const ImportDecrypted = ({
     setuuid((Math.random() + 1).toString(36).substring(7));
   }, [modalOpen]);
 
-  return (
+  return modalOpen ? (
     <AcceptModalComponent
       visible={importModalOpen}
       onClose={closeImportModalHandle}
       component={<ImportFile fileChangeHandle={fileChange} key={uuid} />}
       acceptHandle={acceptHandleFunction}
     />
+  ) : (
+    <></>
   );
 };

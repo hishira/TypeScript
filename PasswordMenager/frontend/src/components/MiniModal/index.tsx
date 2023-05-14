@@ -16,7 +16,6 @@ export const ModalButtonChoicer: React.FC<MoreMiniModal> = ({
   modalClose,
 }: MoreMiniModal): JSX.Element => {
   const deletehandle = async (entryid: string): Promise<void> => {
-    console.log(entryid);
     const response: DeleteEntryResponse =
       await Entry.getInstance().DeleteUserEntry(entryid);
     if (response.status) {

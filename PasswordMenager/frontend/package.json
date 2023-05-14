@@ -62,6 +62,7 @@
     "testEnvironmentOptions": {
       "url": "http://localhost/"
     },
-    "setupFilesAfterEnv": [ "@testing-library/jest-dom/extend-expect" ]
+    "setupFilesAfterEnv": [ "@testing-library/jest-dom/extend-expect" ],
+    "modulePathIgnorePatterns": ["utils"]
   }
 }

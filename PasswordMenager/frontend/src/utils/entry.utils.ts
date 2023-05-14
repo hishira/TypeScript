@@ -118,7 +118,7 @@ export class Entry {
     return response;
   }
 
-  DeleteUserEntry = async (entryid: string): Promise<DeleteEntryResponse> => {
+  async DeleteUserEntry(entryid: string): Promise<DeleteEntryResponse> {
     let accesstoken = this.sessionStorage.getAccessToken();
     let response: DeleteEntryResponse = await this.DeleteEntry(
       entryid,
@@ -130,7 +130,7 @@ export class Entry {
       response = await this.DeleteEntry(entryid, accesstoken);
     }
     return response;
-  };
+  }
 
   async EditEntry(
     editedbody: EditEntry,
