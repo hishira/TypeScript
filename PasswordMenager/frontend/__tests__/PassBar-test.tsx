@@ -1,12 +1,30 @@
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, fireEvent, render } from "@testing-library/react";
 import PassBar from "../src/components/PassBarr";
+import { Export } from "../src/utils/export.utils";
+
+const ExportExportEncryptedCSVSpy = jest
+  .spyOn(Export.prototype, "ExportEntriesCsv")
+  .mockImplementation(() => Promise.resolve());
+
+const ExportEncrypted = jest
+  .spyOn(Export.prototype, "ExportEncrypted")
+  .mockImplementation(() => Promise.resolve(true));
 
 const getContainer = (): HTMLElement => {
   const { container } = render(<PassBar />);
 
   return container;
 };
-afterEach(cleanup);
+
+const getByRole = () => {
+  const { getByRole } = render(<PassBar />);
+
+  return getByRole;
+};
+afterEach(() => {
+  cleanup();
+  jest.clearAllMocks();
+});
 
 describe("PassBar component", () => {
   it("Component should be defined", () => {
@@ -43,5 +61,55 @@ describe("PassBar component", () => {
     const container = getContainer();
     const buttons = container.querySelectorAll("button");
     expect(buttons[3].textContent).toBe("Import encrypted");
+  });
+
+  it("Edit entry should open modal", () => {
+    const container = getContainer();
+    const getbyrole = getByRole();
+    const button = container.querySelectorAll("button")[0];
+    fireEvent.click(button);
+    expect(getbyrole("dialog")).toBeDefined();
+  });
+
+  it("Export entries should trigger Export ExportEntriesCsv function", async () => {
+    const container = getContainer();
+    const button = container.querySelectorAll("button")[1];
+    fireEvent.click(button);
+    await Promise.resolve();
+
+    expect(ExportExportEncryptedCSVSpy).toBeCalledTimes(1);
+  });
+
+  it("Export entries should trigger Export ExportEncrypted function", async () => {
+    const container = getContainer();
+    const button = container.querySelectorAll("button")[2];
+    fireEvent.click(button);
+    await Promise.resolve();
+
+    expect(ExportEncrypted).toBeCalledTimes(1);
+  });
+
+  it("Import encrypted should open modal", async () => {
+    const container = getContainer();
+    const getbyrole = getByRole();
+    const button = container.querySelectorAll("button")[3];
+    fireEvent.click(button);
+    await Promise.resolve().catch();
+
+    expect(getbyrole("dialog")).toBeDefined();
+  });
+
+  it("Import encrypted modal should has input",async () => {
+    const container = getContainer();
+    const button = container.querySelectorAll("button")[3];
+    fireEvent.click(button);
+    await Promise.resolve().catch()
+    const buttons = container.querySelectorAll("button");
+    let includeModalButtons = false;
+    buttons.forEach((button) => {
+      if (button.textContent === "Accept" || button.textContent === "Cancel")
+        includeModalButtons = true;
+    });
+    expect(includeModalButtons).toBe(true);
   });
 });

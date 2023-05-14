@@ -14,9 +14,9 @@ const ModalComponent = ({
 }: ModalProps): JSX.Element => {
   EscapeModalHandle(onClose);
   return (
-    <Modal onClick={(e)=>clickOnModal(e, onClose)} visible={visible}>
+    visible ? <Modal onClick={(e)=>clickOnModal(e, onClose)} visible={visible}>
       <div className="hook">{component}</div>
-    </Modal>
+    </Modal> : <></>
   );
 };
 

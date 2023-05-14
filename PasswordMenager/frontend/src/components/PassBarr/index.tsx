@@ -28,19 +28,15 @@ const PassBar: React.FC = (): JSX.Element => {
 
   return (
     <Container>
-      {modalopen ? (
-        <Modal
-          visible={modalopen}
-          onClose={closehandle}
-          component={<NewEntryComponent refreshentry={false} />}
-        />
-      ) : null}
-      {importModalOpen ? (
-        <ImportDecrypted
-          modalOpen={importModalOpen}
-          closeModalHandle={closeImportModalHandle}
-        />
-      ) : null}
+      <Modal
+        visible={modalopen}
+        onClose={closehandle}
+        component={<NewEntryComponent refreshentry={false} />}
+      />
+      <ImportDecrypted
+        modalOpen={importModalOpen}
+        closeModalHandle={closeImportModalHandle}
+      />
       <Button color="lightgray" onClick={() => setmodalopen(true)}>
         New entry
       </Button>

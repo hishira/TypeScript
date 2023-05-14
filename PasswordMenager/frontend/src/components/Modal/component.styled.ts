@@ -4,7 +4,7 @@ type ModalProps = {
   visible?: boolean;
 };
 
-export const Modal = styled.div<ModalProps>`
+export const Modal = styled.div.attrs({ role: "dialog" })<ModalProps>`
   display: ${({ visible }) => (visible ? "flex" : "none")};
   position: absolute;
   left: 0;
