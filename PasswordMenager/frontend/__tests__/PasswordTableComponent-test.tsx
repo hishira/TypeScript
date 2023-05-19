@@ -42,4 +42,10 @@ describe('PasswordTableComponent component',()=>{
 
         expect(theads).toHaveLength(5);
     })
+
+    it('Should has 11 tr elements', ()=>{
+        const tr = getContainer().querySelectorAll('tr');
+
+        expect(tr).toHaveLength(11);
+    })
 })
