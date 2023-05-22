@@ -1,4 +1,10 @@
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import FieldsContainer from "../src/components/FieldsComponent";
 import { Entry } from "../src/utils/entry.utils";
 import { GetEntriesMock, GetEntryMock } from "./utils/Entry.mock";
@@ -39,14 +45,25 @@ describe("FieldsContainer component", () => {
   });
 
   it("Should has 3 tr element", async () => {
-    const trElements = await waitFor(()=>getContainer().querySelectorAll("tr"));
-    
+    const trElements = await waitFor(() =>
+      getContainer().querySelectorAll("tr")
+    );
+
     await waitFor(() => expect(trElements).toHaveLength(3));
   });
   it("Delete button should trigger delete", async () => {
     const buttons = getContainer().querySelectorAll("button");
     const deleteButton = getButtonWithSpecificText(buttons, "Delete");
     deleteButton && fireEvent.click(deleteButton);
-    await waitFor(()=>expect(jestDeleteMockSpy).toBeCalledTimes(1));
+    await waitFor(() => expect(jestDeleteMockSpy).toBeCalledTimes(1));
+  });
+
+  it("Delete button should trigger refreshGroupMockFunction", async () => {
+    const buttons = getContainer().querySelectorAll("button");
+    const deleteButton =  screen.queryByRole("button", {
+      name: /delete/i,
+    }); //getButtonWithSpecificText(buttons, "Delete");
+    deleteButton && fireEvent.click(deleteButton);
+    await waitFor(() => expect(refreshGroupMockFunction).toBeCalledTimes(1));
   });
 });
