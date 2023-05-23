@@ -62,18 +62,20 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const closeHandle = (): void => setModal(false);
   return (
     <Container>
-      <Modal
-        visible={modal}
-        onClose={closeHandle}
-        component={
-          <ComponentToModal
-            func={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setgroupdto({ name: e.target.value })
-            }
-            buttonhandle={buttonHandleClick}
-          />
-        }
-      />
+      {modal ? (
+        <Modal
+          visible={modal}
+          onClose={closeHandle}
+          component={
+            <ComponentToModal
+              func={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setgroupdto({ name: e.target.value })
+              }
+              buttonhandle={buttonHandleClick}
+            />
+          }
+        />
+      ) : null}
       <Groups>
         {groups.map((group: IGroup) => (
           <GroupContainer
