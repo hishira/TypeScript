@@ -2,39 +2,15 @@ import React, { useState } from "react";
 import { GroupEffect } from "../../hooks/groups.hook";
 import { Group } from "../../utils/group.utils";
 import Button from "../Button";
-import FormElement from "../FormElement/";
 import Modal from "../Modal/";
+import NewGroupComponent from "./NewGroupComponent";
 import {
   ButtonContainer,
   Container,
   GroupContainer,
   Groups,
-  NewGroup,
 } from "./component.styled";
 
-type ModalComponentProps = {
-  func: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  buttonhandle: () => void;
-};
-
-const ComponentToModal = ({
-  func,
-  buttonhandle,
-}: ModalComponentProps): JSX.Element => {
-  return (
-    <NewGroup>
-      <FormElement
-        label="Group name"
-        inputtype="text"
-        inputplaceholder="name"
-        inputChange={func}
-      />
-      <Button onClick={buttonhandle} color="lightblue">
-        Add group
-      </Button>
-    </NewGroup>
-  );
-};
 const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const [modal, setModal] = useState<boolean>(false);
   const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
@@ -62,18 +38,20 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const closeHandle = (): void => setModal(false);
   return (
     <Container>
-      <Modal
-        visible={modal}
-        onClose={closeHandle}
-        component={
-          <ComponentToModal
-            func={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setgroupdto({ name: e.target.value })
-            }
-            buttonhandle={buttonHandleClick}
-          />
-        }
-      />
+      {modal ? (
+        <Modal
+          visible={modal}
+          onClose={closeHandle}
+          component={
+            <NewGroupComponent
+              func={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setgroupdto({ name: e.target.value })
+              }
+              buttonhandle={buttonHandleClick}
+            />
+          }
+        />
+      ) : null}
       <Groups>
         {groups.map((group: IGroup) => (
           <GroupContainer
