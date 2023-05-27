@@ -20,7 +20,7 @@ const getContainer = (): HTMLElement => {
 
 afterEach(cleanup);
 afterEach(() => jest.clearAllMocks());
-// TODO: End this test
+// TODO: End this test, create group handle check
 describe("GroupComponent tests", () => {
   it("Component should be defined", () => {
     expect(getContainer()).toBeDefined();
