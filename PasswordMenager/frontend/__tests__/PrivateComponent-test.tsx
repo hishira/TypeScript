@@ -20,11 +20,17 @@ const getContainer = (store?: IGeneral): HTMLElement => {
 afterEach(cleanup);
 afterEach(() => jest.clearAllMocks());
 
+const componentShouldBeDefined = (userLogin: boolean) => {
+  expect(getContainer(getPrivateRouteStore(userLogin))).toBeDefined();
+};
 describe("PrivateComponent test", () => {
   it("Should be defined", () => {
-    expect(getContainer(getPrivateRouteStore(true))).toBeDefined();
+    componentShouldBeDefined(true);
   });
 
+  it("Event if user is not login component should be defined", () => {
+    componentShouldBeDefined(false);
+  });
   it("If not user login should redirect to login component", () => {
     const container = getContainer(getPrivateRouteStore(false));
     expect(container.querySelector("form")).toBeDefined(); // Login form
@@ -35,8 +41,8 @@ describe("PrivateComponent test", () => {
     expect(container.querySelector("form")).toBe(null);
   });
 
-  it('With user login should render proper component', ()=>{
+  it("With user login should render proper component", () => {
     const container = getContainer();
-    expect(container.querySelector('.test-class')).toBeDefined();
-  })
+    expect(container.querySelector(".test-class")).toBeDefined();
+  });
 });
