@@ -2,18 +2,9 @@ import { render } from "@testing-library/react";
 import { Provider } from "mobx-react";
 import { General, IGeneral } from "../src/models/General";
 import PopUpElement from "../src/components/Popup/index";
+import { POPUPMESSAGE, POPUPTYPE, getStoreForPopUp } from "./utils/store.utils";
 
-const POPUPMESSAGE = "Example popup message";
-const POPUPTYPE = "error";
-const getStoreForPopUp = () =>
-  General.create({
-    useractive: true,
-    popUpelement: {
-      open: true,
-      type: POPUPTYPE,
-      message: POPUPMESSAGE,
-    },
-  });
+
 const getContainer = (store?: IGeneral): HTMLElement => {
   const { container } = render(
     <Provider store={store}>
