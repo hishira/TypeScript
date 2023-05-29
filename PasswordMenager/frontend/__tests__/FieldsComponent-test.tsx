@@ -18,7 +18,7 @@ const jestMockSpy = jest
 
 const jestDeleteMockSpy = jest
   .spyOn(Entry.prototype, "DeleteUserEntry")
-  .mockImplementationOnce((entryId) =>
+  .mockImplementation((entryId) =>
     Promise.resolve({ status: true, respond: GetEntryMock() })
   );
 const refreshGroupMockFunction = jest.fn(() => {});
@@ -45,25 +45,31 @@ describe("FieldsContainer component", () => {
   });
 
   it("Should has 3 tr element", async () => {
-    const trElements = await waitFor(() =>
-      getContainer().querySelectorAll("tr")
-    );
-
-    await waitFor(() => expect(trElements).toHaveLength(3));
+    //const trElements = await waitFor(() =>
+    const container = getContainer();
+    await waitFor(() => {
+      const trElements = container.querySelectorAll("tr");
+      expect(trElements).toHaveLength(3);
+    });
   });
   it("Delete button should trigger delete", async () => {
-    const buttons = getContainer().querySelectorAll("button");
-    const deleteButton = getButtonWithSpecificText(buttons, "Delete");
-    deleteButton && fireEvent.click(deleteButton);
-    await waitFor(() => expect(jestDeleteMockSpy).toBeCalledTimes(1));
+    const container = getContainer();
+
+    await waitFor(() => {
+      const buttons = container.querySelectorAll("button");
+      const deleteButton = getButtonWithSpecificText(buttons, "Delete");
+      deleteButton && fireEvent.click(deleteButton);
+      expect(jestDeleteMockSpy).toBeCalledTimes(1);
+    });
   });
 
   it("Delete button should trigger refreshGroupMockFunction", async () => {
-    const buttons = getContainer().querySelectorAll("button");
-    const deleteButton =  screen.queryByRole("button", {
-      name: /delete/i,
-    }); //getButtonWithSpecificText(buttons, "Delete");
-    deleteButton && fireEvent.click(deleteButton);
-    await waitFor(() => expect(refreshGroupMockFunction).toBeCalledTimes(1));
+    const container = getContainer();
+    await waitFor(() => {
+      const buttons = container.querySelectorAll("button");
+      const deleteButton = getButtonWithSpecificText(buttons, "Delete");
+      deleteButton && fireEvent.click(deleteButton);
+      expect(refreshGroupMockFunction).toBeCalledTimes(1);
+    });
   });
 });
