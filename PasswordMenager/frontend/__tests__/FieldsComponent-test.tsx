@@ -21,6 +21,11 @@ const jestDeleteMockSpy = jest
   .mockImplementation((entryId) =>
     Promise.resolve({ status: true, respond: GetEntryMock() })
   );
+
+//quick fix
+global.fetch = jest.fn(() =>
+  Promise.resolve({ json: () => Promise.resolve(true) })
+);
 const refreshGroupMockFunction = jest.fn(() => {});
 const getContainer = () => {
   const { container } = render(
@@ -42,6 +47,12 @@ describe("FieldsContainer component", () => {
   it("GetUserEntriesByGroupID should be called", () => {
     const container = getContainer();
     expect(jestMockSpy).toBeCalledTimes(1);
+  });
+
+  it("On start should has no dialog", () => {
+    const container = getContainer();
+    const modal = container.querySelectorAll('[role="dialog"]');
+    expect(modal).toHaveLength(0);
   });
 
   it("Should has 3 tr element", async () => {
@@ -70,6 +81,27 @@ describe("FieldsContainer component", () => {
       const deleteButton = getButtonWithSpecificText(buttons, "Delete");
       deleteButton && fireEvent.click(deleteButton);
       expect(refreshGroupMockFunction).toBeCalledTimes(1);
+    });
+  });
+
+  it("Should has edit button", async () => {
+    const container = getContainer();
+    await waitFor(() => {
+      const buttons = container.querySelectorAll("button");
+      const editButton = getButtonWithSpecificText(buttons, "Edit");
+      expect(editButton).toBeDefined();
+    });
+  });
+
+  it("Edit button should open modal", async () => {
+    const container = getContainer();
+    await waitFor(() => {
+      const editButton = getButtonWithSpecificText(
+        container.querySelectorAll("button"),
+        "Edit"
+      );
+      editButton && fireEvent.click(editButton);
+      expect(container.querySelectorAll('[role="dialog"]')).toHaveLength(1);
     });
   });
 });

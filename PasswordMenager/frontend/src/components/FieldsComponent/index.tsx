@@ -57,32 +57,36 @@ const FieldsContainer = ({
   };
   return (
     <Container>
-      {editmodalopen ? <Modal
-        visible={editmodalopen}
-        onClose={onmodalclose}
-        component={
-          <NewEntryComponent
-            refreshentry={refreshmodalentry}
-            edit={true}
-            editentryid={entrytoedit}
-            refresh={refreshentry}
-            closeModalDispatcherHandle={seteditmodalopen}
-          />
-        }
-      /> : null}
-      <Modal
-        visible={smallmodalopen}
-        onClose={smallmodalclose}
-        component={
-          <ModalButtonChoicer
-            entry={entrywithsmallbutton}
-            refreshgroupentities={refreshgroupentities}
-            setentrytoedit={setentrytoedit}
-            seteditmodalopen={seteditmodalopen}
-            modalClose={smallmodalclose}
-          />
-        }
-      />
+      {editmodalopen ? (
+        <Modal
+          visible={editmodalopen}
+          onClose={onmodalclose}
+          component={
+            <NewEntryComponent
+              refreshentry={refreshmodalentry}
+              edit={true}
+              editentryid={entrytoedit}
+              refresh={refreshentry}
+              closeModalDispatcherHandle={seteditmodalopen}
+            />
+          }
+        />
+      ) : null}
+      {smallmodalopen ? (
+        <Modal
+          visible={smallmodalopen}
+          onClose={smallmodalclose}
+          component={
+            <ModalButtonChoicer
+              entry={entrywithsmallbutton}
+              refreshgroupentities={refreshgroupentities}
+              setentrytoedit={setentrytoedit}
+              seteditmodalopen={seteditmodalopen}
+              modalClose={smallmodalclose}
+            />
+          }
+        />
+      ) : null}
       <PasswordTableComponent
         entries={entries}
         deletehandle={deletehandle}
