@@ -9,6 +9,7 @@ import FieldsContainer from "../src/components/FieldsComponent";
 import { Entry } from "../src/utils/entry.utils";
 import { GetEntriesMock, GetEntryMock } from "./utils/Entry.mock";
 import { getButtonWithSpecificText } from "./utils/button.utils";
+import { checkElementMatchContent } from "./utils/element.utils";
 
 const jestMockSpy = jest
   .spyOn(Entry.prototype, "GetUserEntriesByGroupID")
@@ -40,6 +41,7 @@ const getContainer = () => {
 };
 afterEach(cleanup);
 afterEach(() => jest.clearAllMocks());
+
 describe("FieldsContainer component", () => {
   it("Container should be defined", () => {
     expect(getContainer()).toBeDefined();
@@ -102,6 +104,26 @@ describe("FieldsContainer component", () => {
       );
       editButton && fireEvent.click(editButton);
       expect(container.querySelectorAll('[role="dialog"]')).toHaveLength(1);
+    });
+  });
+
+  it("Edit modal should has proper labels", async () => {
+    const container = getContainer();
+    await waitFor(() => {
+      const editButton = getButtonWithSpecificText(
+        container.querySelectorAll("button"),
+        "Edit"
+      );
+      editButton && fireEvent.click(editButton);
+      const modal = container.querySelector('[role="dialog"]');
+      const modalLabels = modal?.querySelectorAll("label");
+      checkElementMatchContent(
+        modalLabels ?? [],
+        "Title",
+        "Username",
+        "Password",
+        "Note"
+      );
     });
   });
 });
