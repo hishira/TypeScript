@@ -13,10 +13,12 @@ const ModalComponent = ({
   onClose,
 }: ModalProps): JSX.Element => {
   EscapeModalHandle(onClose);
-  return (
-    visible ? <Modal onClick={(e)=>clickOnModal(e, onClose)} visible={visible}>
+  return visible ? (
+    <Modal onClick={(e) => clickOnModal(e, onClose)} visible={visible}>
       <div className="hook">{component}</div>
-    </Modal> : <></>
+    </Modal>
+  ) : (
+    <></>
   );
 };
 
