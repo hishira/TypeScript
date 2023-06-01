@@ -138,4 +138,38 @@ describe("NewEntryComponent test", () => {
       expect(editEntrySpyComponent).toBeCalledTimes(1);
     });
   });
+
+  it("Edit action should trigger closeModalDispatcherHandle", async () => {
+    await waitFor(() => {
+      const buttons = getContainer(true).querySelectorAll("button");
+      const update = getButtonWithSpecificText(buttons, "Update");
+      update && fireEvent.click(update);
+      expect(closeModalDispatchMockHandle).toBeCalledTimes(1);
+    });
+  });
+
+  it("Edit action should trigger refresh", async () => {
+    await waitFor(() => {
+      const buttons = getContainer(true).querySelectorAll("button");
+      const update = getButtonWithSpecificText(buttons, "Update");
+      update && fireEvent.click(update);
+      expect(refreshMockFunction).toBeCalledTimes(1);
+    });
+  });
+
+  it("with edit option should has option html element", async () => {
+    await waitFor(() => {
+      const container = getContainer();
+      const options = container.querySelector("option");
+      expect(options).toBeDefined();
+    });
+  });
+
+  it("with not edit option should not has option html element", async () => {
+    await waitFor(() => {
+      const container = getContainer(true);
+      const options = container.querySelector("option");
+      expect(options).toBe(null);
+    });
+  });
 });
