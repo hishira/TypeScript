@@ -13,7 +13,7 @@ type RegisterInfo = {
 };
 
 type Prop = {
-  store: IGeneral;
+  store?: IGeneral;
 };
 const SignUp = ({ store }: Prop) => {
   const [registerinfo, setregisterinfo] = useState<RegisterInfo>({
@@ -40,7 +40,7 @@ const SignUp = ({ store }: Prop) => {
   ): Promise<void> => {
     e.preventDefault();
     if (registerinfo.password.length < 6) {
-      store.setPopUpinfo({
+      store?.setPopUpinfo({
         open: true,
         message: "Password min length must be 6",
         type: "info",
@@ -48,7 +48,7 @@ const SignUp = ({ store }: Prop) => {
       return;
     }
     if (registerinfo.password !== registerinfo.confirmpassword) {
-      store.setPopUpinfo({
+      store?.setPopUpinfo({
         open: true,
         message: "Passwords must be the same",
         type: "info",
@@ -62,7 +62,7 @@ const SignUp = ({ store }: Prop) => {
       })
       .then((response) => {
         if (!!response) {
-          store.setPopUpinfo({
+          store?.setPopUpinfo({
             open: true,
             message: "User created",
             type: "success",

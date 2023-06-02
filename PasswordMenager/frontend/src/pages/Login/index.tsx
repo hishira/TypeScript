@@ -8,7 +8,7 @@ import { SessionStorage } from "../../utils/localstorage.utils";
 import { Container, FormContainer } from "./component.styled";
 
 type Prop = {
-  store: IGeneral;
+  store?: IGeneral;
 };
 const LoginPage = ({ store }: Prop): JSX.Element => {
   const [infoLogin, setInfoLogin] = useState<UserAuth>({
@@ -31,12 +31,15 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     const response: any = await Auth.getInstance().LoginUserHandle(infoLogin);
     console.log(response);
     // TODO: Refactor
-    if (response?.status && !Object.keys(response?.response).includes('message')) {
+    if (
+      response?.status &&
+      !Object.keys(response?.response).includes("message")
+    ) {
       SessionStorage.getInstance().setLocalStorageToken(response.response);
-      store.setUserActive(true);
+      store?.setUserActive(true);
       history.push("/store");
     } else {
-      store.setPopUpinfo({
+      store?.setPopUpinfo({
         open: true,
         type: "info",
         message: response.response.message,
@@ -51,8 +54,8 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
   const history = useHistory();
 
   useEffect(() => {
-    if (store.UserActivity) history.push("/store");
-  }, [history, store.UserActivity]);
+    if (store?.UserActivity) history.push("/store");
+  }, [history, store?.UserActivity]);
   return (
     <Container>
       <FormContainer>

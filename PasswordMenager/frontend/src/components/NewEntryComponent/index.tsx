@@ -75,6 +75,7 @@ const NewEntryComponent = ({
   }, [refreshentry]);
 
   const addnewentry = async (): Promise<void> => {
+    // TODO: Prevent from doing if inputs are empty even if 
     console.log(newentry);
     Entry.getInstance()
       .CreateNewEntryUser(newentry)
@@ -85,7 +86,8 @@ const NewEntryComponent = ({
         } else {
           console.log("Something wrong");
         }
-      });
+      })
+      .catch(console.error);
   };
 
   const getRechangeObject = (): EditEntry => {
