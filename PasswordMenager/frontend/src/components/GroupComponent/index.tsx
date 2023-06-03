@@ -22,12 +22,12 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   };
 
   const buttonHandleClick = async (): Promise<void> => {
-    console.log(groupdto.name);
     Group.getInstance()
       .CreateGroupForUser(groupdto)
       .then((resp) => {
         setRefetch(!refetch);
         setModal(false);
+        setgroupdto({ name: "" });
       });
   };
 
@@ -48,6 +48,7 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
                 setgroupdto({ name: e.target.value })
               }
               buttonhandle={buttonHandleClick}
+              isButtonDisabled={groupdto.name === ""}
             />
           }
         />
