@@ -1,8 +1,8 @@
 import { randomUUID } from "./uuid.utils";
-
+export const GROUPNAME = "Group mock name";
 export const GetGroupMock = (): IGroup => ({
   _id: randomUUID(),
-  name: "Group mock name",
+  name: GROUPNAME,
   userid: randomUUID(),
 });
 
