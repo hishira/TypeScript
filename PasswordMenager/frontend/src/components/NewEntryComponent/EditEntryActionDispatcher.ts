@@ -9,6 +9,14 @@ export class EditEntryActionDispatcher {
   private passwordcharacters: PasswordCharactersTypes;
   private newentry: CreateEntryDto;
   private passwordLength: number;
+
+  get isFormValid(): boolean {
+    return (
+      this.newentry.password !== "" &&
+      this.newentry.groupid !== "" &&
+      this.newentry.username !== ""
+    );
+  }
   constructor(
     setNewEntry: DispatchAction<CreateEntryDto>,
     setpasswordcharacters: DispatchAction<PasswordCharactersTypes>,
@@ -32,6 +40,7 @@ export class EditEntryActionDispatcher {
       groupid: "",
     });
   }
+
   generateHandle() {
     let password: string = "";
     for (let i = 0; i < this.passwordLength; i++) {
@@ -79,7 +88,7 @@ export class EditEntryActionDispatcher {
   }
 
   groupset(e: React.ChangeEvent<HTMLSelectElement>) {
-    console.log(e.target.value)
+    console.log(e.target.value);
     this.setnewentry({ ...this.newentry, groupid: e.target.value });
   }
 }
