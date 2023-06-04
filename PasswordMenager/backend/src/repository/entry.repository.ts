@@ -7,6 +7,11 @@ import { LastEditedVariable } from '../schemas/Interfaces/entryMeta.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { NotImplementedError } from 'src/errors/NotImplemented';
+import {
+  EntrySchemaUtils,
+  algorithm,
+} from 'src/schemas/utils/Entry.schema.utils';
+import { Cipher } from 'src/utils/cipher.utils';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry> {
@@ -29,6 +34,7 @@ export class EntryRepository implements Repository<IEntry> {
       .exec()
       .then((entryById) => {
         const data = this.createEditentity(entry, entryById);
+        console.log(data);
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
           .then((data) => data);
@@ -68,6 +74,15 @@ export class EntryRepository implements Repository<IEntry> {
       };
     }
     if (entry.password && entryById.password !== entry.password) {
+      console.log(data);
+      const bs = EntrySchemaUtils.generateKeyValue(entryById.userid);
+      const { password } = data;
+      data = {
+        ...data,
+        password: new Cipher(algorithm, bs, process.env.iv).encryptValue(
+          password,
+        ),
+      };
       data = {
         ...data,
         ['meta.lastPassword']: entryById.password,
