@@ -6,6 +6,7 @@ import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { LastEditedVariable } from '../schemas/Interfaces/entryMeta.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { NotImplementedError } from 'src/errors/NotImplemented';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry> {
@@ -54,7 +55,7 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   getById(): Promise<IEntry> {
-    throw new Error('Method not implemented.');
+    throw new NotImplementedError();
   }
 
   private createEditentity(entry: Partial<IEntry>, entryById: IEntry) {

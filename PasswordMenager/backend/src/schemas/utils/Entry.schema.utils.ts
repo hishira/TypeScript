@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
 import { Cipher } from 'src/utils/cipher.utils';
 import { Decipher } from 'src/utils/decipher.utils';
 export const algorithm = 'aes-256-ctr';
 
+// TODO: Change iv problem
 export class EntrySchemaUtils {
   static generateKeyValue(userid): Buffer | string {
     let bs = Buffer.from(userid, 'utf-8').subarray(0, 32);

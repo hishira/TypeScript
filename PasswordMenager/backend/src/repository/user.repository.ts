@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { NotImplementedError } from 'src/errors/NotImplemented';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -60,7 +61,7 @@ export class UserRepository implements Repository<IUser> {
   }
 
   getById(): Promise<IUser> {
-    throw new Error('Method not implemented.');
+    throw new NotImplementedError();
   }
 
   private async updateUserHandle(
