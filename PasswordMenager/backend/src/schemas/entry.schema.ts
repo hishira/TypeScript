@@ -40,4 +40,5 @@ const EntrySchema = new mognoose.Schema({
 });
 EntrySchema.pre<IEntry>('save', EntrySchemaUtils.BeforeSave);
 EntrySchema.post('find', EntrySchemaUtils.PostFind);
+EntrySchema.post('findOne', EntrySchemaUtils.PostFindOne);
 export default EntrySchema;

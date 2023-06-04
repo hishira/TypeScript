@@ -65,6 +65,7 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   private createEditentity(entry: Partial<IEntry>, entryById: IEntry) {
+    // TODO: Refactor
     let data: any = { ...entry };
     if (entry.note && entryById.note !== entry.note) {
       data = {

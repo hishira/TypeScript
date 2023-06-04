@@ -28,6 +28,18 @@ export class EntrySchemaUtils {
     return result;
   }
 
+  static PostFindOne(result) {
+    const bs = EntrySchemaUtils.generateKeyValue(result.userid);
+    const encryptedPassword = result.password;
+    result.password = new Decipher(algorithm, bs, process.env.iv).decryptValue(
+      encryptedPassword,
+    );
+
+    return result;
+
+    //return result;
+  }
+
   static BeforeSave(this, next) {
     const encryptedPasswod = this.password;
     const bs = EntrySchemaUtils.generateKeyValue(this.userid);
