@@ -29,11 +29,10 @@ const AppBar = ({ store }: AppBarProps): JSX.Element => {
     <Bar>
       <AppBarLeftSide userActive={store?.UserActivity} />
       <RigthSide>
-        {!store?.UserActivity ? (
-          <Button onClick={() => loginclick()} color="lightblue">
-            Login
-          </Button>
-        ) : (
+        {!store?.UserActivity ? //<Button onClick={() => loginclick()} color="lightblue">
+        //  Login
+        //</Button>
+        null : (
           <Button onClick={logouthandle} color="lightblue">
             Logout
           </Button>

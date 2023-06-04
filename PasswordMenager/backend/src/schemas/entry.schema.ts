@@ -1,7 +1,7 @@
 import * as mognoose from 'mongoose';
 import { IEntry } from './Interfaces/entry.interface';
-import { EntrySchemaUtils } from './utils/Entry.schema.utils';
 import EntryMetaSchema from './entryMeta.schema';
+import { EntrySchemaUtils } from './utils/Entry.schema.utils';
 
 const EntrySchema = new mognoose.Schema({
   title: {
@@ -21,6 +21,10 @@ const EntrySchema = new mognoose.Schema({
     default: '',
   },
   groupid: {
+    type: mognoose.Schema.Types.ObjectId,
+    default: '',
+  },
+  userid: {
     type: mognoose.Schema.Types.ObjectId,
     default: '',
   },

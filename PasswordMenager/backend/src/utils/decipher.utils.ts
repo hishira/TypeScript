@@ -2,11 +2,11 @@ import * as crypto from 'crypto';
 
 export class Decipher {
   private algorihtm: string;
-  private secrectKey: string;
+  private secrectKey: string | Buffer;
   private iv: string;
   private decipher: crypto.Decipher;
 
-  constructor(algorihtm: string, secrectKey: string, iv: string) {
+  constructor(algorihtm: string, secrectKey: string | Buffer, iv: string) {
     this.algorihtm = algorihtm;
     this.secrectKey = secrectKey;
     this.iv = iv;
