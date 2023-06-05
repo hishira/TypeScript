@@ -21,6 +21,7 @@ export const ImportDecrypted = ({
   const fileChange = (...args: File[]): void => {
     if (args.length <= 0) return;
     const file = args[0];
+    console.log(file);
     if (file) {
       const formData = new FormData();
       formData.set("file", file);
