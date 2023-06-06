@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const ImportContainer = styled.div`
   display: flex;
+  flex-direction: column;
   padding: 2rem;
   background-color: whitesmoke;
   border-radius: 10px;

@@ -7,5 +7,6 @@ export const Bar = styled.div`
 `;
 export const LeftSide = styled.div``;
 export const RigthSide = styled.div`
+  min-height: 2rem;
   padding: 0.5rem;
 `;

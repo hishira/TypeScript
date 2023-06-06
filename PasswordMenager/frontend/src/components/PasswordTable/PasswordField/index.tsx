@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { TooLongValue } from "../../../hooks/tooLongValue.hook";
 import {
   MinButton,

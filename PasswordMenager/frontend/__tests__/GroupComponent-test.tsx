@@ -1,7 +1,7 @@
-import { cleanup, fireEvent, render } from "@testing-library/react";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import GroupComponent from "../src/components/GroupComponent";
 import { Group } from "../src/utils/group.utils";
-import { GetGroupsMock } from "./utils/Group.mock";
+import { GROUPNAME, GetGroupsMock } from "./utils/Group.mock";
 import { getButtonWithSpecificText } from "./utils/button.utils";
 
 const groupSpy = jest
@@ -35,9 +35,14 @@ describe("GroupComponent tests", () => {
     expect(groupSpy).toBeCalledTimes(1);
   });
 
-  it("Should has 5 group element", () => {
-    const elements = getContainer().querySelectorAll("div[key]");
-    expect(elements).toHaveLength(5);
+  it("Should has 5 group element", async () => {
+    const container = getContainer();
+    await waitFor(async () => {
+      const elements = Array.from(container.querySelectorAll("div")).filter(
+        (el) => el.textContent === GROUPNAME
+      );
+      expect(elements).toHaveLength(5);
+    });
   });
 
   it("Should has button Add new Group", () => {

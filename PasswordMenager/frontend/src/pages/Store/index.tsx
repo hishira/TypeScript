@@ -1,4 +1,3 @@
-import React from "react";
 import PassComponent from "../../components/PassComponent";
 const StorePage = () => {
   return (

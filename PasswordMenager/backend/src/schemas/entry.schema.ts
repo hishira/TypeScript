@@ -1,7 +1,7 @@
 import * as mognoose from 'mongoose';
 import { IEntry } from './Interfaces/entry.interface';
-import { EntrySchemaUtils } from './utils/Entry.schema.utils';
 import EntryMetaSchema from './entryMeta.schema';
+import { EntrySchemaUtils } from './utils/Entry.schema.utils';
 
 const EntrySchema = new mognoose.Schema({
   title: {
@@ -24,6 +24,10 @@ const EntrySchema = new mognoose.Schema({
     type: mognoose.Schema.Types.ObjectId,
     default: '',
   },
+  userid: {
+    type: mognoose.Schema.Types.ObjectId,
+    default: '',
+  },
   passwordExpiredDate: {
     type: Date,
     default: null,
@@ -36,4 +40,5 @@ const EntrySchema = new mognoose.Schema({
 });
 EntrySchema.pre<IEntry>('save', EntrySchemaUtils.BeforeSave);
 EntrySchema.post('find', EntrySchemaUtils.PostFind);
+EntrySchema.post('findOne', EntrySchemaUtils.PostFindOne);
 export default EntrySchema;

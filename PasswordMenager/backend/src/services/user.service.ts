@@ -1,12 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { FilterQuery, Model } from 'mongoose';
-import { DTO } from 'src/schemas/dto/object.interface';
+import { FilterQuery } from 'mongoose';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
-import { IMeta } from 'src/schemas/Interfaces/meta.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { CreateUserDto } from '../schemas/dto/user.dto';
-import { IUser } from '../schemas/Interfaces/user.interface';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
+import { DTO } from 'src/schemas/dto/object.interface';
+import { IUser } from '../schemas/Interfaces/user.interface';
+import { CreateUserDto } from '../schemas/dto/user.dto';
 
 @Injectable()
 export class UserService {

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { ImportModalOpenHandle } from "../../../hooks/importDecrypted.hook";
 import { Import } from "../../../utils/import.utils";
 import { ImportFile } from "../../ImportFille";
 import { AcceptModalComponent } from "../../Modal/AcceptModal";
@@ -21,6 +22,7 @@ export const ImportDecrypted = ({
   const fileChange = (...args: File[]): void => {
     if (args.length <= 0) return;
     const file = args[0];
+    console.log(file);
     if (file) {
       const formData = new FormData();
       formData.set("file", file);
@@ -37,10 +39,7 @@ export const ImportDecrypted = ({
       .catch(console.error);
   };
 
-  useEffect(() => {
-    setImportModalOpen(modalOpen);
-    setuuid((Math.random() + 1).toString(36).substring(7));
-  }, [modalOpen]);
+  ImportModalOpenHandle(setImportModalOpen, setuuid, modalOpen);
 
   return modalOpen ? (
     <AcceptModalComponent

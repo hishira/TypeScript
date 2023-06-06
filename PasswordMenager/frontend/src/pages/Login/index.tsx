@@ -1,7 +1,8 @@
 import { inject, observer } from "mobx-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import FormComponent from "../../components/Form/index";
+import { LoginHook } from "../../hooks/login.hook";
 import { IGeneral } from "../../models/General";
 import { Auth } from "../../utils/auth.utils";
 import { SessionStorage } from "../../utils/localstorage.utils";
@@ -53,9 +54,8 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    if (store?.UserActivity) history.push("/store");
-  }, [history, store?.UserActivity]);
+  LoginHook(history, store);
+
   return (
     <Container>
       <FormContainer>

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { NotImplementedError } from 'src/errors/NotImplemented';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -49,6 +50,6 @@ export class GroupRepository implements Repository<IGroup> {
   }
 
   getById(): Promise<IGroup> {
-    throw new Error('Method not implemented.');
+    throw new NotImplementedError();
   }
 }

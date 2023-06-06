@@ -75,7 +75,7 @@ const NewEntryComponent = ({
   }, [refreshentry]);
 
   const addnewentry = async (): Promise<void> => {
-    // TODO: Prevent from doing if inputs are empty even if 
+    // TODO: Prevent from doing if inputs are empty even if
     console.log(newentry);
     Entry.getInstance()
       .CreateNewEntryUser(newentry)
@@ -209,7 +209,7 @@ const NewEntryComponent = ({
             value={newentry.note}
           />
           {!edit ? (
-            <Button size="small" color="lightblue" onClick={addnewentry}>
+            <Button disabled={!editEntry.isFormValid} size="small" color="lightblue" onClick={addnewentry}>
               Add
             </Button>
           ) : (
