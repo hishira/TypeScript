@@ -57,9 +57,7 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
         {groups.map((group: IGroup) => (
           <GroupContainer
             key={group._id}
-            {...(selectedgroup === group._id && {
-              style: { backgroundColor: "lightslategrey" },
-            })}
+            isSelected={selectedgroup === group._id}
             onClick={() => ongroupclick(group)}
           >
             {group.name}

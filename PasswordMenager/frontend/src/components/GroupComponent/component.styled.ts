@@ -4,8 +4,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 30%;
-  border-right: 0.1rem solid whitesmoke;
+  width: 25%;
+  border-right: 0.1rem solid lightgray;
   @media (max-width: 650px) {
     width: 100%;
   }
@@ -32,15 +32,19 @@ export const NewGroup = styled.div`
   border-radius: 10px;
   width: 100%;
 `;
-export const GroupContainer = styled.div`
-  border:0.1rem solid lightgrey;
+export const GroupContainer = styled.div<{ isSelected: boolean }>`
+  //border: 0.1rem solid lightgrey;
   padding: 0.5rem;
   text-align: center;
-  &:not(&:first-child){
-    margin-top: 0.4rem;
+  &:first-child{
+    margin-top: .4rem;
+  }
+  &:not(&:first-child) {
+    margin-top: .8rem;
   }
   &:hover {
     cursor: pointer;
-    background-color: lightgray;
+    background-color: whitesmoke;
   }
+  background-color: ${({ isSelected }) => (isSelected ? "whitesmoke" : null)};
 `;

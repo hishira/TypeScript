@@ -33,11 +33,14 @@ const Button = styled.button<Props>`
     animation: ${flash} 0.1s ease forwards;
   }
   &[disabled] {
-    border: 1px solid #CDCDCD;
+    border: 1px solid #cdcdcd;
     background-color: #cccccc;
     color: #666666;
     animation: none;
     cursor: inherit;
+  }
+  &:hover {
+    outline: 0.5px solid lightslategray;
   }
 `;
 
