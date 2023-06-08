@@ -3,6 +3,7 @@ import { EditIcon } from "../../icons/EditIcon";
 import {
   GroupContainer,
   GroupName,
+  GroupOption,
   Groups,
   GroupsIcon,
 } from "./component.styled";
@@ -28,10 +29,13 @@ export const GroupsComponent = ({
           <GroupName isSelected={selectedgroup === group._id}>
             {group.name}
           </GroupName>
-          <GroupsIcon>
-            <EditIcon />
-            <DeleteIcon />
-          </GroupsIcon>
+          <GroupOption>
+            ...
+            <GroupsIcon>
+              <EditIcon />
+              <DeleteIcon />
+            </GroupsIcon>
+          </GroupOption>
         </GroupContainer>
       ))}
     </Groups>
