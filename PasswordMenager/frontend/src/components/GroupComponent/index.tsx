@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { GroupEffect } from "../../hooks/groups.hook";
 import { Group } from "../../utils/group.utils";
-import Button from "../Button";
+import IconButton from "../IconButton";
 import Modal from "../Modal/";
+import { PlusComponent } from "../icons/PlusIcon";
+import { GroupsComponent } from "./Groups";
 import NewGroupComponent from "./NewGroupComponent";
 import {
   ButtonContainer,
-  Container,
-  GroupContainer,
-  Groups,
+  Category,
+  Container
 } from "./component.styled";
 
 const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
@@ -53,24 +54,18 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
           }
         />
       ) : null}
-      <Groups>
-        {groups.map((group: IGroup) => (
-          <GroupContainer
-            key={group._id}
-            {...(selectedgroup === group._id && {
-              style: { backgroundColor: "lightslategrey" },
-            })}
-            onClick={() => ongroupclick(group)}
-          >
-            {group.name}
-          </GroupContainer>
-        ))}
-      </Groups>
-      <ButtonContainer>
-        <Button onClick={clickHandle} color="lightblue">
-          Add new group
-        </Button>
-      </ButtonContainer>
+      <Category>
+        <div>Categories</div>
+        <IconButton onClick={clickHandle}>
+          <PlusComponent></PlusComponent>
+        </IconButton>
+      </Category>
+      <GroupsComponent
+        groups={groups}
+        ongroupclick={ongroupclick}
+        selectedgroup={selectedgroup}
+      />
+      <ButtonContainer></ButtonContainer>
     </Container>
   );
 };

@@ -4,7 +4,7 @@ import Button from "../Button";
 import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
-import { Container } from "./component.styled";
+import { Container, GroupContainer } from "./component.styled";
 const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const [importModalOpen, setImportModalOpen] = useState<boolean>(false);
@@ -37,18 +37,20 @@ const PassBar: React.FC = (): JSX.Element => {
         modalOpen={importModalOpen}
         closeModalHandle={closeImportModalHandle}
       />
-      <Button color="lightgray" onClick={() => setmodalopen(true)}>
-        New entry
-      </Button>
-      <Button color="lightgray" onClick={exportHandle}>
-        Export entries
-      </Button>
-      <Button color="lightgray" onClick={exportEncrypted}>
-        Export encrypted
-      </Button>
-      <Button color="lightgray" onClick={importEncrypted}>
-        Import encrypted
-      </Button>
+      <GroupContainer>
+        <Button color="lightgray" onClick={() => setmodalopen(true)}>
+          New entry
+        </Button>
+        <Button color="lightgray" onClick={exportHandle}>
+          Export entries
+        </Button>
+        <Button color="lightgray" onClick={exportEncrypted}>
+          Export encrypted
+        </Button>
+        <Button color="lightgray" onClick={importEncrypted}>
+          Import encrypted
+        </Button>
+      </GroupContainer>
     </Container>
   );
 };
