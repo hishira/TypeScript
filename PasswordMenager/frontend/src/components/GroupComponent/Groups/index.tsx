@@ -1,4 +1,11 @@
-import { GroupContainer, Groups } from "./component.styled";
+import { DeleteIcon } from "../../icons/DeleteIcon";
+import { EditIcon } from "../../icons/EditIcon";
+import {
+  GroupContainer,
+  GroupName,
+  Groups,
+  GroupsIcon,
+} from "./component.styled";
 
 type GroupsComponentProps = {
   groups: IGroup[];
@@ -18,7 +25,13 @@ export const GroupsComponent = ({
           isSelected={selectedgroup === group._id}
           onClick={() => ongroupclick(group)}
         >
-          {group.name}
+          <GroupName isSelected={selectedgroup === group._id}>
+            {group.name}
+          </GroupName>
+          <GroupsIcon>
+            <EditIcon />
+            <DeleteIcon />
+          </GroupsIcon>
         </GroupContainer>
       ))}
     </Groups>

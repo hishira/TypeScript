@@ -11,18 +11,26 @@ export const Groups = styled.div`
   }
 `;
 export const GroupContainer = styled.div<{ isSelected: boolean }>`
-  //border: 0.1rem solid lightgrey;
   padding: 0.5rem;
-  color: ${({ isSelected }) => (isSelected ? "black" : "slategrey")};
-  //text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   &:first-child {
     margin-top: 0.4rem;
   }
   &:not(&:first-child) {
     margin-top: 0.8rem;
   }
+`;
+export const GroupsIcon = styled.div`
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+`
+export const GroupName = styled.div<{ isSelected: boolean }>`
+  color: ${({ isSelected }) => (isSelected ? "black" : "slategrey")};
   &:hover {
-    cursor:  ${({ isSelected }) => (!isSelected ? 'pointer' : "default")};;
+    cursor: ${({ isSelected }) => (!isSelected ? "pointer" : "default")};
     font-weight: ${({ isSelected }) => (!isSelected ? 550 : "normal")};
   }
 `;
