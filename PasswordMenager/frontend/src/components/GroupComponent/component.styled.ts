@@ -13,6 +13,7 @@ export const Container = styled.div`
 export const Groups = styled.div`
   height: 100%;
   max-height: 100%;
+  padding-left: 2rem;
   overflow: auto;
   scroll-behavior: smooth;
   @media (max-width: 650px) {
@@ -25,7 +26,18 @@ export const ButtonContainer = styled.div`
   padding: 1rem;
   box-sizing: border-box;
 `;
+export const Category = styled.div`
+  padding: 1rem 1.4rem;
+  text-transform: uppercase;
+  color: slategray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  position: relative;
+  box-sizing: border-box;
 
+`
 export const NewGroup = styled.div`
   background-color: white;
   padding: 15px;
@@ -35,7 +47,7 @@ export const NewGroup = styled.div`
 export const GroupContainer = styled.div<{ isSelected: boolean }>`
   //border: 0.1rem solid lightgrey;
   padding: 0.5rem;
-  text-align: center;
+  //text-align: left;
   &:first-child{
     margin-top: .4rem;
   }

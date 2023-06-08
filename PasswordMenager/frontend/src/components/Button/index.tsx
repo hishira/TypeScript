@@ -26,6 +26,8 @@ const Button = styled.button<Props>`
   margin-top: ${({ margintop }) => `${margintop}px` || 0};
   clip-path: circle(75%);
   transition: transform 0.5s;
+  letter-spacing: .275px;
+  transition: text-shadow .3s;
   &:focus {
     outline: none;
   }
@@ -41,6 +43,9 @@ const Button = styled.button<Props>`
   }
   &:hover {
     outline: 0.5px solid lightslategray;
+    text-shadow: 0 0 .65px #3a3636, 0 0 .65px #3a3636;
+    text-decoration: none;
+    box-sizing: border-box;
   }
 `;
 
