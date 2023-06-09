@@ -1,5 +1,6 @@
 import { DeleteIcon } from "../../icons/DeleteIcon";
 import { EditIcon } from "../../icons/EditIcon";
+import { MoreOption } from "../../icons/MoreOptions";
 import {
   GroupContainer,
   GroupName,
@@ -18,6 +19,7 @@ export const GroupsComponent = ({
   ongroupclick,
   selectedgroup,
 }: GroupsComponentProps) => {
+  const edit = () => console.log("Edit function");
   return (
     <Groups>
       {groups.map((group: IGroup) => (
@@ -30,9 +32,9 @@ export const GroupsComponent = ({
             {group.name}
           </GroupName>
           <GroupOption>
-            ...
+            <MoreOption />
             <GroupsIcon>
-              <EditIcon />
+              <EditIcon click={edit} />
               <DeleteIcon />
             </GroupsIcon>
           </GroupOption>

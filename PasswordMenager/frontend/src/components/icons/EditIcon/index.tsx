@@ -1,6 +1,12 @@
-export const EditIcon = () => {
+import { IconProps } from "../type";
+
+export const EditIcon = ({ click }: IconProps): JSX.Element => {
+  const props = {};
+  if (click) {
+    props["onClick"] = click;
+  }
   return (
-    <svg viewBox="0 0 24 24" width='24px' height="24px">
+    <svg {...props} role="edit" viewBox="0 0 24 24" width="24px" height="24px">
       <title />
       <path
         d="M17,22H5a3,3,0,0,1-3-3V7A3,3,0,0,1,5,4H9A1,1,0,0,1,9,6H5A1,1,0,0,0,4,7V19a1,1,0,0,0,1,1H17a1,1,0,0,0,1-1V15a1,1,0,0,1,2,0v4A3,3,0,0,1,17,22Z"
