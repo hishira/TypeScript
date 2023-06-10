@@ -1,5 +1,6 @@
 import { DeleteIcon } from "../../icons/DeleteIcon";
 import { EditIcon } from "../../icons/EditIcon";
+import { MoreOption } from "../../icons/MoreOptions";
 import {
   GroupContainer,
   GroupName,
@@ -12,11 +13,15 @@ type GroupsComponentProps = {
   groups: IGroup[];
   ongroupclick: Function;
   selectedgroup: string;
+  editHandle: (groupId: string) => void;
+  deleteHandle: (groupId: string) => void;
 };
 export const GroupsComponent = ({
   groups,
   ongroupclick,
   selectedgroup,
+  editHandle,
+  deleteHandle,
 }: GroupsComponentProps) => {
   return (
     <Groups>
@@ -24,16 +29,18 @@ export const GroupsComponent = ({
         <GroupContainer
           key={group._id}
           isSelected={selectedgroup === group._id}
-          onClick={() => ongroupclick(group)}
         >
-          <GroupName isSelected={selectedgroup === group._id}>
+          <GroupName
+            onClick={() => ongroupclick(group)}
+            isSelected={selectedgroup === group._id}
+          >
             {group.name}
           </GroupName>
           <GroupOption>
-            ...
+            <MoreOption />
             <GroupsIcon>
-              <EditIcon />
-              <DeleteIcon />
+              <EditIcon click={() => editHandle(group._id)} />
+              <DeleteIcon click={() => deleteHandle(group._id)} />
             </GroupsIcon>
           </GroupOption>
         </GroupContainer>

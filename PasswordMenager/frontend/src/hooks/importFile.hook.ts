@@ -6,5 +6,6 @@ export const ImportFileEffect = (
 ): void => {
   useEffect(() => {
     file && fileChangeHandle(file);
+    //eslint-disable-next-line
   }, [file]);
 };

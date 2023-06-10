@@ -1,7 +1,6 @@
 export const PlusComponent = () => {
   return (
     <svg
-      enable-background="new 0 0 50 50"
       height="30px"
       id="Layer_1"
       version="1.1"
@@ -13,8 +12,8 @@ export const PlusComponent = () => {
       <line
         fill="none"
         stroke="#3b3b3b"
-        stroke-miterlimit="10"
-        stroke-width="2"
+        strokeMiterlimit="10"
+        strokeWidth="2"
         x1="9"
         x2="41"
         y1="25"
@@ -23,8 +22,8 @@ export const PlusComponent = () => {
       <line
         fill="none"
         stroke="#3b3b3b"
-        stroke-miterlimit="10"
-        stroke-width="2"
+        strokeMiterlimit="10"
+        strokeWidth="2"
         x1="25"
         x2="25"
         y1="9"

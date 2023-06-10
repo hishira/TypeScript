@@ -1,62 +1,83 @@
 import React, { useState } from "react";
+import { ActionGroupHooks } from "../../hooks/actionGroups.hook";
 import { GroupEffect } from "../../hooks/groups.hook";
 import { Group } from "../../utils/group.utils";
 import IconButton from "../IconButton";
-import Modal from "../Modal/";
 import { PlusComponent } from "../icons/PlusIcon";
+import { GroupsModal } from "./GroupModals";
 import { GroupsComponent } from "./Groups";
 import NewGroupComponent from "./NewGroupComponent";
-import {
-  ButtonContainer,
-  Category,
-  Container
-} from "./component.styled";
+import { ButtonContainer, Category, Container } from "./component.styled";
 
 const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
-  const [modal, setModal] = useState<boolean>(false);
   const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
   const [refetch, setRefetch] = useState(false);
+  const groupAction = ActionGroupHooks();
+
   const groups = GroupEffect(refetch);
   const [selectedgroup, setselectedgroup] = useState<string>("");
-  const clickHandle = (): void => {
-    setModal(true);
-  };
+
+  //TODO fix
+  const NewGroupComponenet = (): JSX.Element => (
+    <NewGroupComponent
+      func={(e: React.ChangeEvent<HTMLInputElement>) =>
+        setgroupdto({ name: e.target.value })
+      }
+      buttonhandle={buttonHandleClick}
+      isButtonDisabled={groupdto.name === ""}
+    />
+  );
 
   const buttonHandleClick = async (): Promise<void> => {
     Group.getInstance()
       .CreateGroupForUser(groupdto)
       .then((resp) => {
         setRefetch(!refetch);
-        setModal(false);
+        groupAction.setCreateModal(false);
         setgroupdto({ name: "" });
-      });
+      })
+      .catch((_) => {});
+  };
+
+  const deleteClickHandle = () => {
+    console.log(groupAction.actionGroupId);
+    Group.getInstance()
+      .DeleteUserGroup(groupAction.actionGroupId)
+      .then((response) => {
+        console.log(response);
+        setRefetch(!refetch);
+        groupAction.setDeleteModal(false);
+      })
+      .catch((e) => groupAction.setDeleteModal(false));
   };
 
   const ongroupclick: Function = (group: IGroup): void => {
     selectgrouphandle(group._id);
     setselectedgroup(group._id);
   };
-  const closeHandle = (): void => setModal(false);
+
+  const editHandle = (groupId: string): void => {
+    groupAction.setEditModal(true);
+    groupAction.setActionGroupid(groupId);
+  };
+
+  const deleteHandle = (groupId: string): void => {
+    groupAction.setDeleteModal(true);
+    groupAction.setActionGroupid(groupId);
+  };
+
+  const closeHandle = (): void => groupAction.setCreateModal(false);
   return (
     <Container>
-      {modal ? (
-        <Modal
-          visible={modal}
-          onClose={closeHandle}
-          component={
-            <NewGroupComponent
-              func={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setgroupdto({ name: e.target.value })
-              }
-              buttonhandle={buttonHandleClick}
-              isButtonDisabled={groupdto.name === ""}
-            />
-          }
-        />
-      ) : null}
+      <GroupsModal
+        actionGroup={groupAction}
+        newGroupCloseHandle={closeHandle}
+        newGroupComponent={NewGroupComponenet()}
+        deleteHandle={deleteClickHandle}
+      />
       <Category>
         <div>Categories</div>
-        <IconButton onClick={clickHandle}>
+        <IconButton onClick={() => groupAction.setCreateModal(false)}>
           <PlusComponent></PlusComponent>
         </IconButton>
       </Category>
@@ -64,6 +85,8 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
         groups={groups}
         ongroupclick={ongroupclick}
         selectedgroup={selectedgroup}
+        deleteHandle={deleteHandle}
+        editHandle={editHandle}
       />
       <ButtonContainer></ButtonContainer>
     </Container>

@@ -11,13 +11,18 @@ export class GroupApi extends Api {
     return this.instance;
   }
 
-  async getGroupByUser(token: string) {
+  getGroupByUser(token: string) {
     const url = this.getUrl("group/byuser");
-    return await fetch(url, this.fetchGetObjectWithtoken(token));
+    return fetch(url, this.fetchGetObjectWithtoken(token));
   }
 
-  async createGroup(createGroup: CreateGroup, token: string) {
+  createGroup(createGroup: CreateGroup, token: string) {
     const url = this.getUrl("group/");
-    return await fetch(url, this.fetchPostObjectWithToken(createGroup, token));
+    return fetch(url, this.fetchPostObjectWithToken(createGroup, token));
+  }
+
+  deleteGroup(groupId: string, token: string) {
+    const url = this.getUrl(`group/${groupId}`);
+    return fetch(url, this.fetchDeleteObjectWithToken(token));
   }
 }

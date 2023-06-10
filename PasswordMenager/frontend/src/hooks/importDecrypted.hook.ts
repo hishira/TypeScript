@@ -10,5 +10,5 @@ export const ImportModalOpenHandle = (
   useEffect(() => {
     setImportModalOpen(modalOpen);
     setuuid((Math.random() + 1).toString(36).substring(7));
-  }, [modalOpen]);
+  }, [modalOpen, setImportModalOpen, setuuid]);
 };

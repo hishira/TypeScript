@@ -17,9 +17,6 @@ const AppBarLeftSide = ({ userActive }: AppBarLeftSideProp): JSX.Element => {
 };
 const AppBar = ({ store }: AppBarProps): JSX.Element => {
   const hisotry = useHistory();
-  const loginclick = () => {
-    hisotry.push("/login");
-  };
   const logouthandle = () => {
     store?.setUserActive(false);
     SessionStorage.getInstance().removeStorage();
@@ -29,10 +26,7 @@ const AppBar = ({ store }: AppBarProps): JSX.Element => {
     <Bar>
       <AppBarLeftSide userActive={store?.UserActivity} />
       <RigthSide>
-        {!store?.UserActivity ? //<Button onClick={() => loginclick()} color="lightblue">
-        //  Login
-        //</Button>
-        null : (
+        {!store?.UserActivity ? null : (
           <Button onClick={logouthandle} color="lightblue">
             Logout
           </Button>

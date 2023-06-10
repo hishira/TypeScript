@@ -94,4 +94,22 @@ export class Group {
       return { status: true, response: response };
     return { status: false, response: EMPTYGROUPRESPONSE };
   }
+
+  DeleteGroup(groupId: string, token: string): Promise<Response> {
+    return this.groupApi.deleteGroup(groupId, token);
+  }
+
+  DeleteUserGroup(groupId: string): Promise<unknown> {
+    let accessToken: string = this.sessionStorage.getAccessToken();
+    return this.DeleteGroup(groupId, accessToken)
+      .then(async (response) => {
+        if (response.status === 401) {
+          await this.auth.refreshToken();
+          const token = this.sessionStorage.getAccessToken();
+          return this.DeleteGroup(groupId, token);
+        }
+        return response;
+      })
+      .then((resp) => resp.json());
+  }
 }
