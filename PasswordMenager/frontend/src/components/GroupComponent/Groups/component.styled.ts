@@ -34,6 +34,16 @@ export const GroupsIcon = styled.div`
   svg[role="delete"] {
     cursor: pointer;
   }
+  & > svg[role="edit"]:hover {
+    & > path {
+      fill: slategray;
+    }
+  }
+  & > svg[role="delete"]:hover {
+    & > path:first-child {
+      fill: lightcoral;
+    }
+  }
 `;
 export const GroupOption = styled.div`
   position: relative;
