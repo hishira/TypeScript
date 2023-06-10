@@ -5,9 +5,9 @@ export const GetEntryForEdit = (
   edit: boolean | undefined,
   editentryid: string | undefined,
   setEditedEntry: Dispatch<SetStateAction<CreateEntryDto>>,
-  setLoadingComponent: Dispatch<SetStateAction<boolean>>,
+  setLoadingComponent: Dispatch<SetStateAction<boolean>>
 ) => {
-  useEffect(() => {
+  const editFetch = (edit: boolean | undefined, editentryid: string | undefined) => {
     if (edit && editentryid) {
       setLoadingComponent(true);
       Entry.getInstance()
@@ -21,5 +21,8 @@ export const GetEntryForEdit = (
         })
         .catch((_) => setLoadingComponent(false));
     }
-  }, []);
+  };
+  useEffect(() => {
+    editFetch(edit, editentryid)
+  });
 };

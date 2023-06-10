@@ -16,5 +16,5 @@ export const ResizeWindowsHandle = (
     return () => {
       window.removeEventListener("resize", resizeHandleFunction);
     };
-  }, []);
+  });
 };
