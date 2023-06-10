@@ -13,29 +13,34 @@ type GroupsComponentProps = {
   groups: IGroup[];
   ongroupclick: Function;
   selectedgroup: string;
+  editHandle: () => void;
+  deleteHandle: () => void;
 };
 export const GroupsComponent = ({
   groups,
   ongroupclick,
   selectedgroup,
+  editHandle,
+  deleteHandle,
 }: GroupsComponentProps) => {
-  const edit = () => console.log("Edit function");
   return (
     <Groups>
       {groups.map((group: IGroup) => (
         <GroupContainer
           key={group._id}
           isSelected={selectedgroup === group._id}
-          onClick={() => ongroupclick(group)}
         >
-          <GroupName isSelected={selectedgroup === group._id}>
+          <GroupName
+            onClick={() => ongroupclick(group)}
+            isSelected={selectedgroup === group._id}
+          >
             {group.name}
           </GroupName>
           <GroupOption>
             <MoreOption />
             <GroupsIcon>
-              <EditIcon click={edit} />
-              <DeleteIcon />
+              <EditIcon click={editHandle} />
+              <DeleteIcon click={deleteHandle} />
             </GroupsIcon>
           </GroupOption>
         </GroupContainer>

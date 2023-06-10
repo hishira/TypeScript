@@ -6,57 +6,58 @@ import Modal from "../Modal/";
 import { PlusComponent } from "../icons/PlusIcon";
 import { GroupsComponent } from "./Groups";
 import NewGroupComponent from "./NewGroupComponent";
-import {
-  ButtonContainer,
-  Category,
-  Container
-} from "./component.styled";
+import { ButtonContainer, Category, Container } from "./component.styled";
+import { ActionGroupHooks } from "../../hooks/actionGroups.hook";
+import { GroupsModal } from "./GroupModals";
 
 const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
-  const [modal, setModal] = useState<boolean>(false);
   const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
   const [refetch, setRefetch] = useState(false);
+  const groupAction = ActionGroupHooks();
+
   const groups = GroupEffect(refetch);
   const [selectedgroup, setselectedgroup] = useState<string>("");
   const clickHandle = (): void => {
-    setModal(true);
+    groupAction.setCreateModal(true);
   };
+
+  const NewGroupComponenet = (): JSX.Element => (
+    <NewGroupComponent
+      func={(e: React.ChangeEvent<HTMLInputElement>) =>
+        setgroupdto({ name: e.target.value })
+      }
+      buttonhandle={buttonHandleClick}
+      isButtonDisabled={groupdto.name === ""}
+    />
+  );
 
   const buttonHandleClick = async (): Promise<void> => {
     Group.getInstance()
       .CreateGroupForUser(groupdto)
       .then((resp) => {
         setRefetch(!refetch);
-        setModal(false);
+        groupAction.setCreateModal(false);
         setgroupdto({ name: "" });
-      });
+      })
+      .catch((_) => {});
   };
 
   const ongroupclick: Function = (group: IGroup): void => {
     selectgrouphandle(group._id);
     setselectedgroup(group._id);
   };
-  const closeHandle = (): void => setModal(false);
+
+  const closeHandle = (): void => groupAction.setCreateModal(false);
   return (
     <Container>
-      {modal ? (
-        <Modal
-          visible={modal}
-          onClose={closeHandle}
-          component={
-            <NewGroupComponent
-              func={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setgroupdto({ name: e.target.value })
-              }
-              buttonhandle={buttonHandleClick}
-              isButtonDisabled={groupdto.name === ""}
-            />
-          }
-        />
-      ) : null}
+      <GroupsModal
+        actionGroup={groupAction}
+        newGroupCloseHandle={closeHandle}
+        newGroupComponent={NewGroupComponenet()}
+      />
       <Category>
         <div>Categories</div>
-        <IconButton onClick={clickHandle}>
+        <IconButton onClick={()=>groupAction.setCreateModal(false)}>
           <PlusComponent></PlusComponent>
         </IconButton>
       </Category>
@@ -64,6 +65,8 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
         groups={groups}
         ongroupclick={ongroupclick}
         selectedgroup={selectedgroup}
+        deleteHandle={() => groupAction.setDeleteModal(true)}
+        editHandle={() => groupAction.setEditModal(true)}
       />
       <ButtonContainer></ButtonContainer>
     </Container>

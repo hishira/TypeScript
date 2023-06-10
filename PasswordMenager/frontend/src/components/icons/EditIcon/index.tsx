@@ -1,7 +1,8 @@
+import { SVGProps } from "react";
 import { IconProps } from "../type";
 
 export const EditIcon = ({ click }: IconProps): JSX.Element => {
-  const props = {};
+  const props: SVGProps<SVGSVGElement> = {};
   if (click) {
     props["onClick"] = click;
   }

@@ -1,6 +1,14 @@
-export const DeleteIcon = () => {
+import { SVGProps } from "react";
+import { IconProps } from "../type";
+
+export const DeleteIcon = ({ click }: IconProps) => {
+  const props: SVGProps<SVGSVGElement> = {};
+  if (click) {
+    props["onClick"] = click;
+  }
   return (
     <svg
+      {...props}
       height="24px"
       role="delete"
       viewBox="0 0 48 48"
