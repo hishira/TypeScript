@@ -13,8 +13,8 @@ type GroupsComponentProps = {
   groups: IGroup[];
   ongroupclick: Function;
   selectedgroup: string;
-  editHandle: () => void;
-  deleteHandle: () => void;
+  editHandle: (groupId: string) => void;
+  deleteHandle: (groupId: string) => void;
 };
 export const GroupsComponent = ({
   groups,
@@ -39,8 +39,8 @@ export const GroupsComponent = ({
           <GroupOption>
             <MoreOption />
             <GroupsIcon>
-              <EditIcon click={editHandle} />
-              <DeleteIcon click={deleteHandle} />
+              <EditIcon click={() => editHandle(group._id)} />
+              <DeleteIcon click={() => deleteHandle(group._id)} />
             </GroupsIcon>
           </GroupOption>
         </GroupContainer>

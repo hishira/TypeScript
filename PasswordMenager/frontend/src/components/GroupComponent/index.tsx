@@ -1,14 +1,13 @@
 import React, { useState } from "react";
+import { ActionGroupHooks } from "../../hooks/actionGroups.hook";
 import { GroupEffect } from "../../hooks/groups.hook";
 import { Group } from "../../utils/group.utils";
 import IconButton from "../IconButton";
-import Modal from "../Modal/";
 import { PlusComponent } from "../icons/PlusIcon";
+import { GroupsModal } from "./GroupModals";
 import { GroupsComponent } from "./Groups";
 import NewGroupComponent from "./NewGroupComponent";
 import { ButtonContainer, Category, Container } from "./component.styled";
-import { ActionGroupHooks } from "../../hooks/actionGroups.hook";
-import { GroupsModal } from "./GroupModals";
 
 const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
@@ -17,10 +16,8 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
 
   const groups = GroupEffect(refetch);
   const [selectedgroup, setselectedgroup] = useState<string>("");
-  const clickHandle = (): void => {
-    groupAction.setCreateModal(true);
-  };
 
+  //TODO fix
   const NewGroupComponenet = (): JSX.Element => (
     <NewGroupComponent
       func={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -42,9 +39,31 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
       .catch((_) => {});
   };
 
+  const deleteClickHandle = () => {
+    console.log(groupAction.actionGroupId);
+    Group.getInstance()
+      .DeleteUserGroup(groupAction.actionGroupId)
+      .then((response) => {
+        console.log(response);
+        setRefetch(!refetch);
+        groupAction.setDeleteModal(false);
+      })
+      .catch((e) => groupAction.setDeleteModal(false));
+  };
+
   const ongroupclick: Function = (group: IGroup): void => {
     selectgrouphandle(group._id);
     setselectedgroup(group._id);
+  };
+
+  const editHandle = (groupId: string): void => {
+    groupAction.setEditModal(true);
+    groupAction.setActionGroupid(groupId);
+  };
+
+  const deleteHandle = (groupId: string): void => {
+    groupAction.setDeleteModal(true);
+    groupAction.setActionGroupid(groupId);
   };
 
   const closeHandle = (): void => groupAction.setCreateModal(false);
@@ -54,10 +73,11 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
         actionGroup={groupAction}
         newGroupCloseHandle={closeHandle}
         newGroupComponent={NewGroupComponenet()}
+        deleteHandle={deleteClickHandle}
       />
       <Category>
         <div>Categories</div>
-        <IconButton onClick={()=>groupAction.setCreateModal(false)}>
+        <IconButton onClick={() => groupAction.setCreateModal(false)}>
           <PlusComponent></PlusComponent>
         </IconButton>
       </Category>
@@ -65,8 +85,8 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
         groups={groups}
         ongroupclick={ongroupclick}
         selectedgroup={selectedgroup}
-        deleteHandle={() => groupAction.setDeleteModal(true)}
-        editHandle={() => groupAction.setEditModal(true)}
+        deleteHandle={deleteHandle}
+        editHandle={editHandle}
       />
       <ButtonContainer></ButtonContainer>
     </Container>

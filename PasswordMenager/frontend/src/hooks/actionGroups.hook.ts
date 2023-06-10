@@ -1,17 +1,20 @@
 import { useState } from "react";
-type GroupActionSet = React.Dispatch<React.SetStateAction<boolean>>;
+type GroupActionSet<T> = React.Dispatch<React.SetStateAction<T>>;
 export type ActionGroup = {
   createModal: boolean;
-  setCreateModal: GroupActionSet;
+  setCreateModal: GroupActionSet<boolean>;
   editModal: boolean;
-  setEditModal: GroupActionSet;
+  setEditModal: GroupActionSet<boolean>;
   deleteModal: boolean;
-  setDeleteModal: GroupActionSet;
+  setDeleteModal: GroupActionSet<boolean>;
+  actionGroupId: string;
+  setActionGroupid: GroupActionSet<string>;
 };
 export const ActionGroupHooks = (): ActionGroup => {
   const [modal, setModal] = useState<boolean>(false);
   const [editGroupModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteGroupModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [actionGroupId, setActionGroupid] = useState<string>("");
 
   return {
     createModal: modal,
@@ -20,5 +23,7 @@ export const ActionGroupHooks = (): ActionGroup => {
     setEditModal: setEditModalOpen,
     deleteModal: deleteGroupModalOpen,
     setDeleteModal: setDeleteModalOpen,
+    actionGroupId,
+    setActionGroupid,
   };
 };
