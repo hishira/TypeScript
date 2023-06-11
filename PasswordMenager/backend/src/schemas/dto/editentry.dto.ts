@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class EditEntryDto {
   @IsString()
@@ -12,6 +12,9 @@ export class EditEntryDto {
 
   @IsString()
   readonly password;
+
+  @IsOptional()
+  readonly email;
 
   @IsString()
   readonly note;

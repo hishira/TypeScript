@@ -12,6 +12,10 @@ const EntrySchema = new mognoose.Schema({
     type: String,
     default: '',
   },
+  email: {
+    type: String,
+    default: '',
+  },
   password: {
     type: String,
     defaulf: '',
