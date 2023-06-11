@@ -77,7 +77,7 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
       />
       <Category>
         <div>Categories</div>
-        <IconButton onClick={() => groupAction.setCreateModal(false)}>
+        <IconButton onClick={() => groupAction.setCreateModal(true)}>
           <PlusComponent></PlusComponent>
         </IconButton>
       </Category>

@@ -1,4 +1,10 @@
-import { IsDateString, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsDateString,
+  IsEmail,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import { DTO } from './object.interface';
 
 export class CreateEntryDto implements DTO {
@@ -18,6 +24,11 @@ export class CreateEntryDto implements DTO {
   @IsString()
   readonly groupid;
 
+  @IsString()
+  @IsEmail()
+  @IsOptional()
+  readonly email;
+
   @IsOptional()
   @IsDateString()
   readonly passwordExpiredDate?;
@@ -29,6 +40,7 @@ export class CreateEntryDto implements DTO {
       password: this.password,
       note: this.note,
       groupid: this.groupid,
+      email: this.email,
     };
   }
 }

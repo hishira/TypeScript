@@ -1,14 +1,14 @@
 import { useState } from "react";
-type GroupActionSet<T> = React.Dispatch<React.SetStateAction<T>>;
+export type ActionSet<T> = React.Dispatch<React.SetStateAction<T>>;
 export type ActionGroup = {
   createModal: boolean;
-  setCreateModal: GroupActionSet<boolean>;
+  setCreateModal: ActionSet<boolean>;
   editModal: boolean;
-  setEditModal: GroupActionSet<boolean>;
+  setEditModal: ActionSet<boolean>;
   deleteModal: boolean;
-  setDeleteModal: GroupActionSet<boolean>;
+  setDeleteModal: ActionSet<boolean>;
   actionGroupId: string;
-  setActionGroupid: GroupActionSet<string>;
+  setActionGroupid: ActionSet<string>;
 };
 export const ActionGroupHooks = (): ActionGroup => {
   const [modal, setModal] = useState<boolean>(false);
