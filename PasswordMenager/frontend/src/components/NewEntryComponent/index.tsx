@@ -88,7 +88,7 @@ const NewEntryComponent = ({
         }
       })
       .catch(console.error);
-  };
+  }
 
   const getRechangeObject = (): EditEntry => {
     return {
