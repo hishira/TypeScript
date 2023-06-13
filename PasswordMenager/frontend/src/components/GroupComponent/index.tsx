@@ -9,6 +9,24 @@ import { GroupsComponent } from "./Groups";
 import NewGroupComponent from "./NewGroupComponent";
 import { ButtonContainer, Category, Container } from "./component.styled";
 
+type NewGroupComponentProps = {
+  setgroupdto: React.Dispatch<React.SetStateAction<CreateGroup>>;
+  buttonHandleClick: () => void;
+  groupdto: CreateGroup;
+};
+const NewGroupComponenet = ({
+  setgroupdto,
+  buttonHandleClick,
+  groupdto,
+}: NewGroupComponentProps): JSX.Element => (
+  <NewGroupComponent
+    func={(e: React.ChangeEvent<HTMLInputElement>) =>
+      setgroupdto({ name: e.target.value })
+    }
+    buttonhandle={buttonHandleClick}
+    isButtonDisabled={groupdto.name === ""}
+  />
+);
 const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
   const [refetch, setRefetch] = useState(false);
@@ -18,15 +36,6 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   const [selectedgroup, setselectedgroup] = useState<string>("");
 
   //TODO fix
-  const NewGroupComponenet = (): JSX.Element => (
-    <NewGroupComponent
-      func={(e: React.ChangeEvent<HTMLInputElement>) =>
-        setgroupdto({ name: e.target.value })
-      }
-      buttonhandle={buttonHandleClick}
-      isButtonDisabled={groupdto.name === ""}
-    />
-  );
 
   const buttonHandleClick = async (): Promise<void> => {
     Group.getInstance()
@@ -66,14 +75,22 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
     groupAction.setActionGroupid(groupId);
   };
 
+  const editGroupHandle = (groupName: string): void => {
+    console.log(groupAction.actionGroupId, groupName);
+  };
   const closeHandle = (): void => groupAction.setCreateModal(false);
   return (
     <Container>
       <GroupsModal
         actionGroup={groupAction}
         newGroupCloseHandle={closeHandle}
-        newGroupComponent={NewGroupComponenet()}
+        newGroupComponent={NewGroupComponenet({
+          setgroupdto,
+          buttonHandleClick,
+          groupdto,
+        })}
         deleteHandle={deleteClickHandle}
+        editHandle={editGroupHandle}
       />
       <Category>
         <div>Categories</div>

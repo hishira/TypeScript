@@ -24,5 +24,5 @@ export const GetEntryForEdit = (
   };
   useEffect(() => {
     editFetch(edit, editentryid)
-  });
+  }, []);
 };

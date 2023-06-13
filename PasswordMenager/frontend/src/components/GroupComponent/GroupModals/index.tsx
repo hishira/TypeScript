@@ -10,6 +10,7 @@ type GroupModalProps = {
   newGroupCloseHandle: () => void;
   newGroupComponent: JSX.Element;
   deleteHandle: () => void;
+  editHandle: (groupName: string) => void;
 };
 type CreateModalType = {
   actionGroup: ActionGroup;
@@ -22,7 +23,7 @@ type DeleteModalType = {
 };
 type EditModalType = {
   actionGroup: ActionGroup;
-  editHandle: () => void;
+  editHandle: (value: string) => void;
 };
 const CreateModal = ({
   actionGroup,
@@ -47,20 +48,32 @@ const DeleteModal = ({ actionGroup, deleteHandle }: DeleteModalType) =>
     />
   ) : null;
 
-const EditModal = ({ actionGroup, editHandle }: EditModalType) =>
-  actionGroup.editModal ? (
+const EditModal = ({ actionGroup, editHandle }: EditModalType) => {
+  const [groupName, setGroupName] = useState<string>("");
+  const closeHandle = () => {
+    actionGroup.setEditModal(false);
+    setGroupName("");
+  };
+  return actionGroup.editModal ? (
     <AcceptModalComponent
       visible={actionGroup.editModal}
-      onClose={() => actionGroup.setEditModal(false)}
-      acceptHandle={editHandle}
-      component={<AcceptEditModal />}
+      onClose={() => closeHandle()}
+      acceptHandle={() => editHandle(groupName)}
+      disableButton={groupName === ""}
+      component={
+        <AcceptEditModal newName={groupName} setNewName={setGroupName} />
+      }
     />
   ) : null;
+};
 const AcceptDeleteModal = () => (
   <AcceptModalContainer>Are you sure to delete group</AcceptModalContainer>
 );
-const AcceptEditModal = () => {
-  const [newName, setNewName] = useState<string>("");
+type AceptEditModalProps = {
+  newName: string;
+  setNewName: React.Dispatch<React.SetStateAction<string>>;
+};
+const AcceptEditModal = ({ newName, setNewName }: AceptEditModalProps) => {
   return (
     <AcceptModalContainer>
       <FormElement
@@ -78,6 +91,7 @@ export const GroupsModal = ({
   newGroupCloseHandle,
   newGroupComponent,
   deleteHandle,
+  editHandle,
 }: GroupModalProps): JSX.Element => {
   return (
     <div>
@@ -87,7 +101,7 @@ export const GroupsModal = ({
         newGroupComponent={newGroupComponent}
       />
       <DeleteModal actionGroup={actionGroup} deleteHandle={deleteHandle} />
-      <EditModal actionGroup={actionGroup} editHandle={deleteHandle} />
+      <EditModal actionGroup={actionGroup} editHandle={editHandle} />
     </div>
   );
 };
