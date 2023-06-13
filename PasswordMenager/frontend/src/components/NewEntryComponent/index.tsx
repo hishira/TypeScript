@@ -41,7 +41,7 @@ const NewEntryComponent = ({
   closeModalDispatcherHandle,
 }: NewEntryProps): JSX.Element => {
   const [passlen, setpasslen] = useState<number>(6);
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [, setLoading] = useState<boolean>(true);
   const [passwordcharacters, setpasswordcharacters] =
     useState<PasswordCharactersTypes>({
       letters: false,
@@ -88,7 +88,7 @@ const NewEntryComponent = ({
         }
       })
       .catch(console.error);
-  }
+  };
 
   const getRechangeObject = (): EditEntry => {
     return {
@@ -100,15 +100,18 @@ const NewEntryComponent = ({
     };
   };
 
-  const edithaneld = async (): Promise<void> => {
+  const edithaneld = (): void => {
     if (editentryid !== "") {
       const editedvalues: EditEntry = getRechangeObject();
-      const response: EditEntryResponse =
-        await Entry.getInstance().EntryEditById(editedvalues);
-      if (response.status) {
-        closeModalDispatcherHandle && closeModalDispatcherHandle(false);
-        if (refresh !== undefined) refresh();
-      }
+      Entry.getInstance()
+        .EntryEditById(editedvalues)
+        .then((response) => {
+          if (response.status) {
+            closeModalDispatcherHandle?.(false);
+            if (refresh !== undefined) refresh();
+          }
+        })
+        .catch((e) => e && console.error(e));
     }
   };
 
@@ -209,7 +212,12 @@ const NewEntryComponent = ({
             value={newentry.note}
           />
           {!edit ? (
-            <Button disabled={!editEntry.isFormValid} size="small" color="lightblue" onClick={addnewentry}>
+            <Button
+              disabled={!editEntry.isFormValid}
+              size="small"
+              color="lightblue"
+              onClick={addnewentry}
+            >
               Add
             </Button>
           ) : (
