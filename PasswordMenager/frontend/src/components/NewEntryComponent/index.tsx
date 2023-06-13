@@ -33,6 +33,24 @@ type NewEntryProps = {
   refresh?: Function;
   closeModalDispatcherHandle?: Dispatch<SetStateAction<boolean>>;
 };
+type GroupSelection = {
+  edit: boolean | undefined;
+  editEntry: EditEntryActionDispatcher;
+  groups: IGroup[];
+};
+const GroupSelection = ({ edit, editEntry, groups }: GroupSelection) =>
+  !edit ? (
+    <NormalContainer>
+      <SelectLabel>Select group</SelectLabel>
+      <SelectContainer onChange={editEntry.groupset.bind(editEntry)}>
+        {groups.map((group) => (
+          <OptionContainer key={group._id} value={group._id}>
+            {group.name}
+          </OptionContainer>
+        ))}
+      </SelectContainer>
+    </NormalContainer>
+  ) : null;
 const NewEntryComponent = ({
   edit,
   editentryid,
@@ -81,10 +99,7 @@ const NewEntryComponent = ({
       .CreateNewEntryUser(newentry)
       .then((responsenewentry) => {
         if (responsenewentry.status) {
-          console.log("OK");
           editEntry.clearInputData();
-        } else {
-          console.log("Something wrong");
         }
       })
       .catch(console.error);
@@ -135,18 +150,7 @@ const NewEntryComponent = ({
             inputtype="txt"
             value={newentry.username}
           />
-          {!edit ? (
-            <NormalContainer>
-              <SelectLabel>Select group</SelectLabel>
-              <SelectContainer onChange={editEntry.groupset.bind(editEntry)}>
-                {groups.map((group) => (
-                  <OptionContainer key={group._id} value={group._id}>
-                    {group.name}
-                  </OptionContainer>
-                ))}
-              </SelectContainer>
-            </NormalContainer>
-          ) : null}
+          <GroupSelection edit={edit} editEntry={editEntry} groups={groups} />
           <SectionContainer>
             <FormElement
               label={"Password"}
