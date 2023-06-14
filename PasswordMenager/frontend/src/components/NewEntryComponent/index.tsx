@@ -8,6 +8,7 @@ import {
   Checkboxes,
   Checkboxwithlabel,
   EntryModalComponent,
+  GeneratorModal,
   NormalContainer,
   OptionContainer,
   PassLen,
@@ -21,6 +22,7 @@ import { GroupEffect } from "../../hooks/groups.hook";
 import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
 import { Loading } from "../Loading";
 import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
+import Modal from "../Modal";
 export type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
@@ -51,6 +53,41 @@ const GroupSelection = ({ edit, editEntry, groups }: GroupSelection) =>
       </SelectContainer>
     </NormalContainer>
   ) : null;
+
+type PasswordGeneratorOption = {
+  editEntry: EditEntryActionDispatcher;
+};
+const PasswordGeneratorOption = ({ editEntry }: PasswordGeneratorOption) => {
+  return (
+    <GeneratorModal>
+      <SectionContainer>
+        <Checkboxes>
+          <Checkboxwithlabel>
+            <PasswordCheckbox
+              type="checkbox"
+              onChange={editEntry.letterscheckbox.bind(editEntry)}
+            />
+            <div>Letters</div>
+          </Checkboxwithlabel>
+          <Checkboxwithlabel>
+            <PasswordCheckbox
+              type="checkbox"
+              onChange={editEntry.numberscheckbox.bind(editEntry)}
+            />
+            <div>Numbers</div>
+          </Checkboxwithlabel>
+          <Checkboxwithlabel>
+            <PasswordCheckbox
+              type="checkbox"
+              onChange={editEntry.specialcharacters.bind(editEntry)}
+            />
+            <div>Special characters</div>
+          </Checkboxwithlabel>
+        </Checkboxes>
+      </SectionContainer>
+    </GeneratorModal>
+  );
+};
 const NewEntryComponent = ({
   edit,
   editentryid,
@@ -59,6 +96,8 @@ const NewEntryComponent = ({
   closeModalDispatcherHandle,
 }: NewEntryProps): JSX.Element => {
   const [passlen, setpasslen] = useState<number>(6);
+  const [generatePasswordModal, setGeneratorPasswordModal] =
+    useState<boolean>(false);
   const [, setLoading] = useState<boolean>(true);
   const [passwordcharacters, setpasswordcharacters] =
     useState<PasswordCharactersTypes>({
@@ -135,7 +174,7 @@ const NewEntryComponent = ({
       // TODO Ref loading
       loading={false}
       ComponentToLoad={
-        <EntryModalComponent>
+        <EntryModalComponent disabled={generatePasswordModal}>
           <FormElement
             label={"Title"}
             inputplaceholder="Title"
@@ -161,7 +200,7 @@ const NewEntryComponent = ({
             />
             <CheckBox type="checkbox" onChange={checkBoxHandler} />
           </SectionContainer>
-          <SectionContainer>
+          {/*<SectionContainer>
             <Checkboxes>
               <Checkboxwithlabel>
                 <PasswordCheckbox
@@ -185,7 +224,13 @@ const NewEntryComponent = ({
                 <div>Special characters</div>
               </Checkboxwithlabel>
             </Checkboxes>
-          </SectionContainer>
+          </SectionContainer>*/}
+          {generatePasswordModal ? (
+            <PasswordGeneratorOption editEntry={editEntry} />
+          ) : null}
+          <Button onClick={() => setGeneratorPasswordModal(true)}>
+            Generator
+          </Button>
           <ButtonsRangeContainer style={{ position: "relative" }}>
             <Button
               size="small"

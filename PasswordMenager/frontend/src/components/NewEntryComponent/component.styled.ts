@@ -1,14 +1,27 @@
 import styled from "styled-components";
 
-export const EntryModalComponent = styled.div`
+export const EntryModalComponent = styled.div<{ disabled?: boolean }>`
   background-color: white;
   padding: 1rem;
   border-radius: 5px;
   width: 35rem;
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
 `;
 export const NormalContainer = styled.div``;
 export const PassLen = styled.div`
   font-size: ".9rem";
+`;
+export const GeneratorModal = styled.div`
+  position: absolute;
+  background-color: whitesmoke;
+  top: 50%;
+  right: 50%;
+  margin-right: auto;
+  margin-left: auto;
+  transform: translate(50%, -50%);
+  padding: 2rem;
+  z-index: 2000;
+  pointer-events: all;
 `;
 export const SectionContainer = styled.section`
   display: flex;
@@ -24,7 +37,7 @@ export const ButtonsRangeContainer = styled.section`
   & > :not(:first-child) {
     margin-left: 1rem;
   }
-`
+`;
 export const CheckBox = styled.input`
   transform: translate(0%, 175%);
 `;
