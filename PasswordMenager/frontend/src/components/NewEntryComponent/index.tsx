@@ -9,22 +9,13 @@ import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 import {
   ButtonsRangeContainer,
   CheckBox,
-  Checkboxes,
-  Checkboxwithlabel,
   EntryModalComponent,
-  GeneratorInsideModal,
-  GeneratorModal,
-  GeneratorSecionContainer,
-  NormalContainer,
-  OptionContainer,
   PassLen,
-  PasswordCheckbox,
-  SectionContainer,
-  SelectContainer,
-  SelectLabel,
+  SectionContainer
 } from "./component.styled";
+import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
-import { CloseIcon } from "../icons/CloseIcon";
+
 export type PasswordCharactersTypes = {
   letters: boolean;
   numbers: boolean;
@@ -37,81 +28,7 @@ type NewEntryProps = {
   refresh?: Function;
   closeModalDispatcherHandle?: Dispatch<SetStateAction<boolean>>;
 };
-type GroupSelection = {
-  edit: boolean | undefined;
-  editEntry: EditEntryActionDispatcher;
-  groups: IGroup[];
-};
-const GroupSelection = ({ edit, editEntry, groups }: GroupSelection) =>
-  !edit ? (
-    <NormalContainer>
-      <SelectLabel>Select group</SelectLabel>
-      <SelectContainer onChange={editEntry.groupset.bind(editEntry)}>
-        {groups.map((group) => (
-          <OptionContainer key={group._id} value={group._id}>
-            {group.name}
-          </OptionContainer>
-        ))}
-      </SelectContainer>
-    </NormalContainer>
-  ) : null;
 
-type PasswordGeneratorOption = {
-  editEntry: EditEntryActionDispatcher;
-  open: boolean;
-  passwordLength: number;
-  passwordLengthChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClose: () => void;
-};
-const PasswordGeneratorOption = ({
-  editEntry,
-  open,
-  passwordLength,
-  passwordLengthChange,
-  onClose,
-}: PasswordGeneratorOption) => {
-  return open ? (
-    <GeneratorModal>
-      <GeneratorInsideModal>
-        <CloseIcon click={onClose} />
-        <GeneratorSecionContainer>
-          <Checkboxes>
-            <Checkboxwithlabel>
-              <PasswordCheckbox
-                type="checkbox"
-                onChange={editEntry.letterscheckbox.bind(editEntry)}
-              />
-              <div>Letters</div>
-            </Checkboxwithlabel>
-            <Checkboxwithlabel>
-              <PasswordCheckbox
-                type="checkbox"
-                onChange={editEntry.numberscheckbox.bind(editEntry)}
-              />
-              <div>Numbers</div>
-            </Checkboxwithlabel>
-            <Checkboxwithlabel>
-              <PasswordCheckbox
-                type="checkbox"
-                onChange={editEntry.specialcharacters.bind(editEntry)}
-              />
-              <div>Special characters</div>
-            </Checkboxwithlabel>
-          </Checkboxes>
-          <div>
-            <input
-              type="range"
-              min="6"
-              max="50"
-              value={passwordLength}
-              onChange={passwordLengthChange}
-            />
-          </div>
-        </GeneratorSecionContainer>
-      </GeneratorInsideModal>
-    </GeneratorModal>
-  ) : null;
-};
 const NewEntryComponent = ({
   edit,
   editentryid,
