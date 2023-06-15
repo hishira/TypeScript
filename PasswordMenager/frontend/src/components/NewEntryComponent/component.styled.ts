@@ -15,16 +15,35 @@ export const GeneratorModal = styled.div`
   position: absolute;
   background-color: whitesmoke;
   top: 50%;
+  width: 15rem;
   right: 50%;
   margin-right: auto;
   margin-left: auto;
   transform: translate(50%, -50%);
-  padding: 2rem;
   z-index: 2000;
   pointer-events: all;
 `;
 export const SectionContainer = styled.section`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+`;
+export const GeneratorInsideModal = styled.div`
+  position: relative;
+  padding: 2rem;
+  & > svg{
+    position:  absolute;
+    top: 10%;
+    right: 10%;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+`
+export const GeneratorSecionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   align-content: center;
@@ -43,6 +62,7 @@ export const CheckBox = styled.input`
 `;
 export const Checkboxes = styled.div`
   display: flex;
+  justify-content: start;
   flex-direction: column;
 `;
 export const PasswordCheckbox = styled.input``;
