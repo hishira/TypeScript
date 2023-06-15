@@ -7,12 +7,14 @@ import { ModalProps } from "..";
 import Button from "../../Button";
 type AcceptanceModalPrope = ModalProps & {
   acceptHandle: (...args: any[]) => any;
+  disableButton?: boolean;
 };
 export const AcceptModalComponent = ({
   visible,
   component,
   onClose,
   acceptHandle,
+  disableButton,
 }: AcceptanceModalPrope): JSX.Element => {
   EscapeModalHandle(onClose);
   return (
@@ -22,7 +24,11 @@ export const AcceptModalComponent = ({
           {component}
           <ButtonGroup>
             <Button onClick={onClose}>Cancel</Button>
-            <Button color="lightblue" onClick={acceptHandle}>
+            <Button
+              disabled={disableButton}
+              color="lightblue"
+              onClick={acceptHandle}
+            >
               {" "}
               Accept
             </Button>
