@@ -25,4 +25,9 @@ export class GroupApi extends Api {
     const url = this.getUrl(`group/${groupId}`);
     return fetch(url, this.fetchDeleteObjectWithToken(token));
   }
+
+  editGroup(groupId: string, token: string, editGroup: { name: string }) {
+    const url = this.getUrl(`group/${groupId}`);
+    return fetch(url, this.fetchPutObjectWithToken(editGroup, token));
+  }
 }

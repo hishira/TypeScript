@@ -76,7 +76,16 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   };
 
   const editGroupHandle = (groupName: string): void => {
-    console.log(groupAction.actionGroupId, groupName);
+    Group.getInstance()
+      .EditUserGroup(groupAction.actionGroupId, {
+        name: groupName,
+      })
+      .then((response) => {
+        console.log(response);
+        setRefetch(!refetch);
+        groupAction.setEditModal(false);
+      })
+      .catch((e) => e && console.error(e));
   };
   const closeHandle = (): void => groupAction.setCreateModal(false);
   return (
