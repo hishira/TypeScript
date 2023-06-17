@@ -1,6 +1,6 @@
 import { inject, observer } from "mobx-react";
 import { useHistory } from "react-router-dom";
-import { IGeneral } from "../../models/General";
+import { IGeneral, View } from "../../models/General";
 import { SessionStorage } from "../../utils/localstorage.utils";
 import Button from "../Button/index";
 import PassBar from "../PassBarr";
@@ -22,14 +22,20 @@ const AppBar = ({ store }: AppBarProps): JSX.Element => {
     SessionStorage.getInstance().removeStorage();
     hisotry.push("/login");
   };
+  const clickHandle = () => {
+    store?.setViewType(View.Card);
+  };
   return (
     <Bar>
       <AppBarLeftSide userActive={store?.UserActivity} />
       <RigthSide>
         {!store?.UserActivity ? null : (
-          <Button onClick={logouthandle} color="lightblue">
-            Logout
-          </Button>
+          <>
+            <Button onClick={logouthandle} color="lightblue">
+              Logout
+            </Button>
+            <Button onClick={clickHandle}>Change view</Button>
+          </>
         )}
       </RigthSide>
     </Bar>
