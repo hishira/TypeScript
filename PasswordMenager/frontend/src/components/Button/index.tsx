@@ -26,26 +26,30 @@ const Button = styled.button<Props>`
   margin-top: ${({ margintop }) => `${margintop}px` || 0};
   clip-path: circle(75%);
   transition: transform 0.5s;
-  letter-spacing: .275px;
-  transition: text-shadow .3s;
+  letter-spacing: 0.275px;
+  transition: text-shadow 0.3s;
   &:focus {
     outline: none;
   }
   &:active {
     animation: ${flash} 0.1s ease forwards;
   }
-  &[disabled] {
-    border: 1px solid #cdcdcd;
-    background-color: #cccccc;
-    color: #666666;
-    animation: none;
-    cursor: inherit;
-  }
   &:hover {
     outline: 0.5px solid lightslategray;
-    text-shadow: 0 0 .65px #3a3636, 0 0 .65px #3a3636;
+    text-shadow: 0 0 0.65px #3a3636, 0 0 0.65px #3a3636;
     text-decoration: none;
     box-sizing: border-box;
+  }
+  &[disabled] {
+    background-color: #cccccc;
+    box-sizing: border-box;
+    color: #666666;
+    animation: none;
+    &:hover {
+      text-shadow: none;
+      outline: none;
+    }
+    cursor: inherit;
   }
 `;
 
