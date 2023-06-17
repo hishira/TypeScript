@@ -1,6 +1,13 @@
-export const UpIcon = () => {
+import { SVGProps } from "react";
+import { IconProps } from "../type";
+export const UpIcon = ({ click }: IconProps) => {
+  const props: SVGProps<SVGSVGElement> = {};
+  if (click) {
+    props["onClick"] = click;
+  }
   return (
     <svg
+      {...props}
       height="24px"
       id="Layer_1"
       version="1.1"

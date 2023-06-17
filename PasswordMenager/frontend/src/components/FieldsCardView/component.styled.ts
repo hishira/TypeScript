@@ -19,17 +19,21 @@ export const Cards = styled.div`
 `;
 export const Card = styled.div`
   border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 4px 10px;
+  min-height: 2.5rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+export const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-content: center;
   align-items: center;
-  padding: 0.5rem;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 4px 10px;
-  height: 3rem;
 `;
-export const CardContent = styled.div`
-
-`
+export const CardExpand = styled.div``;
+export const CardContent = styled.div``;
 export const CardIcons = styled.div`
   display: flex;
 `;

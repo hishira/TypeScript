@@ -1,7 +1,14 @@
-export const DownIcon = () => {
+import { SVGProps } from "react";
+import { IconProps } from "../type";
+export const DownIcon = ({ click }: IconProps) => {
+  const props: SVGProps<SVGSVGElement> = {};
+  if (click) {
+    props["onClick"] = click;
+  }
   return (
     <svg
       height="24px"
+      {...props}
       id="Layer_1"
       version="1.1"
       viewBox="0 0 512 512"
