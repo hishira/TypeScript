@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const CardsContainer = styled.div`
   width: 75%;
@@ -20,8 +20,8 @@ export const Cards = styled.div`
 export const Card = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 4px 10px;
-  min-height: 2.5rem;
   padding: 0.5rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,9 +31,46 @@ export const CardHeader = styled.div`
   justify-content: space-between;
   align-content: center;
   align-items: center;
+  height: 2rem;
+  min-height: 2rem;
+  max-height: 2rem;
+  box-sizing: border-box;
 `;
-export const CardExpand = styled.div``;
-export const CardContent = styled.div``;
+const CarExpandAnimation = keyframes`
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+`;
+export const CardExpand = styled.div`
+  padding: 2rem;
+  opacity: 0;
+  transition: opacity 0.7s 0.5s;
+  transition: position .5s .5s;
+  animation: ${CarExpandAnimation} 0.5s ease forwards;
+`;
+export const CardExpandContent = styled.div`
+  width: 100%;
+`;
+export const CardFieldName = styled.div`
+  font-weight: 550 ;
+`
+export const CardFieldValue = styled.div``
+export const CardExpandContentRow = styled.div`
+  display: flex;
+  width: 40%;
+  gap: 2rem;
+`;
+
+export const CardContent = styled.div`
+`;
 export const CardIcons = styled.div`
   display: flex;
+  & > svg{
+    &:hover{
+      cursor: pointer;
+    }
+  }
 `;

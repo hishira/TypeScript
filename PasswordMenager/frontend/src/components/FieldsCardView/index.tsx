@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { DownIcon } from "../icons/DownIcon";
 import { UpIcon } from "../icons/UpIcon";
@@ -6,6 +6,10 @@ import {
   Card,
   CardContent,
   CardExpand,
+  CardExpandContent,
+  CardExpandContentRow,
+  CardFieldName,
+  CardFieldValue,
   CardHeader,
   CardIcons,
   Cards,
@@ -36,12 +40,29 @@ const FieldsIcon = ({ entry, open, close }: FieldsIconProps) => {
 type CardComponentProps = {
   entry: CardEntry;
 };
+type CardExpendContentRowProps = {
+  fieldName: string;
+  value: string;
+};
+const CardExpendContentRow = ({
+  fieldName,
+  value,
+}: CardExpendContentRowProps) => {
+  return (
+    <CardExpandContentRow>
+      <CardFieldName>{fieldName}</CardFieldName>
+      <CardFieldValue>{value}</CardFieldValue>
+    </CardExpandContentRow>
+  );
+};
 const CardExpandComponent = ({ entry }: CardComponentProps) => {
   return entry.open ? (
     <CardExpand>
-      <div>username{entry.username}</div>
-      <div>password{entry.password}</div>
-      <div>note{entry.note}</div>
+      <CardExpandContent>
+        <CardExpendContentRow fieldName="Username" value={entry.username} />
+        <CardExpendContentRow fieldName="Password" value={entry.password} />
+        <CardExpendContentRow fieldName="Note" value={entry.note} />
+      </CardExpandContent>
     </CardExpand>
   ) : null;
 };
