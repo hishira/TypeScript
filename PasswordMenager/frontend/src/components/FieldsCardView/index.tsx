@@ -15,7 +15,10 @@ import {
   Cards,
   CardsContainer,
 } from "./component.styled";
+import { EditIcon } from "../icons/EditIcon";
+import { DeleteIcon } from "../icons/DeleteIcon";
 
+// TODO End component
 type FieldsCardViewProps = {
   selectedgroup: string;
   refreshall: boolean;
@@ -58,6 +61,9 @@ const CardExpendContentRow = ({
 const CardExpandComponent = ({ entry }: CardComponentProps) => {
   return entry.open ? (
     <CardExpand>
+      <CardIcons>
+        <EditIcon /> <DeleteIcon />
+      </CardIcons>
       <CardExpandContent>
         <CardExpendContentRow fieldName="Username" value={entry.username} />
         <CardExpendContentRow fieldName="Password" value={entry.password} />
@@ -72,7 +78,9 @@ const CartComponent = ({ entry }: CardComponentProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardContent>{entryCard.username}</CardContent>
+        <CardContent>
+          <div>{entryCard.username}</div>
+        </CardContent>
         <CardIcons>
           <FieldsIcon
             entry={entryCard}

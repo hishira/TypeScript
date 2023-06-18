@@ -48,16 +48,16 @@ export const CardExpand = styled.div`
   padding: 2rem;
   opacity: 0;
   transition: opacity 0.7s 0.5s;
-  transition: position .5s .5s;
+  transition: position 0.5s 0.5s;
   animation: ${CarExpandAnimation} 0.5s ease forwards;
 `;
 export const CardExpandContent = styled.div`
   width: 100%;
 `;
 export const CardFieldName = styled.div`
-  font-weight: 550 ;
-`
-export const CardFieldValue = styled.div``
+  font-weight: 550;
+`;
+export const CardFieldValue = styled.div``;
 export const CardExpandContentRow = styled.div`
   display: flex;
   width: 40%;
@@ -65,11 +65,16 @@ export const CardExpandContentRow = styled.div`
 `;
 
 export const CardContent = styled.div`
+  display: flex;
+  gap: 2rem;
+  & > div:nth-child(2){
+    gap: 1.5rem;
+  }
 `;
 export const CardIcons = styled.div`
   display: flex;
-  & > svg{
-    &:hover{
+  & > svg {
+    &:hover {
       cursor: pointer;
     }
   }

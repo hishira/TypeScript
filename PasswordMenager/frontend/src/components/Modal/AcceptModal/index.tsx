@@ -29,7 +29,6 @@ export const AcceptModalComponent = ({
               color="lightblue"
               onClick={acceptHandle}
             >
-              {" "}
               Accept
             </Button>
           </ButtonGroup>
