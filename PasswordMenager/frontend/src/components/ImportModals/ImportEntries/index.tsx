@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { AcceptModalComponent } from "../../Modal/AcceptModal";
 import { FileSelector } from "../../ImportFille";
+import { ImportEntries } from "./component.styled";
 
 type ImportEntriesModalProps = {
   modalOpen: boolean;
@@ -16,7 +17,14 @@ const ImportEntriesModalComponent = () => {
     console.log(files);
     files && setFile(files[0]);
   };
-  return <FileSelector fileChange={fileChange} />;
+  return (
+    <ImportEntries>
+      <FileSelector
+        availableFileType={["csv", "txt"]}
+        fileChange={fileChange}
+      />
+    </ImportEntries>
+  );
 };
 export const ImportModalEntries = ({
   modalOpen,

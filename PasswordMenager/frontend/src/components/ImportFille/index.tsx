@@ -1,30 +1,66 @@
 import { ChangeEvent, useState } from "react";
 import { ImportFileEffect } from "../../hooks/importFile.hook";
 import FormElement from "../FormElement";
-import { ImportContainer, ImportInput } from "./component.styled";
+import {
+  ErrorMessasge,
+  FileSelectorComponent,
+  ImportContainer,
+  ImportInput,
+} from "./component.styled";
+type PossibleFiles = `${PossibleFileType}`;
+enum PossibleFileType {
+  JPG = "jpeg",
+  PNG = "png",
+  CSV = "csv",
+  TXT = "txt",
+}
 type FileSelectorProps = {
   fileChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  availableFileType?: string[] | string[];
+  availableFileType?: PossibleFiles[];
 };
+
 export const FileSelector = ({
   fileChange,
   availableFileType,
 }: FileSelectorProps) => {
+  const [isWrongType, setIsWrongType] = useState<boolean>(false);
+
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
     //TODO: End for file type check
     if (files && files.length) {
-      Array.from(files).forEach((file) => {
-        console.log(file.type);
-      });
+      const selectedTypes = Array.from(files).map((file) => file.type);
+      console.log(availableFileType);
+      if (availableFileType) {
+        console.log(
+          selectedTypes.some(
+            (currentfileType) =>
+              !availableFileType.filter((fileType) =>
+                currentfileType.toLowerCase().includes(fileType.toLowerCase())
+              ).length
+          )
+        );
+        setIsWrongType(
+          selectedTypes.some(
+            (currentfileType) =>
+              !availableFileType.filter((fileType) =>
+                currentfileType.toLowerCase().includes(fileType.toLowerCase())
+              ).length
+          )
+        );
+      }
     }
     fileChange(e);
   };
+
   return (
-    <div>
-      <label>Choice file</label>
-      <ImportInput role="fileinput" onChange={onFileChange}></ImportInput>
-    </div>
+    <FileSelectorComponent>
+      <div>
+        <label>Choice file</label>
+        <ImportInput role="fileinput" onChange={onFileChange}></ImportInput>
+      </div>
+      {isWrongType ? <ErrorMessasge>Wrong file type</ErrorMessasge> : null}
+    </FileSelectorComponent>
   );
 };
 type ImportFileProps = {
