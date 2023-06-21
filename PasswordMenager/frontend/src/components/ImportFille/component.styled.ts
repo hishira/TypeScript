@@ -13,7 +13,7 @@ export const FileSelectorComponent = styled.div`
   flex-direction: column;
 `
 export const ErrorMessasge = styled.span`
-  color: lightcoral
+  color: lightcoral;
 `
 export const ImportInput = styled.input.attrs({
   type: "file",

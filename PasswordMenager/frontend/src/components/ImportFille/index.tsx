@@ -24,32 +24,24 @@ export const FileSelector = ({
   availableFileType,
 }: FileSelectorProps) => {
   const [isWrongType, setIsWrongType] = useState<boolean>(false);
-
+  const [errorMessage, setErrorMessage] = useState<string>("Wrong file type");
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
-    //TODO: End for file type check
-    if (files && files.length) {
-      const selectedTypes = Array.from(files).map((file) => file.type);
-      console.log(availableFileType);
-      if (availableFileType) {
-        console.log(
-          selectedTypes.some(
-            (currentfileType) =>
-              !availableFileType.filter((fileType) =>
-                currentfileType.toLowerCase().includes(fileType.toLowerCase())
-              ).length
-          )
-        );
-        setIsWrongType(
-          selectedTypes.some(
-            (currentfileType) =>
-              !availableFileType.filter((fileType) =>
-                currentfileType.toLowerCase().includes(fileType.toLowerCase())
-              ).length
-          )
-        );
-      }
-    }
+    if (!files || (files && files.length === 0)) return;
+    const selectedTypes = Array.from(files).map((file) => file.type);
+    if (!availableFileType || availableFileType.length === 0) return;
+    const isWrongType = selectedTypes.some(
+      (currentfileType) =>
+        !availableFileType.filter((fileType) =>
+          currentfileType.toLowerCase().includes(fileType.toLowerCase())
+        ).length
+    );
+    setIsWrongType(isWrongType);
+    isWrongType &&
+      setErrorMessage(
+        `Wrong file type, type possible: ${availableFileType.join(", ")}`
+      );
+
     fileChange(e);
   };
 
@@ -59,7 +51,7 @@ export const FileSelector = ({
         <label>Choice file</label>
         <ImportInput role="fileinput" onChange={onFileChange}></ImportInput>
       </div>
-      {isWrongType ? <ErrorMessasge>Wrong file type</ErrorMessasge> : null}
+      {isWrongType ? <ErrorMessasge>{errorMessage}</ErrorMessasge> : null}
     </FileSelectorComponent>
   );
 };

@@ -10,12 +10,17 @@ type ImportEntriesModalProps = {
 
 const ImportEntriesModalComponent = () => {
   const [file, setFile] = useState<File>();
-
+  const [fileType, setFileType] = useState<string | undefined>(undefined);
+  const possibleTypes = ["csv", "txt"];
   const fileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
     if (files && files?.length <= 0) return;
-    console.log(files);
     files && setFile(files[0]);
+    const fileType = files && files[0].type;
+    const selectedType = possibleTypes.find((ft) =>
+      fileType?.toLowerCase().includes(ft)
+    );
+    setFileType(selectedType);
   };
   return (
     <ImportEntries>
@@ -23,6 +28,7 @@ const ImportEntriesModalComponent = () => {
         availableFileType={["csv", "txt"]}
         fileChange={fileChange}
       />
+      {fileType ? <div>{`Selected file type ${fileType}`}</div> : null}
     </ImportEntries>
   );
 };
