@@ -11,7 +11,7 @@ type ImportEntriesModalProps = {
 const ImportEntriesModalComponent = () => {
   const [file, setFile] = useState<File>();
   const [fileType, setFileType] = useState<string | undefined>(undefined);
-  const possibleTypes = ["csv", "txt"];
+  const possibleTypes: ("csv" | "txt" | "jpeg" | "png")[] = ["csv", "txt"]; //TODO: change
   const fileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
     if (files && files?.length <= 0) return;
@@ -22,13 +22,14 @@ const ImportEntriesModalComponent = () => {
     );
     setFileType(selectedType);
   };
+  //TODO: Add proper message for txt file types
   return (
     <ImportEntries>
       <FileSelector
-        availableFileType={["csv", "txt"]}
+        availableFileType={possibleTypes}
         fileChange={fileChange}
       />
-      {fileType ? <div>{`Selected file type ${fileType}`}</div> : null}
+      {fileType ? <div>{`Selected file type ${fileType}`}, fields must be in proper order, username, password,note. </div> : null}
     </ImportEntries>
   );
 };
