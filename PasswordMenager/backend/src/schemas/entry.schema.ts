@@ -26,11 +26,10 @@ const EntrySchema = new mognoose.Schema({
   },
   groupid: {
     type: mognoose.Schema.Types.ObjectId,
-    default: '',
   },
   userid: {
     type: mognoose.Schema.Types.ObjectId,
-    default: '',
+    default: null,
   },
   passwordExpiredDate: {
     type: Date,
