@@ -19,14 +19,22 @@ export class EntryService {
     entrycreateDTO: CreateEntryDto,
     userid: string,
   ): Promise<IEntry | { message: string }> {
+    const entryToAdd = entrycreateDTO;
+    const isGroupIdEmpty = entryToAdd.groupid === '';
+    let restParams: Partial<CreateEntryDto> = entrycreateDTO;
+    if (isGroupIdEmpty) {
+      const { groupid, ...restEntryParams } = entryToAdd;
+      restParams = restEntryParams;
+    }
     const pureDto: DTO = {
       toObject() {
         return {
-          ...entrycreateDTO,
+          ...(isGroupIdEmpty && restParams ? restParams : entrycreateDTO),
           userid: userid,
         };
       },
     };
+    console.log(pureDto.toObject());
     return this.entryRepository.create(pureDto).catch((_) => {
       console.error(_);
       return { message: 'Error whice creating entry' };

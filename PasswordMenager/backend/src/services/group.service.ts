@@ -9,6 +9,7 @@ import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { IGroup } from '../schemas/Interfaces/group.interface';
 import { EntryService } from './entry.service';
+import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 
 @Injectable()
 export class GroupService {
@@ -59,5 +60,9 @@ export class GroupService {
     };
     await this.entityService.deleteByGroup(groupId);
     return await this.groupRepository.delete(deleteOption);
+  }
+
+  async editGroup(groupId: string, groupDto: EditGroupDto): Promise<unknown> {
+    return this.groupRepository.update({ _id: groupId, ...groupDto });
   }
 }

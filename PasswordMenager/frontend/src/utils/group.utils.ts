@@ -1,7 +1,7 @@
 import { GroupApi } from "../api/group.api";
 import { Auth } from "./auth.utils";
-import { SessionStorage } from "./localstorage.utils";
 import { EMPTYGROUPRESPONSE } from "./constans.utils";
+import { SessionStorage } from "./localstorage.utils";
 
 export class Group {
   private static instance: Group | null = null;
@@ -108,6 +108,29 @@ export class Group {
           const token = this.sessionStorage.getAccessToken();
           return this.DeleteGroup(groupId, token);
         }
+        return response;
+      })
+      .then((resp) => resp.json());
+  }
+
+  EditGroup(
+    groupId: string,
+    token: string,
+    groupDto: { name: string }
+  ): Promise<Response> {
+    return this.groupApi.editGroup(groupId, token, groupDto);
+  }
+
+  EditUserGroup(groupId: string, groupDto: { name: string }): Promise<unknown> {
+    let accessToken = this.sessionStorage.getAccessToken();
+    return this.EditGroup(groupId, accessToken, groupDto)
+      .then(async (response) => {
+        if (response.status === 401) {
+          await this.auth.refreshToken();
+          const token = this.sessionStorage.getAccessToken();
+          return this.EditGroup(groupId, token, groupDto);
+        }
+
         return response;
       })
       .then((resp) => resp.json());

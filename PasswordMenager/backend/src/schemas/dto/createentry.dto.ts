@@ -22,6 +22,7 @@ export class CreateEntryDto implements DTO {
   readonly note;
 
   @IsString()
+  @IsOptional()
   readonly groupid;
 
   @IsString()

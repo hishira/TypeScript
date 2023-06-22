@@ -1,7 +1,60 @@
 import { ChangeEvent, useState } from "react";
 import { ImportFileEffect } from "../../hooks/importFile.hook";
 import FormElement from "../FormElement";
-import { ImportContainer, ImportInput } from "./component.styled";
+import {
+  ErrorMessasge,
+  FileSelectorComponent,
+  ImportContainer,
+  ImportInput,
+} from "./component.styled";
+type PossibleFiles = `${PossibleFileType}`;
+enum PossibleFileType {
+  JPG = "jpeg",
+  PNG = "png",
+  CSV = "csv",
+  TXT = "txt",
+}
+type FileSelectorProps = {
+  fileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  availableFileType?: PossibleFiles[];
+};
+
+export const FileSelector = ({
+  fileChange,
+  availableFileType,
+}: FileSelectorProps) => {
+  const [isWrongType, setIsWrongType] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("Wrong file type");
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { target: { files = [] } = {} } = e;
+    if (!files || (files && files.length === 0)) return;
+    const selectedTypes = Array.from(files).map((file) => file.type);
+    if (!availableFileType || availableFileType.length === 0) return;
+    const isWrongType = selectedTypes.some(
+      (currentfileType) =>
+        !availableFileType.filter((fileType) =>
+          currentfileType.toLowerCase().includes(fileType.toLowerCase())
+        ).length
+    );
+    setIsWrongType(isWrongType);
+    isWrongType &&
+      setErrorMessage(
+        `Wrong file type, type possible: ${availableFileType.join(", ")}`
+      );
+
+    fileChange(e);
+  };
+
+  return (
+    <FileSelectorComponent>
+      <div>
+        <label>Choice file</label>
+        <ImportInput role="fileinput" onChange={onFileChange}></ImportInput>
+      </div>
+      {isWrongType ? <ErrorMessasge>{errorMessage}</ErrorMessasge> : null}
+    </FileSelectorComponent>
+  );
+};
 type ImportFileProps = {
   fileChangeHandle: (...args: File[]) => void;
 };
@@ -23,13 +76,7 @@ export const ImportFile = ({
   // TODO: Improber add password improvement
   return (
     <ImportContainer>
-      <div>
-        <label>Choice file</label>
-        <ImportInput
-          role="fileinput"
-          onChange={(e) => fileChange(e)}
-        ></ImportInput>
-      </div>
+      <FileSelector fileChange={(e) => fileChange(e)} />
       <div>
         <FormElement
           label={"Password"}

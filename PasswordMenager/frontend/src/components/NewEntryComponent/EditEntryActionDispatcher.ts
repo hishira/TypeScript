@@ -13,7 +13,6 @@ export class EditEntryActionDispatcher {
   get isFormValid(): boolean {
     return (
       this.newentry.password !== "" &&
-      this.newentry.groupid !== "" &&
       this.newentry.username !== ""
     );
   }

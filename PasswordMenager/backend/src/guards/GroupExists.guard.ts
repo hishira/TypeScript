@@ -10,6 +10,8 @@ export class GroupGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const body = request.body;
-    return this.groupService.checkIfexists(body.groupid).then((_) => true);
+    return body.groupid === ''
+      ? true
+      : this.groupService.checkIfexists(body.groupid).then((_) => true);
   }
 }

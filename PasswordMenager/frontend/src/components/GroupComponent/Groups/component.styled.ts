@@ -1,10 +1,19 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 
+const iconOpenAnimation = keyframes`
+  from{
+    rigth: -500%;
+  }
+  to{
+    right: 0;
+  }
+`
 export const Groups = styled.div`
   height: 100%;
   max-height: 100%;
   padding-left: 2rem;
   overflow: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   @media (max-width: 650px) {
     max-height: initial;
@@ -28,8 +37,9 @@ export const GroupsIcon = styled.div`
   display: none;
   position: absolute;
   top: 0;
-  right: 0;
+  right: -500%;
   z-index: 2000;
+  animation: ${iconOpenAnimation} .4s linear forwards;
   & > svg[role="edit"],
   svg[role="delete"] {
     cursor: pointer;

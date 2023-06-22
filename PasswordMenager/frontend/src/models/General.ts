@@ -8,6 +8,10 @@ import {
 } from "mobx-state-tree";
 import { NonEmptyObject } from "mobx-state-tree/dist/internal";
 
+export enum View {
+  Table = "Table",
+  Card = "Card",
+}
 type PopUpStoreType = {
   type: string;
   message: string;
@@ -33,6 +37,7 @@ export const General = types
       message: types.string,
       open: types.boolean,
     }),
+    viewType: types.enumeration(Object.keys(View)),
   })
   .actions((self) => ({
     setUserActive(useractive: boolean): void {
@@ -41,6 +46,9 @@ export const General = types
     setPopUpinfo(popupModel: PopUpStoreType): void {
       self.popUpelement = popupModel;
     },
+    setViewType(viewType: View): void {
+      self.viewType = viewType;
+    },
   }))
   .views((self) => ({
     get UserActivity(): boolean {
@@ -48,6 +56,9 @@ export const General = types
     },
     get PopUpModelInfo(): PopUpStoreType {
       return self.popUpelement;
+    },
+    get ViewType(): View {
+      return self.viewType as View;
     },
   }));
 

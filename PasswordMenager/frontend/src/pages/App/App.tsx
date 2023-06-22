@@ -6,7 +6,7 @@ import LoginPage from "../../pages/Login";
 import SignUp from "../../pages/SignUp/";
 import StorePage from "../Store/";
 import { Provider } from "mobx-react";
-import { General } from "../../models/General";
+import { General, View } from "../../models/General";
 import { SessionStorage } from "../../utils/localstorage.utils";
 import PrivateComponent from "../../components/PrivateRoute/index";
 import "./App.css";
@@ -22,6 +22,7 @@ function App() {
       type: "error",
       message: "",
     },
+    viewType: View.Table,
   });
   return (
     <Provider store={store}>

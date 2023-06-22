@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Request,
   UseGuards,
   ValidationPipe,
@@ -14,6 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { GroupService } from '../services/group.service';
+import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 
 @Controller('group')
 export class GroupController {
@@ -26,6 +28,15 @@ export class GroupController {
     @Request() req,
   ) {
     return this.groupservice.create(newgroup, req.user._id);
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Put('/:id')
+  async edit(
+    @Param('id') groupId: string,
+    @Body(new ValidationPipe({ transform: false })) editedGroup: EditGroupDto,
+  ) {
+    return this.groupservice.editGroup(groupId, editedGroup);
   }
 
   @UseGuards(AuthGuard('accessToken'))

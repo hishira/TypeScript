@@ -5,9 +5,12 @@ import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
 import { Container, GroupContainer } from "./component.styled";
+import { ImportModalEntries } from "../ImportModals/ImportEntries";
 const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const [importModalOpen, setImportModalOpen] = useState<boolean>(false);
+  const [importEntriesModalOpen, setImportEntriesModalOpen] =
+    useState<boolean>(false);
   const closehandle = (): void => setmodalopen(false);
   const closeImportModalHandle = (): void => setImportModalOpen(false);
   const exportHandle = (): void => {
@@ -26,6 +29,8 @@ const PassBar: React.FC = (): JSX.Element => {
 
   const importEncrypted = (): void => setImportModalOpen(true);
 
+  const importEntries = (): void => setImportEntriesModalOpen(true);
+
   return (
     <Container>
       <Modal
@@ -37,6 +42,10 @@ const PassBar: React.FC = (): JSX.Element => {
         modalOpen={importModalOpen}
         closeModalHandle={closeImportModalHandle}
       />
+      <ImportModalEntries
+        modalOpen={importEntriesModalOpen}
+        closeModalHandle={() => setImportEntriesModalOpen(false)}
+      />
       <GroupContainer>
         <Button color="lightgray" onClick={() => setmodalopen(true)}>
           New entry
@@ -46,6 +55,9 @@ const PassBar: React.FC = (): JSX.Element => {
         </Button>
         <Button color="lightgray" onClick={exportEncrypted}>
           Export encrypted
+        </Button>
+        <Button color="lightgray" onClick={importEntries}>
+          Import passwords
         </Button>
         <Button color="lightgray" onClick={importEncrypted}>
           Import encrypted
