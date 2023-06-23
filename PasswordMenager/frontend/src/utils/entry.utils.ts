@@ -180,4 +180,24 @@ export class Entry {
     }
     return response;
   }
+
+  async getEntryWithoutGroup(accessToken: string): Promise<IEntry[] | number> {
+    return this.entryApi
+      .getEntryWithoutGroup(accessToken)
+      .then((resp) => (resp.status === 401 ? 401 : resp.json()));
+  }
+
+  async EntriesWithoutGroup() {
+    const accessToken = this.sessionStorage.getAccessToken();
+
+    return this.getEntryWithoutGroup(accessToken).then(async (resp) => {
+      if (typeof resp === "number" && resp === 401) {
+        await this.auth.refreshToken();
+        const token = this.sessionStorage.getAccessToken();
+        return this.getEntryWithoutGroup(token);
+      }
+
+      return resp;
+    });
+  }
 }

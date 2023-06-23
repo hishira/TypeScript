@@ -48,13 +48,22 @@ export class EntryService {
   async getbygroupid(groupid: string): Promise<IEntry[]> {
     const option: FilterOption<FilterQuery<IEntry>> = {
       getOption() {
-        return { groupid: groupid };
+        return { groupid: groupid !== '' ? groupid : null };
       },
     };
 
     return this.entryRepository.find(option);
   }
 
+  async getUserEntriesWithoutGroup(userid: string): Promise<IEntry[]> {
+    const option: FilterOption<FilterQuery<IEntry>> = {
+      getOption() {
+        return { groupid: null, userid: userid };
+      },
+    };
+
+    return this.entryRepository.find(option);
+  }
   async deletebyid(entryid: string): Promise<DeleteEntryResponse> {
     try {
       const deletedentry: Promise<IEntry> =

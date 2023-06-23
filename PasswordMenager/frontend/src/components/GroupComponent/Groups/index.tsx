@@ -23,9 +23,17 @@ export const GroupsComponent = ({
   editHandle,
   deleteHandle,
 }: GroupsComponentProps) => {
+  const groupsWithEmpty = [
+    ...groups,
+    {
+      _id: '',
+      name: "Entries without group",
+      userid: "",
+    },
+  ];
   return (
     <Groups>
-      {groups.map((group: IGroup) => (
+      {groupsWithEmpty.map((group: IGroup) => (
         <GroupContainer
           key={group._id}
           isSelected={selectedgroup === group._id}
