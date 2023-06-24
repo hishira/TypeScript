@@ -8,8 +8,10 @@ export class CustomFileValidator extends FileValidator<any> {
     const buffer = file.buffer as Buffer;
     const stream = this.getStream(buffer);
     const chunks = [];
-    stream.on('data', (chunk) => chunks.push(chunk));
-    return false;
+    stream.on('data', (chunk) => {
+      chunks.push(chunk);
+    });
+    return true;
   }
 
   buildErrorMessage(file: any): string {

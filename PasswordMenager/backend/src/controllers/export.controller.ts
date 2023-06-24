@@ -37,7 +37,7 @@ export class ExportController {
   @Get('csv')
   @UseGuards(AuthGuard('accessToken'))
   getCsv(@Request() req, @Res() response: Response) {
-    this.exportService.getCsvFile(req.user.id).then((csvString) => {
+    this.exportService.getCsvFile(req.user._id).then((csvString) => {
       response
         .set({
           'Content-Type': 'text/csv',
