@@ -26,7 +26,7 @@ export const GroupsComponent = ({
   const groupsWithEmpty = [
     ...groups,
     {
-      _id: '',
+      _id: "",
       name: "Entries without group",
       userid: "",
     },
@@ -44,13 +44,15 @@ export const GroupsComponent = ({
           >
             {group.name}
           </GroupName>
-          <GroupOption>
-            <MoreOption />
-            <GroupsIcon>
-              <EditIcon click={() => editHandle(group._id)} />
-              <DeleteIcon click={() => deleteHandle(group._id)} />
-            </GroupsIcon>
-          </GroupOption>
+          {group._id !== "" ? (
+            <GroupOption>
+              <MoreOption />
+              <GroupsIcon>
+                <EditIcon click={() => editHandle(group._id)} />
+                <DeleteIcon click={() => deleteHandle(group._id)} />
+              </GroupsIcon>
+            </GroupOption>
+          ) : null}
         </GroupContainer>
       ))}
     </Groups>
