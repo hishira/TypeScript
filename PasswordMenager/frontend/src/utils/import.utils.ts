@@ -21,4 +21,8 @@ export class Import {
   public ImportFile(file: File | FormData, fileSize: number): Promise<unknown> {
     return this.importApi.importFile(file, fileSize);
   }
+
+  public Import(file: File | FormData, fileSize: number): Promise<unknown> {
+    return this.importApi.import(file, fileSize);
+  }
 }
