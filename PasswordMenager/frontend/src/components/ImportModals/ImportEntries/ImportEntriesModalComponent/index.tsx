@@ -46,12 +46,13 @@ const ImportEntriesModalComponent = ({
     }
   );
 
+  const fileChangeHandle = FileChangeHandle.fileChange.bind(FileChangeHandle);
   //TODO: Add proper message for txt file types
   return (
     <ImportEntries>
       <FileSelector
         availableFileType={FileChangeHandle.importEntriesHelper.possibleTypes}
-        fileChange={FileChangeHandle.fileChange.bind(FileChangeHandle)}
+        fileChange={fileChangeHandle}
       />
       {FileChangeHandle.fileType ? (
         <div>
