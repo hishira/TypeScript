@@ -17,6 +17,7 @@ import {
 } from "./component.styled";
 import { EditIcon } from "../icons/EditIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
+import { PasswordFieldsHelper } from "../PasswordTable/PasswordField";
 
 // TODO End component
 type FieldsCardViewProps = {
@@ -46,29 +47,45 @@ type CardComponentProps = {
 type CardExpendContentRowProps = {
   fieldName: string;
   value: string;
+  isPassword?: boolean;
 };
 const CardExpendContentRow = ({
   fieldName,
   value,
+  isPassword,
 }: CardExpendContentRowProps) => {
+  const props = {};
+  if (isPassword) {
+    props["onClick"] = () => PasswordFieldsHelper.passwordClick(value);
+  }
   return (
     <CardExpandContentRow>
       <CardFieldName>{fieldName}</CardFieldName>
-      <CardFieldValue>{value}</CardFieldValue>
+      {isPassword ? (
+        <CardFieldValue {...props}>***</CardFieldValue>
+      ) : (
+        <CardFieldValue {...props}>
+          {value}
+        </CardFieldValue>
+      )}
     </CardExpandContentRow>
   );
 };
 const CardExpandComponent = ({ entry }: CardComponentProps) => {
   return entry.open ? (
     <CardExpand>
+      <CardExpandContent>
+        <CardExpendContentRow fieldName="Username" value={entry.username} />
+        <CardExpendContentRow
+          fieldName="Password"
+          value={entry.password}
+          isPassword={true}
+        />
+        <CardExpendContentRow fieldName="Note" value={entry.note} />
+      </CardExpandContent>
       <CardIcons>
         <EditIcon /> <DeleteIcon />
       </CardIcons>
-      <CardExpandContent>
-        <CardExpendContentRow fieldName="Username" value={entry.username} />
-        <CardExpendContentRow fieldName="Password" value={entry.password} />
-        <CardExpendContentRow fieldName="Note" value={entry.note} />
-      </CardExpandContent>
     </CardExpand>
   ) : null;
 };
@@ -79,7 +96,7 @@ const CartComponent = ({ entry }: CardComponentProps) => {
     <Card>
       <CardHeader>
         <CardContent>
-          <div>{entryCard.username}</div>
+          <div>{entryCard.title}</div>
         </CardContent>
         <CardIcons>
           <FieldsIcon
@@ -103,13 +120,12 @@ const FieldsCardView = ({
       open: false,
     })
   );
+  const Entries: JSX.Element[] = entries.map((entry) => (
+    <CartComponent entry={entry} key={entry._id} />
+  ));
   return (
     <CardsContainer>
-      <Cards>
-        {entries.map((entry) => (
-          <CartComponent entry={entry} key={entry._id} />
-        ))}
-      </Cards>
+      <Cards>{Entries}</Cards>
     </CardsContainer>
   );
 };

@@ -56,8 +56,13 @@ export const CardExpandContent = styled.div`
 `;
 export const CardFieldName = styled.div`
   font-weight: 550;
+  width: 50%;
 `;
-export const CardFieldValue = styled.div``;
+export const CardFieldValue = styled.div`
+  &[type="password"] {
+    cursor: pointer;
+  }
+`;
 export const CardExpandContentRow = styled.div`
   display: flex;
   width: 40%;
@@ -67,12 +72,13 @@ export const CardExpandContentRow = styled.div`
 export const CardContent = styled.div`
   display: flex;
   gap: 2rem;
-  & > div:nth-child(2){
+  & > div:nth-child(2) {
     gap: 1.5rem;
   }
 `;
 export const CardIcons = styled.div`
   display: flex;
+  gap: 5rem;
   & > svg {
     &:hover {
       cursor: pointer;

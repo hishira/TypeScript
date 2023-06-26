@@ -7,19 +7,26 @@ import {
   TableRow,
 } from "./component.styled";
 
-const PasswordFieldsHelper = {
+export const PasswordFieldsHelper = {
   gettext: (text: string | null): string => {
     return text ? text : "";
   },
-  passwordClick: (entry: IEntry): void => {
-    let elementpass: HTMLElement | null = document.getElementById(
-      `${entry._id}${entry.groupid}`
+
+  isEntry: (entry: IEntry | string | null): boolean => {
+    return (
+      entry !== null &&
+      typeof entry === "object" &&
+      "_id" in entry &&
+      "password" in entry
     );
-    console.log(elementpass);
-    if (elementpass !== null) {
+  },
+  passwordClick: (entry: IEntry | string | null): void => {
+    const text: string | null = PasswordFieldsHelper.isEntry(entry)
+      ? (entry as IEntry).password
+      : (entry as string);
+    if (entry !== null) {
       navigator.clipboard
-        .writeText(PasswordFieldsHelper.gettext(entry.password))
-        .then(() => console.log("ok"))
+        .writeText(PasswordFieldsHelper.gettext(text))
         .catch((e) => console.log("not ok"));
     }
   },

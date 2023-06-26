@@ -77,7 +77,6 @@ const NewEntryComponent = ({
 
   const addnewentry = async (): Promise<void> => {
     // TODO: Prevent from doing if inputs are empty even if
-    console.log(newentry);
     Entry.getInstance()
       .CreateNewEntryUser(newentry)
       .then((responsenewentry) => {
