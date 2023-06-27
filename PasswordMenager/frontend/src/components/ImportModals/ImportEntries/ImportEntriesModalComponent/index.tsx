@@ -1,6 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { FileSelector } from "../../../ImportFille";
-import { ImportEntries } from "./component.styled";
+import { CheckBox, ImportEntries, OwnFieldsOrder } from "./component.styled";
+import FormElement from "../../../FormElement";
 
 type ImportEntriesModalComponentProps = {
   fileSetHandle: (file: File) => void;
@@ -37,6 +38,8 @@ class ImportEntriesComponent {
 const ImportEntriesModalComponent = ({
   fileSetHandle,
 }: ImportEntriesModalComponentProps) => {
+  const [ownFieldOrder, setOwnFieldOrder] = useState<boolean>(false);
+  const [fieldsNumber, setFieldsNumber] = useState<number>(1);
   const FileChangeHandle = new ImportEntriesComponent(
     ...useState<File | undefined>(),
     ...useState<string | undefined>(undefined),
@@ -56,8 +59,31 @@ const ImportEntriesModalComponent = ({
       />
       {FileChangeHandle.fileType ? (
         <div>
-          {`Selected file type ${FileChangeHandle.fileType}`}, fields must be in
-          proper order, username, password,note.{" "}
+          <span>
+            {`Selected file type ${FileChangeHandle.fileType}`}, fields should
+            be in proper order name, site(in future), username - email,
+            password,note.
+          </span>
+          <OwnFieldsOrder>
+            <span>Select own order of field</span>
+            <CheckBox
+              defaultChecked={ownFieldOrder}
+              onChange={(e) => setOwnFieldOrder(!ownFieldOrder)}
+            />
+          </OwnFieldsOrder>
+          {ownFieldOrder ? (
+            <div>
+              <FormElement
+                label={"Fields number"}
+                inputplaceholder="Fields number"
+                inputChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setFieldsNumber(parseInt(e.target.value))
+                }
+                inputtype="number"
+                value={fieldsNumber}
+              />
+            </div>
+          ) : null}
         </div>
       ) : null}
     </ImportEntries>
