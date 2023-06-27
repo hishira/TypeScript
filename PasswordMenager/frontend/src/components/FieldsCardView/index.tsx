@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { DOMAttributes, useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { DownIcon } from "../icons/DownIcon";
 import { UpIcon } from "../icons/UpIcon";
@@ -49,25 +49,32 @@ type CardExpendContentRowProps = {
   value: string;
   isPassword?: boolean;
 };
+type ValueFieldPropd = {
+  isPassword: boolean | undefined;
+  value: string | IEntry | null;
+};
+const ValueField = ({ isPassword, value }: ValueFieldPropd) => {
+  const props: DOMAttributes<HTMLDivElement> = {};
+  if (isPassword) {
+    props["onClick"] = () => PasswordFieldsHelper.passwordClick(value);
+  }
+  return isPassword ? (
+    <CardFieldValue {...props}>
+      <span>******</span>
+    </CardFieldValue>
+  ) : (
+    <CardFieldValue {...props}>{value}</CardFieldValue>
+  );
+};
 const CardExpendContentRow = ({
   fieldName,
   value,
   isPassword,
 }: CardExpendContentRowProps) => {
-  const props = {};
-  if (isPassword) {
-    props["onClick"] = () => PasswordFieldsHelper.passwordClick(value);
-  }
   return (
     <CardExpandContentRow>
       <CardFieldName>{fieldName}</CardFieldName>
-      {isPassword ? (
-        <CardFieldValue {...props}>***</CardFieldValue>
-      ) : (
-        <CardFieldValue {...props}>
-          {value}
-        </CardFieldValue>
-      )}
+      <ValueField isPassword={isPassword} value={value}></ValueField>
     </CardExpandContentRow>
   );
 };
@@ -110,19 +117,24 @@ const CartComponent = ({ entry }: CardComponentProps) => {
     </Card>
   );
 };
+
+const EntriesMappes = (entries: IEntry[]): CardEntry[] =>
+  entries.map((entry) => ({
+    ...entry,
+    open: false,
+  }));
+
+const EntriesComponentMapper = (entries: CardEntry[]) =>
+  entries.map((entry) => <CartComponent entry={entry} key={entry._id} />);
+
 const FieldsCardView = ({
   selectedgroup,
   refreshall,
 }: FieldsCardViewProps): JSX.Element => {
-  const entries: CardEntry[] = PasswordEntries(selectedgroup, refreshall).map(
-    (entry) => ({
-      ...entry,
-      open: false,
-    })
+  const entries: CardEntry[] = EntriesMappes(
+    PasswordEntries(selectedgroup, refreshall)
   );
-  const Entries: JSX.Element[] = entries.map((entry) => (
-    <CartComponent entry={entry} key={entry._id} />
-  ));
+  const Entries: JSX.Element[] = EntriesComponentMapper(entries);
   return (
     <CardsContainer>
       <Cards>{Entries}</Cards>

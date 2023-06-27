@@ -62,6 +62,9 @@ export const CardFieldValue = styled.div`
   &[type="password"] {
     cursor: pointer;
   }
+  & > span{
+    cursor: pointer;
+  }
 `;
 export const CardExpandContentRow = styled.div`
   display: flex;
