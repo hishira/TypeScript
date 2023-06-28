@@ -59,6 +59,7 @@ export const CardFieldName = styled.div`
   width: 50%;
 `;
 export const CardFieldValue = styled.div`
+  width: 50%;
   &[type="password"] {
     cursor: pointer;
   }
@@ -68,7 +69,7 @@ export const CardFieldValue = styled.div`
 `;
 export const CardExpandContentRow = styled.div`
   display: flex;
-  width: 40%;
+  width: 80%;
   gap: 2rem;
 `;
 
@@ -81,7 +82,6 @@ export const CardContent = styled.div`
 `;
 export const CardIcons = styled.div`
   display: flex;
-  margin-top: 1.5rem;
   gap: 5rem;
   & > svg {
     &:hover {
