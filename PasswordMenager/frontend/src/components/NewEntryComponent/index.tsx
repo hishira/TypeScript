@@ -11,7 +11,7 @@ import {
   CheckBox,
   EntryModalComponent,
   PassLen,
-  SectionContainer
+  SectionContainer,
 } from "./component.styled";
 import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
@@ -52,6 +52,7 @@ const NewEntryComponent = ({
     password: "",
     note: "",
     groupid: "",
+    url: "",
   });
   const editEntry: EditEntryActionDispatcher = new EditEntryActionDispatcher(
     setnewentry,
@@ -72,6 +73,7 @@ const NewEntryComponent = ({
       password: "",
       note: "",
       groupid: "",
+      url: "",
     });
   }, [refreshentry]);
 
@@ -131,6 +133,13 @@ const NewEntryComponent = ({
             inputChange={editEntry.setusername.bind(editEntry)}
             inputtype="txt"
             value={newentry.username}
+          />
+          <FormElement
+            label={"Url"}
+            inputplaceholder="Url link"
+            inputChange={editEntry.seturl.bind(editEntry)}
+            inputtype="txt"
+            value={newentry.url}
           />
           <GroupSelection edit={edit} editEntry={editEntry} groups={groups} />
           <SectionContainer>

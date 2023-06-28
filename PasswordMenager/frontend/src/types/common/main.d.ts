@@ -42,6 +42,7 @@ type CreateEntryDto = {
   password: string;
   note: string;
   groupid: string;
+  url: string;
 };
 
 interface IEntry extends CreateEntryDto {
