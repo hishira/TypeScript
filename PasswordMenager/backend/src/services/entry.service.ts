@@ -41,11 +41,11 @@ export class EntryService {
     });
   }
 
-  async getById(entryId: string): Promise<IEntry> {
+  getById(entryId: string): Promise<IEntry> {
     return this.entryRepository.findById(entryId);
   }
 
-  async getbygroupid(groupid: string): Promise<IEntry[]> {
+  getbygroupid(groupid: string): Promise<IEntry[]> {
     const option: FilterOption<FilterQuery<IEntry>> = {
       getOption() {
         return { groupid: groupid !== '' ? groupid : null };
@@ -55,7 +55,7 @@ export class EntryService {
     return this.entryRepository.find(option);
   }
 
-  async getUserEntriesWithoutGroup(userid: string): Promise<IEntry[]> {
+  getUserEntriesWithoutGroup(userid: string): Promise<IEntry[]> {
     const option: FilterOption<FilterQuery<IEntry>> = {
       getOption() {
         return { groupid: null, userid: userid };
@@ -64,7 +64,8 @@ export class EntryService {
 
     return this.entryRepository.find(option);
   }
-  async deletebyid(entryid: string): Promise<DeleteEntryResponse> {
+
+  deletebyid(entryid: string): Promise<DeleteEntryResponse> {
     try {
       const deletedentry: Promise<IEntry> =
         this.entryRepository.findById(entryid);
@@ -85,7 +86,7 @@ export class EntryService {
           };
         });
     } catch (e) {
-      return { status: false, respond: null };
+      return Promise.resolve({ status: false, respond: null });
     }
   }
 
@@ -99,7 +100,7 @@ export class EntryService {
     });
   }
 
-  async getByUser(userId: string): Promise<IEntry[]> {
+  getByUser(userId: string): Promise<IEntry[]> {
     const filterOption: FilterOption<FilterQuery<IEntry>> = {
       getOption() {
         return {
@@ -110,7 +111,7 @@ export class EntryService {
     return this.entryRepository.find(filterOption);
   }
 
-  async editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
+  editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
     try {
       const entry: Partial<IEntry> = this.getPartialUpdateEntry(neweditedentry);
       return this.entryRepository.update(entry).then(async (_data) => {
@@ -121,7 +122,7 @@ export class EntryService {
         return { status: true, respond: upadednoew };
       });
     } catch (e) {
-      return { status: false, respond: null };
+      return Promise.resolve({ status: false, respond: null });
     }
   }
 

@@ -16,6 +16,9 @@ export class EditEntryDto {
   @IsOptional()
   readonly email;
 
+  @IsOptional()
+  readonly url;
+
   @IsString()
   readonly note;
 }

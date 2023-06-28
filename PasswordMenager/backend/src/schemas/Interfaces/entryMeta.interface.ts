@@ -5,6 +5,7 @@ export enum LastEditedVariable {
   LASTTITLE = 'title',
   LASTUSERNAME = 'username',
   LASTEMAIL = 'email',
+  LASTURL = 'url',
 }
 
 export interface IEntryMeta extends IMeta {
@@ -13,5 +14,6 @@ export interface IEntryMeta extends IMeta {
   readonly lastPassword: string;
   readonly lastNote: string;
   readonly lastEmail: string;
+  readonly lastUrl: string;
   readonly lastEditedVariable: LastEditedVariable;
 }

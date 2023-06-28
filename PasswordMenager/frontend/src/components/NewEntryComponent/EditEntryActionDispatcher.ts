@@ -11,10 +11,7 @@ export class EditEntryActionDispatcher {
   private passwordLength: number;
 
   get isFormValid(): boolean {
-    return (
-      this.newentry.password !== "" &&
-      this.newentry.username !== ""
-    );
+    return this.newentry.password !== "" && this.newentry.username !== "";
   }
   constructor(
     setNewEntry: DispatchAction<CreateEntryDto>,
@@ -37,6 +34,7 @@ export class EditEntryActionDispatcher {
       password: "",
       note: "",
       groupid: "",
+      url: "",
     });
   }
 
@@ -76,6 +74,10 @@ export class EditEntryActionDispatcher {
 
   setusername(e: React.ChangeEvent<HTMLInputElement>) {
     this.setnewentry({ ...this.newentry, username: e.target.value });
+  }
+
+  seturl(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setnewentry({ ...this.newentry, url: e.target.value });
   }
 
   setpassword(e: React.ChangeEvent<HTMLInputElement>) {
