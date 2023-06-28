@@ -81,6 +81,7 @@ export const CardContent = styled.div`
 `;
 export const CardIcons = styled.div`
   display: flex;
+  margin-top: 1.5rem;
   gap: 5rem;
   & > svg {
     &:hover {

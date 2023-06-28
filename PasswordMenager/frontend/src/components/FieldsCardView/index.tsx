@@ -89,6 +89,7 @@ const CardExpandComponent = ({ entry }: CardComponentProps) => {
           isPassword={true}
         />
         <CardExpendContentRow fieldName="Note" value={entry.note} />
+        <CardExpendContentRow fieldName="Url" value={entry.url} />
       </CardExpandContent>
       <CardIcons>
         <EditIcon /> <DeleteIcon />
