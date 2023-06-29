@@ -50,6 +50,9 @@ export const CardExpand = styled.div`
   transition: opacity 0.7s 0.5s;
   transition: position 0.5s 0.5s;
   animation: ${CarExpandAnimation} 0.5s ease forwards;
+  & > div > svg{
+    margin-top: 1.3rem;
+  }
 `;
 export const CardExpandContent = styled.div`
   width: 100%;

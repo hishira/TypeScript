@@ -18,11 +18,16 @@ import {
 import { EditIcon } from "../icons/EditIcon";
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { PasswordFieldsHelper } from "../PasswordTable/PasswordField";
+import { FieldsModal } from "../FieldsComponent/FieldsModal";
+import { FieldsActionHook } from "../../hooks/actionFields.hook";
+import { Entry } from "../../utils/entry.utils";
+import { DeleteEntryModal } from "../FieldsComponent";
 
 // TODO End component
 type FieldsCardViewProps = {
   selectedgroup: string;
   refreshall: boolean;
+  refreshgroupentities: Function;
 };
 type CardEntry = {
   open: boolean;
@@ -43,6 +48,8 @@ const FieldsIcon = ({ entry, open, close }: FieldsIconProps) => {
 
 type CardComponentProps = {
   entry: CardEntry;
+  deleteHandle: Function;
+  editHandle: Function;
 };
 type CardExpendContentRowProps = {
   fieldName: string;
@@ -78,7 +85,11 @@ const CardExpendContentRow = ({
     </CardExpandContentRow>
   );
 };
-const CardExpandComponent = ({ entry }: CardComponentProps) => {
+const CardExpandComponent = ({
+  entry,
+  editHandle,
+  deleteHandle,
+}: CardComponentProps) => {
   return entry.open ? (
     <CardExpand>
       <CardExpandContent>
@@ -89,15 +100,22 @@ const CardExpandComponent = ({ entry }: CardComponentProps) => {
           isPassword={true}
         />
         <CardExpendContentRow fieldName="Note" value={entry.note} />
-        <CardExpendContentRow fieldName="Url" value={entry.url} />
+        {entry.url ? (
+          <CardExpendContentRow fieldName="Url" value={entry.url} />
+        ) : null}
       </CardExpandContent>
       <CardIcons>
-        <EditIcon /> <DeleteIcon />
+        <EditIcon click={() => editHandle(entry)} />{" "}
+        <DeleteIcon click={() => deleteHandle(entry)} />
       </CardIcons>
     </CardExpand>
   ) : null;
 };
-const CartComponent = ({ entry }: CardComponentProps) => {
+const CartComponent = ({
+  entry,
+  deleteHandle,
+  editHandle,
+}: CardComponentProps) => {
   const [entryCard, setEntryCard] = useState<CardEntry>(entry);
 
   return (
@@ -114,7 +132,11 @@ const CartComponent = ({ entry }: CardComponentProps) => {
           />
         </CardIcons>
       </CardHeader>
-      <CardExpandComponent entry={entryCard} />
+      <CardExpandComponent
+        entry={entryCard}
+        deleteHandle={deleteHandle}
+        editHandle={editHandle}
+      />
     </Card>
   );
 };
@@ -125,19 +147,68 @@ const EntriesMappes = (entries: IEntry[]): CardEntry[] =>
     open: false,
   }));
 
-const EntriesComponentMapper = (entries: CardEntry[]) =>
-  entries.map((entry) => <CartComponent entry={entry} key={entry._id} />);
+const EntriesComponentMapper = (
+  entries: CardEntry[],
+  editFunction: Function,
+  deleteFunction: Function
+) =>
+  entries.map((entry) => (
+    <CartComponent
+      editHandle={editFunction}
+      deleteHandle={deleteFunction}
+      entry={entry}
+      key={entry._id}
+    />
+  ));
 
 const FieldsCardView = ({
   selectedgroup,
   refreshall,
+  refreshgroupentities,
 }: FieldsCardViewProps): JSX.Element => {
+  const FieldsAction = FieldsActionHook();
+
   const entries: CardEntry[] = EntriesMappes(
     PasswordEntries(selectedgroup, refreshall)
   );
-  const Entries: JSX.Element[] = EntriesComponentMapper(entries);
+  const deleteHandle = (entry: IEntry) => {
+    FieldsAction.setEntryToDelete(entry._id);
+    FieldsAction.setDeleteModalOpen(true);
+  };
+
+  const editHandle = (entry: IEntry) => {
+    FieldsAction.setEntryToEdit(entry._id);
+    FieldsAction.setEditModalOpen(true);
+  };
+  const Entries: JSX.Element[] = EntriesComponentMapper(
+    entries,
+    editHandle,
+    deleteHandle
+  );
+  const refreshentry: Function = (): void => {
+    refreshgroupentities();
+  };
+
+  const acceptDeleteHandle = () => {
+    Entry.getInstance()
+      .DeleteUserEntry(FieldsAction.entryToDelete)
+      .then((response) => {
+        if (response.status) {
+          refreshgroupentities();
+          FieldsAction.setDeleteModalOpen(false);
+        }
+      })
+      .catch((e) => e && console.error(e));
+  };
   return (
     <CardsContainer>
+      <FieldsModal
+        actionFields={FieldsAction}
+        refreshEntry={refreshentry}
+        deleteAcceptHandle={acceptDeleteHandle}
+        DeleteEntryModal={DeleteEntryModal}
+        refreshgroupentities={refreshgroupentities}
+      />
       <Cards>{Entries}</Cards>
     </CardsContainer>
   );

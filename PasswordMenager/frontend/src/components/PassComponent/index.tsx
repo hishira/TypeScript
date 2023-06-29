@@ -32,6 +32,7 @@ const PassComponent = ({ store }: PassComponentProps) => {
         <FieldsCardView
           selectedgroup={selectedgroupid}
           refreshall={entitiesrefresh}
+          refreshgroupentities={refreshentities}
         />
       )}
     </Container>
