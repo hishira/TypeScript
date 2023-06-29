@@ -26,12 +26,26 @@ export class ImportController {
     )
     file: Express.Multer.File,
   ) {
+    // Default column => name, site(in future), username - email, password,note.
+    const names = [];
+    const sites = [];
+    const username = [];
+    const password = [];
+    const notes = [];
     const stream = Readable.from(file.buffer);
     const write = new Writable();
     const promise = new Promise<void>((resolve, rejext) => {
       write._write = (chunk, encoding, next) => {
         const csvString = chunk.toString() as string;
-        csvString.split('\r\n').forEach((test) => console.log(test));
+        const csvRows = csvString.split('\r\n');
+        csvRows.forEach((csvRovValue) => {
+          const values = csvRovValue.split(',');
+          names.push(values.shift());
+          username.push(values.shift());
+          password.push(values.shift());
+          notes.push(values.shift());
+        });
+        console.log(password);
         next();
       };
       stream.pipe(write);
