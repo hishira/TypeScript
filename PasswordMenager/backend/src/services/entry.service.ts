@@ -137,6 +137,7 @@ export class EntryService {
       ...(editEntryDTO.username !== ''
         ? { username: editEntryDTO.username }
         : {}),
+      ...(editEntryDTO.url !== '' ? { url: editEntryDTO.url } : {}),
     };
   }
 }

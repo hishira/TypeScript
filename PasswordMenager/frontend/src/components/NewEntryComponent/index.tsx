@@ -96,6 +96,7 @@ const NewEntryComponent = ({
       username: newentry.username,
       password: newentry.password,
       note: newentry.note,
+      url: newentry.url,
     };
   };
 
