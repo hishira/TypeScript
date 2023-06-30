@@ -194,10 +194,26 @@ export class Entry {
       if (typeof resp === "number" && resp === 401) {
         await this.auth.refreshToken();
         const token = this.sessionStorage.getAccessToken();
-        return this.getEntryWithoutGroup(token);
+        return this.getEntryWithoutGroup(token).then((value) => {
+          console.log(value);
+          if (Array.isArray(value)) {
+            return value.map((entry) => ({
+              ...entry,
+              passwordExpiredDate:
+                entry?.passwordExpiredDate?.split("T")[0] ?? "",
+            }));
+          }
+          return value;
+        });
       }
 
-      return resp;
+      return Array.isArray(resp)
+        ? resp.map((entry) => ({
+            ...entry,
+            passwordExpiredDate:
+              entry?.passwordExpiredDate?.split("T")[0] ?? "",
+          }))
+        : resp;
     });
   }
 }

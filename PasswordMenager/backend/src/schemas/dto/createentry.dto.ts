@@ -36,7 +36,7 @@ export class CreateEntryDto implements DTO {
 
   @IsOptional()
   @IsDateString()
-  readonly passwordExpiredDate?;
+  readonly passwordExpiredDate;
 
   toObject(): Record<string, unknown> {
     return {

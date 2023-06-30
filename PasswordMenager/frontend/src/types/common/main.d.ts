@@ -43,6 +43,7 @@ type CreateEntryDto = {
   note: string;
   groupid: string;
   url: string;
+  passwordExpiredDate?: string;
 };
 
 interface IEntry extends CreateEntryDto {
@@ -89,6 +90,7 @@ type EditEntry = {
   password: string;
   note: string;
   url: string;
+  passwordExpiredDate?: string;
 };
 
 type EditEntryResponse = {

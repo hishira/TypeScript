@@ -53,6 +53,7 @@ const NewEntryComponent = ({
     note: "",
     groupid: "",
     url: "",
+    passwordExpiredDate: "",
   });
   const editEntry: EditEntryActionDispatcher = new EditEntryActionDispatcher(
     setnewentry,
@@ -74,6 +75,7 @@ const NewEntryComponent = ({
       note: "",
       groupid: "",
       url: "",
+      passwordExpiredDate: "",
     });
   }, [refreshentry]);
 
@@ -176,6 +178,13 @@ const NewEntryComponent = ({
             </Button>
             <PassLen id="passlen">{passlen}</PassLen>
           </ButtonsRangeContainer>
+          <FormElement
+            label={"Password expire date (optional)"}
+            inputplaceholder="Password expire date"
+            inputChange={editEntry.setexirationpassworddate.bind(editEntry)}
+            inputtype="date"
+            value={newentry.passwordExpiredDate}
+          />
           <FormElement
             label={"Note"}
             inputplaceholder="note..."

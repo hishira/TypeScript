@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { PasswordCharactersTypes } from ".";
 import { specialTypeGenerate, generatePart } from "./new-entry.utils";
 
@@ -35,6 +35,7 @@ export class EditEntryActionDispatcher {
       note: "",
       groupid: "",
       url: "",
+      passwordExpiredDate: "",
     });
   }
 
@@ -84,6 +85,9 @@ export class EditEntryActionDispatcher {
     this.setnewentry({ ...this.newentry, password: e.target.value });
   }
 
+  setexirationpassworddate(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setnewentry({...this.newentry, passwordExpiredDate: e.target.value})
+  }
   setnote(e: React.ChangeEvent<HTMLInputElement>) {
     this.setnewentry({ ...this.newentry, note: e.target.value });
   }

@@ -103,6 +103,12 @@ const CardExpandComponent = ({
         {entry.url ? (
           <CardExpendContentRow fieldName="Url" value={entry.url} />
         ) : null}
+        {entry.passwordExpiredDate ? (
+          <CardExpendContentRow
+            fieldName="Expired to"
+            value={entry.passwordExpiredDate}
+          />
+        ) : null}
       </CardExpandContent>
       <CardIcons>
         <EditIcon click={() => editHandle(entry)} />{" "}
