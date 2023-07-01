@@ -23,10 +23,28 @@ const ExpotrModal = ({ exportHandle, exportEncrypted }: ExportModalProps) => {
     </div>
   );
 };
+type ImportModalProps = {
+  importEntries: () => void;
+  importEncrypted: () => void;
+};
+const ImportModal = ({ importEntries, importEncrypted }: ImportModalProps) => {
+  return (
+    <>
+      <Button color="lightgray" onClick={importEntries}>
+        Import passwords
+      </Button>
+      <Button color="lightgray" onClick={importEncrypted}>
+        Import encrypted
+      </Button>
+    </>
+  );
+};
 const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const [importModalOpen, setImportModalOpen] = useState<boolean>(false);
   const [exportModalOpen, setExportModalOpen] = useState<boolean>(false);
+  const [importOptionModalOpen, setImportOptionModalOpen] =
+    useState<boolean>(false);
   const [importEntriesModalOpen, setImportEntriesModalOpen] =
     useState<boolean>(false);
   const closehandle = (): void => setmodalopen(false);
@@ -66,6 +84,16 @@ const PassBar: React.FC = (): JSX.Element => {
           />
         }
       />
+      <Modal
+        visible={importOptionModalOpen}
+        onClose={() => setImportOptionModalOpen(false)}
+        component={
+          <ImportModal
+            importEncrypted={importEncrypted}
+            importEntries={importEntries}
+          />
+        }
+      />
       <ImportDecrypted
         modalOpen={importModalOpen}
         closeModalHandle={closeImportModalHandle}
@@ -81,12 +109,11 @@ const PassBar: React.FC = (): JSX.Element => {
         <Button color="lightgray" onClick={() => setExportModalOpen(true)}>
           Export
         </Button>
-        <Button color="lightgray">Import</Button>
-        <Button color="lightgray" onClick={importEntries}>
-          Import passwords
-        </Button>
-        <Button color="lightgray" onClick={importEncrypted}>
-          Import encrypted
+        <Button
+          color="lightgray"
+          onClick={() => setImportOptionModalOpen(true)}
+        >
+          Import
         </Button>
       </GroupContainer>
     </Container>
