@@ -6,9 +6,27 @@ import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
 import { Container, GroupContainer } from "./component.styled";
 import { ImportModalEntries } from "../ImportModals/ImportEntries";
+
+type ExportModalProps = {
+  exportHandle: () => void;
+  exportEncrypted: () => void;
+};
+const ExpotrModal = ({ exportHandle, exportEncrypted }: ExportModalProps) => {
+  return (
+    <div>
+      <Button color="whitesmoke" onClick={exportHandle}>
+        Export entries
+      </Button>
+      <Button color="lightgray" onClick={exportEncrypted}>
+        Export encrypted
+      </Button>
+    </div>
+  );
+};
 const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const [importModalOpen, setImportModalOpen] = useState<boolean>(false);
+  const [exportModalOpen, setExportModalOpen] = useState<boolean>(false);
   const [importEntriesModalOpen, setImportEntriesModalOpen] =
     useState<boolean>(false);
   const closehandle = (): void => setmodalopen(false);
@@ -38,6 +56,16 @@ const PassBar: React.FC = (): JSX.Element => {
         onClose={closehandle}
         component={<NewEntryComponent refreshentry={false} />}
       />
+      <Modal
+        visible={exportModalOpen}
+        onClose={() => setExportModalOpen(false)}
+        component={
+          <ExpotrModal
+            exportEncrypted={exportEncrypted}
+            exportHandle={exportHandle}
+          />
+        }
+      />
       <ImportDecrypted
         modalOpen={importModalOpen}
         closeModalHandle={closeImportModalHandle}
@@ -50,12 +78,10 @@ const PassBar: React.FC = (): JSX.Element => {
         <Button color="lightgray" onClick={() => setmodalopen(true)}>
           New entry
         </Button>
-        <Button color="lightgray" onClick={exportHandle}>
-          Export entries
+        <Button color="lightgray" onClick={() => setExportModalOpen(true)}>
+          Export
         </Button>
-        <Button color="lightgray" onClick={exportEncrypted}>
-          Export encrypted
-        </Button>
+        <Button color="lightgray">Import</Button>
         <Button color="lightgray" onClick={importEntries}>
           Import passwords
         </Button>
