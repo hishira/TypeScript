@@ -1,18 +1,8 @@
 import { inject, observer } from "mobx-react";
-import { useHistory } from "react-router-dom";
-import { IGeneral, View } from "../../models/General";
-import { SessionStorage } from "../../utils/localstorage.utils";
-import Button from "../Button/index";
+import { IGeneral } from "../../models/General";
 import PassBar from "../PassBarr";
-import {
-  AccountButtons,
-  AccountView,
-  Bar,
-  LeftSide,
-  RigthSide,
-} from "./component.styled";
-import { AccountIcon } from "../icons/AccountIcon";
-import { useState } from "react";
+import AccountContainer from "./AccountContainer/index";
+import { Bar, LeftSide, RigthSide } from "./component.styled";
 
 type AppBarProps = {
   store?: IGeneral;
@@ -23,40 +13,13 @@ type AppBarLeftSideProp = {
 const AppBarLeftSide = ({ userActive }: AppBarLeftSideProp): JSX.Element => {
   return <LeftSide>{userActive ? <PassBar></PassBar> : null}</LeftSide>;
 };
-type AccountContainerProps = {
-  store?: IGeneral;
-};
-const AccountContainer = ({ store }: AccountContainerProps) => {
-  const [openAccountMenu, setOpenAccountMenu] = useState<boolean>(false);
-  const hisotry = useHistory();
 
-  const logouthandle = () => {
-    store?.setUserActive(false);
-    SessionStorage.getInstance().removeStorage();
-    hisotry.push("/login");
-  };
-  const clickHandle = () => {
-    store?.setViewType(View.Card);
-  };
-
-  return !store?.UserActivity ? null : (
-    <AccountView>
-      <AccountIcon click={() => setOpenAccountMenu(!openAccountMenu)} />
-      <AccountButtons visible={openAccountMenu}>
-        <Button onClick={logouthandle} color="lightblue">
-          Logout
-        </Button>
-        <Button onClick={clickHandle}>Change view</Button>
-      </AccountButtons>
-    </AccountView>
-  );
-};
 const AppBar = ({ store }: AppBarProps): JSX.Element => {
   return (
     <Bar>
       <AppBarLeftSide userActive={store?.UserActivity} />
       <RigthSide>
-        <AccountContainer store={store} />
+        <AccountContainer />
       </RigthSide>
     </Bar>
   );
