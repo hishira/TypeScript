@@ -34,7 +34,6 @@ export class EntryService {
         };
       },
     };
-    console.log(pureDto.toObject());
     return this.entryRepository.create(pureDto).catch((_) => {
       console.error(_);
       return { message: 'Error whice creating entry' };
@@ -138,6 +137,9 @@ export class EntryService {
         ? { username: editEntryDTO.username }
         : {}),
       ...(editEntryDTO.url !== '' ? { url: editEntryDTO.url } : {}),
+      ...(editEntryDTO.passwordExpiredDate !== ''
+        ? { passwordExpiredDate: editEntryDTO.passwordExpiredDate }
+        : {}),
     };
   }
 }

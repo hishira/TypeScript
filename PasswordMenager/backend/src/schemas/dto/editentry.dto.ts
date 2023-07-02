@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class EditEntryDto {
   @IsString()
@@ -22,4 +22,8 @@ export class EditEntryDto {
 
   @IsString()
   readonly note;
+
+  @IsOptional()
+  @IsDateString()
+  readonly passwordExpiredDate;
 }

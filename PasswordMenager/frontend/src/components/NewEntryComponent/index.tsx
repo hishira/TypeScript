@@ -99,6 +99,7 @@ const NewEntryComponent = ({
       password: newentry.password,
       note: newentry.note,
       url: newentry.url,
+      passwordExpiredDate: newentry.passwordExpiredDate,
     };
   };
 

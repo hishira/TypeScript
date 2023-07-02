@@ -34,7 +34,7 @@ export class EntryRepository implements Repository<IEntry> {
       .exec()
       .then((entryById) => {
         const data = this.createEditentity(entry, entryById);
-        console.log(data);
+        console.log('After updated, ', data);
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
           .then((data) => data);
@@ -74,8 +74,7 @@ export class EntryRepository implements Repository<IEntry> {
         ['meta.lastEditedVariable']: LastEditedVariable.LASTNOTE,
       };
     }
-    if (entry.password && entryById.password !== entry.password) {
-      console.log(data);
+    if (entry.password) {
       const bs = EntrySchemaUtils.generateKeyValue(entryById.userid);
       const { password } = data;
       data = {
