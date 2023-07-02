@@ -170,13 +170,21 @@ export class Entry {
         return resp;
       })
       .then((resp) => resp.json())
+      .then((resp) => ({
+        ...resp,
+        passwordExpiredDate: resp.passwordExpiredDate?.split("T")[0],
+      }))
       .catch((_) => (isOk = false));
     if (!isOk) {
       await this.auth.refreshToken();
       accessToken = this.sessionStorage.getAccessToken();
       response = await this.entryApi
         .getEntryById(entryId, accessToken)
-        .then((resp) => resp.json());
+        .then((resp) => resp.json())
+        .then((resp) => ({
+          ...resp,
+          passwordExpiredDate: resp.passwordExpiredDate?.split("T")[0],
+        }));
     }
     return response;
   }
