@@ -9,7 +9,6 @@ export const AccountIcon = ({ click }: IconProps) => {
   return (
     <svg
     {...props}
-      enable-background="new 0 0 32 32"
       height="24px"
       version="1.1"
       viewBox="0 0 32 32"

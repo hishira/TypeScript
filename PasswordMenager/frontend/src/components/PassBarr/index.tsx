@@ -2,42 +2,27 @@ import React, { useState } from "react";
 import { Export } from "../../utils/export.utils";
 import Button from "../Button";
 import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
+import { ImportModalEntries } from "../ImportModals/ImportEntries";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
-import { Container, GroupContainer } from "./component.styled";
-import { ImportModalEntries } from "../ImportModals/ImportEntries";
+import { ExpotrModal, ImportModal } from "./PassBarrModalButtons";
+import {
+  Container,
+  GroupContainer
+} from "./component.styled";
 
-type ExportModalProps = {
-  exportHandle: () => void;
-  exportEncrypted: () => void;
+const exportHandle = (): void => {
+  Export.getInstance()
+    .ExportEntriesCsv()
+    .then(() => {})
+    .catch(console.log);
 };
-const ExpotrModal = ({ exportHandle, exportEncrypted }: ExportModalProps) => {
-  return (
-    <div>
-      <Button color="whitesmoke" onClick={exportHandle}>
-        Export entries
-      </Button>
-      <Button color="lightgray" onClick={exportEncrypted}>
-        Export encrypted
-      </Button>
-    </div>
-  );
-};
-type ImportModalProps = {
-  importEntries: () => void;
-  importEncrypted: () => void;
-};
-const ImportModal = ({ importEntries, importEncrypted }: ImportModalProps) => {
-  return (
-    <>
-      <Button color="lightgray" onClick={importEntries}>
-        Import passwords
-      </Button>
-      <Button color="lightgray" onClick={importEncrypted}>
-        Import encrypted
-      </Button>
-    </>
-  );
+
+const exportEncrypted = (): void => {
+  Export.getInstance()
+    .ExportEncrypted()
+    .then(() => {})
+    .catch(console.error);
 };
 const PassBar: React.FC = (): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
@@ -49,19 +34,6 @@ const PassBar: React.FC = (): JSX.Element => {
     useState<boolean>(false);
   const closehandle = (): void => setmodalopen(false);
   const closeImportModalHandle = (): void => setImportModalOpen(false);
-  const exportHandle = (): void => {
-    Export.getInstance()
-      .ExportEntriesCsv()
-      .then(() => {})
-      .catch(console.log);
-  };
-
-  const exportEncrypted = (): void => {
-    Export.getInstance()
-      .ExportEncrypted()
-      .then(() => {})
-      .catch(console.error);
-  };
 
   const importEncrypted = (): void => setImportModalOpen(true);
 
