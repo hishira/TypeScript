@@ -11,7 +11,7 @@ import {
   CheckBox,
   EntryModalComponent,
   PassLen,
-  SectionContainer
+  SectionContainer,
 } from "./component.styled";
 import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
@@ -52,6 +52,8 @@ const NewEntryComponent = ({
     password: "",
     note: "",
     groupid: "",
+    url: "",
+    passwordExpiredDate: "",
   });
   const editEntry: EditEntryActionDispatcher = new EditEntryActionDispatcher(
     setnewentry,
@@ -72,12 +74,13 @@ const NewEntryComponent = ({
       password: "",
       note: "",
       groupid: "",
+      url: "",
+      passwordExpiredDate: "",
     });
   }, [refreshentry]);
 
   const addnewentry = async (): Promise<void> => {
     // TODO: Prevent from doing if inputs are empty even if
-    console.log(newentry);
     Entry.getInstance()
       .CreateNewEntryUser(newentry)
       .then((responsenewentry) => {
@@ -95,6 +98,8 @@ const NewEntryComponent = ({
       username: newentry.username,
       password: newentry.password,
       note: newentry.note,
+      url: newentry.url,
+      passwordExpiredDate: newentry.passwordExpiredDate,
     };
   };
 
@@ -133,6 +138,13 @@ const NewEntryComponent = ({
             inputtype="txt"
             value={newentry.username}
           />
+          <FormElement
+            label={"Url"}
+            inputplaceholder="Url link"
+            inputChange={editEntry.seturl.bind(editEntry)}
+            inputtype="txt"
+            value={newentry.url}
+          />
           <GroupSelection edit={edit} editEntry={editEntry} groups={groups} />
           <SectionContainer>
             <FormElement
@@ -167,6 +179,13 @@ const NewEntryComponent = ({
             </Button>
             <PassLen id="passlen">{passlen}</PassLen>
           </ButtonsRangeContainer>
+          <FormElement
+            label={"Password expire date (optional)"}
+            inputplaceholder="Password expire date"
+            inputChange={editEntry.setexirationpassworddate.bind(editEntry)}
+            inputtype="date"
+            value={newentry.passwordExpiredDate}
+          />
           <FormElement
             label={"Note"}
             inputplaceholder="note..."

@@ -42,6 +42,8 @@ type CreateEntryDto = {
   password: string;
   note: string;
   groupid: string;
+  url: string;
+  passwordExpiredDate?: string;
 };
 
 interface IEntry extends CreateEntryDto {
@@ -59,8 +61,8 @@ type GroupComponentProps = {
 
 type FieldsComponentType = {
   selectedgroup: string;
-  refreshall: boolean,
-  refreshgroupentities: Function,
+  refreshall: boolean;
+  refreshgroupentities: Function;
 };
 
 type GroupId = {
@@ -82,20 +84,22 @@ type DeleteEntryResponse = {
 };
 
 type EditEntry = {
-  _id: string | undefined,
-  title: string,
-  username: string,
-  password: string,
-  note: string,
-}
+  _id: string | undefined;
+  title: string;
+  username: string;
+  password: string;
+  note: string;
+  url: string;
+  passwordExpiredDate?: string;
+};
 
 type EditEntryResponse = {
-  status: boolean,
-  respond: IEntry
-}
-type PopupType = 'success' | 'error' | 'info'
+  status: boolean;
+  respond: IEntry;
+};
+type PopupType = "success" | "error" | "info";
 
 type PopUpElementProps = {
-  type: PopupType,
-  visible: boolean,
-}
+  type: PopupType;
+  visible: boolean;
+};

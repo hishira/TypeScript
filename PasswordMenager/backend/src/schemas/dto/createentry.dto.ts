@@ -30,9 +30,13 @@ export class CreateEntryDto implements DTO {
   @IsOptional()
   readonly email;
 
+  @IsString()
+  @IsOptional()
+  readonly url;
+
   @IsOptional()
   @IsDateString()
-  readonly passwordExpiredDate?;
+  readonly passwordExpiredDate;
 
   toObject(): Record<string, unknown> {
     return {
@@ -42,6 +46,7 @@ export class CreateEntryDto implements DTO {
       note: this.note,
       groupid: this.groupid,
       email: this.email,
+      url: this.url,
     };
   }
 }

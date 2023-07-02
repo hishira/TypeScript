@@ -41,6 +41,12 @@ export class EntryContoller {
   }
 
   @UseGuards(AuthGuard('accessToken'))
+  @Get('/bygroup')
+  async getByGroup(@Request() req): Promise<IEntry[]> {
+    return this.entryService.getUserEntriesWithoutGroup(req.user._id);
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
   @Get('/:id')
   async getEntryById(@Param('id') entryId: string): Promise<IEntry> {
     return this.entryService.getById(entryId);

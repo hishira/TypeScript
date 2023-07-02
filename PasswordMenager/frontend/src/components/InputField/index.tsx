@@ -19,7 +19,7 @@ type Props = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
   type: string;
-  value?: string;
+  value?: string | number;
 };
 const InputField = ({
   onChange,

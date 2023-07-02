@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { PasswordCharactersTypes } from ".";
 import { specialTypeGenerate, generatePart } from "./new-entry.utils";
 
@@ -11,10 +11,7 @@ export class EditEntryActionDispatcher {
   private passwordLength: number;
 
   get isFormValid(): boolean {
-    return (
-      this.newentry.password !== "" &&
-      this.newentry.username !== ""
-    );
+    return this.newentry.password !== "" && this.newentry.username !== "";
   }
   constructor(
     setNewEntry: DispatchAction<CreateEntryDto>,
@@ -37,6 +34,8 @@ export class EditEntryActionDispatcher {
       password: "",
       note: "",
       groupid: "",
+      url: "",
+      passwordExpiredDate: "",
     });
   }
 
@@ -78,10 +77,17 @@ export class EditEntryActionDispatcher {
     this.setnewentry({ ...this.newentry, username: e.target.value });
   }
 
+  seturl(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setnewentry({ ...this.newentry, url: e.target.value });
+  }
+
   setpassword(e: React.ChangeEvent<HTMLInputElement>) {
     this.setnewentry({ ...this.newentry, password: e.target.value });
   }
 
+  setexirationpassworddate(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setnewentry({...this.newentry, passwordExpiredDate: e.target.value})
+  }
   setnote(e: React.ChangeEvent<HTMLInputElement>) {
     this.setnewentry({ ...this.newentry, note: e.target.value });
   }

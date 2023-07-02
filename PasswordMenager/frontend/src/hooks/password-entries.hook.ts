@@ -7,8 +7,8 @@ export const PasswordEntries = (selectedGroup: string, refreshAll: boolean) => {
   useEffect(() => {
     const fetchEntries = async (): Promise<void> => {
       if (selectedGroup === "") {
-        setPasswordEntries([]);
-        return;
+        const response = await Entry.getInstance().EntriesWithoutGroup();
+        if (typeof response !== "number") setPasswordEntries(response);
       }
       const groupid: GroupId = {
         id: selectedGroup,

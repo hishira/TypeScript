@@ -52,5 +52,9 @@ export class EntryApi extends Api {
     return fetch(url, this.fetchGetObjectWithtoken(accesstoken));
   }
 
- 
+  getEntryWithoutGroup(accessToken: string): Promise<Response> {
+    const url = this.getUrl("entry/bygroup");
+
+    return fetch(url, this.fetchGetObjectWithtoken(accessToken));
+  }
 }

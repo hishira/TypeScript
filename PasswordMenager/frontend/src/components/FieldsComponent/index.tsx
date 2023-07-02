@@ -6,7 +6,7 @@ import { PasswordTableComponent } from "../PasswordTable";
 import { FieldsModal } from "./FieldsModal";
 import { Container } from "./component.styled";
 
-const DeleteEntryModal = () => <div>Are you sure to delete entry?</div>;
+export const DeleteEntryModal = () => <div>Are you sure to delete entry?</div>;
 const FieldsContainer = ({
   selectedgroup,
   refreshgroupentities,

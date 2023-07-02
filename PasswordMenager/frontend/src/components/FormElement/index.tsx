@@ -7,7 +7,7 @@ type Props = {
   inputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputplaceholder: string;
   inputtype: string;
-  value?: string
+  value?: string | number
 };
 const FormElement = ({
   label,

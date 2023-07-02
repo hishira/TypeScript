@@ -25,4 +25,11 @@ export class ImportApi extends Api {
 
     return fetch(url, this.fetchPostFileWithToken(file, token, filesize));
   }
+
+  import(file: File | FormData, filesize: number): Promise<Response> {
+    const url = this.getUrl("import/csv");
+
+    const token = this.sessionStorage.getAccessToken();
+    return fetch(url, this.fetchPostFileWithToken(file, token, filesize));
+  }
 }
