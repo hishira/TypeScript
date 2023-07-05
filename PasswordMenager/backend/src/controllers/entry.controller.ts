@@ -21,12 +21,16 @@ import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { EntryService } from '../services/entry.service';
 import { NotificationService } from 'src/services/notification.service';
 import { NotificationChannel } from 'src/schemas/Interfaces/notification.interface';
+import { Logger } from 'src/utils/Logger';
 @Controller('entry')
 export class EntryContoller {
   constructor(
     private readonly entryService: EntryService,
     private readonly notificationService: NotificationService,
-  ) {}
+    private readonly logger: Logger,
+  ) {
+    this.logger.setContext('EntryController');
+  }
 
   @UseGuards(AuthGuard('accessToken'))
   @UseFilters(new GroupNotExistsFilter())
@@ -43,18 +47,24 @@ export class EntryContoller {
         const passwordExpireDate = response.passwordExpiredDate;
         console.log('Password expire date: ', passwordExpireDate);
         if (passwordExpireDate)
-          return this.notificationService.create({
-            entryId: response._id,
-            notificationDate: passwordExpireDate,
-            notificationChannel: NotificationChannel.Email,
-            toObject() {
-              return {
-                entryId: response._id,
-                notificationDate: passwordExpireDate,
-                notificationChannel: NotificationChannel.Email,
-              };
-            },
-          });
+          return this.notificationService
+            .create({
+              entryId: response._id,
+              notificationDate: passwordExpireDate,
+              notificationChannel: NotificationChannel.Email,
+              toObject() {
+                return {
+                  entryId: response._id,
+                  notificationDate: passwordExpireDate,
+                  notificationChannel: NotificationChannel.Email,
+                };
+              },
+            })
+            .then(() =>
+              this.logger.logMessage(
+                `Notification created for date ${passwordExpireDate}`,
+              ),
+            );
         return response;
       })
       .catch();
