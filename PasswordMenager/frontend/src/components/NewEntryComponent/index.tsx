@@ -81,8 +81,12 @@ const NewEntryComponent = ({
 
   const addnewentry = async (): Promise<void> => {
     // TODO: Prevent from doing if inputs are empty even if
+    // TODO: Ref
+    const newEntry = newentry;
+    if (newEntry.passwordExpiredDate === "")
+      delete newEntry.passwordExpiredDate;
     Entry.getInstance()
-      .CreateNewEntryUser(newentry)
+      .CreateNewEntryUser(newEntry)
       .then((responsenewentry) => {
         if (responsenewentry.status) {
           editEntry.clearInputData();

@@ -41,6 +41,7 @@ export class EntryContoller {
       .then((response: any) => {
         if ('message' in response) return response;
         const passwordExpireDate = response.passwordExpiredDate;
+        console.log('Password expire date: ', passwordExpireDate);
         if (passwordExpireDate)
           return this.notificationService.create({
             entryId: response._id,
