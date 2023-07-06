@@ -60,11 +60,12 @@ export class EntryContoller {
                 };
               },
             })
-            .then(() =>
+            .then(async () => {
               this.logger.logMessage(
                 `Notification created for date ${passwordExpireDate}`,
-              ),
-            );
+              );
+              return this.notificationService.notificationSend();
+            });
         return response;
       })
       .catch();
