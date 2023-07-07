@@ -1,11 +1,3 @@
-import { Connection } from 'mongoose';
-import GroupSchema from '../schemas/group.schema';
+import { GroupProvider } from './mongo-models/group.model.provider';
 
-export const groupProviders = [
-  {
-    provide: 'GROUP_MODEL',
-    useFactory: (connection: Connection) =>
-      connection.model('Group', GroupSchema),
-    inject: ['DATABASE_CONNECTION'],
-  },
-];
+export const groupProviders = [new GroupProvider()];

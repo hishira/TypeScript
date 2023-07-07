@@ -3,7 +3,7 @@ import { IEntry } from './Interfaces/entry.interface';
 import EntryMetaSchema from './entryMeta.schema';
 import { EntrySchemaUtils } from './utils/Entry.schema.utils';
 
-const EntrySchema = new mognoose.Schema({
+const EntrySchema = new mognoose.Schema<IEntry>({
   title: {
     type: String,
     default: '',
