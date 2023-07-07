@@ -62,7 +62,7 @@ export const CardFieldName = styled.div`
   width: 50%;
 `;
 export const CardFieldValue = styled.div`
-  width: 50%;
+  min-width: 50%;
   &[type="password"] {
     cursor: pointer;
   }

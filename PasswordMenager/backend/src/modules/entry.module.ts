@@ -8,8 +8,16 @@ import { entryProviders } from '../providers/entry.providers';
 import { EntryService } from '../services/entry.service';
 import { DatabaseModule } from './database.module';
 import { GroupExtModule } from './group-ext.module';
+import { NotificationModule } from './notification.module';
+import { LoggerModule } from './logger.module';
 @Module({
-  imports: [DatabaseModule, GroupExtModule, ValidatorModule],
+  imports: [
+    DatabaseModule,
+    GroupExtModule,
+    ValidatorModule,
+    NotificationModule,
+    LoggerModule,
+  ],
   controllers: [EntryContoller],
   providers: [
     {

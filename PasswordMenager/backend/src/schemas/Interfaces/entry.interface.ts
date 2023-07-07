@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 import { IEntryMeta } from './entryMeta.interface';
 
 export interface IEntry extends Document {
@@ -7,8 +7,9 @@ export interface IEntry extends Document {
   readonly username: string;
   password: string;
   readonly note: string;
-  readonly groupid: string;
-  readonly userid: string;
+  readonly url: string;
+  readonly groupid: Schema.Types.ObjectId;
+  readonly userid: Schema.Types.ObjectId;
   readonly email: string;
   readonly passwordExpiredDate?: Date;
   readonly meta: IEntryMeta;

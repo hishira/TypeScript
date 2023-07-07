@@ -1,6 +1,13 @@
 type UserAuth = {
   login: string;
   password: string;
+  email: string;
+};
+
+type RegisterUser = {
+  login: string;
+  password: string;
+  email: string;
 };
 
 type AuthTokens = {

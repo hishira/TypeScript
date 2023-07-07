@@ -15,7 +15,7 @@ export class AuthApi extends Api {
     return await fetch(url, this.fetchPostObject(userauth));
   }
 
-  async signup(newuserauth: UserAuth): Promise<Response> {
+  async signup(newuserauth: RegisterUser): Promise<Response> {
     const url: string = this.getUrl("auth/signup");
     return await fetch(url, this.fetchPostObject(newuserauth));
   }

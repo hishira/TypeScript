@@ -55,20 +55,24 @@ export class Entry {
     newentry: CreateEntryDto
   ): Promise<CreateEntryResponse> {
     let accesstoken: string = this.sessionStorage.getAccessToken();
-    return this.CreateEntry(newentry, accesstoken).then(async (response) => {
-      if (response === 401) {
-        await this.auth.refreshToken();
-        accesstoken = this.sessionStorage.getAccessToken();
-        //TODO: Can ref
-        response = await this.CreateEntry(newentry, accesstoken);
+    return this.CreateEntry(newentry, accesstoken)
+      .then(async (response) => {
+        if (response === 401) {
+          await this.auth.refreshToken();
+          accesstoken = this.sessionStorage.getAccessToken();
+          //TODO: Can ref
+          return this.CreateEntry(newentry, accesstoken);
+        }
+        return response;
+      })
+      .then((response) => {
         if (response === 401 || response === 500) {
           return this.EMPTY;
         }
-      }
-      if (typeof response !== "number")
-        return { status: true, response: response };
-      return this.EMPTY;
-    });
+        if (typeof response !== "number")
+          return { status: true, response: response };
+        return this.EMPTY;
+      });
   }
 
   async GetEntries(

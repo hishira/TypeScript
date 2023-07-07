@@ -25,6 +25,10 @@ const UserSchema = new mongoose.Schema<IUser>({
       return password;
     },
   },
+  email: {
+    type: String,
+    required: true,
+  },
   meta: {
     type: UserMetaSchema,
     required: true,

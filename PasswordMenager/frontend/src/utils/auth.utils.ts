@@ -39,7 +39,7 @@ export class Auth {
     return { status: false, response: response };
   }
 
-  async registerUser(signupinfo: UserAuth): Promise<null | object | boolean> {
+  async registerUser(signupinfo: RegisterUser): Promise<null | object | boolean> {
     const response: boolean | object = await this.authApi
       .signup(signupinfo)
       .then((resp: Response) => {
