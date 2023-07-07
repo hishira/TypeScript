@@ -10,6 +10,7 @@ type RegisterInfo = {
   login: string;
   password: string;
   confirmpassword: string;
+  email: string;
 };
 
 type Prop = {
@@ -20,6 +21,7 @@ const SignUp = ({ store }: Prop) => {
     login: "",
     password: "",
     confirmpassword: "",
+    email: "",
   });
   const history = useHistory();
 
@@ -31,6 +33,9 @@ const SignUp = ({ store }: Prop) => {
     setregisterinfo({ ...registerinfo, login: login });
   };
 
+  const emailChange = (email: string): void => {
+    setregisterinfo({ ...registerinfo, email: email });
+  };
   const confirmPasswordhandle = (password: string): void => {
     setregisterinfo({ ...registerinfo, confirmpassword: password });
   };
@@ -59,6 +64,7 @@ const SignUp = ({ store }: Prop) => {
       .registerUser({
         login: registerinfo.login,
         password: registerinfo.password,
+        email: registerinfo.email,
       })
       .then((response) => {
         if (!!response) {
@@ -87,6 +93,8 @@ const SignUp = ({ store }: Prop) => {
           maintitle="Create account"
           confirmpassword
           confirmpasshandle={confirmPasswordhandle}
+          isEmail={true}
+          emailSetHandle={emailChange}
         />
       </FormContainer>
     </Container>

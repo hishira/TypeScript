@@ -3,6 +3,7 @@ import Button from "../../components/Button/index";
 import FormElement from "../FormElement/";
 import { Form, FormTitle, Link } from "./component.styled";
 
+// TODO: Refactor
 
 interface Props {
   buttonmessage: string;
@@ -14,6 +15,8 @@ interface Props {
   maintitle: string;
   confirmpassword?: boolean;
   confirmpasshandle?: (value: string) => void;
+  isEmail?: boolean;
+  emailSetHandle: (value: string) => void;
 }
 const FormComponent = ({
   buttonmessage,
@@ -25,6 +28,8 @@ const FormComponent = ({
   maintitle,
   confirmpassword,
   confirmpasshandle,
+  isEmail,
+  emailSetHandle,
 }: Props): JSX.Element => {
   const handlethis = (value: string) => {
     if (confirmpasshandle) confirmpasshandle(value);
@@ -40,6 +45,16 @@ const FormComponent = ({
         inputplaceholder="Login"
         inputtype="text"
       />
+      {isEmail ? (
+        <FormElement
+          label="Email"
+          inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            emailSetHandle(e.target.value)
+          }
+          inputplaceholder="Email"
+          inputtype="text"
+        />
+      ) : null}
       <FormElement
         label="Password"
         inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
