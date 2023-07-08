@@ -52,9 +52,13 @@ export class EntryApi extends Api {
     return fetch(url, this.fetchGetObjectWithtoken(accesstoken));
   }
 
-  getEntryWithoutGroup(accessToken: string): Promise<Response> {
+  getEntryWithoutGroup(
+    accessToken: string,
+    paginator?: { page: number }
+  ): Promise<Response> {
     const url = this.getUrl("entry/bygroup");
-
-    return fetch(url, this.fetchGetObjectWithtoken(accessToken));
+    const fetchObjet = this.fetchPostObjectWithToken({ page: paginator?.page }, accessToken)
+      //: this.fetchGetObjectWithtoken(accessToken);
+    return fetch(url, fetchObjet);
   }
 }

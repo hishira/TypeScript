@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery } from 'mongoose';
-import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
-import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
+import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
-import { IEntry } from '../schemas/Interfaces/entry.interface';
+import { PaginatorDto } from 'src/utils/paginator';
+import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
 @Injectable()
 export class EntryService {
@@ -44,7 +45,7 @@ export class EntryService {
     return this.entryRepository.findById(entryId);
   }
 
-  getbygroupid(groupid: string): Promise<IEntry[]> {
+  getbygroupid(groupid: string): Promise<IEntry[] | EntryData> {
     const option: FilterOption<FilterQuery<IEntry>> = {
       getOption() {
         return { groupid: groupid !== '' ? groupid : null };
@@ -54,14 +55,17 @@ export class EntryService {
     return this.entryRepository.find(option);
   }
 
-  getUserEntriesWithoutGroup(userid: string): Promise<IEntry[]> {
+  getUserEntriesWithoutGroup(
+    userid: string,
+    paginator?: PaginatorDto,
+  ): Promise<IEntry[] | EntryData> {
     const option: FilterOption<FilterQuery<IEntry>> = {
       getOption() {
         return { groupid: null, userid: userid };
       },
     };
 
-    return this.entryRepository.find(option);
+    return this.entryRepository.find(option, paginator);
   }
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse> {
@@ -99,7 +103,7 @@ export class EntryService {
     });
   }
 
-  getByUser(userId: string): Promise<IEntry[]> {
+  getByUser(userId: string): Promise<IEntry[] | EntryData> {
     const filterOption: FilterOption<FilterQuery<IEntry>> = {
       getOption() {
         return {

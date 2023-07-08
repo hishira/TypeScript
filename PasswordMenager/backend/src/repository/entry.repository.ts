@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
-import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { EntryData, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { LastEditedVariable } from '../schemas/Interfaces/entryMeta.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
@@ -12,6 +12,7 @@ import {
   algorithm,
 } from 'src/schemas/utils/Entry.schema.utils';
 import { Cipher } from 'src/utils/cipher.utils';
+import { Paginator, PaginatorDto } from 'src/utils/paginator';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry> {
@@ -24,8 +25,31 @@ export class EntryRepository implements Repository<IEntry> {
     return this.entryModel.findOne({ _id: id }).exec();
   }
 
-  find(option: FilterOption<FilterQuery<IEntry>>): Promise<IEntry[]> {
-    return this.entryModel.find(option.getOption()).exec();
+  find(
+    option: FilterOption<FilterQuery<IEntry>>,
+    paginator?: PaginatorDto,
+  ): Promise<IEntry[] | EntryData | any> {
+    console.log(paginator);
+    if (paginator?.page) {
+      return this.entryModel
+        .find(option.getOption())
+        .skip(paginator.page * 10)
+        .limit(10)
+        .exec()
+        .then((entires) => {
+          console.log(entires.length);
+          if (entires.length < 10) {
+            return Promise.resolve({
+              data: entires,
+              pageInfo: new Paginator(entires.length, false, paginator.page),
+            });
+          }
+          return Promise.resolve({
+            data: entires,
+            pageInfo: new Paginator(entires.length, false, paginator.page),
+          });
+        });
+    } else return this.entryModel.find(option.getOption()).exec();
   }
 
   update(entry: Partial<IEntry>): Promise<unknown> {

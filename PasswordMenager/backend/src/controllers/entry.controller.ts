@@ -16,12 +16,13 @@ import { GroupNotExistsFilter } from 'src/errors/GroupNotExistFilter';
 import { GroupGuard } from 'src/guards/GroupExists.guard';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
-import { IEntry } from '../schemas/Interfaces/entry.interface';
+import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { EntryService } from '../services/entry.service';
 import { NotificationService } from 'src/services/notification.service';
 import { NotificationChannel } from 'src/schemas/Interfaces/notification.interface';
 import { Logger } from 'src/utils/Logger';
+import { PaginatorDto } from 'src/utils/paginator';
 @Controller('entry')
 export class EntryContoller {
   constructor(
@@ -73,14 +74,23 @@ export class EntryContoller {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get('/bygroup/:id')
-  async getbygroupid(@Param('id') groupid: string): Promise<IEntry[]> {
+  async getbygroupid(
+    @Param('id') groupid: string,
+    @Body(new ValidationPipe({ transform: true })) paginator?: PaginatorDto,
+  ): Promise<IEntry[] | EntryData> {
     return this.entryService.getbygroupid(groupid);
   }
 
   @UseGuards(AuthGuard('accessToken'))
-  @Get('/bygroup')
-  async getByGroup(@Request() req): Promise<IEntry[]> {
-    return this.entryService.getUserEntriesWithoutGroup(req.user._id);
+  @Post('/bygroup')
+  async getByGroup(
+    @Request() req,
+    @Body(new ValidationPipe({ transform: true })) paginator?: PaginatorDto,
+  ): Promise<IEntry[] | EntryData> {
+    return this.entryService.getUserEntriesWithoutGroup(
+      req.user._id,
+      paginator,
+    );
   }
 
   @UseGuards(AuthGuard('accessToken'))

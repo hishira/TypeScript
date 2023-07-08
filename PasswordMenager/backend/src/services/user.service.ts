@@ -6,6 +6,7 @@ import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
+import { Paginator } from 'src/utils/paginator';
 
 @Injectable()
 export class UserService {
@@ -32,11 +33,11 @@ export class UserService {
     });
   }
 
-  getAll(): Promise<IUser[]> {
+  getAll(): Promise<IUser[] | { data: IUser[]; pageInfo: Paginator }> {
     return this.userRepository.find(this.allUserFilterOption);
   }
 
-  getOne(): Promise<IUser[]> {
+  getOne(): Promise<IUser[] | { data: IUser[]; pageInfo: Paginator }> {
     return this.userRepository.find(this.allUserFilterOption);
   }
 

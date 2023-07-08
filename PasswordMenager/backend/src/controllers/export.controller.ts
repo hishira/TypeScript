@@ -79,7 +79,8 @@ export class ExportController {
       },
     });
     const passwords = [];
-    entries.forEach((entry) => passwords.push(entry.password));
+    Array.isArray(entries) &&
+      entries.forEach((entry) => passwords.push(entry.password));
     const fileContent = passwords.join(',');
     const password = '123456';
     const salt = randomBytes(16); // Generate a random salt

@@ -18,13 +18,13 @@ export class UsersController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get()
-  async findAll(): Promise<IUser[]> {
+  async findAll(): Promise<IUser[] | any> {
     return this.userServices.getAll();
   }
 
   @UseGuards(AuthGuard('refreshtoken'))
   @Get('one')
-  async findOne(): Promise<IUser[]> {
+  async findOne(): Promise<IUser[] | any> {
     return this.userServices.getOne();
   }
 

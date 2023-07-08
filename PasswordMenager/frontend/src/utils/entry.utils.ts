@@ -179,9 +179,11 @@ export class Entry {
     return response;
   }
 
-  async getEntryWithoutGroup(accessToken: string): Promise<IEntry[] | number> {
+  async getEntryWithoutGroup(
+    accessToken: string
+  ): Promise<IEntry[] | number | { data: IEntry[]; pageInfo: any }> {
     return this.entryApi
-      .getEntryWithoutGroup(accessToken)
+      .getEntryWithoutGroup(accessToken, { page: 1 })
       .then((resp) => (resp.status === 401 ? 401 : resp.json()));
   }
 
@@ -201,12 +203,16 @@ export class Entry {
                 entry?.passwordExpiredDate?.split("T")[0] ?? "",
             }));
           }
-          return value;
+          return Array.isArray(value) ? value : (value as any)?.data;
         });
       }
-
-      return Array.isArray(resp)
-        ? resp.map((entry) => ({
+      const responseMapped = Array.isArray(resp)
+        ? resp
+        : typeof resp === "object" && "data" in resp
+        ? resp.data
+        : resp;
+      return Array.isArray(responseMapped)
+        ? responseMapped.map((entry: IEntry) => ({
             ...entry,
             passwordExpiredDate:
               entry?.passwordExpiredDate?.split("T")[0] ?? "",

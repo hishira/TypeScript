@@ -41,7 +41,7 @@ export class GroupService {
     });
   }
 
-  async getbyuser(userid: string): Promise<GroupDto[]> {
+  async getbyuser(userid: string): Promise<GroupDto[] | any> {
     const filterOption: FilterOption<FilterQuery<IGroup>> = {
       getOption() {
         return {
