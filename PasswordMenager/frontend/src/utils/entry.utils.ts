@@ -183,7 +183,7 @@ export class Entry {
     accessToken: string
   ): Promise<IEntry[] | number | { data: IEntry[]; pageInfo: any }> {
     return this.entryApi
-      .getEntryWithoutGroup(accessToken, { page: 1 })
+      .getEntryWithoutGroup(accessToken, { page: 0 })
       .then((resp) => (resp.status === 401 ? 401 : resp.json()));
   }
 

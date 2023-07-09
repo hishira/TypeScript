@@ -37,7 +37,6 @@ export class EntryRepository implements Repository<IEntry> {
         .limit(10)
         .exec()
         .then((entires) => {
-          console.log(entires.length);
           if (entires.length < 10) {
             return Promise.resolve({
               data: entires,
