@@ -6,6 +6,7 @@ import { inject, observer } from "mobx-react";
 import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
+import { Paginator } from "../Paginator";
 
 type PassComponentProps = {
   store?: IGeneral;
@@ -39,6 +40,7 @@ const PassComponent = ({ store }: PassComponentProps) => {
           passwords={passwords}
         />
       )}
+      <Paginator pageInfo={{ hasMore: true, items: 10, page: 1 }} />
     </Container>
   );
 };
