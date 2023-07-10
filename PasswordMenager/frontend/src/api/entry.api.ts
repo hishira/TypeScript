@@ -56,7 +56,7 @@ export class EntryApi extends Api {
     accessToken: string,
     paginator?: { page: number }
   ): Promise<Response> {
-    const url = this.getUrl("entry/bygroup");
+    const url = this.getUrl("entry/byemptygroup");
     const fetchObjet = this.fetchPostObjectWithToken({ page: paginator?.page }, accessToken)
       //: this.fetchGetObjectWithtoken(accessToken);
     return fetch(url, fetchObjet);

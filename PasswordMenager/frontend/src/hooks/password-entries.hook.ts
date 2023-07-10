@@ -9,16 +9,17 @@ export const PasswordEntries = (selectedGroup: string, refreshAll: boolean) => {
       if (selectedGroup === "") {
         const response = await Entry.getInstance().EntriesWithoutGroup();
         if (typeof response !== "number") setPasswordEntries(response);
-      }
-      const groupid: GroupId = {
-        id: selectedGroup,
-      };
-      const response: GetEntriesResponse =
-        await Entry.getInstance().GetUserEntriesByGroupID(groupid);
-      if (response.status) {
-        setPasswordEntries(response.response);
       } else {
-        setPasswordEntries([]);
+        const groupid: GroupId = {
+          id: selectedGroup,
+        };
+        const response: GetEntriesResponse =
+          await Entry.getInstance().GetUserEntriesByGroupID(groupid);
+        if (response.status) {
+          setPasswordEntries(response.response);
+        } else {
+          setPasswordEntries([]);
+        }
       }
     };
     fetchEntries();

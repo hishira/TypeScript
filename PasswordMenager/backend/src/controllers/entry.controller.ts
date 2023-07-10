@@ -82,7 +82,7 @@ export class EntryContoller {
   }
 
   @UseGuards(AuthGuard('accessToken'))
-  @Post('/bygroup')
+  @Post('/byemptygroup')
   async getByGroup(
     @Request() req,
     @Body(new ValidationPipe({ transform: true })) paginator?: PaginatorDto,

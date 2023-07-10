@@ -29,23 +29,25 @@ export class EntryRepository implements Repository<IEntry> {
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
-    console.log(paginator);
-    if (paginator?.page) {
+    if (
+      paginator &&
+      'page' in paginator &&
+      paginator?.page !== undefined &&
+      paginator?.page !== null
+    ) {
       return this.entryModel
         .find(option.getOption())
         .skip(paginator.page * 10)
         .limit(10)
         .exec()
         .then((entires) => {
-          if (entires.length < 10) {
-            return Promise.resolve({
-              data: entires,
-              pageInfo: new Paginator(entires.length, false, paginator.page),
-            });
-          }
           return Promise.resolve({
             data: entires,
-            pageInfo: new Paginator(entires.length, false, paginator.page),
+            pageInfo: new Paginator(
+              entires.length,
+              entires.length >= 10,
+              paginator.page,
+            ),
           });
         });
     } else return this.entryModel.find(option.getOption()).exec();
