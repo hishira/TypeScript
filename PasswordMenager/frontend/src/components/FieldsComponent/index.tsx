@@ -11,8 +11,8 @@ const FieldsContainer = ({
   selectedgroup,
   refreshgroupentities,
   refreshall,
+  passwords,
 }: FieldsComponentType): JSX.Element => {
-  const entries = PasswordEntries(selectedgroup, refreshall);
   const FieldsAction = FieldsActionHook();
   ResizeWindowsHandle(
     FieldsAction.setSmallModalOpen,
@@ -59,7 +59,7 @@ const FieldsContainer = ({
         refreshgroupentities={refreshgroupentities}
       />
       <PasswordTableComponent
-        entries={entries}
+        entries={passwords}
         deletehandle={deletehandle}
         onedithandle={onedithandle}
         moreClickHandle={moreClickHandle}

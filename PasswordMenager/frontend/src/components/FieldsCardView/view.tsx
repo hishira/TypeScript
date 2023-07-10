@@ -20,6 +20,7 @@ export type FieldsCardViewProps = {
   selectedgroup: string;
   refreshall: boolean;
   refreshgroupentities: Function;
+  passwords: IEntry[],
 };
 export type CardEntry = {
   open: boolean;

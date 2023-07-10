@@ -5,6 +5,7 @@ import { Container } from "./component.styled";
 import { inject, observer } from "mobx-react";
 import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
+import { PasswordEntries } from "../../hooks/password-entries.hook";
 
 type PassComponentProps = {
   store?: IGeneral;
@@ -12,6 +13,7 @@ type PassComponentProps = {
 const PassComponent = ({ store }: PassComponentProps) => {
   const [selectedgroupid, setgroupid] = useState<string>("");
   const [entitiesrefresh, setentitesrefresh] = useState<boolean>(false);
+  const passwords = PasswordEntries(selectedgroupid, entitiesrefresh);
   const selectgrouphandle = (groupid: string) => {
     setgroupid(groupid);
   };
@@ -27,12 +29,14 @@ const PassComponent = ({ store }: PassComponentProps) => {
           refreshgroupentities={refreshentities}
           selectedgroup={selectedgroupid}
           refreshall={entitiesrefresh}
+          passwords={passwords}
         />
       ) : (
         <FieldsCardView
           selectedgroup={selectedgroupid}
           refreshall={entitiesrefresh}
           refreshgroupentities={refreshentities}
+          passwords={passwords}
         />
       )}
     </Container>
