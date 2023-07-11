@@ -179,6 +179,8 @@ export class Entry {
     return response;
   }
 
+  // TODO: Refactor
+
   async getEntryWithoutGroup(
     accessToken: string
   ): Promise<IEntry[] | number | { data: IEntry[]; pageInfo: any }> {
@@ -187,7 +189,10 @@ export class Entry {
       .then((resp) => (resp.status === 401 ? 401 : resp.json()));
   }
 
-  async EntriesWithoutGroup() {
+  async EntriesWithoutGroup(): Promise<{
+    data: IEntry[];
+    pageInfo: { hasMore: boolean; items: number; page: number };
+  }> {
     const accessToken = this.sessionStorage.getAccessToken();
 
     return this.getEntryWithoutGroup(accessToken).then(async (resp) => {
@@ -203,7 +208,9 @@ export class Entry {
                 entry?.passwordExpiredDate?.split("T")[0] ?? "",
             }));
           }
-          return Array.isArray(value) ? value : (value as any)?.data;
+          return Array.isArray(value)
+            ? { data: value, pageInfo: null }
+            : { data: (value as any)?.data, pageInfo: (value as any).pageInfo };
         });
       }
       const responseMapped = Array.isArray(resp)
@@ -211,13 +218,21 @@ export class Entry {
         : typeof resp === "object" && "data" in resp
         ? resp.data
         : resp;
-      return Array.isArray(responseMapped)
+      const pageInfo =
+        typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
+      const mappedData = Array.isArray(responseMapped)
         ? responseMapped.map((entry: IEntry) => ({
             ...entry,
             passwordExpiredDate:
               entry?.passwordExpiredDate?.split("T")[0] ?? "",
           }))
+        : typeof resp === "number"
+        ? []
         : resp;
+      return {
+        data: mappedData,
+        pageInfo: pageInfo,
+      };
     });
   }
 }

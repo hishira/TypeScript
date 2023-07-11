@@ -1,14 +1,31 @@
 import { useEffect, useState } from "react";
 import { Entry } from "../utils/entry.utils";
 
-export const PasswordEntries = (selectedGroup: string, refreshAll: boolean) => {
+type ReturnEntiresType = {
+  entries: IEntry[];
+  paginator?: {
+    hasMore: boolean;
+    items: number;
+    page: number;
+  } | null;
+};
+export const PasswordEntries = (
+  selectedGroup: string,
+  refreshAll: boolean
+): ReturnEntiresType => {
   const [passwordEntries, setPasswordEntries] = useState<IEntry[]>([]);
-
+  const [pageInfo, setPageInfo] = useState<{
+    hasMore: boolean;
+    items: number;
+    page: number;
+  } | null>(null);
   useEffect(() => {
     const fetchEntries = async (): Promise<void> => {
       if (selectedGroup === "") {
-        const response = await Entry.getInstance().EntriesWithoutGroup();
-        if (typeof response !== "number") setPasswordEntries(response);
+        const { data, pageInfo } =
+          await Entry.getInstance().EntriesWithoutGroup();
+        setPasswordEntries(data);
+        setPageInfo(pageInfo);
       } else {
         const groupid: GroupId = {
           id: selectedGroup,
@@ -25,5 +42,5 @@ export const PasswordEntries = (selectedGroup: string, refreshAll: boolean) => {
     fetchEntries();
   }, [selectedGroup, refreshAll]);
 
-  return passwordEntries;
+  return { entries: passwordEntries, paginator: pageInfo };
 };

@@ -14,7 +14,7 @@ type PassComponentProps = {
 const PassComponent = ({ store }: PassComponentProps) => {
   const [selectedgroupid, setgroupid] = useState<string>("");
   const [entitiesrefresh, setentitesrefresh] = useState<boolean>(false);
-  const passwords = PasswordEntries(selectedgroupid, entitiesrefresh);
+  const {entries, paginator} = PasswordEntries(selectedgroupid, entitiesrefresh);
   const selectgrouphandle = (groupid: string) => {
     setgroupid(groupid);
   };
@@ -31,17 +31,17 @@ const PassComponent = ({ store }: PassComponentProps) => {
             refreshgroupentities={refreshentities}
             selectedgroup={selectedgroupid}
             refreshall={entitiesrefresh}
-            passwords={passwords}
+            passwords={entries}
           />
         ) : (
           <FieldsCardView
             selectedgroup={selectedgroupid}
             refreshall={entitiesrefresh}
             refreshgroupentities={refreshentities}
-            passwords={passwords}
+            passwords={entries}
           />
         )}
-        <Paginator pageInfo={{ hasMore: true, items: 10, page: 1 }} />
+        <Paginator pageInfo={paginator} />
       </Entries>
     </Container>
   );
