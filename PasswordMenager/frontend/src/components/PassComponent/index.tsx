@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import GroupComponent from "../GroupComponent/";
 import FieldsComponent from "../FieldsComponent/";
-import { Container } from "./component.styled";
+import { Container, Entries } from "./component.styled";
 import { inject, observer } from "mobx-react";
 import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
@@ -25,22 +25,24 @@ const PassComponent = ({ store }: PassComponentProps) => {
   return (
     <Container className="dupa">
       <GroupComponent selectgrouphandle={selectgrouphandle} />
-      {store?.ViewType === View.Table ? (
-        <FieldsComponent
-          refreshgroupentities={refreshentities}
-          selectedgroup={selectedgroupid}
-          refreshall={entitiesrefresh}
-          passwords={passwords}
-        />
-      ) : (
-        <FieldsCardView
-          selectedgroup={selectedgroupid}
-          refreshall={entitiesrefresh}
-          refreshgroupentities={refreshentities}
-          passwords={passwords}
-        />
-      )}
-      <Paginator pageInfo={{ hasMore: true, items: 10, page: 1 }} />
+      <Entries>
+        {store?.ViewType === View.Table ? (
+          <FieldsComponent
+            refreshgroupentities={refreshentities}
+            selectedgroup={selectedgroupid}
+            refreshall={entitiesrefresh}
+            passwords={passwords}
+          />
+        ) : (
+          <FieldsCardView
+            selectedgroup={selectedgroupid}
+            refreshall={entitiesrefresh}
+            refreshgroupentities={refreshentities}
+            passwords={passwords}
+          />
+        )}
+        <Paginator pageInfo={{ hasMore: true, items: 10, page: 1 }} />
+      </Entries>
     </Container>
   );
 };

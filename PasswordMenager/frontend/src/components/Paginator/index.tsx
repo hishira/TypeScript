@@ -1,3 +1,5 @@
+import { PaginatorContainer } from "./component.styled";
+
 type PaginatorComponentProps = {
   pageInfo: {
     hasMore: boolean;
@@ -8,5 +10,5 @@ type PaginatorComponentProps = {
 export const Paginator = ({
   pageInfo,
 }: PaginatorComponentProps): JSX.Element => {
-  return <>{pageInfo?.page}</>;
+  return <PaginatorContainer>{pageInfo?.page}</PaginatorContainer>;
 };
