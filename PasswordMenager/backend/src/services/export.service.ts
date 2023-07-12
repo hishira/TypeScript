@@ -10,7 +10,6 @@ export class ExportService {
 
   getCsvFile(userId): Promise<string> {
     return this.entryService.getByUser(userId).then((resp) => {
-      console.log(resp);
       const csvRows: string[][] = [];
       Array.isArray(resp) &&
         resp.forEach((entry) => {

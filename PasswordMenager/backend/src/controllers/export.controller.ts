@@ -56,7 +56,6 @@ export class ExportController {
     @Res() response: Response,
     @Body() restOfParams,
   ) {
-    console.log(restOfParams);
     const buffer = Buffer.from(file.buffer);
     const salt = buffer.slice(0, 16);
     const iv = buffer.slice(16, 32);

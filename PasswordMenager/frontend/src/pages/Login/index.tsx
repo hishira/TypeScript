@@ -30,7 +30,6 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
   ): Promise<void> => {
     e.preventDefault();
     const response: any = await Auth.getInstance().LoginUserHandle(infoLogin);
-    console.log(response);
     // TODO: Refactor
     if (
       response?.status &&

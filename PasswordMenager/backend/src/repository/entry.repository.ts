@@ -59,7 +59,6 @@ export class EntryRepository implements Repository<IEntry> {
       .exec()
       .then((entryById) => {
         const data = this.createEditentity(entry, entryById);
-        console.log('After updated, ', data);
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
           .then((data) => data);

@@ -45,7 +45,6 @@ export class ImportController {
           password.push(values.shift());
           notes.push(values.shift());
         });
-        console.log(password);
         next();
       };
       stream.pipe(write);

@@ -10,7 +10,6 @@ type PaginatorComponentProps = {
 export const Paginator = ({
   pageInfo,
 }: PaginatorComponentProps): JSX.Element => {
-  console.log(pageInfo);
   return pageInfo ? (
     <PaginatorContainer>
       <span>{pageInfo.page > 0 ? "<" : null}</span>

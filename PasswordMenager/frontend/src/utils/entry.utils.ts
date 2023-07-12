@@ -200,7 +200,6 @@ export class Entry {
         await this.auth.refreshToken();
         const token = this.sessionStorage.getAccessToken();
         return this.getEntryWithoutGroup(token).then((value) => {
-          console.log(value);
           if (Array.isArray(value)) {
             return value.map((entry) => ({
               ...entry,

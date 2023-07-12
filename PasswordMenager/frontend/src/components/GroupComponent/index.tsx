@@ -49,11 +49,9 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   };
 
   const deleteClickHandle = () => {
-    console.log(groupAction.actionGroupId);
     Group.getInstance()
       .DeleteUserGroup(groupAction.actionGroupId)
       .then((response) => {
-        console.log(response);
         setRefetch(!refetch);
         groupAction.setDeleteModal(false);
       })
@@ -81,7 +79,6 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
         name: groupName,
       })
       .then((response) => {
-        console.log(response);
         setRefetch(!refetch);
         groupAction.setEditModal(false);
       })
