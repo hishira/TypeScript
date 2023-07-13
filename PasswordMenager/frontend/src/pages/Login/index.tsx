@@ -15,6 +15,7 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
   const [infoLogin, setInfoLogin] = useState<UserAuth>({
     login: "",
     password: "",
+    email: "",
   });
 
   const passwordchange = (password: string): void => {
@@ -30,11 +31,9 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
   ): Promise<void> => {
     e.preventDefault();
     const response: any = await Auth.getInstance().LoginUserHandle(infoLogin);
+    const loginSucces = response?.status && !response?.response?.message;
     // TODO: Refactor
-    if (
-      response?.status &&
-      !Object.keys(response?.response).includes("message")
-    ) {
+    if (loginSucces) {
       SessionStorage.getInstance().setLocalStorageToken(response.response);
       store?.setUserActive(true);
       history.push("/store");

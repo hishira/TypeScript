@@ -25,32 +25,42 @@ export class EntryRepository implements Repository<IEntry> {
     return this.entryModel.findOne({ _id: id }).exec();
   }
 
-  find(
-    option: FilterOption<FilterQuery<IEntry>>,
-    paginator?: PaginatorDto,
-  ): Promise<IEntry[] | EntryData | any> {
-    if (
+  // TODO: To other component, seperate
+  private isPaginatorDefined(paginator?: PaginatorDto): boolean {
+    return (
       paginator &&
       'page' in paginator &&
       paginator?.page !== undefined &&
       paginator?.page !== null
-    ) {
+    );
+  }
+
+  private getEntryData(
+    entires: IEntry[],
+    paginator: PaginatorDto,
+  ): Promise<EntryData> {
+    return Promise.resolve({
+      data: entires,
+      pageInfo: new Paginator(
+        entires.length,
+        entires.length >= 10,
+        paginator.page,
+      ),
+    });
+  }
+  find(
+    option: FilterOption<FilterQuery<IEntry>>,
+    paginator?: PaginatorDto,
+  ): Promise<IEntry[] | EntryData | any> {
+    if (this.isPaginatorDefined(paginator)) {
       return this.entryModel
         .find(option.getOption())
         .skip(paginator.page * 10)
         .limit(10)
         .exec()
-        .then((entires) => {
-          return Promise.resolve({
-            data: entires,
-            pageInfo: new Paginator(
-              entires.length,
-              entires.length >= 10,
-              paginator.page,
-            ),
-          });
-        });
-    } else return this.entryModel.find(option.getOption()).exec();
+        .then((entires) => this.getEntryData(entires, paginator));
+    }
+    return this.entryModel.find(option.getOption()).exec();
   }
 
   update(entry: Partial<IEntry>): Promise<unknown> {
