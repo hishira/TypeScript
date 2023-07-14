@@ -1,3 +1,5 @@
+import { LeftIcon } from "../icons/LeftIcon";
+import { RightIcon } from "../icons/RightIcon";
 import { PaginatorContainer } from "./component.styled";
 // Move type to shared
 export type PaginatorType = {
@@ -29,14 +31,9 @@ export const Paginator = ({
   };
   return pageInfo ? (
     <PaginatorContainer>
-      {pageInfo.page > 0 ? (
-        <button onClick={() => previousPage()}>left</button>
-      ) : null}
-      <button onClick={previousPage}>{pageInfo.page > 0 ? "<" : null}</button>
-      <span>{pageInfo?.page + 1}</span>{" "}
-      {pageInfo.hasMore ? (
-        <button onClick={() => nextPage()}>right</button>
-      ) : null}
+      {pageInfo.page > 0 ? <LeftIcon click={() => previousPage()} /> : null}
+      <span>{pageInfo?.page + 1}</span>
+      {pageInfo.hasMore ? <RightIcon click={() => nextPage()} /> : null}
     </PaginatorContainer>
   ) : (
     <></>

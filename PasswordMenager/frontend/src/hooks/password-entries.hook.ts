@@ -22,7 +22,6 @@ export const PasswordEntries = (
     page: number;
   } | null>(null);
   useEffect(() => {
-    console.log('Page')
     const fetchEntries = async (): Promise<void> => {
       if (selectedGroup === "") {
         const { data, pageInfo } =
