@@ -1,8 +1,8 @@
 import styled, { keyframes } from "styled-components";
 
 export const CardsContainer = styled.div`
-  width: 75%;
-  padding: 4rem;
+  width: 90%;
+  padding: 2rem;
   max-height: 89.5vh;
 `;
 export const Cards = styled.div`

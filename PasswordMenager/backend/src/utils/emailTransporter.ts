@@ -9,7 +9,6 @@ export class EmailSender {
   private transporter: Transporter<SMTPTransport.SentMessageInfo>;
   constructor() {
     const smtpConfig = SMTPConfigurationFabric.DefaultTestSMTPConfiguration();
-    console.log(smtpConfig);
     this.transporter = createTransport(smtpConfig);
   }
 

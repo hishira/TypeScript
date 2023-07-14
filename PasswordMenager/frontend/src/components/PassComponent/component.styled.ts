@@ -9,3 +9,9 @@ export const Container = styled.div`
     overflow: hidden;
   }
 `;
+
+export const Entries = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+`;

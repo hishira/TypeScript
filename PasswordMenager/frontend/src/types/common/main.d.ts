@@ -70,6 +70,7 @@ type FieldsComponentType = {
   selectedgroup: string;
   refreshall: boolean;
   refreshgroupentities: Function;
+  passwords: IEntry[];
 };
 
 type GroupId = {

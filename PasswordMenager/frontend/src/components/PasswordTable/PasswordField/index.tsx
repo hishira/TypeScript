@@ -27,7 +27,7 @@ export const PasswordFieldsHelper = {
     if (entry !== null) {
       navigator.clipboard
         .writeText(PasswordFieldsHelper.gettext(text))
-        .catch((e) => console.log("not ok"));
+        .catch((e) => console.error(e));
     }
   },
 };

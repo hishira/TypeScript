@@ -10,11 +10,16 @@ export class ExportService {
 
   getCsvFile(userId): Promise<string> {
     return this.entryService.getByUser(userId).then((resp) => {
-      console.log(resp);
       const csvRows: string[][] = [];
-      resp.forEach((entry) => {
-        csvRows.push([entry.title, entry.username, entry.password, entry.note]);
-      });
+      Array.isArray(resp) &&
+        resp.forEach((entry) => {
+          csvRows.push([
+            entry.title,
+            entry.username,
+            entry.password,
+            entry.note,
+          ]);
+        });
       const csv = new CsvFile(CsvFile.DefaultCsvHeader)
         .setRows(csvRows)
         .getCsvAsString();
@@ -24,9 +29,10 @@ export class ExportService {
   getCsvZipedFile(userId: string): Promise<Archiver.Archiver> {
     const archiver = this.entryService.getByUser(userId).then((resp) => {
       let csvData = [['title', 'password', 'note', '\r\n']];
-      resp.forEach((entry) => {
-        csvData.push([entry.title, entry.password, entry.note, '\r\n']);
-      });
+      Array.isArray(resp) &&
+        resp.forEach((entry) => {
+          csvData.push([entry.title, entry.password, entry.note, '\r\n']);
+        });
       const readable = new Readable({
         read() {
           this.push(csvData.shift().join(','));

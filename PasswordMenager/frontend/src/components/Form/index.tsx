@@ -16,7 +16,7 @@ interface Props {
   confirmpassword?: boolean;
   confirmpasshandle?: (value: string) => void;
   isEmail?: boolean;
-  emailSetHandle: (value: string) => void;
+  emailSetHandle?: (value: string) => void;
 }
 const FormComponent = ({
   buttonmessage,
@@ -34,6 +34,8 @@ const FormComponent = ({
   const handlethis = (value: string) => {
     if (confirmpasshandle) confirmpasshandle(value);
   };
+
+  const isEmailAvailable = isEmail && emailSetHandle;
   return (
     <Form>
       <FormTitle>{maintitle}</FormTitle>
@@ -45,7 +47,7 @@ const FormComponent = ({
         inputplaceholder="Login"
         inputtype="text"
       />
-      {isEmail ? (
+      {isEmailAvailable ? (
         <FormElement
           label="Email"
           inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>

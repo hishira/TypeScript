@@ -65,7 +65,6 @@ export const ImportFile = ({
   const [password, setPassword] = useState<string>("");
   const fileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
-    console.log(files);
     if (files && files.length <= 0) return;
     files && setFile(files[0]);
   };

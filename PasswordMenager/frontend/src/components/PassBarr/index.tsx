@@ -15,7 +15,7 @@ const exportHandle = (): void => {
   Export.getInstance()
     .ExportEntriesCsv()
     .then(() => {})
-    .catch(console.log);
+    .catch(console.error);
 };
 
 const exportEncrypted = (): void => {

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Button from "../Button/index";
 
 export const Container = styled.div`
-  width: 75%;
+  width: 100%;
   overflow: auto;
   max-height: 89.5vh;
   @media (max-width: 650px) {

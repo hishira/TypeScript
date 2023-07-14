@@ -31,11 +31,12 @@ const FieldsCardView = ({
   selectedgroup,
   refreshall,
   refreshgroupentities,
+  passwords,
 }: FieldsCardViewProps): JSX.Element => {
   const FieldsAction = FieldsActionHook();
 
   const entries: CardEntry[] = EntriesMappes(
-    PasswordEntries(selectedgroup, refreshall)
+    passwords
   );
   const deleteHandle = (entry: IEntry) => {
     FieldsAction.setEntryToDelete(entry._id);
