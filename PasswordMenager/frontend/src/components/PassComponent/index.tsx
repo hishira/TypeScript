@@ -6,7 +6,7 @@ import { inject, observer } from "mobx-react";
 import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
-import { Paginator } from "../Paginator";
+import { EntryPaginator, Paginator } from "../Paginator";
 
 type PassComponentProps = {
   store?: IGeneral;
@@ -14,13 +14,22 @@ type PassComponentProps = {
 const PassComponent = ({ store }: PassComponentProps) => {
   const [selectedgroupid, setgroupid] = useState<string>("");
   const [entitiesrefresh, setentitesrefresh] = useState<boolean>(false);
-  const {entries, paginator} = PasswordEntries(selectedgroupid, entitiesrefresh);
+  const [sendPaginator, setPaginator] = useState<EntryPaginator>({ page: 0 });
+  const { entries, paginator } = PasswordEntries(
+    selectedgroupid,
+    entitiesrefresh,
+    sendPaginator
+  );
   const selectgrouphandle = (groupid: string) => {
     setgroupid(groupid);
   };
   const refreshentities = (): void => {
     setgroupid(selectedgroupid);
     setentitesrefresh(!entitiesrefresh);
+  };
+
+  const paginatorChange = (paginator: EntryPaginator): void => {
+    setPaginator(paginator);
   };
   return (
     <Container className="dupa">
@@ -41,7 +50,7 @@ const PassComponent = ({ store }: PassComponentProps) => {
             passwords={entries}
           />
         )}
-        <Paginator pageInfo={paginator} />
+        <Paginator pageInfo={paginator} paginationChange={paginatorChange} />
       </Entries>
     </Container>
   );

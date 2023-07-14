@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Entry } from "../utils/entry.utils";
+import { EntryPaginator } from "../components/Paginator";
 
 type ReturnEntiresType = {
   entries: IEntry[];
@@ -11,7 +12,8 @@ type ReturnEntiresType = {
 };
 export const PasswordEntries = (
   selectedGroup: string,
-  refreshAll: boolean
+  refreshAll: boolean,
+  paginator: EntryPaginator
 ): ReturnEntiresType => {
   const [passwordEntries, setPasswordEntries] = useState<IEntry[]>([]);
   const [pageInfo, setPageInfo] = useState<{
@@ -20,10 +22,11 @@ export const PasswordEntries = (
     page: number;
   } | null>(null);
   useEffect(() => {
+    console.log('Page')
     const fetchEntries = async (): Promise<void> => {
       if (selectedGroup === "") {
         const { data, pageInfo } =
-          await Entry.getInstance().EntriesWithoutGroup();
+          await Entry.getInstance().EntriesWithoutGroup(paginator);
         setPasswordEntries(data);
         setPageInfo(pageInfo);
       } else {
@@ -40,7 +43,7 @@ export const PasswordEntries = (
       }
     };
     fetchEntries();
-  }, [selectedGroup, refreshAll]);
+  }, [selectedGroup, refreshAll, paginator]);
 
   return { entries: passwordEntries, paginator: pageInfo };
 };

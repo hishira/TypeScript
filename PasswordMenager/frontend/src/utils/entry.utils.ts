@@ -2,6 +2,7 @@ import { EntryApi } from "../api/entry.api";
 import { Auth } from "./auth.utils";
 import { SessionStorage } from "./localstorage.utils";
 import { EMPTYENTRYRESPONSE } from "./constans.utils";
+import { EntryPaginator } from "../components/Paginator";
 
 export class Entry {
   private static instance: Entry | null = null;
@@ -182,56 +183,62 @@ export class Entry {
   // TODO: Refactor
 
   async getEntryWithoutGroup(
-    accessToken: string
+    accessToken: string,
+    paginator: EntryPaginator
   ): Promise<IEntry[] | number | { data: IEntry[]; pageInfo: any }> {
     return this.entryApi
-      .getEntryWithoutGroup(accessToken, { page: 0 })
+      .getEntryWithoutGroup(accessToken, paginator)
       .then((resp) => (resp.status === 401 ? 401 : resp.json()));
   }
 
-  async EntriesWithoutGroup(): Promise<{
+  async EntriesWithoutGroup(paginator: EntryPaginator): Promise<{
     data: IEntry[];
     pageInfo: { hasMore: boolean; items: number; page: number };
   }> {
     const accessToken = this.sessionStorage.getAccessToken();
 
-    return this.getEntryWithoutGroup(accessToken).then(async (resp) => {
-      if (typeof resp === "number" && resp === 401) {
-        await this.auth.refreshToken();
-        const token = this.sessionStorage.getAccessToken();
-        return this.getEntryWithoutGroup(token).then((value) => {
-          if (Array.isArray(value)) {
-            return value.map((entry) => ({
+    return this.getEntryWithoutGroup(accessToken, paginator).then(
+      async (resp) => {
+        if (typeof resp === "number" && resp === 401) {
+          await this.auth.refreshToken();
+          const token = this.sessionStorage.getAccessToken();
+          return this.getEntryWithoutGroup(token, paginator).then((value) => {
+            if (Array.isArray(value)) {
+              return value.map((entry) => ({
+                ...entry,
+                passwordExpiredDate:
+                  entry?.passwordExpiredDate?.split("T")[0] ?? "",
+              }));
+            }
+            return Array.isArray(value)
+              ? { data: value, pageInfo: null }
+              : {
+                  data: (value as any)?.data,
+                  pageInfo: (value as any).pageInfo,
+                };
+          });
+        }
+        const responseMapped = Array.isArray(resp)
+          ? resp
+          : typeof resp === "object" && "data" in resp
+          ? resp.data
+          : resp;
+        const pageInfo =
+          typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
+        const mappedData = Array.isArray(responseMapped)
+          ? responseMapped.map((entry: IEntry) => ({
               ...entry,
               passwordExpiredDate:
                 entry?.passwordExpiredDate?.split("T")[0] ?? "",
-            }));
-          }
-          return Array.isArray(value)
-            ? { data: value, pageInfo: null }
-            : { data: (value as any)?.data, pageInfo: (value as any).pageInfo };
-        });
+            }))
+          : typeof resp === "number"
+          ? []
+          : resp;
+        return {
+          data: mappedData,
+          pageInfo: pageInfo,
+        };
       }
-      const responseMapped = Array.isArray(resp)
-        ? resp
-        : typeof resp === "object" && "data" in resp
-        ? resp.data
-        : resp;
-      const pageInfo =
-        typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
-      const mappedData = Array.isArray(responseMapped)
-        ? responseMapped.map((entry: IEntry) => ({
-            ...entry,
-            passwordExpiredDate:
-              entry?.passwordExpiredDate?.split("T")[0] ?? "",
-          }))
-        : typeof resp === "number"
-        ? []
-        : resp;
-      return {
-        data: mappedData,
-        pageInfo: pageInfo,
-      };
-    });
+    );
   }
 }
