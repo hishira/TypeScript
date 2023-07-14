@@ -39,6 +39,7 @@ export const TableButton = styled(Button)`
 export const PasswordTableIcons = styled.div`
   display: flex;
   gap: 2rem;
+  justify-content: center;
   & > svg {
     &:hover {
       cursor: pointer;
