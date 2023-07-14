@@ -36,6 +36,28 @@ export const TableButton = styled(Button)`
     display: none;
   }
 `;
+export const PasswordTableIcons = styled.div`
+  display: flex;
+  gap: 2rem;
+  & > svg {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  & > svg[role="edit"]:hover {
+    & > path {
+      fill: slategray;
+    }
+  }
+  & > svg[role="delete"]:hover {
+    & > path:first-child {
+      fill: lightcoral;
+    }
+  }
+  @media (max-width: 1000px) {
+    display: none;
+  }
+`;
 export const MinButton = styled(TableButton)`
   display: none;
   @media (max-width: 1000px) {
@@ -45,4 +67,3 @@ export const MinButton = styled(TableButton)`
     margin-right: auto;
   }
 `;
-

@@ -2,10 +2,13 @@ import { useRef } from "react";
 import { TooLongValue } from "../../../hooks/tooLongValue.hook";
 import {
   MinButton,
+  PasswordTableIcons,
   TableButton,
   TableComponent,
   TableRow,
 } from "./component.styled";
+import { EditIcon } from "../../icons/EditIcon";
+import { DeleteIcon } from "../../icons/DeleteIcon";
 
 export const PasswordFieldsHelper = {
   gettext: (text: string | null): string => {
@@ -67,16 +70,20 @@ export const PasswordField = ({
         <span>{entry.note}</span>
       </TableComponent>
       <TableComponent>
-        <TableButton onClick={() => deletehandle(entry._id)} color="lightblue">
+        {/*<TableButton onClick={() => deletehandle(entry._id)} color="lightblue">
           Delete
-        </TableButton>
-        <TableButton
+        </TableButton>*/}
+        {/*<TableButton
           color="lightgrey"
           onClick={() => onedithandle(entry._id)}
           style={{ marginLeft: ".4rem" }}
         >
           Edit
-        </TableButton>
+        </TableButton>*/}
+        <PasswordTableIcons>
+          <DeleteIcon click={() => deletehandle(entry._id)} />
+          <EditIcon click={() => onedithandle(entry._id)} />
+        </PasswordTableIcons>
         <MinButton onClick={() => moreClickHandle(entry)}>More</MinButton>
       </TableComponent>
     </TableRow>
