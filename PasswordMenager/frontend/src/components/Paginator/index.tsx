@@ -29,7 +29,7 @@ export const Paginator = ({
       page: (pageInfo?.page ?? 1) - 1,
     });
   };
-  return pageInfo ? (
+  return pageInfo && pageInfo?.page > 0 && pageInfo?.items > 0 ? (
     <PaginatorContainer>
       {pageInfo.page > 0 ? <LeftIcon click={() => previousPage()} /> : null}
       <span>{pageInfo?.page + 1}</span>
