@@ -2,7 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
-import { EntryData, IEntry } from 'src/schemas/Interfaces/entry.interface';
+import {
+  EntryData,
+  EntryState,
+  IEntry,
+} from 'src/schemas/Interfaces/entry.interface';
 import { LastEditedVariable } from '../schemas/Interfaces/entryMeta.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
@@ -52,15 +56,19 @@ export class EntryRepository implements Repository<IEntry> {
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
+    const ActiveFilter: FilterQuery<IEntry> = {
+      ...option.getOption(),
+      state: EntryState.ACTIVE,
+    };
     if (this.isPaginatorDefined(paginator)) {
       return this.entryModel
-        .find(option.getOption())
+        .find(ActiveFilter)
         .skip(paginator.page * 10)
         .limit(10)
         .exec()
         .then((entires) => this.getEntryData(entires, paginator));
     }
-    return this.entryModel.find(option.getOption()).exec();
+    return this.entryModel.find(ActiveFilter).exec();
   }
 
   update(entry: Partial<IEntry>): Promise<unknown> {
@@ -76,11 +84,15 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
-    return this.entryModel.deleteMany(option.getOption()).exec();
+    return this.entryModel
+      .updateMany(option.getOption(), { $set: { state: EntryState.DELETED } })
+      .exec();
   }
 
   deleteMany(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
-    return this.entryModel.deleteMany(option.getOption()).exec();
+    return this.entryModel
+      .updateMany(option.getOption(), { $set: { state: EntryState.DELETED } })
+      .exec();
   }
 
   create(objectToSave: DTO): Promise<IEntry> {
@@ -91,7 +103,11 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   deleteById(id: string): Promise<unknown> {
-    return this.entryModel.findByIdAndDelete(id).exec();
+    return this.entryModel
+      .findByIdAndUpdate(id, {
+        $set: { state: EntryState.DELETED },
+      })
+      .exec();
   }
 
   getById(): Promise<IEntry> {

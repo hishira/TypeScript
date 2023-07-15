@@ -1,7 +1,11 @@
 import { Document, Schema } from 'mongoose';
 import { IEntryMeta } from './entryMeta.interface';
 import { Paginator } from 'src/utils/paginator';
-
+export enum EntryState {
+  ACTIVE = 'active',
+  DELETED = 'deleted',
+  SUSPENDED = 'suspended',
+}
 export interface IEntry extends Document {
   readonly _id: string;
   readonly title: string;
@@ -14,6 +18,7 @@ export interface IEntry extends Document {
   readonly email: string;
   readonly passwordExpiredDate?: Date;
   readonly meta: IEntryMeta;
+  readonly state: EntryState;
 }
 
 export type EntryData = {

@@ -1,5 +1,5 @@
 import * as mognoose from 'mongoose';
-import { IEntry } from './Interfaces/entry.interface';
+import { EntryState, IEntry } from './Interfaces/entry.interface';
 import EntryMetaSchema from './entryMeta.schema';
 import { EntrySchemaUtils } from './utils/Entry.schema.utils';
 
@@ -34,6 +34,11 @@ const EntrySchema = new mognoose.Schema<IEntry>({
   userid: {
     type: mognoose.Schema.Types.ObjectId,
     default: null,
+  },
+  state: {
+    type: String,
+    enum: Object.values(EntryState),
+    default: EntryState.ACTIVE,
   },
   passwordExpiredDate: {
     type: Date,
