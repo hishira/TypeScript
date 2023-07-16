@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
@@ -31,6 +32,13 @@ export class HistoryService {
     return this.historyRepository.update({
       userid: userid as unknown as ObjectId,
       entities: [entry],
+    });
+  }
+
+  appendGroupToHistory(userid: string, group: IGroup): Promise<unknown> {
+    return this.historyRepository.update({
+      userid: userid as unknown as ObjectId,
+      groups: [group],
     });
   }
 }

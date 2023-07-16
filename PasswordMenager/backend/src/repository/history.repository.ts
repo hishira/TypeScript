@@ -31,6 +31,7 @@ export class HistoryRepository implements Repository<IHistory> {
     throw new NotImplementedError();
   }
   update(entry: Partial<IHistory>): Promise<unknown> {
+    // TODO: Fix for group add
     return this.historyModel
       .updateOne(
         { userid: entry.userid },
