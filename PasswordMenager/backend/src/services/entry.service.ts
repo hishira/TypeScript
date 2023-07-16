@@ -9,11 +9,13 @@ import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
+import { HistoryService } from './history.service';
 @Injectable()
 export class EntryService {
   constructor(
     @Inject(Repository)
     private readonly entryRepository: Repository<IEntry>,
+    private readonly historyService: HistoryService,
   ) {}
 
   create(
@@ -69,6 +71,7 @@ export class EntryService {
   }
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse> {
+    // TODO: Refactor
     try {
       const deletedentry: Promise<IEntry> =
         this.entryRepository.findById(entryid);
@@ -80,7 +83,9 @@ export class EntryService {
       const deletedPromise = this.entryRepository.delete(deleteOption);
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
-          return { status: true, respond: res[0] };
+          return this.historyService
+            .appendEntityToHistory(res[0].userid as unknown as string, res[0])
+            .then((r) => ({ status: true, respond: res[0] }));
         })
         .catch((_err) => {
           return {

@@ -31,7 +31,12 @@ export class HistoryRepository implements Repository<IHistory> {
     throw new NotImplementedError();
   }
   update(entry: Partial<IHistory>): Promise<unknown> {
-    throw new NotImplementedError();
+    return this.historyModel
+      .updateOne(
+        { userid: entry.userid },
+        { $push: { entities: entry.entities[0] } },
+      )
+      .exec();
   }
   delete(option: DeleteOption<unknown>): Promise<unknown> {
     throw new NotImplementedError();

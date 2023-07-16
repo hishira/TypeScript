@@ -1,4 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ObjectId } from 'mongoose';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
@@ -23,5 +25,12 @@ export class HistoryService {
         }
       })(),
     );
+  }
+
+  appendEntityToHistory(userid: string, entry: IEntry): Promise<unknown> {
+    return this.historyRepository.update({
+      userid: userid as unknown as ObjectId,
+      entities: [entry],
+    });
   }
 }

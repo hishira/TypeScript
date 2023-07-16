@@ -6,9 +6,10 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EntryService } from 'src/services/entry.service';
 import { ExportService } from 'src/services/export.service';
 import { DatabaseModule } from './database.module';
+import { HistoryModule } from './history.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, HistoryModule],
   controllers: [ExportController],
   providers: [
     {
