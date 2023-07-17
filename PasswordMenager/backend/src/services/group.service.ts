@@ -10,6 +10,7 @@ import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { IGroup } from '../schemas/Interfaces/group.interface';
 import { EntryService } from './entry.service';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
+import { HistoryService } from './history.service';
 
 @Injectable()
 export class GroupService {
@@ -17,6 +18,7 @@ export class GroupService {
     @Inject(Repository)
     private readonly groupRepository: Repository<IGroup>,
     private readonly entityService: EntryService,
+    private readonly historyService: HistoryService,
   ) {}
 
   create(
@@ -59,7 +61,16 @@ export class GroupService {
       },
     };
     await this.entityService.deleteByGroup(groupId);
-    return await this.groupRepository.delete(deleteOption);
+    const groups = this.groupRepository.find(deleteOption);
+    let promiseToResolve: Promise<unknown> = null;
+    if (Array.isArray(groups) && groups.length > 0) {
+      promiseToResolve = this.historyService.appendGroupToHistory(
+        groups[0].userid,
+        groups,
+      );
+    }
+    const promise = this.groupRepository.delete(deleteOption);
+    return promiseToResolve ? promiseToResolve.then((re) => promise) : promise;
   }
 
   async editGroup(groupId: string, groupDto: EditGroupDto): Promise<unknown> {

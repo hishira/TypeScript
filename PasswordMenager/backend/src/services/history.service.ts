@@ -28,17 +28,17 @@ export class HistoryService {
     );
   }
 
-  appendEntityToHistory(userid: string, entry: IEntry): Promise<unknown> {
+  appendEntityToHistory(userid: string, entries: IEntry[]): Promise<unknown> {
     return this.historyRepository.update({
       userid: userid as unknown as ObjectId,
-      entities: [entry],
+      entities: [...entries],
     });
   }
 
-  appendGroupToHistory(userid: string, group: IGroup): Promise<unknown> {
+  appendGroupToHistory(userid: string, groups: IGroup[]): Promise<unknown> {
     return this.historyRepository.update({
       userid: userid as unknown as ObjectId,
-      groups: [group],
+      groups: [...groups],
     });
   }
 }

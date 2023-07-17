@@ -32,12 +32,23 @@ export class HistoryRepository implements Repository<IHistory> {
   }
   update(entry: Partial<IHistory>): Promise<unknown> {
     // TODO: Fix for group add
-    return this.historyModel
-      .updateOne(
-        { userid: entry.userid },
-        { $push: { entities: entry.entities[0] } },
-      )
-      .exec();
+    if (entry.entities && entry.entities.length > 0) {
+      return this.historyModel
+        .updateOne(
+          { userid: entry.userid },
+          { $push: { entities: entry.entities } },
+        )
+        .exec();
+    }
+    // TODO: Check groups add
+    if (entry.groups && entry.groups.length > 0) {
+      return this.historyModel
+        .updateOne(
+          { userid: entry.userid },
+          { $push: { groups: entry.groups } },
+        )
+        .exec();
+    }
   }
   delete(option: DeleteOption<unknown>): Promise<unknown> {
     throw new NotImplementedError();

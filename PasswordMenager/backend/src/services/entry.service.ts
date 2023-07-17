@@ -84,7 +84,7 @@ export class EntryService {
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
           return this.historyService
-            .appendEntityToHistory(res[0].userid as unknown as string, res[0])
+            .appendEntityToHistory(res[0].userid as unknown as string, [res[0]])
             .then((r) => ({ status: true, respond: res[0] }));
         })
         .catch((_err) => {
@@ -98,14 +98,35 @@ export class EntryService {
     }
   }
 
-  async deleteByGroup(groupid: string): Promise<unknown> {
-    return await this.entryRepository.delete({
+  private getHistoryEntryPromise(groupid: string) {
+    return this.entryRepository
+      .find({
+        getOption() {
+          return {
+            groupid: groupid,
+          };
+        },
+      })
+      .then((entires) => {
+        if (Array.isArray(entires) && entires.length > 0) {
+          return this.historyService.appendEntityToHistory(
+            entires[0].userid as unknown as string,
+            entires,
+          );
+        }
+      });
+  }
+
+  deleteByGroup(groupid: string): Promise<unknown> {
+    const promiseEntryHistory = this.getHistoryEntryPromise(groupid);
+    const deletePromise = this.entryRepository.delete({
       getOption() {
         return {
           groupid: groupid,
         };
       },
     });
+    return promiseEntryHistory.then(() => deletePromise);
   }
 
   getByUser(userId: string): Promise<IEntry[] | EntryData> {

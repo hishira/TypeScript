@@ -10,6 +10,9 @@ export class EditEntryActionDispatcher {
   private newentry: CreateEntryDto;
   private passwordLength: number;
 
+  get groupid(): string {
+    return this.newentry.groupid;
+  }
   get isFormValid(): boolean {
     return this.newentry.password !== "" && this.newentry.username !== "";
   }
@@ -86,13 +89,14 @@ export class EditEntryActionDispatcher {
   }
 
   setexirationpassworddate(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setnewentry({...this.newentry, passwordExpiredDate: e.target.value})
+    this.setnewentry({ ...this.newentry, passwordExpiredDate: e.target.value });
   }
   setnote(e: React.ChangeEvent<HTMLInputElement>) {
     this.setnewentry({ ...this.newentry, note: e.target.value });
   }
 
   groupset(e: React.ChangeEvent<HTMLSelectElement>) {
+    console.log(e.target.value);
     this.setnewentry({ ...this.newentry, groupid: e.target.value });
   }
 }
