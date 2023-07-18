@@ -7,6 +7,7 @@ import {
   CardExpandContentRow,
   CardFieldName,
   CardFieldValue,
+  CardFieldValueURL,
   CardHeader,
   CardIcons,
 } from "./component.styled";
@@ -20,7 +21,7 @@ export type FieldsCardViewProps = {
   selectedgroup: string;
   refreshall: boolean;
   refreshgroupentities: Function;
-  passwords: IEntry[],
+  passwords: IEntry[];
 };
 export type CardEntry = {
   open: boolean;
@@ -48,20 +49,28 @@ type CardExpendContentRowProps = {
   fieldName: string;
   value: string;
   isPassword?: boolean;
+  isUrl?: boolean;
 };
 type ValueFieldPropd = {
   isPassword: boolean | undefined;
+  isUrl: boolean | undefined;
   value: string | IEntry | null;
 };
-const ValueField = ({ isPassword, value }: ValueFieldPropd) => {
+const ValueField = ({ isPassword, value, isUrl }: ValueFieldPropd) => {
   const props: DOMAttributes<HTMLDivElement> = {};
   if (isPassword) {
     props["onClick"] = () => PasswordFieldsHelper.passwordClick(value);
+  }
+  if (isUrl) {
+    props["onClick"] = () =>
+      value && typeof value === "string" && window.open(value, "_blank");
   }
   return isPassword ? (
     <CardFieldValue {...props}>
       <span>******</span>
     </CardFieldValue>
+  ) : isUrl ? (
+    <CardFieldValueURL {...props}>{value}</CardFieldValueURL>
   ) : (
     <CardFieldValue {...props}>{value}</CardFieldValue>
   );
@@ -70,11 +79,16 @@ const CardExpendContentRow = ({
   fieldName,
   value,
   isPassword,
+  isUrl,
 }: CardExpendContentRowProps) => {
   return (
     <CardExpandContentRow>
       <CardFieldName>{fieldName}</CardFieldName>
-      <ValueField isPassword={isPassword} value={value}></ValueField>
+      <ValueField
+        isPassword={isPassword}
+        isUrl={isUrl}
+        value={value}
+      ></ValueField>
     </CardExpandContentRow>
   );
 };
@@ -94,7 +108,11 @@ const CardExpandComponent = ({
         />
         <CardExpendContentRow fieldName="Note" value={entry.note} />
         {entry.url ? (
-          <CardExpendContentRow fieldName="Url" value={entry.url} />
+          <CardExpendContentRow
+            fieldName="Url"
+            isUrl={true}
+            value={entry.url}
+          />
         ) : null}
         {entry.passwordExpiredDate ? (
           <CardExpendContentRow
