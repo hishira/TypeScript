@@ -8,4 +8,5 @@ export interface INotification extends Document {
   readonly entryId: Schema.Types.ObjectId;
   readonly notificationDate: Date;
   readonly notificationChannel: NotificationChannel;
+  readonly active: boolean;
 }

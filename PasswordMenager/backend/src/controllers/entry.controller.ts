@@ -41,6 +41,7 @@ export class EntryContoller {
     @Body(new ValidationPipe({ transform: true })) neweentry: CreateEntryDto,
     @Request() req,
   ): Promise<unknown> {
+    //TODO refactor
     return this.entryService
       .create(neweentry, req.user._id)
       .then((response: any) => {
