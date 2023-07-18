@@ -61,14 +61,17 @@ export class GroupService {
       },
     };
     await this.entityService.deleteByGroup(groupId);
-    const groups = this.groupRepository.find(deleteOption);
-    let promiseToResolve: Promise<unknown> = null;
-    if (Array.isArray(groups) && groups.length > 0) {
-      promiseToResolve = this.historyService.appendGroupToHistory(
-        groups[0].userid,
-        groups,
-      );
-    }
+    const promiseToResolve = this.groupRepository
+      .find(deleteOption)
+      .then((groups) => {
+        if (Array.isArray(groups) && groups.length > 0) {
+          return this.historyService.appendGroupToHistory(
+            groups[0].userid,
+            groups,
+          );
+        }
+        return Promise.resolve(true);
+      });
     const promise = this.groupRepository.delete(deleteOption);
     return promiseToResolve ? promiseToResolve.then((re) => promise) : promise;
   }
