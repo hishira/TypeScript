@@ -153,6 +153,10 @@ export class EntryRepository implements Repository<IEntry> {
         ['meta.lastEditedVariable']: LastEditedVariable.LASTUSERNAME,
       };
     }
+    data = {
+      ...data,
+      ['meta.editDate']: new Date(),
+    };
     return data;
   }
 }
