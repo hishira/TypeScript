@@ -8,6 +8,7 @@ import { ExportModule } from './modules/export.module';
 import { GroupModule } from './modules/group.module';
 import { ImportModule } from './modules/import.module';
 import { UserModule } from './modules/user.module';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     UserModule,
@@ -15,6 +16,7 @@ import { UserModule } from './modules/user.module';
     GroupModule,
     EntryModule,
     ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
     ExportModule,
     ImportModule,
   ],
