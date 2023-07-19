@@ -1,12 +1,19 @@
 import { Injectable, Inject } from '@nestjs/common';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
-import { INotification } from 'src/schemas/Interfaces/notification.interface';
+import {
+  INotification,
+  NotificationChannel,
+} from 'src/schemas/Interfaces/notification.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { CreateNotificationDTO } from 'src/schemas/dto/createnotification.dto';
+import {
+  CreateNotificationDTO,
+  CreateNotificationEmailDTO,
+} from 'src/schemas/dto/createnotification.dto';
 import { EmailSender } from 'src/utils/emailTransporter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Logger } from 'src/utils/Logger';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 
 interface NotificationCron {
   notificationSendCronHandle(): void;
@@ -26,11 +33,22 @@ export class NotificationService implements NotificationCron {
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   notificationSendCronHandle() {
-    this.activeNotification.then(console.log)
+    this.activeNotification.then(console.log);
   }
 
   create(notificationDTO: CreateNotificationDTO) {
     return this.notificationRepository.create(notificationDTO);
+  }
+
+  createEmailNotification(entry: IEntry, passwordExpireDate: Date) {
+    return this.create(
+      new CreateNotificationEmailDTO(entry._id, passwordExpireDate),
+    ).then(async () => {
+      this.logger.logMessage(
+        `Notification created for date ${passwordExpireDate}`,
+      );
+      return this.notificationSend();
+    });
   }
 
   notificationSend(): Promise<SMTPTransport.SentMessageInfo> {
