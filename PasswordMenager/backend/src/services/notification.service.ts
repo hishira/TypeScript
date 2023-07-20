@@ -33,7 +33,25 @@ export class NotificationService implements NotificationCron {
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   notificationSendCronHandle() {
-    this.activeNotification.then(console.log);
+    this.getActiveNotificationAsPromise()
+      .then((promises) => Promise.all(promises))
+      .then(console.log);
+  }
+
+  getActiveNotificationAsPromise(): Promise<
+    Promise<boolean | SMTPTransport.SentMessageInfo>[]
+  > {
+    return this.activeNotification.then((notifications) => {
+      return notifications.map((notification) => {
+        if (
+          notification.active &&
+          notification.notificationDate < new Date(Date.now())
+        ) {
+          return this.notificationSend();
+        }
+        return Promise.resolve(true);
+      });
+    });
   }
 
   create(notificationDTO: CreateNotificationDTO) {
