@@ -46,12 +46,13 @@ export class EntryContoller {
       .then((response: Test): any => {
         if ('message' in response) return response;
         const passwordExpireDate = response.passwordExpiredDate;
-        if (passwordExpireDate)
-          return this.notificationService.createEmailNotification(
+        if (passwordExpireDate) {
+          const promise = this.notificationService.createEmailNotification(
             response,
             passwordExpireDate,
           );
-
+          promise.then((_) => console.log('Created'));
+        }
         return response;
       })
       .catch();
