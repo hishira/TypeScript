@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import {
+  ActiveNotificationFilter,
   INotification,
   NotificationChannel,
 } from 'src/schemas/Interfaces/notification.interface';
@@ -35,7 +36,8 @@ export class NotificationService implements NotificationCron {
   notificationSendCronHandle() {
     this.getActiveNotificationAsPromise()
       .then((promises) => Promise.all(promises))
-      .then(console.log);
+      .then(console.log)
+      .catch(() => this.logger.error('Problem with notification send'));
   }
 
   getActiveNotificationAsPromise(): Promise<
@@ -75,9 +77,7 @@ export class NotificationService implements NotificationCron {
 
   get activeNotification(): Promise<INotification[]> {
     return this.notificationRepository
-      .find({
-        getOption: () => ({ active: true }),
-      })
+      .find(new ActiveNotificationFilter())
       .then((data) => (Array.isArray(data) ? data : data.data));
   }
   checkAndSendNotification(): Promise<unknown> {

@@ -1,4 +1,5 @@
 import { Document, Schema } from 'mongoose';
+import { FilterOption } from './filteroption.interface';
 export enum NotificationChannel {
   Account = 'Account',
   Email = 'Email',
@@ -9,4 +10,18 @@ export interface INotification extends Document {
   readonly notificationDate: Date;
   readonly notificationChannel: NotificationChannel;
   readonly active: boolean;
+}
+
+export class ActiveNotificationFilter implements FilterOption {
+  constructor(
+    public readonly active: boolean = true,
+    public readonly notificationChannel: NotificationChannel = NotificationChannel.Email,
+  ) {}
+
+  getOption(): unknown {
+    return {
+      active: this.active,
+      notificationChannel: this.notificationChannel,
+    };
+  }
 }
