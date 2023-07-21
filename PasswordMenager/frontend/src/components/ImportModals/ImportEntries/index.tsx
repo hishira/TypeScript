@@ -31,13 +31,16 @@ const setFormDataAction = (
   setFormData(formFileData);
 };
 
-
 export const ImportModalEntries = ({
   modalOpen,
   closeModalHandle,
 }: ImportEntriesModalProps) => {
   const [importModalOpen, setImportModalOpen] = useState<boolean>(modalOpen);
   const [formData, setFormData] = useState<FormData>();
+  const extend = {
+    buttonText: "Check",
+    handleButton: () => acceptHandle(formData),
+  };
   const closeHandle = () => {
     setImportModalOpen(false);
     closeModalHandle();
@@ -55,6 +58,7 @@ export const ImportModalEntries = ({
           fileSetHandle={(e: File) => setFormDataAction(e, setFormData)}
         />
       }
+      extend={extend}
       acceptHandle={() => acceptHandle(formData)}
     ></AcceptModalComponent>
   ) : (
