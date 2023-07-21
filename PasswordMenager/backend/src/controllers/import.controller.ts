@@ -6,6 +6,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
 import { EmptyFileValidator } from 'src/validators/emptyfile.validator';
 import { CustomFileValidator } from 'src/validators/file.validator';
 import { NotFileValidator } from 'src/validators/notfile.validator';
@@ -27,31 +28,32 @@ export class ImportController {
     file: Express.Multer.File,
   ) {
     // Default column => name, site(in future), username - email, password,note.
-    const names = [];
-    const sites = [];
-    const username = [];
-    const password = [];
-    const notes = [];
+    //const names = [];
+    //const sites = [];
+    //const username = [];
+    //const password = [];
+    //const notes = [];
     const stream = Readable.from(file.buffer);
     const write = new Writable();
+    const datas: ImportEntrySchema[] = [];
     const promise = new Promise<any[]>((resolve, rejext) => {
-      const c = [];
       write._write = (chunk, encoding, next) => {
         const csvString = chunk.toString() as string;
         const csvRows = csvString.split('\r\n');
         csvRows.forEach((csvRovValue) => {
           const values = csvRovValue.split(',');
-          names.push(values.shift());
-          username.push(values.shift());
-          password.push(values.shift());
-          notes.push(values.shift());
+          const name = values.shift();
+          const username = values.shift();
+          const password = values.shift();
+          const note = values.shift();
+          datas.push(new ImportEntrySchema(password, username, name, note, ''));
         });
         next();
       };
       stream.pipe(write);
       stream.on('end', () => {
         write.end();
-        resolve(password);
+        resolve(datas);
       });
     }).then((_) => {
       return _;

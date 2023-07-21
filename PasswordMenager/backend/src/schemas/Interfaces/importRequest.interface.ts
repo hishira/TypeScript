@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export class ImportRequest extends Document {
   readonly userid: mongoose.Schema.Types.ObjectId;
