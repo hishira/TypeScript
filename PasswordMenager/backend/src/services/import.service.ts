@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
+import { Injectable, Inject } from '@nestjs/common';
+import {
+  ImportEntrySchema,
+  ImportRequest,
+} from 'src/schemas/Interfaces/importRequest.interface';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { Readable, Writable } from 'stream';
 
 type ToString = {
@@ -32,14 +36,32 @@ class WritableStream extends Writable {
 }
 @Injectable()
 export class ImportService {
-  importEntriesFromFile(file: Express.Multer.File) {
+  constructor(
+    @Inject(Repository)
+    private readonly importRequestRepository: Repository<ImportRequest>,
+  ) {}
+  importEntriesFromFile(file: Express.Multer.File, userid: string) {
     const readableStream = Readable.from(file.buffer);
     const writer = new WritableStream();
     readableStream.pipe(writer);
-    return new Promise<ImportEntrySchema[]>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       readableStream.on('end', () => {
         writer.end();
-        resolve(writer.getSavedData);
+        const numberOfEntries = writer.getSavedData;
+        this.importRequestRepository
+          .create({
+            toObject: () => ({
+              userid: userid,
+              entriesToImport: writer.getSavedData,
+            }),
+          })
+          .then((importRequest) => {
+            const response = {
+              numberOfEntriesToAdd: numberOfEntries.length,
+              importRequestId: importRequest._id,
+            };
+            resolve(response);
+          });
       });
     });
   }

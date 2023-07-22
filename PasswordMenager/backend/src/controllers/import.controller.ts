@@ -4,7 +4,10 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
 import { ImportService } from 'src/services/import.service';
@@ -15,9 +18,12 @@ import { Readable, Writable } from 'stream';
 @Controller('import')
 export class ImportController {
   constructor(private importService: ImportService) {}
+
+  @UseGuards(AuthGuard('accessToken'))
   @Post('checkCsv')
   @UseInterceptors(FileInterceptor('file'))
   checkCsvFile(
+    @Request() req,
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({ fileType: 'csv' })
@@ -36,7 +42,7 @@ export class ImportController {
     //const password = [];
     //const notes = [];
 
-    return this.importService.importEntriesFromFile(file);
+    return this.importService.importEntriesFromFile(file, req.user._id);
   }
   @Post('csv')
   @UseInterceptors(FileInterceptor('file'))
