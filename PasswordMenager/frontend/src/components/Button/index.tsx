@@ -4,6 +4,7 @@ type Props = {
   fullwidth?: boolean;
   margintop?: number;
   size?: string;
+  outline?: "with" | "without";
 };
 const flash = keyframes`
     from{
@@ -35,7 +36,8 @@ const Button = styled.button<Props>`
     animation: ${flash} 0.1s ease forwards;
   }
   &:hover {
-    outline: 0.5px solid lightslategray;
+    outline: ${({ outline }) =>
+      outline && outline === "without" ? "none" : "0.5px solid lightslategray"};
     text-shadow: 0 0 0.65px #3a3636, 0 0 0.65px #3a3636;
     text-decoration: none;
     box-sizing: border-box;

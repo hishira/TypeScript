@@ -58,10 +58,12 @@ export class ImportService {
           .then((importRequest) => {
             const response = {
               numberOfEntriesToAdd: numberOfEntries.length,
+              entiresToImport: numberOfEntries.slice(0, 10),
               importRequestId: importRequest._id,
             };
             resolve(response);
-          });
+          })
+          .catch((error) => reject(error));
       });
     });
   }

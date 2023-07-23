@@ -15,11 +15,24 @@ type ImportEntriesModalProps = {
   modalOpen: boolean;
   closeModalHandle: () => void;
 };
-
-const acceptHandle = (formData: FormData | undefined) => {
+export type ImportCheckData = {
+  entiresToImport: [];
+  importRequestId: string;
+  numberOfEntriesToAdd: number;
+};
+const acceptHandle = (
+  formData: FormData | undefined,
+  setImportInfo: Dispatch<SetStateAction<ImportCheckData | null>>
+) => {
+  console.log(formData);
   if (!formData) return;
 
-  Import.getInstance().Import(formData, 0);
+  Import.getInstance()
+    .Import(formData, 0)
+    .then((data: ImportCheckData) => {
+      console.log(data);
+      setImportInfo(data);
+    });
 };
 
 const setFormDataAction = (
@@ -31,23 +44,42 @@ const setFormDataAction = (
   setFormData(formFileData);
 };
 
+const CheckExtendButton = (
+  formData: FormData | undefined,
+  setImportFileInfo: Dispatch<SetStateAction<ImportCheckData | null>>
+) => ({
+  buttonText: "Check",
+  handleButton: () => acceptHandle(formData, setImportFileInfo),
+});
+
 export const ImportModalEntries = ({
   modalOpen,
   closeModalHandle,
 }: ImportEntriesModalProps) => {
   const [importModalOpen, setImportModalOpen] = useState<boolean>(modalOpen);
   const [formData, setFormData] = useState<FormData>();
-  const extend = {
-    buttonText: "Check",
-    handleButton: () => acceptHandle(formData),
-  };
+
+  const [importFileInfo, setImportFileInfo] = useState<ImportCheckData | null>(
+    null
+  );
+
+  const [extendData, setExtendData] = useState<{
+    buttonText: string;
+    handleButton: (...args: any[]) => any;
+  }>(CheckExtendButton(formData, setImportFileInfo));
+
   const closeHandle = () => {
     setImportModalOpen(false);
     closeModalHandle();
   };
+
   useEffect(() => {
     setImportModalOpen(modalOpen);
-  }, [modalOpen]);
+    setExtendData({
+      ...extendData,
+      handleButton: () => acceptHandle(formData, setImportFileInfo),
+    });
+  }, [modalOpen, formData]);
 
   return modalOpen ? (
     <AcceptModalComponent
@@ -56,10 +88,11 @@ export const ImportModalEntries = ({
       component={
         <ImportEntriesModalComponent
           fileSetHandle={(e: File) => setFormDataAction(e, setFormData)}
+          importFileInfo={importFileInfo}
         />
       }
-      extend={extend}
-      acceptHandle={() => acceptHandle(formData)}
+      extend={extendData}
+      acceptHandle={() => acceptHandle(formData, setImportFileInfo)}
     ></AcceptModalComponent>
   ) : (
     <></>
