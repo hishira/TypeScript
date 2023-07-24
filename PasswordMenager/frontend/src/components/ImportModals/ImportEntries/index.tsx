@@ -23,16 +23,17 @@ export type ImportCheckData = {
 const acceptHandle = (
   formData: FormData | undefined,
   setImportInfo: Dispatch<SetStateAction<ImportCheckData | null>>
-) => {
+): Promise<boolean> => {
   console.log(formData);
-  if (!formData) return;
+  if (!formData) return Promise.resolve(false);
 
-  Import.getInstance()
+  return Import.getInstance()
     .Import(formData, 0)
     .then((data: ImportCheckData) => {
       console.log(data);
       setImportInfo(data);
-    });
+    })
+    .then((_) => true);
 };
 
 const setFormDataAction = (
@@ -77,7 +78,15 @@ export const ImportModalEntries = ({
     setImportModalOpen(modalOpen);
     setExtendData({
       ...extendData,
-      handleButton: () => acceptHandle(formData, setImportFileInfo),
+      handleButton: () =>
+        acceptHandle(formData, setImportFileInfo).then(
+          (_) =>
+            _ &&
+            setExtendData({
+              buttonText: "Import",
+              handleButton: () => console.log("Import"),
+            })
+        ),
     });
   }, [modalOpen, formData]);
 

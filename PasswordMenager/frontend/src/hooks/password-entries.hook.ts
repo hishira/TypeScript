@@ -22,23 +22,30 @@ export const PasswordEntries = (
     page: number;
   } | null>(null);
   useEffect(() => {
+    const emptyGroupFetch = async () => {
+      const { data, pageInfo } = await Entry.getInstance().EntriesWithoutGroup(
+        paginator
+      );
+      setPasswordEntries(data);
+      setPageInfo(pageInfo);
+    };
+    const fetchWithSelectedGroup = async () => {
+      const groupid: GroupId = {
+        id: selectedGroup,
+      };
+      const response: GetEntriesResponse =
+        await Entry.getInstance().GetUserEntriesByGroupID(groupid);
+      if (response.status) {
+        setPasswordEntries(response.response);
+      } else {
+        setPasswordEntries([]);
+      }
+    };
     const fetchEntries = async (): Promise<void> => {
       if (selectedGroup === "") {
-        const { data, pageInfo } =
-          await Entry.getInstance().EntriesWithoutGroup(paginator);
-        setPasswordEntries(data);
-        setPageInfo(pageInfo);
+        emptyGroupFetch();
       } else {
-        const groupid: GroupId = {
-          id: selectedGroup,
-        };
-        const response: GetEntriesResponse =
-          await Entry.getInstance().GetUserEntriesByGroupID(groupid);
-        if (response.status) {
-          setPasswordEntries(response.response);
-        } else {
-          setPasswordEntries([]);
-        }
+        fetchWithSelectedGroup();
       }
     };
     fetchEntries();
