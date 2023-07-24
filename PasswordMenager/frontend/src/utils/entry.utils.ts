@@ -110,7 +110,13 @@ export class Entry {
       return this.EMPTYGROUP;
     }
     if (typeof response !== "number")
-      return { status: true, response: response };
+      return {
+        status: true,
+        response: response.map((resp) => ({
+          ...resp,
+          passwordExpiredDate: resp.passwordExpiredDate?.split("T")[0],
+        })),
+      };
     return this.EMPTYGROUP;
   }
 
