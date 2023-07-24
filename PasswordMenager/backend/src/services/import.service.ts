@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import {
   ImportEntrySchema,
   ImportRequest,
+  ImportRequestDto,
 } from 'src/schemas/Interfaces/importRequest.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { Readable, Writable } from 'stream';
@@ -49,12 +50,7 @@ export class ImportService {
         writer.end();
         const numberOfEntries = writer.getSavedData;
         this.importRequestRepository
-          .create({
-            toObject: () => ({
-              userid: userid,
-              entriesToImport: writer.getSavedData,
-            }),
-          })
+          .create(new ImportRequestDto(userid, numberOfEntries))
           .then((importRequest) => {
             const response = {
               numberOfEntriesToAdd: numberOfEntries.length,

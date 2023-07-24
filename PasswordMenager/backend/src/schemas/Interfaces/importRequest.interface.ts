@@ -1,6 +1,17 @@
 import mongoose, { Document } from 'mongoose';
 import { ImportRequestState } from '../importRequest.schema';
+import { DTO } from '../dto/object.interface';
 
+export class ImportRequestDto implements DTO {
+  constructor(
+    public userid: string,
+    public entriesToImport: ImportEntrySchema[],
+  ) {}
+  toObject(): Record<string, unknown> {
+    const { userid, entriesToImport } = this;
+    return { userid, entriesToImport };
+  }
+}
 export class ImportRequest extends Document {
   readonly userid: mongoose.Schema.Types.ObjectId;
   readonly created: Date;
