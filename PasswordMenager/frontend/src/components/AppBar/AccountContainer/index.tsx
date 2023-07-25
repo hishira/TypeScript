@@ -6,12 +6,14 @@ import { AccountButtons, AccountView } from "./component.styled";
 import { AccountIcon } from "../../icons/AccountIcon";
 import Button from "../../Button";
 import { inject, observer } from "mobx-react";
+import Modal from "../../Modal";
 
 type AccountContainerProps = {
   store?: IGeneral;
 };
 const AccountContainer = ({ store }: AccountContainerProps) => {
   const [openAccountMenu, setOpenAccountMenu] = useState<boolean>(false);
+  const [useInfo, setUserInfoOpen] = useState<boolean>(false);
   const hisotry = useHistory();
 
   const logouthandle = () => {
@@ -24,16 +26,29 @@ const AccountContainer = ({ store }: AccountContainerProps) => {
     store?.setViewType(currentView === View.Table ? View.Card : View.Table);
   };
 
+  const accountInfoClick = () => {
+    setUserInfoOpen(true);
+    setOpenAccountMenu(!openAccountMenu);
+  };
+
   return !store?.UserActivity ? null : (
-    <AccountView>
-      <AccountIcon click={() => setOpenAccountMenu(!openAccountMenu)} />
-      <AccountButtons visible={openAccountMenu}>
-        <Button onClick={logouthandle} color="lightblue">
-          Logout
-        </Button>
-        <Button onClick={clickHandle}>Change view</Button>
-      </AccountButtons>
-    </AccountView>
+    <>
+      <Modal
+        visible={useInfo}
+        onClose={() => setUserInfoOpen(false)}
+        component={<div>Test user info account</div>}
+      />
+      <AccountView>
+        <AccountIcon click={() => setOpenAccountMenu(!openAccountMenu)} />
+        <AccountButtons visible={openAccountMenu}>
+          <Button onClick={clickHandle}>Change view</Button>
+          <Button onClick={() => accountInfoClick()}>Account info</Button>
+          <Button onClick={logouthandle} color="lightblue">
+            Logout
+          </Button>
+        </AccountButtons>
+      </AccountView>
+    </>
   );
 };
 

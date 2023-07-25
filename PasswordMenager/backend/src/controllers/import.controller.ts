@@ -2,14 +2,13 @@ import {
   Controller,
   ParseFilePipeBuilder,
   Post,
-  UploadedFile,
-  UseInterceptors,
   Request,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
 import { ImportService } from 'src/services/import.service';
 import { EmptyFileValidator } from 'src/validators/emptyfile.validator';
 import { CustomFileValidator } from 'src/validators/file.validator';
@@ -35,13 +34,6 @@ export class ImportController {
     )
     file: Express.Multer.File,
   ) {
-    // Default column => name, site(in future), username - email, password,note.
-    //const names = [];
-    //const sites = [];
-    //const username = [];
-    //const password = [];
-    //const notes = [];
-
     return this.importService.importEntriesFromFile(file, req.user._id);
   }
   @Post('csv')
