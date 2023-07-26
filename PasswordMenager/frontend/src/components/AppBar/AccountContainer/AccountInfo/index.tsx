@@ -1,7 +1,14 @@
-import { AccountInfoContainer } from "./component.styled";
+import { AccountInfoContainer, AccountInfoHeader, HeaderButton } from "./component.styled";
 
 const AccountInfo = () => {
-  return <AccountInfoContainer>Test user info account</AccountInfoContainer>;
+  return (
+    <AccountInfoContainer>
+      <AccountInfoHeader>
+        <HeaderButton>Notification</HeaderButton>
+        <HeaderButton>Import request</HeaderButton>
+      </AccountInfoHeader>
+    </AccountInfoContainer>
+  );
 };
 
 export default AccountInfo;
