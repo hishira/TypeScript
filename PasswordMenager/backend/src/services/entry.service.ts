@@ -10,12 +10,20 @@ import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
 import { HistoryService } from './history.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+
+type Test =
+  | IEntry
+  | {
+      message: string;
+    };
 @Injectable()
 export class EntryService {
   constructor(
     @Inject(Repository)
     private readonly entryRepository: Repository<IEntry>,
     private readonly historyService: HistoryService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   create(
@@ -37,10 +45,23 @@ export class EntryService {
         };
       },
     };
-    return this.entryRepository.create(pureDto).catch((_) => {
-      console.error(_);
-      return { message: 'Error whice creating entry' };
-    });
+    return this.entryRepository
+      .create(pureDto)
+      .then((response: Test): any => {
+        if ('message' in response) return response;
+        const passwordExpireDate = response.passwordExpiredDate;
+        if (passwordExpireDate) {
+          this.eventEmitter.emit('notification.create', {
+            passwordExpireDate: passwordExpireDate,
+            entry: response,
+          });
+        }
+        return response;
+      })
+      .catch((_) => {
+        console.error(_);
+        return { message: 'Error whice creating entry' };
+      });
   }
 
   getById(entryId: string): Promise<IEntry> {

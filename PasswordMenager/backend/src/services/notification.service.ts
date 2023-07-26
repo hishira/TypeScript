@@ -15,6 +15,8 @@ import { EmailSender } from 'src/utils/emailTransporter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Logger } from 'src/utils/Logger';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { OnEvent } from '@nestjs/event-emitter';
+import passport from 'passport';
 
 interface NotificationCron {
   notificationSendCronHandle(): void;
@@ -40,6 +42,16 @@ export class NotificationService implements NotificationCron {
       .catch(() => this.logger.error('Problem with notification send'));
   }
 
+  @OnEvent('notification.create', { async: true })
+  eventNotificationCreateHandle(payload: {
+    passwordExpireDate: Date;
+    entry: IEntry;
+  }) {
+    return this.createEmailNotification(
+      payload.entry,
+      payload.passwordExpireDate,
+    );
+  }
   getActiveNotificationAsPromise(): Promise<
     Promise<boolean | SMTPTransport.SentMessageInfo>[]
   > {

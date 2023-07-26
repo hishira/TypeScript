@@ -9,16 +9,21 @@ import { GroupModule } from './modules/group.module';
 import { ImportModule } from './modules/import.module';
 import { UserModule } from './modules/user.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+const NestModules = [
+  ConfigModule.forRoot(),
+  ScheduleModule.forRoot(),
+  EventEmitterModule.forRoot(),
+];
 @Module({
   imports: [
     UserModule,
     AuthModule,
     GroupModule,
     EntryModule,
-    ConfigModule.forRoot(),
-    ScheduleModule.forRoot(),
     ExportModule,
     ImportModule,
+    ...NestModules,
   ],
   controllers: [AppController],
   providers: [AppService],

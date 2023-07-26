@@ -21,11 +21,7 @@ import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { EntryService } from '../services/entry.service';
-type Test =
-  | IEntry
-  | {
-      message: string;
-    };
+
 @Controller('entry')
 export class EntryContoller {
   constructor(
@@ -41,21 +37,7 @@ export class EntryContoller {
     @Body(new ValidationPipe({ transform: true })) neweentry: CreateEntryDto,
     @Request() req,
   ): Promise<unknown> {
-    return this.entryService
-      .create(neweentry, req.user._id)
-      .then((response: Test): any => {
-        if ('message' in response) return response;
-        const passwordExpireDate = response.passwordExpiredDate;
-        if (passwordExpireDate) {
-          const promise = this.notificationService.createEmailNotification(
-            response,
-            passwordExpireDate,
-          );
-          promise.then((_) => console.log('Created'));
-        }
-        return response;
-      })
-      .catch();
+    return this.entryService.create(neweentry, req.user._id).catch();
   }
 
   @UseGuards(AuthGuard('accessToken'))
