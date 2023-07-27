@@ -104,9 +104,12 @@ export class EntryService {
       const deletedPromise = this.entryRepository.delete(deleteOption);
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
-          return this.historyService
-            .appendEntityToHistory(res[0].userid as unknown as string, [res[0]])
-            .then((r) => ({ status: true, respond: res[0] }));
+          //TODO check
+          this.eventEmitter.emit('history.append', {
+            userid: res[0].userid,
+            entries: [res[0]],
+          });
+          return { status: true, response: res[0] } as any;
         })
         .catch((_err) => {
           return {

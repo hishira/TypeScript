@@ -1,22 +1,20 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import {
   ActiveNotificationFilter,
   INotification,
-  NotificationChannel,
 } from 'src/schemas/Interfaces/notification.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import {
   CreateNotificationDTO,
   CreateNotificationEmailDTO,
 } from 'src/schemas/dto/createnotification.dto';
-import { EmailSender } from 'src/utils/emailTransporter';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { Logger } from 'src/utils/Logger';
-import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { OnEvent } from '@nestjs/event-emitter';
-import passport from 'passport';
+import { EmailSender } from 'src/utils/emailTransporter';
 
 interface NotificationCron {
   notificationSendCronHandle(): void;

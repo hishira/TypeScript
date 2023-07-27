@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { ObjectId } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
@@ -28,6 +29,10 @@ export class HistoryService {
     );
   }
 
+  @OnEvent('history.append', { async: true })
+  eventHistoryUpdate(payload: { userid: string; entries: IEntry[] }) {
+    return this.appendEntityToHistory(payload.userid, payload.entries);
+  }
   appendEntityToHistory(userid: string, entries: IEntry[]): Promise<unknown> {
     return this.historyRepository.update({
       userid: userid as unknown as ObjectId,
