@@ -15,23 +15,19 @@ import { AuthGuard } from '@nestjs/passport';
 import { GroupNotExistsFilter } from 'src/errors/GroupNotExistFilter';
 import { GroupGuard } from 'src/guards/GroupExists.guard';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
+import { NotificationService } from 'src/services/notification.service';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
+import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { EntryService } from '../services/entry.service';
-import { NotificationService } from 'src/services/notification.service';
-import { NotificationChannel } from 'src/schemas/Interfaces/notification.interface';
-import { Logger } from 'src/utils/Logger';
-import { PaginatorDto } from 'src/utils/paginator';
+
 @Controller('entry')
 export class EntryContoller {
   constructor(
     private readonly entryService: EntryService,
     private readonly notificationService: NotificationService,
-    private readonly logger: Logger,
-  ) {
-    this.logger.setContext('EntryController');
-  }
+  ) {}
 
   @UseGuards(AuthGuard('accessToken'))
   @UseFilters(new GroupNotExistsFilter())
@@ -41,34 +37,7 @@ export class EntryContoller {
     @Body(new ValidationPipe({ transform: true })) neweentry: CreateEntryDto,
     @Request() req,
   ): Promise<unknown> {
-    return this.entryService
-      .create(neweentry, req.user._id)
-      .then((response: any) => {
-        if ('message' in response) return response;
-        const passwordExpireDate = response.passwordExpiredDate;
-        if (passwordExpireDate)
-          return this.notificationService
-            .create({
-              entryId: response._id,
-              notificationDate: passwordExpireDate,
-              notificationChannel: NotificationChannel.Email,
-              toObject() {
-                return {
-                  entryId: response._id,
-                  notificationDate: passwordExpireDate,
-                  notificationChannel: NotificationChannel.Email,
-                };
-              },
-            })
-            .then(async () => {
-              this.logger.logMessage(
-                `Notification created for date ${passwordExpireDate}`,
-              );
-              return this.notificationService.notificationSend();
-            });
-        return response;
-      })
-      .catch();
+    return this.entryService.create(neweentry, req.user._id).catch();
   }
 
   @UseGuards(AuthGuard('accessToken'))

@@ -26,23 +26,31 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     setInfoLogin({ ...infoLogin, login: login });
   };
 
+  const InfoMessage = (message: string) => ({
+    open: true,
+    type: "info",
+    message: message,
+  });
+
+  const loginSuccess = (response: LoginReponse): void => {
+    SessionStorage.getInstance().setLocalStorageToken(response.response);
+    store?.setUserActive(true);
+    history.push("/store");
+  };
   const loginClickHandle = async (
     e: React.MouseEvent<HTMLElement>
   ): Promise<void> => {
     e.preventDefault();
-    const response: any = await Auth.getInstance().LoginUserHandle(infoLogin);
+    const response: LoginReponse = await Auth.getInstance().LoginUserHandle(
+      infoLogin
+    );
     const loginSucces = response?.status && !response?.response?.message;
-    // TODO: Refactor
     if (loginSucces) {
-      SessionStorage.getInstance().setLocalStorageToken(response.response);
-      store?.setUserActive(true);
-      history.push("/store");
+      loginSuccess(response);
     } else {
-      store?.setPopUpinfo({
-        open: true,
-        type: "info",
-        message: response.response.message,
-      });
+      store?.setPopUpinfo(
+        InfoMessage(response?.response?.message ?? "Error no message")
+      );
     }
   };
 

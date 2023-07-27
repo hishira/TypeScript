@@ -8,6 +8,10 @@ import Button from "../../Button";
 type AcceptanceModalPrope = ModalProps & {
   acceptHandle: (...args: any[]) => any;
   disableButton?: boolean;
+  extend?: {
+    buttonText: string;
+    handleButton: (...args: any[]) => any;
+  };
 };
 export const AcceptModalComponent = ({
   visible,
@@ -15,8 +19,10 @@ export const AcceptModalComponent = ({
   onClose,
   acceptHandle,
   disableButton,
+  extend,
 }: AcceptanceModalPrope): JSX.Element => {
   EscapeModalHandle(onClose);
+  console.log(extend);
   return (
     <Modal onClick={(e) => clickOnModal(e, onClose)} visible={visible}>
       <div className="hook">
@@ -24,13 +30,23 @@ export const AcceptModalComponent = ({
           {component}
           <ButtonGroup>
             <Button onClick={onClose}>Cancel</Button>
-            <Button
-              disabled={disableButton}
-              color="lightblue"
-              onClick={acceptHandle}
-            >
-              Accept
-            </Button>
+            {extend ? (
+              <Button
+                disabled={disableButton}
+                color="lightblue"
+                onClick={extend.handleButton}
+              >
+                {extend.buttonText}
+              </Button>
+            ) : (
+              <Button
+                disabled={disableButton}
+                color="lightblue"
+                onClick={acceptHandle}
+              >
+                Accept
+              </Button>
+            )}
           </ButtonGroup>
         </ModalContainer>
       </div>

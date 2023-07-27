@@ -4,9 +4,10 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { NotificationRepository } from 'src/repository/notification.repository';
 import { NotificationService } from 'src/services/notification.service';
 import { notificationProviders } from 'src/providers/notification.provider';
+import { LoggerModule } from './logger.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, LoggerModule],
   providers: [
     {
       provide: Repository,

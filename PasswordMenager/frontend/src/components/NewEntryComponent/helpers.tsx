@@ -18,11 +18,18 @@ type GroupSelectionProps = {
   editEntry: EditEntryActionDispatcher;
   groups: IGroup[];
 };
-export const GroupSelection = ({ edit, editEntry, groups }: GroupSelectionProps) =>
+export const GroupSelection = ({
+  edit,
+  editEntry,
+  groups,
+}: GroupSelectionProps) =>
   !edit ? (
     <NormalContainer>
       <SelectLabel>Select group</SelectLabel>
-      <SelectContainer onChange={editEntry.groupset.bind(editEntry)}>
+      <SelectContainer
+        onChange={editEntry.groupset.bind(editEntry)}
+        defaultValue={''}
+      >
         {groups.map((group) => (
           <OptionContainer key={group._id} value={group._id}>
             {group.name}

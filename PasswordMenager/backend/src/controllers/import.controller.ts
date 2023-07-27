@@ -2,16 +2,40 @@ import {
   Controller,
   ParseFilePipeBuilder,
   Post,
+  Request,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ImportService } from 'src/services/import.service';
 import { EmptyFileValidator } from 'src/validators/emptyfile.validator';
 import { CustomFileValidator } from 'src/validators/file.validator';
 import { NotFileValidator } from 'src/validators/notfile.validator';
 import { Readable, Writable } from 'stream';
 @Controller('import')
 export class ImportController {
+  constructor(private importService: ImportService) {}
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Post('checkCsv')
+  @UseInterceptors(FileInterceptor('file'))
+  checkCsvFile(
+    @Request() req,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({ fileType: 'csv' })
+        .addMaxSizeValidator({ maxSize: 10000 })
+        .addValidator(new NotFileValidator())
+        .addValidator(new EmptyFileValidator())
+        .addValidator(new CustomFileValidator())
+        .build(),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.importService.importEntriesFromFile(file, req.user._id);
+  }
   @Post('csv')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
@@ -34,7 +58,8 @@ export class ImportController {
     const notes = [];
     const stream = Readable.from(file.buffer);
     const write = new Writable();
-    const promise = new Promise<void>((resolve, rejext) => {
+    const promise = new Promise<any[]>((resolve, rejext) => {
+      const c = [];
       write._write = (chunk, encoding, next) => {
         const csvString = chunk.toString() as string;
         const csvRows = csvString.split('\r\n');
@@ -50,10 +75,11 @@ export class ImportController {
       stream.pipe(write);
       stream.on('end', () => {
         write.end();
-        resolve();
+        resolve(password);
       });
     }).then((_) => {
-      throw new Error('Not implemented');
+      return _;
+      //throw new Error('Not implemented');
     });
     return promise;
   }

@@ -17,6 +17,10 @@ const NotificationSchema = new Schema<INotification>({
     enum: Object.values(NotificationChannel).concat([null]),
     default: NotificationChannel.Email,
   },
+  active: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 export default NotificationSchema;

@@ -20,3 +20,13 @@ export class CreateNotificationDTO implements DTO {
     };
   }
 }
+
+export class CreateNotificationEmailDTO extends CreateNotificationDTO {
+  constructor(
+    public readonly entryId: string,
+    public readonly notificationDate: Date,
+    public readonly notificationChannel: NotificationChannel = NotificationChannel.Email,
+  ) {
+    super();
+  }
+}

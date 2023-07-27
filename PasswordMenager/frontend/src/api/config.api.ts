@@ -43,7 +43,7 @@ export abstract class Api {
   protected fetchPostFileWithToken(
     file: File | FormData,
     token: string,
-    fileSize: number
+    fileSize: number,
   ): RequestInit {
     return {
       mode: "cors",

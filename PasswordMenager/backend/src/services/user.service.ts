@@ -7,6 +7,8 @@ import { DTO } from 'src/schemas/dto/object.interface';
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
 import { Paginator } from 'src/utils/paginator';
+import { HistoryService } from './history.service';
+import { IHistory } from 'src/schemas/Interfaces/history.interface';
 
 @Injectable()
 export class UserService {
@@ -18,9 +20,12 @@ export class UserService {
   constructor(
     @Inject(Repository)
     private readonly userRepository: Repository<IUser>,
+    private readonly history: HistoryService,
   ) {}
 
-  create(userCreateDTO: CreateUserDto): Promise<IUser | { message: string }> {
+  create(
+    userCreateDTO: CreateUserDto,
+  ): Promise<IUser | { message: string } | IHistory> {
     const pureDto: DTO = {
       toObject() {
         return {
@@ -28,9 +33,14 @@ export class UserService {
         };
       },
     };
-    return this.userRepository.create(pureDto).catch((err) => {
-      return { message: 'Problem occur while user create' };
-    });
+    return this.userRepository
+      .create(pureDto)
+      .then((user) => {
+        return this.history.create(user._id);
+      })
+      .catch((err) => {
+        return { message: 'Problem occur while user create' };
+      });
   }
 
   getAll(): Promise<IUser[] | { data: IUser[]; pageInfo: Paginator }> {

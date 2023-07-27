@@ -1,10 +1,12 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { FileSelector } from "../../../ImportFille";
-import { CheckBox, ImportEntries, OwnFieldsOrder } from "./component.styled";
-import FormElement from "../../../FormElement";
+import { ImportEntries } from "./component.styled";
+import { ImportCheckData } from "..";
+import Button from "../../../Button";
 
 type ImportEntriesModalComponentProps = {
   fileSetHandle: (file: File) => void;
+  importFileInfo: ImportCheckData | null;
 };
 
 type ImportEntriesHelper = {
@@ -37,9 +39,10 @@ class ImportEntriesComponent {
 }
 const ImportEntriesModalComponent = ({
   fileSetHandle,
+  importFileInfo,
 }: ImportEntriesModalComponentProps) => {
-  const [ownFieldOrder, setOwnFieldOrder] = useState<boolean>(false);
-  const [fieldsNumber, setFieldsNumber] = useState<number>(1);
+  //const [ownFieldOrder, setOwnFieldOrder] = useState<boolean>(false);
+  //const [fieldsNumber, setFieldsNumber] = useState<number>(1);
   const FileChangeHandle = new ImportEntriesComponent(
     ...useState<File | undefined>(),
     ...useState<string | undefined>(undefined),
@@ -64,7 +67,22 @@ const ImportEntriesModalComponent = ({
             be in proper order name, site(in future), username - email,
             password,note.
           </span>
-          <OwnFieldsOrder>
+          {importFileInfo ? (
+            <div>
+              You want to import {importFileInfo.numberOfEntriesToAdd}
+              <Button outline="without" color="transparent">
+                Show?
+              </Button>
+              <div style={{ height: "5rem", overflow: "auto" }}>
+                {importFileInfo.entiresToImport?.map((entry) => (
+                  <div key={entry?.password}>
+                    {entry?.password}, {entry?.username}, {entry.url}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          {/*<OwnFieldsOrder>
             <span>Select own order of field</span>
             <CheckBox
               defaultChecked={ownFieldOrder}
@@ -83,7 +101,7 @@ const ImportEntriesModalComponent = ({
                 value={fieldsNumber}
               />
             </div>
-          ) : null}
+          ) : null}*/}
         </div>
       ) : null}
     </ImportEntries>

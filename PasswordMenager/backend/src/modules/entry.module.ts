@@ -10,6 +10,7 @@ import { DatabaseModule } from './database.module';
 import { GroupExtModule } from './group-ext.module';
 import { NotificationModule } from './notification.module';
 import { LoggerModule } from './logger.module';
+import { HistoryModule } from './history.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -17,6 +18,7 @@ import { LoggerModule } from './logger.module';
     ValidatorModule,
     NotificationModule,
     LoggerModule,
+    HistoryModule,
   ],
   controllers: [EntryContoller],
   providers: [

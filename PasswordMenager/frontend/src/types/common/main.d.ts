@@ -20,7 +20,7 @@ type AccessToken = {
 };
 type LoginReponse = {
   status: boolean;
-  response: AuthTokens | null;
+  response: AuthTokens & { message?: string };
 };
 
 type IGroup = {

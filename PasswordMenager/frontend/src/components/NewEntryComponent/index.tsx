@@ -178,9 +178,6 @@ const NewEntryComponent = ({
             >
               Generate
             </Button>
-            <Button size="small" color="lightblue">
-              Save
-            </Button>
             <PassLen id="passlen">{passlen}</PassLen>
           </ButtonsRangeContainer>
           <FormElement

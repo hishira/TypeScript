@@ -6,9 +6,10 @@ import { groupProviders } from '../providers/group.providers';
 import { GroupService } from '../services/group.service';
 import { DatabaseModule } from './database.module';
 import { ExperimentModule } from './experiment.module';
+import { HistoryModule } from './history.module';
 
 @Module({
-  imports: [DatabaseModule, ExperimentModule],
+  imports: [DatabaseModule, ExperimentModule, HistoryModule],
   controllers: [GroupController],
   providers: [
     {

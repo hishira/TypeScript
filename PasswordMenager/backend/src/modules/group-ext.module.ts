@@ -5,9 +5,10 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { GroupService } from 'src/services/group.service';
 import { DatabaseModule } from './database.module';
 import { ExperimentModule } from './experiment.module';
+import { HistoryModule } from './history.module';
 
 @Module({
-  imports: [DatabaseModule, ExperimentModule],
+  imports: [DatabaseModule, ExperimentModule, HistoryModule],
   providers: [
     {
       provide: Repository,

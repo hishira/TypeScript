@@ -22,7 +22,14 @@ export class Import {
     return this.importApi.importFile(file, fileSize);
   }
 
-  public Import(file: File | FormData, fileSize: number): Promise<unknown> {
-    return this.importApi.import(file, fileSize);
+  public Import(
+    file: File | FormData,
+    fileSize: number
+  ): Promise<{
+    entiresToImport: [];
+    importRequestId: string;
+    numberOfEntriesToAdd: number;
+  }> {
+    return this.importApi.import(file, fileSize).then((data) => data.json());
   }
 }

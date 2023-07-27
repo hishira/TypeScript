@@ -5,9 +5,10 @@ import { userProviders } from '../providers/user.providers';
 import { DatabaseModule } from './database.module';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserRepository } from 'src/repository/user.repository';
+import { HistoryModule } from './history.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, HistoryModule],
   controllers: [UsersController],
   providers: [
     {

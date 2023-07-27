@@ -70,6 +70,13 @@ export const CardFieldValue = styled.div`
     cursor: pointer;
   }
 `;
+
+export const CardFieldValueURL = styled.div`
+  min-width: 50%;
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+`
 export const CardExpandContentRow = styled.div`
   display: flex;
   width: 80%;
