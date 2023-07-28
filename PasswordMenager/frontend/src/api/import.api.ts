@@ -32,4 +32,10 @@ export class ImportApi extends Api {
     const token = this.sessionStorage.getAccessToken();
     return fetch(url, this.fetchPostFileWithToken(file, token, filesize));
   }
+
+  importRequests(): Promise<Response> {
+    const url = this.getUrl("import/importRequest");
+    const token = this.sessionStorage.getAccessToken();
+    return fetch(url, this.fetchGetObjectWithtoken(token));
+  }
 }
