@@ -26,10 +26,10 @@ export class EntryService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  create(
+  private getObjectToCreate(
     entrycreateDTO: CreateEntryDto,
     userid: string,
-  ): Promise<IEntry | { message: string }> {
+  ): DTO {
     const entryToAdd = entrycreateDTO;
     const isGroupIdEmpty = entryToAdd.groupid === '';
     let restParams: Partial<CreateEntryDto> = entrycreateDTO;
@@ -37,31 +37,39 @@ export class EntryService {
       const { groupid, ...restEntryParams } = entryToAdd;
       restParams = restEntryParams;
     }
-    const pureDto: DTO = {
+
+    return new (class implements DTO {
       toObject() {
         return {
           ...(isGroupIdEmpty && restParams ? restParams : entrycreateDTO),
           userid: userid,
         };
-      },
-    };
+      }
+    })();
+  }
+  create(
+    entrycreateDTO: CreateEntryDto,
+    userid: string,
+  ): Promise<IEntry | { message: string }> {
     return this.entryRepository
-      .create(pureDto)
-      .then((response: Test): any => {
-        if ('message' in response) return response;
-        const passwordExpireDate = response.passwordExpiredDate;
-        if (passwordExpireDate) {
-          this.eventEmitter.emit('notification.create', {
-            passwordExpireDate: passwordExpireDate,
-            entry: response,
-          });
-        }
-        return response;
-      })
+      .create(this.getObjectToCreate(entrycreateDTO, userid))
+      .then((response: Test): any => this.emitNotificationCreate(response))
       .catch((_) => {
         console.error(_);
         return { message: 'Error whice creating entry' };
       });
+  }
+
+  private emitNotificationCreate(response: Test): any {
+    if ('message' in response) return response;
+    const passwordExpireDate = response.passwordExpiredDate;
+    if (passwordExpireDate) {
+      this.eventEmitter.emit('notification.create', {
+        passwordExpireDate: passwordExpireDate,
+        entry: response,
+      });
+    }
+    return response;
   }
 
   getById(entryId: string): Promise<IEntry> {
