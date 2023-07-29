@@ -1,16 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FilterQuery } from 'mongoose';
 import { GroupNotExists } from 'src/errors/GroupNotExists.error';
-import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
+import { DTO } from 'src/schemas/dto/object.interface';
+import { IGroup } from '../schemas/Interfaces/group.interface';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
-import { IGroup } from '../schemas/Interfaces/group.interface';
 import { EntryService } from './entry.service';
-import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
-import { HistoryService } from './history.service';
 
 @Injectable()
 export class GroupService {
@@ -18,22 +18,29 @@ export class GroupService {
     @Inject(Repository)
     private readonly groupRepository: Repository<IGroup>,
     private readonly entityService: EntryService,
-    private readonly historyService: HistoryService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  create(
-    groupcreateDTO: CreateGroupDto,
+  private getCreatePureDto(
     userid: string,
-  ): Promise<CreateGroupDto> {
-    const pureDto: DTO = {
+    groupcreateDTO: CreateGroupDto,
+  ): DTO {
+    return new (class implements DTO {
       toObject() {
         return {
           ...groupcreateDTO,
           userid: userid,
         };
-      },
-    };
-    return this.groupRepository.create(pureDto);
+      }
+    })();
+  }
+  create(
+    groupcreateDTO: CreateGroupDto,
+    userid: string,
+  ): Promise<CreateGroupDto> {
+    return this.groupRepository.create(
+      this.getCreatePureDto(userid, groupcreateDTO),
+    );
   }
 
   async checkIfexists(groupId: string): Promise<any> {
@@ -65,10 +72,10 @@ export class GroupService {
       .find(deleteOption)
       .then((groups) => {
         if (Array.isArray(groups) && groups.length > 0) {
-          return this.historyService.appendGroupToHistory(
-            groups[0].userid,
-            groups,
-          );
+          this.eventEmitter.emit('history.append', {
+            userid: groups[0].userid,
+            entries: groups,
+          });
         }
         return Promise.resolve(true);
       });
