@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FilterQuery } from 'mongoose';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -9,8 +10,6 @@ import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
-import { HistoryService } from './history.service';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 type Test =
   | IEntry
@@ -22,7 +21,6 @@ export class EntryService {
   constructor(
     @Inject(Repository)
     private readonly entryRepository: Repository<IEntry>,
-    private readonly historyService: HistoryService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
@@ -141,10 +139,11 @@ export class EntryService {
       })
       .then((entires) => {
         if (Array.isArray(entires) && entires.length > 0) {
-          return this.historyService.appendEntityToHistory(
-            entires[0].userid as unknown as string,
-            entires,
-          );
+          //TODO: check if emit work
+          this.eventEmitter.emit('history.append', {
+            userid: entires[0].userid as unknown as string,
+            entries: entires,
+          });
         }
       });
   }
