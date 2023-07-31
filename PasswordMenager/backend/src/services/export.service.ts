@@ -4,6 +4,21 @@ import { CsvFile } from 'src/utils/csv.util';
 import { Readable } from 'stream';
 import { EntryService } from './entry.service';
 
+export class ExportReader extends Readable {
+  constructor(public csvData: string[][]) {
+    super();
+  }
+  override read(size?: number) {
+    this.push(this.csvData.shift().join(','));
+    if (!this.csvData.length) {
+      this.push(null);
+    }
+  }
+  override destroy() {
+    this.csvData = null;
+    return this;
+  }
+}
 @Injectable()
 export class ExportService {
   constructor(private readonly entryService: EntryService) {}
@@ -39,17 +54,7 @@ export class ExportService {
             ]),
           )
         : csvData;
-      const readable = new Readable({
-        read() {
-          this.push(csvData.shift().join(','));
-          if (!csvData.length) {
-            this.push(null);
-          }
-        },
-        destroy() {
-          csvData = null;
-        },
-      });
+      const readable = new ExportReader(csvData);
 
       const archiver = Archiver('zip', {
         zlib: { level: 9 },

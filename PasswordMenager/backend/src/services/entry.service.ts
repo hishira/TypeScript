@@ -11,6 +11,10 @@ import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
 
+const EmptyResponse = {
+  status: false,
+  respond: null,
+};
 type Test =
   | IEntry
   | {
@@ -61,13 +65,13 @@ export class EntryService {
   private emitNotificationCreate(response: Test): any {
     if ('message' in response) return response;
     const passwordExpireDate = response.passwordExpiredDate;
-    if (passwordExpireDate) {
-      this.eventEmitter.emit('notification.create', {
-        passwordExpireDate: passwordExpireDate,
-        entry: response,
-      });
-    }
-    return response;
+    if (passwordExpireDate === null || passwordExpireDate === undefined)
+      return response;
+
+    this.eventEmitter.emit('notification.create', {
+      passwordExpireDate: passwordExpireDate,
+      entry: response,
+    });
   }
 
   getById(entryId: string): Promise<IEntry> {
@@ -118,13 +122,10 @@ export class EntryService {
           return { status: true, response: res[0] } as any;
         })
         .catch((_err) => {
-          return {
-            status: false,
-            respond: null,
-          };
+          return EmptyResponse;
         });
     } catch (e) {
-      return Promise.resolve({ status: false, respond: null });
+      return Promise.resolve(EmptyResponse);
     }
   }
 
@@ -182,7 +183,7 @@ export class EntryService {
         return { status: true, respond: upadednoew };
       });
     } catch (e) {
-      return Promise.resolve({ status: false, respond: null });
+      return Promise.resolve(EmptyResponse);
     }
   }
 

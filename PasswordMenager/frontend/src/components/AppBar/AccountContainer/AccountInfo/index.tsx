@@ -37,6 +37,7 @@ const AccountInfo = () => {
       <AccountInfoHeader>
         <HeaderButton>Notification</HeaderButton>
         <HeaderButton>Import request</HeaderButton>
+        <HeaderButton>Last deleted</HeaderButton>
       </AccountInfoHeader>
     </AccountInfoContainer>
   );
