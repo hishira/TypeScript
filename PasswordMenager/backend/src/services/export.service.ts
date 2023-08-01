@@ -8,13 +8,13 @@ export class ExportReader extends Readable {
   constructor(public csvData: string[][]) {
     super();
   }
-  override read(size?: number) {
-    this.push(this.csvData.shift().join(','));
+  override _read(size?: number) {
+    this.push(this.csvData.shift()?.join(','));
     if (!this.csvData.length) {
       this.push(null);
     }
   }
-  override destroy() {
+  override _destroy() {
     this.csvData = null;
     return this;
   }

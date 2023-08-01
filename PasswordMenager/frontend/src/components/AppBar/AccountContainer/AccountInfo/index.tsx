@@ -1,18 +1,43 @@
 import { useEffect, useState } from "react";
 import { Import } from "../../../../utils/import.utils";
 import { User } from "../../../../utils/user.utils";
+import { EditIcon } from "../../../icons/EditIcon";
 import {
   AccountInfoContainer,
+  AccountInfoContent,
   AccountInfoHeader,
   HeaderButton,
+  ImportRequest,
+  Last,
+  Notification,
   UserIcons,
   UserInfo,
   UserInforContainer,
 } from "./component.styled";
-import { EditIcon } from "../../../icons/EditIcon";
+type ContentType = "Notification" | "ImportRequest" | "Last";
 
+const NotificationElement = () => {
+  return <Notification>Notifications</Notification>;
+};
+
+const ImportRequestElement = () => (
+  <ImportRequest>Import request</ImportRequest>
+);
+
+const LastElement = () => <Last>Last</Last>;
+const GetCurrentView = (mainContentView: ContentType): JSX.Element => {
+  return mainContentView === "Notification" ? (
+    <NotificationElement />
+  ) : mainContentView === "ImportRequest" ? (
+    <ImportRequestElement></ImportRequestElement>
+  ) : (
+    <LastElement></LastElement>
+  );
+};
 const AccountInfo = () => {
   const [userinfo, setUserInfo] = useState<IUser>();
+  const [mainContentView, setMainContentView] =
+    useState<ContentType>("Notification");
   useEffect(() => {
     const firstPromise = Import.getInstance().ImportRequest();
     const secondPromise = User.getInstance().getUserInfo();
@@ -21,6 +46,10 @@ const AccountInfo = () => {
       setUserInfo(user);
     });
   }, []);
+
+  const setMainContent = (contentType: ContentType) =>
+    setMainContentView(contentType);
+
   return (
     <AccountInfoContainer>
       <UserIcons>
@@ -35,10 +64,17 @@ const AccountInfo = () => {
         </UserInfo>
       </UserInforContainer>
       <AccountInfoHeader>
-        <HeaderButton>Notification</HeaderButton>
-        <HeaderButton>Import request</HeaderButton>
-        <HeaderButton>Last deleted</HeaderButton>
+        <HeaderButton onClick={() => setMainContent("Notification")}>
+          Notification
+        </HeaderButton>
+        <HeaderButton onClick={() => setMainContent("ImportRequest")}>
+          Import request
+        </HeaderButton>
+        <HeaderButton onClick={() => setMainContent("Last")}>
+          Last deleted
+        </HeaderButton>
       </AccountInfoHeader>
+      <AccountInfoContent>{GetCurrentView(mainContentView)}</AccountInfoContent>
     </AccountInfoContainer>
   );
 };

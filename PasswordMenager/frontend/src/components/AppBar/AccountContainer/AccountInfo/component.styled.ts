@@ -53,3 +53,11 @@ export const HeaderButton = styled.div`
     text-shadow: 1px 0 0 #000;
   }
 `;
+
+export const AccountInfoContent = styled.div``;
+
+export const Notification = styled.div``;
+
+export const ImportRequest = styled.div``;
+
+export const Last = styled.div``;
