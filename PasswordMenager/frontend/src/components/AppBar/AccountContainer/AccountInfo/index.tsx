@@ -20,9 +20,17 @@ const NotificationElement = () => {
   return <Notification>Notifications</Notification>;
 };
 
-const ImportRequestElement = () => (
-  <ImportRequest>Import request</ImportRequest>
-);
+const ImportRequestElement = () => {
+  const [imports, setImports] = useState<any>();
+  useEffect(() => {
+    Import.getInstance()
+      .ImportRequest()
+      .then((val) => setImports(val));
+  }, []);
+  return (
+    <ImportRequest>Import request {JSON.stringify(imports)}</ImportRequest>
+  );
+};
 
 const LastElement = () => <Last>Last</Last>;
 const GetCurrentView = (mainContentView: ContentType): JSX.Element => {
@@ -39,12 +47,9 @@ const AccountInfo = () => {
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
   useEffect(() => {
-    const firstPromise = Import.getInstance().ImportRequest();
-    const secondPromise = User.getInstance().getUserInfo();
-    Promise.all([firstPromise, secondPromise]).then((values) => {
-      const [importsInfo, user] = values;
-      setUserInfo(user);
-    });
+    Import.getInstance()
+      .ImportRequest()
+      .then((userInfo) => setUserInfo(userInfo));
   }, []);
 
   const setMainContent = (contentType: ContentType) =>
