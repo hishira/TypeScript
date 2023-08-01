@@ -20,36 +20,38 @@ const NotificationElement = () => {
   return <Notification>Notifications</Notification>;
 };
 
-const ImportRequestElement = () => {
-  const [imports, setImports] = useState<any>();
-  useEffect(() => {
-    Import.getInstance()
-      .ImportRequest()
-      .then((val) => setImports(val));
-  }, []);
+const ImportRequestElement = ({ imports }: { imports: any }) => {
   return (
     <ImportRequest>Import request {JSON.stringify(imports)}</ImportRequest>
   );
 };
 
 const LastElement = () => <Last>Last</Last>;
-const GetCurrentView = (mainContentView: ContentType): JSX.Element => {
+const GetCurrentView = (
+  mainContentView: ContentType,
+  imports: any
+): JSX.Element => {
   return mainContentView === "Notification" ? (
     <NotificationElement />
   ) : mainContentView === "ImportRequest" ? (
-    <ImportRequestElement></ImportRequestElement>
+    <ImportRequestElement imports={imports}></ImportRequestElement>
   ) : (
     <LastElement></LastElement>
   );
 };
 const AccountInfo = () => {
   const [userinfo, setUserInfo] = useState<IUser>();
+  const [importRequests, setImportRequests] = useState<any>();
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
   useEffect(() => {
-    Import.getInstance()
-      .ImportRequest()
-      .then((userInfo) => setUserInfo(userInfo));
+    const firstPromise = Import.getInstance().ImportRequest();
+    const secondPromise = User.getInstance().getUserInfo();
+    Promise.all([firstPromise, secondPromise]).then((values) => {
+      const [importsInfo, user] = values;
+      setUserInfo(user);
+      setImportRequests(importsInfo);
+    });
   }, []);
 
   const setMainContent = (contentType: ContentType) =>
@@ -79,7 +81,9 @@ const AccountInfo = () => {
           Last deleted
         </HeaderButton>
       </AccountInfoHeader>
-      <AccountInfoContent>{GetCurrentView(mainContentView)}</AccountInfoContent>
+      <AccountInfoContent>
+        {GetCurrentView(mainContentView, importRequests)}
+      </AccountInfoContent>
     </AccountInfoContainer>
   );
 };
