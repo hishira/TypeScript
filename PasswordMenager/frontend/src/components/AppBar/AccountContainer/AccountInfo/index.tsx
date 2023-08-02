@@ -44,6 +44,7 @@ const AccountInfo = () => {
   const [importRequests, setImportRequests] = useState<any>();
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
+
   useEffect(() => {
     const firstPromise = Import.getInstance().ImportRequest();
     const secondPromise = User.getInstance().getUserInfo();

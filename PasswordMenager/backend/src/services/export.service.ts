@@ -19,19 +19,34 @@ export class ExportReader extends Readable {
     return this;
   }
 }
+export class CsvEntry {
+  constructor(
+    public title: string,
+    public username: string,
+    public password: string,
+    public note: string,
+  ) {}
+}
 @Injectable()
 export class ExportService {
+  private archiverOption = {
+    zlib: { level: 9 },
+    forceLocalTime: true,
+  };
+
   constructor(private readonly entryService: EntryService) {}
 
   getCsvFile(userId): Promise<string> {
     // REfactor, check
     return this.entryService.getByUser(userId).then((resp) => {
-      const csvRows: string[][] = Array.isArray(resp)
+      const csvRows: CsvEntry[][] = Array.isArray(resp)
         ? resp.map((entry) => [
-            entry.title,
-            entry.username,
-            entry.password,
-            entry.note,
+            new CsvEntry(
+              entry.title,
+              entry.username,
+              entry.password,
+              entry.note,
+            ),
           ])
         : [];
       const csv = new CsvFile(CsvFile.DefaultCsvHeader)
@@ -56,10 +71,7 @@ export class ExportService {
         : csvData;
       const readable = new ExportReader(csvData);
 
-      const archiver = Archiver('zip', {
-        zlib: { level: 9 },
-        forceLocalTime: true,
-      });
+      const archiver = Archiver('zip', this.archiverOption);
       archiver.on('error', (err) => console.error(err));
       archiver.append(readable, { name: 'users.csv' });
       return archiver;
