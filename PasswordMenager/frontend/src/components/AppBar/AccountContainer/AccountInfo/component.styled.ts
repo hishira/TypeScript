@@ -13,7 +13,8 @@ export const AccountInfoContainer = styled.div`
   top: 20%;
   left: 0;
   right: -0;
-  height: 10rem;
+  min-height: 10rem;
+  max-height: 35rem;
   padding: 2rem;
 `;
 export const UserInforContainer = styled.div`
@@ -58,6 +59,10 @@ export const AccountInfoContent = styled.div``;
 
 export const Notification = styled.div``;
 
-export const ImportRequest = styled.div``;
+export const ImportRequest = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+`;
 
 export const Last = styled.div``;

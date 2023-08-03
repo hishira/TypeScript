@@ -15,14 +15,38 @@ import {
   UserInforContainer,
 } from "./component.styled";
 type ContentType = "Notification" | "ImportRequest" | "Last";
-
+type ImportRequestData = {
+  _id: string;
+  created: string;
+  state: string;
+  userid: string;
+  entriesToImport: {
+    email: string;
+    password: string;
+    title: string;
+    url: string;
+    username: string;
+  }[];
+};
 const NotificationElement = () => {
   return <Notification>Notifications</Notification>;
 };
 
-const ImportRequestElement = ({ imports }: { imports: any }) => {
+const ImportRequestElement = ({
+  imports,
+}: {
+  imports: ImportRequestData[];
+}) => {
   return (
-    <ImportRequest>Import request {JSON.stringify(imports)}</ImportRequest>
+    <ImportRequest>
+      {imports.map((importVal) => (
+        <div key={importVal._id}>
+          <span>{importVal.state}</span>
+          <span>{importVal.created?.slice(0, 10)}</span>
+          <span>{importVal.entriesToImport.length}</span>
+        </div>
+      ))}
+    </ImportRequest>
   );
 };
 
