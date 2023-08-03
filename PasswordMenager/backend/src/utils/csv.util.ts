@@ -11,7 +11,7 @@ enum TitleCsvHeader {
 //TODO: Check
 export class CsvFile {
   private _titles: TitleCsvHeader[];
-  private _rows: string[][] | CsvEntry[][];
+  private _rows: CsvEntry[];
 
   static DefaultCsvHeader = [
     TitleCsvHeader.Title,
@@ -27,38 +27,35 @@ export class CsvFile {
     this._titles = value;
   }
 
-  get Rows(): CsvEntry[][] | string[][] {
+  get Rows(): CsvEntry[] {
     return this._rows;
   }
 
-  set Rows(value: CsvEntry[][] | string[][]) {
+  set Rows(value: CsvEntry[]) {
     this._rows = value;
   }
 
-  constructor(
-    titles: TitleCsvHeader[] = [],
-    additionalRows: CsvEntry[][] | string[][] = [[]],
-  ) {
+  constructor(titles: TitleCsvHeader[] = [], additionalRows: CsvEntry[] = []) {
     this.Titles = titles;
     this.Rows = additionalRows;
   }
 
-  setTiles(titles: TitleCsvHeader[] = []): CsvFile {
+  setTiles(titles: TitleCsvHeader[] = []): this {
     this.Titles = titles;
     return this;
   }
 
-  setRows(row: CsvEntry[][] | string[][]): CsvFile {
+  setRows(row: CsvEntry[]): this {
     this.Rows = row;
     return this;
   }
 
-  appendRow(row: CsvEntry[] | string[] = []): CsvFile {
-    this._rows.push(row as unknown as any);
+  appendRow(row: CsvEntry): this {
+    this._rows.push(row);
     return this;
   }
 
-  setRow(rows: string[][] | CsvEntry[][] = [[]]) {
+  setRow(rows: CsvEntry[] = []) {
     this.Rows = rows;
     return this;
   }
@@ -74,7 +71,7 @@ export class CsvFile {
   }
 
   private convertRowsToString(): string {
-    return this.Rows.map((x) => x.join(',') + TitleCsvHeader.EndLine)
+    return this.Rows.map((x) => x.toString() + TitleCsvHeader.EndLine)
       .flat()
       .filter((x) => x)
       .join('');

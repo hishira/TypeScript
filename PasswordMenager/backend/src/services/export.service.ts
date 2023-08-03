@@ -26,6 +26,10 @@ export class CsvEntry {
     public password: string,
     public note: string,
   ) {}
+
+  toString(): string {
+    return `${this.title}, ${this.username}, ${this.password}, ${this.note}`;
+  }
 }
 @Injectable()
 export class ExportService {
@@ -37,17 +41,17 @@ export class ExportService {
   constructor(private readonly entryService: EntryService) {}
 
   getCsvFile(userId): Promise<string> {
-    // REfactor, check
     return this.entryService.getByUser(userId).then((resp) => {
-      const csvRows: CsvEntry[][] = Array.isArray(resp)
-        ? resp.map((entry) => [
-            new CsvEntry(
-              entry.title,
-              entry.username,
-              entry.password,
-              entry.note,
-            ),
-          ])
+      const csvRows: CsvEntry[] = Array.isArray(resp)
+        ? resp.map(
+            (entry) =>
+              new CsvEntry(
+                entry.title,
+                entry.username,
+                entry.password,
+                entry.note,
+              ),
+          )
         : [];
       const csv = new CsvFile(CsvFile.DefaultCsvHeader)
         .setRows(csvRows)
