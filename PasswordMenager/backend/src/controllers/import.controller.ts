@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   ParseFilePipeBuilder,
   Post,
   Request,
@@ -17,6 +18,12 @@ import { Readable, Writable } from 'stream';
 @Controller('import')
 export class ImportController {
   constructor(private importService: ImportService) {}
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Get('importRequest')
+  getImportRequests(@Request() req) {
+    return this.importService.getUserImportRequest(req.user._id);
+  }
 
   @UseGuards(AuthGuard('accessToken'))
   @Post('checkCsv')

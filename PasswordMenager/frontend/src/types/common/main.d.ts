@@ -111,3 +111,19 @@ type PopUpElementProps = {
   type: PopupType;
   visible: boolean;
 };
+
+type Meta = {
+  crateDate: string;
+  firstEditDate: string;
+  editDate: string;
+};
+type UserMeta = Meta & {
+  lastLogin: string;
+  lastPassword: string;
+};
+type IUser = {
+  login: string;
+  password: string;
+  email: string;
+  meta: UserMeta;
+};

@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FilterQuery } from 'mongoose';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -9,9 +10,11 @@ import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
-import { HistoryService } from './history.service';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
+const EmptyResponse = {
+  status: false,
+  respond: null,
+};
 type Test =
   | IEntry
   | {
@@ -22,14 +25,13 @@ export class EntryService {
   constructor(
     @Inject(Repository)
     private readonly entryRepository: Repository<IEntry>,
-    private readonly historyService: HistoryService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  create(
+  private getObjectToCreate(
     entrycreateDTO: CreateEntryDto,
     userid: string,
-  ): Promise<IEntry | { message: string }> {
+  ): DTO {
     const entryToAdd = entrycreateDTO;
     const isGroupIdEmpty = entryToAdd.groupid === '';
     let restParams: Partial<CreateEntryDto> = entrycreateDTO;
@@ -37,31 +39,39 @@ export class EntryService {
       const { groupid, ...restEntryParams } = entryToAdd;
       restParams = restEntryParams;
     }
-    const pureDto: DTO = {
+
+    return new (class implements DTO {
       toObject() {
         return {
           ...(isGroupIdEmpty && restParams ? restParams : entrycreateDTO),
           userid: userid,
         };
-      },
-    };
+      }
+    })();
+  }
+  create(
+    entrycreateDTO: CreateEntryDto,
+    userid: string,
+  ): Promise<IEntry | { message: string }> {
     return this.entryRepository
-      .create(pureDto)
-      .then((response: Test): any => {
-        if ('message' in response) return response;
-        const passwordExpireDate = response.passwordExpiredDate;
-        if (passwordExpireDate) {
-          this.eventEmitter.emit('notification.create', {
-            passwordExpireDate: passwordExpireDate,
-            entry: response,
-          });
-        }
-        return response;
-      })
+      .create(this.getObjectToCreate(entrycreateDTO, userid))
+      .then((response: Test): any => this.emitNotificationCreate(response))
       .catch((_) => {
         console.error(_);
         return { message: 'Error whice creating entry' };
       });
+  }
+
+  private emitNotificationCreate(response: Test): any {
+    if ('message' in response) return response;
+    const passwordExpireDate = response.passwordExpiredDate;
+    if (passwordExpireDate === null || passwordExpireDate === undefined)
+      return response;
+
+    this.eventEmitter.emit('notification.create', {
+      passwordExpireDate: passwordExpireDate,
+      entry: response,
+    });
   }
 
   getById(entryId: string): Promise<IEntry> {
@@ -112,13 +122,10 @@ export class EntryService {
           return { status: true, response: res[0] } as any;
         })
         .catch((_err) => {
-          return {
-            status: false,
-            respond: null,
-          };
+          return EmptyResponse;
         });
     } catch (e) {
-      return Promise.resolve({ status: false, respond: null });
+      return Promise.resolve(EmptyResponse);
     }
   }
 
@@ -133,10 +140,11 @@ export class EntryService {
       })
       .then((entires) => {
         if (Array.isArray(entires) && entires.length > 0) {
-          return this.historyService.appendEntityToHistory(
-            entires[0].userid as unknown as string,
-            entires,
-          );
+          //TODO: check if emit work
+          this.eventEmitter.emit('history.append', {
+            userid: entires[0].userid as unknown as string,
+            entries: entires,
+          });
         }
       });
   }
@@ -175,7 +183,7 @@ export class EntryService {
         return { status: true, respond: upadednoew };
       });
     } catch (e) {
-      return Promise.resolve({ status: false, respond: null });
+      return Promise.resolve(EmptyResponse);
     }
   }
 

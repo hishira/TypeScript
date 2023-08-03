@@ -5,6 +5,7 @@ import {
   ImportRequestDto,
 } from 'src/schemas/Interfaces/importRequest.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { Paginator } from 'src/utils/paginator';
 import { Readable, Writable } from 'stream';
 
 type ToString = {
@@ -41,6 +42,18 @@ export class ImportService {
     @Inject(Repository)
     private readonly importRequestRepository: Repository<ImportRequest>,
   ) {}
+
+  getUserImportRequest(userId: string): Promise<
+    | ImportRequest[]
+    | {
+        data: ImportRequest[];
+        pageInfo: Paginator;
+      }
+  > {
+    return this.importRequestRepository.find({
+      getOption: () => ({ userid: userId }),
+    });
+  }
   importEntriesFromFile(file: Express.Multer.File, userid: string) {
     const readableStream = Readable.from(file.buffer);
     const writer = new WritableStream();

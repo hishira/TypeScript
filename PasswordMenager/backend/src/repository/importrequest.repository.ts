@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
@@ -21,10 +21,10 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
     return createdImportRequest.save();
   }
   find(
-    option: FilterOption<unknown>,
+    option: FilterOption<FilterQuery<ImportRequest>>,
     paginator?: PaginatorDto,
   ): Promise<ImportRequest[] | { data: ImportRequest[]; pageInfo: Paginator }> {
-    throw new Error('Method not implemented.');
+    return this.importRequestModal.find({ ...option.getOption() }).exec();
   }
   findById(id: string): Promise<ImportRequest> {
     throw new Error('Method not implemented.');

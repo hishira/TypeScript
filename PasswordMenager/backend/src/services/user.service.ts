@@ -51,6 +51,10 @@ export class UserService {
     return this.userRepository.find(this.allUserFilterOption);
   }
 
+  getUser(userid: string): Promise<IUser> {
+    return this.userRepository.findById(userid);
+  }
+
   update(userId: string, userEditDto: EditUserDto): Promise<unknown> {
     return this.userRepository.update({
       _id: userId,

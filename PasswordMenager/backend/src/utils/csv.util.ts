@@ -1,3 +1,5 @@
+import { CsvEntry } from 'src/services/export.service';
+
 enum TitleCsvHeader {
   Title = 'title',
   Username = 'username',
@@ -6,9 +8,10 @@ enum TitleCsvHeader {
   EndLine = '\r\n',
 }
 
+//TODO: Check
 export class CsvFile {
   private _titles: TitleCsvHeader[];
-  private _rows: string[][];
+  private _rows: CsvEntry[];
 
   static DefaultCsvHeader = [
     TitleCsvHeader.Title,
@@ -24,38 +27,35 @@ export class CsvFile {
     this._titles = value;
   }
 
-  get Rows(): string[][] {
+  get Rows(): CsvEntry[] {
     return this._rows;
   }
 
-  set Rows(value: string[][]) {
+  set Rows(value: CsvEntry[]) {
     this._rows = value;
   }
 
-  constructor(
-    titles: TitleCsvHeader[] = [],
-    additionalRows: string[][] = [[]],
-  ) {
+  constructor(titles: TitleCsvHeader[] = [], additionalRows: CsvEntry[] = []) {
     this.Titles = titles;
     this.Rows = additionalRows;
   }
 
-  setTiles(titles: TitleCsvHeader[] = []): CsvFile {
+  setTiles(titles: TitleCsvHeader[] = []): this {
     this.Titles = titles;
     return this;
   }
 
-  setRows(row: string[][]): CsvFile {
+  setRows(row: CsvEntry[]): this {
     this.Rows = row;
     return this;
   }
 
-  appendRow(row: string[]): CsvFile {
+  appendRow(row: CsvEntry): this {
     this._rows.push(row);
     return this;
   }
 
-  setRow(rows: string[][] = [[]]) {
+  setRow(rows: CsvEntry[] = []) {
     this.Rows = rows;
     return this;
   }
@@ -71,7 +71,7 @@ export class CsvFile {
   }
 
   private convertRowsToString(): string {
-    return this.Rows.map((x) => x.join(',') + TitleCsvHeader.EndLine)
+    return this.Rows.map((x) => x.toString() + TitleCsvHeader.EndLine)
       .flat()
       .filter((x) => x)
       .join('');

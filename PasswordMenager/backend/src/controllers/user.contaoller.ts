@@ -36,4 +36,10 @@ export class UsersController {
   ): Promise<unknown> {
     return this.userServices.update(req.user._id, editUserInfo);
   }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Get('userinfo')
+  getUserInfo(@Request() req): Promise<IUser> {
+    return this.userServices.getUser(req.user._id);
+  }
 }
