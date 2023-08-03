@@ -63,6 +63,13 @@ export const ImportRequest = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
+  box-sizing: border-box;
+  & > div{
+    display: flex;
+    padding: 4px;
+    box-sizing: border-box;
+    justify-content: space-between;
+  }
 `;
 
 export const Last = styled.div``;
