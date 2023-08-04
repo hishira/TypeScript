@@ -11,12 +11,9 @@ export class EntryApi extends Api {
     return this.instance;
   }
 
-  async CreateNewEntry(
-    newentry: CreateEntryDto,
-    token: string
-  ): Promise<Response> {
+  CreateNewEntry(newentry: CreateEntryDto, token: string): Promise<Response> {
     const url = this.getUrl("entry");
-    return await fetch(url, this.fetchPostObjectWithToken(newentry, token));
+    return fetch(url, this.fetchPostObjectWithToken(newentry, token));
   }
 
   async GetEntriesByGroupID(
@@ -57,8 +54,11 @@ export class EntryApi extends Api {
     paginator?: { page: number }
   ): Promise<Response> {
     const url = this.getUrl("entry/byemptygroup");
-    const fetchObjet = this.fetchPostObjectWithToken({ page: paginator?.page }, accessToken)
-      //: this.fetchGetObjectWithtoken(accessToken);
+    const fetchObjet = this.fetchPostObjectWithToken(
+      { page: paginator?.page },
+      accessToken
+    );
+    //: this.fetchGetObjectWithtoken(accessToken);
     return fetch(url, fetchObjet);
   }
 }

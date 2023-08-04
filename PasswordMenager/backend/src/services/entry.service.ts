@@ -72,6 +72,8 @@ export class EntryService {
       passwordExpireDate: passwordExpireDate,
       entry: response,
     });
+
+    return response;
   }
 
   getById(entryId: string): Promise<IEntry> {
@@ -118,6 +120,7 @@ export class EntryService {
           this.eventEmitter.emit('history.append', {
             userid: res[0].userid,
             entries: [res[0]],
+            historyAddType: 'entry',
           });
           return { status: true, response: res[0] } as any;
         })
@@ -144,6 +147,7 @@ export class EntryService {
           this.eventEmitter.emit('history.append', {
             userid: entires[0].userid as unknown as string,
             entries: entires,
+            historyAddType: 'entry',
           });
         }
       });
