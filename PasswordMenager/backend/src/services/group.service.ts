@@ -75,6 +75,7 @@ export class GroupService {
           this.eventEmitter.emit('history.append', {
             userid: groups[0].userid,
             entries: groups,
+            historyAddType: 'group',
           });
         }
         return Promise.resolve(true);
