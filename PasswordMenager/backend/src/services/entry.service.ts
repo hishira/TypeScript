@@ -116,7 +116,6 @@ export class EntryService {
       const deletedPromise = this.entryRepository.delete(deleteOption);
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
-          //TODO check
           this.eventEmitter.emit('history.append', {
             userid: res[0].userid,
             entries: [res[0]],
@@ -143,7 +142,6 @@ export class EntryService {
       })
       .then((entires) => {
         if (Array.isArray(entires) && entires.length > 0) {
-          //TODO: check if emit work
           this.eventEmitter.emit('history.append', {
             userid: entires[0].userid as unknown as string,
             entries: entires,

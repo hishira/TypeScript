@@ -39,6 +39,11 @@ const ImportRequestElement = ({
 }) => {
   return (
     <ImportRequest>
+      <div>
+        <span>Import state</span>
+        <span>Created at</span>
+        <span>Number of entries to add</span>
+      </div>
       {imports.map((importVal) => (
         <div key={importVal._id}>
           <span>{importVal.state}</span>
