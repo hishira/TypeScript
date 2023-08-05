@@ -27,7 +27,7 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
     return this.importRequestModal.find({ ...option.getOption() }).exec();
   }
   findById(id: string): Promise<ImportRequest> {
-    throw new Error('Method not implemented.');
+    return this.importRequestModal.findById(id).exec();
   }
   update(entry: Partial<ImportRequest>): Promise<unknown> {
     throw new Error('Method not implemented.');
