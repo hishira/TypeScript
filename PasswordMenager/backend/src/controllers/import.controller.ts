@@ -28,8 +28,14 @@ export class ImportController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get('activate/:id')
-  async activateImportRequest(@Param('id') importRequestId: string) {
-    return this.importService.activateImportRequest(importRequestId)
+  async activateImportRequest(
+    @Request() req,
+    @Param('id') importRequestId: string,
+  ) {
+    return this.importService.activateImportRequest(
+      importRequestId,
+      req.user._id,
+    );
   }
 
   @UseGuards(AuthGuard('accessToken'))

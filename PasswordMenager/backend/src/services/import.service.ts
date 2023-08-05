@@ -46,7 +46,7 @@ export class ImportService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  activateImportRequest(importRequestId: string) {
+  activateImportRequest(importRequestId: string, userId: string) {
     return this.importRequestRepository
       .findById(importRequestId)
       .then((importRequest) => {
@@ -57,6 +57,7 @@ export class ImportService {
             password: entry.password,
             username: entry.username,
             note: entry.email,
+            userid: userId,
           }),
         }));
         this.eventEmitter.emitAsync('entry.insertMany', {
