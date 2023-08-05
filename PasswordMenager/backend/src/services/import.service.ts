@@ -1,4 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
   ImportEntrySchema,
   ImportRequest,
@@ -42,6 +43,7 @@ export class ImportService {
   constructor(
     @Inject(Repository)
     private readonly importRequestRepository: Repository<ImportRequest>,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   activateImportRequest(importRequestId: string) {
@@ -57,7 +59,9 @@ export class ImportService {
             note: entry.email,
           }),
         }));
-        console.log(dtosObjects);
+        this.eventEmitter.emitAsync('entry.insertMany', {
+          objects: dtosObjects,
+        });
       });
   }
 
