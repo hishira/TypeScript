@@ -5,6 +5,7 @@ import {
   ImportRequestDto,
 } from 'src/schemas/Interfaces/importRequest.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { DTO } from 'src/schemas/dto/object.interface';
 import { Paginator } from 'src/utils/paginator';
 import { Readable, Writable } from 'stream';
 
@@ -42,6 +43,23 @@ export class ImportService {
     @Inject(Repository)
     private readonly importRequestRepository: Repository<ImportRequest>,
   ) {}
+
+  activateImportRequest(importRequestId: string) {
+    return this.importRequestRepository
+      .findById(importRequestId)
+      .then((importRequest) => {
+        const entriesToImport = importRequest.entriesToImport;
+        const dtosObjects: DTO[] = entriesToImport.map((entry) => ({
+          toObject: () => ({
+            title: entry.title,
+            password: entry.password,
+            username: entry.username,
+            note: entry.email,
+          }),
+        }));
+        console.log(dtosObjects);
+      });
+  }
 
   getUserImportRequest(userId: string): Promise<
     | ImportRequest[]

@@ -29,6 +29,11 @@ export class EntryRepository implements Repository<IEntry> {
     return this.entryModel.findOne({ _id: id }).exec();
   }
 
+  createMany(objects: DTO[]): Promise<unknown> {
+    const mappedObject = objects.map((obj) => ({ ...obj.toObject() }));
+    return this.entryModel.insertMany(mappedObject);
+  }
+
   // TODO: To other component, seperate
   private isPaginatorDefined(paginator?: PaginatorDto): boolean {
     return (

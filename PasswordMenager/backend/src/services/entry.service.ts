@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { FilterQuery } from 'mongoose';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -62,6 +62,10 @@ export class EntryService {
       });
   }
 
+  @OnEvent('entry.insertMany', { async: true })
+  insertMany(payload: { objects: DTO[] }) {
+    return this.entryRepository.createMany(payload.objects);
+  }
   private emitNotificationCreate(response: Test): any {
     if ('message' in response) return response;
     const passwordExpireDate = response.passwordExpiredDate;
