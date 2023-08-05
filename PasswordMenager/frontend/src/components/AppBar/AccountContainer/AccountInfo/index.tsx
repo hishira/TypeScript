@@ -14,6 +14,7 @@ import {
   UserInfo,
   UserInforContainer,
 } from "./component.styled";
+import Button from "../../../Button/index";
 type ContentType = "Notification" | "ImportRequest" | "Last";
 type ImportRequestData = {
   _id: string;
@@ -37,6 +38,10 @@ const ImportRequestElement = ({
 }: {
   imports: ImportRequestData[];
 }) => {
+  const activateImportRequest = (importRequestId: string) => {
+    Import.getInstance().AcceptImportRequest(importRequestId).then(console.log);
+  };
+
   return (
     <ImportRequest>
       <div>
@@ -49,6 +54,9 @@ const ImportRequestElement = ({
           <span>{importVal.state}</span>
           <span>{importVal.created?.slice(0, 10)}</span>
           <span>{importVal.entriesToImport.length}</span>
+          <Button onClick={() => activateImportRequest(importVal._id)}>
+            Activate
+          </Button>
         </div>
       ))}
     </ImportRequest>
