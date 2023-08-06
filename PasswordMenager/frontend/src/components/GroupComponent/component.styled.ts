@@ -27,7 +27,7 @@ export const ButtonContainer = styled.div`
   box-sizing: border-box;
 `;
 export const Category = styled.div`
-  padding: 1rem 1.4rem;
+  padding: 1rem .1rem 1rem 1.4rem;
   text-transform: uppercase;
   color: slategray;
   display: flex;
