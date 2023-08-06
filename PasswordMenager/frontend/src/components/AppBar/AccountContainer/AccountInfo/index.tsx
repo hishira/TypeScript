@@ -8,6 +8,7 @@ import {
   AccountInfoHeader,
   HeaderButton,
   ImportRequest,
+  Imports,
   Last,
   Notification,
   UserIcons,
@@ -48,17 +49,20 @@ const ImportRequestElement = ({
         <span>Import state</span>
         <span>Created at</span>
         <span>Number of entries to add</span>
+        <span></span>
       </div>
-      {imports.map((importVal) => (
-        <div key={importVal._id}>
-          <span>{importVal.state}</span>
-          <span>{importVal.created?.slice(0, 10)}</span>
-          <span>{importVal.entriesToImport.length}</span>
-          <Button onClick={() => activateImportRequest(importVal._id)}>
-            Activate
-          </Button>
-        </div>
-      ))}
+      <Imports>
+        {imports.map((importVal) => (
+          <div key={importVal._id}>
+            <span>{importVal.state}</span>
+            <span>{importVal.created?.slice(0, 10)}</span>
+            <span>{importVal.entriesToImport.length}</span>
+            <Button onClick={() => activateImportRequest(importVal._id)}>
+              Activate
+            </Button>
+          </div>
+        ))}
+      </Imports>
     </ImportRequest>
   );
 };
