@@ -167,9 +167,7 @@ const NewEntryComponent = ({
             passwordLengthChange={passwordLenChange}
             onClose={() => setGeneratorPasswordModal(false)}
           />
-          <Button onClick={() => setGeneratorPasswordModal(true)}>
-            Generator
-          </Button>
+
           <ButtonsRangeContainer style={{ position: "relative" }}>
             <Button
               size="small"
@@ -177,6 +175,9 @@ const NewEntryComponent = ({
               onClick={editEntry.generateHandle.bind(editEntry)}
             >
               Generate
+            </Button>
+            <Button onClick={() => setGeneratorPasswordModal(true)}>
+              Generator
             </Button>
             <PassLen id="passlen">{passlen}</PassLen>
           </ButtonsRangeContainer>
