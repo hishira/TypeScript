@@ -22,7 +22,6 @@ export class EntrySchemaUtils {
       .filter((res) => !!res.userid && res.userid !== undefined)
       .filter((res) => res.password !== undefined)
       .forEach((res) => {
-        console.log('ENTRY: ', res.userid, res.password);
         const encryptedPassword = res.password;
         const bs = EntrySchemaUtils.generateKeyValue(res.userid);
         res.password = new Decipher(algorithm, bs, process.env.iv).decryptValue(

@@ -34,7 +34,6 @@ export class EntryRepository implements Repository<IEntry> {
     console.log(mappedObject);
     return this.entryModel
       .insertMany(mappedObject)
-      .then((_)=>console.log(_))
       .catch((e) => console.log(e));
   }
 

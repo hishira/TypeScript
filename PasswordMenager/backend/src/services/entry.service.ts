@@ -10,6 +10,11 @@ import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
+import {
+  EntrySchemaUtils,
+  algorithm,
+} from 'src/schemas/utils/Entry.schema.utils';
+import { Cipher } from 'src/utils/cipher.utils';
 
 const EmptyResponse = {
   status: false,
@@ -64,7 +69,27 @@ export class EntryService {
 
   @OnEvent('entry.insertMany', { async: true })
   insertMany(payload: { objects: DTO[] }) {
-    return this.entryRepository.createMany(payload.objects);
+    const mappedDto: DTO[] = payload.objects.map((dtoInfo) => {
+      if (!('password' in dtoInfo)) return dtoInfo;
+      if (!('userid' in dtoInfo && typeof dtoInfo.password === 'string'))
+        return dtoInfo;
+      const userid = dtoInfo.userid;
+      const object = dtoInfo.toObject();
+      const bs = EntrySchemaUtils.generateKeyValue(userid);
+      const password = dtoInfo.password;
+      const encryptedPassword = new Cipher(
+        algorithm,
+        bs,
+        process.env.id,
+      ).encryptValue(password);
+      return {
+        toObject: () => ({
+          ...object,
+          password: encryptedPassword,
+        }),
+      };
+    });
+    return this.entryRepository.createMany(mappedDto);
   }
   private emitNotificationCreate(response: Test): any {
     if ('message' in response) return response;
