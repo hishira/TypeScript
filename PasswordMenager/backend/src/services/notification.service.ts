@@ -36,7 +36,6 @@ export class NotificationService implements NotificationCron {
   notificationSendCronHandle() {
     this.getActiveNotificationAsPromise()
       .then((promises) => Promise.all(promises))
-      .then(console.log)
       .catch(() => this.logger.error('Problem with notification send'));
   }
 

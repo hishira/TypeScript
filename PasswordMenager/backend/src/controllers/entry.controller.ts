@@ -24,10 +24,7 @@ import { EntryService } from '../services/entry.service';
 
 @Controller('entry')
 export class EntryContoller {
-  constructor(
-    private readonly entryService: EntryService,
-    private readonly notificationService: NotificationService,
-  ) {}
+  constructor(private readonly entryService: EntryService) {}
 
   @UseGuards(AuthGuard('accessToken'))
   @UseFilters(new GroupNotExistsFilter())
