@@ -9,9 +9,9 @@ export const CloseIcon = ({ click }: IconProps) => {
   return (
     <svg
       {...props}
-      height="24px"
+      height="20px"
       viewBox="0 0 48 48"
-      width="24px"
+      width="20px"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path d="M38 12.83l-2.83-2.83-11.17 11.17-11.17-11.17-2.83 2.83 11.17 11.17-11.17 11.17 2.83 2.83 11.17-11.17 11.17 11.17 2.83-2.83-11.17-11.17z" />
