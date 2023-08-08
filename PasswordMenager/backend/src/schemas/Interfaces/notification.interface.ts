@@ -10,6 +10,7 @@ export interface INotification extends Document {
   readonly notificationDate: Date;
   readonly notificationChannel: NotificationChannel;
   readonly active: boolean;
+  readonly userid: Schema.Types.ObjectId;
 }
 
 export class ActiveNotificationFilter implements FilterOption {

@@ -100,6 +100,7 @@ export class EntryService {
     this.eventEmitter.emit('notification.create', {
       passwordExpireDate: passwordExpireDate,
       entry: response,
+      userid: response.userid,
     });
 
     return response;

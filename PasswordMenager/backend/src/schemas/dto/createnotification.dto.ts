@@ -12,6 +12,9 @@ export class CreateNotificationDTO implements DTO {
   @IsEnum(NotificationChannel)
   readonly notificationChannel;
 
+  @IsString()
+  readonly userid;
+
   toObject(): Record<string, unknown> {
     return {
       entryId: this.entryId,
@@ -25,6 +28,7 @@ export class CreateNotificationEmailDTO extends CreateNotificationDTO {
   constructor(
     public readonly entryId: string,
     public readonly notificationDate: Date,
+    public readonly userid: string,
     public readonly notificationChannel: NotificationChannel = NotificationChannel.Email,
   ) {
     super();

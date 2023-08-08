@@ -43,10 +43,12 @@ export class NotificationService implements NotificationCron {
   eventNotificationCreateHandle(payload: {
     passwordExpireDate: Date;
     entry: IEntry;
+    userid: string;
   }) {
     return this.createEmailNotification(
       payload.entry,
       payload.passwordExpireDate,
+      payload.userid,
     );
   }
   getActiveNotificationAsPromise(): Promise<
@@ -69,9 +71,13 @@ export class NotificationService implements NotificationCron {
     return this.notificationRepository.create(notificationDTO);
   }
 
-  createEmailNotification(entry: IEntry, passwordExpireDate: Date) {
+  createEmailNotification(
+    entry: IEntry,
+    passwordExpireDate: Date,
+    userid: string,
+  ) {
     return this.create(
-      new CreateNotificationEmailDTO(entry._id, passwordExpireDate),
+      new CreateNotificationEmailDTO(entry._id, passwordExpireDate, userid),
     ).then(async () => {
       this.logger.logMessage(
         `Notification created for date ${passwordExpireDate}`,
