@@ -84,6 +84,6 @@ export class EntryContoller {
   @UseGuards(AuthGuard('accessToken'))
   @Get('/numberOfEntryWithNotifications')
   entiresWithNotifications(@Request() req) {
-    return this.entryService.entiresWithNotifications(req.user._id);
+    //return this.entryService.entiresWithNotifications(req.user._id);
   }
 }
