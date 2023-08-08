@@ -7,6 +7,7 @@ import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import {
   ActiveNotificationFilter,
   INotification,
+  UserActiveNotificationFilter,
 } from 'src/schemas/Interfaces/notification.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import {
@@ -69,6 +70,12 @@ export class NotificationService implements NotificationCron {
 
   create(notificationDTO: CreateNotificationDTO) {
     return this.notificationRepository.create(notificationDTO);
+  }
+
+  userNotification(userId: string) {
+    return this.notificationRepository.find(
+      new UserActiveNotificationFilter(userId),
+    );
   }
 
   createEmailNotification(

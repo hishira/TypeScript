@@ -80,4 +80,10 @@ export class EntryContoller {
   ): Promise<EditEntryResponse> {
     return this.entryService.editentry(editedentry);
   }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Get('/numberOfEntryWithNotifications')
+  entiresWithNotifications(@Request() req) {
+    return this.entryService.entiresWithNotifications(req.user._id);
+  }
 }
