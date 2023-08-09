@@ -5,6 +5,7 @@ import { NotificationRepository } from 'src/repository/notification.repository';
 import { NotificationService } from 'src/services/notification.service';
 import { notificationProviders } from 'src/providers/notification.provider';
 import { LoggerModule } from './logger.module';
+import { NotificationController } from 'src/controllers/notification.controller';
 
 @Module({
   imports: [DatabaseModule, LoggerModule],
@@ -16,6 +17,7 @@ import { LoggerModule } from './logger.module';
     NotificationService,
     ...notificationProviders,
   ],
+  controllers: [NotificationController],
   exports: [NotificationService],
 })
 export class NotificationModule {}

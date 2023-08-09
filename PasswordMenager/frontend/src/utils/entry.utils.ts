@@ -247,4 +247,9 @@ export class Entry {
       }
     );
   }
+
+  getNumberOfActiveNotification() {
+    const accessToken = this.sessionStorage.getAccessToken();
+    return this.entryApi.getActiveEntryNotification(accessToken);
+  }
 }

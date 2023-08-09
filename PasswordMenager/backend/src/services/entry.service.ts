@@ -96,7 +96,7 @@ export class EntryService {
     const passwordExpireDate = response.passwordExpiredDate;
     if (passwordExpireDate === null || passwordExpireDate === undefined)
       return response;
-
+    console.log('Response', response);
     this.eventEmitter.emit('notification.create', {
       passwordExpireDate: passwordExpireDate,
       entry: response,

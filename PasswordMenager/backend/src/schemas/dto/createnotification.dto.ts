@@ -20,6 +20,7 @@ export class CreateNotificationDTO implements DTO {
       entryId: this.entryId,
       notificationDate: this.notificationDate,
       notificationChannel: this.notificationChannel,
+      userid: this.userid
     };
   }
 }

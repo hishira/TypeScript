@@ -73,6 +73,7 @@ export class NotificationService implements NotificationCron {
   }
 
   userNotification(userId: string) {
+    console.log(userId);
     return this.notificationRepository.find(
       new UserActiveNotificationFilter(userId),
     );
@@ -84,8 +85,13 @@ export class NotificationService implements NotificationCron {
     userid: string,
   ) {
     return this.create(
-      new CreateNotificationEmailDTO(entry._id, passwordExpireDate, userid),
-    ).then(async () => {
+      new CreateNotificationEmailDTO(
+        entry._id,
+        passwordExpireDate,
+        entry.userid as unknown as string,
+      ),
+    ).then(async (_) => {
+      console.log(_);
       this.logger.logMessage(
         `Notification created for date ${passwordExpireDate}`,
       );

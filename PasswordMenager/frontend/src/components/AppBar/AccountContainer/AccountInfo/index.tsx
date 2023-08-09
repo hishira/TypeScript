@@ -16,6 +16,7 @@ import {
   UserInforContainer,
 } from "./component.styled";
 import Button from "../../../Button/index";
+import { Entry } from "../../../../utils/entry.utils";
 type ContentType = "Notification" | "ImportRequest" | "Last";
 type ImportRequestData = {
   _id: string;
@@ -89,8 +90,9 @@ const AccountInfo = () => {
   useEffect(() => {
     const firstPromise = Import.getInstance().ImportRequest();
     const secondPromise = User.getInstance().getUserInfo();
-    Promise.all([firstPromise, secondPromise]).then((values) => {
-      const [importsInfo, user] = values;
+    const thirdPromise = Entry.getInstance().getNumberOfActiveNotification();
+    Promise.all([firstPromise, secondPromise, thirdPromise]).then((values) => {
+      const [importsInfo, user, activeNotifications] = values;
       setUserInfo(user);
       setImportRequests(importsInfo);
     });

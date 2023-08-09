@@ -24,7 +24,10 @@ import { EntryService } from '../services/entry.service';
 
 @Controller('entry')
 export class EntryContoller {
-  constructor(private readonly entryService: EntryService) {}
+  constructor(
+    private readonly entryService: EntryService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   @UseGuards(AuthGuard('accessToken'))
   @UseFilters(new GroupNotExistsFilter())
@@ -81,9 +84,4 @@ export class EntryContoller {
     return this.entryService.editentry(editedentry);
   }
 
-  @UseGuards(AuthGuard('accessToken'))
-  @Get('/numberOfEntryWithNotifications')
-  entiresWithNotifications(@Request() req) {
-    //return this.entryService.entiresWithNotifications(req.user._id);
-  }
 }

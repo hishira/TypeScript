@@ -61,4 +61,9 @@ export class EntryApi extends Api {
     //: this.fetchGetObjectWithtoken(accessToken);
     return fetch(url, fetchObjet);
   }
+
+  getActiveEntryNotification(token: string): Promise<Response> {
+    const url = this.getUrl("notification/numberOfEntryWithNotifications");
+    return fetch(url, this.fetchGetObjectWithtoken(token));
+  }
 }
