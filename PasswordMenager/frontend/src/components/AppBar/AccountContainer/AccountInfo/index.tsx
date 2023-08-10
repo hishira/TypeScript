@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Import } from "../../../../utils/import.utils";
-import { User } from "../../../../utils/user.utils";
+import Button from "../../../Button/index";
 import { EditIcon } from "../../../icons/EditIcon";
 import {
   AccountInfoContainer,
@@ -15,8 +15,7 @@ import {
   UserInfo,
   UserInforContainer,
 } from "./component.styled";
-import Button from "../../../Button/index";
-import { Entry } from "../../../../utils/entry.utils";
+import { GetAccountInfoPromise } from "./utils";
 type ContentType = "Notification" | "ImportRequest" | "Last";
 type ImportRequestData = {
   _id: string;
@@ -31,8 +30,13 @@ type ImportRequestData = {
     username: string;
   }[];
 };
-const NotificationElement = () => {
-  return <Notification>Notifications</Notification>;
+const NotificationElement = ({ notification }: { notification: any[] }) => {
+  // TODO: Add notification which expire password
+  return (
+    <Notification>
+      Number of active notification {notification.length}
+    </Notification>
+  );
 };
 
 const ImportRequestElement = ({
@@ -71,10 +75,11 @@ const ImportRequestElement = ({
 const LastElement = () => <Last>Last</Last>;
 const GetCurrentView = (
   mainContentView: ContentType,
-  imports: any
+  imports: any,
+  notification: any
 ): JSX.Element => {
   return mainContentView === "Notification" ? (
-    <NotificationElement />
+    <NotificationElement notification={notification} />
   ) : mainContentView === "ImportRequest" ? (
     <ImportRequestElement imports={imports}></ImportRequestElement>
   ) : (
@@ -83,18 +88,17 @@ const GetCurrentView = (
 };
 const AccountInfo = () => {
   const [userinfo, setUserInfo] = useState<IUser>();
-  const [importRequests, setImportRequests] = useState<any>();
+  const [importRequests, setImportRequests] = useState<any[]>([]);
+  const [notification, setNotification] = useState<any[]>([]);
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
 
   useEffect(() => {
-    const firstPromise = Import.getInstance().ImportRequest();
-    const secondPromise = User.getInstance().getUserInfo();
-    const thirdPromise = Entry.getInstance().getNumberOfActiveNotification();
-    Promise.all([firstPromise, secondPromise, thirdPromise]).then((values) => {
+    GetAccountInfoPromise().then((values) => {
       const [importsInfo, user, activeNotifications] = values;
       setUserInfo(user);
       setImportRequests(importsInfo);
+      setNotification(activeNotifications);
     });
   }, []);
 
@@ -126,7 +130,7 @@ const AccountInfo = () => {
         </HeaderButton>
       </AccountInfoHeader>
       <AccountInfoContent>
-        {GetCurrentView(mainContentView, importRequests)}
+        {GetCurrentView(mainContentView, importRequests, notification)}
       </AccountInfoContent>
     </AccountInfoContainer>
   );
