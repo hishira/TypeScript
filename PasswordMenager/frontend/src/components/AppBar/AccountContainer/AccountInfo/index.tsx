@@ -16,76 +16,8 @@ import {
   UserInforContainer,
 } from "./component.styled";
 import { GetAccountInfoPromise } from "./utils";
-type ContentType = "Notification" | "ImportRequest" | "Last";
-type ImportRequestData = {
-  _id: string;
-  created: string;
-  state: string;
-  userid: string;
-  entriesToImport: {
-    email: string;
-    password: string;
-    title: string;
-    url: string;
-    username: string;
-  }[];
-};
-const NotificationElement = ({ notification }: { notification: any[] }) => {
-  // TODO: Add notification which expire password
-  return (
-    <Notification>
-      Number of active notification {notification.length}
-    </Notification>
-  );
-};
+import { ContentType, GetCurrentView } from "./AccountInfoView";
 
-const ImportRequestElement = ({
-  imports,
-}: {
-  imports: ImportRequestData[];
-}) => {
-  const activateImportRequest = (importRequestId: string) => {
-    Import.getInstance().AcceptImportRequest(importRequestId).then(console.log);
-  };
-
-  return (
-    <ImportRequest>
-      <div>
-        <span>Import state</span>
-        <span>Created at</span>
-        <span>Number of entries to add</span>
-        <span></span>
-      </div>
-      <Imports>
-        {imports.map((importVal) => (
-          <div key={importVal._id}>
-            <span>{importVal.state}</span>
-            <span>{importVal.created?.slice(0, 10)}</span>
-            <span>{importVal.entriesToImport.length}</span>
-            <Button onClick={() => activateImportRequest(importVal._id)}>
-              Activate
-            </Button>
-          </div>
-        ))}
-      </Imports>
-    </ImportRequest>
-  );
-};
-
-const LastElement = () => <Last>Last</Last>;
-const GetCurrentView = (
-  mainContentView: ContentType,
-  imports: any,
-  notification: any
-): JSX.Element => {
-  return mainContentView === "Notification" ? (
-    <NotificationElement notification={notification} />
-  ) : mainContentView === "ImportRequest" ? (
-    <ImportRequestElement imports={imports}></ImportRequestElement>
-  ) : (
-    <LastElement></LastElement>
-  );
-};
 const AccountInfo = () => {
   const [userinfo, setUserInfo] = useState<IUser>();
   const [importRequests, setImportRequests] = useState<any[]>([]);
