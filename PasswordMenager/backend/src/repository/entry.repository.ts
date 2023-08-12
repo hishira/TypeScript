@@ -17,6 +17,7 @@ import {
 } from 'src/schemas/utils/Entry.schema.utils';
 import { Cipher } from 'src/utils/cipher.utils';
 import { Paginator, PaginatorDto } from 'src/utils/paginator';
+import { UtilsRepository } from './utils.repository';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry> {
@@ -52,14 +53,7 @@ export class EntryRepository implements Repository<IEntry> {
     entires: IEntry[],
     paginator: PaginatorDto,
   ): Promise<EntryData> {
-    return Promise.resolve({
-      data: entires,
-      pageInfo: new Paginator(
-        entires.length,
-        entires.length >= 10,
-        paginator.page,
-      ),
-    });
+    return UtilsRepository.getEntryPaginatorDateAsPromise(entires, paginator);
   }
   find(
     option: FilterOption<FilterQuery<IEntry>>,
