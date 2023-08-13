@@ -1,6 +1,7 @@
-import { Document, Schema } from 'mongoose';
+import { Document, FilterQuery, Schema } from 'mongoose';
 import { IEntryMeta } from './entryMeta.interface';
 import { Paginator } from 'src/utils/paginator';
+import { FilterOption } from './filteroption.interface';
 export enum EntryState {
   ACTIVE = 'active',
   DELETED = 'deleted',
@@ -25,3 +26,8 @@ export type EntryData = {
   data: IEntry[];
   pageInfo: Paginator;
 };
+
+//TODO check
+export class ActiveEntryFilter {
+  constructor(private readonly option: FilterOption<FilterQuery<IEntry>>) {}
+}
