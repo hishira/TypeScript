@@ -1,7 +1,9 @@
-import { Document, FilterQuery, Schema } from 'mongoose';
-import { IEntryMeta } from './entryMeta.interface';
+import { AnyKeys, AnyObject, Document, FilterQuery, Schema } from 'mongoose';
+import { IEntryMeta, LastEditedVariable } from './entryMeta.interface';
 import { Paginator } from 'src/utils/paginator';
 import { FilterOption } from './filteroption.interface';
+import { EntrySchemaUtils, algorithm } from '../utils/Entry.schema.utils';
+import { Cipher } from 'src/utils/cipher.utils';
 export enum EntryState {
   ACTIVE = 'active',
   DELETED = 'deleted',
@@ -29,5 +31,55 @@ export type EntryData = {
 
 //TODO check
 export class ActiveEntryFilter {
-  constructor(private readonly option: FilterOption<FilterQuery<IEntry>>) {}
+  constructor(
+    private readonly option: FilterOption<FilterQuery<IEntry>>,
+    public readonly state: EntryState = EntryState.ACTIVE,
+  ) {}
+
+  public Filter(): FilterQuery<IEntry> {
+    return {
+      ...this.option.getOption(),
+      state: this.state,
+    };
+  }
+}
+
+type EntryUpdateSet = AnyKeys<IEntry> & AnyObject;
+export class DeleteEntryUpdate {
+  constructor(public $set: EntryUpdateSet = { state: EntryState.DELETED }) {}
+}
+
+//TODO: End entry builder
+export class EntryBuilder {
+  constructor(public entry: Partial<IEntry>) {}
+
+  public getEntry(): Partial<IEntry> {
+    return this.entry;
+  }
+
+  public entryNoteUpdate(note: string): this {
+    this.entry = {
+      ...this.entry,
+      ['meta.lastNote']: note,
+      ['meta.lastEditedVariable']: LastEditedVariable.LASTNOTE,
+    } as unknown as Partial<IEntry>;
+
+    return this;
+  }
+
+  public entryPasswordUpdate(userid: string, lastPassword: string, data) {
+    const bs = EntrySchemaUtils.generateKeyValue(userid);
+    const { password } = data;
+    data = {
+      ...data,
+      password: new Cipher(algorithm, bs, process.env.iv).encryptValue(
+        password,
+      ),
+    };
+    this.entry = {
+      ...data,
+      ['meta.lastPassword']: lastPassword,
+      ['meta.lastEditedVariable']: LastEditedVariable.LASTPASSWORD,
+    };
+  }
 }

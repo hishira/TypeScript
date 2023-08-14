@@ -3,6 +3,8 @@ import { FilterQuery, Model } from 'mongoose';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import {
+  ActiveEntryFilter,
+  DeleteEntryUpdate,
   EntryData,
   EntryState,
   IEntry,
@@ -59,10 +61,11 @@ export class EntryRepository implements Repository<IEntry> {
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
-    const ActiveFilter: FilterQuery<IEntry> = {
-      ...option.getOption(),
-      state: EntryState.ACTIVE,
-    };
+    //const ActiveFilter: FilterQuery<IEntry> = {
+    //  ...option.getOption(),
+    //  state: EntryState.ACTIVE,
+    //};
+    const ActiveFilter = new ActiveEntryFilter(option).Filter();
     if (this.isPaginatorDefined(paginator)) {
       return this.entryModel
         .find(ActiveFilter)
@@ -88,13 +91,13 @@ export class EntryRepository implements Repository<IEntry> {
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
     return this.entryModel
-      .updateMany(option.getOption(), { $set: { state: EntryState.DELETED } })
+      .updateMany(option.getOption(), new DeleteEntryUpdate())
       .exec();
   }
 
   deleteMany(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
     return this.entryModel
-      .updateMany(option.getOption(), { $set: { state: EntryState.DELETED } })
+      .updateMany(option.getOption(), new DeleteEntryUpdate())
       .exec();
   }
 
@@ -107,9 +110,7 @@ export class EntryRepository implements Repository<IEntry> {
 
   deleteById(id: string): Promise<unknown> {
     return this.entryModel
-      .findByIdAndUpdate(id, {
-        $set: { state: EntryState.DELETED },
-      })
+      .findByIdAndUpdate(id, new DeleteEntryUpdate())
       .exec();
   }
 
