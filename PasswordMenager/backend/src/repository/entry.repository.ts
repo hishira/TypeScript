@@ -62,10 +62,6 @@ export class EntryRepository implements Repository<IEntry> {
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
-    //const ActiveFilter: FilterQuery<IEntry> = {
-    //  ...option.getOption(),
-    //  state: EntryState.ACTIVE,
-    //};
     const ActiveFilter = new ActiveEntryFilter(option).Filter();
     if (this.isPaginatorDefined(paginator)) {
       return this.entryModel
