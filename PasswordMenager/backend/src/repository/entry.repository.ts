@@ -5,6 +5,7 @@ import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import {
   ActiveEntryFilter,
   DeleteEntryUpdate,
+  EntryBuilder,
   EntryData,
   EntryState,
   IEntry,
@@ -121,6 +122,8 @@ export class EntryRepository implements Repository<IEntry> {
   private createEditentity(entry: Partial<IEntry>, entryById: IEntry) {
     // TODO: Refactor
     let data: any = { ...entry };
+    // TODO: Check if entry builder work
+    const editEntryBuilder = new EntryBuilder({ ...entry });
     if (entry.note && entryById.note !== entry.note) {
       data = {
         ...data,

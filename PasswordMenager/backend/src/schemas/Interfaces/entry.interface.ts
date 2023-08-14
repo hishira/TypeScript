@@ -67,7 +67,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public entryPasswordUpdate(userid: string, lastPassword: string, data) {
+  public entryPasswordUpdate(userid: string, lastPassword: string, data): this {
     const bs = EntrySchemaUtils.generateKeyValue(userid);
     const { password } = data;
     data = {
@@ -81,5 +81,33 @@ export class EntryBuilder {
       ['meta.lastPassword']: lastPassword,
       ['meta.lastEditedVariable']: LastEditedVariable.LASTPASSWORD,
     };
+
+    return this;
+  }
+
+  public setTitle(title: string): this {
+    this.entry = {
+      ...this.entry,
+      ['meta.lastTitle']: title,
+      ['meta.lastEditedVariable']: LastEditedVariable.LASTTITLE,
+    } as unknown as Partial<IEntry>;
+    return this;
+  }
+
+  public setUsername(userName: string): this {
+    this.entry = {
+      ...this.entry,
+      ['meta.lastUsername']: userName,
+      ['meta.lastEditedVariable']: LastEditedVariable.LASTUSERNAME,
+    } as unknown as Partial<IEntry>;
+    return this;
+  }
+
+  public updateEditDate(): this {
+    this.entry = {
+      ...this.entry,
+      ['meta.editDate']: new Date(),
+    } as unknown as Partial<IEntry>;
+    return this;
   }
 }
