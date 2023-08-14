@@ -1,4 +1,11 @@
-import { AnyKeys, AnyObject, Document, FilterQuery, Schema } from 'mongoose';
+import {
+  AnyKeys,
+  AnyObject,
+  Document,
+  FilterQuery,
+  ObjectId,
+  Schema,
+} from 'mongoose';
 import { IEntryMeta, LastEditedVariable } from './entryMeta.interface';
 import { Paginator } from 'src/utils/paginator';
 import { FilterOption } from './filteroption.interface';
@@ -51,7 +58,7 @@ export class DeleteEntryUpdate {
 
 //TODO: End entry builder
 export class EntryBuilder {
-  constructor(public entry: Partial<IEntry>) {}
+  constructor(private entry: Partial<IEntry>) {}
 
   public getEntry(): Partial<IEntry> {
     return this.entry;
@@ -67,7 +74,11 @@ export class EntryBuilder {
     return this;
   }
 
-  public entryPasswordUpdate(userid: string, lastPassword: string, data): this {
+  public entryPasswordUpdate(
+    userid: string | ObjectId,
+    lastPassword: string,
+    data,
+  ): this {
     const bs = EntrySchemaUtils.generateKeyValue(userid);
     const { password } = data;
     data = {
