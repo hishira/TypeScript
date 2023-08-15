@@ -23,4 +23,13 @@ export class UtilsRepository {
       PaginatorData.DefaultPaginatorData(entries, paginator),
     );
   }
+
+  static isPaginatorDefined(paginator?: PaginatorDto): boolean{
+    return (
+      paginator &&
+      'page' in paginator &&
+      paginator?.page !== undefined &&
+      paginator?.page !== null
+    );
+  }
 }

@@ -35,16 +35,6 @@ export class EntryRepository implements Repository<IEntry> {
       .catch((e) => console.log(e));
   }
 
-  // TODO: To other component, seperate
-  private isPaginatorDefined(paginator?: PaginatorDto): boolean {
-    return (
-      paginator &&
-      'page' in paginator &&
-      paginator?.page !== undefined &&
-      paginator?.page !== null
-    );
-  }
-
   private getEntryData(
     entires: IEntry[],
     paginator: PaginatorDto,
@@ -56,7 +46,7 @@ export class EntryRepository implements Repository<IEntry> {
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
     const ActiveFilter = new ActiveEntryFilter(option).Filter();
-    if (this.isPaginatorDefined(paginator)) {
+    if (UtilsRepository.isPaginatorDefined(paginator)) {
       return this.entryModel
         .find(ActiveFilter)
         .skip(paginator.page * 10)

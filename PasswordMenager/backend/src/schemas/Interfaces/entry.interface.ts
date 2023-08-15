@@ -56,7 +56,7 @@ export class DeleteEntryUpdate {
   constructor(public $set: EntryUpdateSet = { state: EntryState.DELETED }) {}
 }
 
-//TODO: End entry builder
+//TODO: Check if can more optimize
 export class EntryBuilder {
   constructor(private entry: Partial<IEntry>) {}
 
