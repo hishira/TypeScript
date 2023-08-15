@@ -24,7 +24,7 @@ export class UtilsRepository {
     );
   }
 
-  static isPaginatorDefined(paginator?: PaginatorDto): boolean{
+  static isPaginatorDefined(paginator?: PaginatorDto): boolean {
     return (
       paginator &&
       'page' in paginator &&
