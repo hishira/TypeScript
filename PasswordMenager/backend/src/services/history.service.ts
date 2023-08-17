@@ -30,9 +30,16 @@ export class HistoryService {
   }
 
   @OnEvent('history.append', { async: true })
-  eventHistoryUpdate(payload: { userid: string; entries: IEntry[] }) {
-    return this.appendEntityToHistory(payload.userid, payload.entries);
+  eventHistoryUpdate(payload: {
+    userid: string;
+    entries: IEntry[] | IGroup[];
+    historyAddType: 'entry' | 'group';
+  }) {
+    return payload.historyAddType === 'entry'
+      ? this.appendEntityToHistory(payload.userid, payload.entries as IEntry[])
+      : this.appendGroupToHistory(payload.userid, payload.entries as IGroup[]);
   }
+
   appendEntityToHistory(userid: string, entries: IEntry[]): Promise<unknown> {
     return this.historyRepository.update({
       userid: userid as unknown as ObjectId,

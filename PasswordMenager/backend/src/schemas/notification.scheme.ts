@@ -21,6 +21,10 @@ const NotificationSchema = new Schema<INotification>({
     type: Boolean,
     default: true,
   },
+  userid: {
+    type: Schema.Types.ObjectId,
+    default: null,
+  },
 });
 
 export default NotificationSchema;

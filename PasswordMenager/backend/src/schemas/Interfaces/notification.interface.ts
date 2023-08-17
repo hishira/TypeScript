@@ -10,6 +10,7 @@ export interface INotification extends Document {
   readonly notificationDate: Date;
   readonly notificationChannel: NotificationChannel;
   readonly active: boolean;
+  readonly userid: Schema.Types.ObjectId;
 }
 
 export class ActiveNotificationFilter implements FilterOption {
@@ -22,6 +23,22 @@ export class ActiveNotificationFilter implements FilterOption {
     return {
       active: this.active,
       notificationChannel: this.notificationChannel,
+    };
+  }
+}
+
+export class UserActiveNotificationFilter implements FilterOption {
+  constructor(
+    public readonly userid: string,
+    public readonly active: boolean = true,
+    public readonly notificationChannel: NotificationChannel = NotificationChannel.Email,
+  ) {}
+
+  getOption(): unknown {
+    return {
+      active: this.active,
+      notificationChannel: this.notificationChannel,
+      userid: this.userid,
     };
   }
 }

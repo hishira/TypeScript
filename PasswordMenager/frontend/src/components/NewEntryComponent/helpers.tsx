@@ -63,6 +63,7 @@ export const PasswordGeneratorOption = ({
               <PasswordCheckbox
                 type="checkbox"
                 onChange={editEntry.letterscheckbox.bind(editEntry)}
+                checked={editEntry.passwordcharacters.letters}
               />
               <div>Letters</div>
             </Checkboxwithlabel>
@@ -70,6 +71,8 @@ export const PasswordGeneratorOption = ({
               <PasswordCheckbox
                 type="checkbox"
                 onChange={editEntry.numberscheckbox.bind(editEntry)}
+                checked={editEntry.passwordcharacters.numbers}
+
               />
               <div>Numbers</div>
             </Checkboxwithlabel>
@@ -77,6 +80,8 @@ export const PasswordGeneratorOption = ({
               <PasswordCheckbox
                 type="checkbox"
                 onChange={editEntry.specialcharacters.bind(editEntry)}
+                checked={editEntry.passwordcharacters.specialChar}
+
               />
               <div>Special characters</div>
             </Checkboxwithlabel>

@@ -10,6 +10,7 @@ import { ImportModule } from './modules/import.module';
 import { UserModule } from './modules/user.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { NotificationModule } from './modules/notification.module';
 const NestModules = [
   ConfigModule.forRoot(),
   ScheduleModule.forRoot(),
@@ -23,6 +24,7 @@ const NestModules = [
     EntryModule,
     ExportModule,
     ImportModule,
+    NotificationModule,
     ...NestModules,
   ],
   controllers: [AppController],

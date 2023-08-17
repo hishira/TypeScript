@@ -7,6 +7,7 @@ import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import {
   ActiveNotificationFilter,
   INotification,
+  UserActiveNotificationFilter,
 } from 'src/schemas/Interfaces/notification.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import {
@@ -36,7 +37,6 @@ export class NotificationService implements NotificationCron {
   notificationSendCronHandle() {
     this.getActiveNotificationAsPromise()
       .then((promises) => Promise.all(promises))
-      .then(console.log)
       .catch(() => this.logger.error('Problem with notification send'));
   }
 
@@ -44,10 +44,12 @@ export class NotificationService implements NotificationCron {
   eventNotificationCreateHandle(payload: {
     passwordExpireDate: Date;
     entry: IEntry;
+    userid: string;
   }) {
     return this.createEmailNotification(
       payload.entry,
       payload.passwordExpireDate,
+      payload.userid,
     );
   }
   getActiveNotificationAsPromise(): Promise<
@@ -70,10 +72,26 @@ export class NotificationService implements NotificationCron {
     return this.notificationRepository.create(notificationDTO);
   }
 
-  createEmailNotification(entry: IEntry, passwordExpireDate: Date) {
+  userNotification(userId: string) {
+    console.log(userId);
+    return this.notificationRepository.find(
+      new UserActiveNotificationFilter(userId),
+    );
+  }
+
+  createEmailNotification(
+    entry: IEntry,
+    passwordExpireDate: Date,
+    userid: string,
+  ) {
     return this.create(
-      new CreateNotificationEmailDTO(entry._id, passwordExpireDate),
-    ).then(async () => {
+      new CreateNotificationEmailDTO(
+        entry._id,
+        passwordExpireDate,
+        entry.userid as unknown as string,
+      ),
+    ).then(async (_) => {
+      console.log(_);
       this.logger.logMessage(
         `Notification created for date ${passwordExpireDate}`,
       );

@@ -3,6 +3,7 @@ import {
   Get,
   ParseFilePipeBuilder,
   Post,
+  Param,
   Request,
   UploadedFile,
   UseGuards,
@@ -23,6 +24,18 @@ export class ImportController {
   @Get('importRequest')
   getImportRequests(@Request() req) {
     return this.importService.getUserImportRequest(req.user._id);
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Get('activate/:id')
+  async activateImportRequest(
+    @Request() req,
+    @Param('id') importRequestId: string,
+  ) {
+    return this.importService.activateImportRequest(
+      importRequestId,
+      req.user._id,
+    );
   }
 
   @UseGuards(AuthGuard('accessToken'))

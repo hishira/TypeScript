@@ -38,4 +38,11 @@ export class ImportApi extends Api {
     const token = this.sessionStorage.getAccessToken();
     return fetch(url, this.fetchGetObjectWithtoken(token));
   }
+
+  acceptImportRequest(importRequestId: string) {
+    const url = this.getUrl(`import/activate/${importRequestId}`);
+    const token = this.sessionStorage.getAccessToken();
+
+    return fetch(url, this.fetchGetObjectWithtoken(token));
+  }
 }

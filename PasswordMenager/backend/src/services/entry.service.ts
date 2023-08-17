@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { FilterQuery } from 'mongoose';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -10,6 +10,11 @@ import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
+import {
+  EntrySchemaUtils,
+  algorithm,
+} from 'src/schemas/utils/Entry.schema.utils';
+import { Cipher } from 'src/utils/cipher.utils';
 
 const EmptyResponse = {
   status: false,
@@ -62,16 +67,43 @@ export class EntryService {
       });
   }
 
+  @OnEvent('entry.insertMany', { async: true })
+  insertMany(payload: { objects: DTO[] }) {
+    const mappedDto: DTO[] = payload.objects.map((dtoInfo) => {
+      if (!('password' in dtoInfo)) return dtoInfo;
+      if (!('userid' in dtoInfo && typeof dtoInfo.password === 'string'))
+        return dtoInfo;
+      const userid = dtoInfo.userid;
+      const object = dtoInfo.toObject();
+      const bs = EntrySchemaUtils.generateKeyValue(userid);
+      const password = dtoInfo.password;
+      const encryptedPassword = new Cipher(
+        algorithm,
+        bs,
+        process.env.id,
+      ).encryptValue(password);
+      return {
+        toObject: () => ({
+          ...object,
+          password: encryptedPassword,
+        }),
+      };
+    });
+    return this.entryRepository.createMany(mappedDto);
+  }
   private emitNotificationCreate(response: Test): any {
     if ('message' in response) return response;
     const passwordExpireDate = response.passwordExpiredDate;
     if (passwordExpireDate === null || passwordExpireDate === undefined)
       return response;
-
+    console.log('Response', response);
     this.eventEmitter.emit('notification.create', {
       passwordExpireDate: passwordExpireDate,
       entry: response,
+      userid: response.userid,
     });
+
+    return response;
   }
 
   getById(entryId: string): Promise<IEntry> {
@@ -114,10 +146,10 @@ export class EntryService {
       const deletedPromise = this.entryRepository.delete(deleteOption);
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
-          //TODO check
           this.eventEmitter.emit('history.append', {
             userid: res[0].userid,
             entries: [res[0]],
+            historyAddType: 'entry',
           });
           return { status: true, response: res[0] } as any;
         })
@@ -140,10 +172,10 @@ export class EntryService {
       })
       .then((entires) => {
         if (Array.isArray(entires) && entires.length > 0) {
-          //TODO: check if emit work
           this.eventEmitter.emit('history.append', {
             userid: entires[0].userid as unknown as string,
             entries: entires,
+            historyAddType: 'entry',
           });
         }
       });

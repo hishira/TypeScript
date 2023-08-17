@@ -4,9 +4,10 @@ import { specialTypeGenerate, generatePart } from "./new-entry.utils";
 
 type DispatchAction<T> = Dispatch<SetStateAction<T>>;
 export class EditEntryActionDispatcher {
+  passwordcharacters: PasswordCharactersTypes;
+
   private setnewentry: DispatchAction<CreateEntryDto>;
   private setpasswordcharacters: DispatchAction<PasswordCharactersTypes>;
-  private passwordcharacters: PasswordCharactersTypes;
   private newentry: CreateEntryDto;
   private passwordLength: number;
 
@@ -96,7 +97,6 @@ export class EditEntryActionDispatcher {
   }
 
   groupset(e: React.ChangeEvent<HTMLSelectElement>) {
-    console.log(e.target.value);
     this.setnewentry({ ...this.newentry, groupid: e.target.value });
   }
 }

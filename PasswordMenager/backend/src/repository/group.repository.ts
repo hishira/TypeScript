@@ -4,7 +4,7 @@ import { NotImplementedError } from 'src/errors/NotImplemented';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
-import { IGroup } from 'src/schemas/Interfaces/group.interface';
+import { GroupBuilder, IGroup } from 'src/schemas/Interfaces/group.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 
 @Injectable()
@@ -35,12 +35,18 @@ export class GroupRepository implements Repository<IGroup> {
       .findById(entry._id)
       .exec()
       .then((group) => {
-        const entryToUpdate = {
-          ...entry,
-          ['meta.lastName']: group.name,
-        };
+        // TODO: Check if work
+        //const entryToUpdate = {
+        //  ...entry,
+        //  ['meta.lastName']: group.name,
+        //};
         return this.groupModel
-          .updateOne({ _id: entry._id }, { $set: { ...entryToUpdate } })
+          .updateOne(
+            { _id: entry._id },
+            new GroupBuilder(entry)
+              .metaLastNameUpdate(group.name)
+              .getUpdateSetObject(),
+          )
           .then((data) => data);
       });
   }

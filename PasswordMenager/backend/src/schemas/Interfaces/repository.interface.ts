@@ -6,6 +6,7 @@ import { Paginator, PaginatorDto } from 'src/utils/paginator';
 
 export interface Repository<T extends Document> {
   create(objectToSave: DTO): Promise<T>;
+  createMany?(objects: DTO[]): Promise<unknown>;
   find(
     option: FilterOption,
     paginator?: PaginatorDto,

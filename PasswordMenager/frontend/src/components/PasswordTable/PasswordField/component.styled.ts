@@ -21,6 +21,7 @@ export const TableRow = styled.tr`
   max-width: 100%;
   min-width: 100%;
   width: 100%;
+  line-height: 3rem;
 `;
 
 export const TableComponent = styled.td<TableComponentProps>`

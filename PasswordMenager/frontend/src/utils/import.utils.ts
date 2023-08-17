@@ -33,7 +33,13 @@ export class Import {
     return this.importApi.import(file, fileSize).then((data) => data.json());
   }
 
-  ImportRequest(){
-    return this.importApi.importRequests().then(data=>data.json());
+  ImportRequest() {
+    return this.importApi.importRequests().then((data) => data.json());
+  }
+
+  AcceptImportRequest(importRequestString: string) {
+    return this.importApi
+      .acceptImportRequest(importRequestString)
+      .then((data) => data.json());
   }
 }

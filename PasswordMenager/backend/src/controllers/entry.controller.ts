@@ -83,4 +83,5 @@ export class EntryContoller {
   ): Promise<EditEntryResponse> {
     return this.entryService.editentry(editedentry);
   }
+
 }

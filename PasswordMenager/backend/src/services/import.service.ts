@@ -1,10 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
   ImportEntrySchema,
   ImportRequest,
   ImportRequestDto,
 } from 'src/schemas/Interfaces/importRequest.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { DTO } from 'src/schemas/dto/object.interface';
 import { Paginator } from 'src/utils/paginator';
 import { Readable, Writable } from 'stream';
 
@@ -41,7 +43,28 @@ export class ImportService {
   constructor(
     @Inject(Repository)
     private readonly importRequestRepository: Repository<ImportRequest>,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  activateImportRequest(importRequestId: string, userId: string) {
+    return this.importRequestRepository
+      .findById(importRequestId)
+      .then((importRequest) => {
+        const entriesToImport = importRequest.entriesToImport;
+        const dtosObjects: DTO[] = entriesToImport.map((entry) => ({
+          toObject: () => ({
+            title: entry.title,
+            password: entry.password,
+            username: entry.username,
+            note: entry.email,
+            userid: userId,
+          }),
+        }));
+        this.eventEmitter.emitAsync('entry.insertMany', {
+          objects: dtosObjects,
+        });
+      });
+  }
 
   getUserImportRequest(userId: string): Promise<
     | ImportRequest[]

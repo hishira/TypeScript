@@ -18,13 +18,16 @@ export class EntrySchemaUtils {
   }
 
   static PostFind(result) {
-    result.forEach((res) => {
-      const encryptedPassword = res.password;
-      const bs = EntrySchemaUtils.generateKeyValue(res.userid);
-      res.password = new Decipher(algorithm, bs, process.env.iv).decryptValue(
-        encryptedPassword,
-      );
-    });
+    result
+      .filter((res) => !!res.userid && res.userid !== undefined)
+      .filter((res) => res.password !== undefined)
+      .forEach((res) => {
+        const encryptedPassword = res.password;
+        const bs = EntrySchemaUtils.generateKeyValue(res.userid);
+        res.password = new Decipher(algorithm, bs, process.env.iv).decryptValue(
+          encryptedPassword,
+        );
+      });
     return result;
   }
 

@@ -13,6 +13,7 @@ export const PassLen = styled.div`
 `;
 export const GeneratorModal = styled.div`
   position: absolute;
+  border-radius: 5px;
   background-color: whitesmoke;
   top: 50%;
   width: 15rem;
@@ -34,8 +35,8 @@ export const GeneratorInsideModal = styled.div`
   padding: 2rem;
   & > svg{
     position:  absolute;
-    top: 10%;
-    right: 10%;
+    top: 5%;
+    right: 5%;
     &:hover{
       cursor: pointer;
     }

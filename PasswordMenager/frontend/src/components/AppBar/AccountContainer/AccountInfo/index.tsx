@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Import } from "../../../../utils/import.utils";
-import { User } from "../../../../utils/user.utils";
+import Button from "../../../Button/index";
 import { EditIcon } from "../../../icons/EditIcon";
 import {
   AccountInfoContainer,
@@ -8,74 +8,29 @@ import {
   AccountInfoHeader,
   HeaderButton,
   ImportRequest,
+  Imports,
   Last,
   Notification,
   UserIcons,
   UserInfo,
   UserInforContainer,
 } from "./component.styled";
-type ContentType = "Notification" | "ImportRequest" | "Last";
-type ImportRequestData = {
-  _id: string;
-  created: string;
-  state: string;
-  userid: string;
-  entriesToImport: {
-    email: string;
-    password: string;
-    title: string;
-    url: string;
-    username: string;
-  }[];
-};
-const NotificationElement = () => {
-  return <Notification>Notifications</Notification>;
-};
+import { GetAccountInfoPromise } from "./utils";
+import { ContentType, GetCurrentView } from "./AccountInfoView";
 
-const ImportRequestElement = ({
-  imports,
-}: {
-  imports: ImportRequestData[];
-}) => {
-  return (
-    <ImportRequest>
-      {imports.map((importVal) => (
-        <div key={importVal._id}>
-          <span>{importVal.state}</span>
-          <span>{importVal.created?.slice(0, 10)}</span>
-          <span>{importVal.entriesToImport.length}</span>
-        </div>
-      ))}
-    </ImportRequest>
-  );
-};
-
-const LastElement = () => <Last>Last</Last>;
-const GetCurrentView = (
-  mainContentView: ContentType,
-  imports: any
-): JSX.Element => {
-  return mainContentView === "Notification" ? (
-    <NotificationElement />
-  ) : mainContentView === "ImportRequest" ? (
-    <ImportRequestElement imports={imports}></ImportRequestElement>
-  ) : (
-    <LastElement></LastElement>
-  );
-};
 const AccountInfo = () => {
   const [userinfo, setUserInfo] = useState<IUser>();
-  const [importRequests, setImportRequests] = useState<any>();
+  const [importRequests, setImportRequests] = useState<any[]>([]);
+  const [notification, setNotification] = useState<any[]>([]);
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
 
   useEffect(() => {
-    const firstPromise = Import.getInstance().ImportRequest();
-    const secondPromise = User.getInstance().getUserInfo();
-    Promise.all([firstPromise, secondPromise]).then((values) => {
-      const [importsInfo, user] = values;
+    GetAccountInfoPromise().then((values) => {
+      const [importsInfo, user, activeNotifications] = values;
       setUserInfo(user);
       setImportRequests(importsInfo);
+      setNotification(activeNotifications);
     });
   }, []);
 
@@ -107,7 +62,7 @@ const AccountInfo = () => {
         </HeaderButton>
       </AccountInfoHeader>
       <AccountInfoContent>
-        {GetCurrentView(mainContentView, importRequests)}
+        {GetCurrentView(mainContentView, importRequests, notification)}
       </AccountInfoContent>
     </AccountInfoContainer>
   );

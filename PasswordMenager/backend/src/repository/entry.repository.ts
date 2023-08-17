@@ -1,22 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
-import { DTO } from 'src/schemas/dto/object.interface';
+import { NotImplementedError } from 'src/errors/NotImplemented';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import {
+  ActiveEntryFilter,
+  DeleteEntryUpdate,
+  EntryBuilder,
   EntryData,
-  EntryState,
   IEntry,
 } from 'src/schemas/Interfaces/entry.interface';
-import { LastEditedVariable } from '../schemas/Interfaces/entryMeta.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { NotImplementedError } from 'src/errors/NotImplemented';
-import {
-  EntrySchemaUtils,
-  algorithm,
-} from 'src/schemas/utils/Entry.schema.utils';
-import { Cipher } from 'src/utils/cipher.utils';
-import { Paginator, PaginatorDto } from 'src/utils/paginator';
+import { DTO } from 'src/schemas/dto/object.interface';
+import { PaginatorDto } from 'src/utils/paginator';
+import { UtilsRepository } from './utils.repository';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry> {
@@ -29,38 +26,27 @@ export class EntryRepository implements Repository<IEntry> {
     return this.entryModel.findOne({ _id: id }).exec();
   }
 
-  // TODO: To other component, seperate
-  private isPaginatorDefined(paginator?: PaginatorDto): boolean {
-    return (
-      paginator &&
-      'page' in paginator &&
-      paginator?.page !== undefined &&
-      paginator?.page !== null
-    );
+  createMany(objects: DTO[]): Promise<unknown> {
+    //TODO: Check
+    const mappedObject = objects.map((obj) => ({ ...obj.toObject() }));
+    console.log(mappedObject);
+    return this.entryModel
+      .insertMany(mappedObject)
+      .catch((e) => console.log(e));
   }
 
   private getEntryData(
     entires: IEntry[],
     paginator: PaginatorDto,
   ): Promise<EntryData> {
-    return Promise.resolve({
-      data: entires,
-      pageInfo: new Paginator(
-        entires.length,
-        entires.length >= 10,
-        paginator.page,
-      ),
-    });
+    return UtilsRepository.getEntryPaginatorDateAsPromise(entires, paginator);
   }
   find(
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
-    const ActiveFilter: FilterQuery<IEntry> = {
-      ...option.getOption(),
-      state: EntryState.ACTIVE,
-    };
-    if (this.isPaginatorDefined(paginator)) {
+    const ActiveFilter = new ActiveEntryFilter(option).Filter();
+    if (UtilsRepository.isPaginatorDefined(paginator)) {
       return this.entryModel
         .find(ActiveFilter)
         .skip(paginator.page * 10)
@@ -85,13 +71,13 @@ export class EntryRepository implements Repository<IEntry> {
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
     return this.entryModel
-      .updateMany(option.getOption(), { $set: { state: EntryState.DELETED } })
+      .updateMany(option.getOption(), new DeleteEntryUpdate())
       .exec();
   }
 
   deleteMany(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
     return this.entryModel
-      .updateMany(option.getOption(), { $set: { state: EntryState.DELETED } })
+      .updateMany(option.getOption(), new DeleteEntryUpdate())
       .exec();
   }
 
@@ -104,9 +90,7 @@ export class EntryRepository implements Repository<IEntry> {
 
   deleteById(id: string): Promise<unknown> {
     return this.entryModel
-      .findByIdAndUpdate(id, {
-        $set: { state: EntryState.DELETED },
-      })
+      .findByIdAndUpdate(id, new DeleteEntryUpdate())
       .exec();
   }
 
@@ -116,47 +100,27 @@ export class EntryRepository implements Repository<IEntry> {
 
   private createEditentity(entry: Partial<IEntry>, entryById: IEntry) {
     // TODO: Refactor
-    let data: any = { ...entry };
+    const data: any = { ...entry };
+    // TODO: Check if entry builder work
+    const editEntryBuilder = new EntryBuilder({ ...entry });
     if (entry.note && entryById.note !== entry.note) {
-      data = {
-        ...data,
-        ['meta.lastNote']: entryById.note,
-        ['meta.lastEditedVariable']: LastEditedVariable.LASTNOTE,
-      };
+      editEntryBuilder.entryNoteUpdate(entryById.note);
     }
     if (entry.password) {
-      const bs = EntrySchemaUtils.generateKeyValue(entryById.userid);
-      const { password } = data;
-      data = {
-        ...data,
-        password: new Cipher(algorithm, bs, process.env.iv).encryptValue(
-          password,
-        ),
-      };
-      data = {
-        ...data,
-        ['meta.lastPassword']: entryById.password,
-        ['meta.lastEditedVariable']: LastEditedVariable.LASTPASSWORD,
-      };
+      editEntryBuilder.entryPasswordUpdate(
+        entryById.userid,
+        entryById.password,
+        data,
+      );
     }
     if (entry.title && entryById.title !== entry.title) {
-      data = {
-        ...data,
-        ['meta.lastTitle']: entryById.title,
-        ['meta.lastEditedVariable']: LastEditedVariable.LASTTITLE,
-      };
+      editEntryBuilder.setTitle(entryById.title);
     }
     if (entry.username && entryById.username !== entry.username) {
-      data = {
-        ...data,
-        ['meta.lastUsername']: entryById.username,
-        ['meta.lastEditedVariable']: LastEditedVariable.LASTUSERNAME,
-      };
+      editEntryBuilder.setUsername(entryById.username);
     }
-    data = {
-      ...data,
-      ['meta.editDate']: new Date(),
-    };
-    return data;
+    editEntryBuilder.updateEditDate();
+
+    return editEntryBuilder.getEntry();
   }
 }

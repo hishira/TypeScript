@@ -5,17 +5,12 @@ import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { IUser } from 'src/schemas/Interfaces/user.interface';
-import { PasswordUtils } from 'src/utils/password.utils';
-enum UserField {
-  LOGIN = 'login',
-  PASSWORD = 'password',
-}
-enum MetaAttributeUser {
-  LASTPASSWORD = 'meta.lastPassword',
-  LASTLOGIN = 'meta.lastLogin',
-  EDITDATE = 'meta.editDate',
-}
+import {
+  IUser,
+  UserBuilder,
+  UserMetaBuilder,
+} from 'src/schemas/Interfaces/user.interface';
+
 @Injectable()
 export class UserRepository implements Repository<IUser> {
   constructor(
@@ -76,32 +71,19 @@ export class UserRepository implements Repository<IUser> {
     entryToEdit: Partial<IUser>,
     metaObject,
   ): Promise<Partial<IUser>> {
-    let entryUser: Partial<IUser> = {};
-    if (UserField.PASSWORD in entryToEdit) {
-      const hashesPassword = await PasswordUtils.EncryptPassword(
-        entryToEdit.password,
-      );
-      entryUser = {
-        password: hashesPassword,
-        ...metaObject,
-      } as unknown as Partial<IUser>;
-    } else {
-      entryUser = {
-        login: entryToEdit.login,
-        ...metaObject,
-      } as unknown as Partial<IUser>;
-    }
-    return entryUser;
+    //TODO: Check if work
+    return new UserBuilder()
+      .updateMetaObject(metaObject)
+      .updateBasedOnUserEntry(entryToEdit)
+      .then((userBuilder) => userBuilder.getUserAsPromise());
   }
 
   private createUserMetaObject(entryToEdit: Partial<IUser>, userInfo: IUser) {
-    const filedToUpdate: MetaAttributeUser = entryToEdit.password
-      ? MetaAttributeUser.LASTPASSWORD
-      : MetaAttributeUser.LASTLOGIN;
-    const lastValue = entryToEdit.password ? userInfo.password : userInfo.login;
-    return {
-      [MetaAttributeUser.EDITDATE]: Date.now(),
-      [filedToUpdate]: lastValue,
-    };
+    return new UserMetaBuilder()
+      .updateFieldToUpdatedBaseOnEditedDto(entryToEdit)
+      .updateLastValues(
+        entryToEdit.password ? userInfo.password : userInfo.login,
+      )
+      .getMetaObject();
   }
 }

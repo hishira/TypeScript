@@ -19,6 +19,7 @@ export const Paginator = ({
   pageInfo,
   paginationChange,
 }: PaginatorComponentProps): JSX.Element => {
+  console.log(pageInfo)
   const nextPage = (): void => {
     paginationChange({
       page: (pageInfo?.page ?? 0) + 1,
@@ -29,7 +30,7 @@ export const Paginator = ({
       page: (pageInfo?.page ?? 1) - 1,
     });
   };
-  return pageInfo && pageInfo?.page > 0 && pageInfo?.items > 0 ? (
+  return pageInfo  && pageInfo?.items > 0 ? (
     <PaginatorContainer>
       {pageInfo.page > 0 ? <LeftIcon click={() => previousPage()} /> : null}
       <span>{pageInfo?.page + 1}</span>
