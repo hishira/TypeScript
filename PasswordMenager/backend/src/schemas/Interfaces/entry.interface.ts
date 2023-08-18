@@ -11,6 +11,8 @@ import { Paginator } from 'src/utils/paginator';
 import { FilterOption } from './filteroption.interface';
 import { EntrySchemaUtils, algorithm } from '../utils/Entry.schema.utils';
 import { Cipher } from 'src/utils/cipher.utils';
+import { DTO } from '../dto/object.interface';
+import { DeleteOption } from './deleteoption.interface';
 export enum EntryState {
   ACTIVE = 'active',
   DELETED = 'deleted',
@@ -120,5 +122,77 @@ export class EntryBuilder {
       ['meta.editDate']: new Date(),
     } as unknown as Partial<IEntry>;
     return this;
+  }
+}
+
+export class EntryDtoMapper {
+  static encryptDtoPassword(dto: DTO): DTO {
+    if (!('password' in dto)) return dto;
+    if (!('userid' in dto && typeof dto.password === 'string')) return dto;
+    const userid = dto.userid;
+    const object = dto.toObject();
+    const bs = EntrySchemaUtils.generateKeyValue(userid);
+    const password = dto.password;
+    const encryptedPassword = new Cipher(
+      algorithm,
+      bs,
+      process.env.id,
+    ).encryptValue(password);
+    return {
+      toObject: () => ({
+        ...object,
+        password: encryptedPassword,
+      }),
+    };
+  }
+}
+
+const EMPTYOPTION = { getOption: () => ({}) };
+export class OptionModelBuilder {
+  private filterQuery: FilterQuery<IEntry> = {};
+  constructor(
+    private option:
+      | FilterOption<FilterQuery<IEntry>>
+      | DeleteOption<FilterQuery<IEntry>> = EMPTYOPTION,
+  ) {}
+
+  updateEntryId(entryId: string): this {
+    this.filterQuery = {
+      ...this.filterQuery,
+      _id: entryId,
+    };
+    return this;
+  }
+
+  updateGroupId(groupId: string): this {
+    this.filterQuery = {
+      ...this.filterQuery,
+      groupid: groupId,
+    };
+    return this;
+  }
+
+  updateUserIdOPtion(userid: string): this {
+    this.filterQuery = {
+      ...this.filterQuery,
+      userid,
+    };
+    return this;
+  }
+
+  setGroupIdNull(): this {
+    this.filterQuery = {
+      ...this.filterQuery,
+      groupid: null,
+    };
+    return this;
+  }
+
+  getOption():
+    | FilterOption<FilterQuery<IEntry>>
+    | DeleteOption<FilterQuery<IEntry>> {
+    return {
+      getOption: () => this.filterQuery,
+    };
   }
 }

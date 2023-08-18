@@ -8,13 +8,13 @@ import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
-import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
-import { EditEntryDto } from './../schemas/dto/editentry.dto';
 import {
-  EntrySchemaUtils,
-  algorithm,
-} from 'src/schemas/utils/Entry.schema.utils';
-import { Cipher } from 'src/utils/cipher.utils';
+  EntryData,
+  EntryDtoMapper,
+  IEntry,
+  OptionModelBuilder,
+} from '../schemas/Interfaces/entry.interface';
+import { EditEntryDto } from './../schemas/dto/editentry.dto';
 
 const EmptyResponse = {
   status: false,
@@ -69,26 +69,9 @@ export class EntryService {
 
   @OnEvent('entry.insertMany', { async: true })
   insertMany(payload: { objects: DTO[] }) {
-    const mappedDto: DTO[] = payload.objects.map((dtoInfo) => {
-      if (!('password' in dtoInfo)) return dtoInfo;
-      if (!('userid' in dtoInfo && typeof dtoInfo.password === 'string'))
-        return dtoInfo;
-      const userid = dtoInfo.userid;
-      const object = dtoInfo.toObject();
-      const bs = EntrySchemaUtils.generateKeyValue(userid);
-      const password = dtoInfo.password;
-      const encryptedPassword = new Cipher(
-        algorithm,
-        bs,
-        process.env.id,
-      ).encryptValue(password);
-      return {
-        toObject: () => ({
-          ...object,
-          password: encryptedPassword,
-        }),
-      };
-    });
+    const mappedDto: DTO[] = payload.objects.map(
+      EntryDtoMapper.encryptDtoPassword,
+    );
     return this.entryRepository.createMany(mappedDto);
   }
   private emitNotificationCreate(response: Test): any {
@@ -124,13 +107,19 @@ export class EntryService {
     userid: string,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData> {
-    const option: FilterOption<FilterQuery<IEntry>> = {
-      getOption() {
-        return { groupid: null, userid: userid };
-      },
-    };
+    //const option: FilterOption<FilterQuery<IEntry>> = {
+    //  getOption() {
+    //    return { groupid: null, userid: userid };
+    //  },
+    //};
 
-    return this.entryRepository.find(option, paginator);
+    return this.entryRepository.find(
+      new OptionModelBuilder()
+        .updateUserIdOPtion(userid)
+        .setGroupIdNull()
+        .getOption(),
+      paginator,
+    );
   }
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse> {
@@ -138,12 +127,14 @@ export class EntryService {
     try {
       const deletedentry: Promise<IEntry> =
         this.entryRepository.findById(entryid);
-      const deleteOption: DeleteOption<FilterQuery<IEntry>> = {
-        getOption() {
-          return { _id: entryid };
-        },
-      };
-      const deletedPromise = this.entryRepository.delete(deleteOption);
+      //const deleteOption: DeleteOption<FilterQuery<IEntry>> = {
+      //  getOption() {
+      //    return { _id: entryid };
+      //  },
+      //};
+      const deletedPromise = this.entryRepository.delete(
+        new OptionModelBuilder().updateEntryId(entryid).getOption(),
+      );
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
           this.eventEmitter.emit('history.append', {
@@ -163,13 +154,7 @@ export class EntryService {
 
   private getHistoryEntryPromise(groupid: string) {
     return this.entryRepository
-      .find({
-        getOption() {
-          return {
-            groupid: groupid,
-          };
-        },
-      })
+      .find(new OptionModelBuilder().updateGroupId(groupid).getOption())
       .then((entires) => {
         if (Array.isArray(entires) && entires.length > 0) {
           this.eventEmitter.emit('history.append', {
@@ -183,25 +168,23 @@ export class EntryService {
 
   deleteByGroup(groupid: string): Promise<unknown> {
     const promiseEntryHistory = this.getHistoryEntryPromise(groupid);
-    const deletePromise = this.entryRepository.delete({
-      getOption() {
-        return {
-          groupid: groupid,
-        };
-      },
-    });
+    const deletePromise = this.entryRepository.delete(
+      new OptionModelBuilder().updateGroupId(groupid).getOption(),
+    );
     return promiseEntryHistory.then(() => deletePromise);
   }
 
   getByUser(userId: string): Promise<IEntry[] | EntryData> {
-    const filterOption: FilterOption<FilterQuery<IEntry>> = {
-      getOption() {
-        return {
-          userid: userId,
-        };
-      },
-    };
-    return this.entryRepository.find(filterOption);
+    //const filterOption: FilterOption<FilterQuery<IEntry>> = {
+    //  getOption() {
+    //    return {
+    //      userid: userId,
+    //    };
+    //  },
+    //};
+    return this.entryRepository.find(
+      new OptionModelBuilder().updateUserIdOPtion(userId).getOption(),
+    );
   }
 
   editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
