@@ -17,6 +17,7 @@ const EmptyResponse = {
   status: false,
   respond: null,
 };
+const CreateEntryErrorMessage = {message: 'Error whice creating entry'}
 type Test =
   | IEntry
   | {
@@ -38,7 +39,7 @@ export class EntryService {
       .then((response: Test): any => this.emitNotificationCreate(response))
       .catch((_) => {
         console.error(_);
-        return { message: 'Error whice creating entry' };
+        return CreateEntryErrorMessage;
       });
   }
 
@@ -54,6 +55,7 @@ export class EntryService {
     const passwordExpireDate = response.passwordExpiredDate;
     if (passwordExpireDate === null || passwordExpireDate === undefined)
       return response;
+    //TODO refactor, move to notification
     console.log('Response', response);
     this.eventEmitter.emit('notification.create', {
       passwordExpireDate: passwordExpireDate,
@@ -155,23 +157,4 @@ export class EntryService {
       return Promise.resolve(EmptyResponse);
     }
   }
-
-  //private getPartialUpdateEntry(editEntryDTO: EditEntryDto): Partial<IEntry> {
-  //  //TODO: Refactor
-  //  return {
-  //    _id: editEntryDTO._id,
-  //    ...(editEntryDTO.title !== '' ? { title: editEntryDTO.title } : {}),
-  //    ...(editEntryDTO.password !== ''
-  //      ? { password: editEntryDTO.password }
-  //      : {}),
-  //    ...(editEntryDTO.note !== '' ? { note: editEntryDTO.note } : {}),
-  //    ...(editEntryDTO.username !== ''
-  //      ? { username: editEntryDTO.username }
-  //      : {}),
-  //    ...(editEntryDTO.url !== '' ? { url: editEntryDTO.url } : {}),
-  //    ...(editEntryDTO.passwordExpiredDate !== ''
-  //      ? { passwordExpiredDate: editEntryDTO.passwordExpiredDate }
-  //      : {}),
-  //  };
-  //}
 }
