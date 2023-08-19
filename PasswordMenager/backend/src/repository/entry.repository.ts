@@ -99,9 +99,7 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   private createEditentity(entry: Partial<IEntry>, entryById: IEntry) {
-    // TODO: Refactor
     const data: any = { ...entry };
-    // TODO: Check if entry builder work
     const editEntryBuilder = new EntryBuilder({ ...entryById });
     if (entry.note && entryById.note !== entry.note) {
       editEntryBuilder.entryNoteUpdate(entry.note);
@@ -120,7 +118,6 @@ export class EntryRepository implements Repository<IEntry> {
       editEntryBuilder.setUsername(entry.username);
     }
     editEntryBuilder.updateEditDate();
-    console.log("Update method ", editEntryBuilder.getEntry())
     return editEntryBuilder.getEntry();
   }
 }

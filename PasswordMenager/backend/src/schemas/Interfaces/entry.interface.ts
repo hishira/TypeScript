@@ -118,7 +118,6 @@ export class EntryBuilder {
   ): this {
     const bs = EntrySchemaUtils.generateKeyValue(userid);
     const { password, ...rest } = data;
-    console.log(bs, password)
     data = {
       ...rest,
       password: new Cipher(algorithm, bs, process.env.iv).encryptValue(
