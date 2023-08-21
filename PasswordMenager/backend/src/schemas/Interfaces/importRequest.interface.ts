@@ -38,3 +38,43 @@ export class ImportEntrySchema {
     };
   }
 }
+
+export class ImportDTOMapper {
+  static MapImportRequestsToDTO(userid: string, entry: ImportEntrySchema): DTO {
+    return {
+      toObject: () => ({
+        title: entry.title,
+        password: entry.password,
+        username: entry.username,
+        note: entry.email,
+        userid: userid,
+      }),
+    };
+  }
+  static MapImportRequestsToDTOs(userid: string, entries: ImportEntrySchema[]) {
+    return entries.map((entry) =>
+      ImportDTOMapper.MapImportRequestsToDTO(userid, entry),
+    );
+  }
+}
+
+type ImportEntryResponse = {
+  numberOfEntriesToAdd: number;
+  entiresToImport: ImportEntrySchema[];
+  importRequestId: any;
+};
+
+export class ImportEntriesResponse {
+  constructor(
+    private readonly importEntries: ImportEntrySchema[],
+    private readonly importRequest: ImportRequest,
+  ) {}
+
+  get ResponseResolve(): ImportEntryResponse {
+    return {
+      numberOfEntriesToAdd: this.importEntries.length,
+      entiresToImport: this.importEntries.slice(0, 10),
+      importRequestId: this.importRequest._id,
+    };
+  }
+}
