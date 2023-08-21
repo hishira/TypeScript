@@ -1,6 +1,7 @@
-import { Document } from 'mongoose';
+import { Document, FilterQuery } from 'mongoose';
 import { IUserMeta } from './userMeta.interface';
 import { PasswordUtils } from 'src/utils/password.utils';
+import { FilterOption } from './filteroption.interface';
 export enum UserField {
   LOGIN = 'login',
   PASSWORD = 'password',
@@ -106,4 +107,12 @@ export class UserMetaBuilder {
       [this.filedsToUpdate]: this.lastValue,
     };
   }
+}
+
+export class UserUtils {
+  static get allUserFilterOption(): FilterOption<FilterQuery<IUser>>{
+    return {getOption() {
+      return {};
+    },
+  };
 }
