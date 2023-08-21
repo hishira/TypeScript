@@ -2,6 +2,8 @@ import { Document, FilterQuery } from 'mongoose';
 import { IUserMeta } from './userMeta.interface';
 import { PasswordUtils } from 'src/utils/password.utils';
 import { FilterOption } from './filteroption.interface';
+import { DTO } from '../dto/object.interface';
+import { CreateUserDto } from '../dto/user.dto';
 export enum UserField {
   LOGIN = 'login',
   PASSWORD = 'password',
@@ -109,10 +111,20 @@ export class UserMetaBuilder {
   }
 }
 
+export const ErrorUserCreateResponse = { message: 'Problem occur while user create' }
+export class UserDTOMapper {
+  static GetDTOFromCreateUserDTO(userCreateDTO: CreateUserDto): DTO {
+    return {
+      toObject: () => ({ ...userCreateDTO }),
+    };
+  }
+}
 export class UserUtils {
-  static get allUserFilterOption(): FilterOption<FilterQuery<IUser>>{
-    return {getOption() {
-      return {};
-    },
-  };
+  static get allUserFilterOption(): FilterOption<FilterQuery<IUser>> {
+    return {
+      getOption() {
+        return {};
+      },
+    };
+  }
 }
