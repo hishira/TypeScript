@@ -1,36 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as Archiver from 'archiver';
 import { CsvFile } from 'src/utils/csv.util';
-import { Readable } from 'stream';
+import { CsvEntry, ExportCsvUtils, ExportReader } from 'src/utils/export.utils';
 import { EntryService } from './entry.service';
 
-export class ExportReader extends Readable {
-  constructor(public csvData: string[][]) {
-    super();
-  }
-  override _read(size?: number) {
-    this.push(this.csvData.shift()?.join(','));
-    if (!this.csvData.length) {
-      this.push(null);
-    }
-  }
-  override _destroy() {
-    this.csvData = null;
-    return this;
-  }
-}
-export class CsvEntry {
-  constructor(
-    public title: string,
-    public username: string,
-    public password: string,
-    public note: string,
-  ) {}
-
-  toString(): string {
-    return `${this.title}, ${this.username}, ${this.password}, ${this.note}`;
-  }
-}
 @Injectable()
 export class ExportService {
   private archiverOption = {
@@ -63,16 +36,7 @@ export class ExportService {
     //TODO: Refactor check if work
     const archiver = this.entryService.getByUser(userId).then((resp) => {
       let csvData = [['title', 'password', 'note', '\r\n']];
-      csvData = Array.isArray(resp)
-        ? csvData.concat(
-            resp.map((entry) => [
-              entry.title,
-              entry.password,
-              entry.note,
-              '\r\n',
-            ]),
-          )
-        : csvData;
+      csvData = ExportCsvUtils.GetConcatedCsvArray(csvData, resp);
       const readable = new ExportReader(csvData);
 
       const archiver = Archiver('zip', this.archiverOption);

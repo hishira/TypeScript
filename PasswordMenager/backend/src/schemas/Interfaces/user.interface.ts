@@ -111,7 +111,9 @@ export class UserMetaBuilder {
   }
 }
 
-export const ErrorUserCreateResponse = { message: 'Problem occur while user create' }
+export const ErrorUserCreateResponse = {
+  message: 'Problem occur while user create',
+};
 export class UserDTOMapper {
   static GetDTOFromCreateUserDTO(userCreateDTO: CreateUserDto): DTO {
     return {
@@ -126,5 +128,9 @@ export class UserUtils {
         return {};
       },
     };
+  }
+
+  static GetFirstUserFromTableOrNull(users: IUser[]): IUser | null {
+    return users && users.length ? users[0] : null;
   }
 }

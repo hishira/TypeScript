@@ -14,17 +14,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import {
-  createCipheriv,
-  createDecipheriv,
-  pbkdf2Sync,
-  randomBytes,
-} from 'crypto';
-import { Response, response } from 'express';
+import { createCipheriv, pbkdf2Sync, randomBytes } from 'crypto';
+import { Response } from 'express';
 
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { ExportService } from 'src/services/export.service';
+import { ExportCsvUtils } from 'src/utils/export.utils';
 // TODO: Check if work as expected witth promise, REFACTOR !!!Important
 @Controller('export')
 export class ExportController {
@@ -56,17 +52,7 @@ export class ExportController {
     @Res() response: Response,
     @Body() restOfParams,
   ) {
-    const buffer = Buffer.from(file.buffer);
-    const salt = buffer.slice(0, 16);
-    const iv = buffer.slice(16, 32);
-    const encryptedContent = buffer.slice(32);
-    const key = pbkdf2Sync('123456', salt, 100000, 32, 'sha256');
-    const decipher = createDecipheriv('aes-256-cbc', key, iv);
-    const decryptedContent = Buffer.concat([
-      decipher.update(encryptedContent),
-      decipher.final(),
-    ]);
-    response.status(200).send(decryptedContent.toString('utf8'));
+    response.status(200).send(ExportCsvUtils.GetEncryptedValueFromFile(file));
   }
 
   @UseGuards(AuthGuard('accessToken'))

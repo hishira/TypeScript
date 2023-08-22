@@ -17,7 +17,7 @@ const EmptyResponse = {
   status: false,
   respond: null,
 };
-const CreateEntryErrorMessage = {message: 'Error whice creating entry'}
+const CreateEntryErrorMessage = { message: 'Error whice creating entry' };
 type Test =
   | IEntry
   | {
