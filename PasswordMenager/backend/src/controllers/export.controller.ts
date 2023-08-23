@@ -63,30 +63,11 @@ export class ExportController {
         return {};
       },
     });
-    const passwords = [];
-    Array.isArray(entries) &&
-      entries.forEach((entry) => passwords.push(entry.password));
-    const fileContent = passwords.join(',');
-    const password = '123456';
-    const salt = randomBytes(16); // Generate a random salt
-
-    const key = pbkdf2Sync(password, salt, 100000, 32, 'sha256');
-    const iv = randomBytes(16); // Generate a random IV
-
-    const cipher = createCipheriv('aes-256-cbc', key, iv);
-    let encryptedContent = cipher.update(fileContent, 'utf8', 'hex');
-    encryptedContent += cipher.final('hex');
-    // Save salt and iv in file
-    const encryptedData = Buffer.concat([
-      salt,
-      iv,
-      Buffer.from(encryptedContent, 'hex'),
-    ]);
     res.set({
       'Content-Disposition': 'attachment; filename=example.txt.xyz',
       'Content-Type': 'application/octet-stream',
     });
-    res.send(encryptedData);
+    res.send(ExportCsvUtils.GetEncryptedDataBuffer(entries));
   }
 
   @Get('encryptedCsv')
