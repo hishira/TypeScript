@@ -30,7 +30,7 @@ export interface IEntry extends Document {
   readonly groupid: Schema.Types.ObjectId | string;
   readonly userid: Schema.Types.ObjectId;
   readonly email: string;
-  readonly passwordExpiredDate?: Date;
+  readonly passwordExpiredDate?: Date | string;
   readonly meta: IEntryMeta;
   readonly state: EntryState;
 }

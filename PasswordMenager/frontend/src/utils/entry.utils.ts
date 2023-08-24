@@ -112,10 +112,7 @@ export class Entry {
     if (typeof response !== "number")
       return {
         status: true,
-        response: response.map((resp) => ({
-          ...resp,
-          passwordExpiredDate: resp.passwordExpiredDate?.split("T")[0],
-        })),
+        response: response,
       };
     return this.EMPTYGROUP;
   }
@@ -180,7 +177,7 @@ export class Entry {
       .then((resp) => resp.json())
       .then((resp) => ({
         ...resp,
-        passwordExpiredDate: resp.passwordExpiredDate?.split("T")[0],
+        passwordExpiredDate: resp?.passwordExpiredDate
       }))
       .catch((_) => console.error(_));
     return response;
@@ -201,12 +198,12 @@ export class Entry {
     await this.auth.refreshToken();
     const token = this.sessionStorage.getAccessToken();
     return this.getEntryWithoutGroup(token, paginator).then((value) => {
-      if (Array.isArray(value)) {
-        return value.map((entry) => ({
-          ...entry,
-          passwordExpiredDate: entry?.passwordExpiredDate?.split("T")[0] ?? "",
-        }));
-      }
+      //if (Array.isArray(value)) {
+      //  return value.map((entry) => ({
+      //    ...entry,
+      //    passwordExpiredDate: entry?.passwordExpiredDate?.split("T")[0] ?? "",
+      //  }));
+      //}
       return Array.isArray(value)
         ? { data: value, pageInfo: null }
         : {
@@ -249,10 +246,10 @@ export class Entry {
         const responseMapped = this.responseMappedObject(resp);
         const pageInfo =
           typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
-        const mappedData = this.passwordEntityMap(responseMapped);
+        //const mappedData = this.passwordEntityMap(responseMapped);
 
         return {
-          data: mappedData,
+          data: responseMapped,
           pageInfo: pageInfo,
         };
       }

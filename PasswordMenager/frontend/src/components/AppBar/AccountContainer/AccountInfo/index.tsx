@@ -13,11 +13,38 @@ import {
   Notification,
   UserIcons,
   UserInfo,
+  UserInfoFlexContainer,
   UserInforContainer,
 } from "./component.styled";
 import { GetAccountInfoPromise } from "./utils";
 import { ContentType, GetCurrentView } from "./AccountInfoView";
+import Modal from "../../../Modal";
 
+const UserContainer = ({ user }: { user: IUser | undefined }): JSX.Element => {
+  const [userEditModalVisible, setUserModalVisible] = useState<boolean>(false);
+  return (
+    <>
+      <Modal
+        visible={userEditModalVisible}
+        onClose={() => setUserModalVisible(false)}
+        component={<div>View</div>}
+      ></Modal>
+      <UserInfoFlexContainer>
+        <UserInforContainer>
+          <UserInfo>
+            <span>Email</span> <span>{user?.email}</span>
+          </UserInfo>
+          <UserInfo>
+            <span>Login</span> <span>{user?.login}</span>
+          </UserInfo>
+        </UserInforContainer>
+        <UserIcons>
+          <EditIcon click={() => setUserModalVisible(true)} />
+        </UserIcons>
+      </UserInfoFlexContainer>
+    </>
+  );
+};
 const AccountInfo = () => {
   const [userinfo, setUserInfo] = useState<IUser>();
   const [importRequests, setImportRequests] = useState<any[]>([]);
@@ -39,17 +66,7 @@ const AccountInfo = () => {
 
   return (
     <AccountInfoContainer>
-      <UserIcons>
-        <EditIcon />
-      </UserIcons>
-      <UserInforContainer>
-        <UserInfo>
-          <span>Email</span> <span>{userinfo?.email}</span>
-        </UserInfo>
-        <UserInfo>
-          <span>Login</span> <span>{userinfo?.login}</span>
-        </UserInfo>
-      </UserInforContainer>
+      <UserContainer user={userinfo}></UserContainer>
       <AccountInfoHeader>
         <HeaderButton onClick={() => setMainContent("Notification")}>
           Notification

@@ -17,20 +17,24 @@ export const AccountInfoContainer = styled.div`
   max-height: 35rem;
   padding: 2rem;
 `;
+export const UserInfoFlexContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+`;
 export const UserInforContainer = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   padding: 1.2rem;
   padding-top: 0;
 `;
 export const UserIcons = styled.div`
-  margin-top: 1.2rem;
-  display: flex;
-  position: absolute;
-  top: 0;
-  right: 10px;
-  justify-content: center;
+  & > svg:hover {
+    cursor: pointer;
+  }
 `;
 export const UserInfo = styled.div`
   display: flex;
@@ -56,9 +60,8 @@ export const HeaderButton = styled.div`
 `;
 
 export const AccountInfoContent = styled.div`
- min-height: 10rem;
+  min-height: 10rem;
   max-height: 35rem;
-
 `;
 
 export const Notification = styled.div``;
@@ -80,13 +83,13 @@ export const Imports = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  &::-webkit-scrollbar{
+  &::-webkit-scrollbar {
     width: 5px;
   }
-  &::-webkit-scrollbar-track{
+  &::-webkit-scrollbar-track {
     background-color: white;
   }
-  &::-webkit-scrollbar-thumb{
+  &::-webkit-scrollbar-thumb {
     background-color: lightslategray;
     border-radius: 15px;
     width: 1px;
