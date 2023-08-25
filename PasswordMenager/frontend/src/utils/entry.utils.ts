@@ -112,7 +112,7 @@ export class Entry {
     if (typeof response !== "number")
       return {
         status: true,
-        response: response,
+        response: response.map(EntryDateMapper),
       };
     return this.EMPTYGROUP;
   }
@@ -175,10 +175,6 @@ export class Entry {
         return resp;
       })
       .then((resp) => resp.json())
-      .then((resp) => ({
-        ...resp,
-        passwordExpiredDate: resp?.passwordExpiredDate
-      }))
       .catch((_) => console.error(_));
     return response;
   }
@@ -198,12 +194,6 @@ export class Entry {
     await this.auth.refreshToken();
     const token = this.sessionStorage.getAccessToken();
     return this.getEntryWithoutGroup(token, paginator).then((value) => {
-      //if (Array.isArray(value)) {
-      //  return value.map((entry) => ({
-      //    ...entry,
-      //    passwordExpiredDate: entry?.passwordExpiredDate?.split("T")[0] ?? "",
-      //  }));
-      //}
       return Array.isArray(value)
         ? { data: value, pageInfo: null }
         : {
@@ -213,22 +203,11 @@ export class Entry {
     });
   }
 
-  private responseMappedObject(resp) {
+  private responseMappedObject(resp): IEntry[] {
     return Array.isArray(resp)
       ? resp
       : typeof resp === "object" && "data" in resp
       ? resp.data
-      : resp;
-  }
-
-  private passwordEntityMap(resp) {
-    return Array.isArray(resp)
-      ? resp.map((entry: IEntry) => ({
-          ...entry,
-          passwordExpiredDate: entry?.passwordExpiredDate?.split("T")[0] ?? "",
-        }))
-      : typeof resp === "number"
-      ? []
       : resp;
   }
 
@@ -243,13 +222,12 @@ export class Entry {
         if (typeof resp === "number" && resp === 401) {
           this.refreshEntriesWithoutGroup(paginator);
         }
-        const responseMapped = this.responseMappedObject(resp);
+        const responseMapped: IEntry[] = this.responseMappedObject(resp);
         const pageInfo =
           typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
-        //const mappedData = this.passwordEntityMap(responseMapped);
 
         return {
-          data: responseMapped,
+          data: responseMapped.map(EntryDateMapper),
           pageInfo: pageInfo,
         };
       }
@@ -263,3 +241,8 @@ export class Entry {
       .then((resp) => resp.json());
   }
 }
+
+const EntryDateMapper = (entry: IEntry): IEntry => ({
+  ...entry,
+  passwordExpiredDate: entry?.passwordExpiredDate?.slice(0, 10),
+});

@@ -21,25 +21,7 @@ export class UtilsRepository {
   ): Promise<PaginatorData<IEntry>> {
     return Promise.resolve(
       PaginatorData.DefaultPaginatorData(
-        entries.map((entry) => {
-          //TODO: Check
-          const isDate = entry instanceof Date;
-          console.log(typeof entry.passwordExpiredDate);
-          const MappedDate =
-            (isDate || typeof entry.passwordExpiredDate === 'object') &&
-            entry?.passwordExpiredDate !== undefined
-              ? (entry?.passwordExpiredDate as Date)
-                  ?.toISOString()
-                  ?.split('T')[0]
-              : entry?.passwordExpiredDate !== undefined
-              ? (entry?.passwordExpiredDate as string)?.split('T')[0]
-              : undefined;
-
-          return {
-            ...entry,
-            passwordExpiredDate: MappedDate,
-          };
-        }),
+        entries,
         paginator,
       ) as unknown as PaginatorData<IEntry>,
     );
