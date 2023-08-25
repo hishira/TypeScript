@@ -107,3 +107,8 @@ export const Imports = styled.div`
   }
 `;
 export const Last = styled.div``;
+
+export const UserEditModalView = styled.div`
+  padding: 2rem;
+  background-color: whitesmoke;
+`;
