@@ -4,8 +4,7 @@ export const AccountInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: whitesmoke;
-  width: 50%;
-  min-width: 50%;
+  width: 55rem;
   border-radius: 5px;
   position: fixed;
   margin-left: auto;
@@ -48,11 +47,11 @@ export const AccountInfoHeader = styled.div`
   gap: 4rem;
 `;
 
-export const HeaderButton = styled.div`
+export const HeaderButton = styled.div<{ active?: boolean }>`
   cursor: pointer;
   box-sizing: border-box;
-  border-radius: 5px;
-  outline: 0.02rem solid slategrey;
+  //border-right: 0.02rem solid slategrey;
+  text-shadow: ${({ active }) => (active ? "1px 0 0 #000" : "none")};
   padding: 0.4rem;
   &:hover {
     text-shadow: 1px 0 0 #000;

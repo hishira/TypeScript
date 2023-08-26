@@ -76,13 +76,22 @@ const AccountInfo = () => {
     <AccountInfoContainer>
       <UserContainer user={userinfo}></UserContainer>
       <AccountInfoHeader>
-        <HeaderButton onClick={() => setMainContent("Notification")}>
+        <HeaderButton
+          onClick={() => setMainContent("Notification")}
+          active={mainContentView === "Notification"}
+        >
           Notification
         </HeaderButton>
-        <HeaderButton onClick={() => setMainContent("ImportRequest")}>
+        <HeaderButton
+          onClick={() => setMainContent("ImportRequest")}
+          active={mainContentView === "ImportRequest"}
+        >
           Import request
         </HeaderButton>
-        <HeaderButton onClick={() => setMainContent("Last")}>
+        <HeaderButton
+          onClick={() => setMainContent("Last")}
+          active={mainContentView === "Last"}
+        >
           Last deleted
         </HeaderButton>
       </AccountInfoHeader>

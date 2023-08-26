@@ -29,7 +29,7 @@ export const NotificationElement = ({
   // TODO: Add notification which expire password
   return (
     <Notification>
-      Number of active notification {notification.length}
+      Number of active notification for {notification.length} entries
     </Notification>
   );
 };

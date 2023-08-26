@@ -12,7 +12,6 @@ export const clickOnModal = (
       !ModalOpenUtils.getInstance().CloseModal
     ) {
       onClose();
-      console.log(i);
       break;
     }
   }
