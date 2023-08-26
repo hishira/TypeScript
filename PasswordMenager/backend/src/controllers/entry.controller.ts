@@ -62,9 +62,9 @@ export class EntryContoller {
   }
 
   @UseGuards(AuthGuard('accessToken'))
-  @Get('/:id')
-  async getEntryById(@Param('id') entryId: string): Promise<IEntry> {
-    return this.entryService.getById(entryId);
+  @Get('/lastDeleted')
+  async getLastDeletedEntries(@Request() req): Promise<unknown> {
+    return this.entryService.getLastDeletedUserEntries(req.user._id);
   }
 
   @UseGuards(AuthGuard('accessToken'))
@@ -84,4 +84,9 @@ export class EntryContoller {
     return this.entryService.editentry(editedentry);
   }
 
+  @UseGuards(AuthGuard('accessToken'))
+  @Get('/:id')
+  async getEntryById(@Param('id') entryId: string): Promise<IEntry> {
+    return this.entryService.getById(entryId);
+  }
 }

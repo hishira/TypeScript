@@ -48,9 +48,10 @@ export class ActiveEntryFilter {
   ) {}
 
   public Filter(): FilterQuery<IEntry> {
+    const hasState = 'state' in this.option.getOption();
     return {
       ...this.option.getOption(),
-      state: this.state,
+      ...(!hasState && { state: this.state }),
     };
   }
 }
@@ -250,6 +251,13 @@ export class OptionModelBuilder {
       | DeleteOption<FilterQuery<IEntry>> = EMPTYOPTION,
   ) {}
 
+  updateStateEntry(state: EntryState): this {
+    this.filterQuery = {
+      ...this.filterQuery,
+      state: state,
+    };
+    return this;
+  }
   updateEntryId(entryId: string): this {
     this.filterQuery = {
       ...this.filterQuery,
