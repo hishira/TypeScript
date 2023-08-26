@@ -20,7 +20,10 @@ export class UtilsRepository {
     paginator: PaginatorDto,
   ): Promise<PaginatorData<IEntry>> {
     return Promise.resolve(
-      PaginatorData.DefaultPaginatorData(entries, paginator),
+      PaginatorData.DefaultPaginatorData(
+        entries,
+        paginator,
+      ) as unknown as PaginatorData<IEntry>,
     );
   }
 

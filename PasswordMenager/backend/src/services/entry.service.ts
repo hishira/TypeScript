@@ -1,25 +1,23 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { FilterQuery } from 'mongoose';
-import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
-import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
-import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
-import { EditEntryDto } from './../schemas/dto/editentry.dto';
 import {
-  EntrySchemaUtils,
-  algorithm,
-} from 'src/schemas/utils/Entry.schema.utils';
-import { Cipher } from 'src/utils/cipher.utils';
+  EntryData,
+  EntryDtoMapper,
+  IEntry,
+  OptionModelBuilder,
+} from '../schemas/Interfaces/entry.interface';
+import { EditEntryDto } from './../schemas/dto/editentry.dto';
 
 const EmptyResponse = {
   status: false,
   respond: null,
 };
+const CreateEntryErrorMessage = { message: 'Error whice creating entry' };
 type Test =
   | IEntry
   | {
@@ -32,63 +30,24 @@ export class EntryService {
     private readonly entryRepository: Repository<IEntry>,
     private readonly eventEmitter: EventEmitter2,
   ) {}
-
-  private getObjectToCreate(
-    entrycreateDTO: CreateEntryDto,
-    userid: string,
-  ): DTO {
-    const entryToAdd = entrycreateDTO;
-    const isGroupIdEmpty = entryToAdd.groupid === '';
-    let restParams: Partial<CreateEntryDto> = entrycreateDTO;
-    if (isGroupIdEmpty) {
-      const { groupid, ...restEntryParams } = entryToAdd;
-      restParams = restEntryParams;
-    }
-
-    return new (class implements DTO {
-      toObject() {
-        return {
-          ...(isGroupIdEmpty && restParams ? restParams : entrycreateDTO),
-          userid: userid,
-        };
-      }
-    })();
-  }
   create(
     entrycreateDTO: CreateEntryDto,
     userid: string,
   ): Promise<IEntry | { message: string }> {
     return this.entryRepository
-      .create(this.getObjectToCreate(entrycreateDTO, userid))
+      .create(EntryDtoMapper.CreateEntryDtoToDto(entrycreateDTO, userid))
       .then((response: Test): any => this.emitNotificationCreate(response))
       .catch((_) => {
         console.error(_);
-        return { message: 'Error whice creating entry' };
+        return CreateEntryErrorMessage;
       });
   }
 
   @OnEvent('entry.insertMany', { async: true })
   insertMany(payload: { objects: DTO[] }) {
-    const mappedDto: DTO[] = payload.objects.map((dtoInfo) => {
-      if (!('password' in dtoInfo)) return dtoInfo;
-      if (!('userid' in dtoInfo && typeof dtoInfo.password === 'string'))
-        return dtoInfo;
-      const userid = dtoInfo.userid;
-      const object = dtoInfo.toObject();
-      const bs = EntrySchemaUtils.generateKeyValue(userid);
-      const password = dtoInfo.password;
-      const encryptedPassword = new Cipher(
-        algorithm,
-        bs,
-        process.env.id,
-      ).encryptValue(password);
-      return {
-        toObject: () => ({
-          ...object,
-          password: encryptedPassword,
-        }),
-      };
-    });
+    const mappedDto: DTO[] = payload.objects.map(
+      EntryDtoMapper.encryptDtoPassword,
+    );
     return this.entryRepository.createMany(mappedDto);
   }
   private emitNotificationCreate(response: Test): any {
@@ -96,6 +55,7 @@ export class EntryService {
     const passwordExpireDate = response.passwordExpiredDate;
     if (passwordExpireDate === null || passwordExpireDate === undefined)
       return response;
+    //TODO refactor, move to notification
     console.log('Response', response);
     this.eventEmitter.emit('notification.create', {
       passwordExpireDate: passwordExpireDate,
@@ -111,26 +71,22 @@ export class EntryService {
   }
 
   getbygroupid(groupid: string): Promise<IEntry[] | EntryData> {
-    const option: FilterOption<FilterQuery<IEntry>> = {
-      getOption() {
-        return { groupid: groupid !== '' ? groupid : null };
-      },
-    };
-
-    return this.entryRepository.find(option);
+    return this.entryRepository.find(
+      new OptionModelBuilder().updateGroupIdOrNull(groupid).getOption(),
+    );
   }
 
   getUserEntriesWithoutGroup(
     userid: string,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData> {
-    const option: FilterOption<FilterQuery<IEntry>> = {
-      getOption() {
-        return { groupid: null, userid: userid };
-      },
-    };
-
-    return this.entryRepository.find(option, paginator);
+    return this.entryRepository.find(
+      new OptionModelBuilder()
+        .updateUserIdOPtion(userid)
+        .setGroupIdNull()
+        .getOption(),
+      paginator,
+    );
   }
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse> {
@@ -138,12 +94,9 @@ export class EntryService {
     try {
       const deletedentry: Promise<IEntry> =
         this.entryRepository.findById(entryid);
-      const deleteOption: DeleteOption<FilterQuery<IEntry>> = {
-        getOption() {
-          return { _id: entryid };
-        },
-      };
-      const deletedPromise = this.entryRepository.delete(deleteOption);
+      const deletedPromise = this.entryRepository.delete(
+        new OptionModelBuilder().updateEntryId(entryid).getOption(),
+      );
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
           this.eventEmitter.emit('history.append', {
@@ -163,13 +116,7 @@ export class EntryService {
 
   private getHistoryEntryPromise(groupid: string) {
     return this.entryRepository
-      .find({
-        getOption() {
-          return {
-            groupid: groupid,
-          };
-        },
-      })
+      .find(new OptionModelBuilder().updateGroupId(groupid).getOption())
       .then((entires) => {
         if (Array.isArray(entires) && entires.length > 0) {
           this.eventEmitter.emit('history.append', {
@@ -183,30 +130,22 @@ export class EntryService {
 
   deleteByGroup(groupid: string): Promise<unknown> {
     const promiseEntryHistory = this.getHistoryEntryPromise(groupid);
-    const deletePromise = this.entryRepository.delete({
-      getOption() {
-        return {
-          groupid: groupid,
-        };
-      },
-    });
+    const deletePromise = this.entryRepository.delete(
+      new OptionModelBuilder().updateGroupId(groupid).getOption(),
+    );
     return promiseEntryHistory.then(() => deletePromise);
   }
 
   getByUser(userId: string): Promise<IEntry[] | EntryData> {
-    const filterOption: FilterOption<FilterQuery<IEntry>> = {
-      getOption() {
-        return {
-          userid: userId,
-        };
-      },
-    };
-    return this.entryRepository.find(filterOption);
+    return this.entryRepository.find(
+      new OptionModelBuilder().updateUserIdOPtion(userId).getOption(),
+    );
   }
 
   editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
     try {
-      const entry: Partial<IEntry> = this.getPartialUpdateEntry(neweditedentry);
+      const entry: Partial<IEntry> =
+        EntryDtoMapper.GetPartialUpdateEntry(neweditedentry);
       return this.entryRepository.update(entry).then(async (_data) => {
         const upadednoew = await this.entryRepository.findById(
           neweditedentry._id,
@@ -217,23 +156,5 @@ export class EntryService {
     } catch (e) {
       return Promise.resolve(EmptyResponse);
     }
-  }
-
-  private getPartialUpdateEntry(editEntryDTO: EditEntryDto): Partial<IEntry> {
-    return {
-      _id: editEntryDTO._id,
-      ...(editEntryDTO.title !== '' ? { title: editEntryDTO.title } : {}),
-      ...(editEntryDTO.password !== ''
-        ? { password: editEntryDTO.password }
-        : {}),
-      ...(editEntryDTO.note !== '' ? { note: editEntryDTO.note } : {}),
-      ...(editEntryDTO.username !== ''
-        ? { username: editEntryDTO.username }
-        : {}),
-      ...(editEntryDTO.url !== '' ? { url: editEntryDTO.url } : {}),
-      ...(editEntryDTO.passwordExpiredDate !== ''
-        ? { passwordExpiredDate: editEntryDTO.passwordExpiredDate }
-        : {}),
-    };
   }
 }

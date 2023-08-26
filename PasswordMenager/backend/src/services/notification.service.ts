@@ -7,6 +7,7 @@ import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import {
   ActiveNotificationFilter,
   INotification,
+  NotificationUtils,
   UserActiveNotificationFilter,
 } from 'src/schemas/Interfaces/notification.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
@@ -23,7 +24,7 @@ interface NotificationCron {
 @Injectable()
 export class NotificationService implements NotificationCron {
   private emailSender: EmailSender;
-  private allNotifiaction: FilterOption<unknown> = { getOption: () => ({}) };
+
   constructor(
     @Inject(Repository)
     private readonly notificationRepository: Repository<INotification>,
@@ -57,10 +58,7 @@ export class NotificationService implements NotificationCron {
   > {
     return this.activeNotification.then((notifications) => {
       return notifications.map((notification) => {
-        if (
-          notification.active &&
-          notification.notificationDate < new Date(Date.now())
-        ) {
+        if (NotificationUtils.SendNotification(notification)) {
           return this.notificationSend();
         }
         return Promise.resolve(true);
@@ -106,15 +104,14 @@ export class NotificationService implements NotificationCron {
   get activeNotification(): Promise<INotification[]> {
     return this.notificationRepository
       .find(new ActiveNotificationFilter())
-      .then((data) => (Array.isArray(data) ? data : data.data));
+      .then((data) => NotificationUtils.GetDataFromPaginator(data));
   }
   checkAndSendNotification(): Promise<unknown> {
     return this.notificationRepository
-      .find(this.allNotifiaction)
+      .find(NotificationUtils.GetAllNotificationFilter)
       .then((notification) => {
-        const notifications = Array.isArray(notification)
-          ? notification
-          : notification.data;
+        const notifications =
+          NotificationUtils.GetDataFromPaginator(notification);
         notifications.forEach((not) => {
           if (not.active) {
             this.notificationSend();

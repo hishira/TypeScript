@@ -99,12 +99,10 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   private createEditentity(entry: Partial<IEntry>, entryById: IEntry) {
-    // TODO: Refactor
     const data: any = { ...entry };
-    // TODO: Check if entry builder work
-    const editEntryBuilder = new EntryBuilder({ ...entry });
+    const editEntryBuilder = new EntryBuilder({ ...entryById });
     if (entry.note && entryById.note !== entry.note) {
-      editEntryBuilder.entryNoteUpdate(entryById.note);
+      editEntryBuilder.entryNoteUpdate(entry.note);
     }
     if (entry.password) {
       editEntryBuilder.entryPasswordUpdate(
@@ -114,13 +112,12 @@ export class EntryRepository implements Repository<IEntry> {
       );
     }
     if (entry.title && entryById.title !== entry.title) {
-      editEntryBuilder.setTitle(entryById.title);
+      editEntryBuilder.setTitle(entry.title);
     }
     if (entry.username && entryById.username !== entry.username) {
-      editEntryBuilder.setUsername(entryById.username);
+      editEntryBuilder.setUsername(entry.username);
     }
     editEntryBuilder.updateEditDate();
-
     return editEntryBuilder.getEntry();
   }
 }

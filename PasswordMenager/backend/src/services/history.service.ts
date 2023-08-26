@@ -3,9 +3,11 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { ObjectId } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
-import { IHistory } from 'src/schemas/Interfaces/history.interface';
+import {
+  HistoryDTOMapper,
+  IHistory,
+} from 'src/schemas/Interfaces/history.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { DTO } from 'src/schemas/dto/object.interface';
 
 @Injectable()
 export class HistoryService {
@@ -15,17 +17,8 @@ export class HistoryService {
   ) {}
 
   create(userid: string): Promise<IHistory> {
-    // AnonymousClass
     return this.historyRepository.create(
-      new (class implements DTO {
-        toObject(): Record<string, unknown> {
-          return {
-            userid: userid,
-            groups: [],
-            entities: [],
-          };
-        }
-      })(),
+      HistoryDTOMapper.CreateHistoryDTO(userid),
     );
   }
 

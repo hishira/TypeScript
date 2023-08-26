@@ -1,7 +1,6 @@
-import React from "react";
 import { EscapeModalHandle } from "../../hooks/modalEscape.hook";
-import { Modal } from "./component.styled";
 import { clickOnModal } from "../../utils/modal.utils";
+import { Modal } from "./component.styled";
 export type ModalProps = {
   visible?: boolean;
   component?: JSX.Element;

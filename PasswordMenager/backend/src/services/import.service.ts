@@ -1,43 +1,17 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
-  ImportEntrySchema,
+  ImportDTOMapper,
+  ImportEntriesResponse,
   ImportRequest,
   ImportRequestDto,
 } from 'src/schemas/Interfaces/importRequest.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { Paginator } from 'src/utils/paginator';
-import { Readable, Writable } from 'stream';
+import { WritableStream } from 'src/utils/writableStream';
+import { Readable } from 'stream';
 
-type ToString = {
-  toString: () => string;
-};
-class WritableStream extends Writable {
-  get getSavedData(): ImportEntrySchema[] {
-    return this.data;
-  }
-  constructor(
-    private readonly data: ImportEntrySchema[] = [],
-    public readonly separator: string = ',',
-  ) {
-    super();
-  }
-  _write(
-    chunk: ToString,
-    encoding: BufferEncoding,
-    callback: (error?: Error) => void,
-  ): void {
-    const fileContentAsString = chunk.toString();
-    const fileRows = fileContentAsString.split('\r\n');
-    fileRows.forEach((csvRow) => {
-      const values = csvRow.split(this.separator);
-      const [name, username, password, note] = values;
-      this.data.push(new ImportEntrySchema(password, username, name, note, ''));
-    });
-    callback();
-  }
-}
 @Injectable()
 export class ImportService {
   constructor(
@@ -51,15 +25,10 @@ export class ImportService {
       .findById(importRequestId)
       .then((importRequest) => {
         const entriesToImport = importRequest.entriesToImport;
-        const dtosObjects: DTO[] = entriesToImport.map((entry) => ({
-          toObject: () => ({
-            title: entry.title,
-            password: entry.password,
-            username: entry.username,
-            note: entry.email,
-            userid: userId,
-          }),
-        }));
+        const dtosObjects: DTO[] = ImportDTOMapper.MapImportRequestsToDTOs(
+          userId,
+          entriesToImport,
+        );
         this.eventEmitter.emitAsync('entry.insertMany', {
           objects: dtosObjects,
         });
@@ -88,12 +57,10 @@ export class ImportService {
         this.importRequestRepository
           .create(new ImportRequestDto(userid, numberOfEntries))
           .then((importRequest) => {
-            const response = {
-              numberOfEntriesToAdd: numberOfEntries.length,
-              entiresToImport: numberOfEntries.slice(0, 10),
-              importRequestId: importRequest._id,
-            };
-            resolve(response);
+            resolve(
+              new ImportEntriesResponse(numberOfEntries, importRequest)
+                .ResponseResolve,
+            );
           })
           .catch((error) => reject(error));
       });

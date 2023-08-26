@@ -1,6 +1,7 @@
 import { AnyKeys, AnyObject, Document, Schema } from 'mongoose';
 import { IGroup } from './group.interface';
 import { IEntry } from './entry.interface';
+import { DTO } from '../dto/object.interface';
 
 export interface IHistory extends Document {
   readonly userid: Schema.Types.ObjectId;
@@ -31,5 +32,19 @@ export class HistoryBuilder {
     isEntriesDefined && this.updateEntries(history.entities);
     isGroupsDefined && this.updateGroups(history.groups);
     return this;
+  }
+}
+
+export class HistoryDTOMapper {
+  static CreateHistoryDTO(userid: string): DTO {
+    return new (class implements DTO {
+      toObject(): Record<string, unknown> {
+        return {
+          userid: userid,
+          groups: [],
+          entities: [],
+        };
+      }
+    })();
   }
 }
