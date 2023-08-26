@@ -1,10 +1,9 @@
-import { Last } from "../component.styled";
 import { ImportRequestCardView } from "./ImportRequestCardView";
+import { LastDeletedElementsCardView } from "./LastDeletedElementsCardView";
 import { NotificationCardView } from "./NotificationCardView";
 
 export type ContentType = "Notification" | "ImportRequest" | "Last";
 
-const LastElement = () => <Last>Last 10 deleted entries</Last>;
 export const GetCurrentView = (
   mainContentView: ContentType,
   imports: any,
@@ -13,8 +12,8 @@ export const GetCurrentView = (
   return mainContentView === "Notification" ? (
     <NotificationCardView notification={notification} />
   ) : mainContentView === "ImportRequest" ? (
-    <ImportRequestCardView imports={imports}></ImportRequestCardView>
+    <ImportRequestCardView imports={imports} />
   ) : (
-    <LastElement></LastElement>
+    <LastDeletedElementsCardView />
   );
 };
