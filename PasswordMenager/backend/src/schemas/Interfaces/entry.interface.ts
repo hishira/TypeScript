@@ -266,6 +266,13 @@ export class OptionModelBuilder {
     return this;
   }
 
+  updateLimit(limit: number): this {
+    this.filterQuery = {
+      ...this.filterQuery,
+      limit: 10,
+    };
+    return this;
+  }
   updateGroupId(groupId: string): this {
     this.filterQuery = {
       ...this.filterQuery,

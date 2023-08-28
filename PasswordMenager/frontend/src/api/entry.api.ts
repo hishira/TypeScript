@@ -66,4 +66,10 @@ export class EntryApi extends Api {
     const url = this.getUrl("notification/numberOfEntryWithNotifications");
     return fetch(url, this.fetchGetObjectWithtoken(token));
   }
+
+  getLastDeletedEntries(token: string): Promise<Response> {
+    const url = this.getUrl("entry/lastDeleted");
+
+    return fetch(url, this.fetchGetObjectWithtoken(token));
+  }
 }

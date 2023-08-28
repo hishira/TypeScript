@@ -54,6 +54,9 @@ export class EntryRepository implements Repository<IEntry> {
         .exec()
         .then((entires) => this.getEntryData(entires, paginator));
     }
+    if ('limit' in option && typeof option.limit === 'number') {
+      return this.entryModel.find(ActiveFilter).limit(option.limit).exec();
+    }
     return this.entryModel.find(ActiveFilter).exec();
   }
 

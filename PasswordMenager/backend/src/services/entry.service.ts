@@ -120,6 +120,7 @@ export class EntryService {
       new OptionModelBuilder()
         .updateUserIdOPtion(userid)
         .updateStateEntry(EntryState.DELETED)
+        .updateLimit(10)
         .getOption(),
     );
   }

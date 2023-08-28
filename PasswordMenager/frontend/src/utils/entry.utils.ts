@@ -240,6 +240,12 @@ export class Entry {
       .getActiveEntryNotification(accessToken)
       .then((resp) => resp.json());
   }
+
+  getLastDeletedEntries(): Promise<IEntry[]> {
+    return this.entryApi
+      .getLastDeletedEntries(this.sessionStorage.getAccessToken())
+      .then((resp) => resp.json());
+  }
 }
 
 const EntryDateMapper = (entry: IEntry): IEntry => ({
