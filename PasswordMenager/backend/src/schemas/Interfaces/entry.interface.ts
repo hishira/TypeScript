@@ -182,6 +182,14 @@ export class EntryBuilder {
     } as unknown as Partial<IEntry>;
     return this;
   }
+
+  public setState(state: EntryState): this {
+    this.entry = {
+      ...this.entry,
+      state: state,
+    };
+    return this;
+  }
 }
 
 export class EntryDtoMapper {

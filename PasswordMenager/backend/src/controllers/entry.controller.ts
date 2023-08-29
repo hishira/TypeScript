@@ -68,6 +68,15 @@ export class EntryContoller {
   }
 
   @UseGuards(AuthGuard('accessToken'))
+  @Put('/activateEntry')
+  async activateDeletedEntries(
+    @Body(new ValidationPipe({ transform: true }))
+    entryIdObject: Pick<EditEntryDto, '_id'>,
+  ) {
+    return this.entryService.activateDeletedEntreis(entryIdObject._id);
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
   @Delete('/byentityid/:id')
   async deletebyid(
     @Param('id') entityid: string,

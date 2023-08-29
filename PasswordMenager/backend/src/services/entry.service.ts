@@ -125,6 +125,12 @@ export class EntryService {
     );
   }
 
+  activateDeletedEntreis(entryId: string) {
+    return this.entryRepository.update({
+      _id: entryId,
+      state: EntryState.ACTIVE,
+    });
+  }
   private getHistoryEntryPromise(groupid: string) {
     return this.entryRepository
       .find(new OptionModelBuilder().updateGroupId(groupid).getOption())

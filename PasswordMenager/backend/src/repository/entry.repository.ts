@@ -45,19 +45,35 @@ export class EntryRepository implements Repository<IEntry> {
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
-    const ActiveFilter = new ActiveEntryFilter(option).Filter();
     if (UtilsRepository.isPaginatorDefined(paginator)) {
-      return this.entryModel
-        .find(ActiveFilter)
-        .skip(paginator.page * 10)
-        .limit(10)
-        .exec()
-        .then((entires) => this.getEntryData(entires, paginator));
+      return this.getEntriesWithPaginator(option, paginator);
     }
-    if ('limit' in option && typeof option.limit === 'number') {
+    return this.returnLimitedEntriesOrAll(option);
+  }
+
+  returnLimitedEntriesOrAll(
+    option: FilterOption<FilterQuery<IEntry>>,
+  ): Promise<IEntry[] | EntryData | any> {
+    const ActiveFilter = new ActiveEntryFilter(option).Filter();
+
+    if (UtilsRepository.checkLimitInOptionPossible(option)) {
       return this.entryModel.find(ActiveFilter).limit(option.limit).exec();
     }
     return this.entryModel.find(ActiveFilter).exec();
+  }
+
+  getEntriesWithPaginator(
+    option: FilterOption<FilterQuery<IEntry>>,
+    paginator?: PaginatorDto,
+  ): Promise<IEntry[] | EntryData | any> {
+    const ActiveFilter = new ActiveEntryFilter(option).Filter();
+
+    return this.entryModel
+      .find(ActiveFilter)
+      .skip(paginator.page * 10)
+      .limit(10)
+      .exec()
+      .then((entires) => this.getEntryData(entires, paginator));
   }
 
   update(entry: Partial<IEntry>): Promise<unknown> {
@@ -101,9 +117,12 @@ export class EntryRepository implements Repository<IEntry> {
     throw new NotImplementedError();
   }
 
-  private createEditentity(entry: Partial<IEntry>, entryById: IEntry) {
-    const data: any = { ...entry };
-    const editEntryBuilder = new EntryBuilder({ ...entryById });
+  private createEditentity(
+    entry: Partial<IEntry>,
+    entryById: IEntry,
+  ): Partial<IEntry> {
+    const data: Partial<IEntry> = { ...entry };
+    const editEntryBuilder: EntryBuilder = new EntryBuilder({ ...entryById });
     if (entry.note && entryById.note !== entry.note) {
       editEntryBuilder.entryNoteUpdate(entry.note);
     }
@@ -119,6 +138,9 @@ export class EntryRepository implements Repository<IEntry> {
     }
     if (entry.username && entryById.username !== entry.username) {
       editEntryBuilder.setUsername(entry.username);
+    }
+    if (entry.state && entry.state !== entryById.state) {
+      editEntryBuilder.setState(entry.state);
     }
     editEntryBuilder.updateEditDate();
     return editEntryBuilder.getEntry();
