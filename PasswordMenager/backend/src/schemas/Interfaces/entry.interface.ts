@@ -58,7 +58,12 @@ export class ActiveEntryFilter {
 
 type EntryUpdateSet = AnyKeys<IEntry> & AnyObject;
 export class DeleteEntryUpdate {
-  constructor(public $set: EntryUpdateSet = { state: EntryState.DELETED }) {}
+  constructor(
+    public $set: EntryUpdateSet = {
+      state: EntryState.DELETED,
+      ['meta.deleteDate']: Date.now(),
+    },
+  ) {}
 }
 
 //TODO: Check if can more optimize
