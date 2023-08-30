@@ -257,6 +257,7 @@ export class OptionModelBuilder {
     private option:
       | FilterOption<FilterQuery<IEntry>>
       | DeleteOption<FilterQuery<IEntry>> = EMPTYOPTION,
+    private queryLimit: number = -1,
   ) {}
 
   updateStateEntry(state: EntryState): this {
@@ -275,10 +276,7 @@ export class OptionModelBuilder {
   }
 
   updateLimit(limit: number): this {
-    this.filterQuery = {
-      ...this.filterQuery,
-      limit: 10,
-    };
+    this.queryLimit = limit;
     return this;
   }
   updateGroupId(groupId: string): this {
@@ -318,6 +316,7 @@ export class OptionModelBuilder {
     | DeleteOption<FilterQuery<IEntry>> {
     return {
       getOption: () => this.filterQuery,
+      ...(this.queryLimit > 0 && { limit: this.queryLimit }),
     };
   }
 }
