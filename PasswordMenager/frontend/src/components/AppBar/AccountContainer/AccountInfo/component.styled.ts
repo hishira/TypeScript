@@ -12,32 +12,36 @@ export const AccountInfoContainer = styled.div`
   top: 20%;
   left: 0;
   right: -0;
-  min-height: 10rem;
+  min-height: 35rem;
   max-height: 35rem;
   padding: 2rem;
 `;
 
+export const Devider = styled.div`
+  width: 100%;
+  border-top: .5px solid slategray;
+`
 export const AccountInfoHeader = styled.div`
   display: flex;
   width: 100%;
-  justify-content: space-evenly;
-  gap: 4rem;
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  justify-content: space-between;
 `;
 
 export const HeaderButton = styled.div<{ active?: boolean }>`
   cursor: pointer;
   box-sizing: border-box;
-  //border-right: 0.02rem solid slategrey;
+  font-size: 18px;
   text-shadow: ${({ active }) => (active ? "1px 0 0 #000" : "none")};
-  padding: 0.4rem;
   &:hover {
     text-shadow: 1px 0 0 #000;
   }
 `;
 
 export const AccountInfoContent = styled.div`
-  min-height: 10rem;
-  max-height: 35rem;
+  min-height: 25rem;
+  max-height: 25rem;
 `;
 
 export const Last = styled.div``;

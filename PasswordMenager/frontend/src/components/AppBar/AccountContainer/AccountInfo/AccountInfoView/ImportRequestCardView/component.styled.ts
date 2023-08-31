@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const ImportRequest = styled.div`
   display: flex;
-  min-height: 10rem;
-  max-height: 30rem;
+  min-height: 25rem;
+  max-height: 25rem;
   flex-direction: column;
   & > div:first-of-type {
     display: flex;

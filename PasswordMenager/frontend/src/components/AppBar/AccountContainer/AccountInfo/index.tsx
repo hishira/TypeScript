@@ -4,6 +4,7 @@ import {
   AccountInfoContainer,
   AccountInfoContent,
   AccountInfoHeader,
+  Devider,
   HeaderButton,
 } from "./component.styled";
 import { GetAccountInfoPromise } from "./utils";
@@ -31,6 +32,7 @@ const AccountInfo = () => {
   return (
     <AccountInfoContainer>
       <UserView user={userinfo}></UserView>
+      <Devider />
       <AccountInfoHeader>
         <HeaderButton
           onClick={() => setMainContent("Notification")}
