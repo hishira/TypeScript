@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import GroupComponent from "../GroupComponent/";
 import FieldsComponent from "../FieldsComponent/";
-import { Container, Entries } from "./component.styled";
+import { Container, EmptyEntries, Entries, Text } from "./component.styled";
 import { inject, observer } from "mobx-react";
 import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
@@ -34,24 +34,30 @@ const PassComponent = ({ store }: PassComponentProps) => {
   return (
     <Container className="dupa">
       <GroupComponent selectgrouphandle={selectgrouphandle} />
-      <Entries>
-        {store?.ViewType === View.Table ? (
-          <FieldsComponent
-            refreshgroupentities={refreshentities}
-            selectedgroup={selectedgroupid}
-            refreshall={entitiesrefresh}
-            passwords={entries}
-          />
-        ) : (
-          <FieldsCardView
-            selectedgroup={selectedgroupid}
-            refreshall={entitiesrefresh}
-            refreshgroupentities={refreshentities}
-            passwords={entries}
-          />
-        )}
-        <Paginator pageInfo={paginator} paginationChange={paginatorChange} />
-      </Entries>
+      {entries.length > 0 ? (
+        <Entries>
+          {store?.ViewType === View.Table ? (
+            <FieldsComponent
+              refreshgroupentities={refreshentities}
+              selectedgroup={selectedgroupid}
+              refreshall={entitiesrefresh}
+              passwords={entries}
+            />
+          ) : (
+            <FieldsCardView
+              selectedgroup={selectedgroupid}
+              refreshall={entitiesrefresh}
+              refreshgroupentities={refreshentities}
+              passwords={entries}
+            />
+          )}
+          <Paginator pageInfo={paginator} paginationChange={paginatorChange} />
+        </Entries>
+      ) : (
+        <EmptyEntries>
+          <Text>No entries available :( </Text>
+        </EmptyEntries>
+      )}
     </Container>
   );
 };

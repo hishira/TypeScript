@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const TableContainer = styled.table`
   width: 100%;
   table-layout: fixed;
+  margin-top: 1rem;
 `;
 export const TableHead = styled.thead``;
 export const TableBody = styled.tbody`
