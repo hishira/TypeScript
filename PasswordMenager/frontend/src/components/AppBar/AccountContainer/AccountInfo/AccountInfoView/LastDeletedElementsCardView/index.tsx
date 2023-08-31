@@ -3,6 +3,7 @@ import {
   Elements,
   LastDeletedElement,
   LastDeletedElements,
+  LastDeletedTitle,
 } from "./component.styled";
 import { Entry } from "../../../../../../utils/entry.utils";
 
@@ -17,7 +18,7 @@ export const LastDeletedElementsCardView = () => {
   }, []);
   return (
     <LastDeletedElements>
-      Last 10 deleted entries
+      <LastDeletedTitle>Last 10 deleted entries</LastDeletedTitle>
       <br />
       <Elements>
         {lastDeletedEntries.map((entry) => (
