@@ -6,6 +6,7 @@ import {
   LastDeletedTitle,
 } from "./component.styled";
 import { Entry } from "../../../../../../utils/entry.utils";
+import Button from "../../../../../Button";
 
 export const LastDeletedElementsCardView = () => {
   const [lastDeletedEntries, setLastDeletedEntries] = useState<IEntry[]>([]);
@@ -22,7 +23,12 @@ export const LastDeletedElementsCardView = () => {
       <br />
       <Elements>
         {lastDeletedEntries.map((entry) => (
-          <LastDeletedElement>{entry.title}</LastDeletedElement>
+          <LastDeletedElement>
+            {entry.title}
+            <Button outline="without" size="small">
+              Restore
+            </Button>
+          </LastDeletedElement>
         ))}
       </Elements>
     </LastDeletedElements>
