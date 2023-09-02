@@ -30,4 +30,18 @@ export const LastDeletedTitle = styled.span`
 
 export const LastDeletedElement = styled.div`
   margin-top: 0.8rem;
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between ;
+  align-items: center;
 `;
+export const LastDeletedEntryInfo = styled.div`
+  display: flex;
+  gap: 5rem;
+  width: 80%;
+  &  > div{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+  }
+`
