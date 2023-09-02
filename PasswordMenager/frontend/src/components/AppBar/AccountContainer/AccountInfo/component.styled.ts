@@ -12,8 +12,8 @@ export const AccountInfoContainer = styled.div`
   top: 20%;
   left: 0;
   right: -0;
-  min-height: 35rem;
-  max-height: 35rem;
+  min-height: 40rem;
+  max-height: 40rem;
   padding: 2rem;
 `;
 
@@ -24,7 +24,7 @@ export const Devider = styled.div`
 export const AccountInfoHeader = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 1.2rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   justify-content: space-between;
 `;
@@ -42,6 +42,8 @@ export const HeaderButton = styled.div<{ active?: boolean }>`
 export const AccountInfoContent = styled.div`
   min-height: 25rem;
   max-height: 25rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
 `;
 
 export const Last = styled.div``;

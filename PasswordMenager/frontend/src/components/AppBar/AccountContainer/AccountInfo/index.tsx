@@ -53,6 +53,8 @@ const AccountInfo = () => {
           Last deleted
         </HeaderButton>
       </AccountInfoHeader>
+      <Devider />
+
       <AccountInfoContent>
         {GetCurrentView(mainContentView, importRequests, notification)}
       </AccountInfoContent>

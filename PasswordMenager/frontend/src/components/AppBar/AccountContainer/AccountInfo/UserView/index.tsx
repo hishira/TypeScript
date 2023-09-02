@@ -1,8 +1,17 @@
 import { useState } from "react";
 import { ModalOpenUtils } from "../../../../../utils/moda.open.utils";
-import { UserEditModalView, UserIcons, UserInfo, UserInfoFlexContainer, UserInforContainer, UserTitleText } from "./component.styled";
+import {
+  Buttons,
+  UserEditModalView,
+  UserIcons,
+  UserInfo,
+  UserInfoFlexContainer,
+  UserInforContainer,
+  UserTitleText,
+} from "./component.styled";
 import Modal from "../../../../Modal";
 import { EditIcon } from "../../../../icons/EditIcon";
+import Button from "../../../../Button";
 
 const UserEditModalComponent = () => {
   return <UserEditModalView>Test</UserEditModalView>;
@@ -31,7 +40,7 @@ export const UserView = ({
       ></Modal>
       <UserInfoFlexContainer>
         <UserInforContainer>
-        <UserTitleText>User information:</UserTitleText>
+          <UserTitleText>User information:</UserTitleText>
           <UserInfo>
             <span>Email</span> <span>{user?.email}</span>
           </UserInfo>
@@ -41,6 +50,7 @@ export const UserView = ({
         </UserInforContainer>
         <UserIcons>
           <EditIcon click={() => check()} />
+          
         </UserIcons>
       </UserInfoFlexContainer>
     </>

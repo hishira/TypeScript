@@ -20,6 +20,9 @@ export const UserInforContainer = styled.div`
 `;
 export const UserIcons = styled.div`
   margin-left: 4rem;
+  /*display: flex;
+  flex-direction: column;
+  align-items: center;*/
   & > svg:hover {
     cursor: pointer;
   }
@@ -33,3 +36,7 @@ export const UserInfo = styled.div`
   gap: 4rem;
   margin-top: 0.7rem;
 `;
+
+export const Buttons = styled.div`
+  display: flex;
+`
