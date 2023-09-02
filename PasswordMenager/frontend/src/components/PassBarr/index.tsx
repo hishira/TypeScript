@@ -6,10 +6,9 @@ import { ImportModalEntries } from "../ImportModals/ImportEntries";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
 import { ExpotrModal, ImportModal } from "./PassBarrModalButtons";
-import {
-  Container,
-  GroupContainer
-} from "./component.styled";
+import { Container, GroupContainer } from "./component.styled";
+import { ExportIcon } from "../icons/ExportIcon";
+import { ImportIcon } from "../icons/ImportIcon";
 
 const exportHandle = (): void => {
   Export.getInstance()
@@ -78,15 +77,17 @@ const PassBar: React.FC = (): JSX.Element => {
         <Button color="lightgray" onClick={() => setmodalopen(true)}>
           New entry
         </Button>
-        <Button color="lightgray" onClick={() => setExportModalOpen(true)}>
+        {/*<Button color="lightgray" onClick={() => setExportModalOpen(true)}>
           Export
-        </Button>
-        <Button
+        </Button>*/}
+        <ExportIcon />
+        {/*<Button
           color="lightgray"
           onClick={() => setImportOptionModalOpen(true)}
         >
           Import
-        </Button>
+        </Button>*/}
+        <ImportIcon />
       </GroupContainer>
     </Container>
   );

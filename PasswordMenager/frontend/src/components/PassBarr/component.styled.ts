@@ -1,14 +1,18 @@
 import styled from "styled-components";
 
 export const GroupContainer = styled.div`
+  display:flex ;
   & > button:not(:first-child) {
     margin-left: 15px;
   }
+  width: 100%;
+  gap: 2rem;
 `;
 
 export const Container = styled.div`
   display: flex;
   padding: 5px;
+  width: 100%;
   justify-content: center;
 `;
 
