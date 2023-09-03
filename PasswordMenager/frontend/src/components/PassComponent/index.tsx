@@ -11,6 +11,14 @@ import { EntryPaginator, Paginator } from "../Paginator";
 type PassComponentProps = {
   store?: IGeneral;
 };
+const EmptyEntriesComponent = () => {
+  return (
+    <EmptyEntries>
+      <Text>No entries available :( </Text>
+    </EmptyEntries>
+  );
+};
+
 const PassComponent = ({ store }: PassComponentProps) => {
   const [selectedgroupid, setgroupid] = useState<string>("");
   const [entitiesrefresh, setentitesrefresh] = useState<boolean>(false);
@@ -54,9 +62,7 @@ const PassComponent = ({ store }: PassComponentProps) => {
           <Paginator pageInfo={paginator} paginationChange={paginatorChange} />
         </Entries>
       ) : (
-        <EmptyEntries>
-          <Text>No entries available :( </Text>
-        </EmptyEntries>
+        <EmptyEntriesComponent />
       )}
     </Container>
   );
