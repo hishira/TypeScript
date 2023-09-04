@@ -6,12 +6,13 @@ export const GroupContainer = styled.div`
     margin-left: 15px;
   }
   width: 100%;
-  gap: 2rem;
+  gap: .5rem;
 `;
 
 export const Container = styled.div`
   display: flex;
   padding: 5px;
+  height: 3rem;
   width: 100%;
   justify-content: center;
 `;

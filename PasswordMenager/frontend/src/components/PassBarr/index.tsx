@@ -9,6 +9,8 @@ import { ExpotrModal, ImportModal } from "./PassBarrModalButtons";
 import { Container, GroupContainer } from "./component.styled";
 import { ExportIcon } from "../icons/ExportIcon";
 import { ImportIcon } from "../icons/ImportIcon";
+import { PlusComponent } from "../icons/PlusIcon";
+import IconButton from "../IconButton";
 
 const exportHandle = (): void => {
   Export.getInstance()
@@ -74,9 +76,12 @@ const PassBar: React.FC = (): JSX.Element => {
         closeModalHandle={() => setImportEntriesModalOpen(false)}
       />
       <GroupContainer>
-        <Button color="lightgray" onClick={() => setmodalopen(true)}>
+        {/*<Button color="lightgray" onClick={() => setmodalopen(true)}>
           New entry
-        </Button>
+        </Button>*/}
+        <IconButton>
+          <PlusComponent />
+        </IconButton>
         {/*<Button color="lightgray" onClick={() => setExportModalOpen(true)}>
           Export
         </Button>*/}

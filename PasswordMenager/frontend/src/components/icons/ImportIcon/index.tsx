@@ -7,7 +7,7 @@ export const ImportIcon = ({ click }: IconProps): JSX.Element => {
     props["onClick"] = click;
   }
   return (
-    <svg {...props} viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+    <svg {...props} viewBox="0 0 256 256"  transform="scale(.6)" xmlns="http://www.w3.org/2000/svg">
       <rect fill="none" height="256" width="256" />
       <polyline
         fill="none"
