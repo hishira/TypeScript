@@ -15,3 +15,18 @@ export const Entries = styled.div`
   width: 100%;
   flex-direction: column;
 `;
+
+export const EmptyEntries = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+export const Text = styled.div`
+  font-weight: 550;
+  font-size: 48px;
+  color: lightslategray;
+  transform: rotate(-5deg);
+`

@@ -1,6 +1,11 @@
+import { FilterQuery } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Paginator, PaginatorDto } from 'src/utils/paginator';
 
+type LimitObject = {
+  limit?: number;
+};
 class PaginatorData<T> {
   constructor(public readonly data: T[], public readonly pageInfo: Paginator) {}
 
@@ -25,6 +30,11 @@ export class UtilsRepository {
         paginator,
       ) as unknown as PaginatorData<IEntry>,
     );
+  }
+  static checkLimitInOptionPossible(
+    option: LimitObject,
+  ): option is LimitObject {
+    return 'limit' in option && typeof option.limit === 'number';
   }
 
   static isPaginatorDefined(paginator?: PaginatorDto): boolean {

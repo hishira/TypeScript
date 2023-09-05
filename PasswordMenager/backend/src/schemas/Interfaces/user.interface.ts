@@ -19,6 +19,7 @@ export interface IUser extends Document {
   readonly email: string;
   readonly meta: IUserMeta;
   readonly _password?: string;
+  readonly defaultPasswordForEntries: string;
   validatePassword(password: string): Promise<boolean>;
 }
 
@@ -28,17 +29,26 @@ export class UserBuilder {
   async updatePassword(password: string): Promise<this> {
     const hashesPassword = await PasswordUtils.EncryptPassword(password);
     this.user = {
-      password: hashesPassword,
       ...this.userMeta,
+      password: hashesPassword,
     };
     return this;
   }
 
   loginUpdate(login: string): this {
     this.user = {
-      login: login,
       ...this.userMeta,
+      login: login,
     };
+    return this;
+  }
+
+  passwordForImportEntries(importPasswordEntries): this {
+    this.user = {
+      ...this.user,
+      defaultPasswordForEntries: importPasswordEntries,
+    };
+
     return this;
   }
 
@@ -46,13 +56,13 @@ export class UserBuilder {
     if (UserField.PASSWORD in user) {
       const hashesPassword = await PasswordUtils.EncryptPassword(user.password);
       this.user = {
-        password: hashesPassword,
         ...this.userMeta,
+        password: hashesPassword,
       } as unknown as Partial<IUser>;
     } else {
       this.user = {
-        login: user.login,
         ...this.userMeta,
+        login: user.login,
       } as unknown as Partial<IUser>;
     }
     return this;

@@ -9,7 +9,17 @@ export const Container = styled.div`
   padding: 0;
   height: 90vh;
 `;
+export const ButtonContainer = styled.div`
+  border: .5px solid slategray;
+  padding: 2rem 4rem;
+  border-radius: 10px;
+  &:hover{
+    cursor: pointer;
+    background-color: #cccccc;
+    transition: background-color .4s;
+  }
+`
 export const Typograph = styled.span`
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 550;
 `;

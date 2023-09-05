@@ -48,16 +48,22 @@ export class ActiveEntryFilter {
   ) {}
 
   public Filter(): FilterQuery<IEntry> {
+    const hasState = 'state' in this.option.getOption();
     return {
       ...this.option.getOption(),
-      state: this.state,
+      ...(!hasState && { state: this.state }),
     };
   }
 }
 
 type EntryUpdateSet = AnyKeys<IEntry> & AnyObject;
 export class DeleteEntryUpdate {
-  constructor(public $set: EntryUpdateSet = { state: EntryState.DELETED }) {}
+  constructor(
+    public $set: EntryUpdateSet = {
+      state: EntryState.DELETED,
+      ['meta.deleteDate']: Date.now(),
+    },
+  ) {}
 }
 
 //TODO: Check if can more optimize
@@ -181,6 +187,14 @@ export class EntryBuilder {
     } as unknown as Partial<IEntry>;
     return this;
   }
+
+  public setState(state: EntryState): this {
+    this.entry = {
+      ...this.entry,
+      state: state,
+    };
+    return this;
+  }
 }
 
 export class EntryDtoMapper {
@@ -248,8 +262,16 @@ export class OptionModelBuilder {
     private option:
       | FilterOption<FilterQuery<IEntry>>
       | DeleteOption<FilterQuery<IEntry>> = EMPTYOPTION,
+    private queryLimit: number = -1,
   ) {}
 
+  updateStateEntry(state: EntryState): this {
+    this.filterQuery = {
+      ...this.filterQuery,
+      state: state,
+    };
+    return this;
+  }
   updateEntryId(entryId: string): this {
     this.filterQuery = {
       ...this.filterQuery,
@@ -258,6 +280,10 @@ export class OptionModelBuilder {
     return this;
   }
 
+  updateLimit(limit: number): this {
+    this.queryLimit = limit;
+    return this;
+  }
   updateGroupId(groupId: string): this {
     this.filterQuery = {
       ...this.filterQuery,
@@ -295,6 +321,7 @@ export class OptionModelBuilder {
     | DeleteOption<FilterQuery<IEntry>> {
     return {
       getOption: () => this.filterQuery,
+      ...(this.queryLimit > 0 && { limit: this.queryLimit }),
     };
   }
 }

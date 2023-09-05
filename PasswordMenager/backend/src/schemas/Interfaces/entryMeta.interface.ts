@@ -16,4 +16,5 @@ export interface IEntryMeta extends IMeta {
   readonly lastEmail: string;
   readonly lastUrl: string;
   readonly lastEditedVariable: LastEditedVariable;
+  readonly deleteDate: Date;
 }

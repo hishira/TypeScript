@@ -8,6 +8,7 @@ import { PaginatorDto } from 'src/utils/paginator';
 import {
   EntryData,
   EntryDtoMapper,
+  EntryState,
   IEntry,
   OptionModelBuilder,
 } from '../schemas/Interfaces/entry.interface';
@@ -114,6 +115,22 @@ export class EntryService {
     }
   }
 
+  getLastDeletedUserEntries(userid: string): Promise<IEntry[] | EntryData> {
+    return this.entryRepository.find(
+      new OptionModelBuilder()
+        .updateUserIdOPtion(userid)
+        .updateStateEntry(EntryState.DELETED)
+        .updateLimit(10)
+        .getOption(),
+    );
+  }
+
+  activateDeletedEntreis(entryId: string) {
+    return this.entryRepository.update({
+      _id: entryId,
+      state: EntryState.ACTIVE,
+    });
+  }
   private getHistoryEntryPromise(groupid: string) {
     return this.entryRepository
       .find(new OptionModelBuilder().updateGroupId(groupid).getOption())

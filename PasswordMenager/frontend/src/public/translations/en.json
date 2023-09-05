@@ -1,0 +1,13 @@
+{
+    "appName": "Password manager",
+    "input.label.login": "Login",
+    "input.label.email": "Email",
+    "input.label.password": "Password",
+    "input.label.confirmPassword": "Confirm password",
+    "login.input.label.placeholder": "Login",
+    "email.input.label.placeholder": "Email",
+    "page.login.button.text": "Login",
+    "page.login.mainTitle": "Log in to account",
+    "page.login.or": "Or ",
+    "page.login.secondaryString": "create account"
+}

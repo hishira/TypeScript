@@ -4,7 +4,20 @@ export const CardsContainer = styled.div`
   width: 90%;
   padding: 2rem;
   max-height: 89.5vh;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: white;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: lightslategray;
+    border-radius: 15px;
+    width: 1px;
+  }
 `;
+
 export const Cards = styled.div`
   width: 80%;
   display: flex;

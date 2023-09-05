@@ -12,6 +12,4 @@ export class ModalOpenUtils {
     if (this.instance === null) this.instance = new ModalOpenUtils();
     return this.instance;
   }
-
-  constructor() {}
 }

@@ -7,6 +7,10 @@ import { PureMetaObject } from './meta.schema';
 
 const EntryMetaSchema = new Schema<IEntryMeta>({
   ...PureMetaObject,
+  deleteDate: {
+    type: Date,
+    default: null,
+  },
   lastNote: {
     type: String,
     default: null,
