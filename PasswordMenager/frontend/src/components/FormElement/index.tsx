@@ -1,6 +1,7 @@
 import React from "react";
 import InputField from "../InputField/index";
 import { FormElementComponent, InputLabel } from "./component.styled";
+import { Translation } from "../Translation";
 
 type Props = {
   label: string;
@@ -17,7 +18,7 @@ const FormElement = ({
   value
 }: Props): JSX.Element => {
   return <FormElementComponent>
-      <InputLabel>{label}</InputLabel>
+      <InputLabel>{Translation(label)}</InputLabel>
       <InputField
         onChange={inputChange}
         placeholder={inputplaceholder}

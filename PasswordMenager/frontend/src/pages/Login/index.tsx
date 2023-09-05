@@ -68,11 +68,11 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
         <FormComponent
           firstinputhandle={loginchange}
           secondinputhandle={passwordchange}
-          buttonmessage="Login"
+          buttonmessage="page.login.button.text"
           buttonHandle={loginClickHandle}
-          secondactionastirng="create account"
+          secondactionastirng="page.login.secondaryString"
           redirectfunction={redirectFunction}
-          maintitle="Log in to account"
+          maintitle="page.login.mainTitle"
         />
       </FormContainer>
     </Container>
