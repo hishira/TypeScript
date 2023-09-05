@@ -1,0 +1,13 @@
+{
+    "appName": "Menadżer haseł",
+    "input.label.login": "Nazwa użytkownika",
+    "input.label.email": "Email",
+    "input.label.password": "Hasło",
+    "input.label.confirmPassword": "Powtórz hasło",
+    "login.input.label.placeholder": "Nazwa użytkownika",
+    "email.input.label.placeholder": "Email",
+    "page.login.button.text": "Zaloguj",
+    "page.login.mainTitle": "Zaloguj do aplikacji",
+    "page.login.or": "Albo ",
+    "page.login.secondaryString": "utwórz konto"
+}
