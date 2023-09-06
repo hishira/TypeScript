@@ -9,5 +9,11 @@
     "page.login.button.text": "Login",
     "page.login.mainTitle": "Log in to account",
     "page.login.or": "Or ",
-    "page.login.secondaryString": "create account"
+    "page.login.secondaryString": "create account",
+    "page.signUp.buttonMessage": "Sign up",
+    "page.signUp.mainTitle":"Create account",
+    "page.signUp.secondary": "login",
+    "page.signUp.popupMessage.passwordLength":"Password min length must be 6",
+    "page.signUp.popupMessage.samePassword":"Passwords must be the same",
+    "page.signUp.popupMessage.userCreated": "User created"
 }

@@ -9,5 +9,11 @@
     "page.login.button.text": "Zaloguj",
     "page.login.mainTitle": "Zaloguj do aplikacji",
     "page.login.or": "Albo ",
-    "page.login.secondaryString": "utwórz konto"
+    "page.login.secondaryString": "utwórz konto",
+    "page.signUp.buttonMessage": "Zarejestruj się",
+    "page.signUp.mainTitle": "Utwórz konto",
+    "page.signUp.secondary": "zaloguj",
+    "page.signUp.popupMessage.passwordLength":"Hasło powinno zawierać minimum 6 znaków",
+    "page.signUp.popupMessage.samePassword":"Hasła muszą być takie same",
+    "page.signUp.popupMessage.userCreated": "Użytkownik utworzony pomyślnie"
 }
