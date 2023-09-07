@@ -1,5 +1,6 @@
 import Button from "../../Button";
 import FormElement from "../../FormElement";
+import { Translation } from "../../Translation";
 import { NewGroup } from "./component.styled";
 
 type ModalComponentProps = {
@@ -15,9 +16,9 @@ const NewGroupComponent = ({
   return (
     <NewGroup>
       <FormElement
-        label="Group name"
+        label="groups.newgroup.groupname"
         inputtype="text"
-        inputplaceholder="name"
+        inputplaceholder="groups.newgroup.name"
         inputChange={func}
       />
       <Button
@@ -25,7 +26,7 @@ const NewGroupComponent = ({
         onClick={buttonhandle}
         color="lightblue"
       >
-        Add group
+        {Translation("groups.newgroup.addgroup")}
       </Button>
     </NewGroup>
   );

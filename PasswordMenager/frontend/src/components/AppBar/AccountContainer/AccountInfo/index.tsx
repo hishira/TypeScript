@@ -9,6 +9,7 @@ import {
 } from "./component.styled";
 import { GetAccountInfoPromise } from "./utils";
 import { UserView } from "./UserView";
+import { Translation } from "../../../Translation";
 
 const AccountInfo = () => {
   const [userinfo, setUserInfo] = useState<IUser>();
@@ -38,19 +39,19 @@ const AccountInfo = () => {
           onClick={() => setMainContent("Notification")}
           active={mainContentView === "Notification"}
         >
-          Notification
+          {Translation('account.view.accountInfo.notification')}
         </HeaderButton>
         <HeaderButton
           onClick={() => setMainContent("ImportRequest")}
           active={mainContentView === "ImportRequest"}
         >
-          Import request
+          {Translation('account.view.accountInfo.importRequest')}
         </HeaderButton>
         <HeaderButton
           onClick={() => setMainContent("Last")}
           active={mainContentView === "Last"}
         >
-          Last deleted
+          {Translation('account.view.accountInfo.lastDeleted')}
         </HeaderButton>
       </AccountInfoHeader>
       <Devider />

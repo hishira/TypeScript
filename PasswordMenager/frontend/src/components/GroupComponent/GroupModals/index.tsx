@@ -77,8 +77,8 @@ const AcceptEditModal = ({ newName, setNewName }: AceptEditModalProps) => {
   return (
     <AcceptModalContainer>
       <FormElement
-        label={"New group name"}
-        inputplaceholder="New group name"
+        label={"groups.groupsmodal.newgroupname"}
+        inputplaceholder="groups.groupsmodal.newgroupname"
         inputChange={(e) => setNewName(e.target.value)}
         inputtype="txt"
         value={newName}

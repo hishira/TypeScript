@@ -8,6 +8,7 @@ import { GroupsModal } from "./GroupModals";
 import { GroupsComponent } from "./Groups";
 import NewGroupComponent from "./NewGroupComponent";
 import { ButtonContainer, Category, Container } from "./component.styled";
+import { Translation } from "../Translation";
 
 type NewGroupComponentProps = {
   setgroupdto: React.Dispatch<React.SetStateAction<CreateGroup>>;
@@ -99,7 +100,7 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
         editHandle={editGroupHandle}
       />
       <Category>
-        <div>Categories</div>
+        <div>{Translation("groups.view.title")}</div>
         <IconButton onClick={() => groupAction.setCreateModal(true)}>
           <PlusComponent></PlusComponent>
         </IconButton>

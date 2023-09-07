@@ -8,6 +8,7 @@ import {
 } from "./component.styled";
 import { Entry } from "../../../../../../utils/entry.utils";
 import Button from "../../../../../Button";
+import { Translation } from "../../../../../Translation";
 
 export const LastDeletedElementsCardView = () => {
   const [lastDeletedEntries, setLastDeletedEntries] = useState<IEntry[]>([]);
@@ -20,14 +21,14 @@ export const LastDeletedElementsCardView = () => {
   }, []);
   return (
     <LastDeletedElements>
-      <LastDeletedTitle>Last 10 deleted entries</LastDeletedTitle>
+      <LastDeletedTitle>{Translation('account.view.lastDeletedEntries.title')}</LastDeletedTitle>
       <br />
       <Elements>
         <LastDeletedElement>
           <LastDeletedEntryInfo>
-            <div>Title</div>
-            <div>Username</div>
-            <div>URL</div>
+            <div>{Translation('account.view.lastDeletedEntries.table.column.title')}</div>
+            <div>{Translation('account.view.lastDeletedEntries.table.column.username')}</div>
+            <div>{Translation('account.view.lastDeletedEntries.table.column.url')}</div>
           </LastDeletedEntryInfo>
         </LastDeletedElement>
         {lastDeletedEntries.map((entry) => (
@@ -38,7 +39,7 @@ export const LastDeletedElementsCardView = () => {
               <div>{entry.url}</div>
             </LastDeletedEntryInfo>
             <Button outline="without" size="small">
-              Restore
+            {Translation('account.view.lastDeletedEntries.table.actionButton')}
             </Button>
           </LastDeletedElement>
         ))}

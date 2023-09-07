@@ -1,5 +1,6 @@
 import { Import } from "../../../../../../utils/import.utils";
 import Button from "../../../../../Button";
+import { Translation } from "../../../../../Translation";
 import { ImportRequest, Imports } from "./component.styled";
 export type ImportRequestData = {
   _id: string;
@@ -26,9 +27,9 @@ export const ImportRequestCardView = ({
   return (
     <ImportRequest>
       <div>
-        <span>Import state</span>
-        <span>Created at</span>
-        <span>Number of entries to add</span>
+        <span>{Translation('account.view.importRequest.table.column.importState')}</span>
+        <span>{Translation('account.view.importRequest.table.column.createdAt')}</span>
+        <span>{Translation('account.view.importRequest.table.column.numberOfEntriesToAdd')}</span>
         <span></span>
       </div>
       <Imports>
@@ -38,7 +39,7 @@ export const ImportRequestCardView = ({
             <span>{importVal.created?.slice(0, 10)}</span>
             <span>{importVal.entriesToImport.length}</span>
             <Button onClick={() => activateImportRequest(importVal._id)}>
-              Activate
+            {Translation('account.view.importRequest.table.actionButton')}
             </Button>
           </div>
         ))}
