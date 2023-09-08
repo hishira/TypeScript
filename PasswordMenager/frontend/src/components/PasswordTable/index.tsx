@@ -1,3 +1,4 @@
+import { Translation } from "../Translation";
 import {
   TableBody,
   TableContainer,
@@ -22,10 +23,10 @@ export const PasswordTableComponent = ({
     <TableContainer>
       <TableHead>
         <TableRow>
-          <th>Title</th>
-          <th>Username</th>
-          <th>Password</th>
-          <th>Note</th>
+          <th>{Translation("entries.table.column.title")}</th>
+          <th>{Translation("entries.table.column.username")}</th>
+          <th>{Translation("entries.table.column.password")}</th>
+          <th>{Translation("entries.table.column.note")}</th>
           <th></th>
         </TableRow>
       </TableHead>

@@ -1,3 +1,4 @@
+import { Translation } from "../Translation";
 import { CloseIcon } from "../icons/CloseIcon";
 import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 import {
@@ -25,7 +26,7 @@ export const GroupSelection = ({
 }: GroupSelectionProps) =>
   !edit ? (
     <NormalContainer>
-      <SelectLabel>Select group</SelectLabel>
+      <SelectLabel>{Translation('newentry.helpers.groupSelect')}</SelectLabel>
       <SelectContainer
         onChange={editEntry.groupset.bind(editEntry)}
         defaultValue={''}
@@ -65,7 +66,7 @@ export const PasswordGeneratorOption = ({
                 onChange={editEntry.letterscheckbox.bind(editEntry)}
                 checked={editEntry.passwordcharacters.letters}
               />
-              <div>Letters</div>
+              <div>{Translation('newentry.helpers.letters')}</div>
             </Checkboxwithlabel>
             <Checkboxwithlabel>
               <PasswordCheckbox
@@ -74,7 +75,7 @@ export const PasswordGeneratorOption = ({
                 checked={editEntry.passwordcharacters.numbers}
 
               />
-              <div>Numbers</div>
+              <div>{Translation('newentry.helpers.numbers')}</div>
             </Checkboxwithlabel>
             <Checkboxwithlabel>
               <PasswordCheckbox
@@ -83,7 +84,7 @@ export const PasswordGeneratorOption = ({
                 checked={editEntry.passwordcharacters.specialChar}
 
               />
-              <div>Special characters</div>
+              <div>{Translation('newentry.helpers.specialCharacters')}</div>
             </Checkboxwithlabel>
           </Checkboxes>
           <div>

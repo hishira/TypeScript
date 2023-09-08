@@ -10,6 +10,7 @@ import { FileSelector } from "../../ImportFille";
 import { ImportEntries } from "./component.styled";
 import { Import } from "../../../utils/import.utils";
 import ImportEntriesModalComponent from "./ImportEntriesModalComponent";
+import { TranslationFunction } from "../../Translation";
 
 type ImportEntriesModalProps = {
   modalOpen: boolean;
@@ -49,7 +50,7 @@ const CheckExtendButton = (
   formData: FormData | undefined,
   setImportFileInfo: Dispatch<SetStateAction<ImportCheckData | null>>
 ) => ({
-  buttonText: "Check",
+  buttonText: TranslationFunction('import.modal.button.check'),
   handleButton: () => acceptHandle(formData, setImportFileInfo),
 });
 
@@ -83,7 +84,7 @@ export const ImportModalEntries = ({
           (_) =>
             _ &&
             setExtendData({
-              buttonText: "Import",
+              buttonText: TranslationFunction('import.modal.button.import'),
               handleButton: () => console.log("Import"),
             })
         ),

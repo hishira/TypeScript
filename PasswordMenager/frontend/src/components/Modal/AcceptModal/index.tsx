@@ -5,6 +5,7 @@ import { clickOnModal } from "../../../utils/modal.utils";
 import { ButtonGroup } from "./component.styled";
 import { ModalProps } from "..";
 import Button from "../../Button";
+import { Translation } from "../../Translation";
 type AcceptanceModalPrope = ModalProps & {
   acceptHandle: (...args: any[]) => any;
   disableButton?: boolean;
@@ -29,14 +30,16 @@ export const AcceptModalComponent = ({
         <ModalContainer>
           {component}
           <ButtonGroup>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose}>
+              {Translation("modal.button.cancel")}
+            </Button>
             {extend ? (
               <Button
                 disabled={disableButton}
                 color="lightblue"
                 onClick={extend.handleButton}
               >
-                {extend.buttonText}
+                {Translation(extend.buttonText)}
               </Button>
             ) : (
               <Button
@@ -44,7 +47,7 @@ export const AcceptModalComponent = ({
                 color="lightblue"
                 onClick={acceptHandle}
               >
-                Accept
+                {Translation("modal.button.accept")}
               </Button>
             )}
           </ButtonGroup>

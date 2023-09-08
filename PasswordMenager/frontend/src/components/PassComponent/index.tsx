@@ -7,6 +7,7 @@ import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { EntryPaginator, Paginator } from "../Paginator";
+import { Translation } from "../Translation";
 
 type PassComponentProps = {
   store?: IGeneral;
@@ -14,7 +15,7 @@ type PassComponentProps = {
 const EmptyEntriesComponent = () => {
   return (
     <EmptyEntries>
-      <Text>No entries available :( </Text>
+      <Text>{Translation("entries.noEntriesAvailable")}</Text>
     </EmptyEntries>
   );
 };

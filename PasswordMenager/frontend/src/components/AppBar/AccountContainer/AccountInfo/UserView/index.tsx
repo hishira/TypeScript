@@ -12,6 +12,7 @@ import {
 import Modal from "../../../../Modal";
 import { EditIcon } from "../../../../icons/EditIcon";
 import Button from "../../../../Button";
+import { Translation } from "../../../../Translation";
 
 const UserEditModalComponent = () => {
   return <UserEditModalView>Test</UserEditModalView>;
@@ -40,12 +41,12 @@ export const UserView = ({
       ></Modal>
       <UserInfoFlexContainer>
         <UserInforContainer>
-          <UserTitleText>User information:</UserTitleText>
+          <UserTitleText>{Translation('userinformation.userinfo')}</UserTitleText>
           <UserInfo>
-            <span>Email</span> <span>{user?.email}</span>
+            <span>{Translation('userinformation.email')}</span> <span>{user?.email}</span>
           </UserInfo>
           <UserInfo>
-            <span>Login</span> <span>{user?.login}</span>
+            <span>{Translation('userinformation.login')}</span> <span>{user?.login}</span>
           </UserInfo>
         </UserInforContainer>
         <UserIcons>

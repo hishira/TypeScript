@@ -7,6 +7,7 @@ import {
   ImportContainer,
   ImportInput,
 } from "./component.styled";
+import { Translation, TranslationFunction } from "../Translation";
 type PossibleFiles = `${PossibleFileType}`;
 enum PossibleFileType {
   JPG = "jpeg",
@@ -39,7 +40,9 @@ export const FileSelector = ({
     setIsWrongType(isWrongType);
     isWrongType &&
       setErrorMessage(
-        `Wrong file type, type possible: ${availableFileType.join(", ")}`
+        `${TranslationFunction(
+          "import.modal.errorMessage"
+        )}${availableFileType.join(", ")}`
       );
 
     fileChange(e);
@@ -48,7 +51,7 @@ export const FileSelector = ({
   return (
     <FileSelectorComponent>
       <div>
-        <label>Choice file</label>
+        <label>{Translation("import.modal.choiceFile")}</label>
         <ImportInput role="fileinput" onChange={onFileChange}></ImportInput>
       </div>
       {isWrongType ? <ErrorMessasge>{errorMessage}</ErrorMessasge> : null}
@@ -78,7 +81,7 @@ export const ImportFile = ({
       <FileSelector fileChange={(e) => fileChange(e)} />
       <div>
         <FormElement
-          label={"Password"}
+          label={TranslationFunction("input.label.password")}
           inputplaceholder="***"
           inputChange={passwordChange}
           inputtype="password"

@@ -1,18 +1,22 @@
 import Button from "../../Button";
+import { Translation } from "../../Translation";
 import { ModalButtonsContainer } from "./component.styled";
 
 type ExportModalProps = {
   exportHandle: () => void;
   exportEncrypted: () => void;
 };
-export const ExpotrModal = ({ exportHandle, exportEncrypted }: ExportModalProps) => {
+export const ExpotrModal = ({
+  exportHandle,
+  exportEncrypted,
+}: ExportModalProps) => {
   return (
     <ModalButtonsContainer>
       <Button color="lightgray" onClick={exportHandle}>
-        Export entries
+        {Translation("bar.modal.button.exportentries")}
       </Button>
       <Button color="lightgray" onClick={exportEncrypted}>
-        Export encrypted
+        {Translation("bar.modal.button.exportencrypted")}
       </Button>
     </ModalButtonsContainer>
   );
@@ -21,14 +25,17 @@ type ImportModalProps = {
   importEntries: () => void;
   importEncrypted: () => void;
 };
-export const ImportModal = ({ importEntries, importEncrypted }: ImportModalProps) => {
+export const ImportModal = ({
+  importEntries,
+  importEncrypted,
+}: ImportModalProps) => {
   return (
     <ModalButtonsContainer>
       <Button color="lightgray" onClick={importEntries}>
-        Import passwords
+        {Translation("bar.modal.button.importpaswords")}
       </Button>
       <Button color="lightgray" onClick={importEncrypted}>
-        Import encrypted
+        {Translation("bar.modal.button.importencrypted")}
       </Button>
     </ModalButtonsContainer>
   );

@@ -15,6 +15,7 @@ import {
 } from "./component.styled";
 import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
+import { Translation } from "../Translation";
 
 export type PasswordCharactersTypes = {
   letters: boolean;
@@ -129,22 +130,22 @@ const NewEntryComponent = ({
       ComponentToLoad={
         <EntryModalComponent disabled={generatePasswordModal}>
           <FormElement
-            label={"Title"}
-            inputplaceholder="Title"
+            label={"newentry.field.title"}
+            inputplaceholder="newentry.field.title"
             inputChange={editEntry.settitle.bind(editEntry)}
             inputtype="txt"
             value={newentry.title}
           />
           <FormElement
-            label={"Username"}
-            inputplaceholder="Username"
+            label={"newentry.field.username"}
+            inputplaceholder="newentry.field.username"
             inputChange={editEntry.setusername.bind(editEntry)}
             inputtype="txt"
             value={newentry.username}
           />
           <FormElement
-            label={"Url"}
-            inputplaceholder="Url link"
+            label={"newentry.field.url"}
+            inputplaceholder="newentry.field.url.placeholder"
             inputChange={editEntry.seturl.bind(editEntry)}
             inputtype="txt"
             value={newentry.url}
@@ -152,7 +153,7 @@ const NewEntryComponent = ({
           <GroupSelection edit={edit} editEntry={editEntry} groups={groups} />
           <SectionContainer>
             <FormElement
-              label={"Password"}
+              label={"newentry.field.password"}
               inputplaceholder="***"
               inputChange={editEntry.setpassword.bind(editEntry)}
               inputtype="password"
@@ -174,23 +175,24 @@ const NewEntryComponent = ({
               color="lightblue"
               onClick={editEntry.generateHandle.bind(editEntry)}
             >
-              Generate
+              {Translation('newentry.action.generate')}
             </Button>
             <Button onClick={() => setGeneratorPasswordModal(true)}>
-              Generator
+             {Translation('newentry.action.generator')}
+
             </Button>
             <PassLen id="passlen">{passlen}</PassLen>
           </ButtonsRangeContainer>
           <FormElement
-            label={"Password expire date (optional)"}
-            inputplaceholder="Password expire date"
+            label={"newentry.field.passwordExpireDate"}
+            inputplaceholder="newentry.field.passwordExpireDate.placeholder"
             inputChange={editEntry.setexirationpassworddate.bind(editEntry)}
             inputtype="date"
             value={newentry.passwordExpiredDate}
           />
           <FormElement
-            label={"Note"}
-            inputplaceholder="note..."
+            label={"newentry.field.passwordExpireDate.note"}
+            inputplaceholder="newentry.field.passwordExpireDate.note.placehodler"
             inputChange={editEntry.setnote.bind(editEntry)}
             inputtype="text"
             value={newentry.note}
@@ -202,11 +204,11 @@ const NewEntryComponent = ({
               color="lightblue"
               onClick={addnewentry}
             >
-              Add
+              {Translation('newentry.action.Add')}
             </Button>
           ) : (
             <Button size="small" color="lightblue" onClick={edithaneld}>
-              Update
+              {Translation('newentry.action.update')}
             </Button>
           )}
         </EntryModalComponent>
