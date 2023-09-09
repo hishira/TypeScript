@@ -25,7 +25,6 @@ i18n.use(initReactI18next).init({
 ReactDOM.render(
   <React.StrictMode>
     <App />
-    <button onClick={()=>i18n.changeLanguage('pl')}>Test</button>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -16,6 +16,9 @@ export const LeftSide = styled.div`
 export const RigthSide = styled.div`
   min-height: 2rem;
   padding: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
   height: 3rem;
   min-height: 3rem;
   max-height : 3rem;

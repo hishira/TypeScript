@@ -3,6 +3,7 @@ import { IGeneral } from "../../models/General";
 import PassBar from "../PassBarr";
 import AccountContainer from "./AccountContainer/index";
 import { Bar, LeftSide, RigthSide } from "./component.styled";
+import { LanguageChange } from "./LanguageChange";
 
 type AppBarProps = {
   store?: IGeneral;
@@ -19,6 +20,7 @@ const AppBar = ({ store }: AppBarProps): JSX.Element => {
     <Bar>
       <AppBarLeftSide userActive={store?.UserActivity} />
       <RigthSide>
+        <LanguageChange />
         <AccountContainer />
       </RigthSide>
     </Bar>
