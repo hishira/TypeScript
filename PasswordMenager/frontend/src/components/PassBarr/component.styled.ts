@@ -7,6 +7,9 @@ export const GroupContainer = styled.div`
   }
   width: 100%;
   gap: .5rem;
+  & > svg:hover{
+    cursor: pointer;
+  }
 `;
 
 export const Container = styled.div`

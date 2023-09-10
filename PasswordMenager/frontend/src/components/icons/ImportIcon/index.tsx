@@ -7,35 +7,18 @@ export const ImportIcon = ({ click }: IconProps): JSX.Element => {
     props["onClick"] = click;
   }
   return (
-    <svg {...props} viewBox="0 0 256 256"  transform="scale(.6)" xmlns="http://www.w3.org/2000/svg">
-      <rect fill="none" height="256" width="256" />
-      <polyline
-        fill="none"
-        points="86 68 128 128 170 68"
-        stroke="#000"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="8"
-      />
-      <line
-        fill="none"
-        stroke="#000"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="8"
-        x1="128"
-        x2="128"
-        y1="128"
-        y2="16"
-      />
-      <path
-        d="M176,96h24a8,8,0,0,1,8,8V208a8,8,0,0,1-8,8H56a8,8,0,0,1-8-8V104a8,8,0,0,1,8-8H80"
-        fill="none"
-        stroke="#000"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="8"
-      />
+    <svg
+      {...props}
+      data-name="Design Convert"
+      id="Design_Convert"
+      viewBox="0 0 64 64"
+      width='45px'
+      height='45px'
+     
+    >
+      <path d="M50,52H14a7,7,0,0,1-7-7V41a1,1,0,0,1,2,0v4a5,5,0,0,0,5,5H50a5,5,0,0,0,5-5V41a1,1,0,0,1,2,0v4A7,7,0,0,1,50,52Z" />
+      <path d="M32,41a1,1,0,0,1-1-1V13a1,1,0,0,1,2,0V40A1,1,0,0,1,32,41Z" />
+      <path d="M32,42a1,1,0,0,1-.71-.29l-10-10a1,1,0,0,1,1.42-1.42L32,39.59l9.29-9.3a1,1,0,0,1,1.42,1.42l-10,10A1,1,0,0,1,32,42Z" />
     </svg>
   );
 };

@@ -76,23 +76,11 @@ const PassBar: React.FC = (): JSX.Element => {
         closeModalHandle={() => setImportEntriesModalOpen(false)}
       />
       <GroupContainer>
-        {/*<Button color="lightgray" onClick={() => setmodalopen(true)}>
-          New entry
-        </Button>*/}
         <IconButton>
-          <PlusComponent />
+          <PlusComponent click={() => setmodalopen(true)} />
         </IconButton>
-        {/*<Button color="lightgray" onClick={() => setExportModalOpen(true)}>
-          Export
-        </Button>*/}
-        <ExportIcon />
-        {/*<Button
-          color="lightgray"
-          onClick={() => setImportOptionModalOpen(true)}
-        >
-          Import
-        </Button>*/}
-        <ImportIcon />
+        <ExportIcon click={() => setExportModalOpen(true)} />
+        <ImportIcon click={() => setImportOptionModalOpen(true)} />
       </GroupContainer>
     </Container>
   );

@@ -4,7 +4,7 @@ export const AccountInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: whitesmoke;
-  width: 55rem;
+  width: 80%;
   border-radius: 5px;
   position: fixed;
   margin-left: auto;
@@ -15,6 +15,9 @@ export const AccountInfoContainer = styled.div`
   min-height: 40rem;
   max-height: 40rem;
   padding: 2rem;
+  @media (min-width: 1000px){
+    width: 55rem;
+  }
 `;
 
 export const Devider = styled.div`

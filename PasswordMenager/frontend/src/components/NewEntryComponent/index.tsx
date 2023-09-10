@@ -204,7 +204,7 @@ const NewEntryComponent = ({
               color="lightblue"
               onClick={addnewentry}
             >
-              {Translation('newentry.action.Add')}
+              {Translation('newentry.action.add')}
             </Button>
           ) : (
             <Button size="small" color="lightblue" onClick={edithaneld}>
