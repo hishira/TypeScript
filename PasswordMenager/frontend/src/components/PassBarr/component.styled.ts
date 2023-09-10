@@ -7,7 +7,7 @@ export const GroupContainer = styled.div`
     margin-left: 15px;
   }
   width: 100%;
-  gap: .75rem;
+  gap: 1.3rem;
   & > svg:hover{
     cursor: pointer;
   }

@@ -5,17 +5,18 @@ import { Entry } from "../../utils/entry.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import { Loading } from "../Loading";
+import { Translation } from "../Translation";
 import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 import {
   ButtonsRangeContainer,
   CheckBox,
   EntryModalComponent,
   PassLen,
+  PasswordFormContainer,
   SectionContainer,
 } from "./component.styled";
 import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
-import { Translation } from "../Translation";
 
 export type PasswordCharactersTypes = {
   letters: boolean;
@@ -150,16 +151,32 @@ const NewEntryComponent = ({
             inputtype="txt"
             value={newentry.url}
           />
-          <GroupSelection edit={edit} editEntry={editEntry} groups={groups} />
+          <FormElement
+            label={"newentry.field.passwordExpireDate.note"}
+            inputplaceholder="newentry.field.passwordExpireDate.note.placehodler"
+            inputChange={editEntry.setnote.bind(editEntry)}
+            inputtype="text"
+            value={newentry.note}
+          />
           <SectionContainer>
+            <PasswordFormContainer>
+              <FormElement
+                label={"newentry.field.password"}
+                inputplaceholder="***"
+                inputChange={editEntry.setpassword.bind(editEntry)}
+                inputtype="password"
+                value={newentry.password}
+              />
+            </PasswordFormContainer>
             <FormElement
-              label={"newentry.field.password"}
-              inputplaceholder="***"
-              inputChange={editEntry.setpassword.bind(editEntry)}
-              inputtype="password"
-              value={newentry.password}
+              fontSize='14px'
+              width="40%"
+              label={"newentry.field.passwordExpireDate"}
+              inputplaceholder="newentry.field.passwordExpireDate.placeholder"
+              inputChange={editEntry.setexirationpassworddate.bind(editEntry)}
+              inputtype="date"
+              value={newentry.passwordExpiredDate}
             />
-            <CheckBox type="checkbox" onChange={checkBoxHandler} />
           </SectionContainer>
           <PasswordGeneratorOption
             open={generatePasswordModal}
@@ -175,28 +192,20 @@ const NewEntryComponent = ({
               color="lightblue"
               onClick={editEntry.generateHandle.bind(editEntry)}
             >
-              {Translation('newentry.action.generate')}
+              {Translation("newentry.action.generate")}
             </Button>
             <Button onClick={() => setGeneratorPasswordModal(true)}>
-             {Translation('newentry.action.generator')}
-
+              {Translation("newentry.action.generator")}
             </Button>
             <PassLen id="passlen">{passlen}</PassLen>
+            <span>
+              Show password
+              <CheckBox type="checkbox" onChange={checkBoxHandler} />
+            </span>
           </ButtonsRangeContainer>
-          <FormElement
-            label={"newentry.field.passwordExpireDate"}
-            inputplaceholder="newentry.field.passwordExpireDate.placeholder"
-            inputChange={editEntry.setexirationpassworddate.bind(editEntry)}
-            inputtype="date"
-            value={newentry.passwordExpiredDate}
-          />
-          <FormElement
-            label={"newentry.field.passwordExpireDate.note"}
-            inputplaceholder="newentry.field.passwordExpireDate.note.placehodler"
-            inputChange={editEntry.setnote.bind(editEntry)}
-            inputtype="text"
-            value={newentry.note}
-          />
+
+          <GroupSelection edit={edit} editEntry={editEntry} groups={groups} />
+
           {!edit ? (
             <Button
               disabled={!editEntry.isFormValid}
@@ -204,11 +213,11 @@ const NewEntryComponent = ({
               color="lightblue"
               onClick={addnewentry}
             >
-              {Translation('newentry.action.add')}
+              {Translation("newentry.action.add")}
             </Button>
           ) : (
             <Button size="small" color="lightblue" onClick={edithaneld}>
-              {Translation('newentry.action.update')}
+              {Translation("newentry.action.update")}
             </Button>
           )}
         </EntryModalComponent>

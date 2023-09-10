@@ -7,7 +7,10 @@ export const EntryModalComponent = styled.div<{ disabled?: boolean }>`
   width: 35rem;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
 `;
-export const NormalContainer = styled.div``;
+export const NormalContainer = styled.div`
+  margin-bottom: .5rem;
+`;
+
 export const PassLen = styled.div`
   font-size: ".9rem";
 `;
@@ -27,9 +30,13 @@ export const GeneratorModal = styled.div`
 export const SectionContainer = styled.section`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   align-content: center;
 `;
+
+export const PasswordFormContainer = styled.div`
+  width: 65%;
+`
 export const GeneratorInsideModal = styled.div`
   position: relative;
   padding: 2rem;
@@ -53,13 +60,12 @@ export const ButtonsRangeContainer = styled.section`
   display: flex;
   justify-content: left;
   align-items: center;
-  align-content: center;
   & > :not(:first-child) {
     margin-left: 1rem;
   }
 `;
 export const CheckBox = styled.input`
-  transform: translate(0%, 175%);
+  margin-top: 5px;
 `;
 export const Checkboxes = styled.div`
   display: flex;

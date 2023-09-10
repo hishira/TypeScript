@@ -8,24 +8,30 @@ type Props = {
   inputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputplaceholder: string;
   inputtype: string;
-  value?: string | number
+  value?: string | number;
+  fontSize?: string;
+  width?: string;
 };
 const FormElement = ({
   label,
   inputChange,
   inputplaceholder,
   inputtype,
-  value
+  value,
+  fontSize,
+  width,
 }: Props): JSX.Element => {
-  return <FormElementComponent>
-      <InputLabel>{Translation(label)}</InputLabel>
+  return (
+    <FormElementComponent width={width}>
+      <InputLabel fontSize={fontSize}>{Translation(label)}</InputLabel>
       <InputField
         onChange={inputChange}
         placeholder={inputplaceholder}
         type={inputtype}
         value={value}
       />
-  </FormElementComponent>;
+    </FormElementComponent>
+  );
 };
 
 export default FormElement;
