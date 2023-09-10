@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Export } from "../../utils/export.utils";
 import Button from "../Button";
 import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
@@ -39,7 +39,6 @@ const PassBar: React.FC = (): JSX.Element => {
   const importEncrypted = (): void => setImportModalOpen(true);
 
   const importEntries = (): void => setImportEntriesModalOpen(true);
-
   return (
     <Container>
       <Modal

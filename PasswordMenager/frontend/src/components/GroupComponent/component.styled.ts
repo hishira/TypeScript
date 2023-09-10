@@ -6,7 +6,10 @@ export const Container = styled.div`
   justify-content: space-between;
   width: 25%;
   border-right: 0.1rem solid lightgray;
-  @media (max-width: 650px) {
+  @media (max-width: 1200px){
+    width: 35%;
+  }
+  @media (max-width: 950px) {
     width: 100%;
   }
 `;
