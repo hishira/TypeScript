@@ -10,6 +10,7 @@ import {
 import { GetAccountInfoPromise } from "./utils";
 import { UserView } from "./UserView";
 import { Translation } from "../../../Translation";
+import { Loading } from "../../../Loading";
 
 const AccountInfo = () => {
   const [userinfo, setUserInfo] = useState<IUser>();
@@ -17,13 +18,14 @@ const AccountInfo = () => {
   const [notification, setNotification] = useState<any[]>([]);
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
-
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     GetAccountInfoPromise().then((values) => {
       const [importsInfo, user, activeNotifications] = values;
       setUserInfo(user);
       setImportRequests(importsInfo);
       setNotification(activeNotifications);
+      setLoading(false);
     });
   }, []);
 
@@ -32,33 +34,42 @@ const AccountInfo = () => {
 
   return (
     <AccountInfoContainer>
-      <UserView user={userinfo}></UserView>
+      <Loading
+        loading={loading}
+        ComponentToLoad={<UserView user={userinfo}></UserView>}
+      />
       <Devider />
-      <AccountInfoHeader>
-        <HeaderButton
-          onClick={() => setMainContent("Notification")}
-          active={mainContentView === "Notification"}
-        >
-          {Translation('account.view.accountInfo.notification')}
-        </HeaderButton>
-        <HeaderButton
-          onClick={() => setMainContent("ImportRequest")}
-          active={mainContentView === "ImportRequest"}
-        >
-          {Translation('account.view.accountInfo.importRequest')}
-        </HeaderButton>
-        <HeaderButton
-          onClick={() => setMainContent("Last")}
-          active={mainContentView === "Last"}
-        >
-          {Translation('account.view.accountInfo.lastDeleted')}
-        </HeaderButton>
-      </AccountInfoHeader>
-      <Devider />
-
-      <AccountInfoContent>
-        {GetCurrentView(mainContentView, importRequests, notification)}
-      </AccountInfoContent>
+      <Loading
+        loading={loading}
+        ComponentToLoad={
+          <>
+            <AccountInfoHeader>
+              <HeaderButton
+                onClick={() => setMainContent("Notification")}
+                active={mainContentView === "Notification"}
+              >
+                {Translation("account.view.accountInfo.notification")}
+              </HeaderButton>
+              <HeaderButton
+                onClick={() => setMainContent("ImportRequest")}
+                active={mainContentView === "ImportRequest"}
+              >
+                {Translation("account.view.accountInfo.importRequest")}
+              </HeaderButton>
+              <HeaderButton
+                onClick={() => setMainContent("Last")}
+                active={mainContentView === "Last"}
+              >
+                {Translation("account.view.accountInfo.lastDeleted")}
+              </HeaderButton>
+            </AccountInfoHeader>
+            <Devider />
+            <AccountInfoContent>
+              {GetCurrentView(mainContentView, importRequests, notification)}
+            </AccountInfoContent>
+          </>
+        }
+      />
     </AccountInfoContainer>
   );
 };

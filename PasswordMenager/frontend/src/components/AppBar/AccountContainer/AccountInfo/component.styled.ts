@@ -22,6 +22,7 @@ export const AccountInfoContainer = styled.div`
 
 export const Devider = styled.div`
   width: 100%;
+  margin-top: 12px;
   border-top: .5px solid slategray;
 `
 export const AccountInfoHeader = styled.div`

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Entry } from "../utils/entry.utils";
 import { EntryPaginator } from "../components/Paginator";
 
@@ -13,7 +13,8 @@ type ReturnEntiresType = {
 export const PasswordEntries = (
   selectedGroup: string,
   refreshAll: boolean,
-  paginator: EntryPaginator
+  paginator: EntryPaginator,
+  setLoading: Dispatch<SetStateAction<boolean>>
 ): ReturnEntiresType => {
   const [passwordEntries, setPasswordEntries] = useState<IEntry[]>([]);
   const [pageInfo, setPageInfo] = useState<{
@@ -23,9 +24,12 @@ export const PasswordEntries = (
   } | null>(null);
   useEffect(() => {
     const emptyGroupFetch = async () => {
-      const { data, pageInfo } = await Entry.getInstance().EntriesWithoutGroup(
-        paginator
-      );
+      const { data, pageInfo } = await Entry.getInstance()
+        .EntriesWithoutGroup(paginator)
+        .then((_) => {
+          setLoading(false);
+          return _;
+        });
       setPasswordEntries(data);
       setPageInfo(pageInfo);
     };
@@ -33,8 +37,12 @@ export const PasswordEntries = (
       const groupid: GroupId = {
         id: selectedGroup,
       };
-      const response: GetEntriesResponse =
-        await Entry.getInstance().GetUserEntriesByGroupID(groupid);
+      const response: GetEntriesResponse = await Entry.getInstance()
+        .GetUserEntriesByGroupID(groupid)
+        .then((_) => {
+          setLoading(false);
+          return _;
+        });
       if (response.status) {
         setPasswordEntries(response.response);
       } else {

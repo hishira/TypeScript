@@ -41,13 +41,13 @@ const NewEntryComponent = ({
   const [passlen, setpasslen] = useState<number>(6);
   const [generatePasswordModal, setGeneratorPasswordModal] =
     useState<boolean>(false);
-  const [, setLoading] = useState<boolean>(true);
   const [passwordcharacters, setpasswordcharacters] =
     useState<PasswordCharactersTypes>({
       letters: false,
       numbers: false,
       specialChar: false,
     });
+  const [loading, setLoading] = useState<boolean>(false);
   const [newentry, setnewentry] = useState<CreateEntryDto>({
     title: "",
     username: "",
@@ -126,8 +126,7 @@ const NewEntryComponent = ({
 
   return (
     <Loading
-      // TODO Ref loading
-      loading={false}
+      loading={loading}
       ComponentToLoad={
         <EntryModalComponent disabled={generatePasswordModal}>
           <FormElement
