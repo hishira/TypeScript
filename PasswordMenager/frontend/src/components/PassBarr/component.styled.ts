@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const GroupContainer = styled.div`
   display:flex ;
   align-items: center;
+  margin-bottom: .3rem;
   & > button:not(:first-child) {
     margin-left: 15px;
   }

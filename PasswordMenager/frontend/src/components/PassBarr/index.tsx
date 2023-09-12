@@ -74,7 +74,7 @@ const PassBar: React.FC = (): JSX.Element => {
         modalOpen={importEntriesModalOpen}
         closeModalHandle={() => setImportEntriesModalOpen(false)}
       />
-      <GroupContainer>
+      <GroupContainer >
         <IconButton>
           <PlusComponent click={() => setmodalopen(true)} />
         </IconButton>

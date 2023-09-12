@@ -95,6 +95,7 @@ export const PasswordGeneratorOption = ({
               value={passwordLength}
               onChange={passwordLengthChange}
             />
+            {passwordLength}
           </div>
         </GeneratorSecionContainer>
       </GeneratorInsideModal>

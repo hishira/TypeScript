@@ -82,6 +82,7 @@
     "entries.table.button.more": "More",
     "userinformation.userinfo": "User information:",
     "userinformation.email": "Email",
-    "userinformation.login": "Login"
+    "userinformation.login": "Login",
+    "newentry.action.showPassword": "Show password"
 
 }

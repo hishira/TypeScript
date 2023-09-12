@@ -4,11 +4,11 @@ export const EntryModalComponent = styled.div<{ disabled?: boolean }>`
   background-color: white;
   padding: 1rem;
   border-radius: 5px;
-  width: 35rem;
+  width: 45rem;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
 `;
 export const NormalContainer = styled.div`
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 `;
 
 export const PassLen = styled.div`
@@ -29,26 +29,34 @@ export const GeneratorModal = styled.div`
 `;
 export const SectionContainer = styled.section`
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
   align-content: center;
 `;
 
 export const PasswordFormContainer = styled.div`
-  width: 65%;
-`
-export const GeneratorInsideModal = styled.div`
-  position: relative;
-  padding: 2rem;
-  & > svg{
-    position:  absolute;
-    top: 5%;
-    right: 5%;
-    &:hover{
+  width: 75%;
+  display: flex;
+  align-items: center;
+
+  & > svg {
+    margin-top: 2.5rem;
+    &:hover {
       cursor: pointer;
     }
   }
-`
+`;
+export const GeneratorInsideModal = styled.div`
+  position: relative;
+  padding: 2rem;
+  & > svg {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
 export const GeneratorSecionContainer = styled.div`
   display: flex;
   flex-direction: column;

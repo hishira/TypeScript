@@ -82,5 +82,6 @@
     "entries.table.button.more": "Więcej",
     "userinformation.userinfo": "Infromacje użytkownika",
     "userinformation.email": "Email",
-    "userinformation.login": "Nazwa użytkownika"
+    "userinformation.login": "Nazwa użytkownika",
+    "newentry.action.showPassword": "Pokaż hasło"
 }

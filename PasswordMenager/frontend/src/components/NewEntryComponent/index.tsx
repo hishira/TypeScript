@@ -17,6 +17,8 @@ import {
 } from "./component.styled";
 import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
+import { ShowIcon } from "../icons/ShowIcon";
+import { HideIcon } from "../icons/HideIcon";
 
 export type PasswordCharactersTypes = {
   letters: boolean;
@@ -57,6 +59,12 @@ const NewEntryComponent = ({
     url: "",
     passwordExpiredDate: "",
   });
+  const [passwordVisible, setPassVisible] = useState<boolean>(false);
+
+  const setPasswordVisible = (ps: boolean) => {
+    setPassVisible(ps);
+    checkBoxHandler({ target: { checked: ps } });
+  };
   const editEntry: EditEntryActionDispatcher = new EditEntryActionDispatcher(
     setnewentry,
     setpasswordcharacters,
@@ -162,14 +170,20 @@ const NewEntryComponent = ({
               <FormElement
                 label={"newentry.field.password"}
                 inputplaceholder="***"
+                width="90%"
                 inputChange={editEntry.setpassword.bind(editEntry)}
                 inputtype="password"
                 value={newentry.password}
               />
+              {!passwordVisible ? (
+                <ShowIcon click={() => setPasswordVisible(true)} />
+              ) : (
+                <HideIcon click={() => setPasswordVisible(false)} />
+              )}
             </PasswordFormContainer>
             <FormElement
-              fontSize='14px'
-              width="40%"
+              fontSize="14px"
+              width="30%"
               label={"newentry.field.passwordExpireDate"}
               inputplaceholder="newentry.field.passwordExpireDate.placeholder"
               inputChange={editEntry.setexirationpassworddate.bind(editEntry)}
@@ -196,11 +210,6 @@ const NewEntryComponent = ({
             <Button onClick={() => setGeneratorPasswordModal(true)}>
               {Translation("newentry.action.generator")}
             </Button>
-            <PassLen id="passlen">{passlen}</PassLen>
-            <span>
-              Show password
-              <CheckBox type="checkbox" onChange={checkBoxHandler} />
-            </span>
           </ButtonsRangeContainer>
 
           <GroupSelection edit={edit} editEntry={editEntry} groups={groups} />
