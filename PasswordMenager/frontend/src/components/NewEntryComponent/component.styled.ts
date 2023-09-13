@@ -19,13 +19,20 @@ export const GeneratorModal = styled.div`
   border-radius: 5px;
   background-color: whitesmoke;
   top: 50%;
-  width: 15rem;
+  width: 25rem;
   right: 50%;
   margin-right: auto;
   margin-left: auto;
   transform: translate(50%, -50%);
   z-index: 2000;
   pointer-events: all;
+`;
+
+export const RangeContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: .8rem;
 `;
 export const SectionContainer = styled.section`
   display: flex;
@@ -60,9 +67,15 @@ export const GeneratorInsideModal = styled.div`
 export const GeneratorSecionContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
+  & > button {
+    margin-top: 1rem;
+  }
+  & input[type="range"] {
+    width: 80%;
+  }
+`;
+export const LengthDiv = styled.div`
+  margin-left: 4px;
 `;
 export const ButtonsRangeContainer = styled.section`
   display: flex;
@@ -93,14 +106,28 @@ export const SelectLabel = styled.div`
 `;
 export const SelectContainer = styled.select`
   padding: 0.5rem;
-  border-radius: 5px;
   font-size: 1.05rem;
-  width: 90%;
+  width: 50%;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid grey;
+  background-color: transparent;
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid slategray;
+  }
 `;
 export const OptionContainer = styled.option`
   padding: 1.4rem;
   font-size: 1.05rem;
+  border: none;
+  padding: 1rem;
+  background-color: transparent;
   &:hover {
     background-color: lightsalmon;
+  }
+  &:focus {
+    background-color: transparent;
+    display: none;
   }
 `;

@@ -7,14 +7,11 @@ export const Container = styled.div`
 export const FormContainer = styled.div`
   display: flex;
   justify-content: center;
-  width: 50%;
+  width: 60%;
   padding: 10px;
   margin-top: 5rem;
   @media (max-width: 1200px) {
-    width: 70%;
-  }
-  @media (max-width: 900px) {
-    width: 70%;
+    width: 95%;
   }
   @media (max-width: 489px) {
     width: 100%;

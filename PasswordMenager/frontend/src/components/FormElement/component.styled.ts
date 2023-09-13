@@ -10,4 +10,5 @@ export const InputLabel = styled.label<{ fontSize?: string }>`
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px 5px 5px 0px;
   padding-left: 0.3rem;
+  color: grey;
 `;

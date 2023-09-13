@@ -1,20 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import { TranslationFunction } from "../Translation";
-const Input = styled.input`
-  width: 90%;
-  padding: 10px 15px;
-  border: none;
-  font-size: 1.15rem;
-  border: 1px solid grey;
-  border-radius: 10px;
-  margin-top: 0.5rem;
-  &:focus {
-    outline: none;
-    border: 1px solid slategray;
-    border-radius: 10px;
-  }
-`;
+import { Input } from "./component.styled";
 
 type Props = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

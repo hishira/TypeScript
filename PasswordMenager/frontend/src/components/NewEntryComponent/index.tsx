@@ -151,20 +151,6 @@ const NewEntryComponent = ({
             inputtype="txt"
             value={newentry.username}
           />
-          <FormElement
-            label={"newentry.field.url"}
-            inputplaceholder="newentry.field.url.placeholder"
-            inputChange={editEntry.seturl.bind(editEntry)}
-            inputtype="txt"
-            value={newentry.url}
-          />
-          <FormElement
-            label={"newentry.field.passwordExpireDate.note"}
-            inputplaceholder="newentry.field.passwordExpireDate.note.placehodler"
-            inputChange={editEntry.setnote.bind(editEntry)}
-            inputtype="text"
-            value={newentry.note}
-          />
           <SectionContainer>
             <PasswordFormContainer>
               <FormElement
@@ -200,17 +186,26 @@ const NewEntryComponent = ({
           />
 
           <ButtonsRangeContainer style={{ position: "relative" }}>
-            <Button
-              size="small"
-              color="lightblue"
-              onClick={editEntry.generateHandle.bind(editEntry)}
-            >
-              {Translation("newentry.action.generate")}
-            </Button>
+           
             <Button onClick={() => setGeneratorPasswordModal(true)}>
               {Translation("newentry.action.generator")}
             </Button>
           </ButtonsRangeContainer>
+
+          <FormElement
+            label={"newentry.field.url"}
+            inputplaceholder="newentry.field.url.placeholder"
+            inputChange={editEntry.seturl.bind(editEntry)}
+            inputtype="txt"
+            value={newentry.url}
+          />
+          <FormElement
+            label={"newentry.field.passwordExpireDate.note"}
+            inputplaceholder="newentry.field.passwordExpireDate.note.placehodler"
+            inputChange={editEntry.setnote.bind(editEntry)}
+            inputtype="text"
+            value={newentry.note}
+          />
 
           <GroupSelection edit={edit} editEntry={editEntry} groups={groups} />
 
