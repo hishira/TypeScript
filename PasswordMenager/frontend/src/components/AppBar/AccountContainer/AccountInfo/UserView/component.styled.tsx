@@ -1,9 +1,29 @@
 import styled from "styled-components";
 
 export const UserEditModalView = styled.div`
-  padding: 2rem 0;
+  padding: 1.5rem .75rem;
   background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  width: 55rem;
 `;
+export const PasswordText = styled.div`
+  margin-top: 18px;
+`
+export const FormElements = styled.div`
+  display: flex;
+  gap: 12px;
+`
+export const UserEditTitle = styled.div`
+  font-size: 18px;
+  font-weight: 550;
+`
+export const UserEditModalContainer = styled.div`
+  & input {
+    background-color: transparent;
+  }
+
+`
 
 export const UserInfoFlexContainer = styled.div`
   display: flex;

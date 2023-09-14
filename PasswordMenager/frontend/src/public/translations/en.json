@@ -55,7 +55,7 @@
     "modal.button.accept": "Accept",
     "newentry.field.title": "Title",
     "newentry.field.username": "Username",
-    "newentry.field.url": "Url",
+    "newentry.field.url": "Website",
     "newentry.field.url.placeholder": "Url link",
     "newentry.field.password": "Password",
     "newentry.action.add": "Add",
@@ -83,6 +83,12 @@
     "userinformation.userinfo": "User information:",
     "userinformation.email": "Email",
     "userinformation.login": "Login",
-    "newentry.action.showPassword": "Show password"
+    "newentry.action.showPassword": "Show password",
+    "deleteentry.question": "Are you sure to delete entry?",
+    "userinformation.edit.login.label": "Login",
+    "userinformation.edit.password.label": "New password",
+    "userinformation.edit.password.placeholder": "New Password",
+    "userinformation.edit.confirmpassword.label": "Confirm password",
+    "userinformation.edit.email.label": "Email"
 
 }

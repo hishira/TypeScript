@@ -6,6 +6,9 @@ export const EntryModalComponent = styled.div<{ disabled?: boolean }>`
   border-radius: 5px;
   width: 45rem;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
+  & > button {
+    margin-top: .75rem;
+  }
 `;
 export const NormalContainer = styled.div`
   margin-bottom: 0.5rem;

@@ -27,6 +27,7 @@ const AccountContainer = ({ store }: AccountContainerProps) => {
   const clickHandle = () => {
     const currentView = store?.ViewType;
     store?.setViewType(currentView === View.Table ? View.Card : View.Table);
+    setOpenAccountMenu(!openAccountMenu);
   };
 
   const accountInfoClick = () => {

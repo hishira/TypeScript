@@ -10,6 +10,7 @@ type Props = {
   inputtype: string;
   value?: string | number;
   fontSize?: string;
+  inputFontSize?: string,
   width?: string;
 };
 const FormElement = ({
@@ -19,6 +20,7 @@ const FormElement = ({
   inputtype,
   value,
   fontSize,
+  inputFontSize,
   width,
 }: Props): JSX.Element => {
   return (
@@ -29,6 +31,7 @@ const FormElement = ({
         placeholder={inputplaceholder}
         type={inputtype}
         value={value}
+        inputFontSize={inputFontSize}
       />
     </FormElementComponent>
   );

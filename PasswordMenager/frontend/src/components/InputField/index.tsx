@@ -7,12 +7,14 @@ type Props = {
   placeholder: string;
   type: string;
   value?: string | number;
+  inputFontSize?: string;
 };
 const InputField = ({
   onChange,
   placeholder,
   type,
   value,
+  inputFontSize
 }: Props): JSX.Element => {
   return (
     <Input
@@ -20,6 +22,7 @@ const InputField = ({
       placeholder={TranslationFunction(placeholder)}
       type={type}
       value={value}
+      fontSize={inputFontSize}
     />
   );
 };

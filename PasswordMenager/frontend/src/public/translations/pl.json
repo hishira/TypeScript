@@ -55,7 +55,7 @@
     "modal.button.accept": "Akceptuj",
     "newentry.field.title": "Tytuł",
     "newentry.field.username": "Nazwa użytkownika",
-    "newentry.field.url": "Url",
+    "newentry.field.url": "Witryna",
     "newentry.field.url.placeholder": "Url link",
     "newentry.field.password": "Hasło",
     "newentry.action.add": "Dodaj",
@@ -83,5 +83,8 @@
     "userinformation.userinfo": "Infromacje użytkownika",
     "userinformation.email": "Email",
     "userinformation.login": "Nazwa użytkownika",
-    "newentry.action.showPassword": "Pokaż hasło"
+    "newentry.action.showPassword": "Pokaż hasło",
+    "deleteentry.question": "Czy usunąć encje?",
+    "userinformation.edit.login.label": "Nazwa użytkownika",
+    "userinformation.edit.password.label": "Hasło"
 }
