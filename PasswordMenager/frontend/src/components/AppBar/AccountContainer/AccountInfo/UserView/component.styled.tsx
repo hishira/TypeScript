@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const UserEditModalView = styled.div`
-  padding: 1.5rem .75rem;
+  padding: 1.5rem 0.75rem;
   background-color: whitesmoke;
   display: flex;
   flex-direction: column;
@@ -9,21 +9,49 @@ export const UserEditModalView = styled.div`
 `;
 export const PasswordText = styled.div`
   margin-top: 18px;
-`
+`;
 export const FormElements = styled.div`
   display: flex;
   gap: 12px;
-`
+`;
+
 export const UserEditTitle = styled.div`
   font-size: 18px;
   font-weight: 550;
+  display: flex;
+  position: relative;
+ 
+  gap: 18px;
+ 
+`;
+
+export const IconHoover = styled.div`
+ position: relative;
+ width: 200px;
+  & > span[test-tooltip="test"] {
+    font-weight: normal;
+    background-color: lightgray;
+    border-radius: 10px;
+    position: absolute;
+    font-size: 15px;
+    padding: 10px;
+    top: -25%;
+    right: 35%;
+    visibility: hidden;
+  }
+  & > svg:hover {
+    cursor: pointer;
+    & ~ span[test-tooltip="test"] {
+      font-weight: normal;
+      visibility: visible;
+    }
+  }
 `
 export const UserEditModalContainer = styled.div`
   & input {
     background-color: transparent;
   }
-
-`
+`;
 
 export const UserInfoFlexContainer = styled.div`
   display: flex;
@@ -50,7 +78,7 @@ export const UserIcons = styled.div`
 export const UserTitleText = styled.div`
   font-size: 18px;
   font-weight: 550;
-`
+`;
 export const UserInfo = styled.div`
   display: flex;
   gap: 4rem;
@@ -59,4 +87,10 @@ export const UserInfo = styled.div`
 
 export const Buttons = styled.div`
   display: flex;
-`
+`;
+export const UserEditModalButtons = styled.div`
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  margin-top: 1.2rem;
+`;

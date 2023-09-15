@@ -89,6 +89,7 @@
     "userinformation.edit.password.label": "New password",
     "userinformation.edit.password.placeholder": "New Password",
     "userinformation.edit.confirmpassword.label": "Confirm password",
-    "userinformation.edit.email.label": "Email"
+    "userinformation.edit.email.label": "Email",
+    "userinformation.edit.importPassword.label": "Password for imports"
 
 }

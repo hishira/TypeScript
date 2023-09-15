@@ -7,7 +7,9 @@ import { Translation } from "../../../../Translation";
 import { EditIcon } from "../../../../icons/EditIcon";
 import {
   FormElements,
+  IconHoover,
   PasswordText,
+  UserEditModalButtons,
   UserEditModalContainer,
   UserEditModalView,
   UserEditTitle,
@@ -17,36 +19,64 @@ import {
   UserInforContainer,
   UserTitleText,
 } from "./component.styled";
+import { MoreOptionIcon } from "../../../../icons/MoreOption";
 
-const UserEditModalComponent = ({ user }: any) => {
-  const [isAdvancePossile, setIsAdvancePossible] = useState<boolean>(false);
+const UserEditModalComponent = ({ user, onClose }: any) => {
+  const [login, setLogin] = useState<string>(user.login);
+  const [email, setEmail] = useState<string>(user.email);
+  const [password, setPassword] = useState<string | undefined>(undefined);
+  const [isAdvanceOptionVisible, setAdvanceOption] = useState<boolean>(false);
+
   return (
     <UserEditModalView>
-      <UserEditTitle>Edit user infromation</UserEditTitle>
-      <Button onClick={() => setIsAdvancePossible(true)}>Advance</Button>
+      <UserEditTitle>
+        <span>Edit user infromation</span>
+        <IconHoover>
+          <MoreOptionIcon click={() => setAdvanceOption(true)} />
+          <span test-tooltip="test">More option</span>
+        </IconHoover>
+      </UserEditTitle>
       <UserEditModalContainer>
         <FormElements>
           <FormElement
             label={"userinformation.edit.login.label"}
             inputplaceholder="userinformation.edit.login.label"
-            inputChange={() => {}}
+            inputChange={(e) => {
+              setLogin(e.target.value);
+            }}
             inputtype="txt"
             fontSize="18px"
             width="80%"
             inputFontSize="16px"
-            value={user.login}
+            value={login}
           />
           <FormElement
             label={"userinformation.edit.email.label"}
             inputplaceholder="userinformation.edit.email.label"
-            inputChange={() => {}}
+            inputChange={(e) => {
+              setEmail(e.target.value);
+            }}
             inputtype="txt"
             fontSize="18px"
             width="80%"
             inputFontSize="16px"
-            value={user.email}
+            value={email}
           />
         </FormElements>
+        {isAdvanceOptionVisible ? (
+          <FormElements>
+            <FormElement
+              label={"userinformation.edit.importPassword.label"}
+              inputplaceholder="userinformation.edit.importPassword.label"
+              inputChange={(e) => {}}
+              inputtype="txt"
+              fontSize="18px"
+              width="80%"
+              inputFontSize="16px"
+              value={""}
+            />
+          </FormElements>
+        ) : null}
         <PasswordText>
           Password (will replace the old one if specified)
         </PasswordText>
@@ -54,12 +84,14 @@ const UserEditModalComponent = ({ user }: any) => {
           <FormElement
             label={"userinformation.edit.password.label"}
             inputplaceholder="userinformation.edit.password.placeholder"
-            inputChange={() => {}}
+            inputChange={(e) => {
+              setPassword(e.target.value);
+            }}
             fontSize="16px"
             width="80%"
             inputFontSize="16px"
             inputtype="password"
-            value={""}
+            value={password}
           />
           <FormElement
             label={"userinformation.edit.confirmpassword.label"}
@@ -72,6 +104,10 @@ const UserEditModalComponent = ({ user }: any) => {
             value={""}
           />
         </FormElements>
+        <UserEditModalButtons>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button>Save</Button>
+        </UserEditModalButtons>
       </UserEditModalContainer>
     </UserEditModalView>
   );
@@ -96,7 +132,9 @@ export const UserView = ({
       <Modal
         visible={userEditModalVisible}
         onClose={() => closeCheck()}
-        component={<UserEditModalComponent user={user} />}
+        component={
+          <UserEditModalComponent user={user} onClose={() => closeCheck()} />
+        }
       ></Modal>
       <UserInfoFlexContainer>
         <UserInforContainer>

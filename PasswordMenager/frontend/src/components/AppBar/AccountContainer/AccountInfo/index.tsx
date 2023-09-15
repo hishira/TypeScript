@@ -33,44 +33,38 @@ const AccountInfo = () => {
     setMainContentView(contentType);
 
   return (
-    <AccountInfoContainer>
-      <Loading
-        loading={loading}
-        ComponentToLoad={<UserView user={userinfo}></UserView>}
-      />
-      <Devider />
-      <Loading
-        loading={loading}
-        ComponentToLoad={
-          <>
-            <AccountInfoHeader>
-              <HeaderButton
-                onClick={() => setMainContent("Notification")}
-                active={mainContentView === "Notification"}
-              >
-                {Translation("account.view.accountInfo.notification")}
-              </HeaderButton>
-              <HeaderButton
-                onClick={() => setMainContent("ImportRequest")}
-                active={mainContentView === "ImportRequest"}
-              >
-                {Translation("account.view.accountInfo.importRequest")}
-              </HeaderButton>
-              <HeaderButton
-                onClick={() => setMainContent("Last")}
-                active={mainContentView === "Last"}
-              >
-                {Translation("account.view.accountInfo.lastDeleted")}
-              </HeaderButton>
-            </AccountInfoHeader>
-            <Devider />
-            <AccountInfoContent>
-              {GetCurrentView(mainContentView, importRequests, notification)}
-            </AccountInfoContent>
-          </>
-        }
-      />
-    </AccountInfoContainer>
+    <Loading
+      loading={loading}
+      ComponentToLoad={
+        <AccountInfoContainer>
+          <UserView user={userinfo}></UserView> <Devider />
+          <AccountInfoHeader>
+            <HeaderButton
+              onClick={() => setMainContent("Notification")}
+              active={mainContentView === "Notification"}
+            >
+              {Translation("account.view.accountInfo.notification")}
+            </HeaderButton>
+            <HeaderButton
+              onClick={() => setMainContent("ImportRequest")}
+              active={mainContentView === "ImportRequest"}
+            >
+              {Translation("account.view.accountInfo.importRequest")}
+            </HeaderButton>
+            <HeaderButton
+              onClick={() => setMainContent("Last")}
+              active={mainContentView === "Last"}
+            >
+              {Translation("account.view.accountInfo.lastDeleted")}
+            </HeaderButton>
+          </AccountInfoHeader>
+          <Devider />
+          <AccountInfoContent>
+            {GetCurrentView(mainContentView, importRequests, notification)}
+          </AccountInfoContent>
+        </AccountInfoContainer>
+      }
+    />
   );
 };
 
