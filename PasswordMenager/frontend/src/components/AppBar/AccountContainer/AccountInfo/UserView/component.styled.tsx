@@ -9,10 +9,12 @@ export const UserEditModalView = styled.div`
 `;
 export const PasswordText = styled.div`
   margin-top: 18px;
+  font-weight: 450;
 `;
 export const FormElements = styled.div`
   display: flex;
   gap: 12px;
+  align-items: center;
 `;
 
 export const UserEditTitle = styled.div`
@@ -30,13 +32,14 @@ export const IconHoover = styled.div`
  width: 200px;
   & > span[test-tooltip="test"] {
     font-weight: normal;
-    background-color: lightgray;
+    background-color: #4d4d4d;
+    color: white;
     border-radius: 10px;
     position: absolute;
-    font-size: 15px;
-    padding: 10px;
-    top: -25%;
-    right: 35%;
+    font-size: 12px;
+    padding: 5px;
+    top: 0  ;
+    right: 45%;
     visibility: hidden;
   }
   & > svg:hover {

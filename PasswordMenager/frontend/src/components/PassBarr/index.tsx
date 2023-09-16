@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Export } from "../../utils/export.utils";
-import Button from "../Button";
+import IconButton from "../IconButton";
 import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
 import { ImportModalEntries } from "../ImportModals/ImportEntries";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
-import { ExpotrModal, ImportModal } from "./PassBarrModalButtons";
-import { Container, GroupContainer } from "./component.styled";
 import { ExportIcon } from "../icons/ExportIcon";
 import { ImportIcon } from "../icons/ImportIcon";
 import { PlusComponent } from "../icons/PlusIcon";
-import IconButton from "../IconButton";
+import { ExpotrModal, ImportModal } from "./PassBarrModalButtons";
+import { Container, GroupContainer } from "./component.styled";
 
 const exportHandle = (): void => {
   Export.getInstance()

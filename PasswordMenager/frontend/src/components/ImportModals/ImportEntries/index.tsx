@@ -1,16 +1,13 @@
 import {
-  ChangeEvent,
   Dispatch,
   SetStateAction,
   useEffect,
-  useState,
+  useState
 } from "react";
-import { AcceptModalComponent } from "../../Modal/AcceptModal";
-import { FileSelector } from "../../ImportFille";
-import { ImportEntries } from "./component.styled";
 import { Import } from "../../../utils/import.utils";
-import ImportEntriesModalComponent from "./ImportEntriesModalComponent";
+import { AcceptModalComponent } from "../../Modal/AcceptModal";
 import { TranslationFunction } from "../../Translation";
+import ImportEntriesModalComponent from "./ImportEntriesModalComponent";
 
 type ImportEntriesModalProps = {
   modalOpen: boolean;

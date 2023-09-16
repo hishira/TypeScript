@@ -1,7 +1,12 @@
 import React from "react";
 import InputField from "../InputField/index";
-import { FormElementComponent, InputLabel } from "./component.styled";
+import {
+  FormElementComponent,
+  InputLabel,
+  InputLabelContainer,
+} from "./component.styled";
 import { Translation } from "../Translation";
+import { InfoIcon } from "../icons/InfoIcon";
 
 type Props = {
   label: string;
@@ -10,8 +15,10 @@ type Props = {
   inputtype: string;
   value?: string | number;
   fontSize?: string;
-  inputFontSize?: string,
+  inputFontSize?: string;
   width?: string;
+  withTooltip?: boolean;
+  tooltipText?: string;
 };
 const FormElement = ({
   label,
@@ -22,10 +29,19 @@ const FormElement = ({
   fontSize,
   inputFontSize,
   width,
+  withTooltip,
+  tooltipText
 }: Props): JSX.Element => {
   return (
     <FormElementComponent width={width}>
-      <InputLabel fontSize={fontSize}>{Translation(label)}</InputLabel>
+      <InputLabelContainer>
+        <InputLabel fontSize={fontSize}>{Translation(label)}</InputLabel>
+        {(withTooltip && tooltipText) ? (
+          <span>
+            <InfoIcon /> <span test-tooltip="tooltip-text">{Translation(tooltipText)}</span>
+          </span>
+        ) : null}
+      </InputLabelContainer>
       <InputField
         onChange={inputChange}
         placeholder={inputplaceholder}

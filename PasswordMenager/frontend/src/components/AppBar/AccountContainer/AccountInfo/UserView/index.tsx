@@ -5,6 +5,7 @@ import FormElement from "../../../../FormElement";
 import Modal from "../../../../Modal";
 import { Translation } from "../../../../Translation";
 import { EditIcon } from "../../../../icons/EditIcon";
+import { MoreOptionIcon } from "../../../../icons/MoreOption";
 import {
   FormElements,
   IconHoover,
@@ -19,7 +20,6 @@ import {
   UserInforContainer,
   UserTitleText,
 } from "./component.styled";
-import { MoreOptionIcon } from "../../../../icons/MoreOption";
 
 const UserEditModalComponent = ({ user, onClose }: any) => {
   const [login, setLogin] = useState<string>(user.login);
@@ -30,10 +30,20 @@ const UserEditModalComponent = ({ user, onClose }: any) => {
   return (
     <UserEditModalView>
       <UserEditTitle>
-        <span>Edit user infromation</span>
+        <span>
+          {Translation("editusermodal.importpassword.infomodal.title")}
+        </span>
         <IconHoover>
-          <MoreOptionIcon click={() => setAdvanceOption(true)} />
-          <span test-tooltip="test">More option</span>
+          <MoreOptionIcon
+            click={() =>
+              !isAdvanceOptionVisible
+                ? setAdvanceOption(true)
+                : setAdvanceOption(false)
+            }
+          />
+          <span test-tooltip="test">
+            {Translation("editusermodal.importpassword.infomodal.moreOption")}
+          </span>
         </IconHoover>
       </UserEditTitle>
       <UserEditModalContainer>
@@ -66,6 +76,8 @@ const UserEditModalComponent = ({ user, onClose }: any) => {
         {isAdvanceOptionVisible ? (
           <FormElements>
             <FormElement
+              withTooltip={true}
+              tooltipText="editusermodal.importpassword.infomodal"
               label={"userinformation.edit.importPassword.label"}
               inputplaceholder="userinformation.edit.importPassword.label"
               inputChange={(e) => {}}
@@ -78,7 +90,9 @@ const UserEditModalComponent = ({ user, onClose }: any) => {
           </FormElements>
         ) : null}
         <PasswordText>
-          Password (will replace the old one if specified)
+          {Translation(
+            "editusermodal.importpassword.infomodal.editPasswordTest"
+          )}
         </PasswordText>
         <FormElements>
           <FormElement
@@ -105,8 +119,14 @@ const UserEditModalComponent = ({ user, onClose }: any) => {
           />
         </FormElements>
         <UserEditModalButtons>
-          <Button onClick={onClose}>Cancel</Button>
-          <Button>Save</Button>
+          <Button onClick={onClose}>
+            {Translation(
+              "editusermodal.importpassword.infomodal.button.cancel"
+            )}
+          </Button>
+          <Button>
+            {Translation("editusermodal.importpassword.infomodal.button.save")}
+          </Button>
         </UserEditModalButtons>
       </UserEditModalContainer>
     </UserEditModalView>

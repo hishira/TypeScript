@@ -26,7 +26,6 @@ export const HideIcon = ({ click }: IconProps) => {
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-miterlimit="10"
-        stroke-width="2"
       />
       <circle
         cx="16"
@@ -38,7 +37,6 @@ export const HideIcon = ({ click }: IconProps) => {
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-miterlimit="10"
-        stroke-width="2"
       />
       <line
         fill="none"

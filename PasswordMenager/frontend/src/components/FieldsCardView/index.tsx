@@ -1,5 +1,4 @@
 import { FieldsActionHook } from "../../hooks/actionFields.hook";
-import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { Entry } from "../../utils/entry.utils";
 import { DeleteEntryModal } from "../FieldsComponent";
 import { FieldsModal } from "../FieldsComponent/FieldsModal";

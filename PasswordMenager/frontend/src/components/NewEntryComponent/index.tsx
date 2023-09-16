@@ -6,19 +6,17 @@ import Button from "../Button";
 import FormElement from "../FormElement/";
 import { Loading } from "../Loading";
 import { Translation } from "../Translation";
+import { HideIcon } from "../icons/HideIcon";
+import { ShowIcon } from "../icons/ShowIcon";
 import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 import {
   ButtonsRangeContainer,
-  CheckBox,
   EntryModalComponent,
-  PassLen,
   PasswordFormContainer,
-  SectionContainer,
+  SectionContainer
 } from "./component.styled";
 import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
-import { ShowIcon } from "../icons/ShowIcon";
-import { HideIcon } from "../icons/HideIcon";
 
 export type PasswordCharactersTypes = {
   letters: boolean;
