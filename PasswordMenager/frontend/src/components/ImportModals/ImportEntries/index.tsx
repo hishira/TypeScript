@@ -1,14 +1,12 @@
 import {
-  ChangeEvent,
   Dispatch,
   SetStateAction,
   useEffect,
-  useState,
+  useState
 } from "react";
-import { AcceptModalComponent } from "../../Modal/AcceptModal";
-import { FileSelector } from "../../ImportFille";
-import { ImportEntries } from "./component.styled";
 import { Import } from "../../../utils/import.utils";
+import { AcceptModalComponent } from "../../Modal/AcceptModal";
+import { TranslationFunction } from "../../Translation";
 import ImportEntriesModalComponent from "./ImportEntriesModalComponent";
 
 type ImportEntriesModalProps = {
@@ -49,7 +47,7 @@ const CheckExtendButton = (
   formData: FormData | undefined,
   setImportFileInfo: Dispatch<SetStateAction<ImportCheckData | null>>
 ) => ({
-  buttonText: "Check",
+  buttonText: TranslationFunction('import.modal.button.check'),
   handleButton: () => acceptHandle(formData, setImportFileInfo),
 });
 
@@ -83,7 +81,7 @@ export const ImportModalEntries = ({
           (_) =>
             _ &&
             setExtendData({
-              buttonText: "Import",
+              buttonText: TranslationFunction('import.modal.button.import'),
               handleButton: () => console.log("Import"),
             })
         ),

@@ -6,8 +6,9 @@ import {
   MinButton,
   PasswordTableIcons,
   TableComponent,
-  TableRow
+  TableRow,
 } from "./component.styled";
+import { Translation } from "../../Translation";
 
 export const PasswordFieldsHelper = {
   gettext: (text: string | null): string => {
@@ -71,7 +72,9 @@ export const PasswordField = ({
           <DeleteIcon click={() => deletehandle(entry._id)} />
           <EditIcon click={() => onedithandle(entry._id)} />
         </PasswordTableIcons>
-        <MinButton onClick={() => moreClickHandle(entry)}>More</MinButton>
+        <MinButton onClick={() => moreClickHandle(entry)}>
+          {Translation("entries.table.button.more")}
+        </MinButton>
       </TableComponent>
     </TableRow>
   );

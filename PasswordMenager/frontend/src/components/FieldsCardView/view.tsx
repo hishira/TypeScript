@@ -16,6 +16,7 @@ import { DeleteIcon } from "../icons/DeleteIcon";
 import { PasswordFieldsHelper } from "../PasswordTable/PasswordField";
 import { UpIcon } from "../icons/UpIcon";
 import { DownIcon } from "../icons/DownIcon";
+import { Translation } from "../Translation";
 
 export type FieldsCardViewProps = {
   selectedgroup: string;
@@ -83,7 +84,7 @@ const CardExpendContentRow = ({
 }: CardExpendContentRowProps) => {
   return (
     <CardExpandContentRow>
-      <CardFieldName>{fieldName}</CardFieldName>
+      <CardFieldName>{Translation(fieldName)}</CardFieldName>
       <ValueField
         isPassword={isPassword}
         isUrl={isUrl}
@@ -100,23 +101,23 @@ const CardExpandComponent = ({
   return entry.open ? (
     <CardExpand>
       <CardExpandContent>
-        <CardExpendContentRow fieldName="Username" value={entry.username} />
+        <CardExpendContentRow fieldName="fieldscard.view.username" value={entry.username} />
         <CardExpendContentRow
-          fieldName="Password"
+          fieldName="fieldscard.view.password"
           value={entry.password}
           isPassword={true}
         />
-        <CardExpendContentRow fieldName="Note" value={entry.note} />
+        <CardExpendContentRow fieldName="fieldscard.view.note" value={entry.note} />
         {entry.url ? (
           <CardExpendContentRow
-            fieldName="Url"
+            fieldName="fieldscard.view.url"
             isUrl={true}
             value={entry.url}
           />
         ) : null}
         {entry.passwordExpiredDate ? (
           <CardExpendContentRow
-            fieldName="Expired to"
+            fieldName="fieldscard.view.expiredTo"
             value={entry.passwordExpiredDate}
           />
         ) : null}

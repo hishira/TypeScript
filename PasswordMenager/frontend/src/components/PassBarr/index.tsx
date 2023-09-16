@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { Export } from "../../utils/export.utils";
-import Button from "../Button";
+import IconButton from "../IconButton";
 import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
 import { ImportModalEntries } from "../ImportModals/ImportEntries";
 import Modal from "../Modal/";
 import NewEntryComponent from "../NewEntryComponent/index";
-import { ExpotrModal, ImportModal } from "./PassBarrModalButtons";
-import { Container, GroupContainer } from "./component.styled";
 import { ExportIcon } from "../icons/ExportIcon";
 import { ImportIcon } from "../icons/ImportIcon";
 import { PlusComponent } from "../icons/PlusIcon";
-import IconButton from "../IconButton";
+import { ExpotrModal, ImportModal } from "./PassBarrModalButtons";
+import { Container, GroupContainer } from "./component.styled";
 
 const exportHandle = (): void => {
   Export.getInstance()
@@ -39,7 +38,6 @@ const PassBar: React.FC = (): JSX.Element => {
   const importEncrypted = (): void => setImportModalOpen(true);
 
   const importEntries = (): void => setImportEntriesModalOpen(true);
-
   return (
     <Container>
       <Modal
@@ -75,24 +73,12 @@ const PassBar: React.FC = (): JSX.Element => {
         modalOpen={importEntriesModalOpen}
         closeModalHandle={() => setImportEntriesModalOpen(false)}
       />
-      <GroupContainer>
-        {/*<Button color="lightgray" onClick={() => setmodalopen(true)}>
-          New entry
-        </Button>*/}
+      <GroupContainer >
         <IconButton>
-          <PlusComponent />
+          <PlusComponent click={() => setmodalopen(true)} />
         </IconButton>
-        {/*<Button color="lightgray" onClick={() => setExportModalOpen(true)}>
-          Export
-        </Button>*/}
-        <ExportIcon />
-        {/*<Button
-          color="lightgray"
-          onClick={() => setImportOptionModalOpen(true)}
-        >
-          Import
-        </Button>*/}
-        <ImportIcon />
+        <ExportIcon click={() => setExportModalOpen(true)} />
+        <ImportIcon click={() => setImportOptionModalOpen(true)} />
       </GroupContainer>
     </Container>
   );

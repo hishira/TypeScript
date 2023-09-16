@@ -8,6 +8,7 @@ import Button from "../../Button";
 import { inject, observer } from "mobx-react";
 import Modal from "../../Modal";
 import AccountInfo from "./AccountInfo";
+import { Translation } from "../../Translation";
 
 type AccountContainerProps = {
   store?: IGeneral;
@@ -26,6 +27,7 @@ const AccountContainer = ({ store }: AccountContainerProps) => {
   const clickHandle = () => {
     const currentView = store?.ViewType;
     store?.setViewType(currentView === View.Table ? View.Card : View.Table);
+    setOpenAccountMenu(!openAccountMenu);
   };
 
   const accountInfoClick = () => {
@@ -43,10 +45,10 @@ const AccountContainer = ({ store }: AccountContainerProps) => {
       <AccountView>
         <AccountIcon click={() => setOpenAccountMenu(!openAccountMenu)} />
         <AccountButtons visible={openAccountMenu}>
-          <Button onClick={clickHandle}>Change view</Button>
-          <Button onClick={() => accountInfoClick()}>Account info</Button>
+          <Button onClick={clickHandle}>{Translation('account.action.changeView')}</Button>
+          <Button onClick={() => accountInfoClick()}>{Translation('account.action.accountInfo')}</Button>
           <Button onClick={logouthandle} color="lightblue">
-            Logout
+          {Translation('account.action.logout')}
           </Button>
         </AccountButtons>
       </AccountView>

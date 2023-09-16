@@ -2,11 +2,16 @@ import styled from "styled-components";
 
 export const GroupContainer = styled.div`
   display:flex ;
+  align-items: center;
+  margin-bottom: .3rem;
   & > button:not(:first-child) {
     margin-left: 15px;
   }
   width: 100%;
-  gap: .5rem;
+  gap: 1.3rem;
+  & > svg:hover{
+    cursor: pointer;
+  }
 `;
 
 export const Container = styled.div`

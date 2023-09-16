@@ -1,12 +1,16 @@
 import { FieldsActionHook } from "../../hooks/actionFields.hook";
-import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { ResizeWindowsHandle } from "../../hooks/resize.hook";
 import { Entry } from "../../utils/entry.utils";
 import { PasswordTableComponent } from "../PasswordTable";
+import { Translation } from "../Translation";
 import { FieldsModal } from "./FieldsModal";
-import { Container } from "./component.styled";
+import { Container, DeleteModalContainer } from "./component.styled";
 
-export const DeleteEntryModal = () => <div>Are you sure to delete entry?</div>;
+export const DeleteEntryModal = () => (
+  <DeleteModalContainer>
+    {Translation("deleteentry.question")}
+  </DeleteModalContainer>
+);
 const FieldsContainer = ({
   selectedgroup,
   refreshgroupentities,

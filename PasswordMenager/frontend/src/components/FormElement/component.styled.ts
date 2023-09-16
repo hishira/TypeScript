@@ -1,13 +1,45 @@
 import styled from "styled-components";
 
-export const FormElementComponent = styled.p`
+export const FormElementComponent = styled.p<{ width?: string }>`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: ${({ width }) => width || "90%"};
 `;
-export const InputLabel = styled.label`
-  font-size: 1.2rem;
+export const InputLabelContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  & > span {
+    margin-top: 5px;
+    position: relative;
+    & > span[test-tooltip="tooltip-text"] {
+      font-weight: normal;
+      background-color: #4d4d4d;
+      color: white;
+      border-radius: 10px;
+      position: absolute;
+      font-size: 12px;
+      padding: 5px;
+      width: 300px;
+      min-width: 200px;
+      max-width: 400px;
+      top: 0;
+
+      visibility: hidden;
+    }
+  }
+  & > span > svg:hover {
+    cursor: pointer;
+    & ~ span[test-tooltip="tooltip-text"] {
+      font-weight: normal;
+      visibility: visible;
+    }
+  }
+`;
+export const InputLabel = styled.label<{ fontSize?: string }>`
+  font-size: ${({ fontSize }) => fontSize ?? " 1.2rem"};
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px 5px 5px 0px;
-  padding-left: .3rem;
+  padding-left: 0.3rem;
+  color: grey;
 `;

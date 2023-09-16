@@ -1,8 +1,9 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
-import { FileSelector } from "../../../ImportFille";
-import { ImportEntries } from "./component.styled";
 import { ImportCheckData } from "..";
 import Button from "../../../Button";
+import { FileSelector } from "../../../ImportFille";
+import { Translation, TranslationFunction } from "../../../Translation";
+import { ImportEntries } from "./component.styled";
 
 type ImportEntriesModalComponentProps = {
   fileSetHandle: (file: File) => void;
@@ -63,15 +64,16 @@ const ImportEntriesModalComponent = ({
       {FileChangeHandle.fileType ? (
         <div>
           <span>
-            {`Selected file type ${FileChangeHandle.fileType}`}, fields should
-            be in proper order name, site(in future), username - email,
-            password,note.
+            {`${TranslationFunction('"import.modal.selectFileType')}${
+              FileChangeHandle.fileType
+            }${TranslationFunction("import.modal.fieldsMessage")}`}
           </span>
           {importFileInfo ? (
             <div>
-              You want to import {importFileInfo.numberOfEntriesToAdd}
+              {Translation("import.modal.youWantToImport")}
+              {importFileInfo.numberOfEntriesToAdd}
               <Button outline="without" color="transparent">
-                Show?
+                {Translation("import.modal.button.show")}
               </Button>
               <div style={{ height: "5rem", overflow: "auto" }}>
                 {importFileInfo.entiresToImport?.map((entry) => (

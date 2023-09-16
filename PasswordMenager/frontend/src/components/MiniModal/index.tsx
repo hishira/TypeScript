@@ -1,4 +1,5 @@
 import { Entry } from "../../utils/entry.utils";
+import { Translation } from "../Translation";
 import { ListComponent, ListItem } from "./component.styled";
 
 type MoreMiniModal = {
@@ -30,8 +31,8 @@ export const ModalButtonChoicer: React.FC<MoreMiniModal> = ({
   };
   return (
     <ListComponent id={entry._id}>
-      <ListItem onClick={() => deletehandle(entry._id)}>Delete</ListItem>
-      <ListItem onClick={() => onedithandle(entry._id)}>Edit</ListItem>
+      <ListItem onClick={() => deletehandle(entry._id)}>{Translation('minimodal.button.delete')}</ListItem>
+      <ListItem onClick={() => onedithandle(entry._id)}>{Translation('minimodal.button.edit')}</ListItem>
     </ListComponent>
   );
 };

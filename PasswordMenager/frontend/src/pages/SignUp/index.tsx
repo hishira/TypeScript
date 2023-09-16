@@ -5,6 +5,7 @@ import { Auth } from "../../utils/auth.utils";
 import { Container, FormContainer } from "./component.styled";
 import { inject, observer } from "mobx-react";
 import { IGeneral } from "../../models/General";
+import { TranslationFunction } from "../../components/Translation";
 
 type RegisterInfo = {
   login: string;
@@ -39,7 +40,13 @@ const SignUp = ({ store }: Prop) => {
   const confirmPasswordhandle = (password: string): void => {
     setregisterinfo({ ...registerinfo, confirmpassword: password });
   };
-
+  const translation = {
+    passwordLength: TranslationFunction(
+      "page.signUp.popupMessage.passwordLength"
+    ),
+    samePassowrds: TranslationFunction("page.signUp.popupMessage.samePassword"),
+    userCreated: TranslationFunction("page.signUp.popupMessage.userCreated"),
+  };
   const registerClickHandle = async (
     e: React.MouseEvent<HTMLElement>
   ): Promise<void> => {
@@ -47,7 +54,7 @@ const SignUp = ({ store }: Prop) => {
     if (registerinfo.password.length < 6) {
       store?.setPopUpinfo({
         open: true,
-        message: "Password min length must be 6",
+        message: translation.passwordLength,
         type: "info",
       });
       return;
@@ -55,7 +62,7 @@ const SignUp = ({ store }: Prop) => {
     if (registerinfo.password !== registerinfo.confirmpassword) {
       store?.setPopUpinfo({
         open: true,
-        message: "Passwords must be the same",
+        message: translation.samePassowrds,
         type: "info",
       });
       return;
@@ -70,7 +77,7 @@ const SignUp = ({ store }: Prop) => {
         if (!!response) {
           store?.setPopUpinfo({
             open: true,
-            message: "User created",
+            message: translation.userCreated,
             type: "success",
           });
         }
@@ -86,11 +93,11 @@ const SignUp = ({ store }: Prop) => {
         <FormComponent
           firstinputhandle={loginchange}
           secondinputhandle={passwordchange}
-          buttonmessage="Sign Up"
+          buttonmessage="page.signUp.buttonMessage"
           buttonHandle={registerClickHandle}
-          secondactionastirng="Login"
+          secondactionastirng="page.signUp.secondary"
           redirectfunction={redirectFunction}
-          maintitle="Create account"
+          maintitle="page.signUp.mainTitle"
           confirmpassword
           confirmpasshandle={confirmPasswordhandle}
           isEmail={true}
