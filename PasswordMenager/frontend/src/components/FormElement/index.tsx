@@ -19,6 +19,7 @@ type Props = {
   width?: string;
   withTooltip?: boolean;
   tooltipText?: string;
+  withBorder?: boolean,
 };
 const FormElement = ({
   label,
@@ -30,7 +31,8 @@ const FormElement = ({
   inputFontSize,
   width,
   withTooltip,
-  tooltipText
+  tooltipText,
+  withBorder
 }: Props): JSX.Element => {
   return (
     <FormElementComponent width={width}>
@@ -47,6 +49,7 @@ const FormElement = ({
         placeholder={inputplaceholder}
         type={inputtype}
         value={value}
+        withBorder={withBorder}
         inputFontSize={inputFontSize}
       />
     </FormElementComponent>

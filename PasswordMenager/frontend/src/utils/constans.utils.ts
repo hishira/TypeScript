@@ -5,6 +5,7 @@ const EMPTYENTRYRESPONSE: IEntry = {
   password: "",
   note: "",
   groupid: "",
+  url: "",
 };
 const EMPTYGROUPRESPONSE: IGroup = { _id: "", name: "", userid: "" }
 export {EMPTYENTRYRESPONSE,EMPTYGROUPRESPONSE} 

@@ -1,5 +1,5 @@
 import { inject, observer } from "mobx-react";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
@@ -9,6 +9,7 @@ import { Loading } from "../Loading";
 import { EntryPaginator, Paginator } from "../Paginator";
 import { Translation } from "../Translation";
 import { Container, EmptyEntries, Entries, Text } from "./component.styled";
+import FormElement from "../FormElement";
 
 type PassComponentProps = {
   store?: IGeneral;
@@ -21,6 +22,20 @@ const EmptyEntriesComponent = () => {
   );
 };
 
+export const FieldSearchInput = () => {
+  return (
+    <Fragment>
+      <FormElement
+        label={""}
+        withBorder={true}
+        inputplaceholder="newentry.field.title"
+        inputChange={() => {}}
+        inputtype="txt"
+        value={"Search"}
+      />
+    </Fragment>
+  );
+};
 const PasswordsMainComponent = ({
   viewType,
   entries,
@@ -32,6 +47,7 @@ const PasswordsMainComponent = ({
 }: any) => {
   return entries.length > 0 ? (
     <Entries>
+      <FieldSearchInput></FieldSearchInput>
       {viewType === View.Table ? (
         <FieldsComponent
           refreshgroupentities={refreshentities}
@@ -53,7 +69,7 @@ const PasswordsMainComponent = ({
     <EmptyEntriesComponent />
   );
 };
-inject("store")(observer(PasswordsMainComponent))
+inject("store")(observer(PasswordsMainComponent));
 const PassComponent = ({ store }: PassComponentProps) => {
   const [selectedgroupid, setgroupid] = useState<string>("");
   const [entitiesrefresh, setentitesrefresh] = useState<boolean>(false);
