@@ -23,15 +23,18 @@ const EmptyEntriesComponent = () => {
 };
 
 export const FieldSearchInput = () => {
+  const [serachFieldValue, setSearchFieldValue] = useState<string>("");
   return (
     <Fragment>
       <FormElement
         label={""}
         withBorder={true}
         inputplaceholder="newentry.field.title"
-        inputChange={() => {}}
+        inputChange={(e) => {
+          setSearchFieldValue(e.target.value);
+        }}
         inputtype="txt"
-        value={"Search"}
+        value={serachFieldValue}
       />
     </Fragment>
   );
