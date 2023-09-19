@@ -22,7 +22,7 @@ const EmptyEntriesComponent = () => {
   );
 };
 
-export const FieldSearchInput = () => {
+export const FieldSearchInput = ({onSearchFieldChange}: any) => {
   const [serachFieldValue, setSearchFieldValue] = useState<string>("");
   return (
     <Fragment>
