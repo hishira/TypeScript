@@ -127,7 +127,7 @@ export const ErrorUserCreateResponse = {
 export class UserDTOMapper {
   static GetDTOFromCreateUserDTO(userCreateDTO: CreateUserDto): DTO {
     return {
-      toObject: () => ({ ...userCreateDTO }),
+      toObject: () => ({ ...userCreateDTO, defaultPasswordForEntries: '' }),
     };
   }
 }
