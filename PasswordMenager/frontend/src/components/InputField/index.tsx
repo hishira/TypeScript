@@ -8,19 +8,22 @@ type Props = {
   type: string;
   value?: string | number;
   inputFontSize?: string;
+  withBorder?: boolean;
 };
 const InputField = ({
   onChange,
   placeholder,
   type,
   value,
-  inputFontSize
+  inputFontSize,
+  withBorder,
 }: Props): JSX.Element => {
   return (
     <Input
       onChange={onChange}
       placeholder={TranslationFunction(placeholder)}
       type={type}
+      withBorder={withBorder}
       value={value}
       fontSize={inputFontSize}
     />

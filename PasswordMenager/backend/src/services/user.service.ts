@@ -12,24 +12,34 @@ import {
 } from '../schemas/Interfaces/user.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
 import { HistoryService } from './history.service';
-
+import { CreateUserCommand } from 'src/commands/CreateUserCommand';
+import { CommandBus } from '@nestjs/cqrs';
+import { error } from 'console';
 @Injectable()
 export class UserService {
   constructor(
     @Inject(Repository)
     private readonly userRepository: Repository<IUser>,
     private readonly history: HistoryService,
+    private readonly commandBus: CommandBus,
   ) {}
 
   create(
     userCreateDTO: CreateUserDto,
   ): Promise<IUser | { message: string } | IHistory> {
-    return this.userRepository
-      .create(UserDTOMapper.GetDTOFromCreateUserDTO(userCreateDTO))
+    return this.commandBus
+      .execute(
+        new CreateUserCommand(
+          userCreateDTO.login,
+          userCreateDTO.password,
+          userCreateDTO.email,
+        ),
+      )
       .then((user) => {
         return this.history.create(user._id);
       })
       .catch((err) => {
+        console.log(err);
         return ErrorUserCreateResponse;
       });
   }

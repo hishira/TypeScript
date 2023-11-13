@@ -203,7 +203,7 @@ export class Entry {
     });
   }
 
-  private responseMappedObject(resp): IEntry[] {
+  private responseMappedObject(resp: any): IEntry[] {
     return Array.isArray(resp)
       ? resp
       : typeof resp === "object" && "data" in resp

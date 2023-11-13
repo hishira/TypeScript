@@ -14,7 +14,7 @@ type ImportEntriesModalProps = {
   closeModalHandle: () => void;
 };
 export type ImportCheckData = {
-  entiresToImport: [];
+  entiresToImport: any[];
   importRequestId: string;
   numberOfEntriesToAdd: number;
 };

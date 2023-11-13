@@ -28,6 +28,8 @@ export const Container = styled.section`
 
 export const Entries = styled.section`
   display: flex;
+  //justify-content: center;
+  align-items: center;
   width: 100%;
   flex-direction: column;
 `;

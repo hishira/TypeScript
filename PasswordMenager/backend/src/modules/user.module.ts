@@ -6,9 +6,11 @@ import { DatabaseModule } from './database.module';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserRepository } from 'src/repository/user.repository';
 import { HistoryModule } from './history.module';
-
+import { CreateUserHandler } from 'src/handlers/createUserHandler';
+import { CqrsModule } from '@nestjs/cqrs';
+const commandHandles = [CreateUserHandler];
 @Module({
-  imports: [DatabaseModule, HistoryModule],
+  imports: [DatabaseModule, HistoryModule, CqrsModule],
   controllers: [UsersController],
   providers: [
     {
@@ -17,6 +19,7 @@ import { HistoryModule } from './history.module';
     },
     UserService,
     ...userProviders,
+    CreateUserHandler,
   ],
   exports: [
     {
@@ -24,6 +27,7 @@ import { HistoryModule } from './history.module';
       useClass: UserRepository,
     },
     UserService,
+    CreateUserHandler,
   ],
 })
 export class UserModule {}

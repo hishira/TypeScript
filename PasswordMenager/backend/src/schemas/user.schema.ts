@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema<IUser>({
     // Default password, when in import entries does not have password
     //TODO: Implement logic for it?
     type: String,
-    required: true,
+    required: false, // TODO: Fix 
     default: null,
   },
   email: {

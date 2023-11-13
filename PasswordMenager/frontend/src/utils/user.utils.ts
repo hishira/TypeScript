@@ -3,8 +3,6 @@ import { SessionStorage } from "./localstorage.utils";
 
 export class User {
   private static instance: User | null = null;
-  //  private readonly user: UserApi;
-  //  private readonly sessionStorage: SessionStorage;
 
   constructor(
     private readonly user: UserApi,
