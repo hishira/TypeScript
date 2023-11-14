@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CreateUserCommand } from 'src/commands/CreateUserCommand';
+import { CreateUserCommand } from 'src/commands/user/CreateUserCommand';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { IUser, UserDTOMapper } from 'src/schemas/Interfaces/user.interface';
 
