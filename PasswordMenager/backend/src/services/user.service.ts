@@ -1,27 +1,24 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CreateUserCommand } from 'src/commands/user/CreateUserCommand';
+import { UpdateUserCommand } from 'src/commands/user/UpdateUserCommand';
+import { GetAllUserQuery } from 'src/queries/user/getAllUser.queries';
+import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
-import { DTO } from 'src/schemas/dto/object.interface';
 import { Paginator } from 'src/utils/paginator';
 import {
   ErrorUserCreateResponse,
   IUser,
-  UserDTOMapper,
-  UserUtils,
 } from '../schemas/Interfaces/user.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
 import { HistoryService } from './history.service';
-import { CreateUserCommand } from 'src/commands/CreateUserCommand';
-import { CommandBus } from '@nestjs/cqrs';
-import { error } from 'console';
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(Repository)
-    private readonly userRepository: Repository<IUser>,
     private readonly history: HistoryService,
     private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {}
 
   create(
@@ -45,21 +42,18 @@ export class UserService {
   }
 
   getAll(): Promise<IUser[] | { data: IUser[]; pageInfo: Paginator }> {
-    return this.userRepository.find(UserUtils.allUserFilterOption);
+    return this.queryBus.execute(new GetAllUserQuery());
   }
 
   getOne(): Promise<IUser[] | { data: IUser[]; pageInfo: Paginator }> {
-    return this.userRepository.find(UserUtils.allUserFilterOption);
+    return this.queryBus.execute(new GetAllUserQuery());
   }
 
   getUser(userid: string): Promise<IUser> {
-    return this.userRepository.findById(userid);
+    return this.queryBus.execute(new GetFilteredUserQueries(userid));
   }
 
   update(userId: string, userEditDto: EditUserDto): Promise<unknown> {
-    return this.userRepository.update({
-      _id: userId,
-      ...userEditDto,
-    });
+    return this.commandBus.execute(new UpdateUserCommand(userId, userEditDto));
   }
 }
