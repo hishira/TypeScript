@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CreateHistoryCommand } from 'src/commands/history/CreateHistoryCommand';
 import { CreateUserCommand } from 'src/commands/user/CreateUserCommand';
 import { UpdateUserCommand } from 'src/commands/user/UpdateUserCommand';
 import { GetAllUserQuery } from 'src/queries/user/getAllUser.queries';
@@ -12,11 +13,9 @@ import {
   IUser,
 } from '../schemas/Interfaces/user.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
-import { HistoryService } from './history.service';
 @Injectable()
 export class UserService {
   constructor(
-    private readonly history: HistoryService,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
@@ -33,10 +32,9 @@ export class UserService {
         ),
       )
       .then((user) => {
-        return this.history.create(user._id);
+        return this.commandBus.execute(new CreateHistoryCommand(user._id));
       })
       .catch((err) => {
-        console.log(err);
         return ErrorUserCreateResponse;
       });
   }

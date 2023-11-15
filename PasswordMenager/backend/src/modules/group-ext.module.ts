@@ -6,9 +6,13 @@ import { GroupService } from 'src/services/group.service';
 import { DatabaseModule } from './database.module';
 import { ExperimentModule } from './experiment.module';
 import { HistoryModule } from './history.module';
+import { CqrsModule } from '@nestjs/cqrs';
+import { CreateGrouCommandpHandler } from 'src/handlers/commands/group/createGroupHandler';
+import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
+import { GetFilteredGroupQueryHandler } from 'src/handlers/queries/group/getFilteredGroup.queries';
 
 @Module({
-  imports: [DatabaseModule, ExperimentModule, HistoryModule],
+  imports: [DatabaseModule, ExperimentModule, HistoryModule, CqrsModule],
   providers: [
     {
       provide: Repository,
@@ -16,6 +20,9 @@ import { HistoryModule } from './history.module';
     },
     GroupService,
     ...groupProviders,
+    CreateGrouCommandpHandler,
+    GetFilteredUserQueryHandler,
+    GetFilteredGroupQueryHandler,
   ],
   exports: [GroupService],
 })

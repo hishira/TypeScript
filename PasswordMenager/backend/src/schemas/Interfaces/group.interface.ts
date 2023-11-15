@@ -32,7 +32,7 @@ export class GroupBuilder implements MongoSetObject<IGroup> {
   }
 }
 
-type Option<T> = FilterOption<T> | DeleteOption<T>;
+export type Option<T> = FilterOption<T> | DeleteOption<T>;
 export class GroupOptionBuilder {
   constructor(private option: FilterQuery<IGroup> = {}) {}
 
