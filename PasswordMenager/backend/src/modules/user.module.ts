@@ -11,6 +11,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { GetAllUserQueryHandler } from 'src/handlers/queries/user/getAllUserHandler.queries';
 import { UpdateUserHandler } from 'src/handlers/commands/user/updateUserHandler';
 import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
+import { CreateHisotryHandler } from 'src/handlers/commands/history/createHistoryHandler';
 const commandHandles = [CreateUserHandler];
 @Module({
   imports: [DatabaseModule, HistoryModule, CqrsModule],
@@ -26,6 +27,7 @@ const commandHandles = [CreateUserHandler];
     GetAllUserQueryHandler,
     GetFilteredUserQueryHandler,
     UpdateUserHandler,
+    CreateHisotryHandler,
   ],
   exports: [
     {

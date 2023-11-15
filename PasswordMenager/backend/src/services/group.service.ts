@@ -11,6 +11,10 @@ import {
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { EntryService } from './entry.service';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CreateGroupCommand } from 'src/commands/group/CreateGroupCommand';
+import { GetExistingGroupQuery } from 'src/queries/group/getExistingGroup.queries';
+import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
 
 @Injectable()
 export class GroupService {
@@ -19,28 +23,29 @@ export class GroupService {
     private readonly groupRepository: Repository<IGroup>,
     private readonly entityService: EntryService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {}
 
   create(
     groupcreateDTO: CreateGroupDto,
     userid: string,
   ): Promise<CreateGroupDto> {
-    return this.groupRepository.create(
-      GroupDtoMapper.CreatePureGroupDTO(userid, groupcreateDTO),
+    return this.commandBus.execute(
+      new CreateGroupCommand(userid, groupcreateDTO),
     );
   }
 
   async checkIfexists(groupId: string): Promise<any> {
-    return this.groupRepository
-      .findById(groupId)
-      .then((data) => GroupUtils.EmptyGroupGuard(data));
+    return this.queryBus.execute(new GetExistingGroupQuery(groupId));
   }
 
   async getbyuser(userid: string): Promise<GroupDto[] | any> {
     //TODO: check if work
-    return this.groupRepository.find(
-      new GroupOptionBuilder().updateUserId(userid).getOption(),
-    );
+    return this.queryBus.execute(new GetFilteredGroup(null, userid));
+    //return this.groupRepository.find(
+    //  new GroupOptionBuilder().updateUserId(userid).getOption(),
+    //);
   }
 
   async deleteGroup(groupId: string): Promise<unknown> {
