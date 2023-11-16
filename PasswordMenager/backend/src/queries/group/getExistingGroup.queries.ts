@@ -1,3 +1,5 @@
+import { GroupQueryInput } from './GroupQueryInput.interface';
+
 export class GetExistingGroupQuery {
-  constructor(public readonly groupId: string) {}
+  constructor(public readonly groupQueryInput: GroupQueryInput) {}
 }
