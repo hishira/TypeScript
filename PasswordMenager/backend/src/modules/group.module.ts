@@ -11,6 +11,8 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { CreateGrouCommandpHandler } from 'src/handlers/commands/group/createGroupHandler';
 import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
 import { GetFilteredGroupQueryHandler } from 'src/handlers/queries/group/getFilteredGroup.queries';
+import { DeleteGroupCommandHandler } from 'src/handlers/commands/group/deleteGroupHandler';
+import { UpdateGroupCommandHandler } from 'src/handlers/commands/group/updateGroupHandler';
 
 @Module({
   imports: [DatabaseModule, ExperimentModule, HistoryModule, CqrsModule],
@@ -25,6 +27,8 @@ import { GetFilteredGroupQueryHandler } from 'src/handlers/queries/group/getFilt
     CreateGrouCommandpHandler,
     GetFilteredUserQueryHandler,
     GetFilteredGroupQueryHandler,
+    DeleteGroupCommandHandler,
+    UpdateGroupCommandHandler,
   ],
 })
 export class GroupModule {}

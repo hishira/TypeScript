@@ -1,6 +1,5 @@
+import { GroupQueryInput } from './GroupQueryInput.interface';
+
 export class GetFilteredGroup {
-  constructor(
-    public readonly groupId: string = null,
-    public readonly userId: string = null,
-  ) {}
+  constructor(public readonly groupQueryInput: GroupQueryInput) {}
 }

@@ -12,9 +12,9 @@ export class GetExistingGroupQueryHandler
   ) {}
 
   execute(query: GetExistingGroupQuery): Promise<any> {
-    const { groupId } = query;
+    const { groupQueryInput } = query;
     return this.groupRepository
-      .findById(groupId)
+      .findById(groupQueryInput.id)
       .then((data) => GroupUtils.EmptyGroupGuard(data));
   }
 }
