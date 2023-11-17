@@ -5,8 +5,10 @@ import { entryProviders } from '../providers/entry.providers';
 import { EntryService } from '../services/entry.service';
 import { DatabaseModule } from './database.module';
 import { HistoryModule } from './history.module';
+import { CqrsModule } from '@nestjs/cqrs';
+import { CreateEntryHandler } from 'src/handlers/commands/entry/createEntryHandler';
 @Module({
-  imports: [DatabaseModule, HistoryModule],
+  imports: [DatabaseModule, HistoryModule, CqrsModule],
   providers: [
     {
       provide: Repository,
@@ -14,6 +16,7 @@ import { HistoryModule } from './history.module';
     },
     EntryService,
     ...entryProviders,
+    CreateEntryHandler,
   ],
   exports: [EntryService],
 })
