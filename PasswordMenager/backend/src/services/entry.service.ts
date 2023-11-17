@@ -13,13 +13,17 @@ import {
   OptionModelBuilder,
 } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
+import { CommandBus } from '@nestjs/cqrs';
+import { CreateEntryCommand } from 'src/commands/entry/CreateEntryCommand';
 
 const EmptyResponse = {
   status: false,
   respond: null,
 };
-const CreateEntryErrorMessage = { message: 'Error whice creating entry' };
-type Test =
+export const CreateEntryErrorMessage = {
+  message: 'Error whice creating entry',
+};
+export type Test =
   | IEntry
   | {
       message: string;
@@ -30,18 +34,15 @@ export class EntryService {
     @Inject(Repository)
     private readonly entryRepository: Repository<IEntry>,
     private readonly eventEmitter: EventEmitter2,
+    private readonly commandBus: CommandBus,
   ) {}
   create(
     entrycreateDTO: CreateEntryDto,
     userid: string,
   ): Promise<IEntry | { message: string }> {
-    return this.entryRepository
-      .create(EntryDtoMapper.CreateEntryDtoToDto(entrycreateDTO, userid))
-      .then((response: Test): any => this.emitNotificationCreate(response))
-      .catch((_) => {
-        console.error(_);
-        return CreateEntryErrorMessage;
-      });
+    return this.commandBus.execute(
+      new CreateEntryCommand(userid, entrycreateDTO),
+    );
   }
 
   @OnEvent('entry.insertMany', { async: true })
@@ -50,21 +51,6 @@ export class EntryService {
       EntryDtoMapper.encryptDtoPassword,
     );
     return this.entryRepository.createMany(mappedDto);
-  }
-  private emitNotificationCreate(response: Test): any {
-    if ('message' in response) return response;
-    const passwordExpireDate = response.passwordExpiredDate;
-    if (passwordExpireDate === null || passwordExpireDate === undefined)
-      return response;
-    //TODO refactor, move to notification
-    console.log('Response', response);
-    this.eventEmitter.emit('notification.create', {
-      passwordExpireDate: passwordExpireDate,
-      entry: response,
-      userid: response.userid,
-    });
-
-    return response;
   }
 
   getById(entryId: string): Promise<IEntry> {

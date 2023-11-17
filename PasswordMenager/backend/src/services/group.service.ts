@@ -46,6 +46,7 @@ export class GroupService {
       )
       .then((groups) => {
         // Like in entry service
+        //TODO Move to commands
         if (Array.isArray(groups) && groups.length > 0) {
           this.eventEmitter.emit('history.append', {
             userid: groups[0].userid,
