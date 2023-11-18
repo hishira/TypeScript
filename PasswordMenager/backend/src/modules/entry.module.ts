@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { CreateEntryBulkHandler } from 'src/handlers/commands/entry/createEntryBulkHandler';
 import { CreateEntryHandler } from 'src/handlers/commands/entry/createEntryHandler';
+import { DeleteEntryHandler } from 'src/handlers/commands/entry/deleteEntryHandler';
+import { GetExistingGroupQueryHandler } from 'src/handlers/queries/group/getExistingGroup.queries';
 import { EntryRepository } from 'src/repository/entry.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { GroupExistsValidator } from 'src/validators/CheckGroup.validator';
@@ -13,7 +16,7 @@ import { GroupExtModule } from './group-ext.module';
 import { HistoryModule } from './history.module';
 import { LoggerModule } from './logger.module';
 import { NotificationModule } from './notification.module';
-import { GetExistingGroupQueryHandler } from 'src/handlers/queries/group/getExistingGroup.queries';
+import { UpdateEntryHandler } from 'src/handlers/commands/entry/updateEntryHandler';
 @Module({
   imports: [
     DatabaseModule,
@@ -35,6 +38,9 @@ import { GetExistingGroupQueryHandler } from 'src/handlers/queries/group/getExis
     GroupExistsValidator,
     CreateEntryHandler,
     GetExistingGroupQueryHandler,
+    CreateEntryBulkHandler,
+    DeleteEntryHandler,
+    UpdateEntryHandler,
   ],
 })
 export class EntryModule {}

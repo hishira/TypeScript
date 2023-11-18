@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { CreateEntryBulkCommand } from 'src/commands/entry/CreateEntryBulkCommand';
+import { CreateEntryCommand } from 'src/commands/entry/CreateEntryCommand';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { DTO } from 'src/schemas/dto/object.interface';
@@ -13,8 +16,9 @@ import {
   OptionModelBuilder,
 } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
-import { CommandBus } from '@nestjs/cqrs';
-import { CreateEntryCommand } from 'src/commands/entry/CreateEntryCommand';
+import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
+import { DeleteEntryCommand } from 'src/commands/entry/DeleteEntryCommand';
+import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
 
 const EmptyResponse = {
   status: false,
@@ -35,6 +39,7 @@ export class EntryService {
     private readonly entryRepository: Repository<IEntry>,
     private readonly eventEmitter: EventEmitter2,
     private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {}
   create(
     entrycreateDTO: CreateEntryDto,
@@ -47,43 +52,49 @@ export class EntryService {
 
   @OnEvent('entry.insertMany', { async: true })
   insertMany(payload: { objects: DTO[] }) {
-    const mappedDto: DTO[] = payload.objects.map(
-      EntryDtoMapper.encryptDtoPassword,
-    );
-    return this.entryRepository.createMany(mappedDto);
+    return this.commandBus.execute(new CreateEntryBulkCommand(payload.objects));
   }
 
   getById(entryId: string): Promise<IEntry> {
-    return this.entryRepository.findById(entryId);
+    //return this.entryRepository.findById(entryId);
+    return this.queryBus.execute(new GetSpecificEntry({ id: entryId }));
   }
 
   getbygroupid(groupid: string): Promise<IEntry[] | EntryData> {
-    return this.entryRepository.find(
-      new OptionModelBuilder().updateGroupIdOrNull(groupid).getOption(),
-    );
+    //return this.entryRepository.find(
+    //  new OptionModelBuilder().updateGroupIdOrNull(groupid).getOption(),
+    //);
+    return this.queryBus.execute(new GetSpecificEntry({ groupId: groupid }));
   }
 
   getUserEntriesWithoutGroup(
     userid: string,
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData> {
-    return this.entryRepository.find(
-      new OptionModelBuilder()
-        .updateUserIdOPtion(userid)
-        .setGroupIdNull()
-        .getOption(),
-      paginator,
+    return this.queryBus.execute(
+      new GetSpecificEntry({ userId: userid, paginator: paginator }),
     );
+    //return this.entryRepository.find(
+    //  new OptionModelBuilder()
+    //    .updateUserIdOPtion(userid)
+    //    .setGroupIdNull()
+    //    .getOption(),
+    //  paginator,
+    //);
   }
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse> {
     // TODO: Refactor
     try {
-      const deletedentry: Promise<IEntry> =
-        this.entryRepository.findById(entryid);
-      const deletedPromise = this.entryRepository.delete(
-        new OptionModelBuilder().updateEntryId(entryid).getOption(),
+      const deletedentry: Promise<IEntry> = this.queryBus.execute(
+        new GetSpecificEntry({ id: entryid }),
       );
+      //this.entryRepository.findById(entryid);
+      const deletedPromise = this.commandBus.execute(
+        new DeleteEntryCommand({ id: entryid }),
+      ); // this.entryRepository.delete(
+      //  new OptionModelBuilder().updateEntryId(entryid).getOption(),
+      //);
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
           this.eventEmitter.emit('history.append', {
@@ -102,20 +113,33 @@ export class EntryService {
   }
 
   getLastDeletedUserEntries(userid: string): Promise<IEntry[] | EntryData> {
-    return this.entryRepository.find(
-      new OptionModelBuilder()
-        .updateUserIdOPtion(userid)
-        .updateStateEntry(EntryState.DELETED)
-        .updateLimit(10)
-        .getOption(),
+    //return this.entryRepository.find(
+    //  new OptionModelBuilder()
+    //    .updateUserIdOPtion(userid)
+    //    .updateStateEntry(EntryState.DELETED)
+    //    .updateLimit(10)
+    //    .getOption(),
+    //);
+    return this.queryBus.execute(
+      new GetSpecificEntry({
+        userId: userid,
+        entryState: EntryState.DELETED,
+        limit: 10,
+      }),
     );
   }
 
   activateDeletedEntreis(entryId: string) {
-    return this.entryRepository.update({
-      _id: entryId,
-      state: EntryState.ACTIVE,
-    });
+    return this.commandBus.execute(
+      new UpdateEntryCommand({
+        id: entryId,
+        entryState: EntryState.ACTIVE,
+      }),
+    );
+    //return this.entryRepository.update({
+    //  _id: entryId,
+    //  state: EntryState.ACTIVE,
+    //});
   }
   private getHistoryEntryPromise(groupid: string) {
     return this.entryRepository
