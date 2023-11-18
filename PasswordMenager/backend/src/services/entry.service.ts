@@ -142,8 +142,10 @@ export class EntryService {
     //});
   }
   private getHistoryEntryPromise(groupid: string) {
-    return this.entryRepository
-      .find(new OptionModelBuilder().updateGroupId(groupid).getOption())
+    //return this.entryRepository
+    //  .find(new OptionModelBuilder().updateGroupId(groupid).getOption())
+    return this.queryBus
+      .execute(new GetSpecificEntry({ groupId: groupid }))
       .then((entires) => {
         if (Array.isArray(entires) && entires.length > 0) {
           this.eventEmitter.emit('history.append', {
@@ -157,29 +159,38 @@ export class EntryService {
 
   deleteByGroup(groupid: string): Promise<unknown> {
     const promiseEntryHistory = this.getHistoryEntryPromise(groupid);
-    const deletePromise = this.entryRepository.delete(
-      new OptionModelBuilder().updateGroupId(groupid).getOption(),
-    );
+    const deletePromise = this.commandBus.execute(
+      new DeleteEntryCommand({ groupId: groupid }),
+    ); //this.entryRepository.delete(
+    //  new OptionModelBuilder().updateGroupId(groupid).getOption(),
+    //);
     return promiseEntryHistory.then(() => deletePromise);
   }
 
   getByUser(userId: string): Promise<IEntry[] | EntryData> {
-    return this.entryRepository.find(
-      new OptionModelBuilder().updateUserIdOPtion(userId).getOption(),
-    );
+    //return this.entryRepository.find(
+    //  new OptionModelBuilder().updateUserIdOPtion(userId).getOption(),
+    //);
+    return this.queryBus.execute(new GetSpecificEntry({ userId: userId }));
   }
 
   editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
     try {
-      const entry: Partial<IEntry> =
-        EntryDtoMapper.GetPartialUpdateEntry(neweditedentry);
-      return this.entryRepository.update(entry).then(async (_data) => {
-        const upadednoew = await this.entryRepository.findById(
-          neweditedentry._id,
-        );
+      //const entry: Partial<IEntry> =
+      //  EntryDtoMapper.GetPartialUpdateEntry(neweditedentry);
+      //.return this.entryRepository.update(entry);
+      return this.commandBus
+        .execute(new UpdateEntryCommand({ updateEntryDto: neweditedentry }))
+        .then(async (_data) => {
+          const upadednoew = await this.queryBus.execute(
+            new GetSpecificEntry({ id: neweditedentry._id }),
+          );
+          //await this.entryRepository.findById(
+          //  neweditedentry._id,
+          //);
 
-        return { status: true, respond: upadednoew };
-      });
+          return { status: true, respond: upadednoew };
+        });
     } catch (e) {
       return Promise.resolve(EmptyResponse);
     }

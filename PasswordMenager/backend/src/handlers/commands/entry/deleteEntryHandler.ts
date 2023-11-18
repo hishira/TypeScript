@@ -13,10 +13,18 @@ export class DeleteEntryHandler
 {
   execute(command: DeleteEntryCommand): Promise<any> {
     const { deleteEntryInput } = command;
+    //TODO: refactor
     if ('id' in deleteEntryInput) {
       const deleteOption = new OptionModelBuilder()
         .updateEntryId(deleteEntryInput.id)
         .getOption();
+      return this.repository.delete(deleteOption);
+    }
+    if ('groupId' in deleteEntryInput) {
+      const deleteOption = new OptionModelBuilder()
+        .updateGroupId(deleteEntryInput.groupId)
+        .getOption();
+
       return this.repository.delete(deleteOption);
     }
   }
