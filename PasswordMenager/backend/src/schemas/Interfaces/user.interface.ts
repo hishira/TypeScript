@@ -141,6 +141,7 @@ export class UserUtils {
   }
 
   static GetFirstUserFromTableOrNull(users: IUser[]): IUser | null {
+    console.log(users);
     return users && users.length ? users[0] : null;
   }
 }

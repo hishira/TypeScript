@@ -1,3 +1,4 @@
 export class GetFilteredUserQueries {
-  constructor(public readonly userid: string) {}
+  //TODO: Refactor
+  constructor(public readonly userid: string, public readonly login?: string) {}
 }
