@@ -11,6 +11,7 @@ import { EntryService } from '../services/entry.service';
 import { DatabaseModule } from './database.module';
 import { HistoryModule } from './history.module';
 import { UpdateEntryHandler } from 'src/handlers/commands/entry/updateEntryHandler';
+import { GetSpecificEntryQueryHandler } from 'src/handlers/queries/entry/getSpecificEntry.queries';
 @Module({
   imports: [DatabaseModule, HistoryModule, CqrsModule],
   providers: [
@@ -25,6 +26,7 @@ import { UpdateEntryHandler } from 'src/handlers/commands/entry/updateEntryHandl
     CreateEntryBulkHandler,
     DeleteEntryHandler,
     UpdateEntryHandler,
+    GetSpecificEntryQueryHandler,
   ],
   exports: [EntryService],
 })

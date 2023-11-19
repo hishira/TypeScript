@@ -17,6 +17,7 @@ import { HistoryModule } from './history.module';
 import { LoggerModule } from './logger.module';
 import { NotificationModule } from './notification.module';
 import { UpdateEntryHandler } from 'src/handlers/commands/entry/updateEntryHandler';
+import { GetSpecificEntryQueryHandler } from 'src/handlers/queries/entry/getSpecificEntry.queries';
 @Module({
   imports: [
     DatabaseModule,
@@ -41,6 +42,7 @@ import { UpdateEntryHandler } from 'src/handlers/commands/entry/updateEntryHandl
     CreateEntryBulkHandler,
     DeleteEntryHandler,
     UpdateEntryHandler,
+    GetSpecificEntryQueryHandler,
   ],
 })
 export class EntryModule {}
