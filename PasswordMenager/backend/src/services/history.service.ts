@@ -1,25 +1,18 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { OnEvent } from '@nestjs/event-emitter';
-import { ObjectId } from 'mongoose';
+import { CreateHistoryCommand } from 'src/commands/history/CreateHistoryCommand';
+import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
-import {
-  HistoryDTOMapper,
-  IHistory,
-} from 'src/schemas/Interfaces/history.interface';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { IHistory } from 'src/schemas/Interfaces/history.interface';
 
 @Injectable()
 export class HistoryService {
-  constructor(
-    @Inject(Repository)
-    private readonly historyRepository: Repository<IHistory>,
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   create(userid: string): Promise<IHistory> {
-    return this.historyRepository.create(
-      HistoryDTOMapper.CreateHistoryDTO(userid),
-    );
+    return this.commandBus.execute(new CreateHistoryCommand(userid));
   }
 
   @OnEvent('history.append', { async: true })
@@ -34,16 +27,20 @@ export class HistoryService {
   }
 
   appendEntityToHistory(userid: string, entries: IEntry[]): Promise<unknown> {
-    return this.historyRepository.update({
-      userid: userid as unknown as ObjectId,
-      entities: [...entries],
-    });
+    return this.commandBus.execute(
+      new UpdateHistoryCommand({
+        userId: userid,
+        entries: entries,
+      }),
+    );
   }
 
   appendGroupToHistory(userid: string, groups: IGroup[]): Promise<unknown> {
-    return this.historyRepository.update({
-      userid: userid as unknown as ObjectId,
-      groups: [...groups],
-    });
+    return this.commandBus.execute(
+      new UpdateHistoryCommand({
+        userId: userid,
+        groups: groups,
+      }),
+    );
   }
 }

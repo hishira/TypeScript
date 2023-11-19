@@ -10,6 +10,8 @@ import { JwtStrategy2 } from '../refreshtoken.strategy';
 import { AuthService } from '../services/auth.service';
 import { DatabaseModule } from './database.module';
 import { UserModule } from './user.module';
+import { CqrsModule } from '@nestjs/cqrs';
+import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
 @Module({
   imports: [
     DatabaseModule,
@@ -20,6 +22,7 @@ import { UserModule } from './user.module';
     JwtModule.register({
       secret: jwtConstants.secret,
     }),
+    CqrsModule,
   ],
   controllers: [AuthController],
   providers: [
@@ -28,6 +31,7 @@ import { UserModule } from './user.module';
     JwtStrategy,
     JwtStrategy2,
     ...groupProviders,
+    GetFilteredUserQueryHandler,
   ],
   exports: [AuthService, JwtModule],
 })

@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from './database.module';
+import { CqrsModule } from '@nestjs/cqrs';
+import { CreateHisotryHandler } from 'src/handlers/commands/history/createHistoryHandler';
 import { historyProvider } from 'src/providers/history.provider';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { HistoryRepository } from 'src/repository/history.repository';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { HistoryService } from 'src/services/history.service';
+import { DatabaseModule } from './database.module';
+import { UpdateHistoryHandler } from 'src/handlers/commands/history/updateHistoryHandler';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, CqrsModule],
   providers: [
     {
       provide: Repository,
@@ -14,6 +17,8 @@ import { HistoryService } from 'src/services/history.service';
     },
     HistoryService,
     ...historyProvider,
+    CreateHisotryHandler,
+    UpdateHistoryHandler,
   ],
   exports: [HistoryService],
 })
