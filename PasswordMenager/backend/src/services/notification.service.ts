@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { CreateNotificationCommand } from 'src/commands/notification/CreateNotificationCommand';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import {
@@ -29,6 +31,7 @@ export class NotificationService implements NotificationCron {
     @Inject(Repository)
     private readonly notificationRepository: Repository<INotification>,
     private readonly logger: Logger,
+    private readonly commandBus: CommandBus,
   ) {
     this.emailSender = new EmailSender();
     this.logger.setContext('Notification service');
@@ -67,7 +70,10 @@ export class NotificationService implements NotificationCron {
   }
 
   create(notificationDTO: CreateNotificationDTO) {
-    return this.notificationRepository.create(notificationDTO);
+    //return this.notificationRepository.create(notificationDTO);
+    return this.commandBus.execute(
+      new CreateNotificationCommand(notificationDTO),
+    );
   }
 
   userNotification(userId: string) {
