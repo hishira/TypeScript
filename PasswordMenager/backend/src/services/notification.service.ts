@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { CreateNotificationCommand } from 'src/commands/notification/CreateNotificationCommand';
+import { GetNotificationQuery } from 'src/queries/notification/getNotification.queries';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import {
@@ -32,6 +33,7 @@ export class NotificationService implements NotificationCron {
     private readonly notificationRepository: Repository<INotification>,
     private readonly logger: Logger,
     private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {
     this.emailSender = new EmailSender();
     this.logger.setContext('Notification service');
@@ -78,9 +80,10 @@ export class NotificationService implements NotificationCron {
 
   userNotification(userId: string) {
     console.log(userId);
-    return this.notificationRepository.find(
-      new UserActiveNotificationFilter(userId),
-    );
+    // return this.notificationRepository.find(
+    //   new UserActiveNotificationFilter(userId),
+    // );
+    return this.queryBus.execute(new GetNotificationQuery({ userId: userId }));
   }
 
   createEmailNotification(
@@ -108,13 +111,17 @@ export class NotificationService implements NotificationCron {
   }
 
   get activeNotification(): Promise<INotification[]> {
-    return this.notificationRepository
-      .find(new ActiveNotificationFilter())
+    // return this.notificationRepository
+    //   .find(new ActiveNotificationFilter())
+    return this.queryBus
+      .execute(new GetNotificationQuery({ active: true }))
       .then((data) => NotificationUtils.GetDataFromPaginator(data));
   }
   checkAndSendNotification(): Promise<unknown> {
-    return this.notificationRepository
-      .find(NotificationUtils.GetAllNotificationFilter)
+    // return this.notificationRepository
+    //   .find(NotificationUtils.GetAllNotificationFilter)
+    return this.queryBus
+      .execute(new GetNotificationQuery({}))
       .then((notification) => {
         const notifications =
           NotificationUtils.GetDataFromPaginator(notification);
