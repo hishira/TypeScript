@@ -36,6 +36,7 @@ const commandHandles = [CreateUserHandler];
     },
     UserService,
     CreateUserHandler,
+    GetFilteredUserQueryHandler,
   ],
 })
 export class UserModule {}

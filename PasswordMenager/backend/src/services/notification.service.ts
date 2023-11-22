@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -6,14 +6,10 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { CreateNotificationCommand } from 'src/commands/notification/CreateNotificationCommand';
 import { GetNotificationQuery } from 'src/queries/notification/getNotification.queries';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import {
-  ActiveNotificationFilter,
   INotification,
   NotificationUtils,
-  UserActiveNotificationFilter,
 } from 'src/schemas/Interfaces/notification.interface';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import {
   CreateNotificationDTO,
   CreateNotificationEmailDTO,
@@ -29,8 +25,6 @@ export class NotificationService implements NotificationCron {
   private emailSender: EmailSender;
 
   constructor(
-    @Inject(Repository)
-    private readonly notificationRepository: Repository<INotification>,
     private readonly logger: Logger,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
@@ -55,7 +49,6 @@ export class NotificationService implements NotificationCron {
     return this.createEmailNotification(
       payload.entry,
       payload.passwordExpireDate,
-      payload.userid,
     );
   }
   getActiveNotificationAsPromise(): Promise<
@@ -72,7 +65,6 @@ export class NotificationService implements NotificationCron {
   }
 
   create(notificationDTO: CreateNotificationDTO) {
-    //return this.notificationRepository.create(notificationDTO);
     return this.commandBus.execute(
       new CreateNotificationCommand(notificationDTO),
     );
@@ -80,17 +72,10 @@ export class NotificationService implements NotificationCron {
 
   userNotification(userId: string) {
     console.log(userId);
-    // return this.notificationRepository.find(
-    //   new UserActiveNotificationFilter(userId),
-    // );
     return this.queryBus.execute(new GetNotificationQuery({ userId: userId }));
   }
 
-  createEmailNotification(
-    entry: IEntry,
-    passwordExpireDate: Date,
-    userid: string,
-  ) {
+  createEmailNotification(entry: IEntry, passwordExpireDate: Date) {
     return this.create(
       new CreateNotificationEmailDTO(
         entry._id,
@@ -111,15 +96,11 @@ export class NotificationService implements NotificationCron {
   }
 
   get activeNotification(): Promise<INotification[]> {
-    // return this.notificationRepository
-    //   .find(new ActiveNotificationFilter())
     return this.queryBus
       .execute(new GetNotificationQuery({ active: true }))
       .then((data) => NotificationUtils.GetDataFromPaginator(data));
   }
   checkAndSendNotification(): Promise<unknown> {
-    // return this.notificationRepository
-    //   .find(NotificationUtils.GetAllNotificationFilter)
     return this.queryBus
       .execute(new GetNotificationQuery({}))
       .then((notification) => {

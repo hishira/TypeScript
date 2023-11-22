@@ -26,6 +26,7 @@ export class GetFilteredUserQueryHandler
           };
         },
       };
+      console.log(userByLogin.getOption());
 
       return this.repository.find(userByLogin);
     }

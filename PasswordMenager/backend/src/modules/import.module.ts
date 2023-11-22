@@ -5,9 +5,11 @@ import { ImportService } from 'src/services/import.service';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { ImportRequestRepository } from 'src/repository/importrequest.repository';
 import { importRequestProvider } from 'src/providers/importrequest.provider';
+import { CqrsModule } from '@nestjs/cqrs';
+import { GetImportQueryHandler } from 'src/handlers/queries/import/getImportsHandler';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, CqrsModule],
   controllers: [ImportController],
   providers: [
     {
@@ -16,6 +18,7 @@ import { importRequestProvider } from 'src/providers/importrequest.provider';
     },
     ImportService,
     ...importRequestProvider,
+    GetImportQueryHandler,
   ],
 })
 export class ImportModule {}
