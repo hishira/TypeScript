@@ -8,6 +8,7 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { NotificationService } from 'src/services/notification.service';
 import { DatabaseModule } from './database.module';
 import { LoggerModule } from './logger.module';
+import { GetNotificationQueryHandler } from 'src/handlers/queries/notification/getNotificationHandler';
 
 @Module({
   imports: [DatabaseModule, LoggerModule, CqrsModule],
@@ -19,6 +20,7 @@ import { LoggerModule } from './logger.module';
     NotificationService,
     ...notificationProviders,
     CreateNotificationCommandHandler,
+    GetNotificationQueryHandler,
   ],
   controllers: [NotificationController],
   exports: [NotificationService],

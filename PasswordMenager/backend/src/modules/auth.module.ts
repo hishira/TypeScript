@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
+import { userProviders } from 'src/providers/user.providers';
+import { UserRepository } from 'src/repository/user.repository';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { JwtStrategy } from '../accesstoken.strategy';
 import { jwtConstants } from '../constans';
 import { AuthController } from '../controllers/auth.controller';
@@ -10,8 +15,6 @@ import { JwtStrategy2 } from '../refreshtoken.strategy';
 import { AuthService } from '../services/auth.service';
 import { DatabaseModule } from './database.module';
 import { UserModule } from './user.module';
-import { CqrsModule } from '@nestjs/cqrs';
-import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
 @Module({
   imports: [
     DatabaseModule,
@@ -31,7 +34,6 @@ import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilter
     JwtStrategy,
     JwtStrategy2,
     ...groupProviders,
-    GetFilteredUserQueryHandler,
   ],
   exports: [AuthService, JwtModule],
 })

@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GetImportQuery } from 'src/queries/import/getImports.queries';
 import {
   ImportDTOMapper,
   ImportEntriesResponse,
@@ -18,11 +20,14 @@ export class ImportService {
     @Inject(Repository)
     private readonly importRequestRepository: Repository<ImportRequest>,
     private readonly eventEmitter: EventEmitter2,
+    private readonly queryBus: QueryBus,
   ) {}
 
   activateImportRequest(importRequestId: string, userId: string) {
-    return this.importRequestRepository
-      .findById(importRequestId)
+    // return this.importRequestRepository
+    //   .findById(importRequestId)
+    return this.queryBus
+      .execute(new GetImportQuery({ id: importRequestId }))
       .then((importRequest) => {
         const entriesToImport = importRequest.entriesToImport;
         const dtosObjects: DTO[] = ImportDTOMapper.MapImportRequestsToDTOs(
@@ -42,9 +47,10 @@ export class ImportService {
         pageInfo: Paginator;
       }
   > {
-    return this.importRequestRepository.find({
-      getOption: () => ({ userid: userId }),
-    });
+    // return this.importRequestRepository.find({
+    //   getOption: () => ({ userid: userId }),
+    // });
+    return this.queryBus.execute(new GetImportQuery({ userId: userId }));
   }
   importEntriesFromFile(file: Express.Multer.File, userid: string) {
     const readableStream = Readable.from(file.buffer);
