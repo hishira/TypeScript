@@ -1,14 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
+import { Injectable } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CreateImportRequestCommand } from 'src/commands/importRequest/ImportRequestCreateCommand';
 import { GetImportQuery } from 'src/queries/import/getImports.queries';
 import {
   ImportDTOMapper,
   ImportEntriesResponse,
+  ImportEntrySchema,
   ImportRequest,
   ImportRequestDto,
 } from 'src/schemas/Interfaces/importRequest.interface';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { Paginator } from 'src/utils/paginator';
 import { WritableStream } from 'src/utils/writableStream';
@@ -17,15 +18,12 @@ import { Readable } from 'stream';
 @Injectable()
 export class ImportService {
   constructor(
-    @Inject(Repository)
-    private readonly importRequestRepository: Repository<ImportRequest>,
     private readonly eventEmitter: EventEmitter2,
     private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
   ) {}
 
   activateImportRequest(importRequestId: string, userId: string) {
-    // return this.importRequestRepository
-    //   .findById(importRequestId)
     return this.queryBus
       .execute(new GetImportQuery({ id: importRequestId }))
       .then((importRequest) => {
@@ -47,28 +45,46 @@ export class ImportService {
         pageInfo: Paginator;
       }
   > {
-    // return this.importRequestRepository.find({
-    //   getOption: () => ({ userid: userId }),
-    // });
     return this.queryBus.execute(new GetImportQuery({ userId: userId }));
   }
   importEntriesFromFile(file: Express.Multer.File, userid: string) {
-    const readableStream = Readable.from(file.buffer);
-    const writer = new WritableStream();
-    readableStream.pipe(writer);
-    return new Promise<any>((resolve, reject) => {
-      readableStream.on('end', () => {
-        writer.end();
-        const numberOfEntries = writer.getSavedData;
-        this.importRequestRepository
-          .create(new ImportRequestDto(userid, numberOfEntries))
-          .then((importRequest) => {
-            resolve(
-              new ImportEntriesResponse(numberOfEntries, importRequest)
-                .ResponseResolve,
-            );
-          })
-          .catch((error) => reject(error));
+    const importRequestStream = new ImportRequestStream(file);
+    let entries = [];
+    return importRequestStream
+      .getPromise()
+      .then((entryImport) => {
+        entries = entryImport;
+        return this.commandBus.execute(
+          new CreateImportRequestCommand(
+            new ImportRequestDto(userid, entryImport),
+          ),
+        );
+      })
+      .then((importRequest) => {
+        return new ImportEntriesResponse(entries, importRequest)
+          .ResponseResolve;
+      });
+  }
+}
+//TEST
+export class ImportRequestStream {
+  private reader: Readable;
+  private readonly writer: WritableStream = new WritableStream();
+  constructor(file: Express.Multer.File) {
+    this.reader = Readable.from(file.buffer);
+    this.reader.pipe(this.writer);
+  }
+
+  getPromise(): Promise<ImportEntrySchema[]> {
+    return new Promise<ImportEntrySchema[]>((resolve, reject) => {
+      this.reader.on('end', () => {
+        try {
+          this.writer.end();
+          const importEntriesSchema = this.writer.getSavedData;
+          resolve(importEntriesSchema);
+        } catch (e) {
+          reject(e);
+        }
       });
     });
   }
