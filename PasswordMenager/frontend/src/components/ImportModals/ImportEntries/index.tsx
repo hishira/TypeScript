@@ -1,9 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Import } from "../../../utils/import.utils";
 import { AcceptModalComponent } from "../../Modal/AcceptModal";
 import { TranslationFunction } from "../../Translation";
@@ -47,7 +42,7 @@ const CheckExtendButton = (
   formData: FormData | undefined,
   setImportFileInfo: Dispatch<SetStateAction<ImportCheckData | null>>
 ) => ({
-  buttonText: TranslationFunction('import.modal.button.check'),
+  buttonText: TranslationFunction("import.modal.button.check"),
   handleButton: () => acceptHandle(formData, setImportFileInfo),
 });
 
@@ -72,29 +67,31 @@ export const ImportModalEntries = ({
     closeModalHandle();
   };
 
+  const functionTimeout = () => {
+    setExtendData({
+      buttonText: TranslationFunction("import.modal.button.import"),
+      handleButton: () => console.log("Import"),
+    });
+  };
   useEffect(() => {
     setImportModalOpen(modalOpen);
     setExtendData({
       ...extendData,
       handleButton: () =>
         acceptHandle(formData, setImportFileInfo).then(
-          (_) =>
-            _ &&
-            setExtendData({
-              buttonText: TranslationFunction('import.modal.button.import'),
-              handleButton: () => console.log("Import"),
-            })
+          (_) => _ && setTimeout(() => functionTimeout())
         ),
     });
   }, [modalOpen, formData]);
 
+  const functionFile = (e: File) => setFormDataAction(e, setFormData);
   return modalOpen ? (
     <AcceptModalComponent
       visible={importModalOpen}
       onClose={closeHandle}
       component={
         <ImportEntriesModalComponent
-          fileSetHandle={(e: File) => setFormDataAction(e, setFormData)}
+          fileSetHandle={functionFile}
           importFileInfo={importFileInfo}
         />
       }
