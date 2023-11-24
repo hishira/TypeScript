@@ -5,7 +5,7 @@ import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
 import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand';
 import { ObjectId } from 'mongoose';
 
-@CommandHandler(UpdateEntryCommand)
+@CommandHandler(UpdateHistoryCommand)
 export class UpdateHistoryHandler
   extends BaseCommandHandler<IHistory>
   implements ICommandHandler<UpdateHistoryCommand>

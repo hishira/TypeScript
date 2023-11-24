@@ -4,6 +4,8 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { CreateNotificationCommand } from 'src/commands/notification/CreateNotificationCommand';
+import { CreateNotificationEvent } from 'src/events/createNotificationEvent';
+import { EventTypes } from 'src/events/eventTypes';
 import { GetNotificationQuery } from 'src/queries/notification/getNotification.queries';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import {
@@ -40,12 +42,8 @@ export class NotificationService implements NotificationCron {
       .catch(() => this.logger.error('Problem with notification send'));
   }
 
-  @OnEvent('notification.create', { async: true })
-  eventNotificationCreateHandle(payload: {
-    passwordExpireDate: Date;
-    entry: IEntry;
-    userid: string;
-  }) {
+  @OnEvent(EventTypes.CreateNotification, { async: true })
+  eventNotificationCreateHandle(payload: CreateNotificationEvent) {
     return this.createEmailNotification(
       payload.entry,
       payload.passwordExpireDate,
@@ -75,7 +73,7 @@ export class NotificationService implements NotificationCron {
     return this.queryBus.execute(new GetNotificationQuery({ userId: userId }));
   }
 
-  createEmailNotification(entry: IEntry, passwordExpireDate: Date) {
+  createEmailNotification(entry: IEntry, passwordExpireDate: Date | string) {
     return this.create(
       new CreateNotificationEmailDTO(
         entry._id,
