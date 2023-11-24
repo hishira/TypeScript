@@ -20,7 +20,7 @@ export class CreateNotificationDTO implements DTO {
       entryId: this.entryId,
       notificationDate: this.notificationDate,
       notificationChannel: this.notificationChannel,
-      userid: this.userid
+      userid: this.userid,
     };
   }
 }
@@ -28,7 +28,7 @@ export class CreateNotificationDTO implements DTO {
 export class CreateNotificationEmailDTO extends CreateNotificationDTO {
   constructor(
     public readonly entryId: string,
-    public readonly notificationDate: Date,
+    public readonly notificationDate: Date | string,
     public readonly userid: string,
     public readonly notificationChannel: NotificationChannel = NotificationChannel.Email,
   ) {

@@ -16,6 +16,8 @@ import {
   IEntry,
 } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
+import { EventTypes } from 'src/events/eventTypes';
+import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 
 const EmptyResponse = {
   status: false,
@@ -29,6 +31,7 @@ export type Test =
   | {
       message: string;
     };
+
 @Injectable()
 export class EntryService {
   constructor(
@@ -36,6 +39,7 @@ export class EntryService {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+
   create(
     entrycreateDTO: CreateEntryDto,
     userid: string,
@@ -45,7 +49,11 @@ export class EntryService {
     );
   }
 
-  @OnEvent('entry.insertMany', { async: true })
+  @OnEvent(EventTypes.DeleteEntryByGroup, { async: true })
+  deleteByGroupEvent(payload: { groupId: string }) {
+    return this.deleteByGroup(payload.groupId);
+  }
+  @OnEvent(EventTypes.InsertManyEntry, { async: true })
   insertMany(payload: { objects: DTO[] }) {
     return this.commandBus.execute(new CreateEntryBulkCommand(payload.objects));
   }
@@ -78,11 +86,10 @@ export class EntryService {
       );
       return Promise.all([deletedentry, deletedPromise])
         .then((res) => {
-          this.eventEmitter.emit('history.append', {
-            userid: res[0].userid,
-            entries: [res[0]],
-            historyAddType: 'entry',
-          });
+          this.eventEmitter.emit(
+            EventTypes.HistoryAppend,
+            new HistoryAppendEvent(res[0].userid, [res[0]], 'entry'),
+          );
           return { status: true, response: res[0] } as any;
         })
         .catch((_err) => {
@@ -116,11 +123,10 @@ export class EntryService {
       .execute(new GetSpecificEntry({ groupId: groupid }))
       .then((entires) => {
         if (Array.isArray(entires) && entires.length > 0) {
-          this.eventEmitter.emit('history.append', {
-            userid: entires[0].userid as unknown as string,
-            entries: entires,
-            historyAddType: 'entry',
-          });
+          this.eventEmitter.emit(
+            EventTypes.HistoryAppend,
+            new HistoryAppendEvent(entires[0].userid, entires, 'entry'),
+          );
         }
       });
   }

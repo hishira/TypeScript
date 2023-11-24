@@ -4,6 +4,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateGroupCommand } from 'src/commands/group/CreateGroupCommand';
 import { DeleteGroupCommand } from 'src/commands/group/DeleteGroupCommand';
 import { UpdateGroupCommand } from 'src/commands/group/UpdateGroupCommand';
+import { EventTypes } from 'src/events/eventTypes';
+import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { GroupResponse } from 'src/handlers/queries/group/getFilteredGroup.queries';
 import { GetExistingGroupQuery } from 'src/queries/group/getExistingGroup.queries';
 import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
@@ -39,7 +41,9 @@ export class GroupService {
   }
 
   async deleteGroup(groupId: string): Promise<unknown> {
-    await this.entityService.deleteByGroup(groupId);
+    await this.eventEmitter.emitAsync(EventTypes.DeleteEntryByGroup, {
+      groupId,
+    });
     const promiseToResolve = this.queryBus
       .execute<GetFilteredGroup, GroupResponse>(
         new GetFilteredGroup({ id: groupId }),
@@ -48,11 +52,10 @@ export class GroupService {
         // Like in entry service
         //TODO Move to commands
         if (Array.isArray(groups) && groups.length > 0) {
-          this.eventEmitter.emit('history.append', {
-            userid: groups[0].userid,
-            entries: groups,
-            historyAddType: 'group',
-          });
+          this.eventEmitter.emit(
+            EventTypes.HistoryAppend,
+            new HistoryAppendEvent(groups[0].userid, groups, 'group'),
+          );
         }
         return Promise.resolve(true);
       });

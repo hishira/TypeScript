@@ -3,6 +3,8 @@ import { CommandBus } from '@nestjs/cqrs';
 import { OnEvent } from '@nestjs/event-emitter';
 import { CreateHistoryCommand } from 'src/commands/history/CreateHistoryCommand';
 import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand';
+import { EventTypes } from 'src/events/eventTypes';
+import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
@@ -15,15 +17,17 @@ export class HistoryService {
     return this.commandBus.execute(new CreateHistoryCommand(userid));
   }
 
-  @OnEvent('history.append', { async: true })
-  eventHistoryUpdate(payload: {
-    userid: string;
-    entries: IEntry[] | IGroup[];
-    historyAddType: 'entry' | 'group';
-  }) {
+  @OnEvent(EventTypes.HistoryAppend, { async: true })
+  eventHistoryUpdate(payload: HistoryAppendEvent) {
     return payload.historyAddType === 'entry'
-      ? this.appendEntityToHistory(payload.userid, payload.entries as IEntry[])
-      : this.appendGroupToHistory(payload.userid, payload.entries as IGroup[]);
+      ? this.appendEntityToHistory(
+          payload.useridString,
+          payload.objects as IEntry[],
+        )
+      : this.appendGroupToHistory(
+          payload.useridString,
+          payload.objects as IGroup[],
+        );
   }
 
   appendEntityToHistory(userid: string, entries: IEntry[]): Promise<unknown> {

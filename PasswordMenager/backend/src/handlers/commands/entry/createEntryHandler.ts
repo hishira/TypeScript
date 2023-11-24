@@ -4,6 +4,8 @@ import { CreateEntryCommand } from 'src/commands/entry/CreateEntryCommand';
 import { EntryDtoMapper, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { CreateEntryErrorMessage, Test } from 'src/services/entry.service';
 import { BaseCommandHandler } from '../BaseCommandHandler';
+import { EventTypes } from 'src/events/eventTypes';
+import { CreateNotificationEvent } from 'src/events/createNotificationEvent';
 
 @CommandHandler(CreateEntryCommand)
 export class CreateEntryHandler
@@ -17,7 +19,7 @@ export class CreateEntryHandler
     const { userId, entrycreateDTO } = command;
     return this.repository
       .create(EntryDtoMapper.CreateEntryDtoToDto(entrycreateDTO, userId))
-      .then((response: Test): any => this.emitNotificationCreate(response))
+      .then((response: Test): unknown => this.emitNotificationCreate(response))
       .catch((_) => {
         console.error(_);
         return CreateEntryErrorMessage;
@@ -29,13 +31,10 @@ export class CreateEntryHandler
     const passwordExpireDate = response.passwordExpiredDate;
     if (passwordExpireDate === null || passwordExpireDate === undefined)
       return response;
-    //TODO refactor, move to notification
-    console.log('Response', response);
-    this.eventEmitter.emit('notification.create', {
-      passwordExpireDate: passwordExpireDate,
-      entry: response,
-      userid: response.userid,
-    });
+    this.eventEmitter.emit(
+      EventTypes.CreateNotification,
+      new CreateNotificationEvent(passwordExpireDate, response),
+    );
 
     return response;
   }
