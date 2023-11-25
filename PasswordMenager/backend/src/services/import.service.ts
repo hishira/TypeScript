@@ -3,6 +3,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateImportRequestCommand } from 'src/commands/importRequest/ImportRequestCreateCommand';
 import { EventTypes } from 'src/events/eventTypes';
+import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { GetImportQuery } from 'src/queries/import/getImports.queries';
 import {
   ImportDTOMapper,
@@ -31,9 +32,10 @@ export class ImportService {
           userId,
           entriesToImport,
         );
-        this.eventEmitter.emitAsync(EventTypes.InsertManyEntry, {
-          objects: dtosObjects,
-        });
+        this.eventEmitter.emitAsync(
+          EventTypes.InsertManyEntry,
+          new InsertmanyEntryEvent(dtosObjects),
+        );
       });
   }
 

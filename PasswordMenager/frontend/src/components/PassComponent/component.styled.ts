@@ -48,3 +48,14 @@ export const Text = styled.div`
   color: lightslategray;
   transform: rotate(-5deg);
 `;
+
+export const SearchContainer = styled.span`
+  width: 75%;
+  display: flex;
+  justify-content: center;
+  & > p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;

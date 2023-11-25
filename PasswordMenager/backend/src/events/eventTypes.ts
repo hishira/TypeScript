@@ -3,4 +3,5 @@ export enum EventTypes {
   InsertManyEntry = 'entry.insertMany',
   HistoryAppend = 'history.append',
   CreateNotification = 'notification.create',
+  CreateUser = 'user.create',
 }

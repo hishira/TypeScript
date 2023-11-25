@@ -13,6 +13,9 @@ import {
   IUser,
 } from '../schemas/Interfaces/user.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
+import { OnEvent } from '@nestjs/event-emitter';
+import { EventTypes } from 'src/events/eventTypes';
+import { CreateUserEvent } from 'src/events/createUserEvent';
 @Injectable()
 export class UserService {
   constructor(
@@ -20,17 +23,16 @@ export class UserService {
     private readonly queryBus: QueryBus,
   ) {}
 
+  @OnEvent(EventTypes.CreateUser, { async: true })
+  createUserEvent(createUserEvent: CreateUserEvent) {
+    return this.create(createUserEvent.createUserDto);
+  }
+
   create(
     userCreateDTO: CreateUserDto,
   ): Promise<IUser | { message: string } | IHistory> {
     return this.commandBus
-      .execute(
-        new CreateUserCommand(
-          userCreateDTO.login,
-          userCreateDTO.password,
-          userCreateDTO.email,
-        ),
-      )
+      .execute(new CreateUserCommand(userCreateDTO))
       .then((user) => {
         return this.commandBus.execute(new CreateHistoryCommand(user._id));
       })
