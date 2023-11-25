@@ -17,15 +17,12 @@ import { UserService } from '../services/user.service';
 @Controller('auth')
 @UseFilters(new UnknownUserExceptionFilter())
 export class AuthController {
-  constructor(
-    private readonly userServices: UserService,
-    private readonly authservice: AuthService,
-  ) {}
+  constructor(private readonly authservice: AuthService) {}
   @Post('signup')
   async create(
     @Body(new ValidationPipe({ transform: false })) newuser: CreateUserDto,
   ) {
-    return this.userServices.create(newuser);
+    return this.authservice.createUser(newuser);
   }
 
   @Post('login')

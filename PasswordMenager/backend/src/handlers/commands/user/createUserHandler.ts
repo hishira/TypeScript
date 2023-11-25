@@ -11,9 +11,9 @@ export class CreateUserHandler
   execute(command: CreateUserCommand): Promise<IUser> {
     return this.repository.create(
       UserDTOMapper.GetDTOFromCreateUserDTO({
-        email: command.email,
-        login: command.login,
-        password: command.password,
+        email: command.createUserDto.email,
+        login: command.createUserDto.login,
+        password: command.createUserDto.password,
       }),
     );
   }

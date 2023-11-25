@@ -1,15 +1,21 @@
 import { inject, observer } from "mobx-react";
-import { useState, Fragment } from "react";
+import { useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
 import FieldsComponent from "../FieldsComponent/";
+import FormElement from "../FormElement";
 import GroupComponent from "../GroupComponent/";
 import { Loading } from "../Loading";
 import { EntryPaginator, Paginator } from "../Paginator";
 import { Translation } from "../Translation";
-import { Container, EmptyEntries, Entries, Text } from "./component.styled";
-import FormElement from "../FormElement";
+import {
+  Container,
+  EmptyEntries,
+  Entries,
+  SearchContainer,
+  Text,
+} from "./component.styled";
 
 type PassComponentProps = {
   store?: IGeneral;
@@ -22,21 +28,20 @@ const EmptyEntriesComponent = () => {
   );
 };
 
-export const FieldSearchInput = ({onSearchFieldChange}: any) => {
-  const [serachFieldValue, setSearchFieldValue] = useState<string>("");
+export const FieldSearchInput = ({ onSearchFieldChange }: any) => {
+  const [serachFieldValue, setSerachFieldValue] = useState<string>("");
   return (
-    <Fragment>
+    <SearchContainer>
       <FormElement
         label={""}
-        withBorder={true}
-        inputplaceholder="newentry.field.title"
+        inputplaceholder="searchinput.searchByTitle"
         inputChange={(e) => {
-          setSearchFieldValue(e.target.value);
+          setSerachFieldValue(e.target.value);
         }}
         inputtype="txt"
         value={serachFieldValue}
       />
-    </Fragment>
+    </SearchContainer>
   );
 };
 const PasswordsMainComponent = ({

@@ -16,13 +16,16 @@ export const Input = styled.input<{ fontSize?: string; withBorder?: boolean }>`
   padding: 10px 15px;
   font-size: ${({ fontSize }) => getInputFontSize(fontSize)};
   border-bottom: ${({ withBorder }) => hasBorderBottom(withBorder)};
-  border: ${({ withBorder }) => getBorder(false, withBorder)};
-  border-radius: ${({ withBorder }) => getBorder(true, withBorder)};
+  //border: ${({ withBorder }) => getBorder(false, withBorder)};
+  border: none;
+  border-bottom: .2px solid slategrey;
+  //border-radius: ${({ withBorder }) => getBorder(true, withBorder)};
   margin-top: 0.5rem;
   &:focus {
     outline: none;
-    border-bottom: ${({ withBorder }) => hasBorderBottom(withBorder)};
-    border-radius: ${({ withBorder }) => getBorder(true, withBorder)};
+    //border-bottom: ${({ withBorder }) => hasBorderBottom(withBorder)};
+    //border-radius: ${({ withBorder }) => getBorder(true, withBorder)};
     border: ${({ withBorder }) => getBorder(false, withBorder)};
+    border-bottom: .2px solid slategrey;
   }
 `;

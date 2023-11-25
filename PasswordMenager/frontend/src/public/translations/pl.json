@@ -86,5 +86,6 @@
     "newentry.action.showPassword": "Pokaż hasło",
     "deleteentry.question": "Czy usunąć encje?",
     "userinformation.edit.login.label": "Nazwa użytkownika",
-    "userinformation.edit.password.label": "Hasło"
+    "userinformation.edit.password.label": "Hasło",
+    "searchinput.searchByTitle":"Szukaj po tytule"
 }

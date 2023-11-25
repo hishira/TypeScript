@@ -18,6 +18,8 @@ import {
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
 import { EventTypes } from 'src/events/eventTypes';
 import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
+import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
+import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 
 const EmptyResponse = {
   status: false,
@@ -50,12 +52,13 @@ export class EntryService {
   }
 
   @OnEvent(EventTypes.DeleteEntryByGroup, { async: true })
-  deleteByGroupEvent(payload: { groupId: string }) {
+  deleteByGroupEvent(payload: DeleteByGroupEvent) {
     return this.deleteByGroup(payload.groupId);
   }
+
   @OnEvent(EventTypes.InsertManyEntry, { async: true })
-  insertMany(payload: { objects: DTO[] }) {
-    return this.commandBus.execute(new CreateEntryBulkCommand(payload.objects));
+  insertMany(payload: InsertmanyEntryEvent) {
+    return this.commandBus.execute(new CreateEntryBulkCommand(payload.dtos));
   }
 
   getById(entryId: string): Promise<IEntry> {

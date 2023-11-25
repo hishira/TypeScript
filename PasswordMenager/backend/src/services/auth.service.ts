@@ -10,14 +10,25 @@ import {
 } from '../constans';
 import { IUser, UserUtils } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CreateUserDto } from 'src/schemas/dto/user.dto';
+import { EventTypes } from 'src/events/eventTypes';
+import { CreateUserEvent } from 'src/events/createUserEvent';
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
+    private eventEmitter: EventEmitter2,
     @Inject(Repository)
     private readonly userRepository: Repository<IUser>,
   ) {}
 
+  async createUser(user: CreateUserDto) {
+    return this.eventEmitter.emitAsync(
+      EventTypes.CreateUser,
+      new CreateUserEvent(user),
+    );
+  }
   async valideteUser(userinfo: AuthInfo): Promise<IUser | null> {
     const userByLogin: FilterOption<FilterQuery<IUser>> = {
       getOption() {

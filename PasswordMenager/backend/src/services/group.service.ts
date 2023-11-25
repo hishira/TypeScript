@@ -13,11 +13,11 @@ import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { EntryService } from './entry.service';
+import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 
 @Injectable()
 export class GroupService {
   constructor(
-    private readonly entityService: EntryService,
     private readonly eventEmitter: EventEmitter2,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
@@ -41,9 +41,10 @@ export class GroupService {
   }
 
   async deleteGroup(groupId: string): Promise<unknown> {
-    await this.eventEmitter.emitAsync(EventTypes.DeleteEntryByGroup, {
-      groupId,
-    });
+    await this.eventEmitter.emitAsync(
+      EventTypes.DeleteEntryByGroup,
+      new DeleteByGroupEvent(groupId),
+    );
     const promiseToResolve = this.queryBus
       .execute<GetFilteredGroup, GroupResponse>(
         new GetFilteredGroup({ id: groupId }),
@@ -62,7 +63,9 @@ export class GroupService {
     const promise = this.commandBus.execute<DeleteGroupCommand, unknown>(
       new DeleteGroupCommand({ id: groupId }),
     );
-    return promiseToResolve ? promiseToResolve.then((re) => promise) : promise;
+    return promiseToResolve !== null
+      ? promiseToResolve.then((re) => promise)
+      : promise;
   }
 
   async editGroup(groupId: string, groupDto: EditGroupDto): Promise<unknown> {
