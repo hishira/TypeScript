@@ -51,11 +51,11 @@ export class EntryApi extends Api {
 
   getEntryWithoutGroup(
     accessToken: string,
-    paginator?: { page: number }
+    input?: { paginator: { page: number }; title: string }
   ): Promise<Response> {
     const url = this.getUrl("entry/byemptygroup");
     const fetchObjet = this.fetchPostObjectWithToken(
-      { page: paginator?.page },
+      { page: input?.paginator.page, title: input?.title },
       accessToken
     );
     //: this.fetchGetObjectWithtoken(accessToken);

@@ -4,6 +4,7 @@ import { PaginatorDto } from 'src/utils/paginator';
 export interface EntryQueryInput {
   readonly id?: string;
   readonly groupId?: string;
+  readonly title?: string;
   readonly userId?: string;
   readonly entryState?: EntryState;
   readonly limit?: number;

@@ -13,7 +13,6 @@ import { UnknownUserExceptionFilter } from 'src/errors/UnknownUserFilter';
 import { AuthInfo } from '../schemas/dto/auth.dto';
 import { CreateUserDto } from '../schemas/dto/user.dto';
 import { AuthService } from '../services/auth.service';
-import { UserService } from '../services/user.service';
 @Controller('auth')
 @UseFilters(new UnknownUserExceptionFilter())
 export class AuthController {

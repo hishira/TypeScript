@@ -21,7 +21,11 @@ import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { EntryService } from '../services/entry.service';
-
+// TODO Move to separate file
+export type FindEntryInput = {
+  paginator: PaginatorDto;
+  title?: string;
+};
 @Controller('entry')
 export class EntryContoller {
   constructor(
@@ -53,11 +57,12 @@ export class EntryContoller {
   @Post('/byemptygroup')
   async getByGroup(
     @Request() req,
-    @Body(new ValidationPipe({ transform: true })) paginator?: PaginatorDto,
+    @Body(new ValidationPipe({ transform: true }))
+    findEntriesField?: FindEntryInput,
   ): Promise<IEntry[] | EntryData> {
     return this.entryService.getUserEntriesWithoutGroup(
       req.user._id,
-      paginator,
+      findEntriesField,
     );
   }
 

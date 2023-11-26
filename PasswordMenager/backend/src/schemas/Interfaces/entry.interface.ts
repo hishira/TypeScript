@@ -40,7 +40,7 @@ export type EntryData = {
   pageInfo: Paginator;
 };
 
-//TODO check
+
 export class ActiveEntryFilter {
   constructor(
     private readonly option: FilterOption<FilterQuery<IEntry>>,
@@ -304,6 +304,15 @@ export class OptionModelBuilder {
     this.filterQuery = {
       ...this.filterQuery,
       userid,
+    };
+    return this;
+  }
+
+  updateTitle(title: string | undefined): this {
+    if (title === undefined) return this;
+    this.filterQuery = {
+      ...this.filterQuery,
+      title: `/${title}/`,
     };
     return this;
   }

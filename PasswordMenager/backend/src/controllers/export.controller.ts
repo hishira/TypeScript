@@ -14,14 +14,12 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { createCipheriv, pbkdf2Sync, randomBytes } from 'crypto';
 import { Response } from 'express';
 
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { ExportService } from 'src/services/export.service';
 import { ExportCsvUtils } from 'src/utils/export.utils';
-// TODO: Check if work as expected witth promise, REFACTOR !!!Important
 @Controller('export')
 export class ExportController {
   constructor(

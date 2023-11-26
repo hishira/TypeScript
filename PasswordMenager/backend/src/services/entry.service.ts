@@ -20,6 +20,7 @@ import { EventTypes } from 'src/events/eventTypes';
 import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
+import { FindEntryInput } from 'src/controllers/entry.controller';
 
 const EmptyResponse = {
   status: false,
@@ -71,11 +72,14 @@ export class EntryService {
 
   getUserEntriesWithoutGroup(
     userid: string,
-    paginator?: PaginatorDto,
+    input?: FindEntryInput,
   ): Promise<IEntry[] | EntryData> {
-    return this.queryBus.execute(
-      new GetSpecificEntry({ userId: userid, paginator: paginator }),
-    );
+    return this.queryBus
+      .execute(new GetSpecificEntry({ userId: userid, ...input }))
+      .then((resp) => {
+        console.log(resp);
+        return resp ?? [];
+      });
   }
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse> {

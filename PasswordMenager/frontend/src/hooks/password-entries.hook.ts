@@ -12,10 +12,12 @@ type ReturnEntiresType = {
 };
 export const PasswordEntries = (
   selectedGroup: string,
+  entriesTitle: string,
   refreshAll: boolean,
   paginator: EntryPaginator,
   setLoading: Dispatch<SetStateAction<boolean>>
 ): ReturnEntiresType => {
+  //TODO: Refactor
   const [passwordEntries, setPasswordEntries] = useState<IEntry[]>([]);
   const [pageInfo, setPageInfo] = useState<{
     hasMore: boolean;
@@ -23,9 +25,10 @@ export const PasswordEntries = (
     page: number;
   } | null>(null);
   useEffect(() => {
+    const inputEntryFields = { tittle: entriesTitle };
     const emptyGroupFetch = async () => {
       const { data, pageInfo } = await Entry.getInstance()
-        .EntriesWithoutGroup(paginator)
+        .EntriesWithoutGroup({ paginator, title: entriesTitle ?? "" })
         .then((_) => {
           setLoading(false);
           return _;

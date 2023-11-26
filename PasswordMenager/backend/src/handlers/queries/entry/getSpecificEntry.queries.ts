@@ -27,6 +27,7 @@ export class GetSpecificEntryQueryHandler
     if ('userId' in input && Object.keys(input).length <= 2) {
       const queryOptions = new OptionModelBuilder()
         .updateUserIdOPtion(input.userId)
+        .updateTitle(input.title)
         .setGroupIdNull()
         .getOption();
       return this.repository.find(

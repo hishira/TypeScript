@@ -71,7 +71,6 @@ export class UserRepository implements Repository<IUser> {
     entryToEdit: Partial<IUser>,
     metaObject,
   ): Promise<Partial<IUser>> {
-    //TODO: Check if work
     return new UserBuilder()
       .updateMetaObject(metaObject)
       .updateBasedOnUserEntry(entryToEdit)
