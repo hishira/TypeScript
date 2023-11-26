@@ -1,5 +1,5 @@
 import { inject, observer } from "mobx-react";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
 import { IGeneral, View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
@@ -20,6 +20,11 @@ import {
 type PassComponentProps = {
   store?: IGeneral;
 };
+
+type SearchFiledInputProps = {
+  onSearchFieldChange: (value: string) => void;
+};
+
 const EmptyEntriesComponent = () => {
   return (
     <EmptyEntries>
@@ -28,16 +33,20 @@ const EmptyEntriesComponent = () => {
   );
 };
 
-export const FieldSearchInput = ({ onSearchFieldChange }: any) => {
+export const FieldSearchInput = ({
+  onSearchFieldChange,
+}: SearchFiledInputProps) => {
   const [serachFieldValue, setSerachFieldValue] = useState<string>("");
+  const searchChangeFunction = (e: ChangeEvent<HTMLInputElement>) => {
+    setSerachFieldValue(e.target.value);
+    onSearchFieldChange(e.target.value);
+  };
   return (
     <SearchContainer>
       <FormElement
         label={""}
         inputplaceholder="searchinput.searchByTitle"
-        inputChange={(e) => {
-          setSerachFieldValue(e.target.value);
-        }}
+        inputChange={searchChangeFunction}
         inputtype="txt"
         value={serachFieldValue}
       />
@@ -52,10 +61,16 @@ const PasswordsMainComponent = ({
   entitiesrefresh,
   paginator,
   paginatorChange,
+  filterValuesChange,
 }: any) => {
+  const searchChangeValue = (val: string) => {
+    filterValuesChange(val);
+  };
   return entries.length > 0 ? (
     <Entries>
-      <FieldSearchInput></FieldSearchInput>
+      <FieldSearchInput
+        onSearchFieldChange={searchChangeValue}
+      ></FieldSearchInput>
       {viewType === View.Table ? (
         <FieldsComponent
           refreshgroupentities={refreshentities}
@@ -80,11 +95,13 @@ const PasswordsMainComponent = ({
 inject("store")(observer(PasswordsMainComponent));
 const PassComponent = ({ store }: PassComponentProps) => {
   const [selectedgroupid, setgroupid] = useState<string>("");
+  const [tiltEntry, setTitleEntry] = useState<string>("");
   const [entitiesrefresh, setentitesrefresh] = useState<boolean>(false);
   const [sendPaginator, setPaginator] = useState<EntryPaginator>({ page: 0 });
   const [loading, setLoading] = useState<boolean>(true);
   const { entries, paginator } = PasswordEntries(
     selectedgroupid,
+    tiltEntry,
     entitiesrefresh,
     sendPaginator,
     setLoading
@@ -100,6 +117,11 @@ const PassComponent = ({ store }: PassComponentProps) => {
   const paginatorChange = (paginator: EntryPaginator): void => {
     setPaginator(paginator);
   };
+
+  const filterValuesChange = (val: string): void => {
+    setTitleEntry(val);
+    console.log(val);
+  };
   return (
     <Container className="dupa">
       <GroupComponent selectgrouphandle={selectgrouphandle} />
@@ -114,6 +136,7 @@ const PassComponent = ({ store }: PassComponentProps) => {
             entitiesrefresh={entitiesrefresh}
             paginator={paginator}
             paginatorChange={paginatorChange}
+            filterValuesChange={filterValuesChange}
           />
         }
       ></Loading>

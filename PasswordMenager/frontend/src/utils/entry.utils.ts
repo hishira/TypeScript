@@ -183,17 +183,20 @@ export class Entry {
 
   async getEntryWithoutGroup(
     accessToken: string,
-    paginator: EntryPaginator
+    input: { paginator: EntryPaginator; title: string }
   ): Promise<IEntry[] | number | { data: IEntry[]; pageInfo: any }> {
     return this.entryApi
-      .getEntryWithoutGroup(accessToken, paginator)
+      .getEntryWithoutGroup(accessToken, input)
       .then((resp) => (resp.status === 401 ? 401 : resp.json()));
   }
 
-  private async refreshEntriesWithoutGroup(paginator: EntryPaginator) {
+  private async refreshEntriesWithoutGroup(input: {
+    paginator: EntryPaginator;
+    title: string;
+  }) {
     await this.auth.refreshToken();
     const token = this.sessionStorage.getAccessToken();
-    return this.getEntryWithoutGroup(token, paginator).then((value) => {
+    return this.getEntryWithoutGroup(token, input).then((value) => {
       return Array.isArray(value)
         ? { data: value, pageInfo: null }
         : {
@@ -211,27 +214,28 @@ export class Entry {
       : resp;
   }
 
-  async EntriesWithoutGroup(paginator: EntryPaginator): Promise<{
+  async EntriesWithoutGroup(input: {
+    paginator: EntryPaginator;
+    title: string;
+  }): Promise<{
     data: IEntry[];
     pageInfo: { hasMore: boolean; items: number; page: number };
   }> {
     const accessToken = this.sessionStorage.getAccessToken();
 
-    return this.getEntryWithoutGroup(accessToken, paginator).then(
-      async (resp) => {
-        if (typeof resp === "number" && resp === 401) {
-          this.refreshEntriesWithoutGroup(paginator);
-        }
-        const responseMapped: IEntry[] = this.responseMappedObject(resp);
-        const pageInfo =
-          typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
-
-        return {
-          data: responseMapped.map(EntryDateMapper),
-          pageInfo: pageInfo,
-        };
+    return this.getEntryWithoutGroup(accessToken, input).then(async (resp) => {
+      if (typeof resp === "number" && resp === 401) {
+        this.refreshEntriesWithoutGroup(input);
       }
-    );
+      const responseMapped: IEntry[] = this.responseMappedObject(resp);
+      const pageInfo =
+        typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
+
+      return {
+        data: responseMapped.map(EntryDateMapper),
+        pageInfo: pageInfo,
+      };
+    });
   }
 
   getNumberOfActiveNotification() {
