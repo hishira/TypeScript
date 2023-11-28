@@ -28,7 +28,6 @@ export class EntryRepository implements Repository<IEntry> {
 
   createMany(objects: DTO[]): Promise<unknown> {
     const mappedObject = objects.map((obj) => ({ ...obj.toObject() }));
-    console.log(mappedObject);
     return this.entryModel
       .insertMany(mappedObject)
       .catch((e) => console.log(e));

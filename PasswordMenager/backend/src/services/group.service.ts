@@ -4,6 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateGroupCommand } from 'src/commands/group/CreateGroupCommand';
 import { DeleteGroupCommand } from 'src/commands/group/DeleteGroupCommand';
 import { UpdateGroupCommand } from 'src/commands/group/UpdateGroupCommand';
+import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { GroupResponse } from 'src/handlers/queries/group/getFilteredGroup.queries';
@@ -12,8 +13,6 @@ import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
-import { EntryService } from './entry.service';
-import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 
 @Injectable()
 export class GroupService {
@@ -50,8 +49,6 @@ export class GroupService {
         new GetFilteredGroup({ id: groupId }),
       )
       .then((groups) => {
-        // Like in entry service
-        //TODO Move to commands
         if (Array.isArray(groups) && groups.length > 0) {
           this.eventEmitter.emit(
             EventTypes.HistoryAppend,

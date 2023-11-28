@@ -312,7 +312,7 @@ export class OptionModelBuilder {
     if (title === undefined) return this;
     this.filterQuery = {
       ...this.filterQuery,
-      title: `/${title}/`,
+      title: { $regex: title },
     };
     return this;
   }

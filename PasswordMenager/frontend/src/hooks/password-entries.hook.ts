@@ -60,7 +60,7 @@ export const PasswordEntries = (
       }
     };
     fetchEntries();
-  }, [selectedGroup, refreshAll, paginator]);
+  }, [selectedGroup, refreshAll, paginator, entriesTitle]);
 
   return { entries: passwordEntries, paginator: pageInfo };
 };
