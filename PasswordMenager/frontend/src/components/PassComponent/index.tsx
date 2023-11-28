@@ -62,11 +62,12 @@ const PasswordsMainComponent = ({
   paginator,
   paginatorChange,
   filterValuesChange,
+  titleSearchEntry
 }: any) => {
   const searchChangeValue = (val: string) => {
     filterValuesChange(val);
   };
-  return entries.length > 0 ? (
+  return entries.length > 0 || titleSearchEntry !== '' ? (
     <Entries>
       <FieldSearchInput
         onSearchFieldChange={searchChangeValue}
@@ -129,6 +130,7 @@ const PassComponent = ({ store }: PassComponentProps) => {
         loading={loading}
         ComponentToLoad={
           <PasswordsMainComponent
+            titleSearchEntry={tiltEntry}
             entries={entries}
             viewType={store?.ViewType}
             refreshentities={refreshentities}

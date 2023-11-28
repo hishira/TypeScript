@@ -7,7 +7,7 @@
     "login.input.label.placeholder": "Nazwa użytkownika",
     "email.input.label.placeholder": "Email",
     "page.login.button.text": "Zaloguj",
-    "page.login.mainTitle": "Zaloguj do aplikacji",
+    "page.login.mainTitle": "Zaloguj",
     "page.login.or": "Albo ",
     "page.login.secondaryString": "utwórz konto",
     "page.signUp.buttonMessage": "Zarejestruj się",

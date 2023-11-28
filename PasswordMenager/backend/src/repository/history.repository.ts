@@ -34,25 +34,6 @@ export class HistoryRepository implements Repository<IHistory> {
     throw new NotImplementedError();
   }
   update(entry: Partial<IHistory>): Promise<unknown> {
-    // TODO: Fix for group add
-    // TODO: Check if work
-    //if (entry.entities && entry.entities.length > 0) {
-    //  return this.historyModel
-    //    .updateOne(
-    //      { userid: entry.userid },
-    //      { $push: { entities: entry.entities } },
-    //    )
-    //    .exec();
-    //}
-    //// TODO: Check groups add
-    //if (entry.groups && entry.groups.length > 0) {
-    //  return this.historyModel
-    //    .updateOne(
-    //      { userid: entry.userid },
-    //      { $push: { groups: entry.groups } },
-    //    )
-    //    .exec();
-    //}
     return this.historyModel
       .updateOne(
         { userid: entry.userid },

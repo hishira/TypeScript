@@ -8,7 +8,6 @@ enum TitleCsvHeader {
   EndLine = '\r\n',
 }
 
-//TODO: Check
 export class CsvFile {
   private _titles: TitleCsvHeader[];
   private _rows: CsvEntry[];

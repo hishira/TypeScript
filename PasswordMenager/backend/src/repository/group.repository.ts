@@ -35,11 +35,6 @@ export class GroupRepository implements Repository<IGroup> {
       .findById(entry._id)
       .exec()
       .then((group) => {
-        // TODO: Check if work
-        //const entryToUpdate = {
-        //  ...entry,
-        //  ['meta.lastName']: group.name,
-        //};
         return this.groupModel
           .updateOne(
             { _id: entry._id },

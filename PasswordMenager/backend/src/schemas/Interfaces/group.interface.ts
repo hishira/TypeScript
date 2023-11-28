@@ -22,13 +22,20 @@ export class GroupBuilder implements MongoSetObject<IGroup> {
   metaLastNameUpdate(lastName: string): this {
     this.entry = {
       ...this.entry,
-      ['meta.lastName']: lastName,
+      ...this.createMetaObject(lastName),
     } as unknown as Partial<IGroup>;
     return this;
   }
 
   getUpdateSetObject(): UpdateWithAggregationPipeline | UpdateQuery<IGroup> {
     return { $set: { ...this.entry } };
+  }
+
+  private createMetaObject(lastName: string) {
+    return {
+      ['meta.lastName']: lastName,
+      ['meta.editDate']: new Date(),
+    };
   }
 }
 

@@ -23,7 +23,7 @@ export class HistoryBuilder {
     return this;
   }
   getPushObject(): PushReturn {
-    return { $push: { entries: this.entries, groups: this.groups } };
+    return { $push: { entities: this.entries, groups: this.groups } };
   }
 
   updateBaseOnIHistory(history: Partial<IHistory>): this {
