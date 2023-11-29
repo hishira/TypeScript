@@ -48,7 +48,9 @@ export class UserService {
   }
 
   getUser(userid: string): Promise<IUser> {
-    return this.queryBus.execute(new GetFilteredUserQueries(userid));
+    return this.queryBus.execute(
+      new GetFilteredUserQueries({ userid: userid }),
+    );
   }
 
   update(userId: string, userEditDto: EditUserDto): Promise<unknown> {

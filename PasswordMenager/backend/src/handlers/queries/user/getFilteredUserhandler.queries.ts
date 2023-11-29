@@ -18,17 +18,18 @@ export class GetFilteredUserQueryHandler
   implements IQueryHandler<GetFilteredUserQueries>
 {
   execute(query: GetFilteredUserQueries): Promise<IUser | UsersReturn> {
-    if ('login' in query) {
+    const { input } = query;
+    if ('login' in input) {
       const userByLogin: FilterOption<FilterQuery<IUser>> = {
         getOption() {
           return {
-            login: query.login,
+            login: input.login,
           };
         },
       };
 
       return this.repository.find(userByLogin);
     }
-    return this.repository.findById(query.userid);
+    return this.repository.findById(input.userid);
   }
 }
