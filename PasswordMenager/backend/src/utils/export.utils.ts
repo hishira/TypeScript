@@ -91,17 +91,6 @@ export class ExportCsvUtils {
   }
 
   static GetEncryptedValueFromFile(file: Express.Multer.File): string {
-    ////TODO: Move to seperate class, not has anything common with csv
-    // const buffer = Buffer.from(file.buffer);
-    // const salt = buffer.slice(0, 16);
-    // const iv = buffer.slice(16, 32);
-    // const encryptedContent = buffer.slice(32);
-    // const key = pbkdf2Sync('123456', salt, 100000, 32, 'sha256');
-    // const decipher = createDecipheriv('aes-256-cbc', key, iv);
-    // const decryptedContent = Buffer.concat([
-    //   decipher.update(encryptedContent),
-    //   decipher.final(),
-    // ]);
     return new EncryptBuffer(file.buffer).getDecryptedBuffer('utf-8');
   }
 
