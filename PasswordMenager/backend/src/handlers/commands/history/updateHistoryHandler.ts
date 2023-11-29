@@ -1,9 +1,8 @@
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { ObjectId } from 'mongoose';
+import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { BaseCommandHandler } from '../BaseCommandHandler';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
-import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand';
-import { ObjectId } from 'mongoose';
 
 @CommandHandler(UpdateHistoryCommand)
 export class UpdateHistoryHandler

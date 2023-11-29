@@ -4,8 +4,9 @@ import { NotImplementedError } from 'src/errors/NotImplemented';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
-import { GroupBuilder, IGroup } from 'src/schemas/Interfaces/group.interface';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { GroupBuilder } from 'src/schemas/utils/builders/group.builder';
 
 @Injectable()
 export class GroupRepository implements Repository<IGroup> {

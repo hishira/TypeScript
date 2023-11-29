@@ -1,10 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
-import {
-  EntryData,
-  IEntry,
-  OptionModelBuilder,
-} from 'src/schemas/Interfaces/entry.interface';
+import { EntryData, IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { OptionModelBuilder } from 'src/schemas/utils/builders/optionModal.builder';
 import { BaseQueryHandler } from '../BaseQueryHandler';
 
 @QueryHandler(GetSpecificEntry)

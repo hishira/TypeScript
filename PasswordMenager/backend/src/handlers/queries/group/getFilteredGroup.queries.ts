@@ -1,11 +1,11 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { FilterQuery } from 'mongoose';
 import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import {
   GroupOptionBuilder,
-  IGroup,
   Option,
-} from 'src/schemas/Interfaces/group.interface';
+} from 'src/schemas/utils/builders/groupOption.builder';
 import { Paginator } from 'src/utils/paginator';
 import { BaseQueryHandler } from '../BaseQueryHandler';
 

@@ -1,9 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { DeleteGroupCommand } from 'src/commands/group/DeleteGroupCommand';
-import {
-  GroupOptionBuilder,
-  IGroup,
-} from 'src/schemas/Interfaces/group.interface';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
+import { GroupOptionBuilder } from 'src/schemas/utils/builders/groupOption.builder';
 import { BaseCommandHandler } from '../BaseCommandHandler';
 
 @CommandHandler(DeleteGroupCommand)

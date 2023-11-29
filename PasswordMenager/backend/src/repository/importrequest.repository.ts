@@ -20,22 +20,28 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
 
     return createdImportRequest.save();
   }
+
   find(
     option: FilterOption<FilterQuery<ImportRequest>>,
     paginator?: PaginatorDto,
   ): Promise<ImportRequest[] | { data: ImportRequest[]; pageInfo: Paginator }> {
     return this.importRequestModal.find({ ...option.getOption() }).exec();
   }
+
   findById(id: string): Promise<ImportRequest> {
     return this.importRequestModal.findById(id).exec();
   }
+
   update(entry: Partial<ImportRequest>): Promise<unknown> {
     throw new Error('Method not implemented.');
   }
+
   delete(option: DeleteOption<unknown>): Promise<unknown> {
     throw new Error('Method not implemented.');
   }
+
   deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;
+
   getById(): Promise<ImportRequest> {
     throw new Error('Method not implemented.');
   }

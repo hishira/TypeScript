@@ -2,18 +2,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
 import { NotImplementedError } from 'src/errors/NotImplemented';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
-import {
-  ActiveEntryFilter,
-  DeleteEntryUpdate,
-  EntryBuilder,
-  EntryData,
-  IEntry,
-} from 'src/schemas/Interfaces/entry.interface';
+import { EntryData, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { PaginatorDto } from 'src/utils/paginator';
 import { UtilsRepository } from './utils.repository';
+import { ActiveEntryFilter } from 'src/schemas/utils/activeEntryFilter';
+import { EntryBuilder } from 'src/schemas/utils/builders/entry.builder';
+import { DeleteEntryUpdate } from 'src/schemas/utils/deleteEntryUpdate.object';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry> {

@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateGroupCommand } from 'src/commands/group/CreateGroupCommand';
-import { GroupDtoMapper, IGroup } from 'src/schemas/Interfaces/group.interface';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
+import { GroupDtoMapper } from 'src/schemas/mapper/groupDtoMapper';
 import { BaseCommandHandler } from '../BaseCommandHandler';
 @CommandHandler(CreateGroupCommand)
 export class CreateGrouCommandpHandler

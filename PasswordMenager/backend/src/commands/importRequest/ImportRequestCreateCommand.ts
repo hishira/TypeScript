@@ -1,4 +1,4 @@
-import { ImportRequestDto } from 'src/schemas/Interfaces/importRequest.interface';
+import { ImportRequestDto } from 'src/schemas/dto/importRequest.dto';
 
 export class CreateImportRequestCommand {
   constructor(readonly objectDto: ImportRequestDto) {}

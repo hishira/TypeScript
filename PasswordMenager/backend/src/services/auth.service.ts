@@ -8,12 +8,13 @@ import {
   RefreshAccessTokenOptions,
   RefreshTokenOptions,
 } from '../constans';
-import { IUser, UserUtils } from '../schemas/Interfaces/user.interface';
+import { IUser } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { EventTypes } from 'src/events/eventTypes';
 import { CreateUserEvent } from 'src/events/createUserEvent';
+import { UserUtils } from 'src/schemas/utils/user.utils';
 @Injectable()
 export class AuthService {
   constructor(

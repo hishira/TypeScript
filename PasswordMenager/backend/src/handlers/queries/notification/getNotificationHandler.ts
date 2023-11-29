@@ -1,11 +1,9 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetNotificationQuery } from 'src/queries/notification/getNotification.queries';
-import {
-  ActiveNotificationFilter,
-  INotification,
-  NotificationUtils,
-  UserActiveNotificationFilter,
-} from 'src/schemas/Interfaces/notification.interface';
+import { INotification } from 'src/schemas/Interfaces/notification.interface';
+import { NotificationUtils } from 'src/schemas/utils/Notification.utils';
+import { ActiveNotificationFilter } from 'src/schemas/utils/activeNotificationFilter';
+import { UserActiveNotificationFilter } from 'src/schemas/utils/userActiveNotificationFilter';
 import { BaseQueryHandler } from '../BaseQueryHandler';
 
 @QueryHandler(GetNotificationQuery)
