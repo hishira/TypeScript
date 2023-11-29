@@ -1,6 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetExistingGroupQuery } from 'src/queries/group/getExistingGroup.queries';
-import { GroupUtils, IGroup } from 'src/schemas/Interfaces/group.interface';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
+import { GroupUtils } from 'src/schemas/utils/group.utils';
 import { BaseQueryHandler } from '../BaseQueryHandler';
 @QueryHandler(GetExistingGroupQuery)
 export class GetExistingGroupQueryHandler

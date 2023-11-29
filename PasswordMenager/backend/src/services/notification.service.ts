@@ -8,14 +8,12 @@ import { CreateNotificationEvent } from 'src/events/createNotificationEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { GetNotificationQuery } from 'src/queries/notification/getNotification.queries';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import {
-  INotification,
-  NotificationUtils,
-} from 'src/schemas/Interfaces/notification.interface';
+import { INotification } from 'src/schemas/Interfaces/notification.interface';
 import {
   CreateNotificationDTO,
   CreateNotificationEmailDTO,
 } from 'src/schemas/dto/createnotification.dto';
+import { NotificationUtils } from 'src/schemas/utils/Notification.utils';
 import { Logger } from 'src/utils/Logger';
 import { EmailSender } from 'src/utils/emailTransporter';
 

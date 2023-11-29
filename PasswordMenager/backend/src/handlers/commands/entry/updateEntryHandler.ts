@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
-import { EntryDtoMapper, IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { EntryDtoMapper } from 'src/schemas/mapper/entryDtoMapper';
 import { BaseCommandHandler } from '../BaseCommandHandler';
 
 @CommandHandler(UpdateEntryCommand)

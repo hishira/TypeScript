@@ -5,13 +5,11 @@ import { CreateImportRequestCommand } from 'src/commands/importRequest/ImportReq
 import { EventTypes } from 'src/events/eventTypes';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { GetImportQuery } from 'src/queries/import/getImports.queries';
-import {
-  ImportDTOMapper,
-  ImportEntriesResponse,
-  ImportRequest,
-  ImportRequestDto,
-} from 'src/schemas/Interfaces/importRequest.interface';
+import { ImportEntriesResponse } from 'src/response/importEntries.response';
+import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
+import { ImportRequestDto } from 'src/schemas/dto/importRequest.dto';
 import { DTO } from 'src/schemas/dto/object.interface';
+import { ImportDTOMapper } from 'src/schemas/mapper/importDtoMapper';
 import { ImportRequestStream } from 'src/utils/importRequest.util';
 import { Paginator } from 'src/utils/paginator';
 

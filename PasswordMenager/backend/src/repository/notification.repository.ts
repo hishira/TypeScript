@@ -21,19 +21,25 @@ export class NotificationRepository implements Repository<INotification> {
 
     return createNotification.save();
   }
+
   find(option: FilterOption<unknown>): Promise<INotification[]> {
     return this.notificationModel.find(option.getOption()).exec();
   }
+
   findById(id: string): Promise<INotification> {
     return this.notificationModel.findOne({ _id: id }).exec();
   }
+
   update(entry: Partial<INotification>): Promise<unknown> {
     throw new NotImplementedError();
   }
+
   delete(option: DeleteOption<unknown>): Promise<unknown> {
     return this.notificationModel.deleteOne(option.getOption()).exec();
   }
+
   deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;
+
   getById(): Promise<INotification> {
     throw new NotImplementedError();
   }

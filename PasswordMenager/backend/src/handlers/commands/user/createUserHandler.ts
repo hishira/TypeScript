@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from 'src/commands/user/CreateUserCommand';
-import { IUser, UserDTOMapper } from 'src/schemas/Interfaces/user.interface';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
+import { UserDTOMapper } from 'src/schemas/mapper/userDtoMapper';
 import { BaseCommandHandler } from '../BaseCommandHandler';
 
 @CommandHandler(CreateUserCommand)

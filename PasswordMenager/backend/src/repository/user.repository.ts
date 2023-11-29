@@ -5,11 +5,9 @@ import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import {
-  IUser,
-  UserBuilder,
-  UserMetaBuilder,
-} from 'src/schemas/Interfaces/user.interface';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
+import { UserBuilder } from 'src/schemas/utils/builders/user.builder';
+import { UserMetaBuilder } from 'src/schemas/utils/builders/userMeta.builder';
 
 @Injectable()
 export class UserRepository implements Repository<IUser> {

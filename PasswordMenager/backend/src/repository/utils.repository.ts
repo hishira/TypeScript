@@ -1,6 +1,4 @@
-import { FilterQuery } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Paginator, PaginatorDto } from 'src/utils/paginator';
 
 type LimitObject = {

@@ -1,11 +1,9 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateHistoryCommand } from 'src/commands/history/CreateHistoryCommand';
-import {
-  HistoryDTOMapper,
-  IHistory,
-} from 'src/schemas/Interfaces/history.interface';
+import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { HistoryDTOMapper } from 'src/schemas/mapper/historyDtoMapper';
 @CommandHandler(CreateHistoryCommand)
 export class CreateHisotryHandler
   implements ICommandHandler<CreateHistoryCommand>

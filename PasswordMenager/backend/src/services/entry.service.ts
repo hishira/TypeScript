@@ -5,22 +5,20 @@ import { CreateEntryBulkCommand } from 'src/commands/entry/CreateEntryBulkComman
 import { CreateEntryCommand } from 'src/commands/entry/CreateEntryCommand';
 import { DeleteEntryCommand } from 'src/commands/entry/DeleteEntryCommand';
 import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
+import { FindEntryInput } from 'src/controllers/entry.controller';
+import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
+import { EventTypes } from 'src/events/eventTypes';
+import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
+import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
-import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
-import { PaginatorDto } from 'src/utils/paginator';
 import {
   EntryData,
   EntryState,
   IEntry,
 } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
-import { EventTypes } from 'src/events/eventTypes';
-import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
-import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
-import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
-import { FindEntryInput } from 'src/controllers/entry.controller';
 
 const EmptyResponse = {
   status: false,

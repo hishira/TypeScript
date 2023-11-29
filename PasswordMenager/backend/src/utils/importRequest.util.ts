@@ -1,6 +1,6 @@
-import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
 import { Readable } from 'stream';
 import { WritableStream } from './writableStream';
+import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
 
 export class ImportRequestStream {
   private reader: Readable;
