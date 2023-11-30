@@ -75,6 +75,7 @@ export class EntryService {
     return this.queryBus
       .execute(new GetSpecificEntry({ userId: userid, ...input }))
       .then((resp) => {
+        console.log(resp);
         return resp ?? [];
       });
   }
@@ -97,9 +98,11 @@ export class EntryService {
           return { status: true, response: res[0] } as any;
         })
         .catch((_err) => {
+          console.error(_err);
           return EmptyResponse;
         });
     } catch (e) {
+      console.log(e);
       return Promise.resolve(EmptyResponse);
     }
   }

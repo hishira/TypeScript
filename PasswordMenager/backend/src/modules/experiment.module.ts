@@ -28,6 +28,6 @@ import { GetSpecificEntryQueryHandler } from 'src/handlers/queries/entry/getSpec
     UpdateEntryHandler,
     GetSpecificEntryQueryHandler,
   ],
-  exports: [EntryService],
+  exports: [EntryService, DeleteEntryHandler],
 })
 export class ExperimentModule {}

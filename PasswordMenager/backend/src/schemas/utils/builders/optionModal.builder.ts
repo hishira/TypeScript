@@ -2,6 +2,7 @@ import { FilterQuery } from 'mongoose';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { EntryState, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
+import { isDefined } from 'src/utils/utils';
 
 export class OptionModelBuilder {
   static EMPTYOPTION = { getOption: () => ({}) };
@@ -21,22 +22,24 @@ export class OptionModelBuilder {
     };
     return this;
   }
-  updateEntryId(entryId: string): this {
+  updateEntryId(entryId?: string): this {
     this.filterQuery = {
       ...this.filterQuery,
-      _id: entryId,
+      ...(isDefined(entryId) && { _id: entryId }),
     };
     return this;
   }
 
-  updateLimit(limit: number): this {
+  updateLimit(limit?: number): this {
+    if (!isDefined(limit)) return this;
     this.queryLimit = limit;
     return this;
   }
-  updateGroupId(groupId: string): this {
+
+  updateGroupId(groupId?: string): this {
     this.filterQuery = {
       ...this.filterQuery,
-      groupid: groupId,
+      ...(isDefined(groupId) && { groupid: groupId }),
     };
     return this;
   }
