@@ -27,6 +27,7 @@ export class GetSpecificEntryQueryHandler
         .updateTitle(input.title)
         .setGroupIdNull()
         .getOption();
+      console.log(queryOptions.getOption())
       return this.repository.find(
         queryOptions,
         input?.paginator ?? { page: 0 },
