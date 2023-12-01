@@ -75,7 +75,6 @@ export class EntryService {
     return this.queryBus
       .execute(new GetSpecificEntry({ userId: userid, ...input }))
       .then((resp) => {
-        console.log(resp);
         return resp ?? [];
       });
   }

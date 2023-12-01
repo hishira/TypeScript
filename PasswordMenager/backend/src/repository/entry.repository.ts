@@ -62,7 +62,7 @@ export class EntryRepository implements Repository<IEntry> {
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
     const ActiveFilter = new ActiveEntryFilter(option).Filter();
-
+    console.log(ActiveFilter)
     return this.entryModel
       .find(ActiveFilter)
       .skip(paginator.page * 10)
