@@ -27,11 +27,13 @@ export class GetSpecificEntryQueryHandler
         .updateTitle(input.title)
         .setGroupIdNull()
         .getOption();
-      console.log(queryOptions.getOption())
-      return this.repository.find(
-        queryOptions,
-        input?.paginator ?? { page: 0 },
-      );
+      console.log(queryOptions.getOption());
+      return this.repository
+        .find(queryOptions, input?.paginator ?? { page: 0 })
+        .catch((e) => {
+          console.log(e);
+          return [];
+        });
     }
 
     if ('userId' in input && 'entryState' in input && 'limit' in input) {
