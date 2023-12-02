@@ -43,7 +43,7 @@ export class EntryRepository implements Repository<IEntry> {
     if (UtilsRepository.isPaginatorDefined(paginator)) {
       return this.getEntriesWithPaginator(option, paginator);
     }
-    return this.returnLimitedEntriesOrAll(option);
+    return this.returnLimitedEntriesOrAll(option).then((e) => e ?? []);
   }
 
   returnLimitedEntriesOrAll(
@@ -62,7 +62,6 @@ export class EntryRepository implements Repository<IEntry> {
     paginator?: PaginatorDto,
   ): Promise<IEntry[] | EntryData | any> {
     const ActiveFilter = new ActiveEntryFilter(option).Filter();
-    console.log(ActiveFilter)
     return this.entryModel
       .find(ActiveFilter)
       .skip(paginator.page * 10)

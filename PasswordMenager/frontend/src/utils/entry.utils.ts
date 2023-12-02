@@ -97,7 +97,7 @@ export class Entry {
 
   private async UserEntriesResponseHandler(
     groupid: GroupId,
-    response: number | IEntry[]
+    response: number | IEntry[] | { data: IEntry[]; pageInfo: any }
   ) {
     if (response === 401) {
       await this.auth.refreshToken();
@@ -112,7 +112,9 @@ export class Entry {
     if (typeof response !== "number")
       return {
         status: true,
-        response: response.map(EntryDateMapper),
+        response: Array.isArray(response)
+          ? response.map(EntryDateMapper)
+          : response.data.map(EntryDateMapper),
       };
     return this.EMPTYGROUP;
   }
