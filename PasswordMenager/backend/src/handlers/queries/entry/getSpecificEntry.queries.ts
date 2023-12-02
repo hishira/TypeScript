@@ -11,38 +11,17 @@ export class GetSpecificEntryQueryHandler
 {
   execute(query: GetSpecificEntry): Promise<IEntry | IEntry[] | EntryData> {
     const { input } = query;
-    //TODO: Refactor
     if ('id' in input && Object.keys(input).length === 1) {
       return this.repository.findById(input.id);
     }
-    if ('groupId' in input && Object.keys(input).length === 1) {
-      const queryOptions = new OptionModelBuilder()
-        .updateGroupIdOrNull(input.groupId)
-        .getOption();
-      return this.repository.find(queryOptions);
-    }
-    if ('userId' in input && Object.keys(input).length <= 3) {
-      const queryOptions = new OptionModelBuilder()
-        .updateUserIdOPtion(input.userId)
-        .updateTitle(input.title)
-        .setGroupIdNull()
-        .getOption();
-      console.log(queryOptions.getOption());
-      return this.repository
-        .find(queryOptions, input?.paginator ?? { page: 0 })
-        .catch((e) => {
-          console.log(e);
-          return [];
-        });
-    }
+    const option = new OptionModelBuilder()
+      .updateGroupIdOrNull(input.groupId)
+      .updateUserIdOPtion(input.userId)
+      .updateTitle(input.title)
+      .updateLimit(input.limit)
+      .updateStateEntry(input.entryState)
+      .getOption();
 
-    if ('userId' in input && 'entryState' in input && 'limit' in input) {
-      const options = new OptionModelBuilder()
-        .updateUserIdOPtion(input.userId)
-        .updateStateEntry(input.entryState)
-        .updateLimit(input.limit)
-        .getOption();
-      return this.repository.find(options);
-    }
+    return this.repository.find(option, input?.paginator ?? { page: 0 });
   }
 }

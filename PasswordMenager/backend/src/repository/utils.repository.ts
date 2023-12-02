@@ -12,7 +12,7 @@ class PaginatorData<T> {
     paginator: PaginatorDto,
   ): PaginatorData<T> {
     return new PaginatorData<T>(
-      data,
+      data ?? [],
       new Paginator(data.length, data.length >= 10, paginator.page),
     );
   }

@@ -6,16 +6,9 @@ import {
   GroupOptionBuilder,
   Option,
 } from 'src/schemas/utils/builders/groupOption.builder';
-import { Paginator } from 'src/utils/paginator';
 import { BaseQueryHandler } from '../BaseQueryHandler';
+import { GroupResponse } from 'src/types/common/main';
 
-//TODO move
-export type GroupResponse =
-  | IGroup[]
-  | {
-      data: IGroup[];
-      pageInfo: Paginator;
-    };
 @QueryHandler(GetFilteredGroup)
 export class GetFilteredGroupQueryHandler
   extends BaseQueryHandler<IGroup>
@@ -27,16 +20,9 @@ export class GetFilteredGroupQueryHandler
   }
 
   buildOption(query: GetFilteredGroup): Option<FilterQuery<IGroup>> {
-    //TODO: Fix
-    if ('userId' in query.groupQueryInput) {
-      return new GroupOptionBuilder()
-        .updateUserId(query.groupQueryInput.userId)
-        .getOption();
-    }
-    if ('id' in query.groupQueryInput) {
-      return new GroupOptionBuilder()
-        .updateId(query.groupQueryInput.id)
-        .getOption();
-    }
+    return new GroupOptionBuilder()
+      .updateUserId(query.groupQueryInput.userId)
+      .updateId(query.groupQueryInput.id)
+      .getOption();
   }
 }

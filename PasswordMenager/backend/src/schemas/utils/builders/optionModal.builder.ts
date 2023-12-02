@@ -15,10 +15,10 @@ export class OptionModelBuilder {
     private queryLimit: number = -1,
   ) {}
 
-  updateStateEntry(state: EntryState): this {
+  updateStateEntry(state?: EntryState): this {
     this.filterQuery = {
       ...this.filterQuery,
-      state: state,
+      ...(isDefined(state) && { state: state }),
     };
     return this;
   }
@@ -44,10 +44,10 @@ export class OptionModelBuilder {
     return this;
   }
 
-  updateGroupIdOrNull(groupId: string): this {
+  updateGroupIdOrNull(groupId?: string): this {
     this.filterQuery = {
       ...this.filterQuery,
-      groupid: groupId !== '' ? groupId : null,
+      ...(isDefined(groupId) ? { groupid: groupId } : { groupid: null }),
     };
     return this;
   }
@@ -55,7 +55,7 @@ export class OptionModelBuilder {
   updateUserIdOPtion(userid: string): this {
     this.filterQuery = {
       ...this.filterQuery,
-      userid,
+      ...(isDefined(userid) && { userid: userid }),
     };
     return this;
   }

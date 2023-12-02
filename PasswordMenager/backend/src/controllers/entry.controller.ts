@@ -14,24 +14,17 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { GroupNotExistsFilter } from 'src/errors/GroupNotExistFilter';
 import { GroupGuard } from 'src/guards/GroupExists.guard';
+import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
-import { NotificationService } from 'src/services/notification.service';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { EntryService } from '../services/entry.service';
-// TODO Move to separate file
-export type FindEntryInput = {
-  paginator: PaginatorDto;
-  title?: string;
-};
+
 @Controller('entry')
 export class EntryContoller {
-  constructor(
-    private readonly entryService: EntryService,
-    private readonly notificationService: NotificationService,
-  ) {}
+  constructor(private readonly entryService: EntryService) {}
 
   @UseGuards(AuthGuard('accessToken'))
   @UseFilters(new GroupNotExistsFilter())
