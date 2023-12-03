@@ -23,6 +23,7 @@ export const userMock = (user?: IUser) =>
 export const CreateUserDtoMock = (): CreateUserDto => ({
   login: 'example_login_test',
   password: 'example_login_test',
+  email: '',
 });
 
 export const EditUserDtoMock = (): EditUserDto => ({
