@@ -5,12 +5,12 @@ import { CreateEntryBulkCommand } from 'src/commands/entry/CreateEntryBulkComman
 import { CreateEntryCommand } from 'src/commands/entry/CreateEntryCommand';
 import { DeleteEntryCommand } from 'src/commands/entry/DeleteEntryCommand';
 import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
-import { FindEntryInput } from 'src/controllers/entry.controller';
 import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
+import { EmptyResponse } from 'src/response/empty.response';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import {
@@ -19,19 +19,7 @@ import {
   IEntry,
 } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
-
-const EmptyResponse = {
-  status: false,
-  respond: null,
-};
-export const CreateEntryErrorMessage = {
-  message: 'Error whice creating entry',
-};
-export type Test =
-  | IEntry
-  | {
-      message: string;
-    };
+import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 
 @Injectable()
 export class EntryService {
@@ -80,7 +68,6 @@ export class EntryService {
   }
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse> {
-    // TODO: Refactor
     try {
       const deletedentry: Promise<IEntry> = this.queryBus.execute(
         new GetSpecificEntry({ id: entryid }),

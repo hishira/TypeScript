@@ -5,8 +5,9 @@ import { CreateNotificationEvent } from 'src/events/createNotificationEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { EntryDtoMapper } from 'src/schemas/mapper/entryDtoMapper';
-import { CreateEntryErrorMessage, Test } from 'src/services/entry.service';
 import { BaseCommandHandler } from '../BaseCommandHandler';
+import { EntryWithMessageResponse } from 'src/response/entryWithMessage.respone';
+import { CreateEntryErrorMessage } from 'src/response/createEntry.response';
 
 @CommandHandler(CreateEntryCommand)
 export class CreateEntryHandler
@@ -20,14 +21,16 @@ export class CreateEntryHandler
     const { userId, entrycreateDTO } = command;
     return this.repository
       .create(EntryDtoMapper.CreateEntryDtoToDto(entrycreateDTO, userId))
-      .then((response: Test): unknown => this.emitNotificationCreate(response))
+      .then((response: EntryWithMessageResponse): unknown =>
+        this.emitNotificationCreate(response),
+      )
       .catch((_) => {
         console.error(_);
         return CreateEntryErrorMessage;
       });
   }
 
-  private emitNotificationCreate(response: Test): any {
+  private emitNotificationCreate(response: EntryWithMessageResponse): any {
     if ('message' in response) return response;
     const passwordExpireDate = response.passwordExpiredDate;
     if (passwordExpireDate === null || passwordExpireDate === undefined)

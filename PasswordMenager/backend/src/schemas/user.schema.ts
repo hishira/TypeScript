@@ -5,7 +5,6 @@ import UserMetaSchema from './userMeta.schema';
 
 async function beforeUserSave<IUser>(next) {
   const user = this;
-  const oldMeta = user.meta;
   if (user.isModified('password')) {
     user.password = await bcryptjs.hash(user.password, 10);
   }
@@ -29,7 +28,7 @@ const UserSchema = new mongoose.Schema<IUser>({
     // Default password, when in import entries does not have password
     //TODO: Implement logic for it?
     type: String,
-    required: false, // TODO: Fix 
+    required: false,
     default: null,
   },
   email: {
