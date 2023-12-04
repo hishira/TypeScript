@@ -34,6 +34,7 @@ import { UserModule } from './user.module';
     JwtStrategy,
     JwtStrategy2,
     ...groupProviders,
+    GetFilteredUserQueryHandler,
   ],
   exports: [AuthService, JwtModule],
 })

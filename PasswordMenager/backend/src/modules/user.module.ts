@@ -14,14 +14,12 @@ import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilter
 import { CreateHisotryHandler } from 'src/handlers/commands/history/createHistoryHandler';
 const commandHandles = [CreateUserHandler];
 @Module({
-  imports: [DatabaseModule, HistoryModule, CqrsModule],
-  controllers: [UsersController],
+  imports: [DatabaseModule, CqrsModule],
   providers: [
     {
       provide: Repository,
       useClass: UserRepository,
     },
-    UserService,
     ...userProviders,
     CreateUserHandler,
     GetAllUserQueryHandler,
@@ -30,13 +28,38 @@ const commandHandles = [CreateUserHandler];
     CreateHisotryHandler,
   ],
   exports: [
+    CreateUserHandler,
+    GetAllUserQueryHandler,
+    GetFilteredUserQueryHandler,
+    UpdateUserHandler,
+    CreateHisotryHandler,
+  ],
+})
+export class UserCommandsModule {}
+
+@Module({
+  imports: [DatabaseModule, HistoryModule, CqrsModule, UserCommandsModule],
+  controllers: [UsersController],
+  providers: [
     {
       provide: Repository,
       useClass: UserRepository,
     },
     UserService,
-    CreateUserHandler,
-    GetFilteredUserQueryHandler,
+    ...userProviders,
+    // CreateUserHandler,
+    // GetAllUserQueryHandler,
+    // GetFilteredUserQueryHandler,
+    // UpdateUserHandler,
+    // CreateHisotryHandler,
+  ],
+  exports: [
+    {
+      provide: Repository,
+      useClass: UserRepository,
+    },
+    ...userProviders,
+    UserService,
   ],
 })
 export class UserModule {}

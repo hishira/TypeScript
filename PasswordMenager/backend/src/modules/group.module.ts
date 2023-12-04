@@ -25,7 +25,7 @@ import { UpdateGroupCommandHandler } from 'src/handlers/commands/group/updateGro
     GroupService,
     ...groupProviders,
     CreateGrouCommandpHandler,
-    GetFilteredUserQueryHandler,
+    //GetFilteredUserQueryHandler,
     GetFilteredGroupQueryHandler,
     DeleteGroupCommandHandler,
     UpdateGroupCommandHandler,

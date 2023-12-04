@@ -19,10 +19,6 @@ const UserSchema = new mongoose.Schema<IUser>({
   password: {
     type: String,
     required: true,
-    set: function (password: string) {
-      this._password = this.password;
-      return password;
-    },
   },
   defaultPasswordForEntries: {
     // Default password, when in import entries does not have password

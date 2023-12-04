@@ -19,6 +19,7 @@ export class GetFilteredUserQueryHandler
 {
   execute(query: GetFilteredUserQueries): Promise<IUser | UsersReturn> {
     const { input } = query;
+    console.log(this.repository);
     if ('login' in input) {
       const userByLogin: FilterOption<FilterQuery<IUser>> = {
         getOption() {

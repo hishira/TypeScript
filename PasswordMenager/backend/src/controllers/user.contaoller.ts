@@ -40,6 +40,7 @@ export class UsersController {
   @UseGuards(AuthGuard('accessToken'))
   @Get('userinfo')
   getUserInfo(@Request() req): Promise<IUser> {
+    console.log(req.user);
     return this.userServices.getUser(req.user._id);
   }
 }
