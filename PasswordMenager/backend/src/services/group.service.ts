@@ -7,12 +7,12 @@ import { UpdateGroupCommand } from 'src/commands/group/UpdateGroupCommand';
 import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
-import { GroupResponse } from 'src/handlers/queries/group/getFilteredGroup.queries';
 import { GetExistingGroupQuery } from 'src/queries/group/getExistingGroup.queries';
 import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
+import { GroupResponse } from 'src/types/common/main';
 
 @Injectable()
 export class GroupService {
