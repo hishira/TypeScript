@@ -1,8 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { QueryBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
-import { FilterQuery } from 'mongoose';
-import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { CreateUserEvent } from 'src/events/createUserEvent';
+import { EventTypes } from 'src/events/eventTypes';
+import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
+import { CreateUserDto } from 'src/schemas/dto/user.dto';
+import { UserUtils } from 'src/schemas/utils/user.utils';
 import {
   AccessTokenOptions,
   RefreshAccessTokenOptions,
@@ -10,18 +14,12 @@ import {
 } from '../constans';
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CreateUserDto } from 'src/schemas/dto/user.dto';
-import { EventTypes } from 'src/events/eventTypes';
-import { CreateUserEvent } from 'src/events/createUserEvent';
-import { UserUtils } from 'src/schemas/utils/user.utils';
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private eventEmitter: EventEmitter2,
-    @Inject(Repository)
-    private readonly userRepository: Repository<IUser>,
+    private queryBus: QueryBus,
   ) {}
 
   async createUser(user: CreateUserDto) {
@@ -31,16 +29,8 @@ export class AuthService {
     );
   }
   async valideteUser(userinfo: AuthInfo): Promise<IUser | null> {
-    const userByLogin: FilterOption<FilterQuery<IUser>> = {
-      getOption() {
-        return {
-          login: userinfo.login,
-        };
-      },
-    };
-
-    return this.userRepository
-      .find(userByLogin)
+    return this.queryBus
+      .execute(new GetFilteredUserQueries({ login: userinfo.login }))
       .then(UserUtils.GetFirstUserFromTableOrNull)
       .then((user) => {
         if (user === null) {
