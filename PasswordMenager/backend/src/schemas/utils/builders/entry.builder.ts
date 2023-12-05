@@ -3,15 +3,40 @@ import { EntryState, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { LastEditedVariable } from 'src/schemas/Interfaces/entryMeta.interface';
 import { EntrySchemaUtils, algorithm } from '../Entry.schema.utils';
 import { Cipher } from 'src/utils/cipher.utils';
+import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
+import { EntryDtoMapper } from 'src/schemas/mapper/entryDtoMapper';
+import { isDefined } from 'src/utils/utils';
 
 export class EntryBuilder {
   constructor(private entry: Partial<IEntry> = {}) {}
 
-  public getEntry(): Partial<IEntry> {
+  updateBaseOnEditEntryDto(editEntryDto?: EditEntryDto): this {
+    this.entry = isDefined(editEntryDto)
+      ? EntryDtoMapper.GetPartialUpdateEntry(editEntryDto)
+      : this.entry;
+    return this;
+  }
+
+  updateIdIfExista(id?: string) {
+    this.entry = {
+      ...this.entry,
+      ...(isDefined(id) && { _id: id }),
+    };
+    return this;
+  }
+
+  updateStateIfExists(entryState?: EntryState) {
+    this.entry = {
+      ...this.entry,
+      ...(isDefined(entryState) && { state: entryState }),
+    };
+    return this;
+  }
+  getEntry(): Partial<IEntry> {
     return this.entry;
   }
 
-  public entryNoteUpdate(note: string): this {
+  entryNoteUpdate(note: string): this {
     this.entry = {
       ...this.entry,
       ['meta.lastNote']: note,
@@ -21,7 +46,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public updateEntryId(id: string): this {
+  updateEntryId(id: string): this {
     this.entry = {
       ...this.entry,
       _id: id,
@@ -29,7 +54,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public updatePasswordWithoutHashing(password: string): this {
+  updatePasswordWithoutHashing(password: string): this {
     this.entry = {
       ...this.entry,
       password: password,
@@ -37,7 +62,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public updatePasswordExpireDate(passowordExpireDate: Date): this {
+  updatePasswordExpireDate(passowordExpireDate: Date): this {
     this.entry = {
       ...this.entry,
       passwordExpiredDate: passowordExpireDate,
@@ -45,7 +70,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public updateUrl(newUrl: string): this {
+  updateUrl(newUrl: string): this {
     this.entry = {
       ...this.entry,
       url: newUrl,
@@ -54,7 +79,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public entryPasswordUpdate(
+  entryPasswordUpdate(
     userid: string | ObjectId,
     lastPassword: string,
     data,
@@ -76,7 +101,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public setTitle(title: string): this {
+  setTitle(title: string): this {
     this.entry = {
       ...this.entry,
       title: title,
@@ -86,7 +111,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public setUsername(userName: string): this {
+  setUsername(userName: string): this {
     this.entry = {
       ...this.entry,
       userName: userName,
@@ -96,7 +121,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public removeMeta(): this {
+  removeMeta(): this {
     const { meta, ...othersEntries } = this.entry;
     const withoutMetaObject = Object.fromEntries(
       Object.keys(othersEntries)
@@ -117,7 +142,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public updateEditDate(): this {
+  updateEditDate(): this {
     this.entry = {
       ...this.entry,
       ['meta.editDate']: new Date(),
@@ -125,7 +150,7 @@ export class EntryBuilder {
     return this;
   }
 
-  public setState(state: EntryState): this {
+  setState(state: EntryState): this {
     this.entry = {
       ...this.entry,
       state: state,
