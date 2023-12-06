@@ -1,4 +1,4 @@
-import { CsvEntry } from './export.utils';
+import { CsvEntry } from './csvEntry';
 
 enum TitleCsvHeader {
   Title = 'title',

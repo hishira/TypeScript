@@ -1,81 +1,8 @@
-import {
-  createCipheriv,
-  createDecipheriv,
-  pbkdf2Sync,
-  randomBytes,
-} from 'crypto';
+import { Cipher, createCipheriv, pbkdf2Sync, randomBytes } from 'crypto';
 import { EntryData, IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { Readable } from 'stream';
 import { PaginatorDto } from 'src/utils/paginator';
+import { EncryptBuffer } from './encryptBuffer';
 
-export class ExportReader extends Readable {
-  constructor(public csvData: string[][]) {
-    super();
-  }
-  override _read(size?: number) {
-    this.push(this.csvData.shift()?.join(','));
-    if (!this.csvData.length) {
-      this.push(null);
-    }
-  }
-  override _destroy() {
-    this.csvData = null;
-    return this;
-  }
-}
-
-export class CsvEntry {
-  constructor(
-    public title: string,
-    public username: string,
-    public password: string,
-    public note: string,
-  ) {}
-
-  toString(): string {
-    return `${this.title}, ${this.username}, ${this.password}, ${this.note}`;
-  }
-}
-
-export class EncryptBuffer {
-  private readonly salt = { startByte: 0, endByte: 16 };
-  private readonly iv = { startByte: 16, endByte: 32 };
-  private readonly key = '123456';
-  private readonly algorithm = 'aes-256-cbc';
-  private readonly byteOfStartEncryptedContent = 32;
-  constructor(readonly fileBuffer: Buffer) {}
-
-  get saltFromBuffer(): Buffer {
-    return this.fileBuffer.slice(this.salt.startByte, this.salt.endByte);
-  }
-
-  get ivFromBuffer(): Buffer {
-    return this.fileBuffer.slice(this.iv.startByte, this.iv.endByte);
-  }
-
-  getDecryptedBuffer(encoding: BufferEncoding): string {
-    const encryptedContent = this.fileBuffer.slice(
-      this.byteOfStartEncryptedContent,
-    );
-    const pbkdfKey = pbkdf2Sync(
-      this.key,
-      this.saltFromBuffer,
-      100000,
-      32,
-      'sha256',
-    );
-    const decipher = createDecipheriv(
-      this.algorithm,
-      pbkdfKey,
-      this.ivFromBuffer,
-    );
-    const decryptedContent = Buffer.concat([
-      decipher.update(encryptedContent),
-      decipher.final(),
-    ]);
-    return decryptedContent.toString(encoding);
-  }
-}
 export class ExportCsvUtils {
   static GetConcatedCsvArray(
     csvToConat: string[][],
@@ -94,6 +21,22 @@ export class ExportCsvUtils {
     return new EncryptBuffer(file.buffer).getDecryptedBuffer('utf-8');
   }
 
+  static GenerateValueForEntryptedData(password: string): {
+    salt: Buffer;
+    iv: Buffer;
+    key: Buffer;
+  } {
+    const salt = randomBytes(16); // Gemerate random salt
+    return {
+      salt,
+      iv: randomBytes(16), // Gemerate random iv
+      key: pbkdf2Sync(password, salt, 100000, 32, 'sha256'),
+    };
+  }
+
+  static GetCipherForEncryptData(key: Buffer, iv: Buffer): Cipher {
+    return createCipheriv('aes-256-cbc', key, iv);
+  }
   static GetEncryptedDataBuffer(
     entries:
       | IEntry[]
@@ -102,18 +45,15 @@ export class ExportCsvUtils {
           pageInfo: PaginatorDto;
         },
   ): Buffer {
-    //TODO: Move to seperate class, not has anything common with csv,
     const passwords = [];
     Array.isArray(entries) &&
       entries.forEach((entry) => passwords.push(entry.password));
     const fileContent = passwords.join(',');
     const password = '123456';
-    const salt = randomBytes(16); // Generate a random salt
+    const { salt, iv, key } =
+      ExportCsvUtils.GenerateValueForEntryptedData(password);
 
-    const key = pbkdf2Sync(password, salt, 100000, 32, 'sha256');
-    const iv = randomBytes(16); // Generate a random IV
-
-    const cipher = createCipheriv('aes-256-cbc', key, iv);
+    const cipher = ExportCsvUtils.GetCipherForEncryptData(key, iv);
     let encryptedContent = cipher.update(fileContent, 'utf8', 'hex');
     encryptedContent += cipher.final('hex');
     // Save salt and iv in file
