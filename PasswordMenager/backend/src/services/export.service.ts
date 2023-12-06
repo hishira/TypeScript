@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as Archiver from 'archiver';
 import { CsvFile } from 'src/utils/csv.util';
-import { CsvEntry, ExportCsvUtils, ExportReader } from 'src/utils/export.utils';
+import { ExportCsvUtils } from 'src/utils/export.utils';
 import { EntryService } from './entry.service';
+import { ExportReader } from 'src/utils/exportReader';
+import { CsvEntry } from 'src/utils/csvEntry';
 
 @Injectable()
 export class ExportService {

@@ -51,7 +51,6 @@ export class UserService {
     return this.queryBus
       .execute(new GetFilteredUserQueries({ userid: userid }))
       .then((r) => {
-        console.log(r)
         return r ?? {};
       });
   }
