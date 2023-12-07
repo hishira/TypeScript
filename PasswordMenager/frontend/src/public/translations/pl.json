@@ -87,5 +87,6 @@
     "deleteentry.question": "Czy usunąć encje?",
     "userinformation.edit.login.label": "Nazwa użytkownika",
     "userinformation.edit.password.label": "Hasło",
-    "searchinput.searchByTitle":"Szukaj po tytule"
+    "searchinput.searchByTitle":"Szukaj po tytule",
+    "entry.noTitle": "Nie wprowadzono tytułu"
 }

@@ -97,5 +97,6 @@
     "editusermodal.importpassword.infomodal.editPasswordTest": "Password (will replace the old one if specified)",
     "editusermodal.importpassword.infomodal.button.cancel": "Cancel",
     "editusermodal.importpassword.infomodal.button.save": "Save",
-    "searchinput.searchByTitle":"Search by title"
+    "searchinput.searchByTitle":"Search by title",
+    "entry.noTitle": "No title provided"
 }

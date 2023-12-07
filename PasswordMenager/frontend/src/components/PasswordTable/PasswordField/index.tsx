@@ -47,11 +47,12 @@ export const PasswordField = ({
   moreClickHandle,
 }: PasswordFieldType) => {
   const TableRefComponent = useRef<HTMLTableRowElement>(null);
+  const calculatedTitle = entry.title === '' || !entry.title ? '-' : entry.title;
   TooLongValue(TableRefComponent);
   return (
     <TableRow ref={TableRefComponent} key={entry._id}>
       <TableComponent>
-        <span>{entry.title}</span>
+        <span>{calculatedTitle}</span>
       </TableComponent>
       <TableComponent>
         <span>{entry.username} </span>
