@@ -15,7 +15,7 @@ export class EditEntryActionDispatcher {
     return this.newentry.groupid;
   }
   get isFormValid(): boolean {
-    return this.newentry.password !== "" && this.newentry.username !== "";
+    return this.newentry !== null &&  this.newentry.password !== "" && this.newentry.username !== "";
   }
   constructor(
     setNewEntry: DispatchAction<CreateEntryDto>,

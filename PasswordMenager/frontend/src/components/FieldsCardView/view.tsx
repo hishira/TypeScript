@@ -1,4 +1,10 @@
-import { DOMAttributes, useState } from "react";
+import { DOMAttributes, useEffect, useState } from "react";
+import { PasswordFieldsHelper } from "../PasswordTable/PasswordField";
+import { Translation } from "../Translation";
+import { DeleteIcon } from "../icons/DeleteIcon";
+import { DownIcon } from "../icons/DownIcon";
+import { EditIcon } from "../icons/EditIcon";
+import { UpIcon } from "../icons/UpIcon";
 import {
   Card,
   CardContent,
@@ -10,13 +16,8 @@ import {
   CardFieldValueURL,
   CardHeader,
   CardIcons,
+  EmptySpan,
 } from "./component.styled";
-import { EditIcon } from "../icons/EditIcon";
-import { DeleteIcon } from "../icons/DeleteIcon";
-import { PasswordFieldsHelper } from "../PasswordTable/PasswordField";
-import { UpIcon } from "../icons/UpIcon";
-import { DownIcon } from "../icons/DownIcon";
-import { Translation } from "../Translation";
 
 export type FieldsCardViewProps = {
   selectedgroup: string;
@@ -101,13 +102,19 @@ const CardExpandComponent = ({
   return entry.open ? (
     <CardExpand>
       <CardExpandContent>
-        <CardExpendContentRow fieldName="fieldscard.view.username" value={entry.username} />
+        <CardExpendContentRow
+          fieldName="fieldscard.view.username"
+          value={entry.username}
+        />
         <CardExpendContentRow
           fieldName="fieldscard.view.password"
           value={entry.password}
           isPassword={true}
         />
-        <CardExpendContentRow fieldName="fieldscard.view.note" value={entry.note} />
+        <CardExpendContentRow
+          fieldName="fieldscard.view.note"
+          value={entry.note}
+        />
         {entry.url ? (
           <CardExpendContentRow
             fieldName="fieldscard.view.url"
@@ -135,12 +142,20 @@ export const CardComponent = ({
   editHandle,
 }: CardComponentProps) => {
   const [entryCard, setEntryCard] = useState<CardEntry>(entry);
-
+  const [isEmptyTitle, setIsEmptyTitle] = useState<boolean>(false);
+  useEffect(() => {
+    if (entryCard.title === undefined || entryCard.title === "")
+      setIsEmptyTitle(true);
+  }, [entryCard]);
   return (
     <Card>
       <CardHeader>
         <CardContent>
-          <div>{entryCard.title}</div>
+          {isEmptyTitle ? (
+            <EmptySpan>{Translation('entry.noTitle')}</EmptySpan>
+          ) : (
+            entryCard.title
+          )}
         </CardContent>
         <CardIcons>
           <FieldsIcon

@@ -97,8 +97,12 @@ export const CardExpandContentRow = styled.div`
 `;
 
 export const CardContent = styled.div`
-  display: flex;
+  display: inline-block;
   gap: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
   & > div:nth-child(2) {
     gap: 1.5rem;
   }
@@ -112,3 +116,8 @@ export const CardIcons = styled.div`
     }
   }
 `;
+
+
+export const EmptySpan = styled.span`
+  color: slategrey;
+`

@@ -1,9 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { EntryDtoMapper } from 'src/schemas/mapper/entryDtoMapper';
-import { BaseCommandHandler } from '../BaseCommandHandler';
 import { EntryBuilder } from 'src/schemas/utils/builders/entry.builder';
+import { BaseCommandHandler } from '../BaseCommandHandler';
 
 @CommandHandler(UpdateEntryCommand)
 export class UpdateEntryHandler
@@ -12,6 +11,7 @@ export class UpdateEntryHandler
 {
   execute(command: UpdateEntryCommand): Promise<any> {
     const { input } = command;
+    console.dir(input);
     const entry = new EntryBuilder()
       .updateBaseOnEditEntryDto(input?.updateEntryDto)
       .updateIdIfExista(input?.id)

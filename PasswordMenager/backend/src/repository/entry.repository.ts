@@ -71,11 +71,13 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   update(entry: Partial<IEntry>): Promise<unknown> {
+    console.log('ENTRY ', entry);
     return this.entryModel
       .findById(entry._id)
       .exec()
       .then((entryById) => {
         const data = this.createEditentity(entry, entryById);
+        console.log(data);
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
           .then((data) => data);
