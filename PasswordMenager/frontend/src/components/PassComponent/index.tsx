@@ -109,6 +109,7 @@ const PassComponent = ({ store }: PassComponentProps) => {
   );
   const selectgrouphandle = (groupid: string) => {
     setgroupid(groupid);
+    setPaginator({page: 0})
   };
   const refreshentities = (): void => {
     setgroupid(selectedgroupid);

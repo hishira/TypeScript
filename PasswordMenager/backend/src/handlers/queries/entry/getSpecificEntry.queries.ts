@@ -11,9 +11,11 @@ export class GetSpecificEntryQueryHandler
 {
   execute(query: GetSpecificEntry): Promise<IEntry | IEntry[] | EntryData> {
     const { input } = query;
+    console.log(input);
     if ('id' in input && Object.keys(input).length === 1) {
       return this.repository.findById(input.id);
     }
+    const isPaginatorDefined = 'page' in input || 'paginator' in input;
     const option = new OptionModelBuilder()
       .updateGroupIdOrNull(input.groupId)
       .updateUserIdOPtion(input.userId)
@@ -22,6 +24,11 @@ export class GetSpecificEntryQueryHandler
       .updateStateEntry(input.entryState)
       .getOption();
 
-    return this.repository.find(option, input?.paginator ?? { page: 0 });
+    return this.repository.find(
+      option,
+      isPaginatorDefined
+        ? { page: input?.page ?? input?.paginator?.page }
+        : { page: 0 },
+    );
   }
 }

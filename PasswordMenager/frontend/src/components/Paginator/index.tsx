@@ -19,7 +19,6 @@ export const Paginator = ({
   pageInfo,
   paginationChange,
 }: PaginatorComponentProps): JSX.Element => {
-  console.log(pageInfo)
   const nextPage = (): void => {
     paginationChange({
       page: (pageInfo?.page ?? 0) + 1,

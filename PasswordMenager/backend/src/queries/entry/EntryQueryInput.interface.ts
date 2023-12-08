@@ -9,4 +9,5 @@ export interface EntryQueryInput {
   readonly entryState?: EntryState;
   readonly limit?: number;
   readonly paginator?: PaginatorDto;
+  readonly page?: number;
 }
