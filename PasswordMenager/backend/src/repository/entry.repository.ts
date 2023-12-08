@@ -67,7 +67,9 @@ export class EntryRepository implements Repository<IEntry> {
       .skip(paginator.page * 10)
       .limit(10)
       .exec()
-      .then((entires) => this.getEntryData(entires, paginator));
+      .then((entires) => {
+        return this.getEntryData(entires, paginator);
+      });
   }
 
   update(entry: Partial<IEntry>): Promise<unknown> {
@@ -77,7 +79,6 @@ export class EntryRepository implements Repository<IEntry> {
       .exec()
       .then((entryById) => {
         const data = this.createEditentity(entry, entryById);
-        console.log(data);
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
           .then((data) => data);

@@ -25,7 +25,7 @@ export const PasswordEntries = (
     page: number;
   } | null>(null);
   useEffect(() => {
-    const inputEntryFields = { tittle: entriesTitle };
+    console.log(paginator)
     const emptyGroupFetch = async () => {
       const { data, pageInfo } = await Entry.getInstance()
         .EntriesWithoutGroup({ paginator, title: entriesTitle ?? "" })
