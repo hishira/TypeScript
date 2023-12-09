@@ -1,15 +1,27 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Entry } from "../utils/entry.utils";
-import { EntryPaginator } from "../components/Paginator";
 
-type ReturnEntiresType = {
-  entries: IEntry[];
-  paginator?: {
-    hasMore: boolean;
-    items: number;
-    page: number;
-  } | null;
+const GetEntryInput = (
+  paginator: EntryPaginator,
+  title: string | null,
+  groupId: string | null
+): EntryInput => ({
+  paginator,
+  title: title ?? "",
+  groupId: groupId === "" ? null : groupId,
+});
+
+const entriesFetch = async (
+  paginator: EntryPaginator,
+  entriesTitle: string,
+  selectedGroup: string
+): Promise<EntriesFetchResponse> => {
+  const { data, pageInfo } = await Entry.getInstance().GetEntriesBy(
+    GetEntryInput(paginator, entriesTitle, selectedGroup)
+  );
+  return { data, pageInfo };
 };
+
 export const PasswordEntries = (
   selectedGroup: string,
   entriesTitle: string,
@@ -17,47 +29,18 @@ export const PasswordEntries = (
   paginator: EntryPaginator,
   setLoading: Dispatch<SetStateAction<boolean>>
 ): ReturnEntiresType => {
-  //TODO: Refactor
   const [passwordEntries, setPasswordEntries] = useState<IEntry[]>([]);
-  const [pageInfo, setPageInfo] = useState<{
-    hasMore: boolean;
-    items: number;
-    page: number;
-  } | null>(null);
+  const [pageInfo, setPageInfo] = useState<PaginatorType | null>(null);
   useEffect(() => {
-    console.log(paginator)
-    const emptyGroupFetch = async () => {
-      const { data, pageInfo } = await Entry.getInstance()
-        .EntriesWithoutGroup({ paginator, title: entriesTitle ?? "" })
-        .then((_) => {
-          setLoading(false);
-          return _;
-        });
+    const fetchEntries = async (): Promise<void> => {
+      const { data, pageInfo } = await entriesFetch(
+        paginator,
+        entriesTitle,
+        selectedGroup
+      );
       setPasswordEntries(data);
       setPageInfo(pageInfo);
-    };
-    const fetchWithSelectedGroup = async () => {
-      const groupid: GroupId = {
-        id: selectedGroup,
-      };
-      const response: GetEntriesResponse = await Entry.getInstance()
-        .GetUserEntriesByGroupID(groupid)
-        .then((_) => {
-          setLoading(false);
-          return _;
-        });
-      if (response.status) {
-        setPasswordEntries(response.response);
-      } else {
-        setPasswordEntries([]);
-      }
-    };
-    const fetchEntries = async (): Promise<void> => {
-      if (selectedGroup === "") {
-        emptyGroupFetch();
-      } else {
-        fetchWithSelectedGroup();
-      }
+      setLoading(false);
     };
     fetchEntries();
   }, [selectedGroup, refreshAll, paginator, entriesTitle]);

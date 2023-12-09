@@ -2,7 +2,6 @@ import { EntryApi } from "../api/entry.api";
 import { Auth } from "./auth.utils";
 import { SessionStorage } from "./localstorage.utils";
 import { EMPTYENTRYRESPONSE } from "./constans.utils";
-import { EntryPaginator } from "../components/Paginator";
 
 export class Entry {
   private static instance: Entry | null = null;
@@ -12,10 +11,6 @@ export class Entry {
   private readonly EMPTY = {
     status: false,
     response: EMPTYENTRYRESPONSE,
-  };
-  private readonly EMPTYGROUP = {
-    status: false,
-    response: [],
   };
 
   constructor(
@@ -39,17 +34,40 @@ export class Entry {
     return this.instance;
   }
 
+  private responseJsonOrStatus(resp: Response) {
+    if (resp.status === 200 || resp.status === 201) return resp.json();
+    return resp.status;
+  }
+
   async CreateEntry(
     newentry: CreateEntryDto,
     token: string
   ): Promise<IEntry | number> {
     const response = await this.entryApi
       .CreateNewEntry(newentry, token)
-      .then((resp: Response) => {
-        if (resp.status === 200 || resp.status === 201) return resp.json();
-        return resp.status;
-      });
+      .then((resp: Response) => this.responseJsonOrStatus(resp));
     return response;
+  }
+
+  private async unauthorizedCheck(
+    newentry: CreateEntryDto,
+    response: number | IEntry
+  ) {
+    if (response === 401) {
+      await this.auth.refreshToken();
+      let accesstoken = this.sessionStorage.getAccessToken();
+      return this.CreateEntry(newentry, accesstoken);
+    }
+    return response;
+  }
+
+  private serverErrorOrEmptyCheck(response: number | IEntry) {
+    if (response === 401 || response === 500) {
+      return this.EMPTY;
+    }
+    if (typeof response !== "number")
+      return { status: true, response: response };
+    return this.EMPTY;
   }
 
   async CreateNewEntryUser(
@@ -57,66 +75,8 @@ export class Entry {
   ): Promise<CreateEntryResponse> {
     let accesstoken: string = this.sessionStorage.getAccessToken();
     return this.CreateEntry(newentry, accesstoken)
-      .then(async (response) => {
-        if (response === 401) {
-          await this.auth.refreshToken();
-          accesstoken = this.sessionStorage.getAccessToken();
-          //TODO: Can ref
-          return this.CreateEntry(newentry, accesstoken);
-        }
-        return response;
-      })
-      .then((response) => {
-        if (response === 401 || response === 500) {
-          return this.EMPTY;
-        }
-        if (typeof response !== "number")
-          return { status: true, response: response };
-        return this.EMPTY;
-      });
-  }
-
-  async GetEntries(
-    groupid: GroupId,
-    token: string
-  ): Promise<number | Array<IEntry>> {
-    return this.entryApi
-      .GetEntriesByGroupID(groupid, token)
-      .then((resp: Response) => {
-        if (resp.status === 200 || resp.status === 201) return resp.json();
-        return resp.status;
-      });
-  }
-
-  async GetUserEntriesByGroupID(groupid: GroupId): Promise<GetEntriesResponse> {
-    let accesstoken = this.sessionStorage.getAccessToken();
-    return this.GetEntries(groupid, accesstoken).then(async (response) =>
-      this.UserEntriesResponseHandler(groupid, response)
-    );
-  }
-
-  private async UserEntriesResponseHandler(
-    groupid: GroupId,
-    response: number | IEntry[] | { data: IEntry[]; pageInfo: any }
-  ) {
-    if (response === 401) {
-      await this.auth.refreshToken();
-      let accesstoken = this.sessionStorage.getAccessToken();
-      response = await this.GetEntries(groupid, accesstoken);
-      if (response === 401 || response === 500) {
-        return this.EMPTYGROUP;
-      }
-    } else if (response === 505) {
-      return this.EMPTYGROUP;
-    }
-    if (typeof response !== "number")
-      return {
-        status: true,
-        response: Array.isArray(response)
-          ? response.map(EntryDateMapper)
-          : response.data.map(EntryDateMapper),
-      };
-    return this.EMPTYGROUP;
+      .then(async (response) => this.unauthorizedCheck(newentry, response))
+      .then((response) => this.serverErrorOrEmptyCheck(response));
   }
 
   async DeleteEntry(
@@ -183,22 +143,19 @@ export class Entry {
 
   // TODO: Refactor
 
-  async getEntryWithoutGroup(
+  async getEntryBy(
     accessToken: string,
-    input: { paginator: EntryPaginator; title: string }
+    input: EntryInput
   ): Promise<IEntry[] | number | { data: IEntry[]; pageInfo: any }> {
     return this.entryApi
-      .getEntryWithoutGroup(accessToken, input)
+      .getEntryBy(accessToken, input)
       .then((resp) => (resp.status === 401 ? 401 : resp.json()));
   }
 
-  private async refreshEntriesWithoutGroup(input: {
-    paginator: EntryPaginator;
-    title: string;
-  }) {
+  private async refreshEntriesBy(input: EntryInput) {
     await this.auth.refreshToken();
     const token = this.sessionStorage.getAccessToken();
-    return this.getEntryWithoutGroup(token, input).then((value) => {
+    return this.getEntryBy(token, input).then((value) => {
       return Array.isArray(value)
         ? { data: value, pageInfo: null }
         : {
@@ -216,18 +173,15 @@ export class Entry {
       : resp;
   }
 
-  async EntriesWithoutGroup(input: {
-    paginator: EntryPaginator;
-    title: string;
-  }): Promise<{
+  async GetEntriesBy(input: EntryInput): Promise<{
     data: IEntry[];
-    pageInfo: { hasMore: boolean; items: number; page: number };
+    pageInfo: PaginatorType;
   }> {
     const accessToken = this.sessionStorage.getAccessToken();
 
-    return this.getEntryWithoutGroup(accessToken, input).then(async (resp) => {
+    return this.getEntryBy(accessToken, input).then(async (resp) => {
       if (typeof resp === "number" && resp === 401) {
-        this.refreshEntriesWithoutGroup(input);
+        this.refreshEntriesBy(input);
       }
       const responseMapped: IEntry[] = this.responseMappedObject(resp);
       const pageInfo =

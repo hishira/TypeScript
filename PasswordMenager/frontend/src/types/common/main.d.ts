@@ -127,3 +127,43 @@ type IUser = {
   email: string;
   meta: UserMeta;
 };
+
+type EntryPaginator = {
+  page: number;
+};
+
+type PaginatorType = {
+  hasMore: boolean;
+  items: number;
+  page: number;
+};
+
+type PaginatorComponentProps = {
+  pageInfo?: PaginatorType | null;
+  paginationChange: (pageInfo: EntryPaginator) => void;
+};
+
+type ReturnEntiresType = {
+  entries: IEntry[];
+  paginator?: {
+    hasMore: boolean;
+    items: number;
+    page: number;
+  } | null;
+};
+
+type EntryInput = {
+  paginator: EntryPaginator;
+  title: string;
+  groupId: string | null;
+};
+
+type EntriesFetchResponse = { data: IEntry[]; pageInfo: PaginatorType };
+
+type PassComponentProps = {
+  store?: IGeneral;
+};
+
+type SearchFiledInputProps = {
+  onSearchFieldChange: (value: string) => void;
+};
