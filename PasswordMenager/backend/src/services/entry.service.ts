@@ -52,11 +52,7 @@ export class EntryService {
     return this.queryBus.execute(new GetSpecificEntry({ id: entryId }));
   }
 
-  getbygroupid(groupid: string): Promise<IEntry[] | EntryData> {
-    return this.queryBus.execute(new GetSpecificEntry({ groupId: groupid }));
-  }
-
-  getUserEntriesWithoutGroup(
+  getUserEntriesBy(
     userid: string,
     input?: FindEntryInput,
   ): Promise<IEntry[] | EntryData> {

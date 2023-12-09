@@ -38,25 +38,13 @@ export class EntryContoller {
   }
 
   @UseGuards(AuthGuard('accessToken'))
-  @Get('/bygroup/:id')
-  async getbygroupid(
-    @Param('id') groupid: string,
-    @Body(new ValidationPipe({ transform: true })) paginator?: PaginatorDto,
-  ): Promise<IEntry[] | EntryData> {
-    return this.entryService.getbygroupid(groupid);
-  }
-
-  @UseGuards(AuthGuard('accessToken'))
-  @Post('/byemptygroup')
+  @Post('/getby')
   async getByGroup(
     @Request() req,
     @Body(new ValidationPipe({ transform: true }))
     findEntriesField?: FindEntryInput,
   ): Promise<IEntry[] | EntryData> {
-    return this.entryService.getUserEntriesWithoutGroup(
-      req.user._id,
-      findEntriesField,
-    );
+    return this.entryService.getUserEntriesBy(req.user._id, findEntriesField);
   }
 
   @UseGuards(AuthGuard('accessToken'))

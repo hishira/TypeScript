@@ -1,13 +1,13 @@
 import { inject, observer } from "mobx-react";
 import { ChangeEvent, useState } from "react";
 import { PasswordEntries } from "../../hooks/password-entries.hook";
-import { IGeneral, View } from "../../models/General";
+import { View } from "../../models/General";
 import FieldsCardView from "../FieldsCardView";
 import FieldsComponent from "../FieldsComponent/";
 import FormElement from "../FormElement";
 import GroupComponent from "../GroupComponent/";
 import { Loading } from "../Loading";
-import { EntryPaginator, Paginator } from "../Paginator";
+import { Paginator } from "../Paginator";
 import { Translation } from "../Translation";
 import {
   Container,
@@ -16,14 +16,6 @@ import {
   SearchContainer,
   Text,
 } from "./component.styled";
-
-type PassComponentProps = {
-  store?: IGeneral;
-};
-
-type SearchFiledInputProps = {
-  onSearchFieldChange: (value: string) => void;
-};
 
 const EmptyEntriesComponent = () => {
   return (
@@ -95,10 +87,10 @@ const PasswordsMainComponent = ({
 };
 inject("store")(observer(PasswordsMainComponent));
 const PassComponent = ({ store }: PassComponentProps) => {
-  const [selectedgroupid, setgroupid] = useState<string>("");
-  const [tiltEntry, setTitleEntry] = useState<string>("");
-  const [entitiesrefresh, setentitesrefresh] = useState<boolean>(false);
-  const [sendPaginator, setPaginator] = useState<EntryPaginator>({ page: 0 });
+  const [selectedgroupid, setSelectedgroupid] = useState<string>("");
+  const [tiltEntry, setTiltEntry] = useState<string>("");
+  const [entitiesrefresh, setEntitiesrefresh] = useState<boolean>(false);
+  const [sendPaginator, setSendPaginator] = useState<EntryPaginator>({ page: 0 });
   const [loading, setLoading] = useState<boolean>(true);
   const { entries, paginator } = PasswordEntries(
     selectedgroupid,
@@ -108,20 +100,20 @@ const PassComponent = ({ store }: PassComponentProps) => {
     setLoading
   );
   const selectgrouphandle = (groupid: string) => {
-    setgroupid(groupid);
-    setPaginator({page: 0})
+    setSelectedgroupid(groupid);
+    setSendPaginator({page: 0})
   };
   const refreshentities = (): void => {
-    setgroupid(selectedgroupid);
-    setentitesrefresh(!entitiesrefresh);
+    setSelectedgroupid(selectedgroupid);
+    setEntitiesrefresh(!entitiesrefresh);
   };
 
   const paginatorChange = (paginator: EntryPaginator): void => {
-    setPaginator(paginator);
+    setSendPaginator(paginator);
   };
 
   const filterValuesChange = (val: string): void => {
-    setTitleEntry(val);
+    setTiltEntry(val);
     console.log(val);
   };
   return (

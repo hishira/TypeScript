@@ -16,14 +16,6 @@ export class EntryApi extends Api {
     return fetch(url, this.fetchPostObjectWithToken(newentry, token));
   }
 
-  async GetEntriesByGroupID(
-    groupid: GroupId,
-    token: string
-  ): Promise<Response> {
-    const url = this.getUrl(`entry/bygroup/${groupid.id}`);
-    return await fetch(url, this.fetchGetObjectWithtoken(token));
-  }
-
   async DeleteEntryById(
     entryid: string,
     accesstoken: string
@@ -49,16 +41,20 @@ export class EntryApi extends Api {
     return fetch(url, this.fetchGetObjectWithtoken(accesstoken));
   }
 
-  getEntryWithoutGroup(
+  getEntryBy(
     accessToken: string,
-    input?: { paginator: { page: number }; title: string }
+    input?: EntryInput
   ): Promise<Response> {
-    const url = this.getUrl("entry/byemptygroup");
+    const url = this.getUrl("entry/getby");
     const fetchObjet = this.fetchPostObjectWithToken(
-      { page: input?.paginator.page, title: input?.title },
+      {
+        page: input?.paginator.page,
+        title: input?.title,
+        groupId: input?.groupId,
+      },
       accessToken
     );
-    //: this.fetchGetObjectWithtoken(accessToken);
+
     return fetch(url, fetchObjet);
   }
 

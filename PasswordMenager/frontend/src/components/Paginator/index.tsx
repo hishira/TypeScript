@@ -2,19 +2,7 @@ import { LeftIcon } from "../icons/LeftIcon";
 import { RightIcon } from "../icons/RightIcon";
 import { PaginatorContainer } from "./component.styled";
 // Move type to shared
-export type PaginatorType = {
-  hasMore: boolean;
-  items: number;
-  page: number;
-};
 
-export type EntryPaginator = {
-  page: number;
-};
-type PaginatorComponentProps = {
-  pageInfo?: PaginatorType | null;
-  paginationChange: (pageInfo: EntryPaginator) => void;
-};
 export const Paginator = ({
   pageInfo,
   paginationChange,
