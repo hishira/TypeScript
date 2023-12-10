@@ -41,6 +41,7 @@
     "groups.newgroup.groupname": "Group name",
     "groups.newgroup.name": "Name",
     "groups.newgroup.addgroup": "Add group",
+    "group.action.delete": "Are you sure to delete this group, all corresponding entries will be deleted?",
     "import.modal.choiceFile": "Choice file",
     "import.modal.errorMessage": "Wrong file type, type possible: ",
     "import.modal.button.check": "Check",

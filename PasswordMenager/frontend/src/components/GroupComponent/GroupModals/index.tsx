@@ -4,7 +4,9 @@ import { AcceptModalComponent } from "../../Modal/AcceptModal";
 import { AcceptModalContainer } from "./component.styled";
 import FormElement from "./../../FormElement/index";
 import { useState } from "react";
+import { TranslationFunction } from "../../Translation";
 
+// TODO: Refactor types and components
 type GroupModalProps = {
   actionGroup: ActionGroup;
   newGroupCloseHandle: () => void;
@@ -67,7 +69,9 @@ const EditModal = ({ actionGroup, editHandle }: EditModalType) => {
   ) : null;
 };
 const AcceptDeleteModal = () => (
-  <AcceptModalContainer>Are you sure to delete group</AcceptModalContainer>
+  <AcceptModalContainer>
+    {TranslationFunction("group.action.delete")}
+  </AcceptModalContainer>
 );
 type AceptEditModalProps = {
   newName: string;

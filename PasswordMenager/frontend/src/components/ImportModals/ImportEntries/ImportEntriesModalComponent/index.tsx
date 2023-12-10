@@ -14,18 +14,14 @@ const ImportEntriesModalComponent = ({
   fileSetHandle,
   importFileInfo,
 }: ImportEntriesModalComponentProps) => {
-  const [file, fileChange] = useState<File | undefined>(undefined);
-  const [filename, setFileName] = useState<string | undefined>(undefined);
+  const [, fileChange] = useState<File | undefined>(undefined);
+  const [filename,] = useState<string | undefined>(undefined);
 
   const fileChangeHandlerFunction = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
     if (files && files?.length <= 0) return;
     files && fileChange(files[0]);
     files && fileSetHandle(files[0]);
-    const fileType = files && files[0].type;
-    const selectedType = ["csv", "txt"].find((ft) =>
-      fileType?.toLowerCase().includes(ft)
-    );
     //setFileName(selectedType);
   };
   //TODO: Add proper message for txt file types
