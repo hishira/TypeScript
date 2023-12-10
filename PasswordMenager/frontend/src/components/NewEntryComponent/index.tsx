@@ -13,7 +13,7 @@ import {
   ButtonsRangeContainer,
   EntryModalComponent,
   PasswordFormContainer,
-  SectionContainer
+  SectionContainer,
 } from "./component.styled";
 import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
@@ -38,17 +38,17 @@ const NewEntryComponent = ({
   refresh,
   closeModalDispatcherHandle,
 }: NewEntryProps): JSX.Element => {
-  const [passlen, setpasslen] = useState<number>(6);
-  const [generatePasswordModal, setGeneratorPasswordModal] =
+  const [passlen, setPasslen] = useState<number>(6);
+  const [generatePasswordModal, setGeneratePasswordModal] =
     useState<boolean>(false);
-  const [passwordcharacters, setpasswordcharacters] =
+  const [passwordcharacters, setPasswordcharacters] =
     useState<PasswordCharactersTypes>({
       letters: false,
       numbers: false,
       specialChar: false,
     });
   const [loading, setLoading] = useState<boolean>(false);
-  const [newentry, setnewentry] = useState<CreateEntryDto>({
+  const [newentry, setNewentry] = useState<CreateEntryDto>({
     title: "",
     username: "",
     password: "",
@@ -57,26 +57,26 @@ const NewEntryComponent = ({
     url: "",
     passwordExpiredDate: "",
   });
-  const [passwordVisible, setPassVisible] = useState<boolean>(false);
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
-  const setPasswordVisible = (ps: boolean) => {
-    setPassVisible(ps);
+  const passwordVisibleFunc = (ps: boolean) => {
+    setPasswordVisible(ps);
     checkBoxHandler({ target: { checked: ps } });
   };
   const editEntry: EditEntryActionDispatcher = new EditEntryActionDispatcher(
-    setnewentry,
-    setpasswordcharacters,
+    setNewentry,
+    setPasswordcharacters,
     passwordcharacters,
     newentry,
     passlen
   );
   const passwordLenChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setpasslen(parseInt(e.target.value));
+    setPasslen(parseInt(e.target.value));
 
   const groups = GroupEffect(true);
-  GetEntryForEdit(edit, editentryid, setnewentry, setLoading);
+  GetEntryForEdit(edit, editentryid, setNewentry, setLoading);
   useEffect(() => {
-    setnewentry({
+    setNewentry({
       title: "",
       username: "",
       password: "",
@@ -160,9 +160,9 @@ const NewEntryComponent = ({
                 value={newentry.password}
               />
               {!passwordVisible ? (
-                <ShowIcon click={() => setPasswordVisible(true)} />
+                <ShowIcon click={() => passwordVisibleFunc(true)} />
               ) : (
-                <HideIcon click={() => setPasswordVisible(false)} />
+                <HideIcon click={() => passwordVisibleFunc(false)} />
               )}
             </PasswordFormContainer>
             <FormElement
@@ -180,12 +180,11 @@ const NewEntryComponent = ({
             editEntry={editEntry}
             passwordLength={passlen}
             passwordLengthChange={passwordLenChange}
-            onClose={() => setGeneratorPasswordModal(false)}
+            onClose={() => setGeneratePasswordModal(false)}
           />
 
           <ButtonsRangeContainer style={{ position: "relative" }}>
-           
-            <Button onClick={() => setGeneratorPasswordModal(true)}>
+            <Button onClick={() => setGeneratePasswordModal(true)}>
               {Translation("newentry.action.generator")}
             </Button>
           </ButtonsRangeContainer>
@@ -217,7 +216,12 @@ const NewEntryComponent = ({
               {Translation("newentry.action.add")}
             </Button>
           ) : (
-            <Button disabled={!editEntry.isFormValid} size="small" color="lightblue" onClick={edithaneld}>
+            <Button
+              disabled={!editEntry.isFormValid}
+              size="small"
+              color="lightblue"
+              onClick={edithaneld}
+            >
               {Translation("newentry.action.update")}
             </Button>
           )}

@@ -43,7 +43,7 @@ export const PasswordEntries = (
       setLoading(false);
     };
     fetchEntries();
-  }, [selectedGroup, refreshAll, paginator, entriesTitle]);
+  }, [selectedGroup, refreshAll, paginator, entriesTitle, setLoading]);
 
   return { entries: passwordEntries, paginator: pageInfo };
 };

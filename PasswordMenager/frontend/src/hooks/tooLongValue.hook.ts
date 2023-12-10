@@ -37,24 +37,29 @@ const leave = (event: MouseEvent) => {
     }
   }
 };
+
+const addRemoveFunction = (
+  currentReference: HTMLElement | null,
+  actionType: "remove" | "add"
+) => {
+  const elements: HTMLTableCellElement[] | undefined = Array.from(
+    currentReference?.querySelectorAll("td") || []
+  );
+  elements.forEach((element) => {
+    actionType === "add"
+      ? element.addEventListener("mouseenter", enter)
+      : element.removeEventListener("mouseenter", enter);
+    actionType === "add"
+      ? element.addEventListener("mouseleave", leave)
+      : element.removeEventListener("mouseleave", leave);
+  });
+};
+
 export const TooLongValue = (ref: RefObject<HTMLElement>) => {
   useEffect(() => {
-    const elements: HTMLTableCellElement[] | undefined = Array.from(
-      ref.current?.querySelectorAll("td") || []
-    );
-    elements.forEach((element) => {
-      element.addEventListener("mouseenter", enter);
-      element.addEventListener("mouseleave", leave);
-    });
+    const currentReference: HTMLElement | null = ref?.current;
+    addRemoveFunction(currentReference, "add");
 
-    return ()=>{
-        const elements: HTMLTableCellElement[] | undefined = Array.from(
-            ref.current?.querySelectorAll("td") || []
-          );
-          elements.forEach((element) => {
-            element.removeEventListener("mouseenter", enter);
-            element.removeEventListener("mouseleave", leave);
-          });
-    }
-  }, []);
+    return () => addRemoveFunction(currentReference, "remove");
+  }, [ref]);
 };

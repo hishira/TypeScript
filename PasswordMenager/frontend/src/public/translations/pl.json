@@ -41,6 +41,7 @@
     "groups.newgroup.groupname": "Nazwa kategori",
     "groups.newgroup.name":"Nazwa",
     "groups.newgroup.addgroup":"Dodaj kategorie",
+    "group.action.delete": "Czy usunąć grupę, wszystkie powiązane hasła zostaną usunięte?",
     "import.modal.choiceFile": "Wybierz plik",
     "import.modal.errorMessage": "Zły typ pliku, możliwe typy: ",
     "import.modal.button.check": "Sprawdź",
