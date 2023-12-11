@@ -141,8 +141,6 @@ export class Entry {
     return response;
   }
 
-  // TODO: Refactor
-
   async getEntryBy(
     accessToken: string,
     input: EntryInput

@@ -82,7 +82,7 @@ export const ImportModalEntries = ({
           (_) => _ && setTimeout(() => functionTimeout())
         ),
     });
-  }, [modalOpen, formData, extendData]);
+  }, [modalOpen, formData]);
 
   const functionFile = (e: File) => setFormDataAction(e, setFormData);
   return modalOpen ? (
