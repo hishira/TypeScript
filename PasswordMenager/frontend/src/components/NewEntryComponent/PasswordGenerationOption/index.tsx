@@ -1,7 +1,6 @@
-import Button from "../Button";
-import { Translation } from "../Translation";
-import { CloseIcon } from "../icons/CloseIcon";
-import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
+import Button from "../../Button";
+import { Translation } from "../../Translation";
+import { CloseIcon } from "../../icons/CloseIcon";
 import {
   Checkboxes,
   Checkboxwithlabel,
@@ -9,47 +8,11 @@ import {
   GeneratorModal,
   GeneratorSecionContainer,
   LengthDiv,
-  NormalContainer,
-  OptionContainer,
   PasswordCheckbox,
   RangeContainer,
-  SelectContainer,
-  SelectLabel,
-} from "./component.styled";
+} from "../component.styled";
+import { PasswordGeneratorOptionProps } from "../types";
 
-type GroupSelectionProps = {
-  edit: boolean | undefined;
-  editEntry: EditEntryActionDispatcher;
-  groups: IGroup[];
-};
-export const GroupSelection = ({
-  edit,
-  editEntry,
-  groups,
-}: GroupSelectionProps) =>
-  !edit ? (
-    <NormalContainer>
-      <SelectLabel>{Translation("newentry.helpers.groupSelect")}</SelectLabel>
-      <SelectContainer
-        onChange={editEntry.groupset.bind(editEntry)}
-        defaultValue={""}
-      >
-        {groups.map((group) => (
-          <OptionContainer key={group._id} value={group._id}>
-            {group.name}
-          </OptionContainer>
-        ))}
-      </SelectContainer>
-    </NormalContainer>
-  ) : null;
-
-type PasswordGeneratorOptionProps = {
-  editEntry: EditEntryActionDispatcher;
-  open: boolean;
-  passwordLength: number;
-  passwordLengthChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClose: () => void;
-};
 export const PasswordGeneratorOption = ({
   editEntry,
   open,

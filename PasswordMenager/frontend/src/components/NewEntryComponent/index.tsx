@@ -1,35 +1,25 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
 import { GroupEffect } from "../../hooks/groups.hook";
 import { Entry } from "../../utils/entry.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import { Loading } from "../Loading";
-import { Translation } from "../Translation";
+import { Translation, TranslationFunction } from "../Translation";
 import { HideIcon } from "../icons/HideIcon";
 import { ShowIcon } from "../icons/ShowIcon";
 import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
+import { GroupSelection } from "./GroupSelection";
 import {
   ButtonsRangeContainer,
   EntryModalComponent,
   PasswordFormContainer,
   SectionContainer,
+  TitleContainer,
 } from "./component.styled";
-import { GroupSelection, PasswordGeneratorOption } from "./helpers";
 import { checkBoxHandler } from "./new-entry.utils";
-
-export type PasswordCharactersTypes = {
-  letters: boolean;
-  numbers: boolean;
-  specialChar: boolean;
-};
-type NewEntryProps = {
-  edit?: boolean;
-  editentryid?: string;
-  refreshentry: boolean;
-  refresh?: Function;
-  closeModalDispatcherHandle?: Dispatch<SetStateAction<boolean>>;
-};
+import { NewEntryProps, PasswordCharactersTypes } from "./types";
+import { PasswordGeneratorOption } from "./PasswordGenerationOption";
 
 const NewEntryComponent = ({
   edit,
@@ -135,6 +125,9 @@ const NewEntryComponent = ({
       loading={loading}
       ComponentToLoad={
         <EntryModalComponent disabled={generatePasswordModal}>
+          <TitleContainer>
+            {TranslationFunction("newentry.title")}
+          </TitleContainer>
           <FormElement
             label={"newentry.field.title"}
             inputplaceholder="newentry.field.title"

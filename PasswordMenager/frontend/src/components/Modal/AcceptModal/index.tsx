@@ -1,11 +1,10 @@
-import React from "react";
-import { Modal, ModalContainer } from "../component.styled";
+import { ModalProps } from "..";
 import { EscapeModalHandle } from "../../../hooks/modalEscape.hook";
 import { clickOnModal } from "../../../utils/modal.utils";
-import { ButtonGroup } from "./component.styled";
-import { ModalProps } from "..";
 import Button from "../../Button";
 import { Translation } from "../../Translation";
+import { Modal, ModalContainer } from "../component.styled";
+import { ButtonGroup } from "./component.styled";
 type AcceptanceModalPrope = ModalProps & {
   acceptHandle: (...args: any[]) => any;
   disableButton?: boolean;

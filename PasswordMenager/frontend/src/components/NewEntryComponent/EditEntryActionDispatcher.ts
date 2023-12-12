@@ -1,8 +1,7 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { PasswordCharactersTypes } from ".";
-import { specialTypeGenerate, generatePart } from "./new-entry.utils";
+import React from "react";
+import { generatePart, specialTypeGenerate } from "./new-entry.utils";
+import { DispatchAction, PasswordCharactersTypes } from "./types";
 
-type DispatchAction<T> = Dispatch<SetStateAction<T>>;
 export class EditEntryActionDispatcher {
   passwordcharacters: PasswordCharactersTypes;
 
@@ -15,7 +14,11 @@ export class EditEntryActionDispatcher {
     return this.newentry.groupid;
   }
   get isFormValid(): boolean {
-    return this.newentry !== null &&  this.newentry.password !== "" && this.newentry.username !== "";
+    return (
+      this.newentry !== null &&
+      this.newentry.password !== "" &&
+      this.newentry.username !== ""
+    );
   }
   constructor(
     setNewEntry: DispatchAction<CreateEntryDto>,
