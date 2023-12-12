@@ -1,19 +1,11 @@
-import { PasswordCharactersTypes } from ".";
+import { PasswordCharactersTypes, PasswordGenerateInformation } from "./types";
 
 export const SMALLETTERS: string = "abcdefghijklmnouprstuwzyw";
 export const BIGLETTERS: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
 export const NUMBERS: string = "0987654321";
 export const SPECIAL: string = "*()&^%$#@!~/{}+-";
 
-type PasswordGenerateInformation = {
-  nothingSelected: boolean;
-  onlyLetters: boolean;
-  lettersAndNumbers: boolean;
-  allSelected: boolean;
-  onlyNumbers: boolean;
-  specialCharacters: boolean;
-  specialAndNumbers: boolean;
-};
+
 export const checkBoxHandler = (e: { target: { checked: boolean } }): void => {
   let element: HTMLCollectionOf<HTMLInputElement> =
     document.getElementsByTagName("input");

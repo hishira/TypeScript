@@ -89,5 +89,6 @@
     "userinformation.edit.login.label": "Nazwa użytkownika",
     "userinformation.edit.password.label": "Hasło",
     "searchinput.searchByTitle":"Szukaj po tytule",
-    "entry.noTitle": "Nie wprowadzono tytułu"
+    "entry.noTitle": "Nie wprowadzono tytułu",
+    "newentry.title": " Dodaj nowe hasło"
 }

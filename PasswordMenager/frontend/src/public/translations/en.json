@@ -99,5 +99,6 @@
     "editusermodal.importpassword.infomodal.button.cancel": "Cancel",
     "editusermodal.importpassword.infomodal.button.save": "Save",
     "searchinput.searchByTitle":"Search by title",
-    "entry.noTitle": "No title provided"
+    "entry.noTitle": "No title provided",
+    "newentry.title": " Create new entry"
 }
