@@ -34,6 +34,7 @@ export class UsersController {
     @Body(new ValidationPipe({ transform: true })) editUserInfo: EditUserDto,
     @Request() req,
   ): Promise<unknown> {
+    //TODO: Fix
     return this.userServices.update(req.user._id, editUserInfo);
   }
 
