@@ -167,3 +167,5 @@ type PassComponentProps = {
 type SearchFiledInputProps = {
   onSearchFieldChange: (value: string) => void;
 };
+
+type UserUpdate = Partial<Pick<IUser, "email" | "login" | "password">>;

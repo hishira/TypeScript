@@ -31,16 +31,26 @@ export class UserBuilder {
   }
 
   async updateBasedOnUserEntry(user: Partial<IUser>): Promise<this> {
+    //TODO: Ref
     if (UserField.PASSWORD in user) {
       const hashesPassword = await PasswordUtils.EncryptPassword(user.password);
       this.user = {
         ...this.userMeta,
         password: hashesPassword,
       } as unknown as Partial<IUser>;
-    } else {
+    }
+    if ('login' in user) {
       this.user = {
+        ...this.user,
         ...this.userMeta,
         login: user.login,
+      } as unknown as Partial<IUser>;
+    }
+    if ('email' in user) {
+      this.user = {
+        ...this.user,
+        ...this.userMeta,
+        email: user.email,
       } as unknown as Partial<IUser>;
     }
     return this;

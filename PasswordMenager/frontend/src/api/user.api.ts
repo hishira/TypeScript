@@ -17,4 +17,12 @@ export class UserApi extends Api {
 
     return fetch(url, this.fetchGetObjectWithtoken(token));
   }
+
+  updateUserInfo(
+    token: string,
+    user:UserUpdate
+  ) {
+    const url = this.getUrl("users/update");
+    return fetch(url, this.fetchPutObjectWithToken(user, token));
+  }
 }
