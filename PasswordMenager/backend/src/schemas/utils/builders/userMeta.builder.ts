@@ -20,7 +20,7 @@ export class UserMetaBuilder {
   }
 
   updateFieldToUpdatedBaseOnEditedDto(entryToEdit: Partial<IUser>): this {
-    const filedToUpdate: MetaAttributeUser = entryToEdit.password
+    const filedToUpdate: MetaAttributeUser = entryToEdit?.password
       ? MetaAttributeUser.LASTPASSWORD
       : MetaAttributeUser.LASTLOGIN;
     this.filedsToUpdate = filedToUpdate;

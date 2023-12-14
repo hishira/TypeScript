@@ -79,7 +79,7 @@ export class UserRepository implements Repository<IUser> {
     return new UserMetaBuilder()
       .updateFieldToUpdatedBaseOnEditedDto(entryToEdit)
       .updateLastValues(
-        entryToEdit.password ? userInfo.password : userInfo.login,
+        entryToEdit?.password ? userInfo.password : userInfo.login,
       )
       .getMetaObject();
   }
