@@ -3,14 +3,14 @@ import { IsString, MinLength, IsOptional, IsEmail } from 'class-validator';
 export class EditUserDto {
   @IsString()
   @IsOptional()
-  readonly login;
+  readonly login?;
 
   @IsEmail()
   @IsOptional()
-  readonly email;
+  readonly email?;
 
   @IsString()
   @IsOptional()
   @MinLength(6)
-  readonly password;
+  readonly password?;
 }
