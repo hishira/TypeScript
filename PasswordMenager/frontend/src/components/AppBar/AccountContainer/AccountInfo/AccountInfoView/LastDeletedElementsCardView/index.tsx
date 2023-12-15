@@ -15,20 +15,36 @@ export const LastDeletedElementsCardView = () => {
   useEffect(() => {
     Entry.getInstance()
       .getLastDeletedEntries()
-      .then((entries: IEntry[]) => {
-        setLastDeletedEntries(entries);
+      .then((entries: EntryData) => {
+        setLastDeletedEntries(entries?.data ?? []);
       });
   }, []);
+
+  const restoreEntry = (entryId: string) => {
+    Entry.getInstance().restoreEntry({ entryId });
+  };
   return (
     <LastDeletedElements>
-      <LastDeletedTitle>{Translation('account.view.lastDeletedEntries.title')}</LastDeletedTitle>
+      <LastDeletedTitle>
+        {Translation("account.view.lastDeletedEntries.title")}
+      </LastDeletedTitle>
       <br />
       <Elements>
         <LastDeletedElement>
           <LastDeletedEntryInfo>
-            <div>{Translation('account.view.lastDeletedEntries.table.column.title')}</div>
-            <div>{Translation('account.view.lastDeletedEntries.table.column.username')}</div>
-            <div>{Translation('account.view.lastDeletedEntries.table.column.url')}</div>
+            <div>
+              {Translation(
+                "account.view.lastDeletedEntries.table.column.title"
+              )}
+            </div>
+            <div>
+              {Translation(
+                "account.view.lastDeletedEntries.table.column.username"
+              )}
+            </div>
+            <div>
+              {Translation("account.view.lastDeletedEntries.table.column.url")}
+            </div>
           </LastDeletedEntryInfo>
         </LastDeletedElement>
         {lastDeletedEntries.map((entry) => (
@@ -38,8 +54,14 @@ export const LastDeletedElementsCardView = () => {
               <div>{entry.username}</div>
               <div>{entry.url}</div>
             </LastDeletedEntryInfo>
-            <Button outline="without" size="small">
-            {Translation('account.view.lastDeletedEntries.table.actionButton')}
+            <Button
+              outline="without"
+              size="small"
+              onClick={() => restoreEntry(entry._id)}
+            >
+              {Translation(
+                "account.view.lastDeletedEntries.table.actionButton"
+              )}
             </Button>
           </LastDeletedElement>
         ))}

@@ -63,6 +63,15 @@ export class EntryService {
       });
   }
 
+  restoreEntry(restoreBody: { entryId: string }) {
+    return this.commandBus.execute(
+      new UpdateEntryCommand({
+        id: restoreBody.entryId,
+        entryState: EntryState.ACTIVE,
+      }),
+    );
+  }
+
   deletebyid(entryid: string): Promise<DeleteEntryResponse> {
     try {
       const deletedentry: Promise<IEntry> = this.queryBus.execute(
@@ -107,18 +116,6 @@ export class EntryService {
       }),
     );
   }
-  private getHistoryEntryPromise(groupid: string) {
-    return this.queryBus
-      .execute(new GetSpecificEntry({ groupId: groupid }))
-      .then((entires) => {
-        if (Array.isArray(entires) && entires.length > 0) {
-          this.eventEmitter.emit(
-            EventTypes.HistoryAppend,
-            new HistoryAppendEvent(entires[0].userid, entires, 'entry'),
-          );
-        }
-      });
-  }
 
   deleteByGroup(groupid: string): Promise<unknown> {
     const promiseEntryHistory = this.getHistoryEntryPromise(groupid);
@@ -146,5 +143,18 @@ export class EntryService {
     } catch (e) {
       return Promise.resolve(EmptyResponse);
     }
+  }
+
+  private getHistoryEntryPromise(groupid: string) {
+    return this.queryBus
+      .execute(new GetSpecificEntry({ groupId: groupid }))
+      .then((entires) => {
+        if (Array.isArray(entires) && entires.length > 0) {
+          this.eventEmitter.emit(
+            EventTypes.HistoryAppend,
+            new HistoryAppendEvent(entires[0].userid, entires, 'entry'),
+          );
+        }
+      });
   }
 }
