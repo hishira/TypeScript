@@ -199,9 +199,16 @@ export class Entry {
       .then((resp) => resp.json());
   }
 
-  getLastDeletedEntries(): Promise<IEntry[]> {
+  getLastDeletedEntries(): Promise<EntryData> {
     return this.entryApi
       .getLastDeletedEntries(this.sessionStorage.getAccessToken())
+      .then((resp) => resp.json());
+  }
+
+  restoreEntry(restoreBody: RestoreEntryBody) {
+    const accessToken = this.sessionStorage.getAccessToken();
+    return this.entryApi
+      .restoreEntry(accessToken, restoreBody)
       .then((resp) => resp.json());
   }
 }

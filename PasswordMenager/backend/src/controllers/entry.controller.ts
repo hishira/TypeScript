@@ -84,4 +84,15 @@ export class EntryContoller {
   async getEntryById(@Param('id') entryId: string): Promise<IEntry> {
     return this.entryService.getById(entryId);
   }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Post('/restore')
+  async restoreEntry(
+    @Body(new ValidationPipe({ transform: false }))
+    restoreBody: {
+      entryId: string;
+    },
+  ) {
+    return this.entryService.restoreEntry(restoreBody);
+  }
 }

@@ -41,10 +41,7 @@ export class EntryApi extends Api {
     return fetch(url, this.fetchGetObjectWithtoken(accesstoken));
   }
 
-  getEntryBy(
-    accessToken: string,
-    input?: EntryInput
-  ): Promise<Response> {
+  getEntryBy(accessToken: string, input?: EntryInput): Promise<Response> {
     const url = this.getUrl("entry/getby");
     const fetchObjet = this.fetchPostObjectWithToken(
       {
@@ -67,5 +64,10 @@ export class EntryApi extends Api {
     const url = this.getUrl("entry/lastDeleted");
 
     return fetch(url, this.fetchGetObjectWithtoken(token));
+  }
+
+  restoreEntry(token: string, restoreBody: RestoreEntryBody) {
+    const url = this.getUrl("entry/restore");
+    return fetch(url, this.fetchPostObjectWithToken(restoreBody, token));
   }
 }

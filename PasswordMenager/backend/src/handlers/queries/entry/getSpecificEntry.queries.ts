@@ -11,7 +11,6 @@ export class GetSpecificEntryQueryHandler
 {
   execute(query: GetSpecificEntry): Promise<IEntry | IEntry[] | EntryData> {
     const { input } = query;
-    console.log(input);
     if ('id' in input && Object.keys(input).length === 1) {
       return this.repository.findById(input.id);
     }

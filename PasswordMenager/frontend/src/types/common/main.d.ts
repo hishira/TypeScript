@@ -169,3 +169,10 @@ type SearchFiledInputProps = {
 };
 
 type UserUpdate = Partial<Pick<IUser, "email" | "login" | "password">>;
+
+type EntryData = {
+  data: IEntry[];
+  pageInfo: PaginatorType;
+};
+
+type RestoreEntryBody = { entryId: string };
