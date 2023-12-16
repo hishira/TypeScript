@@ -18,3 +18,11 @@ type GroupResponse =
       data: IGroup[];
       pageInfo: Paginator;
     };
+
+type UpdateEntryCheck = {
+  noteUpdate: boolean;
+  passwordUpdate: boolean | string;
+  titleUpdate: boolean;
+  userNameUpdate: boolean;
+  stateUpdate: boolean;
+};
