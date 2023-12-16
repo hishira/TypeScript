@@ -11,6 +11,7 @@ import { UtilsRepository } from './utils.repository';
 import { ActiveEntryFilter } from 'src/schemas/utils/activeEntryFilter';
 import { EntryBuilder } from 'src/schemas/utils/builders/entry.builder';
 import { DeleteEntryUpdate } from 'src/schemas/utils/deleteEntryUpdate.object';
+import { UpdateEntryCheck } from 'src/types/common/main';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry> {
@@ -115,36 +116,70 @@ export class EntryRepository implements Repository<IEntry> {
     throw new NotImplementedError();
   }
 
+  private removeUnecessaryElementFromEntry(
+    entry: Partial<IEntry>,
+  ): Partial<IEntry> {
+    let updateEntry = { ...entry };
+    if ('_doc' in entry) updateEntry = entry._doc as IEntry;
+    if ('meta' in updateEntry) {
+      const { meta, ...rest } = updateEntry;
+      updateEntry = rest;
+    }
+    return updateEntry;
+  }
+
+  private getUpdateInfo(
+    entry: Partial<IEntry>,
+    updatedEntry: Partial<IEntry>,
+  ): UpdateEntryCheck {
+    return {
+      noteUpdate: entry.note && updatedEntry.note !== entry.note,
+      passwordUpdate: entry.password,
+      titleUpdate: entry.title && updatedEntry.title !== entry.title,
+      userNameUpdate:
+        entry.username && updatedEntry.username !== entry.username,
+      stateUpdate: entry.state && entry.state !== updatedEntry.state,
+    };
+  }
+
+  private updateEntryBuilder(
+    builder: EntryBuilder,
+    entry: Partial<IEntry>,
+    updatedEntry: Partial<IEntry>,
+    data: Partial<IEntry>,
+  ): void {
+    const entryUpdateObject = this.getUpdateInfo(entry, updatedEntry);
+    if (entryUpdateObject.noteUpdate) {
+      builder.entryNoteUpdate(entry.note);
+    }
+    if (entryUpdateObject.passwordUpdate) {
+      builder.entryPasswordUpdate(
+        updatedEntry.userid,
+        updatedEntry.password,
+        data,
+      );
+    }
+    if (entryUpdateObject.titleUpdate) {
+      builder.setTitle(entry.title);
+    }
+    if (entryUpdateObject.userNameUpdate) {
+      builder.setUsername(entry.username);
+    }
+    if (entryUpdateObject.stateUpdate) {
+      builder.setState(entry.state);
+    }
+  }
+
   private createEditentity(
     entry: Partial<IEntry>,
     entryById: Partial<IEntry>,
   ): Partial<IEntry> {
-    if ('_doc' in entryById) entryById = entryById._doc as IEntry;
-    if ('meta' in entryById) {
-      const { meta, ...rest } = entryById;
-      entryById = rest;
-    }
+    const updatedEntry = this.removeUnecessaryElementFromEntry(entryById);
     const data: Partial<IEntry> = { ...entry };
-    const editEntryBuilder: EntryBuilder = new EntryBuilder({ ...entryById });
-    if (entry.note && entryById.note !== entry.note) {
-      editEntryBuilder.entryNoteUpdate(entry.note);
-    }
-    if (entry.password) {
-      editEntryBuilder.entryPasswordUpdate(
-        entryById.userid,
-        entryById.password,
-        data,
-      );
-    }
-    if (entry.title && entryById.title !== entry.title) {
-      editEntryBuilder.setTitle(entry.title);
-    }
-    if (entry.username && entryById.username !== entry.username) {
-      editEntryBuilder.setUsername(entry.username);
-    }
-    if (entry.state && entry.state !== entryById.state) {
-      editEntryBuilder.setState(entry.state);
-    }
+    const editEntryBuilder: EntryBuilder = new EntryBuilder({
+      ...updatedEntry,
+    });
+    this.updateEntryBuilder(editEntryBuilder, entry, updatedEntry, data);
     editEntryBuilder.updateEditDate();
     return editEntryBuilder.getEntry();
   }
