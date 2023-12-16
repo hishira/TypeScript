@@ -79,6 +79,7 @@ export class EntryRepository implements Repository<IEntry> {
       .exec()
       .then((entryById) => {
         const data = this.createEditentity(entry, entryById);
+        console.log(data);
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
           .then((data) => data);
@@ -116,8 +117,13 @@ export class EntryRepository implements Repository<IEntry> {
 
   private createEditentity(
     entry: Partial<IEntry>,
-    entryById: IEntry,
+    entryById: Partial<IEntry>,
   ): Partial<IEntry> {
+    if ('_doc' in entryById) entryById = entryById._doc as IEntry;
+    if ('meta' in entryById) {
+      const { meta, ...rest } = entryById;
+      entryById = rest;
+    }
     const data: Partial<IEntry> = { ...entry };
     const editEntryBuilder: EntryBuilder = new EntryBuilder({ ...entryById });
     if (entry.note && entryById.note !== entry.note) {
