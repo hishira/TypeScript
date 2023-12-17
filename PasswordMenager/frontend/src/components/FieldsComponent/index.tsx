@@ -1,3 +1,4 @@
+import { inject, observer } from "mobx-react";
 import { FieldsActionHook } from "../../hooks/actionFields.hook";
 import { ResizeWindowsHandle } from "../../hooks/resize.hook";
 import { Entry } from "../../utils/entry.utils";
@@ -5,18 +6,30 @@ import { PasswordTableComponent } from "../PasswordTable";
 import { Translation } from "../Translation";
 import { FieldsModal } from "./FieldsModal";
 import { Container, DeleteModalContainer } from "./component.styled";
+import { IGeneral } from "../../models/General";
 
 export const DeleteEntryModal = () => (
   <DeleteModalContainer>
     {Translation("deleteentry.question")}
   </DeleteModalContainer>
 );
+const ProperDeletedEntryMessage = {
+  open: true,
+  type: "success",
+  message: "Entry deleted succesfull",
+};
+const ErrorDeletedEntryMessage = {
+  open: true,
+  type: "error",
+  message: "Error occur when entry deleted",
+};
 const FieldsContainer = ({
   selectedgroup,
   refreshgroupentities,
   refreshall,
   passwords,
-}: FieldsComponentType): JSX.Element => {
+  store,
+}: FieldsComponentType & { store?: IGeneral }): JSX.Element => {
   const FieldsAction = FieldsActionHook();
   ResizeWindowsHandle(
     FieldsAction.setSmallModalOpen,
@@ -30,9 +43,13 @@ const FieldsContainer = ({
         if (response.status) {
           refreshgroupentities();
           FieldsAction.setDeleteModalOpen(false);
+          store?.setPopUpinfo(ProperDeletedEntryMessage);
         }
       })
-      .catch((e) => e && console.error(e));
+      .catch((e) => {
+        e && console.error(e);
+        store?.setPopUpinfo(ErrorDeletedEntryMessage);
+      });
   };
   const deletehandle = async (entryid: string): Promise<void> => {
     FieldsAction.setEntryToDelete(entryid);
@@ -72,4 +89,4 @@ const FieldsContainer = ({
   );
 };
 
-export default FieldsContainer;
+export default inject("store")(observer(FieldsContainer));
