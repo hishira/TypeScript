@@ -11,7 +11,10 @@ const PopUpElement = ({ type, message, store }: Props): JSX.Element => {
   const { popUpType, messagePopup, visibility } = PopUpHook(store);
 
   return (
-    <PopupElement type={type ?? "info"} visible={visibility}>
+    <PopupElement
+      type={(popUpType.toLowerCase() as PopupType) ?? "info"}
+      visible={visibility}
+    >
       <PopupHeader>{popUpType}</PopupHeader>
       <PopupContent>{messagePopup}</PopupContent>
     </PopupElement>

@@ -13,7 +13,7 @@ export const PopUpHook = (store?: IGeneral) => {
       setMessagePopup(store.PopUpModelInfo.message);
       setTimeout(
         () => store.setPopUpinfo({ open: false, message: "", type: "" }),
-        1000
+        2000
       );
     } else {
       setVisibility(false);

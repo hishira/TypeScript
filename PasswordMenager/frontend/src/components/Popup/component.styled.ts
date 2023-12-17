@@ -1,7 +1,18 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
+const Animation = keyframes`
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+`;
 export const PopupElement = styled.div<PopUpElementProps>`
   display: ${(props) => (props.visible ? "flex" : "none")};
+  opacity: ${(props) => (props.visible ? "1" : "0")};
+  transition: opacity .5 ease-in-out;
+  animation: ${Animation} .5s ease-in-out;
   flex-direction: column;
   padding: 1.5rem;
   position: fixed;

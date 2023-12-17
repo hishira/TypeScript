@@ -1,3 +1,4 @@
+import { inject, observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
 import { GroupEffect } from "../../hooks/groups.hook";
@@ -10,6 +11,7 @@ import { HideIcon } from "../icons/HideIcon";
 import { ShowIcon } from "../icons/ShowIcon";
 import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 import { GroupSelection } from "./GroupSelection";
+import { PasswordGeneratorOption } from "./PasswordGenerationOption";
 import {
   ButtonsRangeContainer,
   EntryModalComponent,
@@ -19,7 +21,6 @@ import {
 } from "./component.styled";
 import { checkBoxHandler } from "./new-entry.utils";
 import { NewEntryProps, PasswordCharactersTypes } from "./types";
-import { PasswordGeneratorOption } from "./PasswordGenerationOption";
 
 const NewEntryComponent = ({
   edit,
@@ -27,6 +28,7 @@ const NewEntryComponent = ({
   refreshentry,
   refresh,
   closeModalDispatcherHandle,
+  store,
 }: NewEntryProps): JSX.Element => {
   const [passlen, setPasslen] = useState<number>(6);
   const [generatePasswordModal, setGeneratePasswordModal] =
@@ -88,9 +90,21 @@ const NewEntryComponent = ({
       .then((responsenewentry) => {
         if (responsenewentry.status) {
           editEntry.clearInputData();
+          store?.setPopUpinfo({
+            open: true,
+            type: "success",
+            message: "Entry successfull created",
+          });
         }
       })
-      .catch(console.error);
+      .catch((e) => {
+        console.error(e);
+        store?.setPopUpinfo({
+          open: true,
+          type: "error",
+          message: "Error occur while entry create",
+        });
+      });
   };
 
   const getRechangeObject = (): EditEntry => {
@@ -114,9 +128,21 @@ const NewEntryComponent = ({
           if (response.status) {
             closeModalDispatcherHandle?.(false);
             if (refresh !== undefined) refresh();
+            store?.setPopUpinfo({
+              open: true,
+              type: "success",
+              message: "Entry successfull updated",
+            });
           }
         })
-        .catch((e) => e && console.error(e));
+        .catch((e) => {
+          e && console.error(e);
+          store?.setPopUpinfo({
+            open: true,
+            type: "error",
+            message: "Error occur while entry update",
+          });
+        });
     }
   };
 
@@ -223,4 +249,4 @@ const NewEntryComponent = ({
     ></Loading>
   );
 };
-export default NewEntryComponent;
+export default inject("store")(observer(NewEntryComponent));

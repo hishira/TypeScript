@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { IGeneral } from "../../models/General";
 import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 
 export type PasswordGenerateInformation = {
@@ -22,6 +23,7 @@ export type NewEntryProps = {
   refreshentry: boolean;
   refresh?: Function;
   closeModalDispatcherHandle?: Dispatch<SetStateAction<boolean>>;
+  store?: IGeneral;
 };
 
 export type GroupSelectionProps = {
