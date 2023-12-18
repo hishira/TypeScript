@@ -21,6 +21,7 @@ import {
 } from "./component.styled";
 import { checkBoxHandler } from "./new-entry.utils";
 import { NewEntryProps, PasswordCharactersTypes } from "./types";
+import { ErrorPopUpObject, SuccessPopUpObject } from "../../utils/popup.utils";
 
 const NewEntryComponent = ({
   edit,
@@ -50,7 +51,11 @@ const NewEntryComponent = ({
     passwordExpiredDate: "",
   });
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-
+  const successCreate = TranslationFunction("entry.createToast.success");
+  const errorCreate = TranslationFunction("entry.createToast.error");
+  const successEdit = TranslationFunction("entry.editToast.success");
+  const errorEdit = TranslationFunction("entry.editToast.error");
+  
   const passwordVisibleFunc = (ps: boolean) => {
     setPasswordVisible(ps);
     checkBoxHandler({ target: { checked: ps } });
@@ -90,20 +95,16 @@ const NewEntryComponent = ({
       .then((responsenewentry) => {
         if (responsenewentry.status) {
           editEntry.clearInputData();
-          store?.setPopUpinfo({
-            open: true,
-            type: "success",
-            message: "Entry successfull created",
-          });
+          store?.setPopUpinfo(
+            SuccessPopUpObject(successCreate)
+          );
         }
       })
       .catch((e) => {
         console.error(e);
-        store?.setPopUpinfo({
-          open: true,
-          type: "error",
-          message: "Error occur while entry create",
-        });
+        store?.setPopUpinfo(
+          ErrorPopUpObject(errorCreate)
+        );
       });
   };
 
@@ -128,20 +129,16 @@ const NewEntryComponent = ({
           if (response.status) {
             closeModalDispatcherHandle?.(false);
             if (refresh !== undefined) refresh();
-            store?.setPopUpinfo({
-              open: true,
-              type: "success",
-              message: "Entry successfull updated",
-            });
+            store?.setPopUpinfo(
+              SuccessPopUpObject(successEdit)
+            );
           }
         })
         .catch((e) => {
           e && console.error(e);
-          store?.setPopUpinfo({
-            open: true,
-            type: "error",
-            message: "Error occur while entry update",
-          });
+          store?.setPopUpinfo(
+            ErrorPopUpObject(errorEdit)
+          );
         });
     }
   };
