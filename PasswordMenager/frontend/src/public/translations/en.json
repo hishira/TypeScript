@@ -100,5 +100,14 @@
     "editusermodal.importpassword.infomodal.button.save": "Save",
     "searchinput.searchByTitle":"Search by title",
     "entry.noTitle": "No title provided",
-    "newentry.title": " Create new entry"
+    "newentry.title": " Create new entry",
+    "entry.createToast.success":"Entry successfull created",
+    "entry.createToast.error":"Error occur while entry create",
+    "entry.editToast.success":"Entry updated successfull",
+    "entry.editToast.error":"Error occur while entry update",
+    "group.createToast.success": "Group created successfull",
+    "group.createToast.error": "Error occur while creating group",
+    "group.editToast.success": "Group edit successfull",
+    "group.editToast.error": "Error occur while editing group"
+
 }

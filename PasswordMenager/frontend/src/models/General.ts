@@ -12,7 +12,7 @@ export enum View {
   Table = "Table",
   Card = "Card",
 }
-type PopUpStoreType = {
+export type PopUpStoreType = {
   type: string;
   message: string;
   open: boolean;

@@ -1,14 +1,17 @@
+import { inject, observer } from "mobx-react";
 import React, { useState } from "react";
 import { ActionGroupHooks } from "../../hooks/actionGroups.hook";
 import { GroupEffect } from "../../hooks/groups.hook";
+import { IGeneral } from "../../models/General";
 import { Group } from "../../utils/group.utils";
+import { ErrorPopUpObject, SuccessPopUpObject } from "../../utils/popup.utils";
 import IconButton from "../IconButton";
+import { Translation, TranslationFunction } from "../Translation";
 import { PlusComponent } from "../icons/PlusIcon";
 import { GroupsModal } from "./GroupModals";
 import { GroupsComponent } from "./Groups";
 import NewGroupComponent from "./NewGroupComponent";
 import { ButtonContainer, Category, Container } from "./component.styled";
-import { Translation } from "../Translation";
 
 type NewGroupComponentProps = {
   setgroupdto: React.Dispatch<React.SetStateAction<CreateGroup>>;
@@ -28,14 +31,26 @@ const NewGroupComponenet = ({
     isButtonDisabled={groupdto.name === ""}
   />
 );
-const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
+const GroupComponent = ({
+  selectgrouphandle,
+  store,
+}: GroupComponentProps & { store?: IGeneral }) => {
   const [groupdto, setgroupdto] = useState<CreateGroup>({ name: "" });
   const [refetch, setRefetch] = useState(false);
   const groupAction = ActionGroupHooks();
 
   const groups = GroupEffect(refetch);
   const [selectedgroup, setselectedgroup] = useState<string>("");
-
+  const successCreateGroupMessage = TranslationFunction(
+    "group.createToast.success"
+  );
+  const errorCreateGroupMessage = TranslationFunction(
+    "group.createToast.error"
+  );
+  const successEditGroupMessage = TranslationFunction(
+    "group.editToast.success"
+  );
+  const errorEditGroupMessage = TranslationFunction("group.editToast.error");
   //TODO fix
 
   const buttonHandleClick = async (): Promise<void> => {
@@ -45,8 +60,11 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
         setRefetch(!refetch);
         groupAction.setCreateModal(false);
         setgroupdto({ name: "" });
+        store?.setPopUpinfo(SuccessPopUpObject(successCreateGroupMessage));
       })
-      .catch((_) => {});
+      .catch((_) => {
+        store?.setPopUpinfo(ErrorPopUpObject(errorCreateGroupMessage));
+      });
   };
 
   const deleteClickHandle = () => {
@@ -82,8 +100,12 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
       .then((response) => {
         setRefetch(!refetch);
         groupAction.setEditModal(false);
+        store?.setPopUpinfo(SuccessPopUpObject(successEditGroupMessage));
       })
-      .catch((e) => e && console.error(e));
+      .catch((e) => {
+        e && console.error(e);
+        store?.setPopUpinfo(ErrorPopUpObject(errorEditGroupMessage));
+      });
   };
   const closeHandle = (): void => groupAction.setCreateModal(false);
   return (
@@ -117,4 +139,4 @@ const GroupComponent = ({ selectgrouphandle }: GroupComponentProps) => {
   );
 };
 
-export default GroupComponent;
+export default inject("store")(observer(GroupComponent));

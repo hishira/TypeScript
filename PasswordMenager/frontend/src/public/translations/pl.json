@@ -90,5 +90,9 @@
     "userinformation.edit.password.label": "Hasło",
     "searchinput.searchByTitle":"Szukaj po tytule",
     "entry.noTitle": "Nie wprowadzono tytułu",
-    "newentry.title": " Dodaj nowe hasło"
+    "newentry.title": " Dodaj nowe hasło",
+    "entry.createToast.success":"Utworzono pomyślnie nowe pole",
+    "entry.createToast.error":"Wystąpił błąd podczas dodawania nowego hasła",
+    "entry.editToast.success":"Pomyślnie edytowano pole",
+    "entry.editToast.error":"Wystąpił błąd podczas edycji pola"
 }
