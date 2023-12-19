@@ -25,11 +25,12 @@ export const TableRow = styled.tr`
 `;
 
 export const TableComponent = styled.td<TableComponentProps>`
-  text-align: center;
+  text-align: ${({ align }) => (align ? align : "center")};
   max-width: 20% !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-left: ${({ align }) => (align ? "24px" : "none")};
   ${(props) => props.password && "cursor: pointer"}
 `;
 export const TableButton = styled(Button)`

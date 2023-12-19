@@ -108,6 +108,8 @@
     "group.createToast.success": "Group created successfull",
     "group.createToast.error": "Error occur while creating group",
     "group.editToast.success": "Group edit successfull",
-    "group.editToast.error": "Error occur while editing group"
+    "group.editToast.error": "Error occur while editing group",
+    "group.deleteToast.success": "Group deleted successfull",
+    "group.deleteToast.error": "Error occur while deleting group"
 
 }

@@ -22,7 +22,7 @@ export const AcceptModalComponent = ({
   extend,
 }: AcceptanceModalPrope): JSX.Element => {
   EscapeModalHandle(onClose);
-  console.log(extend);
+
   return (
     <Modal onClick={(e) => clickOnModal(e, onClose)} visible={visible}>
       <div className="hook">

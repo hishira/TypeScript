@@ -1,5 +1,6 @@
 import Button from "../../Button";
 import FormElement from "../../FormElement";
+import { TitleContainer } from "../../NewEntryComponent/component.styled";
 import { Translation } from "../../Translation";
 import { NewGroup } from "./component.styled";
 
@@ -15,6 +16,7 @@ const NewGroupComponent = ({
 }: ModalComponentProps): JSX.Element => {
   return (
     <NewGroup>
+      <TitleContainer>Add new group</TitleContainer>
       <FormElement
         label="groups.newgroup.groupname"
         inputtype="text"

@@ -1,22 +1,21 @@
+import { Dispatch, SetStateAction } from "react";
 import { ActionGroup } from "../../../hooks/actionGroups.hook";
 
 export type GroupModalProps = {
   actionGroup: ActionGroup;
   newGroupCloseHandle: () => void;
-  newGroupComponent: JSX.Element;
-  deleteHandle: () => void;
-  editHandle: (groupName: string) => void;
+  setRefetch: Dispatch<SetStateAction<boolean>>;
 };
 export type CreateModalType = {
   actionGroup: ActionGroup;
   newGroupCloseHandle: () => void;
-  newGroupComponent: JSX.Element;
+  setRefetch: Dispatch<SetStateAction<boolean>>;
 };
 export type DeleteModalType = {
   actionGroup: ActionGroup;
-  deleteHandle: () => void;
+  setRefetch: Dispatch<SetStateAction<boolean>>;
 };
 export type EditModalType = {
   actionGroup: ActionGroup;
-  editHandle: (value: string) => void;
+  setRefetch: Dispatch<SetStateAction<boolean>>;
 };
