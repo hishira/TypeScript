@@ -6,8 +6,10 @@ export const Container = styled.section`
   justify-content: space-between;
   width: 25%;
   border-right: 0.1rem solid lightgray;
+  padding-right: 1rem;
   @media (max-width: 1200px){
     width: 35%;
+    padding-right: 1.25rem;
   }
   @media (max-width: 950px) {
     width: 100%;

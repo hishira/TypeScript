@@ -1,8 +1,10 @@
+import { TitleContainer } from "../../../../../NewEntryComponent/component.styled";
 import { TranslationFunction } from "../../../../../Translation";
-import { AcceptModalContainer } from "../../../component.styled";
+import { AcceptModalContainer, ModalText } from "../../../component.styled";
 
 export const AcceptDeleteModal = () => (
     <AcceptModalContainer>
-      {TranslationFunction("group.action.delete")}
+      <TitleContainer>Delete group</TitleContainer>
+      <ModalText>{TranslationFunction("group.action.delete")}</ModalText>
     </AcceptModalContainer>
   );

@@ -84,6 +84,7 @@ type GetEntriesResponse = {
 
 type TableComponentProps = {
   password?: boolean;
+  align?: 'right' | 'center' | 'left';
 };
 
 type DeleteEntryResponse = {

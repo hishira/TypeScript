@@ -1,4 +1,4 @@
-import styled, {keyframes} from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const iconOpenAnimation = keyframes`
   from{
@@ -7,7 +7,7 @@ const iconOpenAnimation = keyframes`
   to{
     right: 0;
   }
-`
+`;
 export const Groups = styled.div`
   height: 100%;
   max-height: 100%;
@@ -30,6 +30,11 @@ export const GroupContainer = styled.div<{ isSelected: boolean }>`
   &:not(&:first-child) {
     margin-top: 0.8rem;
   }
+  color: ${({ isSelected }) => (isSelected ? "black" : "slategrey")};
+  &:hover {
+    cursor: ${({ isSelected }) => (!isSelected ? "pointer" : "default")};
+    font-weight: ${({ isSelected }) => (!isSelected ? 550 : "normal")};
+  }
 `;
 export const GroupsIcon = styled.div`
   justify-content: space-between;
@@ -39,7 +44,7 @@ export const GroupsIcon = styled.div`
   top: 0;
   right: -500%;
   z-index: 2000;
-  animation: ${iconOpenAnimation} .4s linear forwards;
+  animation: ${iconOpenAnimation} 0.4s linear forwards;
   & > svg[role="edit"],
   svg[role="delete"] {
     cursor: pointer;
@@ -69,10 +74,4 @@ export const GroupOption = styled.div`
     }
   }
 `;
-export const GroupName = styled.div<{ isSelected: boolean }>`
-  color: ${({ isSelected }) => (isSelected ? "black" : "slategrey")};
-  &:hover {
-    cursor: ${({ isSelected }) => (!isSelected ? "pointer" : "default")};
-    font-weight: ${({ isSelected }) => (!isSelected ? 550 : "normal")};
-  }
-`;
+export const GroupName = styled.div``;

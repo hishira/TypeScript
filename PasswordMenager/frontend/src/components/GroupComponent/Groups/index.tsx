@@ -34,7 +34,7 @@ const getMappedGroup = (
     <GroupContainer key={group._id} isSelected={selectedgroup === group._id}>
       <GroupName
         onClick={() => ongroupclick(group)}
-        isSelected={selectedgroup === group._id}
+  
       >
         {group.name}
       </GroupName>

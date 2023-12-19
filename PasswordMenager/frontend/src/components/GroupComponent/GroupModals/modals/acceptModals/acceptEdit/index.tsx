@@ -1,4 +1,5 @@
 import FormElement from "../../../../../FormElement";
+import { TitleContainer } from "../../../../../NewEntryComponent/component.styled";
 import { AcceptModalContainer } from "../../../component.styled";
 
 type AceptEditModalProps = {
@@ -11,6 +12,7 @@ export const AcceptEditModal = ({
 }: AceptEditModalProps) => {
   return (
     <AcceptModalContainer>
+      <TitleContainer>Edit group</TitleContainer>
       <FormElement
         label={"groups.groupsmodal.newgroupname"}
         inputplaceholder="groups.groupsmodal.newgroupname"
