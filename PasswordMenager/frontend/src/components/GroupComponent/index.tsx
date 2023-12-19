@@ -51,6 +51,12 @@ const GroupComponent = ({
     "group.editToast.success"
   );
   const errorEditGroupMessage = TranslationFunction("group.editToast.error");
+  const successDeleteGroupMessage = TranslationFunction(
+    "group.deleteToast.success"
+  );
+  const errorDeleteGroupMessage = TranslationFunction(
+    "group.deleteToast.error"
+  );
   //TODO fix
 
   const buttonHandleClick = async (): Promise<void> => {
@@ -73,8 +79,12 @@ const GroupComponent = ({
       .then((response) => {
         setRefetch(!refetch);
         groupAction.setDeleteModal(false);
+        store?.setPopUpinfo(SuccessPopUpObject(successDeleteGroupMessage));
       })
-      .catch((e) => groupAction.setDeleteModal(false));
+      .catch((e) => {
+        store?.setPopUpinfo(ErrorPopUpObject(errorDeleteGroupMessage));
+        groupAction.setDeleteModal(false);
+      });
   };
 
   const ongroupclick: Function = (group: IGroup): void => {
