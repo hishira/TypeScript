@@ -29,8 +29,6 @@ const AccountInfo = () => {
     });
   }, []);
 
-  const setMainContent = (contentType: ContentType) =>
-    setMainContentView(contentType);
 
   return (
     <Loading
@@ -40,19 +38,19 @@ const AccountInfo = () => {
           <UserView user={userinfo}></UserView> <Devider />
           <AccountInfoHeader>
             <HeaderButton
-              onClick={() => setMainContent("Notification")}
+              onClick={() => setMainContentView("Notification")}
               active={mainContentView === "Notification"}
             >
               {Translation("account.view.accountInfo.notification")}
             </HeaderButton>
             <HeaderButton
-              onClick={() => setMainContent("ImportRequest")}
+              onClick={() => setMainContentView("ImportRequest")}
               active={mainContentView === "ImportRequest"}
             >
               {Translation("account.view.accountInfo.importRequest")}
             </HeaderButton>
             <HeaderButton
-              onClick={() => setMainContent("Last")}
+              onClick={() => setMainContentView("Last")}
               active={mainContentView === "Last"}
             >
               {Translation("account.view.accountInfo.lastDeleted")}

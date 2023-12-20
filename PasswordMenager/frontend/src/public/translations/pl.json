@@ -94,5 +94,11 @@
     "entry.createToast.success":"Utworzono pomyślnie nowe pole",
     "entry.createToast.error":"Wystąpił błąd podczas dodawania nowego hasła",
     "entry.editToast.success":"Pomyślnie edytowano pole",
-    "entry.editToast.error":"Wystąpił błąd podczas edycji pola"
+    "entry.editToast.error":"Wystąpił błąd podczas edycji pola",
+    "group.createToast.success": "Groupa stworzona pomyślnie",
+    "group.createToast.error": "Występił błąd podczas tworzenia grupy",
+    "group.editToast.success": "Grupa edytowana pomyślnie",
+    "group.editToast.error": "Wystąpił błąd podczas edycji grupy",
+    "group.deleteToast.success": "Usunięto grupe pomyślnie",
+    "group.deleteToast.error": "Występił błąd podczas usuwania grupy"
 }

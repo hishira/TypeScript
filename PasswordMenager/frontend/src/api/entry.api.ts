@@ -12,7 +12,7 @@ export class EntryApi extends Api {
   }
 
   CreateNewEntry(newentry: CreateEntryDto, token: string): Promise<Response> {
-    const url = this.getUrl("entry");
+    const url = this.getUrl("entry/create");
     return fetch(url, this.fetchPostObjectWithToken(newentry, token));
   }
 

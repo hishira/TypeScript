@@ -55,7 +55,7 @@ const NewEntryComponent = ({
   const errorCreate = TranslationFunction("entry.createToast.error");
   const successEdit = TranslationFunction("entry.editToast.success");
   const errorEdit = TranslationFunction("entry.editToast.error");
-  
+
   const passwordVisibleFunc = (ps: boolean) => {
     setPasswordVisible(ps);
     checkBoxHandler({ target: { checked: ps } });
@@ -95,16 +95,14 @@ const NewEntryComponent = ({
       .then((responsenewentry) => {
         if (responsenewentry.status) {
           editEntry.clearInputData();
-          store?.setPopUpinfo(
-            SuccessPopUpObject(successCreate)
-          );
+          store?.setPopUpinfo(SuccessPopUpObject(successCreate));
+        } else {
+          store?.setPopUpinfo(ErrorPopUpObject(errorCreate));
         }
       })
       .catch((e) => {
         console.error(e);
-        store?.setPopUpinfo(
-          ErrorPopUpObject(errorCreate)
-        );
+        store?.setPopUpinfo(ErrorPopUpObject(errorCreate));
       });
   };
 
@@ -129,16 +127,14 @@ const NewEntryComponent = ({
           if (response.status) {
             closeModalDispatcherHandle?.(false);
             if (refresh !== undefined) refresh();
-            store?.setPopUpinfo(
-              SuccessPopUpObject(successEdit)
-            );
+            store?.setPopUpinfo(SuccessPopUpObject(successEdit));
+          } else {
+            store?.setPopUpinfo(ErrorPopUpObject(errorEdit));
           }
         })
         .catch((e) => {
           e && console.error(e);
-          store?.setPopUpinfo(
-            ErrorPopUpObject(errorEdit)
-          );
+          store?.setPopUpinfo(ErrorPopUpObject(errorEdit));
         });
     }
   };
