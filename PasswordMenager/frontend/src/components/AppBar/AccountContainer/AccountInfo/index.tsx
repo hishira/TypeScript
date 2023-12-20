@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { AccountInfoEffect } from "../../../../hooks/accountInfo.hook";
+import { Loading } from "../../../Loading";
+import { Translation } from "../../../Translation";
 import { ContentType, GetCurrentView } from "./AccountInfoView";
+import { UserView } from "./UserView";
 import {
   AccountInfoContainer,
   AccountInfoContent,
@@ -7,28 +11,12 @@ import {
   Devider,
   HeaderButton,
 } from "./component.styled";
-import { GetAccountInfoPromise } from "./utils";
-import { UserView } from "./UserView";
-import { Translation } from "../../../Translation";
-import { Loading } from "../../../Loading";
 
 const AccountInfo = () => {
-  const [userinfo, setUserInfo] = useState<IUser>();
-  const [importRequests, setImportRequests] = useState<any[]>([]);
-  const [notification, setNotification] = useState<any[]>([]);
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
-  const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    GetAccountInfoPromise().then((values) => {
-      const [importsInfo, user, activeNotifications] = values;
-      setUserInfo(user);
-      setImportRequests(importsInfo);
-      setNotification(activeNotifications);
-      setLoading(false);
-    });
-  }, []);
-
+  const { userinfo, importRequests, notification, loading } =
+    AccountInfoEffect();
 
   return (
     <Loading
@@ -58,7 +46,12 @@ const AccountInfo = () => {
           </AccountInfoHeader>
           <Devider />
           <AccountInfoContent>
-            {GetCurrentView(mainContentView, importRequests, notification)}
+            {GetCurrentView(
+              mainContentView,
+              importRequests,
+              notification,
+             
+            )}
           </AccountInfoContent>
         </AccountInfoContainer>
       }
