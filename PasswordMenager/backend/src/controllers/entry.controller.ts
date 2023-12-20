@@ -27,9 +27,7 @@ export class EntryContoller {
   constructor(private readonly entryService: EntryService) {}
 
   @UseGuards(AuthGuard('accessToken'))
-  @UseFilters(new GroupNotExistsFilter())
-  @UseGuards(GroupGuard)
-  @Post()
+  @Post('/create')
   async create(
     @Body(new ValidationPipe({ transform: true })) neweentry: CreateEntryDto,
     @Request() req,
