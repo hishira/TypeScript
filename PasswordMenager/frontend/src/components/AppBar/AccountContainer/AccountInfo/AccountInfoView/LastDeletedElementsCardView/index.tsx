@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Elements,
   LastDeletedElement,
@@ -12,16 +12,19 @@ import { Translation } from "../../../../../Translation";
 
 export const LastDeletedElementsCardView = () => {
   const [lastDeletedEntries, setLastDeletedEntries] = useState<IEntry[]>([]);
+  const [refetch, setRefetch] = useState<boolean>(false);
   useEffect(() => {
     Entry.getInstance()
       .getLastDeletedEntries()
       .then((entries: EntryData) => {
         setLastDeletedEntries(entries?.data ?? []);
       });
-  }, []);
+  }, [refetch]);
 
   const restoreEntry = (entryId: string) => {
-    Entry.getInstance().restoreEntry({ entryId });
+    Entry.getInstance()
+      .restoreEntry({ entryId })
+      .then((_) => setRefetch((a) => !a));
   };
   return (
     <LastDeletedElements>
