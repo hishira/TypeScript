@@ -110,6 +110,13 @@
     "group.editToast.success": "Group edit successfull",
     "group.editToast.error": "Error occur while editing group",
     "group.deleteToast.success": "Group deleted successfull",
-    "group.deleteToast.error": "Error occur while deleting group"
+    "group.deleteToast.error": "Error occur while deleting group",
+    "accountview.entry.restore.success": "Entry restore successfull",
+    "accountview.entry.restore.error": "Error occur while restoring entries",
+    "group.newgroup.modal.title": "Add new group",
+    "group.deletegroup.modal.title": "Delete group",
+    "group.editgroup.modal.title": "Edit group",
+    "edit.title": " Edit entry",
+    "delete.entry.modal.title": "Delete entry"
 
 }

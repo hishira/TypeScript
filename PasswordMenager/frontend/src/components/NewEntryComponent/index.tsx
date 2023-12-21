@@ -145,7 +145,7 @@ const NewEntryComponent = ({
       ComponentToLoad={
         <EntryModalComponent disabled={generatePasswordModal}>
           <TitleContainer>
-            {TranslationFunction("newentry.title")}
+            {TranslationFunction(edit ? "edit.title" : "newentry.title")}
           </TitleContainer>
           <FormElement
             label={"newentry.field.title"}

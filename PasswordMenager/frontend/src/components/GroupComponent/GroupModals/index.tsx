@@ -1,6 +1,6 @@
 import CreateModal from "./modals/createModal";
 import DeleteModal from "./modals/deleteModal";
-import { EditModal } from "./modals/editModal";
+import EditModal from "./modals/editModal";
 import { GroupModalProps } from "./types";
 
 export const GroupsModal = ({

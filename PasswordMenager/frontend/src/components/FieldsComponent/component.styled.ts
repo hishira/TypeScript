@@ -39,4 +39,9 @@ export const MinButton = styled(TableButton)`
 
 export const DeleteModalContainer = styled.div`
   padding: 2rem;
+  min-width: 20rem;
+`
+
+export const DeleteModalContent = styled.div`
+  margin-top: 24px;
 `
