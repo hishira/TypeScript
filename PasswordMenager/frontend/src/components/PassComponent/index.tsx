@@ -54,12 +54,12 @@ const PasswordsMainComponent = ({
   paginator,
   paginatorChange,
   filterValuesChange,
-  titleSearchEntry
+  titleSearchEntry,
 }: any) => {
   const searchChangeValue = (val: string) => {
     filterValuesChange(val);
   };
-  return entries.length > 0 || titleSearchEntry !== '' ? (
+  return entries.length > 0 || titleSearchEntry !== "" ? (
     <Entries>
       <FieldSearchInput
         onSearchFieldChange={searchChangeValue}
@@ -90,7 +90,9 @@ const PassComponent = ({ store }: PassComponentProps) => {
   const [selectedgroupid, setSelectedgroupid] = useState<string>("");
   const [tiltEntry, setTiltEntry] = useState<string>("");
   const [entitiesrefresh, setEntitiesrefresh] = useState<boolean>(false);
-  const [sendPaginator, setSendPaginator] = useState<EntryPaginator>({ page: 0 });
+  const [sendPaginator, setSendPaginator] = useState<EntryPaginator>({
+    page: 0,
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const { entries, paginator } = PasswordEntries(
     selectedgroupid,
@@ -101,11 +103,13 @@ const PassComponent = ({ store }: PassComponentProps) => {
   );
   const selectgrouphandle = (groupid: string) => {
     setSelectedgroupid(groupid);
-    setSendPaginator({page: 0})
+    setSendPaginator({ page: 0 });
   };
   const refreshentities = (): void => {
     setSelectedgroupid(selectedgroupid);
-    setEntitiesrefresh(!entitiesrefresh);
+    setSendPaginator({ page: 0 });
+    setTiltEntry("");
+    setEntitiesrefresh((a) => !a);
   };
 
   const paginatorChange = (paginator: EntryPaginator): void => {

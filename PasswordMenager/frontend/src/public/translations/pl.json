@@ -100,5 +100,12 @@
     "group.editToast.success": "Grupa edytowana pomyślnie",
     "group.editToast.error": "Wystąpił błąd podczas edycji grupy",
     "group.deleteToast.success": "Usunięto grupe pomyślnie",
-    "group.deleteToast.error": "Występił błąd podczas usuwania grupy"
+    "group.deleteToast.error": "Występił błąd podczas usuwania grupy",
+    "accountview.entry.restore.success": "Odzyskano poprawnie",
+    "accountview.entry.restore.error": "Wystąpił błąd podczas odzyskiwania",
+    "group.newgroup.modal.title": "Dodaj nową grupę",
+    "group.deletegroup.modal.title": "Usuń grupę",
+    "group.editgroup.modal.title": "Edytuj grupe",
+    "edit.title": " Edytuj encję",
+    "delete.entry.modal.title": "Usuń encję"
 }

@@ -4,7 +4,7 @@ import { AcceptModalContainer, ModalText } from "../../../component.styled";
 
 export const AcceptDeleteModal = () => (
     <AcceptModalContainer>
-      <TitleContainer>Delete group</TitleContainer>
+      <TitleContainer>{TranslationFunction('group.deletegroup.modal.title')}</TitleContainer>
       <ModalText>{TranslationFunction("group.action.delete")}</ModalText>
     </AcceptModalContainer>
   );

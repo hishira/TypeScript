@@ -1,16 +1,24 @@
 import { inject, observer } from "mobx-react";
 import { FieldsActionHook } from "../../hooks/actionFields.hook";
 import { ResizeWindowsHandle } from "../../hooks/resize.hook";
+import { IGeneral } from "../../models/General";
 import { Entry } from "../../utils/entry.utils";
+import { TitleContainer } from "../NewEntryComponent/component.styled";
 import { PasswordTableComponent } from "../PasswordTable";
 import { Translation } from "../Translation";
 import { FieldsModal } from "./FieldsModal";
-import { Container, DeleteModalContainer } from "./component.styled";
-import { IGeneral } from "../../models/General";
+import {
+  Container,
+  DeleteModalContainer,
+  DeleteModalContent,
+} from "./component.styled";
 
 export const DeleteEntryModal = () => (
   <DeleteModalContainer>
-    {Translation("deleteentry.question")}
+    <TitleContainer>{Translation("delete.entry.modal.title")}</TitleContainer>
+    <DeleteModalContent>
+      {Translation("deleteentry.question")}
+    </DeleteModalContent>
   </DeleteModalContainer>
 );
 const ProperDeletedEntryMessage = {

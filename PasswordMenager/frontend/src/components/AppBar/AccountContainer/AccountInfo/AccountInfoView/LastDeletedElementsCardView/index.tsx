@@ -1,4 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Entry } from "../../../../../../utils/entry.utils";
+import { Translation } from "../../../../../Translation";
+import LastDeletedMappedEntries from "./LastDeletedMappedEntries";
 import {
   Elements,
   LastDeletedElement,
@@ -6,9 +9,6 @@ import {
   LastDeletedEntryInfo,
   LastDeletedTitle,
 } from "./component.styled";
-import { Entry } from "../../../../../../utils/entry.utils";
-import Button from "../../../../../Button";
-import { Translation } from "../../../../../Translation";
 
 export const LastDeletedElementsCardView = () => {
   const [lastDeletedEntries, setLastDeletedEntries] = useState<IEntry[]>([]);
@@ -21,11 +21,6 @@ export const LastDeletedElementsCardView = () => {
       });
   }, [refetch]);
 
-  const restoreEntry = (entryId: string) => {
-    Entry.getInstance()
-      .restoreEntry({ entryId })
-      .then((_) => setRefetch((a) => !a));
-  };
   return (
     <LastDeletedElements>
       <LastDeletedTitle>
@@ -50,24 +45,10 @@ export const LastDeletedElementsCardView = () => {
             </div>
           </LastDeletedEntryInfo>
         </LastDeletedElement>
-        {lastDeletedEntries.map((entry) => (
-          <LastDeletedElement key={entry._id}>
-            <LastDeletedEntryInfo>
-              <div>{entry.title}</div>
-              <div>{entry.username}</div>
-              <div>{entry.url}</div>
-            </LastDeletedEntryInfo>
-            <Button
-              outline="without"
-              size="small"
-              onClick={() => restoreEntry(entry._id)}
-            >
-              {Translation(
-                "account.view.lastDeletedEntries.table.actionButton"
-              )}
-            </Button>
-          </LastDeletedElement>
-        ))}
+        <LastDeletedMappedEntries
+          setRefetch={setRefetch}
+          entries={lastDeletedEntries}
+        />
       </Elements>
     </LastDeletedElements>
   );

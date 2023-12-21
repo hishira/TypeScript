@@ -1,3 +1,4 @@
+import { inject, observer } from "mobx-react";
 import { useState } from "react";
 import { IGeneral } from "../../../../../models/General";
 import { Group } from "../../../../../utils/group.utils";
@@ -10,7 +11,7 @@ import { TranslationFunction } from "../../../../Translation";
 import { EditModalType } from "../../types";
 import { AcceptEditModal } from "../acceptModals/acceptEdit";
 
-export const EditModal = ({
+const EditModal = ({
   actionGroup,
   store,
   setRefetch,
@@ -53,3 +54,5 @@ export const EditModal = ({
     />
   ) : null;
 };
+
+export default inject("store")(observer(EditModal));
