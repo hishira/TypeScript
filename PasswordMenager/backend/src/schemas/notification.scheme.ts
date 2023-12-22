@@ -7,6 +7,7 @@ const NotificationSchema = new Schema<INotification>({
   entryId: {
     type: Schema.Types.ObjectId,
     default: null,
+    ref: 'Entry',
   },
   notificationDate: {
     type: Date,
