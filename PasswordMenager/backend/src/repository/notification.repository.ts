@@ -23,7 +23,10 @@ export class NotificationRepository implements Repository<INotification> {
   }
 
   find(option: FilterOption<unknown>): Promise<INotification[]> {
-    return this.notificationModel.find(option.getOption()).exec();
+    return this.notificationModel
+      .find(option.getOption())
+      .populate('entryId')
+      .exec();
   }
 
   findById(id: string): Promise<INotification> {
