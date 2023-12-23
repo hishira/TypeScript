@@ -13,13 +13,21 @@ export const NotificationElement = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
 `;
 
 export const NotificationSubElement = styled.div`
-    text-align: start;
-    width: 33%;
-    &:not(:first-of-type){
-        text-align: center;
+  text-align: start;
+  width: 33%;
+  &:not(:first-of-type) {
+    text-align: center;
+  }
+  &:last-of-type {
+    width: 20%;
+    & > svg{
+      cursor: pointer;
     }
+    & > svg:last-of-type {
+      margin-left: 16px;
+    }
+  }
 `;

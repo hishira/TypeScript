@@ -4,8 +4,6 @@ import FormElement from "../FormElement/";
 import { Form, FormTitle, Link } from "./component.styled";
 import { Translation } from "../Translation";
 
-// TODO: Refactor
-
 interface Props {
   buttonmessage: string;
   buttonHandle: (e: React.MouseEvent<HTMLElement>) => void;
