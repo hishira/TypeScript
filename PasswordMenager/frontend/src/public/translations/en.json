@@ -117,6 +117,9 @@
     "group.deletegroup.modal.title": "Delete group",
     "group.editgroup.modal.title": "Edit group",
     "edit.title": " Edit entry",
-    "delete.entry.modal.title": "Delete entry"
+    "delete.entry.modal.title": "Delete entry",
+    "notification.title": "Entry Title",
+    "notification.data": "Notification data",
+    "notification.type": "Notification type"
 
 }

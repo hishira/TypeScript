@@ -107,5 +107,8 @@
     "group.deletegroup.modal.title": "Usuń grupę",
     "group.editgroup.modal.title": "Edytuj grupe",
     "edit.title": " Edytuj encję",
-    "delete.entry.modal.title": "Usuń encję"
+    "delete.entry.modal.title": "Usuń encję",
+    "notification.title": "Tytuł encji",
+    "notification.data": "Data notyfikacji",
+    "notification.type": "Typ notyfikacji"
 }
