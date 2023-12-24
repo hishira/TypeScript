@@ -109,4 +109,8 @@ export class NotificationService implements NotificationCron {
         });
       });
   }
+
+  deleteNotification(notificationId: string) {}
+
+  editNotification(notificationBody) {}
 }
