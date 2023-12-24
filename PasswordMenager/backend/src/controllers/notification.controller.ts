@@ -1,4 +1,14 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Put,
+  Request,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { NotificationService } from 'src/services/notification.service';
 
@@ -11,4 +21,14 @@ export class NotificationController {
   async entiresWithNotifications(@Request() req) {
     return this.notificationService.userNotification(req.user._id);
   }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Delete('/delete/:id')
+  async deleteNotification(@Param('id') notificationId: string) {}
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Put('/edit')
+  async editNotification(
+    @Body(new ValidationPipe({ transform: true })) editnotification,
+  ) {}
 }
