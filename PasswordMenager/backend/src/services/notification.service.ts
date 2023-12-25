@@ -24,6 +24,12 @@ interface NotificationCron {
 export class NotificationService implements NotificationCron {
   private emailSender: EmailSender;
 
+  get activeNotification(): Promise<INotification[]> {
+    return this.queryBus
+      .execute(new GetNotificationQuery({ active: true }))
+      .then((data) => NotificationUtils.GetDataFromPaginator(data));
+  }
+
   constructor(
     private readonly logger: Logger,
     private readonly commandBus: CommandBus,
@@ -91,11 +97,6 @@ export class NotificationService implements NotificationCron {
     return this.emailSender.sendEmail('', '', 'You got message example');
   }
 
-  get activeNotification(): Promise<INotification[]> {
-    return this.queryBus
-      .execute(new GetNotificationQuery({ active: true }))
-      .then((data) => NotificationUtils.GetDataFromPaginator(data));
-  }
   checkAndSendNotification(): Promise<unknown> {
     return this.queryBus
       .execute(new GetNotificationQuery({}))
