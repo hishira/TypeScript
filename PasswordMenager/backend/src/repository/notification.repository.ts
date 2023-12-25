@@ -34,7 +34,9 @@ export class NotificationRepository implements Repository<INotification> {
   }
 
   update(entry: Partial<INotification>): Promise<unknown> {
-    throw new NotImplementedError();
+    return this.notificationModel
+      .updateOne({ _id: entry.id }, { $set: { ...entry } })
+      .exec();
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {
