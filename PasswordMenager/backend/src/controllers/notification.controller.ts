@@ -10,6 +10,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { EditNotificationDTO } from 'src/schemas/dto/editnotification.dto';
 import { NotificationService } from 'src/services/notification.service';
 
 @Controller('notification')
@@ -29,6 +30,7 @@ export class NotificationController {
   @UseGuards(AuthGuard('accessToken'))
   @Put('/edit')
   async editNotification(
-    @Body(new ValidationPipe({ transform: true })) editnotification,
+    @Body(new ValidationPipe({ transform: true }))
+    editnotification: EditNotificationDTO,
   ) {}
 }
