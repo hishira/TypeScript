@@ -84,7 +84,7 @@ type GetEntriesResponse = {
 
 type TableComponentProps = {
   password?: boolean;
-  align?: 'right' | 'center' | 'left';
+  align?: "right" | "center" | "left";
 };
 
 type DeleteEntryResponse = {
@@ -177,3 +177,10 @@ type EntryData = {
 };
 
 type RestoreEntryBody = { entryId: string };
+
+type EditNotification = {
+  _id: string;
+  notficationDate?: string;
+  notificationChannel?: "Account" | "Email" | "Sms";
+  active?: boolean;
+};
