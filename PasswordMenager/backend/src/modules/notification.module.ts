@@ -9,6 +9,8 @@ import { NotificationService } from 'src/services/notification.service';
 import { DatabaseModule } from './database.module';
 import { LoggerModule } from './logger.module';
 import { GetNotificationQueryHandler } from 'src/handlers/queries/notification/getNotificationHandler';
+import { DeleteNotificationCommandHandler } from 'src/handlers/commands/notification/deleteNotificationHandler';
+import { EditNotificationHandler } from 'src/handlers/commands/notification/editNotificationHandler';
 
 @Module({
   imports: [DatabaseModule, LoggerModule, CqrsModule],
@@ -21,6 +23,8 @@ import { GetNotificationQueryHandler } from 'src/handlers/queries/notification/g
     ...notificationProviders,
     CreateNotificationCommandHandler,
     GetNotificationQueryHandler,
+    DeleteNotificationCommandHandler,
+    EditNotificationHandler,
   ],
   controllers: [NotificationController],
   exports: [NotificationService],
