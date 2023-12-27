@@ -25,12 +25,16 @@ export class NotificationController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Delete('/delete/:id')
-  async deleteNotification(@Param('id') notificationId: string) {}
+  async deleteNotification(@Param('id') notificationId: string) {
+    return this.notificationService.deleteNotification(notificationId);
+  }
 
   @UseGuards(AuthGuard('accessToken'))
   @Put('/edit')
   async editNotification(
     @Body(new ValidationPipe({ transform: true }))
     editnotification: EditNotificationDTO,
-  ) {}
+  ) {
+    return this.notificationService.editNotification(editnotification);
+  }
 }

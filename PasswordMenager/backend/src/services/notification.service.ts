@@ -4,6 +4,8 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { CreateNotificationCommand } from 'src/commands/notification/CreateNotificationCommand';
+import { DeleteNotificationCommand } from 'src/commands/notification/DeleteNotificationCommand';
+import { EditNotificationCommand } from 'src/commands/notification/EditNotificationCommand';
 import { CreateNotificationEvent } from 'src/events/createNotificationEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { GetNotificationQuery } from 'src/queries/notification/getNotification.queries';
@@ -13,6 +15,7 @@ import {
   CreateNotificationDTO,
   CreateNotificationEmailDTO,
 } from 'src/schemas/dto/createnotification.dto';
+import { EditNotificationDTO } from 'src/schemas/dto/editnotification.dto';
 import { NotificationUtils } from 'src/schemas/utils/Notification.utils';
 import { Logger } from 'src/utils/Logger';
 import { EmailSender } from 'src/utils/emailTransporter';
@@ -111,7 +114,15 @@ export class NotificationService implements NotificationCron {
       });
   }
 
-  deleteNotification(notificationId: string) {}
+  deleteNotification(notificationId: string) {
+    return this.commandBus.execute(
+      new DeleteNotificationCommand({ _id: notificationId }),
+    );
+  }
 
-  editNotification(notificationBody) {}
+  editNotification(notificationBody: EditNotificationDTO) {
+    return this.commandBus.execute(
+      new EditNotificationCommand({ ...notificationBody }),
+    );
+  }
 }

@@ -4,10 +4,15 @@ import {
   IsEnum,
   IsOptional,
   IsString,
+  IsNotEmpty,
 } from 'class-validator';
 import { NotificationChannel } from '../Interfaces/notification.interface';
 
 export class EditNotificationDTO {
+  @IsString()
+  @IsNotEmpty()
+  readonly _id;
+
   @IsString()
   @IsDate()
   @IsOptional()
