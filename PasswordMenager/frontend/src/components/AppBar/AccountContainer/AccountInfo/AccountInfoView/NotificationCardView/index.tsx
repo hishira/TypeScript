@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { NotificationUtil } from "../../../../../../utils/notification.utils";
 import { Translation } from "../../../../../Translation";
 import { DeleteIcon } from "../../../../../icons/DeleteIcon";
 import { EditIcon } from "../../../../../icons/EditIcon";
@@ -7,12 +9,21 @@ import {
   NotificationList,
   NotificationSubElement,
 } from "./component.styled";
+import { Entry } from "../../../../../../utils/entry.utils";
 
-export const NotificationCardView = ({
-  notification,
-}: {
-  notification: any[];
-}) => {
+export const NotificationCardView = () => {
+  const [notification, setNotification] = useState<any[]>([]);
+  const [refetch, setRefetch] = useState<boolean>(false);
+  useEffect(() => {
+    Entry.getInstance()
+      .getNumberOfActiveNotification()
+      .then((notifications) => setNotification(notifications));
+  }, [refetch]);
+  const deleteHandle = (notificationId: string) => {
+    NotificationUtil.getInstance()
+      .deleteNofitication(notificationId)
+      .then((_) => setRefetch((a) => !a));
+  };
   return (
     <Notification>
       Number of active notification for {notification.length} entries
@@ -41,8 +52,8 @@ export const NotificationCardView = ({
               {notifi?.notificationChannel}
             </NotificationSubElement>
             <NotificationSubElement>
-              <EditIcon ></EditIcon>
-              <DeleteIcon></DeleteIcon>
+              <EditIcon></EditIcon>
+              <DeleteIcon click={() => deleteHandle(notifi._id)}></DeleteIcon>
             </NotificationSubElement>
           </NotificationElement>
         ))}

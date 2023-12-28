@@ -6,11 +6,10 @@ export type ContentType = "Notification" | "ImportRequest" | "Last";
 
 export const GetCurrentView = (
   mainContentView: ContentType,
-  imports: any,
-  notification: any
+  imports: any
 ): JSX.Element => {
   return mainContentView === "Notification" ? (
-    <NotificationCardView notification={notification} />
+    <NotificationCardView />
   ) : mainContentView === "ImportRequest" ? (
     <ImportRequestCardView imports={imports} />
   ) : (
