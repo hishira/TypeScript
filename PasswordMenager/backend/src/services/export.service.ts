@@ -6,6 +6,15 @@ import { EntryService } from './entry.service';
 import { ExportReader } from 'src/utils/exportReader';
 import { CsvEntry } from 'src/utils/csvEntry';
 
+const EntryToCsvEntryMapper = (entryResponse): CsvEntry[] => {
+  const csvRows: CsvEntry[] = Array.isArray(entryResponse)
+    ? entryResponse.map(
+        (entry) =>
+          new CsvEntry(entry.title, entry.username, entry.password, entry.note),
+      )
+    : [];
+  return csvRows;
+};
 @Injectable()
 export class ExportService {
   private archiverOption = {
@@ -17,17 +26,7 @@ export class ExportService {
 
   getCsvFile(userId): Promise<string> {
     return this.entryService.getByUser(userId).then((resp) => {
-      const csvRows: CsvEntry[] = Array.isArray(resp)
-        ? resp.map(
-            (entry) =>
-              new CsvEntry(
-                entry.title,
-                entry.username,
-                entry.password,
-                entry.note,
-              ),
-          )
-        : [];
+      const csvRows: CsvEntry[] = EntryToCsvEntryMapper(resp);
       const csv = new CsvFile(CsvFile.DefaultCsvHeader)
         .setRows(csvRows)
         .getCsvAsString();
@@ -35,7 +34,6 @@ export class ExportService {
     });
   }
   getCsvZipedFile(userId: string): Promise<Archiver.Archiver> {
-    //TODO: Refactor check if work
     const archiver = this.entryService.getByUser(userId).then((resp) => {
       let csvData = [['title', 'password', 'note', '\r\n']];
       csvData = ExportCsvUtils.GetConcatedCsvArray(csvData, resp);

@@ -1,8 +1,8 @@
 import { NotificationApi } from "../api/notification.api";
 import { SessionStorage } from "./localstorage.utils";
 
-export class Notification {
-  private static instance: Notification | null = null;
+export class NotificationUtil {
+  private static instance: NotificationUtil | null = null;
   private notificationApi: NotificationApi;
   private sessionStorage: SessionStorage;
 
@@ -14,9 +14,9 @@ export class Notification {
     this.sessionStorage = sessionStorage;
   }
 
-  static getInstance(): Notification {
+  static getInstance(): NotificationUtil {
     if (this.instance === null) {
-      this.instance = new Notification(
+      this.instance = new NotificationUtil(
         NotificationApi.getInstance(),
         SessionStorage.getInstance()
       );

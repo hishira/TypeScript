@@ -7,17 +7,13 @@ import {
   Post,
   Put,
   Request,
-  UseFilters,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GroupNotExistsFilter } from 'src/errors/GroupNotExistFilter';
-import { GroupGuard } from 'src/guards/GroupExists.guard';
 import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
-import { PaginatorDto } from 'src/utils/paginator';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { EntryService } from '../services/entry.service';
