@@ -11,6 +11,23 @@ import {
 } from "./component.styled";
 import { Entry } from "../../../../../../utils/entry.utils";
 
+const ActivateNotification = (notification: {
+  _id: string;
+}): Promise<object> => {
+  const activeBody: EditNotification = {
+    _id: notification._id,
+    active: true,
+  };
+  return NotificationUtil.getInstance().updateNotification(activeBody);
+};
+
+const SuspendNotifcation = (notification: { _id: string }): Promise<object> => {
+  const suspendBody: EditNotification = {
+    _id: notification._id,
+    active: false,
+  };
+  return NotificationUtil.getInstance().updateNotification(suspendBody);
+};
 export const NotificationCardView = () => {
   const [notification, setNotification] = useState<any[]>([]);
   const [refetch, setRefetch] = useState<boolean>(false);
@@ -23,6 +40,16 @@ export const NotificationCardView = () => {
     NotificationUtil.getInstance()
       .deleteNofitication(notificationId)
       .then((_) => setRefetch((a) => !a));
+  };
+
+  const editNotificationHandler = (notification: {
+    _id: string;
+    active: boolean;
+  }) => {
+    const handler = notification.active
+      ? SuspendNotifcation
+      : ActivateNotification;
+    handler(notification).then((_) => setRefetch((a) => !a));
   };
   return (
     <Notification>
@@ -38,6 +65,7 @@ export const NotificationCardView = () => {
           <NotificationSubElement>
             {Translation("notification.type")}
           </NotificationSubElement>
+          <NotificationSubElement>Type</NotificationSubElement>
           <NotificationSubElement></NotificationSubElement>
         </NotificationElement>
         {notification.map((notifi) => (
@@ -52,7 +80,12 @@ export const NotificationCardView = () => {
               {notifi?.notificationChannel}
             </NotificationSubElement>
             <NotificationSubElement>
-              <EditIcon></EditIcon>
+              {notifi?.active ? "Active" : "Suspended"}
+            </NotificationSubElement>
+            <NotificationSubElement>
+              <EditIcon
+                click={() => editNotificationHandler(notifi)}
+              ></EditIcon>
               <DeleteIcon click={() => deleteHandle(notifi._id)}></DeleteIcon>
             </NotificationSubElement>
           </NotificationElement>

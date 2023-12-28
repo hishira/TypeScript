@@ -35,7 +35,7 @@ export class NotificationRepository implements Repository<INotification> {
 
   update(entry: Partial<INotification>): Promise<unknown> {
     return this.notificationModel
-      .updateOne({ _id: entry.id }, { $set: { ...entry } })
+      .updateOne({ _id: entry._id }, { $set: { ...entry } })
       .exec();
   }
 

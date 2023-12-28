@@ -13,7 +13,6 @@ export class EditNotificationHandler
     const partialNotification: Partial<INotification> = {
       ...notificationInput,
     };
-    if ('_id' in partialNotification) delete partialNotification._id;
     return this.repository.update(partialNotification);
   }
 }
