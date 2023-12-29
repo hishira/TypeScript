@@ -186,7 +186,7 @@ export class Entry {
         typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
 
       return {
-        data: responseMapped.map(EntryDateMapper),
+        data: responseMapped,
         pageInfo: pageInfo,
       };
     });
@@ -213,7 +213,7 @@ export class Entry {
   }
 }
 
-const EntryDateMapper = (entry: IEntry): IEntry => ({
-  ...entry,
-  passwordExpiredDate: entry?.passwordExpiredDate?.slice(0, 10),
-});
+// const EntryDateMapper = (entry: IEntry): IEntry => ({
+//   ...entry,
+//   passwordExpiredDate: entry?.passwordExpiredDate?.slice(0, 10),
+// });

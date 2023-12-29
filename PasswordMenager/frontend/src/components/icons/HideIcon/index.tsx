@@ -10,7 +10,6 @@ export const HideIcon = ({ click }: IconProps) => {
   return (
     <svg
       {...props}
-      enable-background="new 0 0 32 32"
       id="Editable-line"
       version="1.1"
       viewBox="0 0 32 32"
@@ -23,9 +22,6 @@ export const HideIcon = ({ click }: IconProps) => {
         fill="none"
         id="XMLID_13_"
         stroke="#A8B3BD"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-miterlimit="10"
       />
       <circle
         cx="16"
@@ -34,18 +30,11 @@ export const HideIcon = ({ click }: IconProps) => {
         id="XMLID_14_"
         r="5"
         stroke="#A8B3BD"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-miterlimit="10"
       />
       <line
         fill="none"
         id="XMLID_15_"
         stroke="#A8B3BD"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-miterlimit="10"
-        stroke-width="2"
         x1="3"
         x2="29"
         y1="3"

@@ -3,14 +3,8 @@ import {
   INotification,
   NotificationChannel,
 } from './Interfaces/notification.interface';
-const NotificationDateGet = (date: any) => {
-  console.log(date instanceof Date);
-  if (typeof date === 'object' && date instanceof Date) {
-    console.log(date.toISOString().split('T')[0]);
-    return date.toISOString().split('T')[0];
-  }
-  return date;
-};
+import { MongoDateGetter } from './utils/utils';
+
 const NotificationSchema = new Schema<INotification>(
   {
     entryId: {
@@ -21,7 +15,7 @@ const NotificationSchema = new Schema<INotification>(
     notificationDate: {
       type: Date,
       default: Date.now(),
-      get: NotificationDateGet,
+      get: MongoDateGetter,
     },
     notificationChannel: {
       type: String,
