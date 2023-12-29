@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Entry } from "../../../../../../utils/entry.utils";
 import { NotificationUtil } from "../../../../../../utils/notification.utils";
 import { Translation } from "../../../../../Translation";
 import { DeleteIcon } from "../../../../../icons/DeleteIcon";
@@ -9,37 +10,29 @@ import {
   NotificationList,
   NotificationSubElement,
 } from "./component.styled";
-import { Entry } from "../../../../../../utils/entry.utils";
+import { ActivateNotification, SuspendNotifcation } from "./utils";
+import NotificationModal from "./NotificationModals";
 
-const ActivateNotification = (notification: {
-  _id: string;
-}): Promise<object> => {
-  const activeBody: EditNotification = {
-    _id: notification._id,
-    active: true,
-  };
-  return NotificationUtil.getInstance().updateNotification(activeBody);
-};
-
-const SuspendNotifcation = (notification: { _id: string }): Promise<object> => {
-  const suspendBody: EditNotification = {
-    _id: notification._id,
-    active: false,
-  };
-  return NotificationUtil.getInstance().updateNotification(suspendBody);
-};
 export const NotificationCardView = () => {
   const [notification, setNotification] = useState<any[]>([]);
   const [refetch, setRefetch] = useState<boolean>(false);
+  const [action, setAction] = useState<
+    "delete" | "activate" | "suspend" | null
+  >(null);
+  const [acceptHandler, setAcceptHandler] = useState<Promise<any> | null>(null);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   useEffect(() => {
     Entry.getInstance()
       .getNumberOfActiveNotification()
       .then((notifications) => setNotification(notifications));
   }, [refetch]);
   const deleteHandle = (notificationId: string) => {
-    NotificationUtil.getInstance()
-      .deleteNofitication(notificationId)
-      .then((_) => setRefetch((a) => !a));
+    setAction("delete");
+    setModalOpen(true);
+    const acceptHandler =
+      NotificationUtil.getInstance().deleteNofitication(notificationId);
+    //.then((_) => setRefetch((a) => !a));
+    setAcceptHandler(acceptHandler);
   };
 
   const editNotificationHandler = (notification: {
@@ -49,10 +42,19 @@ export const NotificationCardView = () => {
     const handler = notification.active
       ? SuspendNotifcation
       : ActivateNotification;
-    handler(notification).then((_) => setRefetch((a) => !a));
+    setAction(notification.active ? "suspend" : "activate");
+    setModalOpen(true);
+    const acceptHandler = handler(notification); //.then((_) => setRefetch((a) => !a));
+    setAcceptHandler(acceptHandler);
   };
   return (
     <Notification>
+      <NotificationModal
+        action={action}
+        acceptHandler={acceptHandler}
+        setRefetch={setRefetch}
+        modalOpen={modalOpen}
+      />
       Number of active notification for {notification.length} entries
       <NotificationList>
         <NotificationElement>
