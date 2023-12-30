@@ -19,3 +19,7 @@ export const SuspendNotifcation = (notification: {
   };
   return NotificationUtil.getInstance().updateNotification(suspendBody);
 };
+
+export const DeleteNotification = (notification: {_id: string}): Promise<object>=>{
+  return NotificationUtil.getInstance().deleteNofitication(notification._id);
+}
