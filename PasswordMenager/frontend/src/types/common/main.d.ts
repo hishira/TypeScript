@@ -184,3 +184,8 @@ type EditNotification = {
   notificationChannel?: "Account" | "Email" | "Sms";
   active?: boolean;
 };
+
+type NotificationLike =  {
+  _id: string;
+  active: boolean;
+}

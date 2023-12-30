@@ -9,8 +9,7 @@ export const ShowIcon = ({ click }: IconProps) => {
 
   return (
     <svg
-    {...props}
-      enable-background="new 0 0 32 32"
+      {...props}
       id="Editable-line"
       version="1.1"
       viewBox="0 0 32 32"
@@ -23,10 +22,6 @@ export const ShowIcon = ({ click }: IconProps) => {
         fill="none"
         id="XMLID_10_"
         stroke="#A8B3BD"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-miterlimit="10"
-        stroke-width="2"
       />
       <circle
         cx="16"
@@ -35,10 +30,6 @@ export const ShowIcon = ({ click }: IconProps) => {
         id="XMLID_12_"
         r="5"
         stroke="#A8B3BD"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-miterlimit="10"
-        stroke-width="2"
       />
     </svg>
   );

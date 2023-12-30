@@ -120,6 +120,12 @@
     "delete.entry.modal.title": "Delete entry",
     "notification.title": "Entry Title",
     "notification.data": "Notification data",
-    "notification.type": "Notification type"
+    "notification.type": "Notification type",
+    "notification.suspend.success": "Suspend notification successful",
+    "notification.suspend.error": "Error occur while suspendind notification",
+    "notification.delete.success": "Delete notification successful",
+    "notification.delete.error": "Error occur while delete notification",
+    "notification.activete.success": "Activete notification successful",
+    "notification.activete.error": "Error occur while activation notification"
 
 }

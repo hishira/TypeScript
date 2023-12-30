@@ -9,7 +9,6 @@ export const ImportIcon = ({ click }: IconProps): JSX.Element => {
   return (
     <svg
       {...props}
-      data-name="Design Convert"
       id="Design_Convert"
       viewBox="0 0 64 64"
       width='34px'

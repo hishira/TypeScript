@@ -13,7 +13,7 @@ export class Entry {
     response: EMPTYENTRYRESPONSE,
   };
 
-  constructor(
+  private constructor(
     authInstance: Auth,
     entryApiInstance: EntryApi,
     sessionStorageInstance: SessionStorage
@@ -186,7 +186,7 @@ export class Entry {
         typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
 
       return {
-        data: responseMapped.map(EntryDateMapper),
+        data: responseMapped,
         pageInfo: pageInfo,
       };
     });
@@ -212,8 +212,3 @@ export class Entry {
       .then((resp) => resp.json());
   }
 }
-
-const EntryDateMapper = (entry: IEntry): IEntry => ({
-  ...entry,
-  passwordExpiredDate: entry?.passwordExpiredDate?.slice(0, 10),
-});
