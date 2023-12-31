@@ -1,17 +1,13 @@
 import { inject, observer } from "mobx-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { NotificationMessages } from "../../../../../../../hooks/notificationMessages.hook";
 import { IGeneral } from "../../../../../../../models/General";
-import { AcceptModalComponent } from "../../../../../../Modal/AcceptModal";
-import { TranslationFunction } from "../../../../../../Translation";
-import {
-  ActivateNotification,
-  DeleteNotification,
-  SuspendNotifcation,
-} from "../utils";
 import {
   ErrorPopUpObject,
   SuccessPopUpObject,
 } from "../../../../../../../utils/popup.utils";
+import { AcceptModalComponent } from "../../../../../../Modal/AcceptModal";
+import { ActionHandlerMapper, ComponentMapper } from "./mappers";
 
 type NotificationModalType = {
   action: "delete" | "activate" | "suspend" | null;
@@ -20,20 +16,10 @@ type NotificationModalType = {
   notification: NotificationLike | null;
 };
 
-const ActiveModal = <div>Active notification?</div>;
-const SuspendModal = <div>Suspend notification?</div>;
-const DeleteModal = <div>Are you sure to delete notification?</div>;
-
 const SelectProperModalText = (
   action: "delete" | "activate" | "suspend" | null
 ) => {
-  return action === "activate"
-    ? ActiveModal
-    : action === "suspend"
-    ? SuspendModal
-    : action === "delete"
-    ? DeleteModal
-    : undefined;
+  return ComponentMapper[action ?? ""];
 };
 const NotificationModal = ({
   action,
@@ -46,46 +32,14 @@ const NotificationModal = ({
   const [component, setComponent] = useState<JSX.Element | undefined>(
     undefined
   );
-  const successSuspendMessage = TranslationFunction(
-    "notification.suspend.success"
-  );
-  const errorSuspendMessage = TranslationFunction("notification.suspend.error");
-  const successDeleteMessage = TranslationFunction(
-    "notification.delete.success"
-  );
-  const errorDeleteMessage = TranslationFunction("notification.delete.error");
-  const successActivateMessage = TranslationFunction(
-    "notification.activete.success"
-  );
-  const errorActivateMessage = TranslationFunction(
-    "notification.activete.error"
-  );
+  const { successMessage, errorMessage } = NotificationMessages(action);
   useEffect(() => {
     setModalOpen(modalOpen);
     setComponent(SelectProperModalText(action));
   }, [modalOpen, action]);
 
   const acceptModalPromiseHandler = () => {
-    const acceptHandler =
-      action === "activate"
-        ? ActivateNotification
-        : action === "suspend"
-        ? SuspendNotifcation
-        : action === "delete"
-        ? DeleteNotification
-        : null;
-    const successMessage =
-      action === "activate"
-        ? successActivateMessage
-        : action === "suspend"
-        ? successSuspendMessage
-        : successDeleteMessage;
-    const errorMessage =
-      action === "activate"
-        ? errorActivateMessage
-        : action === "suspend"
-        ? errorSuspendMessage
-        : errorDeleteMessage;
+    const acceptHandler = ActionHandlerMapper[action ?? ""];
     if (acceptHandler && notification) {
       acceptHandler(notification)
         ?.then((_) => {

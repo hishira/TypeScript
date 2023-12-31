@@ -3,7 +3,7 @@ export class DocumentUtils {
 
   private _document: Document;
 
-  constructor() {
+  private constructor() {
     this._document = document;
   }
 

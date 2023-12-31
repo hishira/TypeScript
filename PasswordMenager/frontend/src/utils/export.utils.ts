@@ -6,7 +6,7 @@ export class Export {
   private exportApi: ExportApi;
   private documentUtils: DocumentUtils;
 
-  constructor(
+  private constructor(
     exportApiInstance: ExportApi,
     documentUtilsInstance: DocumentUtils
   ) {

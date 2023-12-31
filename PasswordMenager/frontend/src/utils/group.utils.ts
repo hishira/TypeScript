@@ -9,7 +9,7 @@ export class Group {
   private sessionStorage: SessionStorage;
   private groupApi: GroupApi;
 
-  constructor(
+  private constructor(
     authInstance: Auth,
     groupApiInstance: GroupApi,
     sessionStorageInstance: SessionStorage
