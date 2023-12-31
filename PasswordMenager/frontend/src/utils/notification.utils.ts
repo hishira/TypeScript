@@ -6,7 +6,7 @@ export class NotificationUtil {
   private notificationApi: NotificationApi;
   private sessionStorage: SessionStorage;
 
-  constructor(
+  private constructor(
     notificationApi: NotificationApi,
     sessionStorage: SessionStorage
   ) {

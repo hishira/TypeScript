@@ -4,7 +4,7 @@ export class Import {
   private static instance: Import | null = null;
   private importApi: ImportApi;
 
-  constructor(importApiInstance: ImportApi) {
+  private constructor(importApiInstance: ImportApi) {
     this.importApi = importApiInstance;
   }
 

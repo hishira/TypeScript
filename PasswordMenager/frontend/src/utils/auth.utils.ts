@@ -6,7 +6,7 @@ export class Auth {
   private authApi: AuthApi;
   private sessionStorage: SessionStorage;
 
-  constructor(
+  private constructor(
     authApiInstance: AuthApi,
     sessionStorageInstance: SessionStorage
   ) {

@@ -3,7 +3,7 @@ export class SessionStorage {
   private storage: Storage;
   private readonly accesstoken = "accesstoken";
   private readonly refreshtoken = "refreshtoken";
-  constructor() {
+  private constructor() {
     this.storage = sessionStorage;
   }
 
