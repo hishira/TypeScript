@@ -110,5 +110,15 @@
     "delete.entry.modal.title": "Usuń encję",
     "notification.title": "Tytuł encji",
     "notification.data": "Data notyfikacji",
-    "notification.type": "Typ notyfikacji"
+    "notification.type": "Typ notyfikacji",
+    "notification.suspend.success": "Wstrzymano otrzymywanie notyfikacji",
+    "notification.suspend.error": "Błąd wystąpił podczas zawieszania notyfikacji",
+    "notification.delete.success": "Usunięto notyfikacjie pomyślnie",
+    "notification.delete.error": "Błąd wystąpił podczas usuwania notyfikacji",
+    "notification.activete.success": "Aktywowano notyfikacje pomyślnie",
+    "notification.activete.error": "Błąd wystąpił podczas aktywowania notyfikacji",
+    "length":"Długość",
+    "notification.delete.text": "Czy chcesz usunąć notyfikacje?",
+    "notification.suspend.text": "Czy wstrzymać otrzymywanie notyfikacji?",
+    "notification.active.text": "Czy aktywować notyfikacje?"
 }

@@ -126,6 +126,9 @@
     "notification.delete.success": "Delete notification successful",
     "notification.delete.error": "Error occur while delete notification",
     "notification.activete.success": "Activete notification successful",
-    "notification.activete.error": "Error occur while activation notification"
-
+    "notification.activete.error": "Error occur while activation notification",
+    "length":"Length",
+    "notification.delete.text": "Are you sure to delete notification?",
+    "notification.suspend.text": "Suspend notification?",
+    "notification.active.text": "Active notification?"
 }

@@ -27,8 +27,6 @@ const EntriesComponentMapper = (
   ));
 
 const FieldsCardView = ({
-  selectedgroup,
-  refreshall,
   refreshgroupentities,
   passwords,
 }: FieldsCardViewProps): JSX.Element => {
