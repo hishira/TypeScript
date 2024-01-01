@@ -52,7 +52,7 @@ export const PasswordGeneratorOption = ({
             </Checkboxwithlabel>
           </Checkboxes>
           <div>
-            <LengthDiv>Length</LengthDiv>
+            <LengthDiv>{Translation("length")}</LengthDiv>
             <RangeContainer>
               <input
                 type="range"

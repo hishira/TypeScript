@@ -5,7 +5,6 @@ export const BIGLETTERS: string = "ABCDEFGHIJKLMNOUPRSTUWZXY";
 export const NUMBERS: string = "0987654321";
 export const SPECIAL: string = "*()&^%$#@!~/{}+-";
 
-
 export const checkBoxHandler = (e: { target: { checked: boolean } }): void => {
   let element: HTMLCollectionOf<HTMLInputElement> =
     document.getElementsByTagName("input");
@@ -91,3 +90,13 @@ export const specialTypeGenerate = (
   let arr: Array<number> = [0, 3];
   return arr[Math.floor(Math.random() * arr.length)];
 };
+
+export const EmptyEntry = (): CreateEntryDto => ({
+  title: "",
+  username: "",
+  password: "",
+  note: "",
+  groupid: "",
+  url: "",
+  passwordExpiredDate: "",
+});

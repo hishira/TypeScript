@@ -1,3 +1,5 @@
-export const ActiveModal = <div>Active notification?</div>;
-export const SuspendModal = <div>Suspend notification?</div>;
-export const DeleteModal = <div>Are you sure to delete notification?</div>;
+import { Translation } from "../../../../../../../Translation";
+
+export const ActiveModal = <div>{Translation('notification.active.text')}</div>;
+export const SuspendModal = <div>{Translation('notification.suspend.text')}</div>;
+export const DeleteModal = <div>{Translation('notification.delete.text')}</div>;

@@ -19,7 +19,7 @@ import {
   SectionContainer,
   TitleContainer,
 } from "./component.styled";
-import { checkBoxHandler } from "./new-entry.utils";
+import { EmptyEntry, checkBoxHandler } from "./new-entry.utils";
 import { NewEntryProps, PasswordCharactersTypes } from "./types";
 import { ErrorPopUpObject, SuccessPopUpObject } from "../../utils/popup.utils";
 
@@ -41,15 +41,7 @@ const NewEntryComponent = ({
       specialChar: false,
     });
   const [loading, setLoading] = useState<boolean>(false);
-  const [newentry, setNewentry] = useState<CreateEntryDto>({
-    title: "",
-    username: "",
-    password: "",
-    note: "",
-    groupid: "",
-    url: "",
-    passwordExpiredDate: "",
-  });
+  const [newentry, setNewentry] = useState<CreateEntryDto>(EmptyEntry());
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const successCreate = TranslationFunction("entry.createToast.success");
   const errorCreate = TranslationFunction("entry.createToast.error");
@@ -73,15 +65,7 @@ const NewEntryComponent = ({
   const groups = GroupEffect(true);
   GetEntryForEdit(edit, editentryid, setNewentry, setLoading);
   useEffect(() => {
-    setNewentry({
-      title: "",
-      username: "",
-      password: "",
-      note: "",
-      groupid: "",
-      url: "",
-      passwordExpiredDate: "",
-    });
+    setNewentry(EmptyEntry());
   }, [refreshentry]);
 
   const addnewentry = async (): Promise<void> => {
