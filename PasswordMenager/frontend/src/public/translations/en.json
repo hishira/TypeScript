@@ -121,6 +121,7 @@
     "notification.title": "Entry Title",
     "notification.data": "Notification data",
     "notification.type": "Notification type",
+    "notification.state": "State",
     "notification.suspend.success": "Suspend notification successful",
     "notification.suspend.error": "Error occur while suspendind notification",
     "notification.delete.success": "Delete notification successful",
@@ -130,5 +131,8 @@
     "length":"Length",
     "notification.delete.text": "Are you sure to delete notification?",
     "notification.suspend.text": "Suspend notification?",
-    "notification.active.text": "Active notification?"
+    "notification.active.text": "Active notification?",
+    "active": "Active",
+    "suspend": "Suspend",
+    "notification.numerMessage": "Number of active notification for {{notificationLength}} entries"
 }

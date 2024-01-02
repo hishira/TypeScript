@@ -111,6 +111,7 @@
     "notification.title": "Tytuł encji",
     "notification.data": "Data notyfikacji",
     "notification.type": "Typ notyfikacji",
+    "notification.state": "Stan",
     "notification.suspend.success": "Wstrzymano otrzymywanie notyfikacji",
     "notification.suspend.error": "Błąd wystąpił podczas zawieszania notyfikacji",
     "notification.delete.success": "Usunięto notyfikacjie pomyślnie",
@@ -120,5 +121,8 @@
     "length":"Długość",
     "notification.delete.text": "Czy chcesz usunąć notyfikacje?",
     "notification.suspend.text": "Czy wstrzymać otrzymywanie notyfikacji?",
-    "notification.active.text": "Czy aktywować notyfikacje?"
+    "notification.active.text": "Czy aktywować notyfikacje?",
+    "active": "Aktywny",
+    "suspend": "Zawieszony",
+    "notification.numerMessage": "Liczba aktywnych notyfikacji wynosi {{notificationLength}}"
 }

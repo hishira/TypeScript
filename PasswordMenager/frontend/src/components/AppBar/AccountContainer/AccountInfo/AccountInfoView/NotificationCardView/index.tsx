@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Entry } from "../../../../../../utils/entry.utils";
-import { Translation } from "../../../../../Translation";
+import { Translation, TranslationFunction } from "../../../../../Translation";
 import { DeleteIcon } from "../../../../../icons/DeleteIcon";
 import { EditIcon } from "../../../../../icons/EditIcon";
 import NotificationModal from "./NotificationModals";
@@ -38,6 +38,7 @@ export const NotificationCardView = () => {
     setModalOpen(true);
     setNotificationForAction(notification);
   };
+
   return (
     <Notification>
       <NotificationModal
@@ -46,7 +47,10 @@ export const NotificationCardView = () => {
         modalOpen={modalOpen}
         notification={notificationForAction}
       />
-      Number of active notification for {notification.length} entries
+      {Translation("notification.numerMessage", {
+        notificationLength: notification.length,
+      })}
+     
       <NotificationList>
         <NotificationElement>
           <NotificationSubElement>
@@ -58,7 +62,9 @@ export const NotificationCardView = () => {
           <NotificationSubElement>
             {Translation("notification.type")}
           </NotificationSubElement>
-          <NotificationSubElement>Type</NotificationSubElement>
+          <NotificationSubElement>
+            {Translation("notification.state")}
+          </NotificationSubElement>
           <NotificationSubElement></NotificationSubElement>
         </NotificationElement>
         {notification.map((notifi) => (
@@ -73,7 +79,7 @@ export const NotificationCardView = () => {
               {notifi?.notificationChannel}
             </NotificationSubElement>
             <NotificationSubElement>
-              {notifi?.active ? "Active" : "Suspended"}
+              {notifi?.active ? Translation("active") : Translation("suspend")}
             </NotificationSubElement>
             <NotificationSubElement>
               <EditIcon
