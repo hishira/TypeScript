@@ -26,6 +26,9 @@ export const FileSelector = ({
 }: FileSelectorProps) => {
   const [isWrongType, setIsWrongType] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("Wrong file type");
+  const message = `${TranslationFunction(
+    "import.modal.errorMessage"
+  )}${availableFileType?.join(", ")}`;
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
     if (!files || (files && files.length === 0)) return;
@@ -38,12 +41,7 @@ export const FileSelector = ({
         ).length
     );
     setIsWrongType(isWrongType);
-    isWrongType &&
-      setErrorMessage(
-        `${TranslationFunction(
-          "import.modal.errorMessage"
-        )}${availableFileType.join(", ")}`
-      );
+    isWrongType && setErrorMessage(message);
 
     fileChange(e);
   };

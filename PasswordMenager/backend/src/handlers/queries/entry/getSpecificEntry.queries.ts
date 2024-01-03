@@ -25,9 +25,7 @@ export class GetSpecificEntryQueryHandler
 
     return this.repository.find(
       option,
-      isPaginatorDefined
-        ? { page: input?.page ?? input?.paginator?.page }
-        : { page: 0 },
+      isPaginatorDefined && { page: input?.page ?? input?.paginator?.page },
     );
   }
 }
