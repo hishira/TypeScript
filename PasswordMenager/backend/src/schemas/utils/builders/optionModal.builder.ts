@@ -2,7 +2,7 @@ import { FilterQuery } from 'mongoose';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { EntryState, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
-import { isDefined } from 'src/utils/utils';
+import { IsNotUndefined, isDefined } from 'src/utils/utils';
 
 export class OptionModelBuilder {
   static EMPTYOPTION = { getOption: () => ({}) };
@@ -47,7 +47,7 @@ export class OptionModelBuilder {
   updateGroupIdOrNull(groupId?: string): this {
     this.filterQuery = {
       ...this.filterQuery,
-      ...(isDefined(groupId) ? { groupid: groupId } : { groupid: null }),
+      ...(IsNotUndefined(groupId) && { groupid: groupId }),
     };
     return this;
   }

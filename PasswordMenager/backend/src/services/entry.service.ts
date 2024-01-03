@@ -125,8 +125,10 @@ export class EntryService {
     return promiseEntryHistory.then(() => deletePromise);
   }
 
-  getByUser(userId: string): Promise<IEntry[] | EntryData> {
-    return this.queryBus.execute(new GetSpecificEntry({ userId: userId }));
+  getByUser(userId: string, limit?: number): Promise<IEntry[] | EntryData> {
+    return this.queryBus.execute(
+      new GetSpecificEntry({ userId: userId, limit: limit }),
+    );
   }
 
   editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
