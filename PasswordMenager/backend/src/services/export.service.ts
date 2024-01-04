@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as Archiver from 'archiver';
 import { CsvFile } from 'src/utils/csv.util';
-import { ExportCsvUtils } from 'src/utils/export.utils';
-import { EntryService } from './entry.service';
-import { ExportReader } from 'src/utils/exportReader';
 import { CsvEntry } from 'src/utils/csvEntry';
+import { ExportCsvUtils } from 'src/utils/export.utils';
+import { ExportReader } from 'src/utils/exportReader';
+import { EntryService } from './entry.service';
 
 const EntryToCsvEntryMapper = (entryResponse): CsvEntry[] => {
   const csvRows: CsvEntry[] = Array.isArray(entryResponse)
@@ -48,5 +48,10 @@ export class ExportService {
       return archiver;
     });
     return archiver;
+  }
+
+  async getEncryptedFile(userId: string): Promise<Buffer> {
+    const entries = await this.entryService.getByUser(userId);
+    return ExportCsvUtils.GetEncryptedDataBuffer(entries);
   }
 }

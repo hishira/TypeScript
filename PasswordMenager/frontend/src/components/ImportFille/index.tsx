@@ -31,17 +31,18 @@ export const FileSelector = ({
   )}${availableFileType?.join(", ")}`;
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
-    if (!files || (files && files.length === 0)) return;
-    const selectedTypes = Array.from(files).map((file) => file.type);
-    if (!availableFileType || availableFileType.length === 0) return;
-    const isWrongType = selectedTypes.some(
-      (currentfileType) =>
-        !availableFileType.filter((fileType) =>
-          currentfileType.toLowerCase().includes(fileType.toLowerCase())
-        ).length
-    );
-    setIsWrongType(isWrongType);
-    isWrongType && setErrorMessage(message);
+    // TODO: Fix
+    // if (!files || (files && files.length === 0)) return;
+    // const selectedTypes = Array.from(files).map((file) => file.type);
+    // if (!availableFileType || availableFileType.length === 0) return;
+    // const isWrongType = selectedTypes.some(
+    //   (currentfileType) =>
+    //     !availableFileType.filter((fileType) =>
+    //       currentfileType.toLowerCase().includes(fileType.toLowerCase())
+    //     ).length
+    // );
+    // setIsWrongType(isWrongType);
+    // isWrongType && setErrorMessage(message);
 
     fileChange(e);
   };
@@ -65,6 +66,7 @@ export const ImportFile = ({
   const [file, setFile] = useState<File>();
   const [password, setPassword] = useState<string>("");
   const fileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e);
     const { target: { files = [] } = {} } = e;
     if (files && files.length <= 0) return;
     files && setFile(files[0]);

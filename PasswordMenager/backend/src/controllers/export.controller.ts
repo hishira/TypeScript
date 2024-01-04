@@ -56,16 +56,14 @@ export class ExportController {
   @UseGuards(AuthGuard('accessToken'))
   @Get('encrypted')
   async getEncryptFile(@Req() req, @Res() res: Response) {
-    const entries = await this.entryService.find({
-      getOption() {
-        return {};
-      },
-    });
+    const encyptedBuffer = await this.exportService.getEncryptedFile(
+      req.user._id,
+    );
     res.set({
       'Content-Disposition': 'attachment; filename=example.txt.xyz',
       'Content-Type': 'application/octet-stream',
     });
-    res.send(ExportCsvUtils.GetEncryptedDataBuffer(entries));
+    res.send(encyptedBuffer);
   }
 
   @Get('encryptedCsv')
