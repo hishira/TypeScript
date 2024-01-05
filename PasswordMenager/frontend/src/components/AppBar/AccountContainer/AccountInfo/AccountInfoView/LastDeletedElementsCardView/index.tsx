@@ -17,7 +17,8 @@ export const LastDeletedElementsCardView = () => {
     Entry.getInstance()
       .getLastDeletedEntries()
       .then((entries: EntryData) => {
-        setLastDeletedEntries(entries?.data ?? []);
+        if (Array.isArray(entries)) setLastDeletedEntries(entries);
+        else setLastDeletedEntries(entries?.data ?? []);
       });
   }, [refetch]);
 

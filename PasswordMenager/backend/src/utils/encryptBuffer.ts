@@ -4,7 +4,7 @@ export class EncryptBuffer {
   private readonly salt = { startByte: 0, endByte: 16 };
   private readonly iv = { startByte: 16, endByte: 32 };
   private readonly key = '123456';
-  private readonly algorithm = 'aes-256-gcm';
+  private readonly algorithm = 'aes-256-ocb';
   private readonly byteOfStartEncryptedContent = 32;
   constructor(readonly fileBuffer: Buffer) {}
 
