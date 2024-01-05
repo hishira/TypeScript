@@ -14,6 +14,7 @@ enum PossibleFileType {
   PNG = "png",
   CSV = "csv",
   TXT = "txt",
+  XYZ = "xyz",
 }
 type FileSelectorProps = {
   fileChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -32,17 +33,20 @@ export const FileSelector = ({
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { target: { files = [] } = {} } = e;
     // TODO: Fix
-    // if (!files || (files && files.length === 0)) return;
-    // const selectedTypes = Array.from(files).map((file) => file.type);
-    // if (!availableFileType || availableFileType.length === 0) return;
-    // const isWrongType = selectedTypes.some(
-    //   (currentfileType) =>
-    //     !availableFileType.filter((fileType) =>
-    //       currentfileType.toLowerCase().includes(fileType.toLowerCase())
-    //     ).length
-    // );
-    // setIsWrongType(isWrongType);
-    // isWrongType && setErrorMessage(message);
+    if (!files || (files && files.length === 0)) return;
+    const selectedTypes = Array.from(files).map(
+      (file) => (file.type || file.name.split(".").at(-1)) ?? ""
+    );
+    console.log(files);
+    if (!availableFileType || availableFileType.length === 0) return;
+    const isWrongType = selectedTypes.some(
+      (currentfileType) =>
+        !availableFileType.filter((fileType) =>
+          currentfileType.toLowerCase().includes(fileType.toLowerCase())
+        ).length
+    );
+    setIsWrongType(isWrongType);
+    isWrongType && setErrorMessage(message);
 
     fileChange(e);
   };
@@ -78,7 +82,10 @@ export const ImportFile = ({
   // TODO: Improber add password improvement
   return (
     <ImportContainer>
-      <FileSelector fileChange={(e) => fileChange(e)} />
+      <FileSelector
+        fileChange={(e) => fileChange(e)}
+        availableFileType={[PossibleFileType.XYZ]}
+      />
       <div>
         <FormElement
           label={TranslationFunction("input.label.password")}

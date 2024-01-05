@@ -18,7 +18,7 @@ export class ExportCsvUtils {
   }
 
   static GetEncryptedValueFromFile(file: Express.Multer.File): string {
-    return new EncryptBuffer(file.buffer).getDecryptedBuffer('utf-8');
+    return new EncryptBuffer(file.buffer).getDecryptedBuffer('utf8');
   }
 
   static GenerateValueForEntryptedData(password: string): {
@@ -35,7 +35,7 @@ export class ExportCsvUtils {
   }
 
   static GetCipherForEncryptData(key: Buffer, iv: Buffer): Cipher {
-    return createCipheriv('aes-256-gcm', key, iv);
+    return createCipheriv('aes-256-ocb', key, iv);
   }
   static GetEncryptedDataBuffer(
     entries:
