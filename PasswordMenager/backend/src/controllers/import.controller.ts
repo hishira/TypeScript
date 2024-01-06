@@ -8,6 +8,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -36,6 +37,12 @@ export class ImportController {
       importRequestId,
       req.user._id,
     );
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Delete('/:id')
+  async deleteImportRequest(@Param('id') importRequestId: string) {
+    return this.importService.deleteImportRequest(importRequestId);
   }
 
   @UseGuards(AuthGuard('accessToken'))

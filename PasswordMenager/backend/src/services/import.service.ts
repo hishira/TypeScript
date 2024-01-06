@@ -64,4 +64,8 @@ export class ImportService {
           .ResponseResolve;
       });
   }
+
+  deleteImportRequest(importRequestId){
+    
+  }
 }
