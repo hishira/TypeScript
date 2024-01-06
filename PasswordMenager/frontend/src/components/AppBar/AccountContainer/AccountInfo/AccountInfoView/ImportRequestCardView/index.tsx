@@ -1,7 +1,10 @@
 import { Import } from "../../../../../../utils/import.utils";
 import Button from "../../../../../Button";
 import { Translation } from "../../../../../Translation";
-import { ImportRequest, Imports } from "./component.styled";
+import { DeleteIcon } from "../../../../../icons/DeleteIcon";
+import { ShowIcon } from "../../../../../icons/ShowIcon";
+import { TuroOnIcon } from "../../../../../icons/TurnOnIcon";
+import { Actions, ImportRequest, Imports } from "./component.styled";
 export type ImportRequestData = {
   _id: string;
   created: string;
@@ -27,10 +30,18 @@ export const ImportRequestCardView = ({
   return (
     <ImportRequest>
       <div>
-        <span>{Translation('account.view.importRequest.table.column.importState')}</span>
-        <span>{Translation('account.view.importRequest.table.column.createdAt')}</span>
-        <span>{Translation('account.view.importRequest.table.column.numberOfEntriesToAdd')}</span>
-        <span></span>
+        <span>
+          {Translation("account.view.importRequest.table.column.importState")}
+        </span>
+        <span>
+          {Translation("account.view.importRequest.table.column.createdAt")}
+        </span>
+        <span>
+          {Translation(
+            "account.view.importRequest.table.column.numberOfEntriesToAdd"
+          )}
+        </span>
+        <span>Actions</span>
       </div>
       <Imports>
         {imports.map((importVal) => (
@@ -38,9 +49,14 @@ export const ImportRequestCardView = ({
             <span>{importVal.state}</span>
             <span>{importVal.created?.slice(0, 10)}</span>
             <span>{importVal.entriesToImport.length}</span>
-            <Button onClick={() => activateImportRequest(importVal._id)}>
-            {Translation('account.view.importRequest.table.actionButton')}
-            </Button>
+            <Actions>
+              {/* <Button onClick={() => activateImportRequest(importVal._id)}>
+                {Translation("account.view.importRequest.table.actionButton")}
+              </Button> */}
+              <TuroOnIcon></TuroOnIcon>
+              <ShowIcon></ShowIcon>
+              <DeleteIcon></DeleteIcon>
+            </Actions>
           </div>
         ))}
       </Imports>

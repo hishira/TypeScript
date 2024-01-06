@@ -37,7 +37,8 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {
-    throw new Error('Method not implemented.');
+    //TODO: Fix;
+    return this.importRequestModal.deleteMany(option.getOption);
   }
 
   deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;

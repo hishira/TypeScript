@@ -40,3 +40,13 @@ export const Imports = styled.div`
     justify-content: space-between;
   }
 `;
+export const Actions = styled.span`
+  display: flex;
+  box-sizing: border-box;
+  gap: 12px;
+  align-items: center;
+  & > svg{
+    cursor: pointer;
+    width: 24px;
+  }
+`

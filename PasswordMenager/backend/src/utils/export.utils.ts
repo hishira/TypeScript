@@ -35,7 +35,7 @@ export class ExportCsvUtils {
   }
 
   static GetCipherForEncryptData(key: Buffer, iv: Buffer): Cipher {
-    return createCipheriv('aes-256-ocb', key, iv);
+    return createCipheriv('aes-256-cbc', key, iv);
   }
   static GetEncryptedDataBuffer(
     entries:
