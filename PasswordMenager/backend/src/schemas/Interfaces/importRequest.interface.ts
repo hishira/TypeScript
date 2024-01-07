@@ -2,7 +2,7 @@ import mongoose, { Document } from 'mongoose';
 import { ImportRequestState } from '../importRequest.schema';
 
 export class ImportRequest extends Document {
-  readonly userid: mongoose.Schema.Types.ObjectId;
+  readonly userid: mongoose.Schema.Types.ObjectId | string;
   readonly created: Date;
   readonly entriesToImport: ImportEntrySchema[];
   readonly state: ImportRequestState;
