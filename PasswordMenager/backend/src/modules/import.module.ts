@@ -8,6 +8,7 @@ import { importRequestProvider } from 'src/providers/importrequest.provider';
 import { CqrsModule } from '@nestjs/cqrs';
 import { GetImportQueryHandler } from 'src/handlers/queries/import/getImportsHandler';
 import { CreateImportRequestHandler } from 'src/handlers/commands/importRequest/createImportRequestHandler';
+import { DeleteImportRequestHandler } from 'src/handlers/commands/importRequest/deleteImportRequestHandler';
 
 @Module({
   imports: [DatabaseModule, CqrsModule],
@@ -21,6 +22,7 @@ import { CreateImportRequestHandler } from 'src/handlers/commands/importRequest/
     ...importRequestProvider,
     GetImportQueryHandler,
     CreateImportRequestHandler,
+    DeleteImportRequestHandler,
   ],
 })
 export class ImportModule {}
