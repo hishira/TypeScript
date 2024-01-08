@@ -2,6 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ImportRequestEditCommand } from 'src/commands/importRequest/ImportRequestEditCommand';
 import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
 import { BaseCommandHandler } from '../BaseCommandHandler';
+import { ImportRequestBuilder } from 'src/schemas/utils/builders/importRequest.builder';
 
 @CommandHandler(ImportRequestEditCommand)
 export class EditImportRequestHandler
@@ -9,6 +10,14 @@ export class EditImportRequestHandler
   implements ICommandHandler<ImportRequestEditCommand>
 {
   execute(command: ImportRequestEditCommand): Promise<any> {
-    throw new Error('Method not implemented.');
+    const { input } = command;
+    const partialImportRequest = new ImportRequestBuilder()
+      .setId(input._id)
+      .setUserId(input.userid)
+      .setCreateDate(input.created)
+      .setState(input.state)
+      .setEntriesToImport(input.entriesToImport)
+      .getPartialImportRequest();
+    return this.repository.update(partialImportRequest);
   }
 }

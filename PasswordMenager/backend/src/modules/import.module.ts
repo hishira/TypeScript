@@ -9,6 +9,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { GetImportQueryHandler } from 'src/handlers/queries/import/getImportsHandler';
 import { CreateImportRequestHandler } from 'src/handlers/commands/importRequest/createImportRequestHandler';
 import { DeleteImportRequestHandler } from 'src/handlers/commands/importRequest/deleteImportRequestHandler';
+import { EditImportRequestHandler } from 'src/handlers/commands/importRequest/editImportRequestHandler';
 
 @Module({
   imports: [DatabaseModule, CqrsModule],
@@ -23,6 +24,7 @@ import { DeleteImportRequestHandler } from 'src/handlers/commands/importRequest/
     GetImportQueryHandler,
     CreateImportRequestHandler,
     DeleteImportRequestHandler,
+    EditImportRequestHandler,
   ],
 })
 export class ImportModule {}
