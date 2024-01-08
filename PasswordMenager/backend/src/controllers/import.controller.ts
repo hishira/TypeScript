@@ -1,17 +1,21 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  Param,
   ParseFilePipeBuilder,
   Post,
-  Param,
+  Put,
   Request,
   UploadedFile,
   UseGuards,
   UseInterceptors,
-  Delete,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { EditImportRequest } from 'src/schemas/dto/editImportRequest.dto';
 import { ImportService } from 'src/services/import.service';
 import { EmptyFileValidator } from 'src/validators/emptyfile.validator';
 import { CustomFileValidator } from 'src/validators/file.validator';
@@ -43,6 +47,17 @@ export class ImportController {
   @Delete('/:id')
   async deleteImportRequest(@Param('id') importRequestId: string) {
     return this.importService.deleteImportRequest(importRequestId);
+  }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Put('/:id')
+  updateImportRequest(
+    @Param('id') importRequestId: string,
+    @Body(new ValidationPipe({ transform: true }))
+    editImportRequestDto: EditImportRequest,
+  ) {
+    //TODO: Implement
+    throw Error('Not implemented');
   }
 
   @UseGuards(AuthGuard('accessToken'))

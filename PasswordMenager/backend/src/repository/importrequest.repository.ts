@@ -33,12 +33,13 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
   }
 
   update(entry: Partial<ImportRequest>): Promise<unknown> {
-    throw new Error('Method not implemented.');
+    return this.importRequestModal
+      .updateOne({ _id: entry._id }, { $set: { ...entry } })
+      .exec();
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {
-    //TODO: Fix;
-    return this.importRequestModal.deleteMany(option.getOption);
+    return this.importRequestModal.deleteMany(option.getOption).exec();
   }
 
   deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;
