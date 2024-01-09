@@ -3,11 +3,13 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateImportRequestCommand } from 'src/commands/importRequest/ImportRequestCreateCommand';
 import { ImportRequestDeleteCommand } from 'src/commands/importRequest/ImportRequestDeleteCommand.1';
+import { ImportRequestEditCommand } from 'src/commands/importRequest/ImportRequestEditCommand';
 import { EventTypes } from 'src/events/eventTypes';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { GetImportQuery } from 'src/queries/import/getImports.queries';
 import { ImportEntriesResponse } from 'src/response/importEntries.response';
 import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
+import { EditImportRequest } from 'src/schemas/dto/editImportRequest.dto';
 import { ImportRequestDto } from 'src/schemas/dto/importRequest.dto';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { ImportDTOMapper } from 'src/schemas/mapper/importDtoMapper';
@@ -69,6 +71,18 @@ export class ImportService {
   deleteImportRequest(importRequestId: string) {
     return this.commandBus.execute(
       new ImportRequestDeleteCommand({ _id: importRequestId }),
+    );
+  }
+
+  editImpoerRequest(
+    importRequestId: string,
+    editImportRequestDto: EditImportRequest,
+  ) {
+    return this.commandBus.execute(
+      new ImportRequestEditCommand({
+        _id: importRequestId,
+        ...editImportRequestDto,
+      }),
     );
   }
 }

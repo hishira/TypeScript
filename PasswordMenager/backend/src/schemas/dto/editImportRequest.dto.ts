@@ -1,10 +1,11 @@
 import {
   IsArray,
   IsEnum,
-  IsObject,
   IsOptional,
   IsString,
+  Validate,
 } from 'class-validator';
+import { ImportEntrySchemaValidator } from 'src/validators/importEntrySchema.validator';
 import { ImportRequestState } from '../importRequest.schema';
 
 export class EditImportRequest {
@@ -22,6 +23,7 @@ export class EditImportRequest {
 
   //TODO: ImportEntrySchema validation
   @IsArray()
+  @Validate(ImportEntrySchemaValidator, { each: true })
   @IsOptional()
   readonly entriesToImport?;
 }

@@ -56,8 +56,10 @@ export class ImportController {
     @Body(new ValidationPipe({ transform: true }))
     editImportRequestDto: EditImportRequest,
   ) {
-    //TODO: Implement
-    throw Error('Not implemented');
+    return this.importService.editImpoerRequest(
+      importRequestId,
+      editImportRequestDto,
+    );
   }
 
   @UseGuards(AuthGuard('accessToken'))
