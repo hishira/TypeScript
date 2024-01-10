@@ -185,7 +185,22 @@ type EditNotification = {
   active?: boolean;
 };
 
-type NotificationLike =  {
+type NotificationLike = {
   _id: string;
   active: boolean;
-}
+};
+
+type EntriesToImport = {
+  email: string;
+  password: string;
+  title: string;
+  url: string;
+  username: string;
+};
+type ImportRequestData = {
+  _id: string;
+  created: string;
+  state: string;
+  userid: string;
+  entriesToImport: EntriesToImport[];
+};
