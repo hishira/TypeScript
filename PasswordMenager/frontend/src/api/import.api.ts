@@ -45,4 +45,16 @@ export class ImportApi extends Api {
 
     return fetch(url, this.fetchGetObjectWithtoken(token));
   }
+
+  updateImportRequest(
+    importRequestId: string,
+    editImportRequestBody: EditImportRequest
+  ): Promise<Response> {
+    const url = this.getUrl(`import/${importRequestId}`);
+    const token = this.sessionStorage.getAccessToken();
+    return fetch(
+      url,
+      this.fetchPutObjectWithToken(editImportRequestBody, token)
+    );
+  }
 }
