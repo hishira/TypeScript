@@ -42,4 +42,14 @@ export class Import {
       .acceptImportRequest(importRequestString)
       .then((data) => data.json());
   }
+
+  EditImportRequest(
+    importRequestId: string,
+    editImportRequestBody: EditImportRequest
+  ) {
+    return this.importApi.updateImportRequest(
+      importRequestId,
+      editImportRequestBody
+    );
+  }
 }

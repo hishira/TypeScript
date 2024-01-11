@@ -204,3 +204,12 @@ type ImportRequestData = {
   userid: string;
   entriesToImport: EntriesToImport[];
 };
+
+type ImportRequestState = "active" | "complete" | "deleted";
+
+type EditImportRequest = {
+  userid?: string;
+  created?: string;
+  state?: ImportRequestData;
+  entriesToImport?: EntriesToImport[];
+};
