@@ -38,8 +38,11 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
       .exec();
   }
 
-  delete(option: DeleteOption<unknown>): Promise<unknown> {
-    return this.importRequestModal.deleteMany(option.getOption).exec();
+  delete(option: DeleteOption<Partial<ImportRequest>>): Promise<unknown> {
+    const optionValue = option.getOption();
+    return this.importRequestModal
+      .updateOne({ _id: optionValue._id }, { $set: { ...optionValue } })
+      .exec();
   }
 
   deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;
