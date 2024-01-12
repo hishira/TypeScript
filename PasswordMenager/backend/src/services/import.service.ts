@@ -12,6 +12,7 @@ import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
 import { EditImportRequest } from 'src/schemas/dto/editImportRequest.dto';
 import { ImportRequestDto } from 'src/schemas/dto/importRequest.dto';
 import { DTO } from 'src/schemas/dto/object.interface';
+import { ImportRequestState } from 'src/schemas/importRequest.schema';
 import { ImportDTOMapper } from 'src/schemas/mapper/importDtoMapper';
 import { ImportRequestStream } from 'src/utils/importRequest.util';
 import { Paginator } from 'src/utils/paginator';
@@ -70,7 +71,10 @@ export class ImportService {
 
   deleteImportRequest(importRequestId: string) {
     return this.commandBus.execute(
-      new ImportRequestDeleteCommand({ _id: importRequestId }),
+      new ImportRequestDeleteCommand({
+        _id: importRequestId,
+        state: ImportRequestState.Deleted,
+      }),
     );
   }
 

@@ -57,4 +57,10 @@ export class ImportApi extends Api {
       this.fetchPutObjectWithToken(editImportRequestBody, token)
     );
   }
+
+  deleteImportRequest(importRequestId: string): Promise<Response> {
+    const url = this.getUrl(`import/${importRequestId}`);
+    const token = this.sessionStorage.getAccessToken();
+    return fetch(url, this.fetchDeleteObjectWithToken(token));
+  }
 }

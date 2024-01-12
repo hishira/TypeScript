@@ -52,4 +52,8 @@ export class Import {
       editImportRequestBody
     );
   }
+
+  DeleteImportRequest(importRequestId: string) {
+    return this.importApi.deleteImportRequest(importRequestId);
+  }
 }
