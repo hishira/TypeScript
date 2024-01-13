@@ -32,10 +32,26 @@ export const ImportRequestHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 18px;
+  margin-top: 8px;
+  flex-wrap: nowrap;
+  & > div {
+    //width: 20%;
+    inline-size: 20%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 `;
 
 export const TitleContainer = styled.div`
-  font-size: 20px;
-  font-weight: 550;
-  color: rgba(0,0,0,.8);
-`
+  & > span {
+    font-size: 20px;
+    font-weight: 550;
+    color: rgba(0, 0, 0, 0.8);
+  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > svg {
+    cursor: pointer;
+  }
+`;

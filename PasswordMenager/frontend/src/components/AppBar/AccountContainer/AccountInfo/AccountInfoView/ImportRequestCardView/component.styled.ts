@@ -45,8 +45,11 @@ export const Actions = styled.span`
   box-sizing: border-box;
   gap: 12px;
   align-items: center;
-  & > svg{
+  & > svg {
     cursor: pointer;
     width: 24px;
+    &:hover {
+      transform: scale(1.1);
+    }
   }
-`
+`;

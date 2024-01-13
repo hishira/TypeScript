@@ -7,28 +7,51 @@ import { ShowIcon } from "../../../../../icons/ShowIcon";
 import { TuroOnIcon } from "../../../../../icons/TurnOnIcon";
 import { ImportRequestEntries } from "./ImportRequestEntries";
 import { Actions, ImportRequest, Imports } from "./component.styled";
+import { ModalOpenUtils } from "../../../../../../utils/moda.open.utils";
+import { ModalsView } from "./ModalsView";
 
 export const ImportRequestCardView = ({
   imports,
 }: {
   imports: ImportRequestData[];
 }) => {
-  const [showEntries, setShowEntries] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [entriesToShow, setEntriesToShow] = useState<EntriesToImport[]>([]);
+  const [modalType, setModalType] = useState<"show" | "delete" | "activate">(
+    "show"
+  );
   const activateImportRequest = (importRequestId: string) => {
     Import.getInstance().AcceptImportRequest(importRequestId).then(console.log);
   };
   const showEntriesHandle = (entries: EntriesToImport[]) => {
     setEntriesToShow(entries);
-    setShowEntries(true);
+    setModalType("show");
+    setModalOpen(true);
+    ModalOpenUtils.getInstance().CloseModal = true;
   };
+
+  const deleteImportRequest = (importRequestId: string) => {
+    setModalType("delete");
+    setModalOpen(true);
+    //Import.getInstance().DeleteImportRequest(importRequestId).then(console.log);
+  };
+
+  const showImportModalClose = () => {
+    setModalOpen(false);
+  };
+
   return (
     <>
-      <Modal
-        visible={showEntries}
-        onClose={() => setShowEntries(false)}
-        component={<ImportRequestEntries entries={entriesToShow} />}
-      ></Modal>
+      <ModalsView
+        acceptModalHandler={() => console.log("HI")}
+        isModalVisible={modalOpen}
+        modalClose={showImportModalClose}
+        modalType={modalType}
+        showEntryModal={{
+          closeHandle: showImportModalClose,
+          entries: entriesToShow,
+        }}
+      ></ModalsView>
       <ImportRequest>
         <div>
           <span>
@@ -57,7 +80,9 @@ export const ImportRequestCardView = ({
                 <ShowIcon
                   click={() => showEntriesHandle(importVal.entriesToImport)}
                 ></ShowIcon>
-                <DeleteIcon></DeleteIcon>
+                <DeleteIcon
+                  click={() => deleteImportRequest(importVal._id)}
+                ></DeleteIcon>
               </Actions>
             </div>
           ))}
