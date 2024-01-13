@@ -5,11 +5,13 @@ import {
   ImportRequestHeader,
   TitleContainer,
 } from "./component.styled";
+import { CloseIcon } from "../../../../../../icons/CloseIcon";
 
-type ImportEntriesProprs = {
+export type ImportEntriesProprs = {
   entries: EntriesToImport[];
+  closeHandle: () => void;
 };
-export const ImportRequestEntries = ({ entries }: ImportEntriesProprs) => {
+export const ImportRequestEntries = ({ entries, closeHandle }: ImportEntriesProprs) => {
   const [mappedEntries, setMappedEntries] = useState<EntriesToImport[]>([]);
 
   useEffect(() => {
@@ -26,7 +28,9 @@ export const ImportRequestEntries = ({ entries }: ImportEntriesProprs) => {
 
   return (
     <ImportRequestEntriesModal>
-      <TitleContainer>Entries to import</TitleContainer>
+      <TitleContainer>
+        <span>Entries to import</span> <CloseIcon click={closeHandle} />
+      </TitleContainer>
       <ImportRequestHeader>
         <div>Email</div>
         <div>Username</div>
