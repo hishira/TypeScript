@@ -1,17 +1,17 @@
-import { AcceptModalComponent } from "../../../../../../Modal/AcceptModal";
 import Modal from "../../../../../../Modal/";
+import { AcceptModalComponent } from "../../../../../../Modal/AcceptModal";
 import {
   ImportEntriesProprs,
   ImportRequestEntries,
 } from "../ImportRequestEntries";
-import { useEffect, useState } from "react";
 
 export type ModalViewsType = {
   modalType: "show" | "delete" | "activate";
   isModalVisible: boolean;
   showEntryModal: ImportEntriesProprs;
   modalClose: () => void;
-  acceptModalHandler: () => void;
+  acceptDeleteImportRequestHandler: () => void;
+  acceptActivateImportRequest: () => void;
 };
 
 export const ModalsView = ({
@@ -19,16 +19,22 @@ export const ModalsView = ({
   showEntryModal,
   isModalVisible,
   modalClose,
-  acceptModalHandler,
+  acceptDeleteImportRequestHandler,
+  acceptActivateImportRequest,
 }: ModalViewsType) => {
-  const [mt, setMt] = useState<"show" | "delete" | "activate">("show");
- 
   return modalType === "delete" ? (
     <AcceptModalComponent
       visible={isModalVisible}
       onClose={() => modalClose()}
-      component={<div>Are you sure to delete import requests</div>}
-      acceptHandle={acceptModalHandler}
+      component={<div>Are you sure to delete import requests?</div>}
+      acceptHandle={acceptDeleteImportRequestHandler}
+    />
+  ) : modalType === "activate" ? (
+    <AcceptModalComponent
+      visible={isModalVisible}
+      onClose={() => modalClose()}
+      component={<div>Activate this import request?</div>}
+      acceptHandle={acceptActivateImportRequest}
     />
   ) : (
     <Modal

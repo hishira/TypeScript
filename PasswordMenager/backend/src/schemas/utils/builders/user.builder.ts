@@ -53,6 +53,13 @@ export class UserBuilder {
         email: user.email,
       } as unknown as Partial<IUser>;
     }
+    if ('defaultPasswordForEntries' in user) {
+      this.user = {
+        ...this.user,
+        ...this.userMeta,
+        defaultPasswordForEntries: user.defaultPasswordForEntries,
+      };
+    }
     return this;
   }
 

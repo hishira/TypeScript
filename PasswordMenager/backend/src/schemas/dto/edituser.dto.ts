@@ -13,4 +13,9 @@ export class EditUserDto {
   @IsOptional()
   @MinLength(6)
   readonly password?;
+
+  @IsString()
+  @IsOptional()
+  @MinLength(6)
+  readonly importPassword?;
 }

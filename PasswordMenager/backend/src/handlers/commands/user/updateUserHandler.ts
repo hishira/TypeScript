@@ -16,7 +16,10 @@ export class UpdateUserHandler
     });
     return this.repository.update({
       _id: command.userId,
-      ...command.userEditDto,
+      ...{
+        ...command.userEditDto,
+        defaultPasswordForEntries: command.userEditDto.importPassword,
+      },
     });
   }
 }
