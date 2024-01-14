@@ -126,6 +126,7 @@ type IUser = {
   login: string;
   password: string;
   email: string;
+  defaultPasswordForEntries: string | null;
   meta: UserMeta;
 };
 
@@ -169,7 +170,9 @@ type SearchFiledInputProps = {
   onSearchFieldChange: (value: string) => void;
 };
 
-type UserUpdate = Partial<Pick<IUser, "email" | "login" | "password">>;
+type UserUpdate = Partial<Pick<IUser, "email" | "login" | "password">> & {
+  importPassword?: string | undefined;
+};
 
 type EntryData = {
   data: IEntry[];

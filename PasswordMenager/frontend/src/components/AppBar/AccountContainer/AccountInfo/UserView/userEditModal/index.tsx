@@ -26,14 +26,23 @@ export const UserEditModalComponent = ({
   const [login, setLogin] = useState<string>(user ? user.login : "");
   const [email, setEmail] = useState<string>(user ? user.email : "");
   const [password, setPassword] = useState<string | undefined>(undefined);
+  const [importPassword, setImportPassword] = useState<string | undefined>(
+    (user ? user.defaultPasswordForEntries : undefined) ?? undefined
+  );
   const [isAdvanceOptionVisible, setAdvanceOption] = useState<boolean>(false);
   const onSaveHandler = () => {
+    // TODO: Check
     const isPasswordNotDefined =
       password === null || password === undefined || password === "";
+    const isImportPasswordDefined =
+      importPassword !== null &&
+      importPassword !== undefined &&
+      importPassword !== "";
     changeHandle({
       login,
       email,
       ...(!isPasswordNotDefined && { password: password }),
+      ...(isImportPasswordDefined && { importPassword }),
     });
   };
   return (
@@ -89,12 +98,14 @@ export const UserEditModalComponent = ({
               tooltipText="editusermodal.importpassword.infomodal"
               label={"userinformation.edit.importPassword.label"}
               inputplaceholder="userinformation.edit.importPassword.label"
-              inputChange={(e) => {}}
+              inputChange={(e) => {
+                setImportPassword(e.target.value);
+              }}
               inputtype="txt"
               fontSize="18px"
               width="80%"
               inputFontSize="16px"
-              value={""}
+              value={importPassword}
             />
           </FormElements>
         ) : null}

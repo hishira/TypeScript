@@ -1,14 +1,11 @@
 import { useState } from "react";
-import { Import } from "../../../../../../utils/import.utils";
-import Modal from "../../../../../Modal";
+import { ModalOpenUtils } from "../../../../../../utils/moda.open.utils";
 import { Translation } from "../../../../../Translation";
 import { DeleteIcon } from "../../../../../icons/DeleteIcon";
 import { ShowIcon } from "../../../../../icons/ShowIcon";
 import { TuroOnIcon } from "../../../../../icons/TurnOnIcon";
-import { ImportRequestEntries } from "./ImportRequestEntries";
-import { Actions, ImportRequest, Imports } from "./component.styled";
-import { ModalOpenUtils } from "../../../../../../utils/moda.open.utils";
 import { ModalsView } from "./ModalsView";
+import { Actions, ImportRequest, Imports } from "./component.styled";
 
 export const ImportRequestCardView = ({
   imports,
@@ -20,9 +17,9 @@ export const ImportRequestCardView = ({
   const [modalType, setModalType] = useState<"show" | "delete" | "activate">(
     "show"
   );
-  const activateImportRequest = (importRequestId: string) => {
-    Import.getInstance().AcceptImportRequest(importRequestId).then(console.log);
-  };
+  // const activateImportRequest = (importRequestId: string) => {
+  //   Import.getInstance().AcceptImportRequest(importRequestId).then(console.log);
+  // };
   const showEntriesHandle = (entries: EntriesToImport[]) => {
     setEntriesToShow(entries);
     setModalType("show");
@@ -33,17 +30,24 @@ export const ImportRequestCardView = ({
   const deleteImportRequest = (importRequestId: string) => {
     setModalType("delete");
     setModalOpen(true);
-    //Import.getInstance().DeleteImportRequest(importRequestId).then(console.log);
+  };
+
+  const acceptImportRequest = (importRequestId: string) => {
+    setModalType("activate");
+    setModalOpen(true);
+    ModalOpenUtils.getInstance().CloseModal = true;
   };
 
   const showImportModalClose = () => {
     setModalOpen(false);
+    ModalOpenUtils.getInstance().CloseModal = false;
   };
 
   return (
     <>
       <ModalsView
-        acceptModalHandler={() => console.log("HI")}
+        acceptDeleteImportRequestHandler={() => console.log("HI")}
+        acceptActivateImportRequest={() => console.log("HI")}
         isModalVisible={modalOpen}
         modalClose={showImportModalClose}
         modalType={modalType}
@@ -75,7 +79,7 @@ export const ImportRequestCardView = ({
               <span>{importVal.entriesToImport.length}</span>
               <Actions>
                 <TuroOnIcon
-                  click={() => activateImportRequest(importVal._id)}
+                  click={() => acceptImportRequest(importVal._id)}
                 ></TuroOnIcon>
                 <ShowIcon
                   click={() => showEntriesHandle(importVal.entriesToImport)}
