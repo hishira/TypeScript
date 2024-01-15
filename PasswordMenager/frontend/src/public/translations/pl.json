@@ -124,5 +124,7 @@
     "notification.active.text": "Czy aktywować notyfikacje?",
     "active": "Aktywny",
     "suspend": "Zawieszony",
-    "notification.numerMessage": "Liczba aktywnych notyfikacji wynosi {{notificationLength}}"
+    "notification.numerMessage": "Liczba aktywnych notyfikacji wynosi {{notificationLength}}",
+    "actions": "Akcje",
+    "entriesToImport": "Hasła do zimportowania"
 }
