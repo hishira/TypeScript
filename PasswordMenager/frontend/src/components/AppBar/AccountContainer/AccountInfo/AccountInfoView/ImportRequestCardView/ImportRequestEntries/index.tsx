@@ -6,12 +6,16 @@ import {
   TitleContainer,
 } from "./component.styled";
 import { CloseIcon } from "../../../../../../icons/CloseIcon";
+import { Translation } from "../../../../../../Translation";
 
 export type ImportEntriesProprs = {
   entries: EntriesToImport[];
   closeHandle: () => void;
 };
-export const ImportRequestEntries = ({ entries, closeHandle }: ImportEntriesProprs) => {
+export const ImportRequestEntries = ({
+  entries,
+  closeHandle,
+}: ImportEntriesProprs) => {
   const [mappedEntries, setMappedEntries] = useState<EntriesToImport[]>([]);
 
   useEffect(() => {
@@ -29,14 +33,19 @@ export const ImportRequestEntries = ({ entries, closeHandle }: ImportEntriesProp
   return (
     <ImportRequestEntriesModal>
       <TitleContainer>
-        <span>Entries to import</span> <CloseIcon click={closeHandle} />
+        <span>{Translation("entriesToImport")}</span>{" "}
+        <CloseIcon click={closeHandle} />
       </TitleContainer>
       <ImportRequestHeader>
-        <div>Email</div>
-        <div>Username</div>
-        <div>Password</div>
-        <div>title</div>
-        <div>url</div>
+        <div>{Translation("userinformation.email")}</div>
+        <div>
+          {Translation("account.view.lastDeletedEntries.table.column.username")}
+        </div>
+        <div>{Translation("newentry.field.password")}</div>
+        <div>{Translation("entries.table.column.title")}</div>
+        <div>
+          {Translation("account.view.lastDeletedEntries.table.column.url")}
+        </div>
       </ImportRequestHeader>
       <ImportEntriesTable>
         {mappedEntries.map((e) => (

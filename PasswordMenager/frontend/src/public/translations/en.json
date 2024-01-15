@@ -134,5 +134,7 @@
     "notification.active.text": "Active notification?",
     "active": "Active",
     "suspend": "Suspend",
-    "notification.numerMessage": "Number of active notification for {{notificationLength}} entries"
+    "notification.numerMessage": "Number of active notification for {{notificationLength}} entries",
+    "actions": "Actions",
+    "entriesToImport": "Entries to import"
 }

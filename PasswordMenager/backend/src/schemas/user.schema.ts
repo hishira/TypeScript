@@ -21,8 +21,6 @@ const UserSchema = new mongoose.Schema<IUser>({
     required: true,
   },
   defaultPasswordForEntries: {
-    // Default password, when in import entries does not have password
-    //TODO: Implement logic for it?
     type: String,
     required: false,
     default: null,

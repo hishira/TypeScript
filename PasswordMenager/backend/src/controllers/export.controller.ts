@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   ParseFilePipeBuilder,
   Post,
   Req,
@@ -16,17 +15,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 
-import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { ExportService } from 'src/services/export.service';
 import { ExportCsvUtils } from 'src/utils/export.utils';
 @Controller('export')
 export class ExportController {
-  constructor(
-    private readonly exportService: ExportService,
-    @Inject(Repository)
-    private readonly entryService: Repository<IEntry>,
-  ) {}
+  constructor(private readonly exportService: ExportService) {}
 
   @Get('csv')
   @UseGuards(AuthGuard('accessToken'))
@@ -42,6 +35,19 @@ export class ExportController {
     });
   }
 
+  @Get('json')
+  @UseGuards(AuthGuard('accessToken'))
+  getJson(@Request() req, @Res() response: Response) {
+    this.exportService.getJsonFile(req.user._id).then((json) => {
+      response
+        .set({
+          'Content-Type': 'text/json',
+          'Content-Disposition': `attachment; filename="users.json"`,
+        })
+        .attachment('users.json')
+        .send(json);
+    });
+  }
   @Post('decrypt')
   @UseInterceptors(FileInterceptor('file'))
   async decryptData(

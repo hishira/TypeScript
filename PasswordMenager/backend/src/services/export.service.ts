@@ -5,6 +5,7 @@ import { CsvEntry } from 'src/utils/csvEntry';
 import { ExportCsvUtils } from 'src/utils/export.utils';
 import { ExportReader } from 'src/utils/exportReader';
 import { EntryService } from './entry.service';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 
 const EntryToCsvEntryMapper = (entryResponse): CsvEntry[] => {
   const csvRows: CsvEntry[] = Array.isArray(entryResponse)
@@ -34,6 +35,12 @@ export class ExportService {
         .setRows(csvRows)
         .getCsvAsString();
       return csv;
+    });
+  }
+
+  getJsonFile(userId): Promise<IEntry[]> {
+    return this.entryService.getByUser(userId, 100000).then((resp) => {
+      return 'data' in resp ? resp.data : resp;
     });
   }
   getCsvZipedFile(userId: string): Promise<Archiver.Archiver> {

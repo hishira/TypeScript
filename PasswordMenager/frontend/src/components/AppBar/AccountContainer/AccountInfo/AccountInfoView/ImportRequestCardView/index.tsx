@@ -69,7 +69,7 @@ export const ImportRequestCardView = ({
               "account.view.importRequest.table.column.numberOfEntriesToAdd"
             )}
           </span>
-          <span>Actions</span>
+          <span>{Translation("actions")}</span>
         </div>
         <Imports>
           {imports.map((importVal) => (
