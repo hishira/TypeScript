@@ -11,9 +11,16 @@ import { PlusComponent } from "../icons/PlusIcon";
 import { ExpotrModal, ImportModal } from "./PassBarrModalButtons";
 import { Container, GroupContainer } from "./component.styled";
 
-const exportHandle = (): void => {
+const exportCsvHandle = (): void => {
   Export.getInstance()
     .ExportEntriesCsv()
+    .then(() => {})
+    .catch(console.error);
+};
+
+const exportJsonHandler = (): void => {
+  Export.getInstance()
+    .ExportJson()
     .then(() => {})
     .catch(console.error);
 };
@@ -51,7 +58,8 @@ const PassBar: React.FC = (): JSX.Element => {
         component={
           <ExpotrModal
             exportEncrypted={exportEncrypted}
-            exportHandle={exportHandle}
+            exportCsvHandle={exportCsvHandle}
+            exportJsonHandle={exportJsonHandler}
           />
         }
       />
@@ -73,7 +81,7 @@ const PassBar: React.FC = (): JSX.Element => {
         modalOpen={importEntriesModalOpen}
         closeModalHandle={() => setImportEntriesModalOpen(false)}
       />
-      <GroupContainer >
+      <GroupContainer>
         <IconButton>
           <PlusComponent click={() => setmodalopen(true)} />
         </IconButton>

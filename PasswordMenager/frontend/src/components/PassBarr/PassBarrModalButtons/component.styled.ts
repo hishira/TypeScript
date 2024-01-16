@@ -6,5 +6,5 @@ export const ModalButtonsContainer = styled.div`
   gap: 12px;
   padding: 2rem;
   flex-direction: column;
-  width: 10rem;
+  width: 15rem;
 `
