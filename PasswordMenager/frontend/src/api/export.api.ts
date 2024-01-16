@@ -31,4 +31,11 @@ export class ExportApi extends Api {
 
     return fetch(url, this.fetchGetObjectWithtoken(token));
   }
+
+  async getExportedEntriesAsJson(): Promise<Response> {
+    const url = this.getUrl("export/json");
+    const token = this.sessionStorage.getAccessToken();
+
+    return fetch(url, this.fetchGetObjectWithtoken(token));
+  }
 }

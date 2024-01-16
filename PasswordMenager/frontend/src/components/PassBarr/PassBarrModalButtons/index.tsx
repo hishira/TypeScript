@@ -3,17 +3,22 @@ import { Translation } from "../../Translation";
 import { ModalButtonsContainer } from "./component.styled";
 
 type ExportModalProps = {
-  exportHandle: () => void;
+  exportCsvHandle: () => void;
+  exportJsonHandle: () => void;
   exportEncrypted: () => void;
 };
 export const ExpotrModal = ({
-  exportHandle,
+  exportCsvHandle,
+  exportJsonHandle,
   exportEncrypted,
 }: ExportModalProps) => {
   return (
     <ModalButtonsContainer>
-      <Button color="lightgray" onClick={exportHandle}>
-        {Translation("bar.modal.button.exportentries")}
+      <Button color="lightgray" onClick={exportCsvHandle}>
+        {Translation("bar.modal.button.exportentriescsv")}
+      </Button>
+      <Button color="lightgray" onClick={exportJsonHandle}>
+        {Translation("bar.modal.button.exportentriesjson")}
       </Button>
       <Button color="lightgray" onClick={exportEncrypted}>
         {Translation("bar.modal.button.exportencrypted")}

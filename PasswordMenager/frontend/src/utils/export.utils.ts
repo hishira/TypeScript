@@ -37,6 +37,12 @@ export class Export {
     });
   }
 
+  async ExportJson(): Promise<unknown> {
+    return this.exportApi.getExportedEntriesAsJson().then((resp) => {
+      resp.blob().then((file) => this.downloadFile(file, "entries.json"));
+    });
+  }
+
   private downloadFile(blob: Blob, filename: string) {
     const csvUrl = URL.createObjectURL(blob);
     const anchor = this.documentUtils.createDownloableLink(csvUrl, filename);
