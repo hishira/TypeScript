@@ -33,10 +33,7 @@ export class ImportController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get('activate/:id')
-  async activateImportRequest(
-    @Request() req,
-    @Param('id') importRequestId: string,
-  ) {
+  activateImportRequest(@Request() req, @Param('id') importRequestId: string) {
     return this.importService.activateImportRequest(
       importRequestId,
       req.user._id,
@@ -45,7 +42,7 @@ export class ImportController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Delete('/:id')
-  async deleteImportRequest(@Param('id') importRequestId: string) {
+  deleteImportRequest(@Param('id') importRequestId: string) {
     return this.importService.deleteImportRequest(importRequestId);
   }
 

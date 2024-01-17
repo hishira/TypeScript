@@ -44,11 +44,11 @@ export class Export {
   }
 
   private downloadFile(blob: Blob, filename: string) {
-    const csvUrl = URL.createObjectURL(blob);
-    const anchor = this.documentUtils.createDownloableLink(csvUrl, filename);
+    const fileUrl = URL.createObjectURL(blob);
+    const anchor = this.documentUtils.createDownloableLink(fileUrl, filename);
     this.documentUtils.addChildElement(anchor);
     anchor.click();
     this.documentUtils.removeChildElement(anchor);
-    URL.revokeObjectURL(csvUrl);
+    URL.revokeObjectURL(fileUrl);
   }
 }
