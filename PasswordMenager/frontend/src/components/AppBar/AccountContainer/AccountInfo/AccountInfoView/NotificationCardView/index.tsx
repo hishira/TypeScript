@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Entry } from "../../../../../../utils/entry.utils";
-import { Translation, TranslationFunction } from "../../../../../Translation";
+import { Translation } from "../../../../../Translation";
 import { DeleteIcon } from "../../../../../icons/DeleteIcon";
 import { EditIcon } from "../../../../../icons/EditIcon";
 import NotificationModal from "./NotificationModals";
@@ -50,7 +50,7 @@ export const NotificationCardView = () => {
       {Translation("notification.numerMessage", {
         notificationLength: notification.length,
       })}
-     
+
       <NotificationList>
         <NotificationElement>
           <NotificationSubElement>
