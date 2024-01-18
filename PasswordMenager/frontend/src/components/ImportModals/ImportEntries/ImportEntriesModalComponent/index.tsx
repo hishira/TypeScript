@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { ImportCheckData } from "..";
 import Button from "../../../Button";
-import { FileSelector } from "../../../ImportFille";
+import { FileSelector, PossibleFileType } from "../../../ImportFille";
 import { Translation, TranslationFunction } from "../../../Translation";
 import { ImportEntries } from "./component.styled";
 
@@ -15,9 +15,15 @@ const ImportEntriesModalComponent = ({
   importFileInfo,
 }: ImportEntriesModalComponentProps) => {
   const [, fileChange] = useState<File | undefined>(undefined);
-  const [filename,] = useState<string | undefined>(undefined);
-
+  const [filename] = useState<string | undefined>(undefined);
+  const availabeFileType = [
+    PossibleFileType.CSV,
+    PossibleFileType.JSON,
+    PossibleFileType.ApplicationJson,
+    PossibleFileType.TextCsv,
+  ];
   const fileChangeHandlerFunction = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e);
     const { target: { files = [] } = {} } = e;
     if (files && files?.length <= 0) return;
     files && fileChange(files[0]);
@@ -28,7 +34,7 @@ const ImportEntriesModalComponent = ({
   return (
     <ImportEntries>
       <FileSelector
-        availableFileType={["csv", "txt"]}
+        availableFileType={availabeFileType}
         fileChange={fileChangeHandlerFunction}
       />
       {filename ? (

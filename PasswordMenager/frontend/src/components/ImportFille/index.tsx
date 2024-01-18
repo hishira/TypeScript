@@ -9,12 +9,15 @@ import {
 } from "./component.styled";
 import { Translation, TranslationFunction } from "../Translation";
 type PossibleFiles = `${PossibleFileType}`;
-enum PossibleFileType {
+export enum PossibleFileType {
   JPG = "jpeg",
   PNG = "png",
   CSV = "csv",
   TXT = "txt",
   XYZ = "xyz",
+  JSON = "json",
+  ApplicationJson = 'application/json',
+  TextCsv = 'text/csv',
 }
 type FileSelectorProps = {
   fileChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -37,7 +40,7 @@ export const FileSelector = ({
     const selectedTypes = Array.from(files).map(
       (file) => (file.type || file.name.split(".").at(-1)) ?? ""
     );
-    console.log(files);
+    console.log(selectedTypes);
     if (!availableFileType || availableFileType.length === 0) return;
     const isWrongType = selectedTypes.some(
       (currentfileType) =>

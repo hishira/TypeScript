@@ -21,6 +21,22 @@ import { EmptyFileValidator } from 'src/validators/emptyfile.validator';
 import { CustomFileValidator } from 'src/validators/file.validator';
 import { NotFileValidator } from 'src/validators/notfile.validator';
 import { Readable, Writable } from 'stream';
+
+const CSVPipeBuilder = new ParseFilePipeBuilder()
+  .addFileTypeValidator({ fileType: 'csv' })
+  .addMaxSizeValidator({ maxSize: 10000 })
+  .addValidator(new NotFileValidator())
+  .addValidator(new EmptyFileValidator())
+  .addValidator(new CustomFileValidator())
+  .build();
+
+const JSONPipeBuilder = new ParseFilePipeBuilder()
+  .addFileTypeValidator({ fileType: 'json' })
+  .addMaxSizeValidator({ maxSize: 1000000 })
+  .addValidator(new NotFileValidator())
+  .addValidator(new EmptyFileValidator())
+  .addValidator(new CustomFileValidator())
+  .build();
 @Controller('import')
 export class ImportController {
   constructor(private importService: ImportService) {}
@@ -64,19 +80,24 @@ export class ImportController {
   @UseInterceptors(FileInterceptor('file'))
   checkCsvFile(
     @Request() req,
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType: 'csv' })
-        .addMaxSizeValidator({ maxSize: 10000 })
-        .addValidator(new NotFileValidator())
-        .addValidator(new EmptyFileValidator())
-        .addValidator(new CustomFileValidator())
-        .build(),
-    )
+    @UploadedFile(CSVPipeBuilder)
     file: Express.Multer.File,
   ) {
     return this.importService.importEntriesFromFile(file, req.user._id);
   }
+
+  @UseGuards(AuthGuard('accessToken'))
+  @Post('checkJson')
+  @UseInterceptors(FileInterceptor('file'))
+  checkJsonFile(
+    @Request() req,
+    @UploadedFile(JSONPipeBuilder)
+    file: Express.Multer.File,
+  ) {
+    console.log(file);
+    return Promise.resolve('true'); //this.importService.importEntriesFromFile(file, req.user._id);
+  }
+
   @Post('csv')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(

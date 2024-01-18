@@ -24,13 +24,16 @@ export class Import {
 
   public Import(
     file: File | FormData,
-    fileSize: number
+    fileSize: number,
+    fileType: "csv" | "json"
   ): Promise<{
     entiresToImport: [];
     importRequestId: string;
     numberOfEntriesToAdd: number;
   }> {
-    return this.importApi.import(file, fileSize).then((data) => data.json());
+    return this.importApi
+      .import(file, fileSize, fileType)
+      .then((data) => data.json());
   }
 
   ImportRequest() {
