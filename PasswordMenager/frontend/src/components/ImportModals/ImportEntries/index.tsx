@@ -19,9 +19,11 @@ const acceptHandle = (
 ): Promise<boolean> => {
   console.log(formData);
   if (!formData) return Promise.resolve(false);
-
+  console.log(formData.getAll('file'));
+  // TODO: Fix
+  //return Promise.resolve(true);
   return Import.getInstance()
-    .Import(formData, 0)
+    .Import(formData, 0, 'json')
     .then((data: ImportCheckData) => {
       console.log(data);
       setImportInfo(data);
@@ -33,6 +35,7 @@ const setFormDataAction = (
   file: File,
   setFormData: Dispatch<SetStateAction<FormData | undefined>>
 ) => {
+  console.log("File ", file);
   const formFileData = new FormData();
   formFileData.set("file", file);
   setFormData(formFileData);
@@ -69,7 +72,7 @@ export const ImportModalEntries = ({
 
   const functionTimeout = () => {
     setExtendData({
-      buttonText: TranslationFunction("import.modal.button.import"),
+      buttonText: "Import",
       handleButton: () => console.log("Import"),
     });
   };
@@ -84,7 +87,9 @@ export const ImportModalEntries = ({
     });
   }, [modalOpen, formData]);
 
-  const functionFile = (e: File) => setFormDataAction(e, setFormData);
+  const functionFile = (e: File) => {
+    setFormDataAction(e, setFormData);
+  };
   return modalOpen ? (
     <AcceptModalComponent
       visible={importModalOpen}

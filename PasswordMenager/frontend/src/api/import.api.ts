@@ -26,12 +26,13 @@ export class ImportApi extends Api {
     return fetch(url, this.fetchPostFileWithToken(file, token, filesize));
   }
 
-  import(file: File | FormData, filesize: number): Promise<Response> {
-    const url = this.getUrl("import/checkCsv");
+  import(file: File | FormData, filesize: number, importType: 'csv' | 'json'): Promise<Response> {
+    const url = this.getUrl(`import/${importType === 'csv' ? `checkCsv` : 'checkJson'}`);
 
     const token = this.sessionStorage.getAccessToken();
     return fetch(url, this.fetchPostFileWithToken(file, token, filesize));
   }
+  
 
   importRequests(): Promise<Response> {
     const url = this.getUrl("import/importRequest");
