@@ -19,6 +19,7 @@ import { EditImportRequest } from 'src/schemas/dto/editImportRequest.dto';
 import { ImportService } from 'src/services/import.service';
 import { EmptyFileValidator } from 'src/validators/emptyfile.validator';
 import { CustomFileValidator } from 'src/validators/file.validator';
+import { JSONFileValidator } from 'src/validators/json.file.validator';
 import { NotFileValidator } from 'src/validators/notfile.validator';
 import { Readable, Writable } from 'stream';
 
@@ -35,7 +36,7 @@ const JSONPipeBuilder = new ParseFilePipeBuilder()
   .addMaxSizeValidator({ maxSize: 1000000 })
   .addValidator(new NotFileValidator())
   .addValidator(new EmptyFileValidator())
-  .addValidator(new CustomFileValidator())
+  .addValidator(new JSONFileValidator())
   .build();
 @Controller('import')
 export class ImportController {
@@ -95,7 +96,7 @@ export class ImportController {
     file: Express.Multer.File,
   ) {
     console.log(file);
-    return Promise.resolve('true'); //this.importService.importEntriesFromFile(file, req.user._id);
+    return Promise.resolve(true); //this.importService.importEntriesFromFile(file, req.user._id);
   }
 
   @Post('csv')

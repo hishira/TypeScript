@@ -11,6 +11,9 @@ export class CustomFileValidator extends FileValidator<any> {
     stream.on('data', (chunk) => {
       chunks.push(chunk);
     });
+    stream.on('end', () => {
+      console.log(chunks.toString());
+    });
     return true;
   }
 
