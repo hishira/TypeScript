@@ -1,8 +1,8 @@
 import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
-import {
-  CsvEntrySchemaMapper,
-  EntrySchemaFileMapper,
-} from 'src/schemas/mapper/jsonEntrySchemaMapper';
+import { CsvEntrySchemaMapper } from 'src/schemas/mapper/csvEntrySchemaMapper';
+import { EntrySchemaFileMapper } from 'src/schemas/mapper/entrySchemaFileMappre';
+import { JsonEntrySchemaMapper } from 'src/schemas/mapper/jsonEntrySchemaMapper';
+
 import { Writable } from 'stream';
 
 type ToString = {
@@ -14,6 +14,7 @@ export class WritableStream extends Writable {
     return this.data;
   }
   constructor(
+    public readonly writeType: 'csv' | 'json',
     private readonly data: ImportEntrySchema[] = [],
     public readonly separator: string = ',',
   ) {
@@ -25,10 +26,10 @@ export class WritableStream extends Writable {
     callback: (error?: Error) => void,
   ): void {
     const fileContentAsString = chunk.toString();
-    const csvMapper: EntrySchemaFileMapper = new CsvEntrySchemaMapper(
-      fileContentAsString,
-      this.separator,
-    );
+    const csvMapper: EntrySchemaFileMapper =
+      this.writeType === 'csv'
+        ? new CsvEntrySchemaMapper(fileContentAsString, this.separator)
+        : new JsonEntrySchemaMapper(fileContentAsString, this.separator);
     // TODO: Check
     // const fileRows = fileContentAsString.split('\r\n');
     // fileRows.forEach((csvRow) => {
@@ -38,23 +39,5 @@ export class WritableStream extends Writable {
     // });
     this.data.push(...csvMapper.getMappedImportEntries());
     callback();
-  }
-}
-
-export class JsonWritableStream extends Writable {
-  get getSavedData(): ImportEntrySchema[] {
-    return this.data;
-  }
-  constructor(private readonly data: ImportEntrySchema[] = []) {
-    super();
-  }
-
-  override _write(
-    chunk: ToString,
-    encoding: BufferEncoding,
-    callback: (error?: Error) => void,
-  ): void {
-    const fileContentAsString = chunk.toString();
-    const entriesfromArray = JSON.parse(fileContentAsString);
   }
 }

@@ -1,37 +1,39 @@
 import { ImportEntrySchema } from '../Interfaces/importRequest.interface';
+import { EntrySchemaFileMapper } from './entrySchemaFileMappre';
 
-export interface ImportEntrySchemaFileMapper {
-  getMappedImportEntries(): ImportEntrySchema[];
-}
-
-export abstract class EntrySchemaFileMapper
-  implements ImportEntrySchemaFileMapper
-{
-  protected readonly importEntrySchemas: ImportEntrySchema[] = [];
-  constructor(protected readonly stringContent: string) {}
-  getMappedImportEntries(): ImportEntrySchema[] {
-    return this.importEntrySchemas;
-  }
-
-  abstract mapStringToImportSchemas(): void;
-}
-export class CsvEntrySchemaMapper extends EntrySchemaFileMapper {
-  constructor(stringContent: string, public separator: string = ',') {
-    super(stringContent);
-  }
+type MapperType = 'array' | 'object';
+export class JsonEntrySchemaMapper extends EntrySchemaFileMapper {
+  parsedJsonData: unknown;
+  parsedMapper: { [keyof in MapperType]: () => ImportEntrySchema[] } = {
+    array: this.arrayJsonMapper.bind(this),
+    object: this.objectJsonMapper.bind(this),
+  };
   mapStringToImportSchemas(): void {
-    const fileRows = this.stringContent.split('\r\n');
-    fileRows.forEach((csvRow) => {
-      const values = csvRow.split(this.separator);
-      const [name, username, password, note] = values;
-      this.importEntrySchemas.push(
-        new ImportEntrySchema(password, username, name, note, ''),
+    this.parsedJsonData = JSON.parse(this.stringContent);
+    const mapType: MapperType = Array.isArray(this.parsedJsonData)
+      ? 'array'
+      : 'object';
+    this.importEntrySchemas = this.parsedMapper[mapType]();
+  }
+
+  arrayJsonMapper(): ImportEntrySchema[] {
+    const importEntriesSchema: ImportEntrySchema[] = [];
+    (this.parsedJsonData as any[]).forEach((jsonData) => {
+      importEntriesSchema.push(
+        new ImportEntrySchema(
+          jsonData?.password ?? undefined,
+          jsonData?.username ?? undefined,
+          jsonData?.url ?? undefined,
+          jsonData?.title ?? undefined,
+          jsonData?.email ?? undefined,
+        ),
       );
     });
+    return importEntriesSchema;
   }
-}
-export class JsonEntrySchemaMapper extends EntrySchemaFileMapper {
-  mapStringToImportSchemas(): void {
-    throw new Error('Method not implemented.');
+  objectJsonMapper(): ImportEntrySchema[] {
+    const importEntriesSchema: ImportEntrySchema[] = [];
+
+    return importEntriesSchema;
   }
 }

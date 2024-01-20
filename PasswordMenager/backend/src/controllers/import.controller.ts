@@ -84,7 +84,7 @@ export class ImportController {
     @UploadedFile(CSVPipeBuilder)
     file: Express.Multer.File,
   ) {
-    return this.importService.importEntriesFromFile(file, req.user._id);
+    return this.importService.importEntriesFromFile(file, req.user._id, 'csv');
   }
 
   @UseGuards(AuthGuard('accessToken'))
@@ -95,8 +95,7 @@ export class ImportController {
     @UploadedFile(JSONPipeBuilder)
     file: Express.Multer.File,
   ) {
-    console.log(file);
-    return Promise.resolve(true); //this.importService.importEntriesFromFile(file, req.user._id);
+    return this.importService.importEntriesFromFile(file, req.user._id, 'json');
   }
 
   @Post('csv')
