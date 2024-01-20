@@ -1,11 +1,14 @@
+import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
 import { Readable } from 'stream';
 import { WritableStream } from './writableStream';
-import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
 
 export class ImportRequestStream {
   private reader: Readable;
-  private readonly writer: WritableStream = new WritableStream();
-  constructor(file: Express.Multer.File) {
+  private readonly writer: WritableStream = new WritableStream(this.writeType);
+  constructor(
+    file: Express.Multer.File,
+    public writeType: 'csv' | 'json' = 'csv',
+  ) {
     this.reader = Readable.from(file.buffer);
     this.reader.pipe(this.writer);
   }

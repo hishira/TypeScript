@@ -50,8 +50,12 @@ export class ImportService {
   > {
     return this.queryBus.execute(new GetImportQuery({ userId: userId }));
   }
-  importEntriesFromFile(file: Express.Multer.File, userid: string) {
-    const importRequestStream = new ImportRequestStream(file);
+  importEntriesFromFile(
+    file: Express.Multer.File,
+    userid: string,
+    writeType: 'csv' | 'json',
+  ) {
+    const importRequestStream = new ImportRequestStream(file, writeType);
     let entries = [];
     return importRequestStream
       .getPromise()
