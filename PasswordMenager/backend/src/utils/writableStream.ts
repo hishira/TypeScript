@@ -1,8 +1,6 @@
 import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
-import { CsvEntrySchemaMapper } from 'src/schemas/mapper/csvEntrySchemaMapper';
 import { EntrySchemaFileMapper } from 'src/schemas/mapper/entrySchemaFileMappre';
-import { JsonEntrySchemaMapper } from 'src/schemas/mapper/jsonEntrySchemaMapper';
-
+import { ImportEntrySchemaMapperFactory } from 'src/schemas/mapper/importEntrySchemaMapperFactory';
 import { Writable } from 'stream';
 
 type ToString = {
@@ -27,16 +25,10 @@ export class WritableStream extends Writable {
   ): void {
     const fileContentAsString = chunk.toString();
     const csvMapper: EntrySchemaFileMapper =
-      this.writeType === 'csv'
-        ? new CsvEntrySchemaMapper(fileContentAsString, this.separator)
-        : new JsonEntrySchemaMapper(fileContentAsString, this.separator);
-    // TODO: Check
-    // const fileRows = fileContentAsString.split('\r\n');
-    // fileRows.forEach((csvRow) => {
-    //   const values = csvRow.split(this.separator);
-    //   const [name, username, password, note] = values;
-    //   this.data.push(new ImportEntrySchema(password, username, name, note, ''));
-    // });
+      ImportEntrySchemaMapperFactory.GetEntrySchemaMapper(this.writeType, {
+        fileContentAsString: fileContentAsString,
+        separator: this.separator,
+      });
     this.data.push(...csvMapper.getMappedImportEntries());
     callback();
   }

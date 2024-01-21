@@ -1,17 +1,27 @@
-import { useState } from "react";
+import { inject, observer } from "mobx-react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { IGeneral } from "../../../../../../models/General";
+import { Import } from "../../../../../../utils/import.utils";
 import { ModalOpenUtils } from "../../../../../../utils/moda.open.utils";
+import {
+  ErrorPopUpObject,
+  SuccessPopUpObject,
+} from "../../../../../../utils/popup.utils";
 import { Translation } from "../../../../../Translation";
 import { DeleteIcon } from "../../../../../icons/DeleteIcon";
 import { ShowIcon } from "../../../../../icons/ShowIcon";
 import { TuroOnIcon } from "../../../../../icons/TurnOnIcon";
 import { ModalsView } from "./ModalsView";
 import { Actions, ImportRequest, Imports } from "./component.styled";
-import { Import } from "../../../../../../utils/import.utils";
 
-export const ImportRequestCardView = ({
+const ImportRequestCardView = ({
   imports,
+  store,
+  refetch,
 }: {
   imports: ImportRequestData[];
+  store?: IGeneral;
+  refetch: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [entriesToShow, setEntriesToShow] = useState<EntriesToImport[]>([]);
@@ -53,7 +63,19 @@ export const ImportRequestCardView = ({
     if (actionImportRequest === undefined) return;
     Import.getInstance()
       .DeleteImportRequest(actionImportRequest)
-      .then(console.log);
+      .then((r) => {
+        if (r.status >= 200 && r.status <= 299) {
+          store?.setPopUpinfo(
+            SuccessPopUpObject("Import request successfull deleted")
+          );
+          refetch((a) => !a);
+        } else {
+          store?.setPopUpinfo(
+            ErrorPopUpObject("Error occurs while deleting import request")
+          );
+        }
+        showImportModalClose();
+      });
   };
 
   return (
@@ -108,3 +130,5 @@ export const ImportRequestCardView = ({
     </>
   );
 };
+
+export default inject("store")(observer(ImportRequestCardView));
