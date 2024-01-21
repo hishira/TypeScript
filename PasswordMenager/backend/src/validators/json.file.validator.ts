@@ -1,6 +1,17 @@
 import { FileValidator } from '@nestjs/common';
 import { Duplex } from 'stream';
+enum JsonErrorsType {
+  EMPTY = 'empty',
+  PARSE = 'parse',
+  FORMAT = 'format',
+}
 export class JSONFileValidator extends FileValidator<any> {
+  ErrorsMapper: { [key in JsonErrorsType]: string } = {
+    empty: 'JSON file is empty',
+    parse: 'Cannot parse json file',
+    format: 'Wrong json format',
+  };
+  currectErrorMessage = this.ErrorsMapper[JsonErrorsType.EMPTY];
   constructor(validationOptions: any = {}) {
     super(validationOptions);
   }
@@ -17,7 +28,12 @@ export class JSONFileValidator extends FileValidator<any> {
         const chunksString = chunks.toString();
         try {
           JSON.parse(chunksString);
+          if (chunksString.length === 0) {
+            this.currectErrorMessage = this.ErrorsMapper[JsonErrorsType.FORMAT];
+            resolve(false);
+          }
         } catch (e) {
+          this.currectErrorMessage = this.ErrorsMapper[JsonErrorsType.PARSE];
           resolve(false);
         }
         resolve(true);
@@ -25,7 +41,7 @@ export class JSONFileValidator extends FileValidator<any> {
     });
   }
   buildErrorMessage(file: any): string {
-    return 'Cannot parse json file';
+    return this.currectErrorMessage;
   }
 
   private getStream(buffer: Buffer): Duplex {

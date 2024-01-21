@@ -48,7 +48,9 @@ export class ImportService {
         pageInfo: Paginator;
       }
   > {
-    return this.queryBus.execute(new GetImportQuery({ userId: userId }));
+    return this.queryBus.execute(
+      new GetImportQuery({ userId: userId, state: ImportRequestState.Active }),
+    );
   }
   importEntriesFromFile(
     file: Express.Multer.File,

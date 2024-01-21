@@ -16,28 +16,14 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EditImportRequest } from 'src/schemas/dto/editImportRequest.dto';
+import { CSVPipeBuilder } from 'src/schemas/utils/builders/csvFile.builder';
+import { JSONPipeBuilder } from 'src/schemas/utils/builders/jsonFile.builder';
 import { ImportService } from 'src/services/import.service';
 import { EmptyFileValidator } from 'src/validators/emptyfile.validator';
 import { CustomFileValidator } from 'src/validators/file.validator';
-import { JSONFileValidator } from 'src/validators/json.file.validator';
 import { NotFileValidator } from 'src/validators/notfile.validator';
 import { Readable, Writable } from 'stream';
 
-const CSVPipeBuilder = new ParseFilePipeBuilder()
-  .addFileTypeValidator({ fileType: 'csv' })
-  .addMaxSizeValidator({ maxSize: 10000 })
-  .addValidator(new NotFileValidator())
-  .addValidator(new EmptyFileValidator())
-  .addValidator(new CustomFileValidator())
-  .build();
-
-const JSONPipeBuilder = new ParseFilePipeBuilder()
-  .addFileTypeValidator({ fileType: 'json' })
-  .addMaxSizeValidator({ maxSize: 1000000 })
-  .addValidator(new NotFileValidator())
-  .addValidator(new EmptyFileValidator())
-  .addValidator(new JSONFileValidator())
-  .build();
 @Controller('import')
 export class ImportController {
   constructor(private importService: ImportService) {}

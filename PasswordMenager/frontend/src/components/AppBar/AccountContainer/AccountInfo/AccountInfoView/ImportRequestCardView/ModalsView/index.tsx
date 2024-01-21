@@ -4,6 +4,7 @@ import {
   ImportEntriesProprs,
   ImportRequestEntries,
 } from "../ImportRequestEntries";
+import { ActivateImportRequest, DeleteImportRequest } from "./component.styled";
 
 export type ModalViewsType = {
   modalType: "show" | "delete" | "activate";
@@ -26,14 +27,22 @@ export const ModalsView = ({
     <AcceptModalComponent
       visible={isModalVisible}
       onClose={() => modalClose()}
-      component={<div>Are you sure to delete import requests?</div>}
+      component={
+        <DeleteImportRequest>
+          Are you sure to delete import requests?
+        </DeleteImportRequest>
+      }
       acceptHandle={acceptDeleteImportRequestHandler}
     />
   ) : modalType === "activate" ? (
     <AcceptModalComponent
       visible={isModalVisible}
       onClose={() => modalClose()}
-      component={<div>Activate this import request?</div>}
+      component={
+        <ActivateImportRequest>
+          Activate import request? All entries will be added to your store
+        </ActivateImportRequest>
+      }
       acceptHandle={acceptActivateImportRequest}
     />
   ) : (

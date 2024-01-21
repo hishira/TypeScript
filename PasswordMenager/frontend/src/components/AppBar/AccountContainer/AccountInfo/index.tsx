@@ -15,7 +15,8 @@ import {
 const AccountInfo = () => {
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
-  const { userinfo, importRequests, loading } = AccountInfoEffect();
+  const [refetch, setRefetch] = useState<boolean>(false);
+  const { userinfo, importRequests, loading } = AccountInfoEffect(refetch);
 
   return (
     <Loading
@@ -45,7 +46,7 @@ const AccountInfo = () => {
           </AccountInfoHeader>
           <Devider />
           <AccountInfoContent>
-            {GetCurrentView(mainContentView, importRequests)}
+            {GetCurrentView(mainContentView, importRequests, setRefetch)}
           </AccountInfoContent>
         </AccountInfoContainer>
       }

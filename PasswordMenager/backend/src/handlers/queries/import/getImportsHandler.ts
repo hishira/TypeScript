@@ -10,9 +10,10 @@ export class GetImportQueryHandler
 {
   execute(query: GetImportQuery): Promise<any> {
     const { input } = query;
-    if ('userId' in input) {
+    //TODO: Refactor
+    if ('userId' in input && 'state' in input) {
       const option = {
-        getOption: () => ({ userid: input.userId }),
+        getOption: () => ({ userid: input.userId, state: input.state }),
       };
       return this.repository.find(option);
     }
