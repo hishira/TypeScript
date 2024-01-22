@@ -24,41 +24,45 @@ export class UserBuilder {
   passwordForImportEntries(importPasswordEntries): this {
     this.user = {
       ...this.user,
+      ...this.userMeta,
       defaultPasswordForEntries: importPasswordEntries,
     };
 
     return this;
   }
 
+  emailUpdate(email: string): this {
+    this.user = {
+      ...this.user,
+      ...this.userMeta,
+      email,
+    };
+
+    return this;
+  }
+
+  async passwordUpdate(password: string): Promise<this> {
+    const hashesPassword = await PasswordUtils.EncryptPassword(password);
+    this.user = {
+      ...this.userMeta,
+      password: hashesPassword,
+    } as unknown as Partial<IUser>;
+
+    return this;
+  }
+
   async updateBasedOnUserEntry(user: Partial<IUser>): Promise<this> {
-    //TODO: Ref
     if (UserField.PASSWORD in user) {
-      const hashesPassword = await PasswordUtils.EncryptPassword(user.password);
-      this.user = {
-        ...this.userMeta,
-        password: hashesPassword,
-      } as unknown as Partial<IUser>;
+      await this.updatePassword(user.password);
     }
     if ('login' in user) {
-      this.user = {
-        ...this.user,
-        ...this.userMeta,
-        login: user.login,
-      } as unknown as Partial<IUser>;
+      this.loginUpdate(user.login);
     }
     if ('email' in user) {
-      this.user = {
-        ...this.user,
-        ...this.userMeta,
-        email: user.email,
-      } as unknown as Partial<IUser>;
+      this.emailUpdate(user.email);
     }
     if ('defaultPasswordForEntries' in user) {
-      this.user = {
-        ...this.user,
-        ...this.userMeta,
-        defaultPasswordForEntries: user.defaultPasswordForEntries,
-      };
+      this.passwordForImportEntries(user.defaultPasswordForEntries);
     }
     return this;
   }

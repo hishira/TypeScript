@@ -3,7 +3,7 @@ import { AccountInfoEffect } from "../../../../hooks/accountInfo.hook";
 import { Loading } from "../../../Loading";
 import { Translation } from "../../../Translation";
 import { ContentType, GetCurrentView } from "./AccountInfoView";
-import { UserView } from "./UserView";
+import UserView from "./UserView";
 import {
   AccountInfoContainer,
   AccountInfoContent,
@@ -23,7 +23,7 @@ const AccountInfo = () => {
       loading={loading}
       ComponentToLoad={
         <AccountInfoContainer>
-          <UserView user={userinfo}></UserView> <Devider />
+          <UserView user={userinfo} setRefetch={setRefetch}></UserView> <Devider />
           <AccountInfoHeader>
             <HeaderButton
               onClick={() => setMainContentView("Notification")}
