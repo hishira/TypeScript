@@ -1,6 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetImportQuery } from 'src/queries/import/getImports.queries';
 import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
+import { ImportRequestBuilder } from 'src/schemas/utils/builders/importRequest.builder';
 import { BaseQueryHandler } from '../BaseQueryHandler';
 
 @QueryHandler(GetImportQuery)
@@ -10,15 +11,11 @@ export class GetImportQueryHandler
 {
   execute(query: GetImportQuery): Promise<any> {
     const { input } = query;
-    //TODO: Refactor
-    if ('userId' in input && 'state' in input) {
-      const option = {
-        getOption: () => ({ userid: input.userId, state: input.state }),
-      };
-      return this.repository.find(option);
-    }
-    if ('id' in input) {
-      return this.repository.findById(input.id);
-    }
+    const importRequestOption = new ImportRequestBuilder()
+      .setId(input.id)
+      .setState(input.state)
+      .setUserId(input.userId)
+      .getOption();
+    return this.repository.find(importRequestOption);
   }
 }

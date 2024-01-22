@@ -26,7 +26,7 @@ export class User {
     return this.user.getUserInfo(token).then((data) => data.json());
   }
 
-  updateUser(user: UserUpdate): Promise<unknown> {
+  updateUser(user: UserUpdate): Promise<Response> {
     const token = this.sessionStorage.getAccessToken();
     return this.user.updateUserInfo(token, user);
   }
