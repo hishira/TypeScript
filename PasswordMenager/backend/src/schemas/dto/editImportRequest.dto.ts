@@ -21,7 +21,6 @@ export class EditImportRequest {
   @IsOptional()
   readonly state: ImportRequestState;
 
-  //TODO: ImportEntrySchema validation
   @IsArray()
   @Validate(ImportEntrySchemaValidator, { each: true })
   @IsOptional()

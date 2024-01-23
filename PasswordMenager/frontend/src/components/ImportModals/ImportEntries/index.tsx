@@ -17,13 +17,16 @@ const acceptHandle = (
   formData: FormData | undefined,
   setImportInfo: Dispatch<SetStateAction<ImportCheckData | null>>
 ): Promise<boolean> => {
-  console.log(formData);
   if (!formData) return Promise.resolve(false);
-  console.log(formData.getAll('file'));
-  // TODO: Fix
-  //return Promise.resolve(true);
+  const fileType = (formData.get("file") as File).type;
+  const type: "csv" | "json" | null = ["text/csv", "csv"].includes(fileType)
+    ? "csv"
+    : ["application/json", "json"].includes(fileType)
+    ? "json"
+    : null;
+  if (type === null) return Promise.resolve(false);
   return Import.getInstance()
-    .Import(formData, 0, 'json')
+    .Import(formData, 0, type)
     .then((data: ImportCheckData) => {
       console.log(data);
       setImportInfo(data);
@@ -35,7 +38,6 @@ const setFormDataAction = (
   file: File,
   setFormData: Dispatch<SetStateAction<FormData | undefined>>
 ) => {
-  console.log("File ", file);
   const formFileData = new FormData();
   formFileData.set("file", file);
   setFormData(formFileData);

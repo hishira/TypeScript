@@ -12,6 +12,11 @@ import {
   UserEditModalView,
   UserEditTitle,
 } from "./component.styled";
+import {
+  GetPartialDefinedField,
+  IsImportPasswordDefined,
+  IsUserPasswordNotDefined,
+} from "./utils";
 
 type UserEditModalType = {
   user: IUser | undefined;
@@ -31,19 +36,15 @@ export const UserEditModalComponent = ({
   );
   const [isAdvanceOptionVisible, setAdvanceOption] = useState<boolean>(false);
   const onSaveHandler = () => {
-    // TODO: Check
-    const isPasswordNotDefined =
-      password === null || password === undefined || password === "";
-    const isImportPasswordDefined =
-      importPassword !== null &&
-      importPassword !== undefined &&
-      importPassword !== "";
-    changeHandle({
-      login,
-      email,
-      ...(!isPasswordNotDefined && { password: password }),
-      ...(isImportPasswordDefined && { importPassword }),
-    });
+    const isPasswordNotDefined = IsUserPasswordNotDefined(password);
+    const isImportPasswordDefined = IsImportPasswordDefined(importPassword);
+    changeHandle(
+      GetPartialDefinedField(
+        { login, email, password, importPassword },
+        isPasswordNotDefined,
+        isImportPasswordDefined
+      )
+    );
   };
   return (
     <UserEditModalView>

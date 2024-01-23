@@ -8,6 +8,7 @@ export const ImportRequestEntriesModal = styled.div`
   height: 35rem;
   min-height: 35rem;
   max-height: 35rem;
+  width: 45rem;
   overflow: scroll;
   overflow-x: hidden;
   &::-webkit-scrollbar {
