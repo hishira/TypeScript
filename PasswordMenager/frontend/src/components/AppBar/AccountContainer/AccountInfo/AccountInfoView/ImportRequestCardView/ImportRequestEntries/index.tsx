@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { Translation } from "../../../../../../Translation";
+import { CloseIcon } from "../../../../../../icons/CloseIcon";
 import {
   ImportEntriesTable,
   ImportRequestEntriesModal,
   ImportRequestHeader,
   TitleContainer,
 } from "./component.styled";
-import { CloseIcon } from "../../../../../../icons/CloseIcon";
-import { Translation } from "../../../../../../Translation";
+import { MapEntries } from "./utils";
 
 export type ImportEntriesProprs = {
   entries: EntriesToImport[];
@@ -19,15 +20,7 @@ export const ImportRequestEntries = ({
   const [mappedEntries, setMappedEntries] = useState<EntriesToImport[]>([]);
 
   useEffect(() => {
-    setMappedEntries(
-      entries.map((e) => ({
-        email: (e.email === "" ? "-" : e.email) ?? "-",
-        password: (e.password === "" ? "-" : e.password) ?? "-",
-        title: (e.title === "" ? "-" : e.title) ?? "-",
-        url: (e.url === "" ? "-" : e.url) ?? "-",
-        username: (e.username === "" ? "-" : e.username) ?? "-",
-      }))
-    );
+    setMappedEntries(entries.map(MapEntries));
   }, [entries]);
 
   return (
