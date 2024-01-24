@@ -17,13 +17,13 @@ const AccountInfo = () => {
     useState<ContentType>("Notification");
   const [refetch, setRefetch] = useState<boolean>(false);
   const { userinfo, importRequests, loading } = AccountInfoEffect(refetch);
-
   return (
     <Loading
       loading={loading}
       ComponentToLoad={
         <AccountInfoContainer>
-          <UserView user={userinfo} setRefetch={setRefetch}></UserView> <Devider />
+          <UserView user={userinfo} setRefetch={setRefetch}></UserView>
+          <Devider />
           <AccountInfoHeader>
             <HeaderButton
               onClick={() => setMainContentView("Notification")}
