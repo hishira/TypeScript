@@ -4,6 +4,7 @@ import Button from "../../../Button";
 import { FileSelector, PossibleFileType } from "../../../ImportFille";
 import { Translation, TranslationFunction } from "../../../Translation";
 import { ImportEntries } from "./component.styled";
+import { TitleContainer } from "../../../shared/styled-components";
 
 type ImportEntriesModalComponentProps = {
   fileSetHandle: (file: File) => void;
@@ -33,6 +34,7 @@ const ImportEntriesModalComponent = ({
   //TODO: Add proper message for txt file types
   return (
     <ImportEntries>
+      <TitleContainer>Import entries</TitleContainer>
       <FileSelector
         availableFileType={availabeFileType}
         fileChange={fileChangeHandlerFunction}
@@ -60,26 +62,6 @@ const ImportEntriesModalComponent = ({
               </div>
             </div>
           ) : null}
-          {/*<OwnFieldsOrder>
-            <span>Select own order of field</span>
-            <CheckBox
-              defaultChecked={ownFieldOrder}
-              onChange={(e) => setOwnFieldOrder(!ownFieldOrder)}
-            />
-          </OwnFieldsOrder>
-          {ownFieldOrder ? (
-            <div>
-              <FormElement
-                label={"Fields number"}
-                inputplaceholder="Fields number"
-                inputChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setFieldsNumber(parseInt(e.target.value))
-                }
-                inputtype="number"
-                value={fieldsNumber}
-              />
-            </div>
-          ) : null}*/}
         </div>
       ) : null}
     </ImportEntries>

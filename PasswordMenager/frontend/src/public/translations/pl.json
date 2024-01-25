@@ -127,5 +127,10 @@
     "suspend": "Zawieszony",
     "notification.numerMessage": "Liczba aktywnych notyfikacji wynosi {{notificationLength}}",
     "actions": "Akcje",
-    "entriesToImport": "Hasła do zimportowania"
+    "entriesToImport": "Hasła do zimportowania",
+    "importEncyrpted.title": "Zimportuj zaszyfrowane hasła",
+    "deleteImportRequest.title":"Usuń żadanie o import haseł",
+    "deleteImportRequest.content":"Czy jesteś pewien że chcesz usunąć żadanie importu haseł. Po usunięciu będziesz musiał jeszcze raz zaimportować plik z hasłami.",
+    "activateImportRequest.title":"Altywuj żadanie importu haseł",
+    "activateImportRequest.content":" Czy chcesz aktywować żadanie importu haseł. Wszystkie hasła zostaną dodane do twojego konta"
 }

@@ -1,3 +1,3 @@
 export type IconProps = {
-  click?: () => void;
+  click?: (e?: any) => void;
 };

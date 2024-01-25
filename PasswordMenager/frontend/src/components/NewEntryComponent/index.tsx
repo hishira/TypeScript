@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
 import { GroupEffect } from "../../hooks/groups.hook";
 import { Entry } from "../../utils/entry.utils";
+import { ErrorPopUpObject, SuccessPopUpObject } from "../../utils/popup.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import { Loading } from "../Loading";
 import { Translation, TranslationFunction } from "../Translation";
 import { HideIcon } from "../icons/HideIcon";
 import { ShowIcon } from "../icons/ShowIcon";
+import { TitleContainer } from "../shared/styled-components";
 import { EditEntryActionDispatcher } from "./EditEntryActionDispatcher";
 import { GroupSelection } from "./GroupSelection";
 import { PasswordGeneratorOption } from "./PasswordGenerationOption";
@@ -17,11 +19,9 @@ import {
   EntryModalComponent,
   PasswordFormContainer,
   SectionContainer,
-  TitleContainer,
 } from "./component.styled";
 import { EmptyEntry, checkBoxHandler } from "./new-entry.utils";
 import { NewEntryProps, PasswordCharactersTypes } from "./types";
-import { ErrorPopUpObject, SuccessPopUpObject } from "../../utils/popup.utils";
 
 const NewEntryComponent = ({
   edit,

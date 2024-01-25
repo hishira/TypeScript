@@ -1,6 +1,6 @@
 import FormElement from "../../../../../FormElement";
-import { TitleContainer } from "../../../../../NewEntryComponent/component.styled";
 import { TranslationFunction } from "../../../../../Translation";
+import { TitleContainer } from "../../../../../shared/styled-components";
 import { AcceptModalContainer } from "../../../component.styled";
 
 type AceptEditModalProps = {

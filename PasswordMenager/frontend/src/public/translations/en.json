@@ -137,5 +137,10 @@
     "suspend": "Suspend",
     "notification.numerMessage": "Number of active notification for {{notificationLength}} entries",
     "actions": "Actions",
-    "entriesToImport": "Entries to import"
+    "entriesToImport": "Entries to import",
+    "importEncyrpted.title": "Import encrypted passwords",
+    "deleteImportRequest.title":"Delete import request",
+    "deleteImportRequest.content":"Are you sure to delete import requests?",
+    "activateImportRequest.title":"Activate import request",
+    "activateImportRequest.content":" Do you want to activate import request? All entries will be added to your store"
 }
