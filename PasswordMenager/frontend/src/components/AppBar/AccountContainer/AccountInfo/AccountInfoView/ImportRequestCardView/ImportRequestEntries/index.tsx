@@ -42,7 +42,7 @@ export const ImportRequestEntries = ({
       </ImportRequestHeader>
       <ImportEntriesTable>
         {mappedEntries.map((e) => (
-          <ImportRequestHeader key={e.email}>
+          <ImportRequestHeader key={crypto.randomUUID()}>
             <div>{e.email}</div>
             <div>{e.username}</div>
             <div>{e.password}</div>

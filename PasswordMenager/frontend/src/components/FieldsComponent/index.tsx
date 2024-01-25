@@ -3,9 +3,9 @@ import { FieldsActionHook } from "../../hooks/actionFields.hook";
 import { ResizeWindowsHandle } from "../../hooks/resize.hook";
 import { IGeneral } from "../../models/General";
 import { Entry } from "../../utils/entry.utils";
-import { TitleContainer } from "../NewEntryComponent/component.styled";
 import { PasswordTableComponent } from "../PasswordTable";
 import { Translation } from "../Translation";
+import { TitleContainer } from "../shared/styled-components";
 import { FieldsModal } from "./FieldsModal";
 import {
   Container,

@@ -8,6 +8,7 @@ import {
   ImportInput,
 } from "./component.styled";
 import { Translation, TranslationFunction } from "../Translation";
+import { TitleContainer } from "../shared/styled-components";
 type PossibleFiles = `${PossibleFileType}`;
 export enum PossibleFileType {
   JPG = "jpeg",
@@ -16,8 +17,8 @@ export enum PossibleFileType {
   TXT = "txt",
   XYZ = "xyz",
   JSON = "json",
-  ApplicationJson = 'application/json',
-  TextCsv = 'text/csv',
+  ApplicationJson = "application/json",
+  TextCsv = "text/csv",
 }
 type FileSelectorProps = {
   fileChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -85,6 +86,7 @@ export const ImportFile = ({
   // TODO: Improber add password improvement
   return (
     <ImportContainer>
+      <TitleContainer>{Translation('importEncyrpted.title')}</TitleContainer>
       <FileSelector
         fileChange={(e) => fileChange(e)}
         availableFileType={[PossibleFileType.XYZ]}

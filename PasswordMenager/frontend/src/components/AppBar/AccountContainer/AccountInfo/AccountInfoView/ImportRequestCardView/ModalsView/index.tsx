@@ -1,5 +1,7 @@
 import Modal from "../../../../../../Modal/";
 import { AcceptModalComponent } from "../../../../../../Modal/AcceptModal";
+import { Translation } from "../../../../../../Translation";
+import { TitleContainer } from "../../../../../../shared/styled-components";
 import {
   ImportEntriesProprs,
   ImportRequestEntries,
@@ -9,7 +11,6 @@ import {
   ActivateImportRequestContextModal,
   DeleteImportRequest,
   DeleteModalContent,
-  TitleContainer,
 } from "./component.styled";
 
 export type ModalViewsType = {
@@ -23,19 +24,20 @@ export type ModalViewsType = {
 
 const DeleteModalComponenet = () => (
   <DeleteImportRequest>
-    <TitleContainer>Delete import request</TitleContainer>
+    <TitleContainer>{Translation("deleteImportRequest.title")}</TitleContainer>
     <DeleteModalContent>
-      Are you sure to delete import requests?
+      {Translation("deleteImportRequest.content")}
     </DeleteModalContent>
   </DeleteImportRequest>
 );
 
 const ActiveModalComponent = () => (
   <ActivateImportRequest>
-    <TitleContainer>Activate import request</TitleContainer>
+    <TitleContainer>
+      {Translation("activateImportRequest.title")}
+    </TitleContainer>
     <ActivateImportRequestContextModal>
-      Do you want to activate import request? All entries will be added to your
-      store
+      {Translation("deleteImportRequest.content")}
     </ActivateImportRequestContextModal>
   </ActivateImportRequest>
 );
@@ -47,21 +49,28 @@ export const ModalsView = ({
   acceptDeleteImportRequestHandler,
   acceptActivateImportRequest,
 }: ModalViewsType) => {
-  return modalType === "delete" ? (
-    <AcceptModalComponent
-      visible={isModalVisible}
-      onClose={() => modalClose()}
-      component={<DeleteModalComponenet />}
-      acceptHandle={acceptDeleteImportRequestHandler}
-    />
-  ) : modalType === "activate" ? (
-    <AcceptModalComponent
-      visible={isModalVisible}
-      onClose={() => modalClose()}
-      component={<ActiveModalComponent />}
-      acceptHandle={acceptActivateImportRequest}
-    />
-  ) : (
+  if (modalType === "delete") {
+    return (
+      <AcceptModalComponent
+        visible={isModalVisible}
+        onClose={() => modalClose()}
+        component={<DeleteModalComponenet />}
+        acceptHandle={acceptDeleteImportRequestHandler}
+      />
+    );
+  }
+  if (modalType === "activate") {
+    return (
+      <AcceptModalComponent
+        visible={isModalVisible}
+        onClose={() => modalClose()}
+        component={<ActiveModalComponent />}
+        acceptHandle={acceptActivateImportRequest}
+      />
+    );
+  }
+
+  return (
     <Modal
       visible={isModalVisible}
       onClose={modalClose}

@@ -1,7 +1,7 @@
 import Button from "../../Button";
 import FormElement from "../../FormElement";
-import { TitleContainer } from "../../NewEntryComponent/component.styled";
 import { Translation, TranslationFunction } from "../../Translation";
+import { TitleContainer } from "../../shared/styled-components";
 import { NewGroup } from "./component.styled";
 
 type ModalComponentProps = {
