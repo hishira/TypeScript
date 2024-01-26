@@ -17,13 +17,12 @@ export const Paginator = ({
       page: (pageInfo?.page ?? 1) - 1,
     });
   };
-  return pageInfo  && pageInfo?.items > 0 ? (
+  if (!pageInfo || pageInfo?.items <= 0) return <></>;
+  return (
     <PaginatorContainer>
       {pageInfo.page > 0 ? <LeftIcon click={() => previousPage()} /> : null}
       <span>{pageInfo?.page + 1}</span>
       {pageInfo.hasMore ? <RightIcon click={() => nextPage()} /> : null}
     </PaginatorContainer>
-  ) : (
-    <></>
   );
 };

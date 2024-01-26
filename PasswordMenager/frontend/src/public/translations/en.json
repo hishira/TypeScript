@@ -142,5 +142,8 @@
     "deleteImportRequest.title":"Delete import request",
     "deleteImportRequest.content":"Are you sure to delete import requests?",
     "activateImportRequest.title":"Activate import request",
-    "activateImportRequest.content":" Do you want to activate import request? All entries will be added to your store"
+    "activateImportRequest.content":" Do you want to activate import request? All entries will be added to your store",
+    "notification.modalTitle.activate": "Activate notification",
+    "notification.modalTitle.suspend": "Suspend notification",
+    "notification.modalTitle.delete": "Delete notification"
 }

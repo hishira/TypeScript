@@ -7,6 +7,47 @@ import { EmptyEntriesComponent } from "../EmptyEntries";
 import { FieldSearchInput } from "../FieldSearchInput";
 import { Entries } from "../component.styled";
 
+const FieldsComponentMapper: {
+  [key in View]: (
+    refreshentities: any,
+    selectedgroupid: any,
+    entitiesrefresh: any,
+    entries: any
+  ) => JSX.Element;
+} = {
+  [View.Table]: (
+    refreshentities,
+    selectedgroupid,
+    entitiesrefresh,
+    entries
+  ) => (
+    <FieldsComponent
+      refreshgroupentities={refreshentities}
+      selectedgroup={selectedgroupid}
+      refreshall={entitiesrefresh}
+      passwords={entries}
+    />
+  ),
+  [View.Card]: (refreshentities, selectedgroupid, entitiesrefresh, entries) => (
+    <FieldsCardView
+      selectedgroup={selectedgroupid}
+      refreshall={entitiesrefresh}
+      refreshgroupentities={refreshentities}
+      passwords={entries}
+    />
+  ),
+};
+type PasswordMainComponentPropr = {
+  viewType: View;
+  entries: any;
+  refreshentities: any;
+  selectedgroupid: any;
+  entitiesrefresh: any;
+  paginator: any;
+  paginatorChange: any;
+  filterValuesChange: any;
+  titleSearchEntry: any;
+};
 const PasswordsMainComponent = ({
   viewType,
   entries,
@@ -17,7 +58,7 @@ const PasswordsMainComponent = ({
   paginatorChange,
   filterValuesChange,
   titleSearchEntry,
-}: any) => {
+}: PasswordMainComponentPropr) => {
   const searchChangeValue = (val: string) => {
     filterValuesChange(val);
   };
@@ -26,20 +67,11 @@ const PasswordsMainComponent = ({
       <FieldSearchInput
         onSearchFieldChange={searchChangeValue}
       ></FieldSearchInput>
-      {viewType === View.Table ? (
-        <FieldsComponent
-          refreshgroupentities={refreshentities}
-          selectedgroup={selectedgroupid}
-          refreshall={entitiesrefresh}
-          passwords={entries}
-        />
-      ) : (
-        <FieldsCardView
-          selectedgroup={selectedgroupid}
-          refreshall={entitiesrefresh}
-          refreshgroupentities={refreshentities}
-          passwords={entries}
-        />
+      {FieldsComponentMapper[viewType](
+        refreshentities,
+        selectedgroupid,
+        entitiesrefresh,
+        entries
       )}
       <Paginator pageInfo={paginator} paginationChange={paginatorChange} />
     </Entries>

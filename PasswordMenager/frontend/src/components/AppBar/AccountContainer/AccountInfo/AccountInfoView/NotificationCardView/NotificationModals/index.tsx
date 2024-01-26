@@ -14,6 +14,7 @@ type NotificationModalType = {
   setRefetch: Dispatch<SetStateAction<boolean>>;
   modalOpen: boolean;
   notification: NotificationLike | null;
+  closeModal: () => void;
 };
 
 const SelectProperModalText = (
@@ -26,6 +27,7 @@ const NotificationModal = ({
   setRefetch,
   modalOpen,
   notification,
+  closeModal,
   store,
 }: NotificationModalType & { store?: IGeneral }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
@@ -52,14 +54,19 @@ const NotificationModal = ({
       setModalOpen(false);
     }
   };
-  return isModalOpen ? (
+  const close = () => {
+    setModalOpen(false);
+    closeModal();
+  };
+  if (!isModalOpen) return null;
+  return (
     <AcceptModalComponent
       visible={isModalOpen}
       acceptHandle={acceptModalPromiseHandler}
-      onClose={() => setModalOpen(false)}
+      onClose={() => close()}
       component={component}
     />
-  ) : null;
+  );
 };
 
 export default inject("store")(observer(NotificationModal));
