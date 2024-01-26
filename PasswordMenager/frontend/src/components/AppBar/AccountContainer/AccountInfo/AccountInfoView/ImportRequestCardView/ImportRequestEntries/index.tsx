@@ -13,6 +13,20 @@ export type ImportEntriesProprs = {
   entries: EntriesToImport[];
   closeHandle: () => void;
 };
+
+const ImportRequestHeaderComponent = ({
+  entrie,
+}: {
+  entrie: EntriesToImport;
+}) => (
+  <ImportRequestHeader>
+    <div>{entrie.email}</div>
+    <div>{entrie.username}</div>
+    <div>{entrie.password}</div>
+    <div>{entrie.title}</div>
+    <div>{entrie.url}</div>
+  </ImportRequestHeader>
+);
 export const ImportRequestEntries = ({
   entries,
   closeHandle,
@@ -42,13 +56,7 @@ export const ImportRequestEntries = ({
       </ImportRequestHeader>
       <ImportEntriesTable>
         {mappedEntries.map((e) => (
-          <ImportRequestHeader key={crypto.randomUUID()}>
-            <div>{e.email}</div>
-            <div>{e.username}</div>
-            <div>{e.password}</div>
-            <div>{e.title}</div>
-            <div>{e.url}</div>
-          </ImportRequestHeader>
+          <ImportRequestHeaderComponent entrie={e} />
         ))}
       </ImportEntriesTable>
     </ImportRequestEntriesModal>

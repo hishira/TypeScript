@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { Entry } from "../../../../../../utils/entry.utils";
 import { Translation } from "../../../../../Translation";
-import { DeleteIcon } from "../../../../../icons/DeleteIcon";
-import { EditIcon } from "../../../../../icons/EditIcon";
-import NotificationModal from "./NotificationModals";
 import {
-  Notification,
-  NotificationElement,
-  NotificationList,
-  NotificationSubElement,
-} from "./component.styled";
+  NotificationElementComponent,
+  NotificationHeaderElement,
+} from "./NotificationElements";
+import NotificationModal from "./NotificationModals";
+import { Notification, NotificationList } from "./component.styled";
 
 export const NotificationCardView = () => {
   const [notification, setNotification] = useState<any[]>([]);
@@ -39,6 +36,11 @@ export const NotificationCardView = () => {
     setNotificationForAction(notification);
   };
 
+  const closeMoldaHandler = () => {
+    setAction(null);
+    setModalOpen(false);
+    setNotificationForAction(null);
+  };
   return (
     <Notification>
       <NotificationModal
@@ -46,48 +48,21 @@ export const NotificationCardView = () => {
         setRefetch={setRefetch}
         modalOpen={modalOpen}
         notification={notificationForAction}
+        closeModal={closeMoldaHandler}
       />
       {Translation("notification.numerMessage", {
         notificationLength: notification.length,
       })}
 
       <NotificationList>
-        <NotificationElement>
-          <NotificationSubElement>
-            {Translation("notification.title")}
-          </NotificationSubElement>
-          <NotificationSubElement>
-            {Translation("notification.data")}
-          </NotificationSubElement>
-          <NotificationSubElement>
-            {Translation("notification.type")}
-          </NotificationSubElement>
-          <NotificationSubElement>
-            {Translation("notification.state")}
-          </NotificationSubElement>
-          <NotificationSubElement></NotificationSubElement>
-        </NotificationElement>
+        <NotificationHeaderElement />
         {notification.map((notifi) => (
-          <NotificationElement key={notifi?._id}>
-            <NotificationSubElement>
-              {notifi?.entryId?.title}
-            </NotificationSubElement>
-            <NotificationSubElement>
-              {notifi?.notificationDate}
-            </NotificationSubElement>
-            <NotificationSubElement>
-              {notifi?.notificationChannel}
-            </NotificationSubElement>
-            <NotificationSubElement>
-              {notifi?.active ? Translation("active") : Translation("suspend")}
-            </NotificationSubElement>
-            <NotificationSubElement>
-              <EditIcon
-                click={() => editNotificationHandler(notifi)}
-              ></EditIcon>
-              <DeleteIcon click={() => deleteHandle(notifi)}></DeleteIcon>
-            </NotificationSubElement>
-          </NotificationElement>
+          <NotificationElementComponent
+            key={notifi?._id}
+            notifi={notifi}
+            editNotificationHandler={editNotificationHandler}
+            deleteHandle={deleteHandle}
+          />
         ))}
       </NotificationList>
     </Notification>

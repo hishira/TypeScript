@@ -216,3 +216,20 @@ type EditImportRequest = {
   state?: ImportRequestData;
   entriesToImport?: EntriesToImport[];
 };
+
+type CardComponentProps = {
+  entry: CardEntry;
+  deleteHandle: Function;
+  editHandle: Function;
+};
+type CardExpendContentRowProps = {
+  fieldName: string;
+  value: string;
+  isPassword?: boolean;
+  isUrl?: boolean;
+};
+type ValueFieldPropd = {
+  isPassword: boolean | undefined;
+  isUrl: boolean | undefined;
+  value: string | IEntry | null;
+};

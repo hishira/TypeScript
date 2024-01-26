@@ -8,11 +8,9 @@ import {
   SuccessPopUpObject,
 } from "../../../../../../utils/popup.utils";
 import { Translation } from "../../../../../Translation";
-import { DeleteIcon } from "../../../../../icons/DeleteIcon";
-import { ShowIcon } from "../../../../../icons/ShowIcon";
-import { TuroOnIcon } from "../../../../../icons/TurnOnIcon";
+import { ImportRequestEntry } from "./ImportRequest";
 import { ModalsView } from "./ModalsView";
-import { Actions, ImportRequest, Imports } from "./component.styled";
+import { ImportRequest, Imports } from "./component.styled";
 
 const ImportRequestCardView = ({
   imports,
@@ -108,22 +106,13 @@ const ImportRequestCardView = ({
         </div>
         <Imports>
           {imports.map((importVal) => (
-            <div key={importVal._id}>
-              <span>{importVal.state}</span>
-              <span>{importVal.created}</span>
-              <span>{importVal.entriesToImport.length}</span>
-              <Actions>
-                <TuroOnIcon
-                  click={() => acceptImportRequest(importVal._id)}
-                ></TuroOnIcon>
-                <ShowIcon
-                  click={() => showEntriesHandle(importVal.entriesToImport)}
-                ></ShowIcon>
-                <DeleteIcon
-                  click={() => deleteImportRequest(importVal._id)}
-                ></DeleteIcon>
-              </Actions>
-            </div>
+            <ImportRequestEntry
+              key={importVal._id}
+              importVal={importVal}
+              acceptImportRequest={acceptImportRequest}
+              deleteImportRequest={deleteImportRequest}
+              showEntriesHandle={showEntriesHandle}
+            />
           ))}
         </Imports>
       </ImportRequest>
