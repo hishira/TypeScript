@@ -1,19 +1,11 @@
-import { DOMAttributes, useEffect, useState } from "react";
-import { PasswordFieldsHelper } from "../PasswordTable/PasswordField";
+import { useEffect, useState } from "react";
 import { Translation } from "../Translation";
-import { DeleteIcon } from "../icons/DeleteIcon";
 import { DownIcon } from "../icons/DownIcon";
-import { EditIcon } from "../icons/EditIcon";
 import { UpIcon } from "../icons/UpIcon";
+import { CardExpandComponent } from "./CardExpand";
 import {
   Card,
   CardContent,
-  CardExpand,
-  CardExpandContent,
-  CardExpandContentRow,
-  CardFieldName,
-  CardFieldValue,
-  CardFieldValueURL,
   CardHeader,
   CardIcons,
   EmptySpan,
@@ -42,85 +34,6 @@ const FieldsIcon = ({ entry, open, close }: FieldsIconProps) => {
   );
 };
 
-
-const ValueField = ({ isPassword, value, isUrl }: ValueFieldPropd) => {
-  const props: DOMAttributes<HTMLDivElement> = {};
-  if (isPassword) {
-    props["onClick"] = () => PasswordFieldsHelper.passwordClick(value);
-  }
-  if (isUrl) {
-    props["onClick"] = () =>
-      value && typeof value === "string" && window.open(value, "_blank");
-  }
-  return isPassword ? (
-    <CardFieldValue {...props}>
-      <span>******</span>
-    </CardFieldValue>
-  ) : isUrl ? (
-    <CardFieldValueURL {...props}>{value}</CardFieldValueURL>
-  ) : (
-    <CardFieldValue {...props}>{value}</CardFieldValue>
-  );
-};
-const CardExpendContentRow = ({
-  fieldName,
-  value,
-  isPassword,
-  isUrl,
-}: CardExpendContentRowProps) => {
-  return (
-    <CardExpandContentRow>
-      <CardFieldName>{Translation(fieldName)}</CardFieldName>
-      <ValueField
-        isPassword={isPassword}
-        isUrl={isUrl}
-        value={value}
-      ></ValueField>
-    </CardExpandContentRow>
-  );
-};
-const CardExpandComponent = ({
-  entry,
-  editHandle,
-  deleteHandle,
-}: CardComponentProps) => {
-  return entry.open ? (
-    <CardExpand>
-      <CardExpandContent>
-        <CardExpendContentRow
-          fieldName="fieldscard.view.username"
-          value={entry.username}
-        />
-        <CardExpendContentRow
-          fieldName="fieldscard.view.password"
-          value={entry.password}
-          isPassword={true}
-        />
-        <CardExpendContentRow
-          fieldName="fieldscard.view.note"
-          value={entry.note}
-        />
-        {entry.url ? (
-          <CardExpendContentRow
-            fieldName="fieldscard.view.url"
-            isUrl={true}
-            value={entry.url}
-          />
-        ) : null}
-        {entry.passwordExpiredDate ? (
-          <CardExpendContentRow
-            fieldName="fieldscard.view.expiredTo"
-            value={entry.passwordExpiredDate}
-          />
-        ) : null}
-      </CardExpandContent>
-      <CardIcons>
-        <EditIcon click={() => editHandle(entry)} />{" "}
-        <DeleteIcon click={() => deleteHandle(entry)} />
-      </CardIcons>
-    </CardExpand>
-  ) : null;
-};
 export const CardComponent = ({
   entry,
   deleteHandle,
@@ -137,7 +50,7 @@ export const CardComponent = ({
       <CardHeader>
         <CardContent>
           {isEmptyTitle ? (
-            <EmptySpan>{Translation('entry.noTitle')}</EmptySpan>
+            <EmptySpan>{Translation("entry.noTitle")}</EmptySpan>
           ) : (
             entryCard.title
           )}

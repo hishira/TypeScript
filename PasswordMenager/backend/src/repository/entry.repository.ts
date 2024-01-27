@@ -6,12 +6,12 @@ import { EntryData, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
-import { PaginatorDto } from 'src/utils/paginator';
-import { UtilsRepository } from './utils.repository';
 import { ActiveEntryFilter } from 'src/schemas/utils/activeEntryFilter';
 import { EntryBuilder } from 'src/schemas/utils/builders/entry.builder';
 import { DeleteEntryUpdate } from 'src/schemas/utils/deleteEntryUpdate.object';
 import { UpdateEntryCheck } from 'src/types/common/main';
+import { PaginatorDto } from 'src/utils/paginator';
+import { UtilsRepository } from './utils.repository';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry> {
@@ -74,13 +74,12 @@ export class EntryRepository implements Repository<IEntry> {
   }
 
   update(entry: Partial<IEntry>): Promise<unknown> {
-    console.log('ENTRY ', entry);
     return this.entryModel
       .findById(entry._id)
       .exec()
       .then((entryById) => {
         const data = this.createEditentity(entry, entryById);
-        console.log(data);
+
         return this.entryModel
           .updateOne({ _id: entry._id }, { $set: { ...data } })
           .then((data) => data);

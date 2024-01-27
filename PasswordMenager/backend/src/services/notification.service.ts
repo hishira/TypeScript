@@ -76,7 +76,6 @@ export class NotificationService implements NotificationCron {
   }
 
   userNotification(userId: string) {
-    console.log(userId);
     return this.queryBus.execute(new GetNotificationQuery({ userId: userId }));
   }
 
@@ -88,7 +87,6 @@ export class NotificationService implements NotificationCron {
         entry.userid as unknown as string,
       ),
     ).then(async (_) => {
-      console.log(_);
       this.logger.logMessage(
         `Notification created for date ${passwordExpireDate}`,
       );

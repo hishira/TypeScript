@@ -8,7 +8,6 @@ export const SPECIAL: string = "*()&^%$#@!~/{}+-";
 export const checkBoxHandler = (e: { target: { checked: boolean } }): void => {
   let element: HTMLCollectionOf<HTMLInputElement> =
     document.getElementsByTagName("input");
-  console.log(element);
   if (e.target.checked) {
     for (let i of element) {
       if (i.type === "password") {
