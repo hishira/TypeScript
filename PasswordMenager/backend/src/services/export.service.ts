@@ -27,7 +27,6 @@ export class ExportService {
 
   getCsvFile(userId): Promise<string> {
     return this.entryService.getByUser(userId, 100000).then((resp) => {
-      console.log('data' in resp ? resp?.data?.length : -2);
       const csvRows: CsvEntry[] = EntryToCsvEntryMapper(
         'data' in resp ? resp?.data : resp,
       );

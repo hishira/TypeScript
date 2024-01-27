@@ -5,9 +5,15 @@ import { SearchContainer } from "../component.styled";
 export const FieldSearchInput = ({
   onSearchFieldChange,
 }: SearchFiledInputProps) => {
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
   const [serachFieldValue, setSerachFieldValue] = useState<string>("");
   const searchChangeFunction = (e: ChangeEvent<HTMLInputElement>) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    setTimeoutId(setTimeout(() => functionInputChange(e), 1000));
     setSerachFieldValue(e.target.value);
+  };
+
+  const functionInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     onSearchFieldChange(e.target.value);
   };
   return (

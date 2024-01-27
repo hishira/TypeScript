@@ -93,7 +93,6 @@ export class EntryService {
           return EmptyResponse;
         });
     } catch (e) {
-      console.log(e);
       return Promise.resolve(EmptyResponse);
     }
   }

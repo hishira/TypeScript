@@ -38,7 +38,6 @@ const PassComponent = ({ store }: PassComponentProps) => {
 
   const filterValuesChange = (val: string): void => {
     setTiltEntry(val);
-    console.log(val);
   };
   return (
     <Container className="dupa">
