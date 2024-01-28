@@ -2,12 +2,17 @@ import { inject, observer } from "mobx-react";
 import { useHistory } from "react-router-dom";
 import { Translation } from "../../components/Translation";
 import { IGeneral } from "../../models/General";
-import { ButtonContainer, Container, Typograph } from "./component.styled";
+import {
+  ButtonContainer,
+  ButtonsContainer,
+  Container,
+  Typograph,
+} from "./component.styled";
 type HomePageProps = {
   store: IGeneral;
 };
 
-const HomePage = ({ store }: HomePageProps) => {
+const HomePage = ({ store }: HomePageProps): JSX.Element => {
   const history = useHistory();
   const StoreButtonHandle = (): void => {
     if (store.UserActivity) history.push("/store");
@@ -15,9 +20,13 @@ const HomePage = ({ store }: HomePageProps) => {
   };
   return (
     <Container>
-      <ButtonContainer onClick={() => StoreButtonHandle()}>
-        <Typograph>{Translation("appName")}</Typograph>
-      </ButtonContainer>
+      <Typograph>{Translation("appName")}</Typograph>
+      <ButtonsContainer>
+        <ButtonContainer onClick={() => StoreButtonHandle()}>
+          Online
+        </ButtonContainer>
+        <ButtonContainer>Local</ButtonContainer>
+      </ButtonsContainer>
     </Container>
   );
 };
