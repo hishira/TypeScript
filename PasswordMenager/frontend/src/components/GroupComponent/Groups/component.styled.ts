@@ -11,7 +11,7 @@ const iconOpenAnimation = keyframes`
 export const Groups = styled.div`
   height: 100%;
   max-height: 100%;
-  padding-left: 2rem;
+  padding-left: 1.5rem;
   overflow: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -44,6 +44,7 @@ export const GroupsIcon = styled.div`
   top: 0;
   right: -500%;
   z-index: 2000;
+  padding-inline: 2rem 1rem;
   animation: ${iconOpenAnimation} 0.4s linear forwards;
   & > svg[role="edit"],
   svg[role="delete"] {

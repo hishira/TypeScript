@@ -5,7 +5,7 @@ import { IGeneral } from "../../models/General";
 export type StoreType = {
   store?: IGeneral;
 };
-interface PrivateComponentType extends StoreType {
+export interface PrivateComponentType extends StoreType {
   Component: any;
   path: string;
 };

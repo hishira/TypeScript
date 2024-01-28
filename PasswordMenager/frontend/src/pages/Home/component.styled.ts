@@ -10,16 +10,23 @@ export const Container = styled.div`
   height: 90vh;
 `;
 export const ButtonContainer = styled.div`
-  border: .5px solid slategray;
-  padding: 2rem 4rem;
+  border: 0.5px solid slategray;
+  padding: .8rem 4rem;
   border-radius: 10px;
-  &:hover{
+  &:hover {
     cursor: pointer;
-    background-color: #cccccc;
-    transition: background-color .4s;
+    background-color: #ccc;
+    transition: background-color 0.4s;
   }
-`
+`;
 export const Typograph = styled.span`
   font-size: 2rem;
   font-weight: 550;
+`;
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 8rem;
+  flex-direction: row;
+  margin-top: 32px;
 `;

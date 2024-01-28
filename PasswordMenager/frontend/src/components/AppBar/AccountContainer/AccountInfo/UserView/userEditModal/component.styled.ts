@@ -49,11 +49,12 @@ export const UserEditModalContainer = styled.div`
 `;
 
 export const UserEditModalView = styled.div`
-  padding: 1.5rem 0.75rem;
+  padding: 1.5rem 1rem;
   background-color: whitesmoke;
   display: flex;
   flex-direction: column;
   width: 55rem;
+  border-radius: 10px;
 `;
 
 export const UserEditTitle = styled.div`
