@@ -1,13 +1,5 @@
-import { DeleteIcon } from "../../icons/DeleteIcon";
-import { EditIcon } from "../../icons/EditIcon";
-import { MoreOption } from "../../icons/MoreOptions";
-import {
-  GroupContainer,
-  GroupName,
-  GroupOption,
-  Groups,
-  GroupsIcon,
-} from "./component.styled";
+import { getMappedGroup } from "./GroupElement";
+import { Groups } from "./component.styled";
 
 const EmptyGroup: IGroup = {
   _id: "",
@@ -22,33 +14,6 @@ type GroupsComponentProps = {
   deleteHandle: (groupId: string) => void;
 };
 
-
-const getMappedGroup = (
-  groups: IGroup[],
-  selectedgroup: string,
-  ongroupclick: Function,
-  editHandle: (groupId: string) => void,
-  deleteHandle: (groupId: string) => void
-): JSX.Element[] =>
-  groups.map((group: IGroup) => (
-    <GroupContainer key={group._id} isSelected={selectedgroup === group._id}>
-      <GroupName
-        onClick={() => ongroupclick(group)}
-  
-      >
-        {group.name}
-      </GroupName>
-      {group._id !== "" ? (
-        <GroupOption>
-          <MoreOption />
-          <GroupsIcon>
-            <EditIcon click={() => editHandle(group._id)} />
-            <DeleteIcon click={() => deleteHandle(group._id)} />
-          </GroupsIcon>
-        </GroupOption>
-      ) : null}
-    </GroupContainer>
-  ));
 export const GroupsComponent = ({
   groups,
   ongroupclick,

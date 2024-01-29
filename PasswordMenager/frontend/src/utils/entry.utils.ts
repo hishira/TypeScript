@@ -1,12 +1,14 @@
 import { EntryApi } from "../api/entry.api";
+import { EntryFetchFactory } from "../factories/entry.factory";
+import { EntryFetch } from "../interfaces/entry.fetch";
 import { Auth } from "./auth.utils";
-import { SessionStorage } from "./localstorage.utils";
 import { EMPTYENTRYRESPONSE } from "./constans.utils";
+import { SessionStorage } from "./localstorage.utils";
 
 export class Entry {
   private static instance: Entry | null = null;
   private auth: Auth;
-  private entryApi: EntryApi;
+  private entryApi: EntryFetch;
   private sessionStorage: SessionStorage;
   private readonly EMPTY = {
     status: false,
@@ -15,11 +17,11 @@ export class Entry {
 
   private constructor(
     authInstance: Auth,
-    entryApiInstance: EntryApi,
+    entryApiInstance: EntryFetch,
     sessionStorageInstance: SessionStorage
   ) {
     this.auth = authInstance;
-    this.entryApi = entryApiInstance;
+    this.entryApi = EntryFetchFactory.getInstance().getProperClass(); ///entryApiInstance;
     this.sessionStorage = sessionStorageInstance;
   }
   static getInstance(): Entry {
