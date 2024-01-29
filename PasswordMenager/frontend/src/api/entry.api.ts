@@ -1,6 +1,7 @@
 import { Api } from "./config.api";
+import { EntryFetch } from "../interfaces/entry.fetch";
 
-export class EntryApi extends Api {
+export class EntryApi extends Api implements EntryFetch {
   private static instance: EntryApi | null = null;
 
   static getInstance(): EntryApi {
@@ -16,23 +17,14 @@ export class EntryApi extends Api {
     return fetch(url, this.fetchPostObjectWithToken(newentry, token));
   }
 
-  async DeleteEntryById(
-    entryid: string,
-    accesstoken: string
-  ): Promise<Response> {
+  DeleteEntryById(entryid: string, accesstoken: string): Promise<Response> {
     const url = this.getUrl(`entry/byentityid/${entryid}`);
-    return await fetch(url, this.fetchDeleteObjectWithToken(accesstoken));
+    return fetch(url, this.fetchDeleteObjectWithToken(accesstoken));
   }
 
-  async EditEntryByID(
-    entrybody: EditEntry,
-    accesstoken: string
-  ): Promise<Response> {
+  EditEntryByID(entrybody: EditEntry, accesstoken: string): Promise<Response> {
     const url = this.getUrl(`entry/edit`);
-    return await fetch(
-      url,
-      this.fetchPutObjectWithToken(entrybody, accesstoken)
-    );
+    return fetch(url, this.fetchPutObjectWithToken(entrybody, accesstoken));
   }
 
   getEntryById(entryId: string, accesstoken: string): Promise<Response> {

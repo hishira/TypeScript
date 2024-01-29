@@ -3,6 +3,10 @@ import { useHistory } from "react-router-dom";
 import { Translation } from "../../components/Translation";
 import { IGeneral } from "../../models/General";
 import {
+  ApplicationDatabase,
+  ApplicationDatabaseType,
+} from "../../models/applicationDatabase";
+import {
   ButtonContainer,
   ButtonsContainer,
   Container,
@@ -17,6 +21,8 @@ const HomePage = ({ store }: HomePageProps): JSX.Element => {
   const StoreButtonHandle = (): void => {
     if (store.UserActivity) history.push("/store");
     else history.push("/login");
+    ApplicationDatabase.getInstance().DataBaseType =
+      ApplicationDatabaseType.ONLINE;
   };
   return (
     <Container>
