@@ -11,6 +11,7 @@ import { SessionStorage } from "../../utils/localstorage.utils";
 import HomePage from "../Home";
 import StorePage from "../Store/";
 import "./App.css";
+import { ApplicationDatabase } from "../../models/applicationDatabase";
 const notEmpty = (value: string | null | undefined): boolean => {
   return value !== null && value !== undefined && value !== "";
 };
@@ -24,6 +25,7 @@ function App() {
     },
     viewType: View.Table,
   });
+  ApplicationDatabase.getInstance().DataBaseType = SessionStorage.getInstance().ApplicationDataType;
   return (
     <Provider store={store}>
       <Router>

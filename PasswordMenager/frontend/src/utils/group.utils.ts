@@ -1,4 +1,5 @@
-import { GroupApi } from "../api/group.api";
+import { GroupFetchFactory } from "../factories/group.factory";
+import { GroupFetch } from "../interfaces/group.fetch";
 import { Auth } from "./auth.utils";
 import { EMPTYGROUPRESPONSE } from "./constans.utils";
 import { SessionStorage } from "./localstorage.utils";
@@ -7,15 +8,14 @@ export class Group {
   private static instance: Group | null = null;
   private auth: Auth;
   private sessionStorage: SessionStorage;
-  private groupApi: GroupApi;
+  private groupApi: GroupFetch;
 
   private constructor(
     authInstance: Auth,
-    groupApiInstance: GroupApi,
     sessionStorageInstance: SessionStorage
   ) {
     this.auth = authInstance;
-    this.groupApi = groupApiInstance;
+    this.groupApi = GroupFetchFactory.getInstance().getProperClass();
     this.sessionStorage = sessionStorageInstance;
   }
 
@@ -23,7 +23,6 @@ export class Group {
     if (this.instance === null) {
       this.instance = new Group(
         Auth.getInstance(),
-        GroupApi.getInstance(),
         SessionStorage.getInstance()
       );
       return this.instance;

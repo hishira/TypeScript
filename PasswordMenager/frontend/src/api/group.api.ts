@@ -1,6 +1,7 @@
+import { GroupFetch } from "../interfaces/group.fetch";
 import { Api } from "./config.api";
 
-export class GroupApi extends Api {
+export class GroupApi extends Api implements GroupFetch {
   private static instance: GroupApi | null = null;
 
   static getInstance(): GroupApi {

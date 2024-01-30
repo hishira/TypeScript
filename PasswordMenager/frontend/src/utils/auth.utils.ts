@@ -1,31 +1,26 @@
-import { AuthApi } from "../api/auth.api";
+import { AuthFetchFactory } from "../factories/auth.factory";
+import { AuthFetch } from "../interfaces/auth.fetch";
 import { SessionStorage } from "./localstorage.utils";
 
 export class Auth {
   private static instance: Auth | null = null;
-  private authApi: AuthApi;
+  private authApi: AuthFetch;
   private sessionStorage: SessionStorage;
 
-  private constructor(
-    authApiInstance: AuthApi,
-    sessionStorageInstance: SessionStorage
-  ) {
-    this.authApi = authApiInstance;
+  private constructor(sessionStorageInstance: SessionStorage) {
+    this.authApi = AuthFetchFactory.getInstance().getProperClass();
     this.sessionStorage = sessionStorageInstance;
   }
   static getInstance(): Auth {
     if (this.instance === null) {
-      this.instance = new Auth(
-        AuthApi.getInstance(),
-        SessionStorage.getInstance()
-      );
+      this.instance = new Auth(SessionStorage.getInstance());
       return this.instance;
     }
     return this.instance;
   }
 
   async LoginUser(authinfo: UserAuth): Promise<AuthTokens | any> {
-    return await this.authApi.login(authinfo).then((resp: Response) => {
+    return await this.authApi.login?.(authinfo).then((resp: Response) => {
       return resp.json();
     });
   }
@@ -39,7 +34,9 @@ export class Auth {
     return { status: false, response: response };
   }
 
-  async registerUser(signupinfo: RegisterUser): Promise<null | object | boolean> {
+  async registerUser(
+    signupinfo: RegisterUser
+  ): Promise<null | object | boolean> {
     const response: boolean | object = await this.authApi
       .signup(signupinfo)
       .then((resp: Response) => {
@@ -52,7 +49,7 @@ export class Auth {
   async refreshToken(): Promise<void> {
     const refreshtoken: string = this.sessionStorage.getRefreshToken();
     const response: number | AccessToken = await this.authApi
-      .refreshAccessToken(refreshtoken)
+      .refreshAccessToken?.(refreshtoken)
       .then((resp: Response) => {
         if (resp.status === 201 || resp.status === 200) return resp.json();
         return 401;

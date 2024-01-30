@@ -1,4 +1,3 @@
-import { EntryApi } from "../api/entry.api";
 import { EntryFetchFactory } from "../factories/entry.factory";
 import { EntryFetch } from "../interfaces/entry.fetch";
 import { Auth } from "./auth.utils";
@@ -17,18 +16,16 @@ export class Entry {
 
   private constructor(
     authInstance: Auth,
-    entryApiInstance: EntryFetch,
     sessionStorageInstance: SessionStorage
   ) {
     this.auth = authInstance;
-    this.entryApi = EntryFetchFactory.getInstance().getProperClass(); ///entryApiInstance;
+    this.entryApi = EntryFetchFactory.getInstance().getProperClass();
     this.sessionStorage = sessionStorageInstance;
   }
   static getInstance(): Entry {
     if (this.instance === null) {
       this.instance = new Entry(
         Auth.getInstance(),
-        EntryApi.getInstance(),
         SessionStorage.getInstance()
       );
       return this.instance;

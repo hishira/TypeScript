@@ -6,7 +6,6 @@ export class EntryLocal implements EntryFetch {
   static getInstance(): EntryLocal {
     if (this.instance === null) {
       this.instance = new EntryLocal();
-      return this.instance;
     }
     return this.instance;
   }

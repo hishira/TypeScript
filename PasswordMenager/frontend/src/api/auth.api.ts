@@ -1,6 +1,7 @@
+import { AuthFetch } from "../interfaces/auth.fetch";
 import { Api } from "./config.api";
 
-export class AuthApi extends Api {
+export class AuthApi extends Api implements AuthFetch {
   private static instance: AuthApi | null = null;
 
   static getInstance(): AuthApi {
@@ -10,18 +11,18 @@ export class AuthApi extends Api {
     }
     return this.instance;
   }
-  async login(userauth: UserAuth): Promise<Response> {
+  login(userauth: UserAuth): Promise<Response> {
     const url: string = this.getUrl("auth/login");
-    return await fetch(url, this.fetchPostObject(userauth));
+    return fetch(url, this.fetchPostObject(userauth));
   }
 
-  async signup(newuserauth: RegisterUser): Promise<Response> {
+  signup(newuserauth: RegisterUser): Promise<Response> {
     const url: string = this.getUrl("auth/signup");
-    return await fetch(url, this.fetchPostObject(newuserauth));
+    return fetch(url, this.fetchPostObject(newuserauth));
   }
 
-  async refreshAccessToken(token: string): Promise<Response> {
+  refreshAccessToken(token: string): Promise<Response> {
     const url: string = this.getUrl("auth/refresh");
-    return await fetch(url, this.fetchGetObjectWithtoken(token));
+    return fetch(url, this.fetchGetObjectWithtoken(token));
   }
 }
