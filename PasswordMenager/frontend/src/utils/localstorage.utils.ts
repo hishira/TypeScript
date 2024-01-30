@@ -1,12 +1,23 @@
+import { ApplicationDatabaseType } from "../models/applicationDatabase";
+
 export class SessionStorage {
   private static instance: SessionStorage | null = null;
   private storage: Storage;
   private readonly accesstoken = "accesstoken";
   private readonly refreshtoken = "refreshtoken";
+  private readonly dataType = "dataType";
+
   private constructor() {
     this.storage = sessionStorage;
   }
 
+  get ApplicationDataType(): ApplicationDatabaseType | null {
+    return JSON.parse(this.storage.getItem(this.dataType) ?? 'null') ?? null;
+  }
+
+  set ApplicationDataType(dataType: ApplicationDatabaseType | null) {
+    this.storage.setItem(this.dataType, JSON.stringify(dataType));
+  }
   static getInstance(): SessionStorage {
     if (this.instance === null) {
       this.instance = new SessionStorage();

@@ -1,10 +1,12 @@
+import { SessionStorage } from "../utils/localstorage.utils";
+
 export enum ApplicationDatabaseType {
   ONLINE = "online",
   LOCAL = "local",
 }
 export class ApplicationDatabase {
   private static instance: ApplicationDatabase | null = null;
-
+  
   private databaseType: ApplicationDatabaseType | null = null;
 
   private constructor() {}
@@ -20,6 +22,7 @@ export class ApplicationDatabase {
   }
 
   set DataBaseType(databaseType: ApplicationDatabaseType | null) {
+    SessionStorage.getInstance().ApplicationDataType = databaseType;
     this.databaseType = databaseType;
   }
 
