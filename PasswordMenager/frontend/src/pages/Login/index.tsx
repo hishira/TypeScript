@@ -2,6 +2,7 @@ import { inject, observer } from "mobx-react";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import FormComponent from "../../components/Form/index";
+import { LocalLogin } from "../../components/LocalLogin";
 import { LoginHook } from "../../hooks/login.hook";
 import { IGeneral } from "../../models/General";
 import { Auth } from "../../utils/auth.utils";
@@ -62,7 +63,9 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
 
   LoginHook(history, store);
 
-  return (
+  return store?.IsLocal ? (
+    <LocalLogin />
+  ) : (
     <Container>
       <FormContainer>
         <FormComponent

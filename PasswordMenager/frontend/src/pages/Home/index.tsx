@@ -3,6 +3,10 @@ import { useHistory } from "react-router-dom";
 import { Translation } from "../../components/Translation";
 import { IGeneral } from "../../models/General";
 import {
+  ApplicationDatabase,
+  ApplicationDatabaseType,
+} from "../../models/applicationDatabase";
+import {
   ButtonContainer,
   ButtonsContainer,
   Container,
@@ -17,11 +21,20 @@ const HomePage = ({ store }: HomePageProps): JSX.Element => {
 
   const StoreButtonHandle = async (): Promise<void> => {
     /// TODO: User to encrypt password
-   
-    // if (store.UserActivity) history.push("/store");
-    // else history.push("/login");
-    // ApplicationDatabase.getInstance().DataBaseType =
-    //   ApplicationDatabaseType.ONLINE;
+
+    if (store.UserActivity) history.push("/store");
+    else history.push("/login");
+    ApplicationDatabase.getInstance().DataBaseType =
+      ApplicationDatabaseType.ONLINE;
+    store.setIsLocal(false);
+  };
+
+  const localButtonHandle = async () => {
+    if (store.UserActivity) history.push("/store");
+    else history.push("/login");
+    ApplicationDatabase.getInstance().DataBaseType =
+      ApplicationDatabaseType.LOCAL;
+    store.setIsLocal(true);
   };
   return (
     <Container>
@@ -30,7 +43,9 @@ const HomePage = ({ store }: HomePageProps): JSX.Element => {
         <ButtonContainer onClick={() => StoreButtonHandle()}>
           Online
         </ButtonContainer>
-        <ButtonContainer>Local</ButtonContainer>
+        <ButtonContainer onClick={() => localButtonHandle()}>
+          Local
+        </ButtonContainer>
       </ButtonsContainer>
     </Container>
   );
