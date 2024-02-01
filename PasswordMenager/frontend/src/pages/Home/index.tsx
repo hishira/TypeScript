@@ -3,10 +3,6 @@ import { useHistory } from "react-router-dom";
 import { Translation } from "../../components/Translation";
 import { IGeneral } from "../../models/General";
 import {
-  ApplicationDatabase,
-  ApplicationDatabaseType,
-} from "../../models/applicationDatabase";
-import {
   ButtonContainer,
   ButtonsContainer,
   Container,
@@ -18,11 +14,14 @@ type HomePageProps = {
 
 const HomePage = ({ store }: HomePageProps): JSX.Element => {
   const history = useHistory();
-  const StoreButtonHandle = (): void => {
-    if (store.UserActivity) history.push("/store");
-    else history.push("/login");
-    ApplicationDatabase.getInstance().DataBaseType =
-      ApplicationDatabaseType.ONLINE;
+
+  const StoreButtonHandle = async (): Promise<void> => {
+    /// TODO: User to encrypt password
+   
+    // if (store.UserActivity) history.push("/store");
+    // else history.push("/login");
+    // ApplicationDatabase.getInstance().DataBaseType =
+    //   ApplicationDatabaseType.ONLINE;
   };
   return (
     <Container>
