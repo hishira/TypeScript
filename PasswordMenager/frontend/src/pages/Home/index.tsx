@@ -20,8 +20,7 @@ const HomePage = ({ store }: HomePageProps): JSX.Element => {
   const history = useHistory();
 
   const StoreButtonHandle = async (): Promise<void> => {
-    /// TODO: User to encrypt password
-
+    
     if (store.UserActivity) history.push("/store");
     else history.push("/login");
     ApplicationDatabase.getInstance().DataBaseType =
