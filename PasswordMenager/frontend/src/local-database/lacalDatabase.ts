@@ -5,11 +5,12 @@ import {
   StoreNames,
   openDB,
 } from "idb";
-interface CommonDatabaseInterface extends DBSchema {
+export interface CommonDatabaseInterface extends DBSchema {
   user: {
     value: {
       id: string;
       password: string;
+      isActive: boolean;
     };
     key: string;
     indexes: { "by-id": string };
@@ -22,11 +23,13 @@ type CustomStoreType = IDBPObjectStore<
   "readwrite"
 >;
 export abstract class LocalDatabase {
+  private static instance: LocalDatabase | null = null;
   private mapCollection: Map<"user", CustomStoreType> = new Map();
   private db: IDBPDatabase<CommonDatabaseInterface> | undefined;
+
   constructor(
     public readonly dataBaseName: "user",
-    public version: number = 0
+    public version: number = 1
   ) {}
 
   async init() {
@@ -46,32 +49,62 @@ export abstract class LocalDatabase {
           const tc = db.transaction(this.dataBaseName, "readwrite");
           const store = tc.objectStore(this.dataBaseName);
           this.mapCollection.set(this.dataBaseName, store);
+          console.log(this.mapCollection);
           await tc.done;
         }
       },
     });
+
+    if (!this.db.objectStoreNames.contains(this.dataBaseName)) {
+      const storetc = this.db.createObjectStore(this.dataBaseName, {
+        keyPath: "id",
+        autoIncrement: true,
+      });
+      storetc.createIndex("by-id", "id");
+      const tc = this.db.transaction(this.dataBaseName, "readwrite");
+      const store = tc.objectStore(this.dataBaseName);
+      this.mapCollection.set(this.dataBaseName, store);
+      await tc.done;
+    } else {
+      const tc = this.db.transaction(this.dataBaseName, "readwrite");
+      const store = tc.objectStore(this.dataBaseName);
+      this.mapCollection.set(this.dataBaseName, store);
+      console.log(this.mapCollection);
+      await tc.done;
+    }
   }
 
-  getStore(storeName: "user"): CustomStoreType | undefined {
+  getStore(): CustomStoreType | undefined {
     try {
-      if (this.mapCollection.get(storeName) === undefined) throw Error();
+      console.log(this.mapCollection);
+      if (this.mapCollection.get(this.dataBaseName) === undefined)
+        throw Error();
 
-      return this.mapCollection.get(storeName);
+      return this.mapCollection.get(this.dataBaseName);
     } catch {
       console.error("unnkown store name");
     }
   }
-
-  private getCollection(collectionName: "user"): CustomStoreType | undefined {
-    return this.mapCollection.get(collectionName);
-  }
-
-  //abstract get(id: string): any;
 
   put(object: unknown): Promise<unknown> {
     const db = this.mapCollection.get(this.dataBaseName);
     if (db === undefined) return Promise.resolve(null);
     if (db.put === undefined) return Promise.resolve(null);
     return (db.put as Function)(object);
+  }
+
+  getAll(): Promise<any[] | undefined | null> {
+    // TODO: Check
+    const tc = this.getStore()?.transaction;
+    const ct = this.getStore()?.getAll() as Promise<any[]>;
+    return tc?.done.then((_) => ct) ?? Promise.resolve(null);
+  }
+
+  abstract add(
+    value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
+  ): unknown;
+
+  private getCollection(collectionName: "user"): CustomStoreType | undefined {
+    return this.mapCollection.get(collectionName);
   }
 }

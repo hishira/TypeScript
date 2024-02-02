@@ -6,10 +6,11 @@ export enum ApplicationDatabaseType {
 }
 export class ApplicationDatabase {
   private static instance: ApplicationDatabase | null = null;
-  
+
   private databaseType: ApplicationDatabaseType | null = null;
 
   private constructor() {}
+
   static getInstance(): ApplicationDatabase {
     if (this.instance === null) {
       this.instance = new ApplicationDatabase();

@@ -12,6 +12,7 @@ import { SessionStorage } from "../../utils/localstorage.utils";
 import HomePage from "../Home";
 import StorePage from "../Store/";
 import "./App.css";
+import { DatabaseInit } from "../../local-database/init";
 const notEmpty = (value: string | null | undefined): boolean => {
   return value !== null && value !== undefined && value !== "";
 };
@@ -26,6 +27,7 @@ function App() {
     viewType: View.Table,
     isLocal: SessionStorage.getInstance().ApplicationDataType === ApplicationDatabaseType.LOCAL
   });
+  DatabaseInit();
   ApplicationDatabase.getInstance().DataBaseType = SessionStorage.getInstance().ApplicationDataType;
   return (
     <Provider store={store}>

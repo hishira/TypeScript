@@ -63,21 +63,23 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
 
   LoginHook(history, store);
 
-  return store?.IsLocal ? (
-    <LocalLogin />
-  ) : (
+  return (
     <Container>
-      <FormContainer>
-        <FormComponent
-          firstinputhandle={loginchange}
-          secondinputhandle={passwordchange}
-          buttonmessage="page.login.button.text"
-          buttonHandle={loginClickHandle}
-          secondactionastirng="page.login.secondaryString"
-          redirectfunction={redirectFunction}
-          maintitle="page.login.mainTitle"
-        />
-      </FormContainer>
+      {store?.IsLocal ? (
+        <LocalLogin />
+      ) : (
+        <FormContainer>
+          <FormComponent
+            firstinputhandle={loginchange}
+            secondinputhandle={passwordchange}
+            buttonmessage="page.login.button.text"
+            buttonHandle={loginClickHandle}
+            secondactionastirng="page.login.secondaryString"
+            redirectfunction={redirectFunction}
+            maintitle="page.login.mainTitle"
+          />
+        </FormContainer>
+      )}
     </Container>
   );
 };
