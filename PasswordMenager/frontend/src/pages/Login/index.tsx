@@ -2,6 +2,7 @@ import { inject, observer } from "mobx-react";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import FormComponent from "../../components/Form/index";
+import { LocalLogin } from "../../components/LocalLogin";
 import { LoginHook } from "../../hooks/login.hook";
 import { IGeneral } from "../../models/General";
 import { Auth } from "../../utils/auth.utils";
@@ -64,17 +65,21 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
 
   return (
     <Container>
-      <FormContainer>
-        <FormComponent
-          firstinputhandle={loginchange}
-          secondinputhandle={passwordchange}
-          buttonmessage="page.login.button.text"
-          buttonHandle={loginClickHandle}
-          secondactionastirng="page.login.secondaryString"
-          redirectfunction={redirectFunction}
-          maintitle="page.login.mainTitle"
-        />
-      </FormContainer>
+      {store?.IsLocal ? (
+        <LocalLogin />
+      ) : (
+        <FormContainer>
+          <FormComponent
+            firstinputhandle={loginchange}
+            secondinputhandle={passwordchange}
+            buttonmessage="page.login.button.text"
+            buttonHandle={loginClickHandle}
+            secondactionastirng="page.login.secondaryString"
+            redirectfunction={redirectFunction}
+            maintitle="page.login.mainTitle"
+          />
+        </FormContainer>
+      )}
     </Container>
   );
 };

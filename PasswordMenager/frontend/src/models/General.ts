@@ -1,10 +1,10 @@
 import {
   IModelType,
-  Instance,
   ISimpleType,
   IStateTreeNode,
-  types,
+  Instance,
   _NotCustomized,
+  types,
 } from "mobx-state-tree";
 import { NonEmptyObject } from "mobx-state-tree/dist/internal";
 
@@ -38,6 +38,7 @@ export const General = types
       open: types.boolean,
     }),
     viewType: types.enumeration(Object.keys(View)),
+    isLocal: types.boolean,
   })
   .actions((self) => ({
     setUserActive(useractive: boolean): void {
@@ -49,6 +50,9 @@ export const General = types
     setViewType(viewType: View): void {
       self.viewType = viewType;
     },
+    setIsLocal(isLocal: boolean): void{
+      self.isLocal = isLocal;
+    }
   }))
   .views((self) => ({
     get UserActivity(): boolean {
@@ -60,6 +64,9 @@ export const General = types
     get ViewType(): View {
       return self.viewType as View;
     },
+    get IsLocal(): boolean{
+      return self.isLocal;
+    }
   }));
 
 export type IGeneral = Instance<typeof General>;

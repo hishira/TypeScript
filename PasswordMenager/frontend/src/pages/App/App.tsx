@@ -5,13 +5,14 @@ import PopUpElement from "../../components/Popup";
 import PrivateComponent from "../../components/PrivateRoute/index";
 import UserRedirect from "../../components/UserRedirect";
 import { General, View } from "../../models/General";
+import { ApplicationDatabase, ApplicationDatabaseType } from "../../models/applicationDatabase";
 import LoginPage from "../../pages/Login";
 import SignUp from "../../pages/SignUp/";
 import { SessionStorage } from "../../utils/localstorage.utils";
 import HomePage from "../Home";
 import StorePage from "../Store/";
 import "./App.css";
-import { ApplicationDatabase } from "../../models/applicationDatabase";
+import { DatabaseInit } from "../../local-database/init";
 const notEmpty = (value: string | null | undefined): boolean => {
   return value !== null && value !== undefined && value !== "";
 };
@@ -24,7 +25,9 @@ function App() {
       message: "",
     },
     viewType: View.Table,
+    isLocal: SessionStorage.getInstance().ApplicationDataType === ApplicationDatabaseType.LOCAL
   });
+  DatabaseInit();
   ApplicationDatabase.getInstance().DataBaseType = SessionStorage.getInstance().ApplicationDataType;
   return (
     <Provider store={store}>
