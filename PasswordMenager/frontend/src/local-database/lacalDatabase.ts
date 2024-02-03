@@ -42,17 +42,18 @@ export abstract class LocalDatabase {
         autoIncrement: true,
       });
       storetc.createIndex("by-id", "id");
-      const tc = db.transaction(this.dataBaseName, "readwrite");
-      const store = tc.objectStore(this.dataBaseName);
-      this.mapCollection.set(this.dataBaseName, store);
-      await tc.done;
-    } else {
-      const tc = db.transaction(this.dataBaseName, "readwrite");
-      const store = tc.objectStore(this.dataBaseName);
-      this.mapCollection.set(this.dataBaseName, store);
-      console.log(this.mapCollection);
-      await tc.done;
     }
+    await this.createStore(db);
+  }
+  private async createStore(
+    db: IDBPDatabase<CommonDatabaseInterface> | undefined = this.db
+  ): Promise<void> {
+    if (db === undefined) throw Error("Undefined database");
+
+    const tc = db.transaction(this.dataBaseName, "readwrite");
+    const store = tc.objectStore(this.dataBaseName);
+    this.mapCollection.set(this.dataBaseName, store);
+    await tc.done;
   }
   async init() {
     this.db = await openDB<CommonDatabaseInterface>("local", this.version, {
