@@ -8,7 +8,7 @@ import {
 import { Translation } from "../Translation";
 import { InfoIcon } from "../icons/InfoIcon";
 
-type Props = {
+export type FormProps = {
   label: string;
   inputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputplaceholder: string;
@@ -33,7 +33,7 @@ const FormElement = ({
   withTooltip,
   tooltipText,
   withBorder
-}: Props): JSX.Element => {
+}: FormProps): JSX.Element => {
   return (
     <FormElementComponent width={width}>
       <InputLabelContainer>
