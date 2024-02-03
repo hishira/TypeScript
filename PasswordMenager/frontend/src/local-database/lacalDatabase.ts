@@ -32,46 +32,36 @@ export abstract class LocalDatabase {
     public version: number = 1
   ) {}
 
-  async init() {
-    this.db = await openDB<CommonDatabaseInterface>("local", this.version, {
-      upgrade: async (db: IDBPDatabase<CommonDatabaseInterface>) => {
-        if (!db.objectStoreNames.contains(this.dataBaseName)) {
-          const storetc = db.createObjectStore(this.dataBaseName, {
-            keyPath: "id",
-            autoIncrement: true,
-          });
-          storetc.createIndex("by-id", "id");
-          const tc = db.transaction(this.dataBaseName, "readwrite");
-          const store = tc.objectStore(this.dataBaseName);
-          this.mapCollection.set(this.dataBaseName, store);
-          await tc.done;
-        } else {
-          const tc = db.transaction(this.dataBaseName, "readwrite");
-          const store = tc.objectStore(this.dataBaseName);
-          this.mapCollection.set(this.dataBaseName, store);
-          console.log(this.mapCollection);
-          await tc.done;
-        }
-      },
-    });
-
-    if (!this.db.objectStoreNames.contains(this.dataBaseName)) {
-      const storetc = this.db.createObjectStore(this.dataBaseName, {
+  private async databaseUpdate(
+    db: IDBPDatabase<CommonDatabaseInterface> | undefined = this.db
+  ) {
+    if (db === undefined) throw Error("Undefined database");
+    if (!db.objectStoreNames.contains(this.dataBaseName)) {
+      const storetc = db.createObjectStore(this.dataBaseName, {
         keyPath: "id",
         autoIncrement: true,
       });
       storetc.createIndex("by-id", "id");
-      const tc = this.db.transaction(this.dataBaseName, "readwrite");
+      const tc = db.transaction(this.dataBaseName, "readwrite");
       const store = tc.objectStore(this.dataBaseName);
       this.mapCollection.set(this.dataBaseName, store);
       await tc.done;
     } else {
-      const tc = this.db.transaction(this.dataBaseName, "readwrite");
+      const tc = db.transaction(this.dataBaseName, "readwrite");
       const store = tc.objectStore(this.dataBaseName);
       this.mapCollection.set(this.dataBaseName, store);
       console.log(this.mapCollection);
       await tc.done;
     }
+  }
+  async init() {
+    this.db = await openDB<CommonDatabaseInterface>("local", this.version, {
+      upgrade: async (db: IDBPDatabase<CommonDatabaseInterface>) => {
+        await this.databaseUpdate(db);
+      },
+    });
+
+    await this.databaseUpdate();
   }
 
   getStore(): CustomStoreType | undefined {
@@ -93,11 +83,11 @@ export abstract class LocalDatabase {
     return (db.put as Function)(object);
   }
 
-  getAll(): Promise<any[] | undefined | null> {
-    // TODO: Check
-    const tc = this.getStore()?.transaction;
-    const ct = this.getStore()?.getAll() as Promise<any[]>;
-    return tc?.done.then((_) => ct) ?? Promise.resolve(null);
+  getAll(): Promise<{ id: string; password: string; isActive: boolean }[]> {
+    return (
+      this.db?.getAll(this.dataBaseName) ??
+      Promise.reject(new Error("Database is undefiend"))
+    );
   }
 
   abstract add(
