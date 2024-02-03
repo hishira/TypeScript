@@ -233,3 +233,10 @@ type ValueFieldPropd = {
   isUrl: boolean | undefined;
   value: string | IEntry | null;
 };
+type ErrorValue = {
+  message: string;
+};
+type ValidatorErrors = {
+  [key: string]: ErrorValue;
+};
+type ValidatorFn = (value: unknown) => ValidatorErrors | null;
