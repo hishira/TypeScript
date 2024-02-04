@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import FormElement, { FormProps } from "../FormElement";
-import { ErrorContainer } from "../shared/styled-components";
+import { ErrorContainer, Errors } from "../shared/styled-components";
+import { ValidatorElement } from "./component.styled";
 
-type ValidatorFormProps = FormProps & { validators: ValidatorFn[] };
+type ValidatorFormProps = FormProps & {
+  validators: ValidatorFn[];
+  isValid?: (isValid: boolean) => void;
+};
 export const ValidatorForm = (formProps: ValidatorFormProps) => {
   const [errors, setErrors] = useState<ErrorValue[]>([]);
   const inputValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,18 +20,27 @@ export const ValidatorForm = (formProps: ValidatorFormProps) => {
         );
       }
     });
+    formProps.isValid && formProps.isValid(tmpErrors.length <= 0);
     setErrors(tmpErrors);
-    console.log(errors);
   };
   useEffect(() => {
+    console.log(errors);
     setErrors((e) => e);
   }, [errors]);
   return (
-    <>
-      <FormElement {...formProps} inputChange={(e) => inputValidation(e)} />
-      {errors.forEach((e) => (
-        <ErrorContainer>{e.message}</ErrorContainer>
-      ))}
-    </>
+    <ValidatorElement>
+      <FormElement
+        {...formProps}
+        inputChange={(e) => inputValidation(e)}
+        isError={errors.length > 0}
+      />
+      {errors && (
+        <Errors>
+          {errors.map((e) => (
+            <ErrorContainer>{e.message}</ErrorContainer>
+          ))}
+        </Errors>
+      )}
+    </ValidatorElement>
   );
 };

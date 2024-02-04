@@ -238,5 +238,5 @@ type ErrorValue = {
 };
 type ValidatorErrors = {
   [key: string]: ErrorValue;
-};
+} | null;
 type ValidatorFn = (value: unknown) => ValidatorErrors | null;

@@ -1,12 +1,12 @@
 import React from "react";
 import InputField from "../InputField/index";
+import { Translation } from "../Translation";
+import { InfoIcon } from "../icons/InfoIcon";
 import {
   FormElementComponent,
   InputLabel,
   InputLabelContainer,
 } from "./component.styled";
-import { Translation } from "../Translation";
-import { InfoIcon } from "../icons/InfoIcon";
 
 export type FormProps = {
   label: string;
@@ -19,7 +19,8 @@ export type FormProps = {
   width?: string;
   withTooltip?: boolean;
   tooltipText?: string;
-  withBorder?: boolean,
+  withBorder?: boolean;
+  isError?: boolean;
 };
 const FormElement = ({
   label,
@@ -32,15 +33,19 @@ const FormElement = ({
   width,
   withTooltip,
   tooltipText,
-  withBorder
+  withBorder,
+  isError,
 }: FormProps): JSX.Element => {
   return (
     <FormElementComponent width={width}>
       <InputLabelContainer>
-        <InputLabel fontSize={fontSize}>{Translation(label)}</InputLabel>
-        {(withTooltip && tooltipText) ? (
+        <InputLabel fontSize={fontSize} isError={isError}>
+          {Translation(label)}
+        </InputLabel>
+        {withTooltip && tooltipText ? (
           <span>
-            <InfoIcon /> <span test-tooltip="tooltip-text">{Translation(tooltipText)}</span>
+            <InfoIcon />{" "}
+            <span test-tooltip="tooltip-text">{Translation(tooltipText)}</span>
           </span>
         ) : null}
       </InputLabelContainer>
@@ -51,6 +56,7 @@ const FormElement = ({
         value={value}
         withBorder={withBorder}
         inputFontSize={inputFontSize}
+        isError={isError}
       />
     </FormElementComponent>
   );

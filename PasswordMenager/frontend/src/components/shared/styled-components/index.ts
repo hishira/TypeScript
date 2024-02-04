@@ -12,8 +12,12 @@ export const ContentContainer = styled.div`
   color: rgba(0, 0, 0, 0.65);
 `;
 
+export const Errors = styled.span`
+  display: inline-flex;
+  flex-direction: column;
+`;
 export const ErrorContainer = styled.span`
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   color: lightsalmon;
 `;

@@ -9,6 +9,7 @@ type Props = {
   value?: string | number;
   inputFontSize?: string;
   withBorder?: boolean;
+  isError?: boolean;
 };
 const InputField = ({
   onChange,
@@ -17,6 +18,7 @@ const InputField = ({
   value,
   inputFontSize,
   withBorder,
+  isError
 }: Props): JSX.Element => {
   return (
     <Input
@@ -26,6 +28,7 @@ const InputField = ({
       withBorder={withBorder}
       value={value}
       fontSize={inputFontSize}
+      isError={isError}
     />
   );
 };
