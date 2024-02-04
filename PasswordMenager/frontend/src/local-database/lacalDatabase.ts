@@ -32,29 +32,6 @@ export abstract class LocalDatabase {
     public version: number = 1
   ) {}
 
-  private async databaseUpdate(
-    db: IDBPDatabase<CommonDatabaseInterface> | undefined = this.db
-  ) {
-    if (db === undefined) throw Error("Undefined database");
-    if (!db.objectStoreNames.contains(this.dataBaseName)) {
-      const storetc = db.createObjectStore(this.dataBaseName, {
-        keyPath: "id",
-        autoIncrement: true,
-      });
-      storetc.createIndex("by-id", "id");
-    }
-    await this.createStore(db);
-  }
-  private async createStore(
-    db: IDBPDatabase<CommonDatabaseInterface> | undefined = this.db
-  ): Promise<void> {
-    if (db === undefined) throw Error("Undefined database");
-
-    const tc = db.transaction(this.dataBaseName, "readwrite");
-    const store = tc.objectStore(this.dataBaseName);
-    this.mapCollection.set(this.dataBaseName, store);
-    await tc.done;
-  }
   async init() {
     this.db = await openDB<CommonDatabaseInterface>("local", this.version, {
       upgrade: async (db: IDBPDatabase<CommonDatabaseInterface>) => {
@@ -65,16 +42,10 @@ export abstract class LocalDatabase {
     await this.databaseUpdate();
   }
 
-  getStore(): CustomStoreType | undefined {
-    try {
-      console.log(this.mapCollection);
-      if (this.mapCollection.get(this.dataBaseName) === undefined)
-        throw Error();
-
-      return this.mapCollection.get(this.dataBaseName);
-    } catch {
-      console.error("unnkown store name");
-    }
+  protected baseAdd(
+    value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
+  ) {
+    this.db?.add(this.dataBaseName, value);
   }
 
   put(object: unknown): Promise<unknown> {
@@ -97,5 +68,30 @@ export abstract class LocalDatabase {
 
   private getCollection(collectionName: "user"): CustomStoreType | undefined {
     return this.mapCollection.get(collectionName);
+  }
+
+  private async createStore(
+    db: IDBPDatabase<CommonDatabaseInterface> | undefined = this.db
+  ): Promise<void> {
+    if (db === undefined) throw Error("Undefined database");
+
+    const tc = db.transaction(this.dataBaseName, "readwrite");
+    const store = tc.objectStore(this.dataBaseName);
+    this.mapCollection.set(this.dataBaseName, store);
+    await tc.done;
+  }
+
+  private async databaseUpdate(
+    db: IDBPDatabase<CommonDatabaseInterface> | undefined = this.db
+  ) {
+    if (db === undefined) throw Error("Undefined database");
+    if (!db.objectStoreNames.contains(this.dataBaseName)) {
+      const storetc = db.createObjectStore(this.dataBaseName, {
+        keyPath: "id",
+        autoIncrement: true,
+      });
+      storetc.createIndex("by-id", "id");
+    }
+    await this.createStore(db);
   }
 }

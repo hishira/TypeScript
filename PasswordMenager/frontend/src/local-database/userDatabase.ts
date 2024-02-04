@@ -12,6 +12,6 @@ export class UserDatabase extends LocalDatabase {
       password: await CryptoDatabase.hashPassword(userDto.password),
       isActive: true,
     };
-    this.getStore()?.add(user);
+    this.baseAdd(user);
   }
 }

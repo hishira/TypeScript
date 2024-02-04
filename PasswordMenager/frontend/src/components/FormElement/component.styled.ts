@@ -36,10 +36,10 @@ export const InputLabelContainer = styled.div`
     }
   }
 `;
-export const InputLabel = styled.label<{ fontSize?: string }>`
+export const InputLabel = styled.label<{ fontSize?: string, isError?: boolean }>`
   font-size: ${({ fontSize }) => fontSize ?? " 1.2rem"};
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px 5px 5px 0px;
   padding-left: 0.3rem;
-  color: grey;
+  color: ${({isError})=> isError ? 'lightsalmon' : 'grey'};
 `;
