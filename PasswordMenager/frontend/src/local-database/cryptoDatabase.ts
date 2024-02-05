@@ -42,19 +42,15 @@ export class CryptoDatabase {
       false,
       ["encrypt", "decrypt"]
     );
-    console.log(keyPair);
     const iv = crypto.getRandomValues(new Uint8Array(12));
     const array = await crypto.subtle
       .encrypt({ name: "AES-GCM", iv }, keyPair, Buffer.from("test"))
       .then((a) => a);
     const as = new TextDecoder("utf-8").decode(array);
     const cs = new TextEncoder().encode(as).buffer;
-    console.log(array);
-    console.log(stringToArrayBuffer(as));
 
     crypto.subtle
       .decrypt({ name: "AES-GCM", iv }, keyPair, cs)
-      .then((a) => console.log(new TextDecoder().decode(a)))
       .catch((a) => console.log(a));
   }
 }

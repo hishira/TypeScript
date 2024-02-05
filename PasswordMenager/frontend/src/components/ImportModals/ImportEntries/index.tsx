@@ -28,7 +28,6 @@ const acceptHandle = (
   return Import.getInstance()
     .Import(formData, 0, type)
     .then((data: ImportCheckData) => {
-      console.log(data);
       setImportInfo(data);
     })
     .then((_) => true);

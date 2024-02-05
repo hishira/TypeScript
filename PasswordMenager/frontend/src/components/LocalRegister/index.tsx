@@ -27,7 +27,6 @@ const LocalRegisterComponent = ({ store }: { store?: IGeneral }) => {
   ];
   const history = useHistory();
   const addUser = () => {
-    console.log(inValidFields());
     if (inValidFields()) {
       return;
     }
