@@ -35,7 +35,6 @@ const LocalRegisterComponent = ({ store }: { store?: IGeneral }) => {
       .getDatabase("user")
       ?.add({ password: password })
       .then((response) => {
-        console.log(response);
         if (response) {
           store?.setPopUpinfo(
             SuccessPopUpObject("Create local account successfull")

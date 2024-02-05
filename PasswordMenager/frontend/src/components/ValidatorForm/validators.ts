@@ -58,7 +58,6 @@ export namespace Validators {
       const error = validator(value);
       errors.push(error);
     });
-    console.log(errors);
     return errors.filter((val) => !!val).length > 0;
   };
 }
