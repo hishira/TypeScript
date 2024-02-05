@@ -24,8 +24,8 @@ export const ValidatorForm = (formProps: ValidatorFormProps) => {
     setErrors(tmpErrors);
   };
   useEffect(() => {
-    console.log(errors);
     setErrors((e) => e);
+    formProps.isValid && formProps.isValid(errors.length <= 0);
   }, [errors]);
   return (
     <ValidatorElement>

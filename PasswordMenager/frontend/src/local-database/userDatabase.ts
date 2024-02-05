@@ -6,12 +6,18 @@ export class UserDatabase extends LocalDatabase {
     super("user");
   }
 
-  override async add(userDto: { password: string }) {
-    const user = {
-      id: CryptoDatabase.generateRandomId(),
-      password: await CryptoDatabase.hashPassword(userDto.password),
-      isActive: true,
-    };
-    this.baseAdd(user);
+  override async add(userDto: {
+    password: string;
+  }): Promise<string | undefined> {
+    return CryptoDatabase.hashPassword(userDto.password).then(
+      (hashedPassword) => {
+        const user = {
+          id: CryptoDatabase.generateRandomId(),
+          password: hashedPassword,
+          isActive: true,
+        };
+        return this.baseAdd(user);
+      }
+    );
   }
 }

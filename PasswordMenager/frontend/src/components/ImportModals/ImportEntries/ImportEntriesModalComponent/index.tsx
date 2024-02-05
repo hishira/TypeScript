@@ -24,7 +24,6 @@ const ImportEntriesModalComponent = ({
     PossibleFileType.TextCsv,
   ];
   const fileChangeHandlerFunction = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
     const { target: { files = [] } = {} } = e;
     if (files && files?.length <= 0) return;
     files && fileChange(files[0]);
