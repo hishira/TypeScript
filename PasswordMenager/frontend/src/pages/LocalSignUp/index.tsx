@@ -1,4 +1,4 @@
-import { LocalRegisterComponent } from "../../components/LocalRegister";
+import LocalRegisterComponent from "../../components/LocalRegister";
 
 export const LocaSignUp = () => {
   return <LocalRegisterComponent />;

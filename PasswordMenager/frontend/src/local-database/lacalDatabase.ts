@@ -5,13 +5,14 @@ import {
   StoreNames,
   openDB,
 } from "idb";
+type UserValue = {
+  id: string;
+  password: string;
+  isActive: boolean;
+};
 export interface CommonDatabaseInterface extends DBSchema {
   user: {
-    value: {
-      id: string;
-      password: string;
-      isActive: boolean;
-    };
+    value: UserValue;
     key: string;
     indexes: { "by-id": string };
   };
@@ -44,8 +45,8 @@ export abstract class LocalDatabase {
 
   protected baseAdd(
     value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
-  ) {
-    this.db?.add(this.dataBaseName, value);
+  ): Promise<string> | undefined {
+    return this.db?.add(this.dataBaseName, value);
   }
 
   put(object: unknown): Promise<unknown> {
@@ -64,7 +65,7 @@ export abstract class LocalDatabase {
 
   abstract add(
     value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
-  ): unknown;
+  ): Promise<unknown>;
 
   private getCollection(collectionName: "user"): CustomStoreType | undefined {
     return this.mapCollection.get(collectionName);

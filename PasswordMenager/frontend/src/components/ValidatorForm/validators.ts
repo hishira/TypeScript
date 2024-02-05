@@ -48,4 +48,17 @@ export namespace Validators {
         return valueToCompare !== value ? SameValueError(message) : null;
       return valueToCompare !== value ? SameValueError(message) : null;
     };
+
+  export const StaticFieldValidation = (
+    value: unknown,
+    ...validators: ValidatorFn[]
+  ) => {
+    const errors: any[] = [];
+    validators.forEach((validator) => {
+      const error = validator(value);
+      errors.push(error);
+    });
+    console.log(errors);
+    return errors.filter((val) => !!val).length > 0;
+  };
 }
