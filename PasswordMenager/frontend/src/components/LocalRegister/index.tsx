@@ -1,19 +1,18 @@
-import { inject, observer } from "mobx-react";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Databases } from "../../local-database/init";
-import { IGeneral } from "../../models/General";
-import { ErrorPopUpObject, SuccessPopUpObject } from "../../utils/popup.utils";
 import Button from "../Button";
 import { ValidatorForm } from "../ValidatorForm";
 import { Validators } from "../ValidatorForm/validators";
 import { ContentContainer, TitleContainer } from "../shared/styled-components";
 import { LocalRegisterElement } from "./component.styled";
 
-const LocalRegisterComponent = ({ store }: { store?: IGeneral }) => {
+export const LocalRegisterComponent = ({
+  localRegisterHandle,
+}: {
+  localRegisterHandle: (password: string) => void;
+}) => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [validPassword, setValidPassoword] = useState<boolean>(false);
+  const [validPassword, setValidPassword] = useState<boolean>(false);
   const [validConfirmPassword, setValidConfirmPassword] =
     useState<boolean>(true);
   const passwordValidators: ValidatorFn[] = [
@@ -25,26 +24,11 @@ const LocalRegisterComponent = ({ store }: { store?: IGeneral }) => {
     Validators.Required,
     Validators.SaveValue(password, "Must be same as password"),
   ];
-  const history = useHistory();
   const addUser = () => {
     if (inValidFields()) {
       return;
     }
-    Databases.getInstance()
-      .getDatabase("user")
-      ?.add({ password: password })
-      .then((response) => {
-        if (response) {
-          store?.setPopUpinfo(
-            SuccessPopUpObject("Create local account successfull")
-          );
-          history.push("/login");
-          return;
-        }
-        store?.setPopUpinfo(
-          ErrorPopUpObject("Error occur while creating local account")
-        );
-      });
+    localRegisterHandle(password);
   };
   const inValidFields = (): boolean => {
     const passwordIsInvalid = Validators.StaticFieldValidation(
@@ -75,7 +59,7 @@ const LocalRegisterComponent = ({ store }: { store?: IGeneral }) => {
         inputplaceholder="*****"
         inputtype="password"
         validators={passwordValidators}
-        isValid={(a) => setValidPassoword(a)}
+        isValid={(a) => setValidPassword(a)}
       />
       <ValidatorForm
         label="input.label.confirmPassword"
@@ -97,5 +81,3 @@ const LocalRegisterComponent = ({ store }: { store?: IGeneral }) => {
     </LocalRegisterElement>
   );
 };
-
-export default inject("store")(observer(LocalRegisterComponent));

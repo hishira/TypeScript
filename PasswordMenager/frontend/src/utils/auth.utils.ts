@@ -27,8 +27,11 @@ export class Auth {
 
   async LoginUserHandle(authobj: UserAuth): Promise<LoginReponse> {
     const response: AuthTokens = await this.LoginUser(authobj);
-
-    if (response?.access_token !== "" && response?.refresh_token !== "") {
+    if (
+      response &&
+      response?.access_token !== "" &&
+      response?.refresh_token !== ""
+    ) {
       return { status: true, response: response };
     }
     return { status: false, response: response };
@@ -42,7 +45,8 @@ export class Auth {
       .then((resp: Response) => {
         if (resp.status === 200 || resp.status === 201) return resp.json();
         return false;
-      });
+      })
+      .catch((e) => false);
     return response === false ? null : response;
   }
 

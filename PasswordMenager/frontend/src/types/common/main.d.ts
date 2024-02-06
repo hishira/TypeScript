@@ -5,9 +5,9 @@ type UserAuth = {
 };
 
 type RegisterUser = {
-  login: string;
+  login?: string;
   password: string;
-  email: string;
+  email?: string;
 };
 
 type AuthTokens = {

@@ -14,7 +14,7 @@ import LoginPage from "../../pages/Login";
 import SignUp from "../../pages/SignUp/";
 import { SessionStorage } from "../../utils/localstorage.utils";
 import HomePage from "../Home";
-import { LocaSignUp } from "../LocalSignUp";
+import LocaSignUp from "../LocalSignUp";
 import StorePage from "../Store/";
 import "./App.css";
 const notEmpty = (value: string | null | undefined): boolean => {

@@ -34,7 +34,8 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
   });
 
   const loginSuccess = (response: LoginReponse): void => {
-    SessionStorage.getInstance().setLocalStorageToken(response.response);
+    !store?.IsLocal &&
+      SessionStorage.getInstance().setLocalStorageToken(response.response);
     store?.setUserActive(true);
     history.push("/store");
   };
@@ -42,6 +43,10 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     e: React.MouseEvent<HTMLElement>
   ): Promise<void> => {
     e.preventDefault();
+    await loginHandler();
+  };
+
+  const loginHandler = async () => {
     const response: LoginReponse = await Auth.getInstance().LoginUserHandle(
       infoLogin
     );
@@ -54,7 +59,6 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
       );
     }
   };
-
   const redirectFunction = () => {
     history.push("/signup");
   };
@@ -63,10 +67,14 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
 
   LoginHook(history, store);
 
+  const localLoginHandle = async (password: string) => {
+    setInfoLogin({ login: "", password: password, email: "" });
+    await loginHandler();
+  };
   return (
     <Container>
       {store?.IsLocal ? (
-        <LocalLogin />
+        <LocalLogin loginButtonhandle={localLoginHandle} />
       ) : (
         <FormContainer>
           <FormComponent
