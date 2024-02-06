@@ -1,20 +1,31 @@
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Databases } from "../../local-database/init";
+import Button from "../Button";
 import FormElement from "../FormElement";
 import { TitleContainer } from "../shared/styled-components";
 import { LocalLoginElement } from "./component.styled";
-import { useHistory } from "react-router-dom";
 
-export const LocalLogin = () => {
+export const LocalLogin = ({
+  loginButtonhandle,
+}: {
+  loginButtonhandle: (password: string) => void;
+}) => {
   const [password, setPassword] = useState<string>("");
   const history = useHistory();
   useEffect(() => {
-    Databases.getInstance().getDatabase("user")?.getAll().then((userArray)=>{
-      if(userArray.length <= 0) {
-        history.push('/local-signup')
-      }
-    });
+    Databases.getInstance()
+      .getDatabase("user")
+      ?.getAll()
+      .then((userArray) => {
+        if (userArray.length <= 0) {
+          history.push("/local-signup");
+        }
+      });
   });
+  const LoginHandler = () => {
+    loginButtonhandle(password);
+  };
   return (
     <LocalLoginElement>
       <TitleContainer>Please enter the password to store</TitleContainer>
@@ -26,6 +37,7 @@ export const LocalLogin = () => {
         inputplaceholder="*****"
         inputtype="password"
       />
+      <Button onClick={LoginHandler}>Login</Button>
     </LocalLoginElement>
   );
 };
