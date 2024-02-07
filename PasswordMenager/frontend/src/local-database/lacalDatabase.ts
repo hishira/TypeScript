@@ -1,28 +1,9 @@
+import { IDBPDatabase, openDB } from "idb";
 import {
-  DBSchema,
-  IDBPDatabase,
-  IDBPObjectStore,
-  StoreNames,
-  openDB,
-} from "idb";
-type UserValue = {
-  id: string;
-  password: string;
-  isActive: boolean;
-};
-export interface CommonDatabaseInterface extends DBSchema {
-  user: {
-    value: UserValue;
-    key: string;
-    indexes: { "by-id": string };
-  };
-}
-type CustomStoreType = IDBPObjectStore<
   CommonDatabaseInterface,
-  ArrayLike<StoreNames<CommonDatabaseInterface>>,
-  StoreNames<CommonDatabaseInterface>,
-  "readwrite"
->;
+  CustomStoreType,
+} from "./localDatabase.interface";
+
 export abstract class LocalDatabase {
   private static instance: LocalDatabase | null = null;
   private mapCollection: Map<"user", CustomStoreType> = new Map();
