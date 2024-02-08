@@ -36,8 +36,9 @@ export const LocalLogin = ({
         }
         inputplaceholder="*****"
         inputtype="password"
+        value={password}
       />
-      <Button onClick={LoginHandler}>Login</Button>
+      <Button onClick={() => LoginHandler()}>Login</Button>
     </LocalLoginElement>
   );
 };

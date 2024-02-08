@@ -1,14 +1,15 @@
 import { databases } from "./database.provider";
-import { CommonDatabaseInterface, LocalDatabase } from "./lacalDatabase";
+import { LocalDatabase } from "./lacalDatabase";
+import { CommonDatabaseInterface } from "./localDatabase.interface";
 
 export const DatabaseInit = async (): Promise<boolean> => {
-  return new Promise<boolean>((resole, reject)=>{
+  return new Promise<boolean>((resole, reject) => {
     databases.forEach(async (database) => {
       await database.init();
       Databases.getInstance().addDatabase(database.dataBaseName, database);
     });
-    resole(true)
-  })
+    resole(true);
+  });
 };
 
 export class Databases {
@@ -28,7 +29,7 @@ export class Databases {
     this.map.set(databaseName, localDatabase);
   }
 
-  getDatabase(
+  getDatabase<T>(
     databaseName: keyof CommonDatabaseInterface
   ): LocalDatabase | undefined {
     return this.map.get(databaseName);

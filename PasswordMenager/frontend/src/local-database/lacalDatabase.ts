@@ -1,16 +1,19 @@
 import { IDBPDatabase, openDB } from "idb";
+import { NotDefinedDatabaseError } from "./errors/notDefinedDatabase.error";
 import {
   CommonDatabaseInterface,
   CustomStoreType,
+  DatabaseName,
+  DatabaseTypes,
 } from "./localDatabase.interface";
 
+type DatabaseType =  IDBPDatabase<CommonDatabaseInterface>;
 export abstract class LocalDatabase {
-  private static instance: LocalDatabase | null = null;
-  private mapCollection: Map<"user", CustomStoreType> = new Map();
-  private db: IDBPDatabase<CommonDatabaseInterface> | undefined;
+  private mapCollection: Map<DatabaseName, CustomStoreType> = new Map();
+  private db!: DatabaseType
 
   constructor(
-    public readonly dataBaseName: "user",
+    public readonly dataBaseName: DatabaseName,
     public version: number = 1
   ) {}
 
@@ -25,10 +28,14 @@ export abstract class LocalDatabase {
   }
 
   protected baseAdd(
-    value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
+    value: DatabaseTypes
   ): Promise<string> | undefined {
     return this.db?.add(this.dataBaseName, value);
   }
+
+  abstract add(
+    value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
+  ): Promise<unknown>;
 
   put(object: unknown): Promise<unknown> {
     const db = this.mapCollection.get(this.dataBaseName);
@@ -37,19 +44,14 @@ export abstract class LocalDatabase {
     return (db.put as Function)(object);
   }
 
-  getAll(): Promise<{ id: string; password: string; isActive: boolean }[]> {
-    return (
-      this.db?.getAll(this.dataBaseName) ??
-      Promise.reject(new Error("Database is undefiend"))
-    );
+  getAll(): Promise<DatabaseTypes[]> {
+    this.checkIfDatabseDefiled();
+    
+    return this.db.getAll(this.dataBaseName);
   }
 
-  abstract add(
-    value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
-  ): Promise<unknown>;
-
-  private getCollection(collectionName: "user"): CustomStoreType | undefined {
-    return this.mapCollection.get(collectionName);
+  private checkIfDatabseDefiled() {
+    if (this.db === undefined) throw new NotDefinedDatabaseError();
   }
 
   private async createStore(
