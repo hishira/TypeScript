@@ -51,6 +51,7 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
       infoLogin
     );
     const loginSucces = response?.status && !response?.response?.message;
+    
     if (loginSucces) {
       loginSuccess(response);
     } else {

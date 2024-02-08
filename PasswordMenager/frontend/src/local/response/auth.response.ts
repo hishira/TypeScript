@@ -1,4 +1,4 @@
-export class AuthResponse extends Response {
+export class LocalResponse extends Response {
   constructor(public authData: unknown) {
     super(null, { status: authData !== undefined ? 200 : 404 });
   }

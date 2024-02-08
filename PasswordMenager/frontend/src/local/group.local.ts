@@ -1,4 +1,5 @@
 import { GroupFetch } from "../interfaces/group.fetch";
+import { LocalResponse } from "./response/auth.response";
 
 export class GroupLocal implements GroupFetch {
   private static instance: GroupLocal | null = null;
@@ -11,13 +12,13 @@ export class GroupLocal implements GroupFetch {
     return this.instance;
   }
 
-  getGroupByUser(token: string): Promise<Response> {
+  getGroupByUser(token: string): Promise<LocalResponse> {
+    return Promise.resolve(new LocalResponse([])); //throw new Error("Method not implemented.");
+  }
+  createGroup(createGroup: CreateGroup, token: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
-  createGroup(createGroup: CreateGroup, token: string): Promise<Response> {
-    throw new Error("Method not implemented.");
-  }
-  deleteGroup(groupId: string, token: string): Promise<Response> {
+  deleteGroup(groupId: string, token: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
   editGroup(
