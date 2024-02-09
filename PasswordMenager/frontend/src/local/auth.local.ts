@@ -1,15 +1,16 @@
 import { AuthFetch } from "../interfaces/auth.fetch";
 import { CryptoDatabase } from "../local-database/cryptoDatabase";
-import { NotDefinedDatabaseError } from "../local-database/errors/notDefinedDatabase.error";
 import { Databases } from "../local-database/init";
-import { LocalDatabase } from "../local-database/lacalDatabase";
 import { UserValue } from "../local-database/localDatabase.interface";
+import { DataBaseLocal } from "./database.local";
 import { LocalResponse } from "./response/auth.response";
 
-export class AuthLocal implements AuthFetch {
+export class AuthLocal extends DataBaseLocal implements AuthFetch {
   private static instance: AuthLocal | null = null;
 
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
   static getInstance(): AuthLocal {
     if (this.instance === null) {
@@ -19,7 +20,7 @@ export class AuthLocal implements AuthFetch {
   }
 
   signup(newuserauth: RegisterUser): Promise<LocalResponse> {
-    const userDatabase = this.getUserDatabase();
+    const userDatabase = this.getDatabase("user");
     return userDatabase
       .add({ password: newuserauth.password })
       .then(this.signUpResponseValidation)
@@ -33,8 +34,9 @@ export class AuthLocal implements AuthFetch {
           Databases.getInstance()
             .getDatabase("user")
             ?.getAll()
-            .then((users) => this.loginUserCheck(users as UserValue[], hashedPassword)) ??
-          Promise.reject(new LocalResponse(undefined))
+            .then((users) =>
+              this.loginUserCheck(users as UserValue[], hashedPassword)
+            ) ?? Promise.reject(new LocalResponse(undefined))
         );
       }
     );
@@ -43,14 +45,6 @@ export class AuthLocal implements AuthFetch {
   private signUpResponseValidation(response: unknown) {
     if (response === undefined) throw new Error("Undefined promise value");
     return response;
-  }
-
-  private getUserDatabase(): LocalDatabase {
-    const userDatabase = Databases.getInstance().getDatabase("user");
-    if (!(userDatabase && "add" in userDatabase))
-      throw new NotDefinedDatabaseError();
-
-    return userDatabase;
   }
 
   private loginUserCheck(

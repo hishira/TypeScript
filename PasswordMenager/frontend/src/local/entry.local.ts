@@ -1,7 +1,8 @@
 import { EntryFetch } from "../interfaces/entry.fetch";
+import { DataBaseLocal } from "./database.local";
 import { LocalResponse } from "./response/auth.response";
 
-export class EntryLocal implements EntryFetch {
+export class EntryLocal extends DataBaseLocal implements EntryFetch {
   private static instance: EntryLocal | null = null;
 
   static getInstance(): EntryLocal {
@@ -15,7 +16,9 @@ export class EntryLocal implements EntryFetch {
     newentry: CreateEntryDto,
     token: string
   ): Promise<LocalResponse> {
-    throw new Error("Method not implemented.");
+    return this.getDatabase("entry")
+      .add(newentry)
+      .then((newEntryResponse) => new LocalResponse(newEntryResponse));
   }
   DeleteEntryById(
     entryid: string,

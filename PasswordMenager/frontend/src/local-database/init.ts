@@ -29,7 +29,7 @@ export class Databases {
     this.map.set(databaseName, localDatabase);
   }
 
-  getDatabase<T>(
+  getDatabase(
     databaseName: keyof CommonDatabaseInterface
   ): LocalDatabase | undefined {
     return this.map.get(databaseName);

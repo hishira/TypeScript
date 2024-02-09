@@ -5,8 +5,23 @@ export type UserValue = {
   password: string;
   isActive: boolean;
 };
+enum EntryState {
+  ACTIVE = 'active',
+  DELETED = 'deleted',
+  SUSPENDED = 'suspended',
+}
 export type EntryValue = {
   id: string;
+  password: string;
+  title: string;
+  username: string;
+  url: string;
+  email: string;
+  note: string;
+  groupid: string | null;
+  userid: string | null;
+  state:  EntryState
+  passwordExpiredDate: Date | string | null
 };
 export interface CommonDatabaseInterface extends DBSchema {
   user: {
@@ -22,7 +37,7 @@ export interface CommonDatabaseInterface extends DBSchema {
 }
 
 export type DatabaseTypes = UserValue | EntryValue;
-export type DatabaseName = 'user' | 'entry';
+export type DatabaseName = "user" | "entry";
 
 export type CustomStoreType = IDBPObjectStore<
   CommonDatabaseInterface,
