@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Databases } from "../../local-database/init";
+import { LocalDatabases } from "../../local-database/init";
 import Button from "../Button";
 import FormElement from "../FormElement";
 import { TitleContainer } from "../shared/styled-components";
@@ -14,7 +14,7 @@ export const LocalLogin = ({
   const [password, setPassword] = useState<string>("");
   const history = useHistory();
   useEffect(() => {
-    Databases.getInstance()
+    LocalDatabases.getInstance()
       .getDatabase("user")
       ?.getAll()
       .then((userArray) => {

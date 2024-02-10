@@ -5,22 +5,21 @@ import { CommonDatabaseInterface } from "./localDatabase.interface";
 export const DatabaseInit = async (): Promise<boolean> => {
   return new Promise<boolean>(async (resole, reject) => {
     databases.forEach(async (database) => {
-      //await database.init();
       LocalDatabase.getInstance().addDatabaseName(database.dataBaseName);
-      Databases.getInstance().addDatabase(database.dataBaseName, database);
+      LocalDatabases.getInstance().addDatabase(database.dataBaseName, database);
     });
     await LocalDatabase.getInstance().initDatabase();
     resole(true);
   });
 };
 
-export class Databases {
-  private static instance: Databases | null = null;
+export class LocalDatabases {
+  private static instance: LocalDatabases | null = null;
   public map: Map<keyof CommonDatabaseInterface, LocalDatabase> = new Map();
 
   private constructor() {}
-  static getInstance(): Databases {
-    if (this.instance === null) this.instance = new Databases();
+  static getInstance(): LocalDatabases {
+    if (this.instance === null) this.instance = new LocalDatabases();
     return this.instance;
   }
 
