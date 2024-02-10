@@ -7,17 +7,29 @@ import {
   DatabaseTypes,
 } from "./localDatabase.interface";
 
-type DatabaseType =  IDBPDatabase<CommonDatabaseInterface>;
-export abstract class LocalDatabase {
+type DatabaseType = IDBPDatabase<CommonDatabaseInterface>;
+export class LocalDatabase {
   private mapCollection: Map<DatabaseName, CustomStoreType> = new Map();
-  private db!: DatabaseType
+  private db!: DatabaseType;
 
+  private static instance: LocalDatabase | null = null;
+
+  private dataBasedNames: DatabaseName[] = [];
   constructor(
-    public readonly dataBaseName: DatabaseName,
+    public readonly dataBaseName: DatabaseName = "user",
     public version: number = 1
   ) {}
 
-  async init() {
+  static getInstance(): LocalDatabase {
+    if (this.instance === null) this.instance = new LocalDatabase();
+    return this.instance;
+  }
+
+  addDatabaseName(databaseName: DatabaseName) {
+    this.dataBasedNames.push(databaseName);
+  }
+
+  async initDatabase() {
     this.db = await openDB<CommonDatabaseInterface>("local", this.version, {
       upgrade: async (db: IDBPDatabase<CommonDatabaseInterface>) => {
         await this.databaseUpdate(db);
@@ -27,15 +39,15 @@ export abstract class LocalDatabase {
     await this.databaseUpdate();
   }
 
-  protected baseAdd(
-    value: DatabaseTypes
-  ): Promise<string> | undefined {
-    return this.db?.add(this.dataBaseName, value);
+  baseAdd(value: DatabaseTypes): Promise<string> | undefined {
+    return LocalDatabase.getInstance().db.add(this.dataBaseName, value);
   }
 
-  abstract add(
+  add(
     value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
-  ): Promise<unknown>;
+  ): Promise<unknown> {
+    return Promise.resolve();
+  }
 
   put(object: unknown): Promise<unknown> {
     const db = this.mapCollection.get(this.dataBaseName);
@@ -44,14 +56,15 @@ export abstract class LocalDatabase {
     return (db.put as Function)(object);
   }
 
-  getAll(): Promise<DatabaseTypes[]> {
+  getAll(databaseName?: DatabaseName): Promise<DatabaseTypes[]> {
     this.checkIfDatabseDefiled();
-    
-    return this.db.getAll(this.dataBaseName);
+    if (databaseName === undefined) throw new Error();
+    return LocalDatabase.getInstance().db.getAll(databaseName);
   }
 
   private checkIfDatabseDefiled() {
-    if (this.db === undefined) throw new NotDefinedDatabaseError();
+    if (LocalDatabase.getInstance().db === undefined)
+      throw new NotDefinedDatabaseError();
   }
 
   private async createStore(
@@ -68,14 +81,16 @@ export abstract class LocalDatabase {
   private async databaseUpdate(
     db: IDBPDatabase<CommonDatabaseInterface> | undefined = this.db
   ) {
-    if (db === undefined) throw Error("Undefined database");
-    if (!db.objectStoreNames.contains(this.dataBaseName)) {
-      const storetc = db.createObjectStore(this.dataBaseName, {
-        keyPath: "id",
-        autoIncrement: true,
-      });
-      storetc.createIndex("by-id", "id");
-    }
-    await this.createStore(db);
+    this.dataBasedNames.forEach(async (dataBaseName) => {
+      if (db === undefined) throw Error("Undefined database");
+      if (!db.objectStoreNames.contains(dataBaseName)) {
+        const storetc = db.createObjectStore(dataBaseName, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+        storetc.createIndex("by-id", "id");
+      }
+      await this.createStore(db);
+    });
   }
 }

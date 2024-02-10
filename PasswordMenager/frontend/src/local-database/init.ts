@@ -3,11 +3,13 @@ import { LocalDatabase } from "./lacalDatabase";
 import { CommonDatabaseInterface } from "./localDatabase.interface";
 
 export const DatabaseInit = async (): Promise<boolean> => {
-  return new Promise<boolean>((resole, reject) => {
+  return new Promise<boolean>(async (resole, reject) => {
     databases.forEach(async (database) => {
-      await database.init();
+      //await database.init();
+      LocalDatabase.getInstance().addDatabaseName(database.dataBaseName);
       Databases.getInstance().addDatabase(database.dataBaseName, database);
     });
+    await LocalDatabase.getInstance().initDatabase();
     resole(true);
   });
 };
