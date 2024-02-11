@@ -1,14 +1,15 @@
 import { databases } from "./database.provider";
 import { LocalDatabase } from "./lacalDatabase";
 import { CommonDatabaseInterface } from "./localDatabase.interface";
+import { LocalDatabaseInitializer } from "./localDatabaseInitializer";
 
 export const DatabaseInit = async (): Promise<boolean> => {
   return new Promise<boolean>(async (resole, reject) => {
     databases.forEach(async (database) => {
-      LocalDatabase.getInstance().addDatabaseName(database.dataBaseName);
+      LocalDatabaseInitializer.getInstance().addDatabaseToInitialize(database.dataBaseName);
       LocalDatabases.getInstance().addDatabase(database.dataBaseName, database);
     });
-    await LocalDatabase.getInstance().initDatabase();
+    await LocalDatabaseInitializer.getInstance().initDatabase();
     resole(true);
   });
 };

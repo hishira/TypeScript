@@ -1,4 +1,5 @@
 import { IDBPDatabase, openDB } from "idb";
+import { NoDatabaseToInitialized } from "./errors/noDatabaseToInitialized.error";
 import { NotDefinedDatabaseError } from "./errors/notDefinedDatabase.error";
 import {
   CommonDatabaseInterface,
@@ -34,6 +35,7 @@ export class CoreDatabase {
   }
 
   async initDatabase() {
+    if (this.databaseNames.length <= 0) throw new NoDatabaseToInitialized();
     this.db = await openDB<CommonDatabaseInterface>("local", this.version, {
       upgrade: async (db: IDBPDatabase<CommonDatabaseInterface>) => {
         await this.databaseUpdate(db);
