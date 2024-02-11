@@ -1,24 +1,26 @@
 import { databases } from "./database.provider";
 import { LocalDatabase } from "./lacalDatabase";
 import { CommonDatabaseInterface } from "./localDatabase.interface";
+import { LocalDatabaseInitializer } from "./localDatabaseInitializer";
 
 export const DatabaseInit = async (): Promise<boolean> => {
-  return new Promise<boolean>((resole, reject) => {
+  return new Promise<boolean>(async (resole, reject) => {
     databases.forEach(async (database) => {
-      await database.init();
-      Databases.getInstance().addDatabase(database.dataBaseName, database);
+      LocalDatabaseInitializer.getInstance().addDatabaseToInitialize(database.dataBaseName);
+      LocalDatabases.getInstance().addDatabase(database.dataBaseName, database);
     });
+    await LocalDatabaseInitializer.getInstance().initDatabase();
     resole(true);
   });
 };
 
-export class Databases {
-  private static instance: Databases | null = null;
+export class LocalDatabases {
+  private static instance: LocalDatabases | null = null;
   public map: Map<keyof CommonDatabaseInterface, LocalDatabase> = new Map();
 
   private constructor() {}
-  static getInstance(): Databases {
-    if (this.instance === null) this.instance = new Databases();
+  static getInstance(): LocalDatabases {
+    if (this.instance === null) this.instance = new LocalDatabases();
     return this.instance;
   }
 

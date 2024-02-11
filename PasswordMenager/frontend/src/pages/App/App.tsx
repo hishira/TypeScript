@@ -1,6 +1,8 @@
 import { Provider } from "mobx-react";
+import { useEffect, useState } from "react";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import AppBar from "../../components/AppBar";
+import { Loading } from "../../components/Loading";
 import PopUpElement from "../../components/Popup";
 import PrivateComponent from "../../components/PrivateRoute/index";
 import UserRedirect from "../../components/UserRedirect";
@@ -21,6 +23,7 @@ const notEmpty = (value: string | null | undefined): boolean => {
   return value !== null && value !== undefined && value !== "";
 };
 function App() {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const store = General.create({
     useractive: notEmpty(SessionStorage.getInstance().getAccessToken()),
     popUpelement: {
@@ -33,24 +36,34 @@ function App() {
       SessionStorage.getInstance().ApplicationDataType ===
       ApplicationDatabaseType.LOCAL,
   });
-  DatabaseInit().then((_) => _);
+  useEffect(() => {
+    DatabaseInit()
+      .then((_) => _)
+      .then((_) => setIsLoading(false));
+  }, []);
+
   ApplicationDatabase.getInstance().DataBaseType =
     SessionStorage.getInstance().ApplicationDataType;
   return (
-    <Provider store={store}>
-      <Router>
-        <div className="App">
-          <AppBar />
-          <PopUpElement></PopUpElement>
-          <UserRedirect path="/" Component={HomePage} />
-          {/* <Route exact path="/" component={HomePage} /> */}
-          <Route path="/login" component={LoginPage} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/local-signup" component={LocaSignUp} />
-          <PrivateComponent path="/store" Component={StorePage} />
-        </div>
-      </Router>
-    </Provider>
+    <Loading
+      loading={isLoading}
+      ComponentToLoad={
+        <Provider store={store}>
+          <Router>
+            <div className="App">
+              <AppBar />
+              <PopUpElement></PopUpElement>
+              <UserRedirect path="/" Component={HomePage} />
+              {/* <Route exact path="/" component={HomePage} /> */}
+              <Route path="/login" component={LoginPage} />
+              <Route path="/signup" component={SignUp} />
+              <Route path="/local-signup" component={LocaSignUp} />
+              <PrivateComponent path="/store" Component={StorePage} />
+            </div>
+          </Router>
+        </Provider>
+      }
+    ></Loading>
   );
 }
 

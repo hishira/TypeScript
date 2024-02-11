@@ -1,6 +1,6 @@
 import { AuthFetch } from "../interfaces/auth.fetch";
 import { CryptoDatabase } from "../local-database/cryptoDatabase";
-import { Databases } from "../local-database/init";
+import { LocalDatabases } from "../local-database/init";
 import { UserValue } from "../local-database/localDatabase.interface";
 import { DataBaseLocal } from "./database.local";
 import { LocalResponse } from "./response/auth.response";
@@ -31,7 +31,7 @@ export class AuthLocal extends DataBaseLocal implements AuthFetch {
     return CryptoDatabase.hashPassword(userauth.password).then(
       (hashedPassword) => {
         return (
-          Databases.getInstance()
+          LocalDatabases.getInstance()
             .getDatabase("user")
             ?.getAll()
             .then((users) =>

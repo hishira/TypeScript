@@ -1,5 +1,6 @@
 import { CryptoDatabase } from "./cryptoDatabase";
 import { LocalDatabase } from "./lacalDatabase";
+import { DatabaseName, DatabaseTypes } from "./localDatabase.interface";
 
 export class UserDatabase extends LocalDatabase {
   constructor() {
@@ -19,5 +20,9 @@ export class UserDatabase extends LocalDatabase {
         return this.baseAdd(user);
       }
     );
+  }
+
+  override getAll(databaseName?: DatabaseName): Promise<DatabaseTypes[]> {
+    return super.getAll(this.dataBaseName);
   }
 }

@@ -30,32 +30,38 @@ export class Group {
     return this.instance;
   }
 
-  async GetGroups(token: string): Promise<number | Array<IGroup>> {
-    const response: Promise<number | Array<IGroup>> = await this.groupApi
-      .getGroupByUser(token)
-      .then((resp: Response) => {
-        if (resp.status === 201 || resp.status === 200) return resp.json();
-        return resp.status;
-      });
-    return response;
+  getGroups(token: string): Promise<number | IGroup[]> {
+    return this.groupApi.getGroupByUser(token).then((resp: Response) => {
+      if (resp.status === 201 || resp.status === 200) return resp.json();
+      return resp.status;
+    });
   }
-
-  async GetGroupsByUser(): Promise<GroupResponse> {
-    let token: string = this.sessionStorage.getAccessToken();
-    let response: number | Array<IGroup> = await this.GetGroups(token);
+  async mapGroupsResponse(
+    response: number | Array<IGroup>
+  ): Promise<GroupResponse> {
     if (response === 401) {
       await this.auth.refreshToken();
-      token = this.sessionStorage.getAccessToken();
-      response = await this.GetGroups(token);
+      const token = this.sessionStorage.getAccessToken();
+      response = await this.getGroups(token);
       if (response === 401 || response === 500) {
         return { status: false, response: [] };
       }
     } else if (response === 500) {
       return { status: false, response: [] };
     }
-    if (typeof response !== "number")
-      return { status: true, response: response };
-    return { status: false, response: [] };
+
+    return {
+      status: true,
+      response: typeof response === "number" ? [] : response,
+    };
+  }
+  async GetGroups(token: string): Promise<GroupResponse> {
+    return await this.getGroups(token).then(this.mapGroupsResponse);
+  }
+
+  async GetGroupsByUser(): Promise<GroupResponse> {
+    let token: string = this.sessionStorage.getAccessToken();
+    return this.GetGroups(token);
   }
 
   async GroupCreate(
