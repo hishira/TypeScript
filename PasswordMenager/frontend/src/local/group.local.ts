@@ -12,25 +12,27 @@ export class GroupLocal extends DataBaseLocal implements GroupFetch {
     return this.instance;
   }
 
-  getGroupByUser(token: string): Promise<LocalResponse> {
-    return Promise.resolve(new LocalResponse([])); //throw new Error("Method not implemented.");
+  getGroupByUser(_: string): Promise<LocalResponse> {
+    return this.getDatabase("group")
+      .getAll()
+      .then((groupResponse) => new LocalResponse(groupResponse));
   }
-  createGroup(createGroup: CreateGroup, token: string): Promise<LocalResponse> {
+  createGroup(createGroup: CreateGroup, _: string): Promise<LocalResponse> {
     const newGroup: GroupValue = {
       name: createGroup.name,
-      id: crypto.randomUUID(),
-      userid: "", // TODO: Fix @hishira
+      _id: crypto.randomUUID(),
+      userid: "", // TODO: Fix @hishira -> if we have one user it is not required
     };
     return this.getDatabase("group")
       .add(newGroup)
       .then((databaseReponse) => new LocalResponse(databaseReponse));
   }
-  deleteGroup(groupId: string, token: string): Promise<LocalResponse> {
+  deleteGroup(groupId: string, _: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
   editGroup(
     groupId: string,
-    token: string,
+    _: string,
     editGroup: { name: string }
   ): Promise<Response> {
     throw new Error("Method not implemented.");

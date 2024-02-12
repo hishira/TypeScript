@@ -34,6 +34,9 @@ export class CoreDatabase {
     return this.db.getAll(databaseName);
   }
 
+  delete(databaseName: DatabaseName, id: string) {
+    return this.db.delete(databaseName, id);
+  }
   async initDatabase() {
     if (this.databaseNames.length <= 0) throw new NoDatabaseToInitialized();
     this.db = await openDB<CommonDatabaseInterface>("local", this.version, {
@@ -52,10 +55,10 @@ export class CoreDatabase {
       if (db === undefined) throw Error("Undefined database");
       if (!db.objectStoreNames.contains(dataBaseName)) {
         const storetc = db.createObjectStore(dataBaseName, {
-          keyPath: "id",
+          keyPath: "_id",
           autoIncrement: true,
         });
-        storetc.createIndex("by-id", "id");
+        storetc.createIndex("by-_id", "_id");
       }
     });
   }

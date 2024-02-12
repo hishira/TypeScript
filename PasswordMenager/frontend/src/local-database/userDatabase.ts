@@ -13,7 +13,7 @@ export class UserDatabase extends LocalDatabase {
     return CryptoDatabase.hashPassword(userDto.password).then(
       (hashedPassword) => {
         const user = {
-          id: CryptoDatabase.generateRandomId(),
+          _id: CryptoDatabase.generateRandomId(),
           password: hashedPassword,
           isActive: true,
         };

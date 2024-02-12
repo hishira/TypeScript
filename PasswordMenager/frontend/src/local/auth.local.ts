@@ -22,7 +22,7 @@ export class AuthLocal extends DataBaseLocal implements AuthFetch {
   signup(newuserauth: RegisterUser): Promise<LocalResponse> {
     const userDatabase = this.getDatabase("user");
     return userDatabase
-      .add({ password: newuserauth.password })
+      .add({ password: newuserauth.password, })
       .then(this.signUpResponseValidation)
       .then((response) => new LocalResponse(response));
   }

@@ -6,14 +6,17 @@ import {
 } from "./localDatabase.interface";
 
 export class LocalDatabase {
-  
   constructor(
     public readonly dataBaseName: DatabaseName = "user",
     public version: number = 1
   ) {}
 
-  baseAdd(value: DatabaseTypes): Promise<string> | undefined {
+  baseAdd(value: DatabaseTypes): Promise<string> {
     return CoreDatabase.getInstance().add(this.dataBaseName, value);
+  }
+
+  baseDelete(id: string):Promise<unknown>{
+    return CoreDatabase.getInstance().delete(this.dataBaseName,id )
   }
 
   add(
@@ -23,7 +26,8 @@ export class LocalDatabase {
   }
 
   getAll(databaseName?: DatabaseName): Promise<DatabaseTypes[]> {
-    if (databaseName === undefined) throw new Error();
-    return CoreDatabase.getInstance().getAll(databaseName);
+    const currentDatabaseName = databaseName ?? this.dataBaseName;
+    if (currentDatabaseName === undefined) throw new Error();
+    return CoreDatabase.getInstance().getAll(currentDatabaseName);
   }
 }

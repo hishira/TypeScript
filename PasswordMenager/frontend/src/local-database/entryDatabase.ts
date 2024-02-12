@@ -7,6 +7,13 @@ export class EntryDatabase extends LocalDatabase {
   }
 
   override async add(entryDto: EntryValue) {
-    this.baseAdd(entryDto);
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.baseAdd(entryDto);
+        resolve(entryDto);
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { DBSchema, IDBPObjectStore, StoreNames } from "idb";
 
 export type UserValue = {
-  id: string;
+  _id: string;
   password: string;
   isActive: boolean;
 };
@@ -11,7 +11,7 @@ enum EntryState {
   SUSPENDED = "suspended",
 }
 export type EntryValue = {
-  id: string;
+  _id: string;
   password: string;
   title: string;
   username: string;
@@ -24,26 +24,20 @@ export type EntryValue = {
   passwordExpiredDate: Date | string | null;
 };
 export type GroupValue = {
-  id: string;
+  _id: string;
   userid: string;
   name: string;
 };
+
+export type DatabaseInterface<DatabaseDocument> = {
+  value: DatabaseDocument;
+  key: string;
+  indexes: { "by-_id": string };
+};
 export interface CommonDatabaseInterface extends DBSchema {
-  user: {
-    value: UserValue;
-    key: string;
-    indexes: { "by-id": string };
-  };
-  entry: {
-    value: EntryValue;
-    key: string;
-    indexes: { "by-id": string };
-  };
-  group: {
-    value: GroupValue;
-    key: string;
-    indexes: { "by-id": string };
-  };
+  user: DatabaseInterface<UserValue>;
+  entry: DatabaseInterface<EntryValue>;
+  group: DatabaseInterface<GroupValue>;
 }
 
 export type DatabaseTypes = UserValue | EntryValue | GroupValue;
