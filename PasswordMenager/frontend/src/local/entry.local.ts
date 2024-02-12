@@ -12,13 +12,17 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
     return this.instance;
   }
 
-  CreateNewEntry(
-    newentry: CreateEntryDto,
-    token: string
-  ): Promise<LocalResponse> {
+  CreateNewEntry(newentry: CreateEntryDto, _: string): Promise<LocalResponse> {
+    const newEntry = {
+      ...newentry,
+      _id: crypto.randomUUID(),
+    }
     return this.getDatabase("entry")
-      .add(newentry)
-      .then((newEntryResponse) => new LocalResponse(newEntryResponse));
+      .add(newEntry)
+      .then((newEntryResponse) => {
+        console.log("RE ", newEntryResponse);
+        return new LocalResponse(newEntryResponse);
+      });
   }
   DeleteEntryById(
     entryid: string,
@@ -36,10 +40,12 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
     throw new Error("Method not implemented.");
   }
   getEntryBy(
-    accessToken: string,
+    _: string,
     input?: EntryInput | undefined
   ): Promise<LocalResponse> {
-    return Promise.resolve(new LocalResponse([]));
+    return this.getDatabase("entry")
+      .getAll()
+      .then((resp) => new LocalResponse(resp));
   }
   getActiveEntryNotification(token: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");

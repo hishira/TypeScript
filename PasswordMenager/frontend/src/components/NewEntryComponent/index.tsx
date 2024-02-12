@@ -77,6 +77,7 @@ const NewEntryComponent = ({
     Entry.getInstance()
       .CreateNewEntryUser(newEntry)
       .then((responsenewentry) => {
+        console.log(responsenewentry)
         if (responsenewentry.status) {
           editEntry.clearInputData();
           store?.setPopUpinfo(SuccessPopUpObject(successCreate));
