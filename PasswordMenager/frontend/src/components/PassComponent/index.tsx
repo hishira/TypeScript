@@ -19,7 +19,8 @@ const PassComponent = ({ store }: PassComponentProps) => {
     tiltEntry,
     entitiesrefresh,
     sendPaginator,
-    setLoading
+    setLoading,
+    store.RefetchAfterEntryCreate,
   );
   const selectgrouphandle = (groupid: string) => {
     setSelectedgroupid(groupid);

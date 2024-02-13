@@ -15,5 +15,6 @@ export class EntryDatabase extends LocalDatabase {
         reject(e);
       }
     });
+    
   }
 }

@@ -1,4 +1,5 @@
 import { EntryFetch } from "../interfaces/entry.fetch";
+import { LocalDatabases } from "../local-database/init";
 import { DataBaseLocal } from "./database.local";
 import { LocalResponse } from "./response/auth.response";
 
@@ -16,7 +17,7 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
     const newEntry = {
       ...newentry,
       _id: crypto.randomUUID(),
-    }
+    };
     return this.getDatabase("entry")
       .add(newEntry)
       .then((newEntryResponse) => {
@@ -24,19 +25,16 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
         return new LocalResponse(newEntryResponse);
       });
   }
-  DeleteEntryById(
-    entryid: string,
-    accesstoken: string
-  ): Promise<LocalResponse> {
+  DeleteEntryById(entryid: string, _: string): Promise<LocalResponse> {
+    return LocalDatabases.getInstance()
+      .getDatabase("entry")
+      .baseDelete(entryid)
+      .then((resp) => new LocalResponse({ status: true, resp }));
+  }
+  EditEntryByID(entrybody: EditEntry, _: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
-  EditEntryByID(
-    entrybody: EditEntry,
-    accesstoken: string
-  ): Promise<LocalResponse> {
-    throw new Error("Method not implemented.");
-  }
-  getEntryById(entryId: string, accesstoken: string): Promise<LocalResponse> {
+  getEntryById(entryId: string, _: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
   getEntryBy(
@@ -45,16 +43,19 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
   ): Promise<LocalResponse> {
     return this.getDatabase("entry")
       .getAll()
-      .then((resp) => new LocalResponse(resp));
+      .then((resp) => {
+        console.log(resp);
+        return new LocalResponse(resp);
+      });
   }
-  getActiveEntryNotification(token: string): Promise<LocalResponse> {
+  getActiveEntryNotification(_: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
-  getLastDeletedEntries(token: string): Promise<LocalResponse> {
+  getLastDeletedEntries(_: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
   restoreEntry(
-    token: string,
+    _: string,
     restoreBody: RestoreEntryBody
   ): Promise<LocalResponse> {
     throw new Error("Method not implemented.");

@@ -39,6 +39,7 @@ export const General = types
     }),
     viewType: types.enumeration(Object.keys(View)),
     isLocal: types.boolean,
+    refetchAfterEntryCreate: types.boolean,
   })
   .actions((self) => ({
     setUserActive(useractive: boolean): void {
@@ -50,9 +51,12 @@ export const General = types
     setViewType(viewType: View): void {
       self.viewType = viewType;
     },
-    setIsLocal(isLocal: boolean): void{
+    setIsLocal(isLocal: boolean): void {
       self.isLocal = isLocal;
-    }
+    },
+    setRefetchAfterEntryCreate(refetchAfterEntryCreate: boolean): void {
+      self.refetchAfterEntryCreate = refetchAfterEntryCreate;
+    },
   }))
   .views((self) => ({
     get UserActivity(): boolean {
@@ -64,9 +68,12 @@ export const General = types
     get ViewType(): View {
       return self.viewType as View;
     },
-    get IsLocal(): boolean{
+    get IsLocal(): boolean {
       return self.isLocal;
-    }
+    },
+    get RefetchAfterEntryCreate(): boolean {
+      return self.refetchAfterEntryCreate;
+    },
   }));
 
 export type IGeneral = Instance<typeof General>;

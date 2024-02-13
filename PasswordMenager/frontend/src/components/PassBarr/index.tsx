@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { inject, observer } from "mobx-react";
+import { useState } from "react";
+import { IGeneral } from "../../models/General";
 import { Export } from "../../utils/export.utils";
 import IconButton from "../IconButton";
 import { ImportDecrypted } from "../ImportModals/ImportDecrypted";
@@ -31,7 +33,7 @@ const exportEncrypted = (): void => {
     .then(() => {})
     .catch(console.error);
 };
-const PassBar: React.FC = (): JSX.Element => {
+const PassBar = ({ store }: { store?: IGeneral }): JSX.Element => {
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const [importModalOpen, setImportModalOpen] = useState<boolean>(false);
   const [exportModalOpen, setExportModalOpen] = useState<boolean>(false);
@@ -45,12 +47,20 @@ const PassBar: React.FC = (): JSX.Element => {
   const importEncrypted = (): void => setImportModalOpen(true);
 
   const importEntries = (): void => setImportEntriesModalOpen(true);
+  const refreshEntryAfterCreate = () => {
+    store?.setRefetchAfterEntryCreate(!store?.RefetchAfterEntryCreate);
+  };
   return (
     <Container>
       <Modal
         visible={modalopen}
         onClose={closehandle}
-        component={<NewEntryComponent refreshentry={false} />}
+        component={
+          <NewEntryComponent
+            refreshentry={false}
+            refresh={refreshEntryAfterCreate}
+          />
+        }
       />
       <Modal
         visible={exportModalOpen}
@@ -92,4 +102,4 @@ const PassBar: React.FC = (): JSX.Element => {
   );
 };
 
-export default PassBar;
+export default inject("store")(observer(PassBar));
