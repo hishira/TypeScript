@@ -77,8 +77,11 @@ const NewEntryComponent = ({
     Entry.getInstance()
       .CreateNewEntryUser(newEntry)
       .then((responsenewentry) => {
-        console.log(responsenewentry)
+        console.log(responsenewentry);
         if (responsenewentry.status) {
+          console.log(refresh);
+          if (refresh !== undefined) refresh();
+
           editEntry.clearInputData();
           store?.setPopUpinfo(SuccessPopUpObject(successCreate));
         } else {

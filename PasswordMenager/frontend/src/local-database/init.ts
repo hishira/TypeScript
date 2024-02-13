@@ -1,4 +1,5 @@
 import { databases } from "./database.provider";
+import { NotDefinedDatabaseError } from "./errors/notDefinedDatabase.error";
 import { LocalDatabase } from "./lacalDatabase";
 import { CommonDatabaseInterface } from "./localDatabase.interface";
 import { LocalDatabaseInitializer } from "./localDatabaseInitializer";
@@ -6,7 +7,9 @@ import { LocalDatabaseInitializer } from "./localDatabaseInitializer";
 export const DatabaseInit = async (): Promise<boolean> => {
   return new Promise<boolean>(async (resole, reject) => {
     databases.forEach(async (database) => {
-      LocalDatabaseInitializer.getInstance().addDatabaseToInitialize(database.dataBaseName);
+      LocalDatabaseInitializer.getInstance().addDatabaseToInitialize(
+        database.dataBaseName
+      );
       LocalDatabases.getInstance().addDatabase(database.dataBaseName, database);
     });
     await LocalDatabaseInitializer.getInstance().initDatabase();
@@ -31,9 +34,10 @@ export class LocalDatabases {
     this.map.set(databaseName, localDatabase);
   }
 
-  getDatabase(
-    databaseName: keyof CommonDatabaseInterface
-  ): LocalDatabase | undefined {
-    return this.map.get(databaseName);
+  getDatabase(databaseName: keyof CommonDatabaseInterface): LocalDatabase {
+    if (this.map.get(databaseName) === undefined)
+      throw new NotDefinedDatabaseError();
+
+    return this.map.get(databaseName) as unknown as LocalDatabase;
   }
 }

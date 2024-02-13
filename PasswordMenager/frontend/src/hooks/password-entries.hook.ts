@@ -27,7 +27,8 @@ export const PasswordEntries = (
   entriesTitle: string,
   refreshAll: boolean,
   paginator: EntryPaginator,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  createEntryRefresh: boolean
 ): ReturnEntiresType => {
   const [passwordEntries, setPasswordEntries] = useState<IEntry[]>([]);
   const [pageInfo, setPageInfo] = useState<PaginatorType | null>(null);
@@ -43,7 +44,14 @@ export const PasswordEntries = (
       setLoading(false);
     };
     fetchEntries();
-  }, [selectedGroup, refreshAll, paginator, entriesTitle, setLoading]);
+  }, [
+    selectedGroup,
+    refreshAll,
+    paginator,
+    entriesTitle,
+    setLoading,
+    createEntryRefresh,
+  ]);
 
   return { entries: passwordEntries, paginator: pageInfo };
 };

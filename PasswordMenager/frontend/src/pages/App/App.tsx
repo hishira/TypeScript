@@ -35,6 +35,7 @@ function App() {
     isLocal:
       SessionStorage.getInstance().ApplicationDataType ===
       ApplicationDatabaseType.LOCAL,
+    refetchAfterEntryCreate: false,
   });
   useEffect(() => {
     DatabaseInit()
