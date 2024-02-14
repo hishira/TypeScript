@@ -15,14 +15,18 @@ export class LocalDatabase {
     return CoreDatabase.getInstance().add(this.dataBaseName, value);
   }
 
-  baseDelete(id: string):Promise<unknown>{
-    return CoreDatabase.getInstance().delete(this.dataBaseName,id )
+  baseDelete(id: string): Promise<unknown> {
+    return CoreDatabase.getInstance().delete(this.dataBaseName, id);
   }
 
   add(
     value: CommonDatabaseInterface[keyof CommonDatabaseInterface]["value"]
   ): Promise<unknown> {
     return Promise.resolve();
+  }
+
+  getById(id: string): Promise<unknown> {
+    return CoreDatabase.getInstance().getById(this.dataBaseName, id);
   }
 
   getAll(databaseName?: DatabaseName): Promise<DatabaseTypes[]> {
