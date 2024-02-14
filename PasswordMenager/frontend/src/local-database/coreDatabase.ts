@@ -10,6 +10,7 @@ import {
 export type DatabaseType = IDBPDatabase<CommonDatabaseInterface>;
 
 export class CoreDatabase {
+ 
   private static instance: CoreDatabase | null = null;
   private db!: DatabaseType;
   private databaseNames: DatabaseName[] = [];
@@ -32,6 +33,10 @@ export class CoreDatabase {
   getAll(databaseName: DatabaseName): Promise<DatabaseTypes[]> {
     this.checkIfDatabseIsDefined();
     return this.db.getAll(databaseName);
+  }
+
+  getById(databaseName: DatabaseName, id: string): Promise<unknown> {
+    return this.db.get(databaseName, id);
   }
 
   delete(databaseName: DatabaseName, id: string) {

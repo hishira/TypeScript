@@ -16,14 +16,12 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
   CreateNewEntry(newentry: CreateEntryDto, _: string): Promise<LocalResponse> {
     const newEntry = {
       ...newentry,
+      groupid: newentry.groupid === "" ? null : newentry.groupid,
       _id: crypto.randomUUID(),
     };
     return this.getDatabase("entry")
       .add(newEntry)
-      .then((newEntryResponse) => {
-        console.log("RE ", newEntryResponse);
-        return new LocalResponse(newEntryResponse);
-      });
+      .then((newEntryResponse) => new LocalResponse(newEntryResponse));
   }
   DeleteEntryById(entryid: string, _: string): Promise<LocalResponse> {
     return LocalDatabases.getInstance()
@@ -35,7 +33,9 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
     throw new Error("Method not implemented.");
   }
   getEntryById(entryId: string, _: string): Promise<LocalResponse> {
-    throw new Error("Method not implemented.");
+    return this.getDatabase("entry")
+      .getById(entryId)
+      .then((resp) => new LocalResponse(resp));
   }
   getEntryBy(
     _: string,
