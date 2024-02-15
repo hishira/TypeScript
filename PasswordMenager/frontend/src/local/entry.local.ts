@@ -1,5 +1,5 @@
 import { EntryFetch } from "../interfaces/entry.fetch";
-import { LocalDatabases } from "../local-database/init";
+import { EntryValue } from "../local-database/localDatabase.interface";
 import { DataBaseLocal } from "./database.local";
 import { LocalResponse } from "./response/auth.response";
 
@@ -24,13 +24,15 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
       .then((newEntryResponse) => new LocalResponse(newEntryResponse));
   }
   DeleteEntryById(entryid: string, _: string): Promise<LocalResponse> {
-    return LocalDatabases.getInstance()
-      .getDatabase("entry")
+    return this.getDatabase("entry")
       .baseDelete(entryid)
       .then((resp) => new LocalResponse({ status: true, resp }));
   }
   EditEntryByID(entrybody: EditEntry, _: string): Promise<LocalResponse> {
-    throw new Error("Method not implemented.");
+    return this.getDatabase("entry")
+      .put(entrybody as EntryValue)
+      .then((resp) => new LocalResponse({ status: true, resp }));
+    //throw new Error("Method not implemented.");
   }
   getEntryById(entryId: string, _: string): Promise<LocalResponse> {
     return this.getDatabase("entry")

@@ -25,6 +25,9 @@ export class LocalDatabase {
     return Promise.resolve();
   }
 
+  put(value: DatabaseTypes){
+    return CoreDatabase.getInstance().put(this.dataBaseName, value);
+  }
   getById(id: string): Promise<unknown> {
     return CoreDatabase.getInstance().getById(this.dataBaseName, id);
   }

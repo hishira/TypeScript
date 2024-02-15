@@ -16,7 +16,6 @@ export type EntryValue = {
   title: string;
   username: string;
   url: string;
-  email: string;
   note: string;
   groupid: string | null;
   userid: string | null;
