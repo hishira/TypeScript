@@ -10,7 +10,6 @@ import {
 export type DatabaseType = IDBPDatabase<CommonDatabaseInterface>;
 
 export class CoreDatabase {
- 
   private static instance: CoreDatabase | null = null;
   private db!: DatabaseType;
   private databaseNames: DatabaseName[] = [];
@@ -42,6 +41,11 @@ export class CoreDatabase {
   delete(databaseName: DatabaseName, id: string) {
     return this.db.delete(databaseName, id);
   }
+
+  put(databaseName: DatabaseName, value: DatabaseTypes) {
+    return this.db.put(databaseName, value);
+  }
+
   async initDatabase() {
     if (this.databaseNames.length <= 0) throw new NoDatabaseToInitialized();
     this.db = await openDB<CommonDatabaseInterface>("local", this.version, {
