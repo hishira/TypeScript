@@ -5,7 +5,7 @@ import { LocalResponse } from "./response/auth.response";
 
 export class EntryLocal extends DataBaseLocal implements EntryFetch {
   private static instance: EntryLocal | null = null;
-
+  private readonly defaultPerPage: number = 10;
   static getInstance(): EntryLocal {
     if (this.instance === null) {
       this.instance = new EntryLocal();
@@ -32,7 +32,6 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
     return this.getDatabase("entry")
       .put(entrybody as EntryValue)
       .then((resp) => new LocalResponse({ status: true, resp }));
-    //throw new Error("Method not implemented.");
   }
   getEntryById(entryId: string, _: string): Promise<LocalResponse> {
     return this.getDatabase("entry")
@@ -43,11 +42,22 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
     _: string,
     input?: EntryInput | undefined
   ): Promise<LocalResponse> {
+    const page = input?.paginator?.page ?? 0;
     return this.getDatabase("entry")
       .getAll()
       .then((resp) => {
-        console.log(resp);
-        return new LocalResponse(resp);
+        const lastIndexItem =
+          page * 10 + 10 < resp.length ? page * 10 + 10 : resp.length;
+        const respMapped = resp.slice(page * 10, lastIndexItem);
+        console.log(input, respMapped, resp.length);
+        return new LocalResponse({
+          data: respMapped,
+          pageInfo: {
+            items: respMapped.length,
+            hasMore: respMapped.length >= 10,
+            page,
+          },
+        });
       });
   }
   getActiveEntryNotification(_: string): Promise<LocalResponse> {

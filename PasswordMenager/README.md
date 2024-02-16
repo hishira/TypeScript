@@ -9,23 +9,27 @@
 # Frontend
  - Description:
     - Language: TypeScript
-    - Libraries : React.js + styled-components + mobx
+    - Libraries : React.js + styled-components + mobx + idb
+  - In application we can store passwords in two way. One way is storing in mongodb, second is storing localy in browswer using index db
 # Login & Signup
-<div style="display:flex; justify-content:space-around;align-items:center;align-content:center;">
-<p style="width:40%; height: 100%">
-<img src="public/login.PNG">
-</p>
-<p style="width:40%; height: 100%">
-<img src="public/signup.PNG">
-</p >
-</div>
-
-# Password store
+![Alt text](public/image.png)
+## Online login
+![Alt text](public/image-1.png)
+## Local login
+![Alt text](public/image-2.png)
+## Online signup
+![Alt text](public/image-3.png)
+## Local signup
+![Alt text](public/image-test.png)
 ## Store
-<img src="public/store.PNG">
-
-## New entry
-<img src="public/entry.PNG">
-
-## New group of passwords
-<img src="public/group.PNG">
+![Alt text](public/image-11.png)
+## Create new entry
+![Alt text](public/image-21.png)
+## Delete entry
+![Alt text](public/image-31.png)
+## Card view
+![Alt text](public/image-4.png)
+## User view
+![Alt text](public/image-5.png)
+![Alt text](public/image-6.png)
+![Alt text](public/image-7.png)
