@@ -180,6 +180,7 @@ export class Entry {
       if (typeof resp === "number" && resp === 401) {
         this.refreshEntriesBy(input);
       }
+      console.log(resp)
       const responseMapped: IEntry[] = this.responseMappedObject(resp);
       const pageInfo =
         typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;

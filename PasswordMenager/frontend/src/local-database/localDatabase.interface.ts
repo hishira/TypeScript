@@ -18,13 +18,11 @@ export type EntryValue = {
   url: string;
   note: string;
   groupid: string | null;
-  userid: string | null;
   state: EntryState;
   passwordExpiredDate: Date | string | null;
 };
 export type GroupValue = {
   _id: string;
-  userid: string;
   name: string;
 };
 

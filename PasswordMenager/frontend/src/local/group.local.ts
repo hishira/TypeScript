@@ -3,6 +3,17 @@ import { GroupValue } from "../local-database/localDatabase.interface";
 import { DataBaseLocal } from "./database.local";
 import { LocalResponse } from "./response/auth.response";
 
+const GetGroupValue = (
+  groupId: string,
+  editGroup: { name: string }
+): GroupValue => ({
+  _id: groupId,
+  name: editGroup.name,
+});
+
+const GetLocalResponseByCommingResponse = <T>(response: T): LocalResponse =>
+  new LocalResponse(response);
+
 export class GroupLocal extends DataBaseLocal implements GroupFetch {
   private static instance: GroupLocal | null = null;
   static getInstance(): GroupLocal {
@@ -15,26 +26,30 @@ export class GroupLocal extends DataBaseLocal implements GroupFetch {
   getGroupByUser(_: string): Promise<LocalResponse> {
     return this.getDatabase("group")
       .getAll()
-      .then((groupResponse) => new LocalResponse(groupResponse));
+      .then(GetLocalResponseByCommingResponse);
   }
   createGroup(createGroup: CreateGroup, _: string): Promise<LocalResponse> {
     const newGroup: GroupValue = {
       name: createGroup.name,
       _id: crypto.randomUUID(),
-      userid: "", // TODO: Fix @hishira -> if we have one user it is not required
     };
+
     return this.getDatabase("group")
       .add(newGroup)
-      .then((databaseReponse) => new LocalResponse(databaseReponse));
+      .then(GetLocalResponseByCommingResponse);
   }
   deleteGroup(groupId: string, _: string): Promise<LocalResponse> {
-    throw new Error("Method not implemented.");
+    return this.getDatabase("group")
+      .baseDelete(groupId)
+      .then(GetLocalResponseByCommingResponse);
   }
   editGroup(
     groupId: string,
     _: string,
     editGroup: { name: string }
-  ): Promise<Response> {
-    throw new Error("Method not implemented.");
+  ): Promise<LocalResponse> {
+    return this.getDatabase("group")
+      .put(GetGroupValue(groupId, editGroup))
+      .then(GetLocalResponseByCommingResponse);
   }
 }

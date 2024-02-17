@@ -6,7 +6,6 @@ import { DatabaseName } from "../local-database/localDatabase.interface";
 export class DataBaseLocal {
   getDatabase(name: DatabaseName): LocalDatabase {
     const userDatabase = LocalDatabases.getInstance().getDatabase(name);
-    console.log(userDatabase);
     if (!(userDatabase && "add" in userDatabase))
       throw new NotDefinedDatabaseError();
 
