@@ -1,6 +1,10 @@
 import { EntryFetch } from "../interfaces/entry.fetch";
-import { EntryValue } from "../local-database/localDatabase.interface";
+import {
+  DatabaseTypes,
+  EntryValue,
+} from "../local-database/localDatabase.interface";
 import { DataBaseLocal } from "./database.local";
+import { PaginatorData } from "./paginator";
 import { LocalResponse } from "./response/auth.response";
 
 export class EntryLocal extends DataBaseLocal implements EntryFetch {
@@ -38,38 +42,44 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
       .getById(entryId)
       .then((resp) => new LocalResponse(resp));
   }
+
   getEntryBy(
     _: string,
     input?: EntryInput | undefined
   ): Promise<LocalResponse> {
     const page = input?.paginator?.page ?? 0;
+    const goupid = input?.groupId ?? null;
     return this.getDatabase("entry")
       .getAll()
-      .then((resp) => {
-        const lastIndexItem =
-          page * 10 + 10 < resp.length ? page * 10 + 10 : resp.length;
-        const respMapped = resp.slice(page * 10, lastIndexItem);
-        console.log(input, respMapped, resp.length);
-        return new LocalResponse({
-          data: respMapped,
-          pageInfo: {
-            items: respMapped.length,
-            hasMore: respMapped.length >= 10,
-            page,
-          },
-        });
-      });
+      .then((resp) => this.calculatePaginator(resp, page, goupid));
   }
+
   getActiveEntryNotification(_: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
+
   getLastDeletedEntries(_: string): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
   }
+
   restoreEntry(
     _: string,
     restoreBody: RestoreEntryBody
   ): Promise<LocalResponse> {
     throw new Error("Method not implemented.");
+  }
+
+  private calculatePaginator(
+    response: DatabaseTypes[],
+    page: number,
+    groupId: string | null
+  ): LocalResponse {
+    const lastIndexItem =
+      page * 10 + 10 < response.length ? page * 10 + 10 : response.length;
+    const hasMoreItems = page * 10 + 10 < response.length;
+    const respMapped = response
+      .filter((entity) => (entity as EntryValue).groupid === groupId)
+      .slice(page * 10, lastIndexItem);
+    return new LocalResponse(new PaginatorData(respMapped, page, hasMoreItems));
   }
 }

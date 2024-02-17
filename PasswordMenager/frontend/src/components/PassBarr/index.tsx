@@ -95,8 +95,12 @@ const PassBar = ({ store }: { store?: IGeneral }): JSX.Element => {
         <IconButton>
           <PlusComponent click={() => setmodalopen(true)} />
         </IconButton>
-        <ExportIcon click={() => setExportModalOpen(true)} />
-        <ImportIcon click={() => setImportOptionModalOpen(true)} />
+        {!store?.IsLocal && (
+          <>
+            <ExportIcon click={() => setExportModalOpen(true)} />
+            <ImportIcon click={() => setImportOptionModalOpen(true)} />
+          </>
+        )}
       </GroupContainer>
     </Container>
   );
