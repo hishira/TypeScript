@@ -2,6 +2,11 @@ import { EntryFetchFactory } from "../factories/entry.factory";
 import { EntryFetch } from "../interfaces/entry.fetch";
 import { Auth } from "./auth.utils";
 import { EMPTYENTRYRESPONSE } from "./constans.utils";
+import {
+  ResponseJsonRun,
+  isObjectAndHasProperKeys,
+  retriveKeyFromObjectIfExists,
+} from "./helpers.utils";
 import { SessionStorage } from "./localstorage.utils";
 
 export class Entry {
@@ -84,7 +89,7 @@ export class Entry {
   ): Promise<DeleteEntryResponse> {
     return this.entryApi
       .DeleteEntryById(deleteid, accesstoken)
-      .then((resp: Response) => resp.json());
+      .then(ResponseJsonRun);
   }
 
   async DeleteUserEntry(entryid: string): Promise<DeleteEntryResponse> {
@@ -105,9 +110,7 @@ export class Entry {
   ): Promise<EditEntryResponse> {
     const response: EditEntryResponse = await this.entryApi
       .EditEntryByID(editedbody, accesstoken)
-      .then((resp: Response) => {
-        return resp.json();
-      });
+      .then(ResponseJsonRun);
     return response;
   }
 
@@ -135,7 +138,7 @@ export class Entry {
         }
         return resp;
       })
-      .then((resp) => resp.json())
+      .then(ResponseJsonRun)
       .catch((_) => console.error(_));
     return response;
   }
@@ -152,24 +155,31 @@ export class Entry {
   private async refreshEntriesBy(input: EntryInput) {
     await this.auth.refreshToken();
     const token = this.sessionStorage.getAccessToken();
-    return this.getEntryBy(token, input).then((value) => {
-      return Array.isArray(value)
-        ? { data: value, pageInfo: null }
-        : {
-            data: (value as any)?.data,
-            pageInfo: (value as any).pageInfo,
-          };
-    });
+    return this.getEntryBy(token, input).then((value) =>
+      this.retriveDataFromResponse(value)
+    );
+  }
+
+  private retriveDataFromResponse(response: unknown): {
+    data: Record<string, unknown>;
+    pageInfo: Record<string, unknown>;
+  } {
+    return Array.isArray(response)
+      ? { data: response, pageInfo: null }
+      : {
+          data: (response as any)?.data,
+          pageInfo: (response as any).pageInfo,
+        };
   }
 
   private responseMappedObject(resp: any): IEntry[] {
-    return Array.isArray(resp)
-      ? resp
-      : typeof resp === "object" && "data" in resp
-      ? resp.data
-      : resp;
+    if (Array.isArray(resp)) return resp;
+    return this.getProperKeyDataFromResponse(resp);
   }
 
+  private getProperKeyDataFromResponse(resp: any) {
+    return isObjectAndHasProperKeys(resp, "data") ? resp.data : resp;
+  }
   async GetEntriesBy(input: EntryInput): Promise<{
     data: IEntry[];
     pageInfo: PaginatorType;
@@ -177,13 +187,11 @@ export class Entry {
     const accessToken = this.sessionStorage.getAccessToken();
 
     return this.getEntryBy(accessToken, input).then(async (resp) => {
-      if (typeof resp === "number" && resp === 401) {
+      if (typeof resp === "number") {
         this.refreshEntriesBy(input);
       }
-      console.log(resp)
       const responseMapped: IEntry[] = this.responseMappedObject(resp);
-      const pageInfo =
-        typeof resp === "object" && "pageInfo" in resp ? resp.pageInfo : null;
+      const pageInfo = this.retrivePageInfoFromObject(resp as Record<string, any>);
 
       return {
         data: responseMapped,
@@ -192,23 +200,27 @@ export class Entry {
     });
   }
 
+  private retrivePageInfoFromObject(resp: { pageInfo?: any }): PaginatorType  {
+    return retriveKeyFromObjectIfExists(resp, "pageInfo") as PaginatorType;
+  }
+
   getNumberOfActiveNotification() {
     const accessToken = this.sessionStorage.getAccessToken();
     return this.entryApi
       .getActiveEntryNotification(accessToken)
-      .then((resp) => resp.json());
+      .then(ResponseJsonRun);
   }
 
   getLastDeletedEntries(): Promise<EntryData> {
     return this.entryApi
       .getLastDeletedEntries(this.sessionStorage.getAccessToken())
-      .then((resp) => resp.json());
+      .then(ResponseJsonRun);
   }
 
   restoreEntry(restoreBody: RestoreEntryBody) {
     const accessToken = this.sessionStorage.getAccessToken();
     return this.entryApi
       .restoreEntry(accessToken, restoreBody)
-      .then((resp) => resp.json());
+      .then(ResponseJsonRun);
   }
 }

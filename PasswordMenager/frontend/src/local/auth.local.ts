@@ -2,6 +2,7 @@ import { AuthFetch } from "../interfaces/auth.fetch";
 import { CryptoDatabase } from "../local-database/cryptoDatabase";
 import { LocalDatabases } from "../local-database/init";
 import { UserValue } from "../local-database/localDatabase.interface";
+import { ExampleTokesResponseForLocalEnvironment } from "../utils/constans.utils";
 import { DataBaseLocal } from "./database.local";
 import { LocalResponse } from "./response/auth.response";
 
@@ -22,7 +23,7 @@ export class AuthLocal extends DataBaseLocal implements AuthFetch {
   signup(newuserauth: RegisterUser): Promise<LocalResponse> {
     const userDatabase = this.getDatabase("user");
     return userDatabase
-      .add({ password: newuserauth.password, })
+      .add({ password: newuserauth.password })
       .then(this.signUpResponseValidation)
       .then((response) => new LocalResponse(response));
   }
@@ -33,7 +34,7 @@ export class AuthLocal extends DataBaseLocal implements AuthFetch {
         return (
           LocalDatabases.getInstance()
             .getDatabase("user")
-            ?.getAll()
+            .getAll()
             .then((users) =>
               this.loginUserCheck(users as UserValue[], hashedPassword)
             ) ?? Promise.reject(new LocalResponse(undefined))
@@ -54,10 +55,7 @@ export class AuthLocal extends DataBaseLocal implements AuthFetch {
     const user = users[0];
 
     return user.password === hashedPassword
-      ? new LocalResponse({
-          access_token: "example_access_token",
-          refresh_token: "123123",
-        })
+      ? new LocalResponse(ExampleTokesResponseForLocalEnvironment)
       : new LocalResponse(undefined);
   }
 }
