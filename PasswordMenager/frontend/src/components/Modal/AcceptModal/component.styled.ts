@@ -11,7 +11,6 @@ export const ButtonGroup = styled.div`
             z-index: 10000;
             border: none;
             outline: none;
-            transform: scale(1.04);
         }
     }
 `

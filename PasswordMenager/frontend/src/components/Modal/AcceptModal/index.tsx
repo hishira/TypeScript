@@ -10,7 +10,7 @@ type AcceptanceModalPrope = ModalProps & {
   disableButton?: boolean;
   extend?: {
     buttonText: string;
-    handleButton: (...args: any[]) => any;
+    handleButton: (...args: any[]) => void;
   };
 };
 export const AcceptModalComponent = ({
