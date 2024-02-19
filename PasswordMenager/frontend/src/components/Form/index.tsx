@@ -85,7 +85,7 @@ const FormComponent = ({
         type="submit"
         margintop={10}
         fullwidth
-        color="lightblue"
+        color="whitesmoke"
         size="large"
       >
         {Translation(buttonmessage)}

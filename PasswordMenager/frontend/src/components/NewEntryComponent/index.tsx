@@ -219,7 +219,7 @@ const NewEntryComponent = ({
             <Button
               disabled={!editEntry.isFormValid}
               size="small"
-              color="lightblue"
+              color="whitesmoke"
               onClick={edithaneld}
             >
               {Translation("newentry.action.update")}

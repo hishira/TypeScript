@@ -38,7 +38,7 @@ export const LocalLogin = ({
         inputtype="password"
         value={password}
       />
-      <Button onClick={() => LoginHandler()}>Login</Button>
+      <Button color="whitesmoke" onClick={() => LoginHandler()}>Login</Button>
     </LocalLoginElement>
   );
 };

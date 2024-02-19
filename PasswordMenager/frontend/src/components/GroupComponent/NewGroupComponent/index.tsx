@@ -28,7 +28,7 @@ const NewGroupComponent = ({
       <Button
         disabled={isButtonDisabled}
         onClick={buttonhandle}
-        color="lightblue"
+        color="whitesmoke"
       >
         {Translation("groups.newgroup.addgroup")}
       </Button>

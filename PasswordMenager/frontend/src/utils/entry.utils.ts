@@ -53,27 +53,6 @@ export class Entry {
     return response;
   }
 
-  private async unauthorizedCheck(
-    newentry: CreateEntryDto,
-    response: number | IEntry
-  ) {
-    if (response === 401) {
-      await this.auth.refreshToken();
-      let accesstoken = this.sessionStorage.getAccessToken();
-      return this.CreateEntry(newentry, accesstoken);
-    }
-    return response;
-  }
-
-  private serverErrorOrEmptyCheck(response: number | IEntry) {
-    if (response === 401 || response === 500) {
-      return this.EMPTY;
-    }
-    if (typeof response !== "number")
-      return { status: true, response: response };
-    return this.EMPTY;
-  }
-
   async CreateNewEntryUser(
     newentry: CreateEntryDto
   ): Promise<CreateEntryResponse> {
@@ -143,6 +122,25 @@ export class Entry {
     return response;
   }
 
+  getNumberOfActiveNotification() {
+    const accessToken = this.sessionStorage.getAccessToken();
+    return this.entryApi
+      .getActiveEntryNotification(accessToken)
+      .then(ResponseJsonRun);
+  }
+
+  getLastDeletedEntries(): Promise<EntryData> {
+    return this.entryApi
+      .getLastDeletedEntries(this.sessionStorage.getAccessToken())
+      .then(ResponseJsonRun);
+  }
+
+  restoreEntry(restoreBody: RestoreEntryBody) {
+    const accessToken = this.sessionStorage.getAccessToken();
+    return this.entryApi
+      .restoreEntry(accessToken, restoreBody)
+      .then(ResponseJsonRun);
+  }
   async getEntryBy(
     accessToken: string,
     input: EntryInput
@@ -191,7 +189,9 @@ export class Entry {
         this.refreshEntriesBy(input);
       }
       const responseMapped: IEntry[] = this.responseMappedObject(resp);
-      const pageInfo = this.retrivePageInfoFromObject(resp as Record<string, any>);
+      const pageInfo = this.retrivePageInfoFromObject(
+        resp as Record<string, any>
+      );
 
       return {
         data: responseMapped,
@@ -200,27 +200,28 @@ export class Entry {
     });
   }
 
-  private retrivePageInfoFromObject(resp: { pageInfo?: any }): PaginatorType  {
+  private retrivePageInfoFromObject(resp: { pageInfo?: any }): PaginatorType {
     return retriveKeyFromObjectIfExists(resp, "pageInfo") as PaginatorType;
   }
 
-  getNumberOfActiveNotification() {
-    const accessToken = this.sessionStorage.getAccessToken();
-    return this.entryApi
-      .getActiveEntryNotification(accessToken)
-      .then(ResponseJsonRun);
+  private async unauthorizedCheck(
+    newentry: CreateEntryDto,
+    response: number | IEntry
+  ) {
+    if (response === 401) {
+      await this.auth.refreshToken();
+      let accesstoken = this.sessionStorage.getAccessToken();
+      return this.CreateEntry(newentry, accesstoken);
+    }
+    return response;
   }
 
-  getLastDeletedEntries(): Promise<EntryData> {
-    return this.entryApi
-      .getLastDeletedEntries(this.sessionStorage.getAccessToken())
-      .then(ResponseJsonRun);
-  }
-
-  restoreEntry(restoreBody: RestoreEntryBody) {
-    const accessToken = this.sessionStorage.getAccessToken();
-    return this.entryApi
-      .restoreEntry(accessToken, restoreBody)
-      .then(ResponseJsonRun);
+  private serverErrorOrEmptyCheck(response: number | IEntry) {
+    if (response === 401 || response === 500) {
+      return this.EMPTY;
+    }
+    if (typeof response !== "number")
+      return { status: true, response: response };
+    return this.EMPTY;
   }
 }

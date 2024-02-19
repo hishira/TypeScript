@@ -5,4 +5,5 @@ export const NewGroup = styled.div`
   padding: 15px;
   border-radius: 10px;
   width: 100%;
+  
 `;

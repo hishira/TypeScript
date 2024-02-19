@@ -43,7 +43,7 @@ export const AcceptModalComponent = ({
             ) : (
               <Button
                 disabled={disableButton}
-                color="lightblue"
+                color="whitesmoke"
                 onClick={acceptHandle}
               >
                 {Translation("modal.button.accept")}
