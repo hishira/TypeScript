@@ -13,7 +13,8 @@ const getBorder = (
   isError?: boolean
 ) => {
   if (radius) return withBorder ? "10px" : "none";
-  return withBorder ? `1px solid ${isError ? "lightsalmon" : "grey"}` : "none";
+  const errorColor = isError ? "lightsalmon" : "grey";
+  return withBorder ? `1px solid ${errorColor}` : "none";
 };
 const borderColorCalculate = (isError: boolean | undefined, color: string) => {
   return isError ? "lightsalmon" : color;
@@ -38,5 +39,7 @@ export const Input = styled.input<{
       getBorder(false, withBorder, isError)};
     border-bottom: 0.2px solid
       ${({ isError }) => borderColorCalculate(isError, "slategrey")};
+    box-shadow: .5px .5px .5px  slategray;
+    border-bottom: none;
   }
 `;

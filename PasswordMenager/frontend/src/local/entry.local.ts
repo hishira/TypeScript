@@ -51,7 +51,19 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
     const goupid = input?.groupId ?? null;
     return this.getDatabase("entry")
       .getAll()
+      .then((resp) => this.filter(resp, input))
       .then((resp) => this.calculatePaginator(resp, page, goupid));
+  }
+  filter(
+    resp: DatabaseTypes[],
+    input?: EntryInput | undefined
+  ): DatabaseTypes[] {
+    const searchParam = input?.title;
+    if (searchParam === undefined || searchParam === "") return resp;
+
+    return resp.filter((dataValue) =>
+      this.runRegexOnValue(`${searchParam}`, (dataValue as EntryValue).title)
+    );
   }
 
   getActiveEntryNotification(_: string): Promise<LocalResponse> {
@@ -69,6 +81,12 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
     throw new Error("Method not implemented.");
   }
 
+  private runRegexOnValue(
+    pattern: string,
+    valueForCheck: string
+  ): RegExpExecArray | null {
+    return RegExp(new RegExp(pattern, "gi")).exec(valueForCheck);
+  }
   private calculatePaginator(
     response: DatabaseTypes[],
     page: number,
