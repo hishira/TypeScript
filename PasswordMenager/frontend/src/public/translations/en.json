@@ -145,5 +145,9 @@
     "activateImportRequest.content":" Do you want to activate import request? All entries will be added to your store",
     "notification.modalTitle.activate": "Activate notification",
     "notification.modalTitle.suspend": "Suspend notification",
-    "notification.modalTitle.delete": "Delete notification"
+    "notification.modalTitle.delete": "Delete notification",
+    "localLogin.enterPassword": "Please enter the password to store",
+    "localSignUp.title": "Use password manager locally, please fill fields",
+    "localSignUp.subTitle": "Passwords and data will be stored at broswere. Passwords will be encrypted using entered password",
+    "localSignUp.create": "Create"
 }

@@ -135,5 +135,9 @@
     "activateImportRequest.content":" Czy chcesz aktywować żadanie importu haseł. Wszystkie hasła zostaną dodane do twojego konta",
     "notification.modalTitle.activate": "Aktywować notyfikacje",
     "notification.modalTitle.suspend": "Zawiesić notyfikacje",
-    "notification.modalTitle.delete": "Usunąć notyfikacje"
+    "notification.modalTitle.delete": "Usunąć notyfikacje",
+    "localLogin.enterPassword": "Proszę wprowadzić hasło aby odblokować",
+    "localSignUp.title": "Używaj menadżera haseł lokalnie, proszę uzupełnić konto by utworzyć konto",
+    "localSignUp.subTitle": "Hasła i dane będą przechowywane w przeglądarce. Dane powinny być zaszyfrowane za pomocą wprowadzonego poniżej hasła.",
+    "localSignUp.create": "Utwórz"
 }

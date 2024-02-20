@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { LocalDatabases } from "../../local-database/init";
+import { useState } from "react";
+import { CheckIfLocelUserExists } from "../../hooks/checkIfLocalUserExists.hook";
 import Button from "../Button";
 import FormElement from "../FormElement";
+import { Translation } from "../Translation";
 import { TitleContainer } from "../shared/styled-components";
 import { LocalLoginElement } from "./component.styled";
 
@@ -12,23 +12,13 @@ export const LocalLogin = ({
   loginButtonhandle: (password: string) => void;
 }) => {
   const [password, setPassword] = useState<string>("");
-  const history = useHistory();
-  useEffect(() => {
-    LocalDatabases.getInstance()
-      .getDatabase("user")
-      ?.getAll()
-      .then((userArray) => {
-        if (userArray.length <= 0) {
-          history.push("/local-signup");
-        }
-      });
-  });
+  CheckIfLocelUserExists();
   const LoginHandler = () => {
     loginButtonhandle(password);
   };
   return (
     <LocalLoginElement>
-      <TitleContainer>Please enter the password to store</TitleContainer>
+      <TitleContainer>{Translation("localLogin.enterPassword")}</TitleContainer>
       <FormElement
         label="input.label.password"
         inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -38,7 +28,9 @@ export const LocalLogin = ({
         inputtype="password"
         value={password}
       />
-      <Button color="whitesmoke" onClick={() => LoginHandler()}>Login</Button>
+      <Button color="whitesmoke" onClick={() => LoginHandler()}>
+        {Translation("page.login.button.text")}
+      </Button>
     </LocalLoginElement>
   );
 };
