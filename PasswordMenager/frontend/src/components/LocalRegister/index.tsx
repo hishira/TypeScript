@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { LocalRegisterUtil } from "../../hooks/localRegisterUtil.hook";
 import Button from "../Button";
+import { Translation } from "../Translation";
 import { ValidatorForm } from "../ValidatorForm";
-import { Validators } from "../ValidatorForm/validators";
 import { ContentContainer, TitleContainer } from "../shared/styled-components";
 import { LocalRegisterElement } from "./component.styled";
 
@@ -10,46 +10,22 @@ export const LocalRegisterComponent = ({
 }: {
   localRegisterHandle: (password: string) => void;
 }) => {
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [validPassword, setValidPassword] = useState<boolean>(false);
-  const [validConfirmPassword, setValidConfirmPassword] =
-    useState<boolean>(true);
-  const passwordValidators: ValidatorFn[] = [
-    Validators.MinLength(6),
-    Validators.Required,
-  ];
-  const confirmPassowrdValidators: ValidatorFn[] = [
-    Validators.MinLength(6),
-    Validators.Required,
-    Validators.SaveValue(password, "Must be same as password"),
-  ];
-  const addUser = () => {
-    if (inValidFields()) {
-      return;
-    }
-    localRegisterHandle(password);
-  };
-  const inValidFields = (): boolean => {
-    const passwordIsInvalid = Validators.StaticFieldValidation(
-      password,
-      ...passwordValidators
-    );
-    const isConfirmPasswordInvalid = Validators.StaticFieldValidation(
-      confirmPassword,
-      ...confirmPassowrdValidators
-    );
-    return passwordIsInvalid || isConfirmPasswordInvalid;
-  };
+  const {
+    setPassword,
+    passwordValidators,
+    setValidPassword,
+    setConfirmPassword,
+    setValidConfirmPassword,
+    confirmPassowrdValidators,
+    validPassword,
+    validConfirmPassword,
+    addUser,
+  } = LocalRegisterUtil(localRegisterHandle);
+  
   return (
     <LocalRegisterElement>
-      <TitleContainer>
-        Use password manager locally, please enter fields
-      </TitleContainer>
-      <ContentContainer>
-        Passwords and data will be stored at broswere. Passwords will be
-        encrypted using entered password
-      </ContentContainer>
+      <TitleContainer>{Translation("localSignUp.title")}</TitleContainer>
+      <ContentContainer>{Translation("localSignUp.subTitle")}</ContentContainer>
       <ValidatorForm
         label="input.label.password"
         width="100%"
@@ -76,7 +52,7 @@ export const LocalRegisterComponent = ({
         disabled={!validPassword || !validConfirmPassword}
         onClick={() => addUser()}
       >
-        Create
+        {Translation("localSignUp.create")}
       </Button>
     </LocalRegisterElement>
   );

@@ -87,6 +87,7 @@ export class EntryLocal extends DataBaseLocal implements EntryFetch {
   ): RegExpExecArray | null {
     return RegExp(new RegExp(pattern, "gi")).exec(valueForCheck);
   }
+  
   private calculatePaginator(
     response: DatabaseTypes[],
     page: number,

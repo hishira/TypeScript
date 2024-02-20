@@ -39,7 +39,7 @@ export const Input = styled.input<{
       getBorder(false, withBorder, isError)};
     border-bottom: 0.2px solid
       ${({ isError }) => borderColorCalculate(isError, "slategrey")};
-    box-shadow: .5px .5px .5px  slategray;
+    box-shadow: 2px 11px 12px -12px rgba(66, 68, 90, 1);
     border-bottom: none;
   }
 `;
