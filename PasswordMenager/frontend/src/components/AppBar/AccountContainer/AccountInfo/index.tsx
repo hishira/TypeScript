@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { AccountInfoEffect } from "../../../../hooks/accountInfo.hook";
 import { Loading } from "../../../Loading";
 import { Translation } from "../../../Translation";
@@ -11,12 +11,41 @@ import {
   Devider,
   HeaderButton,
 } from "./component.styled";
-
+type HeaderButtonsProps = {
+  mainContentView: string;
+  setMainContentView: Dispatch<SetStateAction<ContentType>>;
+};
+const HeaderButtons = ({
+  mainContentView,
+  setMainContentView,
+}: HeaderButtonsProps) => (
+  <AccountInfoHeader>
+    <HeaderButton
+      onClick={() => setMainContentView("Notification")}
+      active={mainContentView === "Notification"}
+    >
+      {Translation("account.view.accountInfo.notification")}
+    </HeaderButton>
+    <HeaderButton
+      onClick={() => setMainContentView("ImportRequest")}
+      active={mainContentView === "ImportRequest"}
+    >
+      {Translation("account.view.accountInfo.importRequest")}
+    </HeaderButton>
+    <HeaderButton
+      onClick={() => setMainContentView("Last")}
+      active={mainContentView === "Last"}
+    >
+      {Translation("account.view.accountInfo.lastDeleted")}
+    </HeaderButton>
+  </AccountInfoHeader>
+);
 const AccountInfo = () => {
   const [mainContentView, setMainContentView] =
     useState<ContentType>("Notification");
   const [refetch, setRefetch] = useState<boolean>(false);
   const { userinfo, importRequests, loading } = AccountInfoEffect(refetch);
+  
   return (
     <Loading
       loading={loading}
@@ -24,26 +53,10 @@ const AccountInfo = () => {
         <AccountInfoContainer>
           <UserView user={userinfo} setRefetch={setRefetch}></UserView>
           <Devider />
-          <AccountInfoHeader>
-            <HeaderButton
-              onClick={() => setMainContentView("Notification")}
-              active={mainContentView === "Notification"}
-            >
-              {Translation("account.view.accountInfo.notification")}
-            </HeaderButton>
-            <HeaderButton
-              onClick={() => setMainContentView("ImportRequest")}
-              active={mainContentView === "ImportRequest"}
-            >
-              {Translation("account.view.accountInfo.importRequest")}
-            </HeaderButton>
-            <HeaderButton
-              onClick={() => setMainContentView("Last")}
-              active={mainContentView === "Last"}
-            >
-              {Translation("account.view.accountInfo.lastDeleted")}
-            </HeaderButton>
-          </AccountInfoHeader>
+          <HeaderButtons
+            mainContentView={mainContentView}
+            setMainContentView={setMainContentView}
+          />
           <Devider />
           <AccountInfoContent>
             {GetCurrentView(mainContentView, importRequests, setRefetch)}
