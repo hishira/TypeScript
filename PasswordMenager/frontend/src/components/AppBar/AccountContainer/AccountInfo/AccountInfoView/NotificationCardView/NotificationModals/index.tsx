@@ -1,5 +1,5 @@
 import { inject, observer } from "mobx-react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { NotificationMessages } from "../../../../../../../hooks/notificationMessages.hook";
 import { IGeneral } from "../../../../../../../models/General";
 import {
@@ -7,7 +7,8 @@ import {
   SuccessPopUpObject,
 } from "../../../../../../../utils/popup.utils";
 import { AcceptModalComponent } from "../../../../../../Modal/AcceptModal";
-import { ActionHandlerMapper, ComponentMapper } from "./mappers";
+import { ActionHandlerMapper } from "./mappers";
+import { NotificationHook } from "./notification.hook";
 
 type NotificationModalType = {
   action: "delete" | "activate" | "suspend" | null;
@@ -17,11 +18,6 @@ type NotificationModalType = {
   closeModal: () => void;
 };
 
-const SelectProperModalText = (
-  action: "delete" | "activate" | "suspend" | null
-) => {
-  return ComponentMapper[action ?? ""];
-};
 const NotificationModal = ({
   action,
   setRefetch,
@@ -30,29 +26,23 @@ const NotificationModal = ({
   closeModal,
   store,
 }: NotificationModalType & { store?: IGeneral }) => {
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [component, setComponent] = useState<JSX.Element | undefined>(
-    undefined
-  );
   const { successMessage, errorMessage } = NotificationMessages(action);
-  useEffect(() => {
-    setModalOpen(modalOpen);
-    setComponent(SelectProperModalText(action));
-  }, [modalOpen, action]);
-
+  const { component, isModalOpen, setModalOpen } = NotificationHook(
+    modalOpen,
+    action
+  );
   const acceptModalPromiseHandler = () => {
     const acceptHandler = ActionHandlerMapper[action ?? ""];
-    if (acceptHandler && notification) {
-      acceptHandler(notification)
-        ?.then((_) => {
-          setRefetch((a) => !a);
-          store?.setPopUpinfo(SuccessPopUpObject(successMessage));
-        })
-        .catch((e) => {
-          store?.setPopUpinfo(ErrorPopUpObject(errorMessage));
-        });
+    if (!acceptHandler || !notification) return;
+    acceptHandler(notification)
+      ?.then((_) => {
+        setRefetch((a) => !a);
+        store?.setPopUpinfo(SuccessPopUpObject(successMessage));
+      })
+      .catch((e) => {
+        store?.setPopUpinfo(ErrorPopUpObject(errorMessage));
+      });
       setModalOpen(false);
-    }
   };
   const close = () => {
     setModalOpen(false);
