@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { Entry } from "../../../../../../utils/entry.utils";
 import { Translation } from "../../../../../Translation";
 import LastDeletedMappedEntries from "./LastDeletedMappedEntries";
 import {
@@ -9,18 +7,10 @@ import {
   LastDeletedEntryInfo,
   LastDeletedTitle,
 } from "./component.styled";
+import { LastDeletedEntriesHook } from "./lastDeletedEntries.hook";
 
 export const LastDeletedElementsCardView = () => {
-  const [lastDeletedEntries, setLastDeletedEntries] = useState<IEntry[]>([]);
-  const [refetch, setRefetch] = useState<boolean>(false);
-  useEffect(() => {
-    Entry.getInstance()
-      .getLastDeletedEntries()
-      .then((entries: EntryData) => {
-        if (Array.isArray(entries)) setLastDeletedEntries(entries);
-        else setLastDeletedEntries(entries?.data ?? []);
-      });
-  }, [refetch]);
+  const { lastDeletedEntries, setRefetch } = LastDeletedEntriesHook();
 
   return (
     <LastDeletedElements>
