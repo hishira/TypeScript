@@ -10,6 +10,7 @@ import {
   CardIcons,
   EmptySpan,
 } from "./component.styled";
+import { FieldsCardHook } from "./fieldsCard.hook";
 
 export type FieldsCardViewProps = {
   selectedgroup: string;
@@ -39,12 +40,7 @@ export const CardComponent = ({
   deleteHandle,
   editHandle,
 }: CardComponentProps) => {
-  const [entryCard, setEntryCard] = useState<CardEntry>(entry);
-  const [isEmptyTitle, setIsEmptyTitle] = useState<boolean>(false);
-  useEffect(() => {
-    if (entryCard.title === undefined || entryCard.title === "")
-      setIsEmptyTitle(true);
-  }, [entryCard]);
+  const {isEmptyTitle, entryCard, closeIconHandle,openIconHandle} = FieldsCardHook(entry);
   return (
     <Card>
       <CardHeader>
@@ -58,8 +54,8 @@ export const CardComponent = ({
         <CardIcons>
           <FieldsIcon
             entry={entryCard}
-            close={(entry) => setEntryCard({ ...entryCard, open: false })}
-            open={(entry) => setEntryCard({ ...entryCard, open: true })}
+            close={closeIconHandle}
+            open={openIconHandle}
           />
         </CardIcons>
       </CardHeader>

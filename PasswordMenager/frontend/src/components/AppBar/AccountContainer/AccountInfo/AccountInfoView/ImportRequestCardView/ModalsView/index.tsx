@@ -49,11 +49,12 @@ export const ModalsView = ({
   acceptDeleteImportRequestHandler,
   acceptActivateImportRequest,
 }: ModalViewsType) => {
+  const onClose = () => modalClose();
   if (modalType === "delete") {
     return (
       <AcceptModalComponent
         visible={isModalVisible}
-        onClose={() => modalClose()}
+        onClose={onClose}
         component={<DeleteModalComponenet />}
         acceptHandle={acceptDeleteImportRequestHandler}
       />
@@ -63,7 +64,7 @@ export const ModalsView = ({
     return (
       <AcceptModalComponent
         visible={isModalVisible}
-        onClose={() => modalClose()}
+        onClose={onClose}
         component={<ActiveModalComponent />}
         acceptHandle={acceptActivateImportRequest}
       />
