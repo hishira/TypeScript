@@ -32,9 +32,7 @@ const ErrorDeletedEntryMessage = {
   message: "Error occur when entry deleted",
 };
 const FieldsContainer = ({
-  selectedgroup,
   refreshgroupentities,
-  refreshall,
   passwords,
   store,
 }: FieldsComponentType & { store?: IGeneral }): JSX.Element => {

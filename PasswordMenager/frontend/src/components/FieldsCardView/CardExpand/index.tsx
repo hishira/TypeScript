@@ -9,6 +9,7 @@ import {
   CardFieldName,
   CardIcons,
 } from "../component.styled";
+import { CardEntry } from "../view";
 
 const CardExpendContentRow = ({
   fieldName,
@@ -27,6 +28,46 @@ const CardExpendContentRow = ({
     </CardExpandContentRow>
   );
 };
+const CardEntryUrlView = ({ entry }: { entry: CardEntry }) => {
+  return entry.url ? (
+    <CardExpendContentRow
+      fieldName="fieldscard.view.url"
+      isUrl={true}
+      value={entry.url}
+    />
+  ) : null;
+};
+const CardEntryPasswordExpireData = ({ entry }: { entry: CardEntry }) => {
+  return entry.passwordExpiredDate ? (
+    <CardExpendContentRow
+      fieldName="fieldscard.view.expiredTo"
+      value={entry.passwordExpiredDate}
+    />
+  ) : null;
+};
+const CardExpandContentComponent = ({
+  entry,
+}: Pick<CardComponentProps, "entry">) => {
+  return (
+    <>
+      <CardExpendContentRow
+        fieldName="fieldscard.view.username"
+        value={entry.username}
+      />
+      <CardExpendContentRow
+        fieldName="fieldscard.view.password"
+        value={entry.password}
+        isPassword={true}
+      />
+      <CardExpendContentRow
+        fieldName="fieldscard.view.note"
+        value={entry.note}
+      />
+      <CardEntryUrlView entry={entry} />
+      <CardEntryPasswordExpireData entry={entry} />
+    </>
+  );
+};
 export const CardExpandComponent = ({
   entry,
   editHandle,
@@ -35,35 +76,10 @@ export const CardExpandComponent = ({
   return entry.open ? (
     <CardExpand>
       <CardExpandContent>
-        <CardExpendContentRow
-          fieldName="fieldscard.view.username"
-          value={entry.username}
-        />
-        <CardExpendContentRow
-          fieldName="fieldscard.view.password"
-          value={entry.password}
-          isPassword={true}
-        />
-        <CardExpendContentRow
-          fieldName="fieldscard.view.note"
-          value={entry.note}
-        />
-        {entry.url ? (
-          <CardExpendContentRow
-            fieldName="fieldscard.view.url"
-            isUrl={true}
-            value={entry.url}
-          />
-        ) : null}
-        {entry.passwordExpiredDate ? (
-          <CardExpendContentRow
-            fieldName="fieldscard.view.expiredTo"
-            value={entry.passwordExpiredDate}
-          />
-        ) : null}
+        <CardExpandContentComponent entry={entry} />
       </CardExpandContent>
       <CardIcons>
-        <EditIcon click={() => editHandle(entry)} />{" "}
+        <EditIcon click={() => editHandle(entry)} />
         <DeleteIcon click={() => deleteHandle(entry)} />
       </CardIcons>
     </CardExpand>
