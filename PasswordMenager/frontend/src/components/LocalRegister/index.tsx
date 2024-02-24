@@ -5,6 +5,45 @@ import { ValidatorForm } from "../ValidatorForm";
 import { ContentContainer, TitleContainer } from "../shared/styled-components";
 import { LocalRegisterElement } from "./component.styled";
 
+type ValidatorElementPropr = {
+  inputFunction: (value: string) => void;
+  validators: ValidatorFn[];
+  setValid: (val: boolean) => void;
+};
+const ValidatePasswordForm = ({
+  inputFunction,
+  validators,
+  setValid,
+}: ValidatorElementPropr) => (
+  <ValidatorForm
+    label="input.label.password"
+    width="100%"
+    inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+      inputFunction(e.target.value)
+    }
+    inputplaceholder="*****"
+    inputtype="password"
+    validators={validators}
+    isValid={(a) => setValid(a)}
+  />
+);
+const ValidateConfirmPasswordForm = ({
+  inputFunction,
+  validators,
+  setValid,
+}: ValidatorElementPropr) => (
+  <ValidatorForm
+    label="input.label.confirmPassword"
+    width="100%"
+    inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+      inputFunction(e.target.value)
+    }
+    isValid={(a) => setValid(a)}
+    inputplaceholder="*****"
+    inputtype="password"
+    validators={validators}
+  />
+);
 export const LocalRegisterComponent = ({
   localRegisterHandle,
 }: {
@@ -21,32 +60,21 @@ export const LocalRegisterComponent = ({
     validConfirmPassword,
     addUser,
   } = LocalRegisterUtil(localRegisterHandle);
-  
+
   return (
     <LocalRegisterElement>
       <TitleContainer>{Translation("localSignUp.title")}</TitleContainer>
       <ContentContainer>{Translation("localSignUp.subTitle")}</ContentContainer>
-      <ValidatorForm
-        label="input.label.password"
-        width="100%"
-        inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setPassword(e.target.value)
-        }
-        inputplaceholder="*****"
-        inputtype="password"
+      <ValidatePasswordForm
+        inputFunction={setPassword}
         validators={passwordValidators}
-        isValid={(a) => setValidPassword(a)}
+        setValid={setValidPassword}
       />
-      <ValidatorForm
-        label="input.label.confirmPassword"
-        width="100%"
-        inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setConfirmPassword(e.target.value)
-        }
-        isValid={(a) => setValidConfirmPassword(a)}
-        inputplaceholder="*****"
-        inputtype="password"
+
+      <ValidateConfirmPasswordForm
+        inputFunction={setConfirmPassword}
         validators={confirmPassowrdValidators}
+        setValid={setValidConfirmPassword}
       />
       <Button
         disabled={!validPassword || !validConfirmPassword}

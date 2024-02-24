@@ -39,11 +39,17 @@ export const PopupElement = styled.div<PopUpElementProps>`
         `;
     }
   }}
+ 
 `;
 
 export const PopupHeader = styled.div`
   display: flex;
   flex-direction: row;
+  & > svg {
+    width: 24px;
+    height: 24px;
+    margin-right: 24px;
+  }
 `;
 export const PopupContent = styled.div`
   display: flex;

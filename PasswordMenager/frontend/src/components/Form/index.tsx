@@ -1,8 +1,8 @@
 import React from "react";
 import Button from "../../components/Button/index";
 import FormElement from "../FormElement/";
-import { Form, FormTitle, Link } from "./component.styled";
 import { Translation } from "../Translation";
+import { Form, FormTitle, Link } from "./component.styled";
 
 interface Props {
   buttonmessage: string;
@@ -17,6 +17,82 @@ interface Props {
   isEmail?: boolean;
   emailSetHandle?: (value: string) => void;
 }
+
+const FormEmailField = ({
+  isEmailAvailable,
+  emailSetHandle,
+}: {
+  isEmailAvailable: boolean;
+  emailSetHandle: (value: string) => void;
+}) => {
+  return isEmailAvailable ? (
+    <FormElement
+      label="input.label.email"
+      inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        emailSetHandle(e.target.value)
+      }
+      inputplaceholder="email.input.label.placeholder"
+      inputtype="text"
+    />
+  ) : null;
+};
+
+const ConfirmPasswordElement = ({
+  confirmpassword,
+  handlethis,
+}: {
+  confirmpassword: boolean;
+  handlethis: (value: string) => void;
+}) => {
+  return confirmpassword ? (
+    <FormElement
+      label="input.label.confirmPassword"
+      inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        handlethis(e.target.value)
+      }
+      inputplaceholder="*****"
+      inputtype="password"
+    />
+  ) : null;
+};
+type InputChangeHandler = {
+  inputChangeHandler: (value: string) => void;
+};
+const LoginInputElement = ({ inputChangeHandler }: InputChangeHandler) => (
+  <FormElement
+    label="input.label.login"
+    inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+      inputChangeHandler(e.target.value)
+    }
+    inputplaceholder="login.input.label.placeholder"
+    inputtype="text"
+  />
+);
+const PasswordInputElement = ({ inputChangeHandler }: InputChangeHandler) => (
+  <FormElement
+    label="input.label.password"
+    inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+      inputChangeHandler(e.target.value)
+    }
+    inputplaceholder="*****"
+    inputtype="password"
+  />
+);
+
+const RedirectLinkElement = ({
+  redirectFunction,
+  redirectTranslation,
+}: {
+  redirectFunction: () => void;
+  redirectTranslation: string;
+}) => (
+  <p>
+    {Translation("page.login.or")}
+    <Link onClick={() => redirectFunction()}>
+      {Translation(redirectTranslation)}
+    </Link>
+  </p>
+);
 const FormComponent = ({
   buttonmessage,
   buttonHandle,
@@ -38,48 +114,20 @@ const FormComponent = ({
   return (
     <Form>
       <FormTitle>{Translation(maintitle)}</FormTitle>
-      <FormElement
-        label="input.label.login"
-        inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          firstinputhandle(e.target.value)
-        }
-        inputplaceholder="login.input.label.placeholder"
-        inputtype="text"
+      <LoginInputElement inputChangeHandler={firstinputhandle} />
+      <FormEmailField
+        isEmailAvailable={isEmailAvailable as boolean}
+        emailSetHandle={emailSetHandle as any}
       />
-      {isEmailAvailable ? (
-        <FormElement
-          label="input.label.email"
-          inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            emailSetHandle(e.target.value)
-          }
-          inputplaceholder="email.input.label.placeholder"
-          inputtype="text"
-        />
-      ) : null}
-      <FormElement
-        label="input.label.password"
-        inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          secondinputhandle(e.target.value)
-        }
-        inputplaceholder="*****"
-        inputtype="password"
+      <PasswordInputElement inputChangeHandler={secondinputhandle} />
+      <ConfirmPasswordElement
+        confirmpassword={confirmpassword as boolean}
+        handlethis={handlethis}
       />
-      {confirmpassword ? (
-        <FormElement
-          label="input.label.confirmPassword"
-          inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handlethis(e.target.value)
-          }
-          inputplaceholder="*****"
-          inputtype="password"
-        />
-      ) : null}
-      <p>
-        {Translation("page.login.or")}
-        <Link onClick={() => redirectfunction()}>
-          {Translation(secondactionastirng)}
-        </Link>
-      </p>
+      <RedirectLinkElement
+        redirectFunction={redirectfunction}
+        redirectTranslation={secondactionastirng}
+      />
       <Button
         onClick={buttonHandle}
         type="submit"
