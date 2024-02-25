@@ -45,3 +45,7 @@ export const LastDeletedEntryInfo = styled.div`
     max-width: 30%;
   }
 `
+
+export const LastDeletedInfoElement = styled.div`
+  word-break: break-all;
+`

@@ -31,6 +31,8 @@ export const ImportRequestUtilsHook = () => {
 
   const acceptImportRequest = (importRequestId: string) => {
     setModalType("activate");
+    setActionImportRequest(importRequestId);
+
     setModalOpen(true);
     ModalOpenUtils.getInstance().CloseModal = true;
   };
@@ -49,7 +51,20 @@ export const ImportRequestUtilsHook = () => {
     Import.getInstance()
       .DeleteImportRequest(actionImportRequest)
       .then((r) => {
-        handleDeleteImportRequest(r,refetch,store);
+        handleDeleteImportRequest(r, refetch, store);
+        showImportModalClose();
+      });
+  };
+
+  const acceptImportRequestHandler = (
+    refetch: Dispatch<SetStateAction<boolean>>,
+    store?: IGeneral
+  ) => {
+    console.log(actionImportRequest);
+    if (actionImportRequest === undefined) return;
+    Import.getInstance()
+      .AcceptImportRequest(actionImportRequest)
+      .then((_) => {
         showImportModalClose();
       });
   };
@@ -64,18 +79,23 @@ export const ImportRequestUtilsHook = () => {
     modalType,
     entriesToShow,
     deleteImportRequestHandle,
+    acceptImportRequestHandler,
   };
 };
 
-const handleDeleteImportRequest = (request: {status: number}, refetch: Dispatch<SetStateAction<boolean>>, store?: IGeneral) => {
-    if (request.status >= 200 && request.status <= 299) {
-        store?.setPopUpinfo(
-          SuccessPopUpObject("Import request successfull deleted")
-        );
-        refetch((a) => !a);
-      } else {
-        store?.setPopUpinfo(
-          ErrorPopUpObject("Error occurs while deleting import request")
-        );
-      }
-}
+const handleDeleteImportRequest = (
+  request: { status: number },
+  refetch: Dispatch<SetStateAction<boolean>>,
+  store?: IGeneral
+) => {
+  if (request.status >= 200 && request.status <= 299) {
+    store?.setPopUpinfo(
+      SuccessPopUpObject("Import request successfull deleted")
+    );
+    refetch((a) => !a);
+  } else {
+    store?.setPopUpinfo(
+      ErrorPopUpObject("Error occurs while deleting import request")
+    );
+  }
+};

@@ -44,6 +44,18 @@ const ValidateConfirmPasswordForm = ({
     validators={validators}
   />
 );
+
+const CreateLocalRegisterButton = ({
+  isDisabled,
+  handleClick,
+}: {
+  isDisabled: boolean;
+  handleClick: () => void;
+}) => (
+  <Button disabled={isDisabled} onClick={() => handleClick()}>
+    {Translation("localSignUp.create")}
+  </Button>
+);
 export const LocalRegisterComponent = ({
   localRegisterHandle,
 }: {
@@ -60,6 +72,7 @@ export const LocalRegisterComponent = ({
     validConfirmPassword,
     addUser,
   } = LocalRegisterUtil(localRegisterHandle);
+  const createButtonDisabled = !validPassword || !validConfirmPassword;
 
   return (
     <LocalRegisterElement>
@@ -76,12 +89,10 @@ export const LocalRegisterComponent = ({
         validators={confirmPassowrdValidators}
         setValid={setValidConfirmPassword}
       />
-      <Button
-        disabled={!validPassword || !validConfirmPassword}
-        onClick={() => addUser()}
-      >
-        {Translation("localSignUp.create")}
-      </Button>
+      <CreateLocalRegisterButton
+        isDisabled={createButtonDisabled}
+        handleClick={addUser}
+      />
     </LocalRegisterElement>
   );
 };

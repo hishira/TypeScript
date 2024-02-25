@@ -1,11 +1,11 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
-import { PaginatorDto, Paginator } from 'src/utils/paginator';
+import { Paginator, PaginatorDto } from 'src/utils/paginator';
 
 @Injectable()
 export class ImportRequestRepository implements Repository<ImportRequest> {
@@ -25,7 +25,8 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
     option: FilterOption<FilterQuery<ImportRequest>>,
     paginator?: PaginatorDto,
   ): Promise<ImportRequest[] | { data: ImportRequest[]; pageInfo: Paginator }> {
-    if ('_id' in option.getOption()) return this.find(option.getOption()._id);
+    if ('_id' in option.getOption())
+      return this.findById(option.getOption()._id).then((resp) => [resp]);
     return this.importRequestModal.find({ ...option.getOption() }).exec();
   }
 

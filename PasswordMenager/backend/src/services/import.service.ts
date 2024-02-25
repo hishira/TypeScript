@@ -28,12 +28,15 @@ export class ImportService {
   activateImportRequest(importRequestId: string, userId: string) {
     return this.queryBus
       .execute(new GetImportQuery({ id: importRequestId }))
+      .then((importRequest) => this.retrieveFirstImportRequest(importRequest))
       .then((importRequest) => {
         const entriesToImport = importRequest.entriesToImport;
         const dtosObjects: DTO[] = ImportDTOMapper.MapImportRequestsToDTOs(
           userId,
           entriesToImport,
         );
+
+        //return dtosObjects;
         this.eventEmitter.emitAsync(
           EventTypes.InsertManyEntry,
           new InsertmanyEntryEvent(dtosObjects),
@@ -94,5 +97,10 @@ export class ImportService {
         ...editImportRequestDto,
       }),
     );
+  }
+
+  private retrieveFirstImportRequest(importRequest: any): any {
+    if (Array.isArray(importRequest)) return importRequest.find(Boolean);
+    return importRequest;
   }
 }

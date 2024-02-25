@@ -11,7 +11,11 @@ import {
   Translation,
   TranslationFunction,
 } from "../../../../../../Translation";
-import { LastDeletedElement, LastDeletedEntryInfo } from "../component.styled";
+import {
+  LastDeletedElement,
+  LastDeletedEntryInfo,
+  LastDeletedInfoElement,
+} from "../component.styled";
 
 type MappedEntriesType = {
   entries: IEntry[];
@@ -63,9 +67,9 @@ const LastDeleteEntryElement = ({
   return (
     <LastDeletedElement>
       <LastDeletedEntryInfo>
-        <div>{entry.title}</div>
-        <div>{entry.username}</div>
-        <div>{entry.url}</div>
+        <LastDeletedInfoElement>{entry.title}</LastDeletedInfoElement>
+        <LastDeletedInfoElement>{entry.username}</LastDeletedInfoElement>
+        <LastDeletedInfoElement>{entry.url}</LastDeletedInfoElement>
       </LastDeletedEntryInfo>
       <Button
         outline="without"

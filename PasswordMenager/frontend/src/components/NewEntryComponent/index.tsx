@@ -1,9 +1,4 @@
 import { inject, observer } from "mobx-react";
-import React, { useEffect, useState } from "react";
-import { GetEntryForEdit } from "../../hooks/getEntryForEdit.hook";
-import { GroupEffect } from "../../hooks/groups.hook";
-import { Entry } from "../../utils/entry.utils";
-import { ErrorPopUpObject, SuccessPopUpObject } from "../../utils/popup.utils";
 import Button from "../Button";
 import FormElement from "../FormElement/";
 import { Loading } from "../Loading";
@@ -20,9 +15,36 @@ import {
   PasswordFormContainer,
   SectionContainer,
 } from "./component.styled";
-import { EmptyEntry, checkBoxHandler } from "./new-entry.utils";
-import { NewEntryProps, PasswordCharactersTypes } from "./types";
+import { NewEntryUtils } from "./newentry.utils";
+import { NewEntryProps } from "./types";
 
+const PasswordElementContainer = ({
+  newentry,
+  editEntry,
+  passwordVisible,
+  passwordVisibleFunc,
+}: {
+  passwordVisible: boolean;
+  passwordVisibleFunc: (ps: boolean) => void;
+  newentry: CreateEntryDto;
+  editEntry: EditEntryActionDispatcher;
+}) => (
+  <PasswordFormContainer>
+    <FormElement
+      label={"newentry.field.password"}
+      inputplaceholder="***"
+      width="90%"
+      inputChange={editEntry.setpassword.bind(editEntry)}
+      inputtype="password"
+      value={newentry.password}
+    />
+    {!passwordVisible ? (
+      <ShowIcon click={() => passwordVisibleFunc(true)} />
+    ) : (
+      <HideIcon click={() => passwordVisibleFunc(false)} />
+    )}
+  </PasswordFormContainer>
+);
 const NewEntryComponent = ({
   edit,
   editentryid,
@@ -31,102 +53,26 @@ const NewEntryComponent = ({
   closeModalDispatcherHandle,
   store,
 }: NewEntryProps): JSX.Element => {
-  const [passlen, setPasslen] = useState<number>(6);
-  const [generatePasswordModal, setGeneratePasswordModal] =
-    useState<boolean>(false);
-  const [passwordcharacters, setPasswordcharacters] =
-    useState<PasswordCharactersTypes>({
-      letters: false,
-      numbers: false,
-      specialChar: false,
-    });
-  const [loading, setLoading] = useState<boolean>(false);
-  const [newentry, setNewentry] = useState<CreateEntryDto>(EmptyEntry());
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const successCreate = TranslationFunction("entry.createToast.success");
-  const errorCreate = TranslationFunction("entry.createToast.error");
-  const successEdit = TranslationFunction("entry.editToast.success");
-  const errorEdit = TranslationFunction("entry.editToast.error");
-
-  const passwordVisibleFunc = (ps: boolean) => {
-    setPasswordVisible(ps);
-    checkBoxHandler({ target: { checked: ps } });
-  };
-  const editEntry: EditEntryActionDispatcher = new EditEntryActionDispatcher(
-    setNewentry,
-    setPasswordcharacters,
-    passwordcharacters,
+  const {
     newentry,
-    passlen
+    loading,
+    passwordVisible,
+    editEntry,
+    generatePasswordModal,
+    passwordVisibleFunc,
+    passlen,
+    groups,
+    passwordLenChange,
+    setGeneratePasswordModal,
+    addnewentry,
+    edithaneld,
+  } = NewEntryUtils(
+    edit ?? false,
+    editentryid,
+    refresh,
+    closeModalDispatcherHandle,
+    store
   );
-  const passwordLenChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setPasslen(parseInt(e.target.value));
-
-  const groups = GroupEffect(true);
-  GetEntryForEdit(edit, editentryid, setNewentry, setLoading);
-  useEffect(() => {
-    setNewentry(EmptyEntry());
-  }, [refreshentry]);
-
-  const addnewentry = async (): Promise<void> => {
-    // TODO: Prevent from doing if inputs are empty even if
-    // TODO: Ref
-    const newEntry = newentry;
-    if (newEntry.passwordExpiredDate === "")
-      delete newEntry.passwordExpiredDate;
-    Entry.getInstance()
-      .CreateNewEntryUser(newEntry)
-      .then((responsenewentry) => {
-        console.log(responsenewentry);
-        if (responsenewentry.status) {
-          console.log(refresh);
-          if (refresh !== undefined) refresh();
-
-          editEntry.clearInputData();
-          store?.setPopUpinfo(SuccessPopUpObject(successCreate));
-        } else {
-          store?.setPopUpinfo(ErrorPopUpObject(errorCreate));
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        store?.setPopUpinfo(ErrorPopUpObject(errorCreate));
-      });
-  };
-
-  const getRechangeObject = (): EditEntry => {
-    return {
-      _id: editentryid,
-      title: newentry.title,
-      username: newentry.username,
-      password: newentry.password,
-      note: newentry.note,
-      url: newentry.url,
-      passwordExpiredDate: newentry.passwordExpiredDate,
-    };
-  };
-
-  const edithaneld = (): void => {
-    if (editentryid !== "") {
-      const editedvalues: EditEntry = getRechangeObject();
-      Entry.getInstance()
-        .EntryEditById(editedvalues)
-        .then((response) => {
-          if (response.status) {
-            closeModalDispatcherHandle?.(false);
-            if (refresh !== undefined) refresh();
-            store?.setPopUpinfo(SuccessPopUpObject(successEdit));
-          } else {
-            store?.setPopUpinfo(ErrorPopUpObject(errorEdit));
-          }
-        })
-        .catch((e) => {
-          e && console.error(e);
-          store?.setPopUpinfo(ErrorPopUpObject(errorEdit));
-        });
-    }
-  };
-
   return (
     <Loading
       loading={loading}
@@ -150,21 +96,12 @@ const NewEntryComponent = ({
             value={newentry.username}
           />
           <SectionContainer>
-            <PasswordFormContainer>
-              <FormElement
-                label={"newentry.field.password"}
-                inputplaceholder="***"
-                width="90%"
-                inputChange={editEntry.setpassword.bind(editEntry)}
-                inputtype="password"
-                value={newentry.password}
-              />
-              {!passwordVisible ? (
-                <ShowIcon click={() => passwordVisibleFunc(true)} />
-              ) : (
-                <HideIcon click={() => passwordVisibleFunc(false)} />
-              )}
-            </PasswordFormContainer>
+            <PasswordElementContainer
+              newentry={newentry}
+              editEntry={editEntry}
+              passwordVisible={passwordVisible}
+              passwordVisibleFunc={passwordVisibleFunc}
+            />
             <FormElement
               fontSize="14px"
               width="30%"
