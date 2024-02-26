@@ -23,7 +23,6 @@ import { GetSpecificEntryQueryHandler } from 'src/handlers/queries/entry/getSpec
     ...entryProviders,
     CreateEntryHandler,
     GetExistingGroupQueryHandler,
-    CreateEntryBulkHandler,
     DeleteEntryHandler,
     UpdateEntryHandler,
     GetSpecificEntryQueryHandler,

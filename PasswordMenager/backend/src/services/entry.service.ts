@@ -9,6 +9,7 @@ import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
+import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
 import { EmptyResponse } from 'src/response/empty.response';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
@@ -19,8 +20,17 @@ import {
   IEntry,
 } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
-import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 
+//TODO: Temporary fix, for event catcher
+@Injectable()
+export class EntryEmitService {
+  constructor(private readonly commandBus: CommandBus) {}
+
+  @OnEvent(EventTypes.InsertManyEntry, { async: true })
+  insertMany(payload: InsertmanyEntryEvent) {
+    return this.commandBus.execute(new CreateEntryBulkCommand(payload.dtos));
+  }
+}
 @Injectable()
 export class EntryService {
   constructor(
@@ -41,11 +51,6 @@ export class EntryService {
   @OnEvent(EventTypes.DeleteEntryByGroup, { async: true })
   deleteByGroupEvent(payload: DeleteByGroupEvent) {
     return this.deleteByGroup(payload.groupId);
-  }
-
-  @OnEvent(EventTypes.InsertManyEntry, { async: true })
-  insertMany(payload: InsertmanyEntryEvent) {
-    return this.commandBus.execute(new CreateEntryBulkCommand(payload.dtos));
   }
 
   getById(entryId: string): Promise<IEntry> {

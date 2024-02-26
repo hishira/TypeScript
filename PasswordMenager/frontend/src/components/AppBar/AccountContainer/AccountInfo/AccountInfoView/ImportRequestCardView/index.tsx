@@ -25,6 +25,7 @@ const ImportRequestCardView = ({
     modalType,
     entriesToShow,
     deleteImportRequestHandle,
+    acceptImportRequestHandler,
   } = ImportRequestUtilsHook();
 
   return (
@@ -33,7 +34,9 @@ const ImportRequestCardView = ({
         acceptDeleteImportRequestHandler={() =>
           deleteImportRequestHandle(refetch, store)
         }
-        acceptActivateImportRequest={() => console.log("HI")}
+        acceptActivateImportRequest={() =>
+          acceptImportRequestHandler(refetch, store)
+        }
         isModalVisible={modalOpen}
         modalClose={showImportModalClose}
         modalType={modalType}
