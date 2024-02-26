@@ -35,12 +35,14 @@ export class ImportService {
           userId,
           entriesToImport,
         );
-
+        console.log('Before encryption ');
+        dtosObjects.forEach((val) => console.log(val.toObject()));
         //return dtosObjects;
         this.eventEmitter.emitAsync(
           EventTypes.InsertManyEntry,
           new InsertmanyEntryEvent(dtosObjects),
         );
+        return true;
       });
   }
 

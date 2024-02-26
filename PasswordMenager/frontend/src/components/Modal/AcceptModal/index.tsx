@@ -35,7 +35,7 @@ export const AcceptModalComponent = ({
             {extend ? (
               <Button
                 disabled={disableButton}
-                color="lightblue"
+                color="whitesmoke"
                 onClick={extend.handleButton}
               >
                 {Translation(extend.buttonText)}
