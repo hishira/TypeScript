@@ -67,7 +67,7 @@ export class ExportController {
     );
     res.set({
       'Content-Disposition': 'attachment; filename=example.txt.xyz',
-      'Content-Type': 'application/octet-stream',
+      'Content-Type': 'text/xyz',
     });
     res.send(encyptedBuffer);
   }
