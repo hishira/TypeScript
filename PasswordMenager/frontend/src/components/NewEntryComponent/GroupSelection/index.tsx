@@ -1,9 +1,9 @@
 import { Translation } from "../../Translation";
 import {
-    NormalContainer,
-    OptionContainer,
-    SelectContainer,
-    SelectLabel,
+  NormalContainer,
+  OptionContainer,
+  SelectContainer,
+  SelectLabel,
 } from "../component.styled";
 import { GroupSelectionProps } from "../types";
 
@@ -11,8 +11,10 @@ export const GroupSelection = ({
   edit,
   editEntry,
   groups,
-}: GroupSelectionProps) =>
-  !edit ? (
+}: GroupSelectionProps) => {
+  const visible = !edit && groups.length > 0;
+
+  return visible ? (
     <NormalContainer>
       <SelectLabel>{Translation("newentry.helpers.groupSelect")}</SelectLabel>
       <SelectContainer
@@ -27,3 +29,4 @@ export const GroupSelection = ({
       </SelectContainer>
     </NormalContainer>
   ) : null;
+};

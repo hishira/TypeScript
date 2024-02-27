@@ -1,56 +1,18 @@
 import { inject, observer } from "mobx-react";
 import { Dispatch, SetStateAction } from "react";
 import { IGeneral } from "../../../../../../../models/General";
-import { Entry } from "../../../../../../../utils/entry.utils";
-import {
-  ErrorPopUpObject,
-  SuccessPopUpObject,
-} from "../../../../../../../utils/popup.utils";
 import Button from "../../../../../../Button";
-import {
-  Translation,
-  TranslationFunction,
-} from "../../../../../../Translation";
+import { Translation } from "../../../../../../Translation";
 import {
   LastDeletedElement,
   LastDeletedEntryInfo,
   LastDeletedInfoElement,
 } from "../component.styled";
+import { LastDeletedMappedHook } from "./lastDeletedMapped.hook";
 
-type MappedEntriesType = {
+export type MappedEntriesType = {
   entries: IEntry[];
   setRefetch: Dispatch<SetStateAction<boolean>>;
-};
-
-const LastDeletedRestoreMessages = () => {
-  const restoreSuccessMessage = TranslationFunction(
-    "accountview.entry.restore.success"
-  );
-  const restoreErrorMessage = TranslationFunction(
-    "accountview.entry.restore.error"
-  );
-  return {
-    restoreSuccessMessage,
-    restoreErrorMessage,
-  };
-};
-const RestoreEntryHandle = (
-  entryId: string,
-  setRefetch: Dispatch<SetStateAction<boolean>>,
-  store?: IGeneral
-) => {
-  const { restoreSuccessMessage, restoreErrorMessage } =
-    LastDeletedRestoreMessages();
-
-  Entry.getInstance()
-    .restoreEntry({ entryId })
-    .then((_) => {
-      setRefetch((a) => !a);
-      store?.setPopUpinfo(SuccessPopUpObject(restoreSuccessMessage));
-    })
-    .catch((e) => {
-      store?.setPopUpinfo(ErrorPopUpObject(restoreErrorMessage));
-    });
 };
 
 const LastDeleteEntryElement = ({
@@ -61,9 +23,7 @@ const LastDeleteEntryElement = ({
   store?: IGeneral;
   entry: IEntry;
 }) => {
-  const restoreEntry = (entryId: string) => {
-    RestoreEntryHandle(entryId, setRefetch, store);
-  };
+  const { RestoreEntry } = LastDeletedMappedHook(setRefetch, store);
   return (
     <LastDeletedElement>
       <LastDeletedEntryInfo>
@@ -74,7 +34,7 @@ const LastDeleteEntryElement = ({
       <Button
         outline="without"
         size="small"
-        onClick={() => restoreEntry(entry._id)}
+        onClick={() => RestoreEntry(entry._id)}
       >
         {Translation("account.view.lastDeletedEntries.table.actionButton")}
       </Button>

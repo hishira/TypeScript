@@ -17,20 +17,21 @@ export class EntryRepositoryUtils {
         'Incopatabile entries, should be array and have title, username and password field',
       );
   }
-  static IsProperDtosObjects(
-    dtos: Record<string, any>[],
-  ): dtos is CreateEntry[] {
+  static IsProperDtosObjects(dtos): dtos is CreateEntry[] {
     return (
       Array.isArray(dtos) &&
       dtos.every((dtoObject) => {
-        const objectRetrive = dtoObject;
-        return (
-          'title' in objectRetrive &&
-          'password' in objectRetrive &&
-          'username' in objectRetrive &&
-          'userid' in objectRetrive
-        );
+        return EntryRepositoryUtils.IsCreateEntryObject(dtoObject);
       })
+    );
+  }
+
+  static IsCreateEntryObject(object): object is CreateEntry {
+    return (
+      'title' in object &&
+      'password' in object &&
+      'username' in object &&
+      'userid' in object
     );
   }
 }
