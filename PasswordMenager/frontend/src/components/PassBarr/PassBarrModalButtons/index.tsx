@@ -40,12 +40,15 @@ export const ImportModal = ({
 }: ImportModalProps) => {
   return (
     <ModalButtonsContainer>
-      <Button color="lightgray" onClick={importEntries}>
-        {Translation("bar.modal.button.importpaswords")}
-      </Button>
-      <Button color="lightgray" onClick={importEncrypted}>
-        {Translation("bar.modal.button.importencrypted")}
-      </Button>
+      <TitleContainer>Import entries options</TitleContainer>
+      <ExportButtons>
+        <Button color="lightgray" onClick={importEntries}>
+          {Translation("bar.modal.button.importpaswords")}
+        </Button>
+        <Button color="lightgray" onClick={importEncrypted}>
+          {Translation("bar.modal.button.importencrypted")}
+        </Button>
+      </ExportButtons>
     </ModalButtonsContainer>
   );
 };
