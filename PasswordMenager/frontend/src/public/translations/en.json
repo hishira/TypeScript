@@ -72,7 +72,7 @@
     "newentry.helpers.numbers": "Numbers",
     "newentry.helpers.specialCharacters": "Special characters",
     "bar.modal.button.importencrypted": "Import encrypted",
-    "bar.modal.button.importpaswords": "Import passwords",
+    "bar.modal.button.importpaswords": "Import as csv ora json",
     "bar.modal.button.exportentriescsv": "Export as csv",
     "bar.modal.button.exportentriesjson": "Export as json",
     "bar.modal.button.exportencrypted": "Export encrypted",

@@ -4,10 +4,12 @@ export const EntryModalComponent = styled.div<{ disabled?: boolean }>`
   background-color: white;
   padding: 1rem;
   border-radius: 5px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   width: 45rem;
   pointer-events: ${({ disabled }) => (disabled ? "none" : "all")};
   & > button {
-    margin-top: .75rem;
+    margin-top: 0.75rem;
   }
 `;
 export const NormalContainer = styled.div`
@@ -35,7 +37,7 @@ export const RangeContainer = styled.div`
   display: flex;
   gap: 12px;
   align-items: center;
-  margin-top: .8rem;
+  margin-top: 0.8rem;
 `;
 export const SectionContainer = styled.section`
   display: flex;
@@ -132,5 +134,22 @@ export const OptionContainer = styled.option`
   &:focus {
     background-color: transparent;
     display: none;
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  display: inline;
+  & > button {
+    width: 100%;
+    margin: 0;
+    padding: 16px;
+    border-radius: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-color: white;
+    &:disabled {
+      background-color: grey;
+    }
+    ///border: 0.1px solid lightslategray;
   }
 `;

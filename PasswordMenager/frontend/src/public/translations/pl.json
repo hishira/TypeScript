@@ -72,7 +72,7 @@
     "newentry.helpers.numbers":"Liczby",
     "newentry.helpers.specialCharacters":"Znaki specjalne",
     "bar.modal.button.importencrypted":"Importuj zaszyfrowane",
-    "bar.modal.button.importpaswords":"Importuj hasła(plain text)",
+    "bar.modal.button.importpaswords":"Importuj jako csv albo json",
     "bar.modal.button.exportentriescsv": "Exportuj jako csv",
     "bar.modal.button.exportentriesjson": "Exportuj jako json",
     "bar.modal.button.exportencrypted":"Exportuj jako zaszyfrowany plik",
