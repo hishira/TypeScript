@@ -13,7 +13,6 @@ import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
 import { EmptyResponse } from 'src/response/empty.response';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
-import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import {
   EntryData,
   EntryState,
@@ -77,7 +76,7 @@ export class EntryService {
     );
   }
 
-  deletebyid(entryid: string): Promise<DeleteEntryResponse> {
+  deletebyid(entryid: string): Promise<DeleteEntryResponse<IEntry>> {
     try {
       const deletedentry: Promise<IEntry> = this.queryBus.execute(
         new GetSpecificEntry({ id: entryid }),
@@ -121,21 +120,13 @@ export class EntryService {
     );
   }
 
-  deleteByGroup(groupid: string): Promise<unknown> {
-    const promiseEntryHistory = this.getHistoryEntryPromise(groupid);
-    const deletePromise = this.commandBus.execute(
-      new DeleteEntryCommand({ groupId: groupid }),
-    );
-    return promiseEntryHistory.then(() => deletePromise);
-  }
-
   getByUser(userId: string, limit?: number): Promise<IEntry[] | EntryData> {
     return this.queryBus.execute(
       new GetSpecificEntry({ userId: userId, limit: limit }),
     );
   }
 
-  editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse> {
+  editentry(neweditedentry: EditEntryDto): Promise<EditEntryResponse<IEntry>> {
     try {
       return this.commandBus
         .execute(new UpdateEntryCommand({ updateEntryDto: neweditedentry }))
@@ -162,5 +153,13 @@ export class EntryService {
           );
         }
       });
+  }
+
+  private deleteByGroup(groupid: string): Promise<unknown> {
+    const promiseEntryHistory = this.getHistoryEntryPromise(groupid);
+    const deletePromise = this.commandBus.execute(
+      new DeleteEntryCommand({ groupId: groupid }),
+    );
+    return promiseEntryHistory.then(() => deletePromise);
   }
 }

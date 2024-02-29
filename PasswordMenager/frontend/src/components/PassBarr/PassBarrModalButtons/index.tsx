@@ -15,7 +15,9 @@ export const ExpotrModal = ({
 }: ExportModalProps) => {
   return (
     <ModalButtonsContainer>
-      <TitleContainer>Export entries options</TitleContainer>
+      <TitleContainer>
+        {Translation("exportEntries.options.title")}
+      </TitleContainer>
       <ExportButtons>
         <Button color="lightgray" onClick={exportCsvHandle}>
           {Translation("bar.modal.button.exportentriescsv")}
@@ -40,7 +42,9 @@ export const ImportModal = ({
 }: ImportModalProps) => {
   return (
     <ModalButtonsContainer>
-      <TitleContainer>Import entries options</TitleContainer>
+      <TitleContainer>
+        {Translation("importEntries.options.title")}
+      </TitleContainer>
       <ExportButtons>
         <Button color="lightgray" onClick={importEntries}>
           {Translation("bar.modal.button.importpaswords")}

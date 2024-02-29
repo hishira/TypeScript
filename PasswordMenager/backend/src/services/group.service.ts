@@ -12,7 +12,8 @@ import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
-import { GroupResponse } from 'src/types/common/main';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
+import { Paginator } from 'src/utils/paginator';
 
 @Injectable()
 export class GroupService {
@@ -45,7 +46,7 @@ export class GroupService {
       new DeleteByGroupEvent(groupId),
     );
     const promiseToResolve = this.queryBus
-      .execute<GetFilteredGroup, GroupResponse>(
+      .execute<GetFilteredGroup, GroupResponse<IGroup, Paginator>>(
         new GetFilteredGroup({ id: groupId }),
       )
       .then((groups) => {

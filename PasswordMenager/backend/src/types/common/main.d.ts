@@ -1,22 +1,20 @@
-import { IGroup } from 'src/schemas/Interfaces/group.interface';
-import { IEntry } from '../../schemas/Interfaces/entry.interface';
-import { Paginator } from 'src/utils/paginator';
 
-type DeleteEntryResponse = {
+
+type DeleteEntryResponse<T> = {
   status: boolean;
-  respond: IEntry | null;
+  respond: T | null;
 };
 
-type EditEntryResponse = {
+type EditEntryResponse<T> = {
   status: boolean;
-  respond: IEntry | null;
+  respond: T | null;
 };
 
-type GroupResponse =
-  | IGroup[]
+type GroupResponse<T, PaginatorLike> =
+  | T[]
   | {
-      data: IGroup[];
-      pageInfo: Paginator;
+      data: T[];
+      pageInfo: PaginatorLike;
     };
 
 type UpdateEntryCheck = {
@@ -26,3 +24,10 @@ type UpdateEntryCheck = {
   userNameUpdate: boolean;
   stateUpdate: boolean;
 };
+
+type TokenObject = {
+  access_token: string;
+  refresh_token: string;
+};
+
+type AccesTokenObject = Pick<TokenObject, 'access_token'>;

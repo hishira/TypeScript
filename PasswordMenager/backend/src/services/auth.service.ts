@@ -42,7 +42,7 @@ export class AuthService {
       });
   }
 
-  login(user: any) {
+  login(user: IUser): TokenObject {
     const payload = { login: user.login, _id: user._id };
     return {
       access_token: this.jwtService.sign(payload, AccessTokenOptions),
@@ -50,7 +50,7 @@ export class AuthService {
     };
   }
 
-  refreshaccesstoken(user: any) {
+  refreshaccesstoken(user: IUser): AccesTokenObject {
     const payload = user;
     return {
       access_token: this.jwtService.sign(payload, RefreshAccessTokenOptions),

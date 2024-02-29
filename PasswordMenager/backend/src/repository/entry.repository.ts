@@ -9,7 +9,6 @@ import { DTO } from 'src/schemas/dto/object.interface';
 import { ActiveEntryFilter } from 'src/schemas/utils/activeEntryFilter';
 import { EntryBuilder } from 'src/schemas/utils/builders/entry.builder';
 import { DeleteEntryUpdate } from 'src/schemas/utils/deleteEntryUpdate.object';
-import { UpdateEntryCheck } from 'src/types/common/main';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryRepositoryUtils } from './repository-utils/entry-utils';
 import { UtilsRepository } from './utils.repository';
@@ -25,7 +24,7 @@ export class EntryRepository implements Repository<IEntry> {
     return this.entryModel.findOne({ _id: id }).exec();
   }
 
-  createMany(objects: DTO[]): Promise<unknown> {
+  createMany(objects: DTO[]): Promise<IEntry[]> {
     // Think of using insertMany -> more specific for many entry insert
     const newEntryObjects =
       EntryRepositoryUtils.GetMappedDtosToProperEntryDto(objects);

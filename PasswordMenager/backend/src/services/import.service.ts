@@ -28,20 +28,11 @@ export class ImportService {
   activateImportRequest(importRequestId: string, userId: string) {
     return this.queryBus
       .execute(new GetImportQuery({ id: importRequestId }))
-      .then((importRequest) => this.retrieveFirstImportRequest(importRequest))
+      .then((importRequest: ImportRequest[]) =>
+        this.retrieveFirstImportRequest(importRequest),
+      )
       .then((importRequest) => {
-        const entriesToImport = importRequest.entriesToImport;
-        const dtosObjects: DTO[] = ImportDTOMapper.MapImportRequestsToDTOs(
-          userId,
-          entriesToImport,
-        );
-        console.log('Before encryption ');
-        dtosObjects.forEach((val) => console.log(val.toObject()));
-        //return dtosObjects;
-        this.eventEmitter.emitAsync(
-          EventTypes.InsertManyEntry,
-          new InsertmanyEntryEvent(dtosObjects),
-        );
+        this.handleActivateImportRequest(importRequest, userId);
         return true;
       });
   }
@@ -101,8 +92,25 @@ export class ImportService {
     );
   }
 
-  private retrieveFirstImportRequest(importRequest: any): any {
+  private retrieveFirstImportRequest(
+    importRequest: ImportRequest[],
+  ): ImportRequest {
     if (Array.isArray(importRequest)) return importRequest.find(Boolean);
     return importRequest;
+  }
+
+  private handleActivateImportRequest(
+    importRequest: ImportRequest,
+    userId: string,
+  ) {
+    const entriesToImport = importRequest.entriesToImport;
+    const dtosObjects: DTO[] = ImportDTOMapper.MapImportRequestsToDTOs(
+      userId,
+      entriesToImport,
+    );
+    this.eventEmitter.emitAsync(
+      EventTypes.InsertManyEntry,
+      new InsertmanyEntryEvent(dtosObjects),
+    );
   }
 }

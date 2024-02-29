@@ -13,7 +13,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
-import { DeleteEntryResponse, EditEntryResponse } from 'src/types/common/main';
 import { EntryData, IEntry } from '../schemas/Interfaces/entry.interface';
 import { CreateEntryDto } from '../schemas/dto/createentry.dto';
 import { EntryService } from '../services/entry.service';
@@ -43,7 +42,7 @@ export class EntryContoller {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get('/lastDeleted')
-  async getLastDeletedEntries(@Request() req): Promise<unknown> {
+  async getLastDeletedEntries(@Request() req): Promise<IEntry[] | EntryData> {
     return this.entryService.getLastDeletedUserEntries(req.user._id);
   }
 
@@ -60,7 +59,7 @@ export class EntryContoller {
   @Delete('/byentityid/:id')
   async deletebyid(
     @Param('id') entityid: string,
-  ): Promise<DeleteEntryResponse> {
+  ): Promise<DeleteEntryResponse<IEntry>> {
     return this.entryService.deletebyid(entityid);
   }
 
@@ -69,7 +68,7 @@ export class EntryContoller {
   async editentry(
     @Body(new ValidationPipe({ transform: true })) editedentry: EditEntryDto,
     @Request() req,
-  ): Promise<EditEntryResponse> {
+  ): Promise<EditEntryResponse<IEntry>> {
     return this.entryService.editentry(editedentry);
   }
 
