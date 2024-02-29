@@ -6,15 +6,15 @@ import {
   GroupOptionBuilder,
   Option,
 } from 'src/schemas/utils/builders/groupOption.builder';
+import { Paginator } from 'src/utils/paginator';
 import { BaseQueryHandler } from '../BaseQueryHandler';
-import { GroupResponse } from 'src/types/common/main';
 
 @QueryHandler(GetFilteredGroup)
 export class GetFilteredGroupQueryHandler
   extends BaseQueryHandler<IGroup>
-  implements IQueryHandler<GetFilteredGroup, GroupResponse>
+  implements IQueryHandler<GetFilteredGroup, GroupResponse<IGroup, Paginator>>
 {
-  execute(query: GetFilteredGroup): Promise<GroupResponse> {
+  execute(query: GetFilteredGroup): Promise<GroupResponse<IGroup, Paginator>> {
     const groupOption = this.buildOption(query);
     return this.repository.find(groupOption);
   }

@@ -33,7 +33,7 @@ const ImportEntriesModalComponent = ({
   //TODO: Add proper message for txt file types
   return (
     <ImportEntries>
-      <TitleContainer>Import entries</TitleContainer>
+      <TitleContainer>{Translation('importEntries.title')}</TitleContainer>
       <FileSelector
         availableFileType={availabeFileType}
         fileChange={fileChangeHandlerFunction}

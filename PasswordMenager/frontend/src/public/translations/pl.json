@@ -139,5 +139,8 @@
     "localLogin.enterPassword": "Proszę wprowadzić hasło aby odblokować",
     "localSignUp.title": "Używaj menadżera haseł lokalnie, proszę uzupełnić konto by utworzyć konto",
     "localSignUp.subTitle": "Hasła i dane będą przechowywane w przeglądarce. Dane powinny być zaszyfrowane za pomocą wprowadzonego poniżej hasła.",
-    "localSignUp.create": "Utwórz"
+    "localSignUp.create": "Utwórz",
+    "importEntries.title": "Importuj hasła",
+    "exportEntries.options.title": "Opcje eksportu haseł",
+    "importEntries.options.title": "Opcje importu haseł"
 }

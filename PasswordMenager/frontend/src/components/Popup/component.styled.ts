@@ -46,9 +46,9 @@ export const PopupHeader = styled.div`
   display: flex;
   flex-direction: row;
   & > svg {
-    width: 24px;
-    height: 24px;
-    margin-right: 24px;
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
   }
 `;
 export const PopupContent = styled.div`

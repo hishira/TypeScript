@@ -150,6 +150,5 @@ export const ButtonContainer = styled.div`
     &:disabled {
       background-color: grey;
     }
-    ///border: 0.1px solid lightslategray;
   }
 `;

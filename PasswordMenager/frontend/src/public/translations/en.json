@@ -149,5 +149,8 @@
     "localLogin.enterPassword": "Please enter the password to store",
     "localSignUp.title": "Use password manager locally, please fill fields",
     "localSignUp.subTitle": "Passwords and data will be stored at broswere. Passwords will be encrypted using entered password",
-    "localSignUp.create": "Create"
+    "localSignUp.create": "Create",
+    "importEntries.title": "Import entries",
+    "exportEntries.options.title": "Export entries options",
+    "importEntries.options.title": "Import entries options"
 }
