@@ -1,5 +1,3 @@
-
-
 type DeleteEntryResponse<T> = {
   status: boolean;
   respond: T | null;
@@ -31,3 +29,16 @@ type TokenObject = {
 };
 
 type AccesTokenObject = Pick<TokenObject, 'access_token'>;
+
+type PaginatorPage = {
+  page: number;
+};
+type IPaginator = PaginatorPage & {
+  items: number;
+  hasMore: boolean;
+};
+
+type PaginatorData<T> = {
+  data: T[];
+  pageInfo: IPaginator;
+};
