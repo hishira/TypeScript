@@ -33,19 +33,13 @@ export class UserRepository implements Repository<IUser> {
   update(entry: Partial<IUser>): Promise<IUser> {
     return this.userModel
       .findById(entry._id)
-      .exec()
       .then((user) => this.updateUserHandle(entry, user))
-      .then((userUpdated) =>
-        this.userModel
-          .findOneAndUpdate(
-            { _id: entry._id },
-            {
-              $set: {
-                ...userUpdated,
-              },
-            },
-          )
-          .then((data) => data),
+      .then((updatedUser) =>
+        this.userModel.findOneAndUpdate(
+          { _id: entry._id },
+          { $set: { ...updatedUser } },
+          { returnDocument: 'after' },
+        ),
       );
   }
 

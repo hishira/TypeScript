@@ -77,16 +77,14 @@ export class EntryRepository implements Repository<IEntry> {
   update(entry: Partial<IEntry>): Promise<IEntry> {
     return this.entryModel
       .findById(entry._id)
-      .exec()
-      .then((entryById) => {
-        const entryData = this.createEditentity(entry, entryById);
-
-        return this.entryModel.updateOne(
+      .then((entryById: IEntry) => this.createEditentity(entry, entryById))
+      .then((updatedEntry: Partial<IEntry>) =>
+        this.entryModel.findOneAndUpdate(
           { _id: entry._id },
-          { $set: { ...entryData } },
-        );
-      })
-      .then((d) => entry as IEntry); //TODO: Fix
+          { $set: { ...updatedEntry } },
+          { returnDocument: 'after' },
+        ),
+      );
   }
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {

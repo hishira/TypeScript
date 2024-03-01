@@ -32,7 +32,7 @@ export class GroupRepository implements Repository<IGroup> {
   }
 
   update(entry: Partial<IGroup>): Promise<IGroup> {
-    return this.groupModel.findByIdAndUpdate(entry._id).then((group) => {
+    return this.groupModel.findById(entry._id).then((group) => {
       return this.groupModel
         .findByIdAndUpdate(
           { _id: entry._id },
