@@ -55,7 +55,7 @@ export class UserService {
       });
   }
 
-  update(userId: string, userEditDto: EditUserDto): Promise<unknown> {
+  update(userId: string, userEditDto: EditUserDto): Promise<IUser> {
     return this.commandBus.execute(new UpdateUserCommand(userId, userEditDto));
   }
 }

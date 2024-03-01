@@ -30,23 +30,23 @@ export class UserRepository implements Repository<IUser> {
     return this.userModel.findById(id).exec();
   }
 
-  update(entry: Partial<IUser>): Promise<unknown> {
+  update(entry: Partial<IUser>): Promise<IUser> {
     return this.userModel
       .findById(entry._id)
       .exec()
-      .then(async (user) => {
-        const updatedPartialUser = await this.updateUserHandle(entry, user);
-        return this.userModel
+      .then((user) => this.updateUserHandle(entry, user))
+      .then((userUpdated) =>
+        this.userModel
           .findOneAndUpdate(
             { _id: entry._id },
             {
               $set: {
-                ...updatedPartialUser,
+                ...userUpdated,
               },
             },
           )
-          .then((data) => data);
-      });
+          .then((data) => data),
+      );
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {
@@ -57,7 +57,7 @@ export class UserRepository implements Repository<IUser> {
     throw new NotImplementedError();
   }
 
-  private async updateUserHandle(
+  private updateUserHandle(
     entryToEdit: Partial<IUser>,
     userInfo: IUser,
   ): Promise<Partial<IUser>> {

@@ -33,10 +33,11 @@ export class NotificationRepository implements Repository<INotification> {
     return this.notificationModel.findOne({ _id: id }).exec();
   }
 
-  update(entry: Partial<INotification>): Promise<unknown> {
+  update(entry: Partial<INotification>): Promise<INotification> {
     return this.notificationModel
       .updateOne({ _id: entry._id }, { $set: { ...entry } })
-      .exec();
+      .exec()
+      .then((_) => entry as INotification);
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {

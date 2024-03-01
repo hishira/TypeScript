@@ -31,20 +31,18 @@ export class GroupRepository implements Repository<IGroup> {
     return this.groupModel.findOne({ _id: id }).exec();
   }
 
-  update(entry: Partial<IGroup>): Promise<unknown> {
-    return this.groupModel
-      .findById(entry._id)
-      .exec()
-      .then((group) => {
-        return this.groupModel
-          .updateOne(
-            { _id: entry._id },
-            new GroupBuilder(entry)
-              .metaLastNameUpdate(group.name)
-              .getUpdateSetObject(),
-          )
-          .then((data) => data);
-      });
+  update(entry: Partial<IGroup>): Promise<IGroup> {
+    return this.groupModel.findByIdAndUpdate(entry._id).then((group) => {
+      return this.groupModel
+        .findByIdAndUpdate(
+          { _id: entry._id },
+          new GroupBuilder(entry)
+            .metaLastNameUpdate(group.name)
+            .getUpdateSetObject(),
+          { returnDocument: 'after' },
+        )
+        .then((data) => data);
+    });
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {

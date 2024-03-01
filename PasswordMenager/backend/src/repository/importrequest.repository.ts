@@ -34,10 +34,11 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
     return this.importRequestModal.findById(id).exec();
   }
 
-  update(entry: Partial<ImportRequest>): Promise<unknown> {
+  update(entry: Partial<ImportRequest>): Promise<ImportRequest> {
     return this.importRequestModal
       .updateOne({ _id: entry._id }, { $set: { ...entry } })
-      .exec();
+      .exec()
+      .then((r) => entry as ImportRequest); // TODO: FIx
   }
 
   delete(option: DeleteOption<Partial<ImportRequest>>): Promise<unknown> {
