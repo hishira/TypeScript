@@ -56,7 +56,7 @@ export class NotificationService implements NotificationCron {
       payload.passwordExpireDate,
     );
   }
-  getActiveNotificationAsPromise(): Promise<
+  private getActiveNotificationAsPromise(): Promise<
     Promise<boolean | SMTPTransport.SentMessageInfo>[]
   > {
     return this.activeNotification.then((notifications) => {

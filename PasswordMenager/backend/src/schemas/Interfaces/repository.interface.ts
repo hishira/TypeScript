@@ -12,7 +12,7 @@ export interface Repository<T extends Document> {
     paginator?: PaginatorDto,
   ): Promise<T[] | { data: T[]; pageInfo: Paginator }>;
   findById(id: string): Promise<T>;
-  update(entry: Partial<T>): Promise<unknown>;
+  update(entry: Partial<T>): Promise<T>;
   delete(option: DeleteOption): Promise<unknown>;
   deleteMany?: (option: DeleteOption) => Promise<unknown>;
   getById(): Promise<T>;

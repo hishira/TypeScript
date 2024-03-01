@@ -7,7 +7,7 @@ import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { HistoryBuilder } from 'src/schemas/utils/builders/history.builder';
-import { PaginatorDto, Paginator } from 'src/utils/paginator';
+import { Paginator, PaginatorDto } from 'src/utils/paginator';
 
 @Injectable()
 export class HistoryRepository implements Repository<IHistory> {
@@ -35,13 +35,14 @@ export class HistoryRepository implements Repository<IHistory> {
     throw new NotImplementedError();
   }
 
-  update(entry: Partial<IHistory>): Promise<unknown> {
+  update(entry: Partial<IHistory>): Promise<IHistory> {
     return this.historyModel
       .updateOne(
         { userid: entry.userid },
         new HistoryBuilder().updateBaseOnIHistory(entry).getPushObject(),
       )
-      .exec();
+      .exec()
+      .then((e) => entry as IHistory); // TODO: FIx;
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {
