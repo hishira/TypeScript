@@ -1,5 +1,6 @@
-import { Types } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { TestDataUtils } from '../utils/TestDataUtils';
@@ -49,6 +50,14 @@ export const EditEntryDtoMock = (): EditEntryDto => ({
   passwordExpiredDate: new Date(),
 });
 
+type Skipable<T extends Record<string, any>> = T & {
+  skip: (toSkip: number) => any;
+};
+export const ExampleEntryGetOptionObject: () => FilterOption<
+  FilterQuery<IEntry>
+> = () => ({
+  getOption: () => ({ _id: 'asd123' }),
+});
 interface Executable<T> {
   exec: () => T;
 }
@@ -61,8 +70,13 @@ export class EntryMockModel {
 
   static exec = jest.fn();
 
-  static find(potion): Executable<Promise<Partial<IEntry[]>>> {
+  static find(potion): Skipable<Executable<Promise<Partial<IEntry[]>>>> {
     return {
+      skip: (toSkip: number) => ({
+        limit: (toLimit: number) => ({
+          exec: () => Promise.resolve([entryMock(), entryMock()]),
+        }),
+      }),
       exec: () => Promise.resolve([entryMock(), entryMock()]),
     };
   }
@@ -73,9 +87,9 @@ export class EntryMockModel {
     };
   }
 
-  static findOneAndUpdate = jest.fn().mockResolvedValue({});
+  static readonly findOneAndUpdate = jest.fn().mockResolvedValue({});
 
-  static deleteOne = jest.fn().mockResolvedValue(true);
+  static readonly deleteOne = jest.fn().mockResolvedValue(true);
 
   static deleteMany() {
     return { exec: () => Promise.resolve(true) };

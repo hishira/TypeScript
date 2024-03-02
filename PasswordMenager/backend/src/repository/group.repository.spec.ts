@@ -1,9 +1,9 @@
-import { IGroup } from 'src/schemas/Interfaces/group.interface';
-import { GroupRepository } from './group.repository';
-import { Model } from 'mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Model } from 'mongoose';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { GroupModelMock, groupMock } from '../../test/mock/GroupModelMock';
 import { TestUtils } from '../../test/utils/TestUtils';
+import { GroupRepository } from './group.repository';
 
 describe('GroupRepository', () => {
   let groupModel: Model<IGroup>;
@@ -75,18 +75,14 @@ describe('GroupRepository', () => {
     TestUtils.expectHasProperties(group, 'name', 'userid');
   });
 
-  it('Uptdate method should use findById method', async () => {
+  it('Uptdate method should use findById and findByIdAndUpdate method', async () => {
     const spy = jest.spyOn(groupModel, 'findById');
+    const otherSpy = jest.spyOn(groupModel, 'findByIdAndUpdate');
+
     await groupRepo.update({ _id: '123', name: 'asdasd' });
 
     expect(spy).toBeCalledTimes(1);
-  });
-
-  it('Uptdate method should use findById method', async () => {
-    const spy = jest.spyOn(groupModel, 'updateOne');
-    await groupRepo.update({ _id: '123', name: 'asdasd' });
-
-    expect(spy).toBeCalledTimes(1);
+    expect(otherSpy).toBeCalledTimes(1);
   });
 
   it('Delete method should use model deleteOne function', async () => {

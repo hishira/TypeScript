@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
-import { EntryMockModel, entryMock } from '../../test/mock/EntryMock';
+import {
+  EntryMockModel,
+  ExampleEntryGetOptionObject,
+  entryMock,
+} from '../../test/mock/EntryMock';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { EntryRepository } from './entry.repository';
 
@@ -74,14 +78,26 @@ describe('EntryRepository', () => {
     const spy = jest.spyOn(entryModel, 'find').mockReturnValueOnce({
       exec: jest.fn().mockResolvedValueOnce({ name: 'other' }),
     } as any);
-    await entryRepo.find({
-      getOption() {
-        return { _id: 'asd123' };
-      },
+    const otherSpy = jest.spyOn(entryRepo, 'returnLimitedEntriesOrAll');
+    await entryRepo.find(ExampleEntryGetOptionObject());
+    expect(spy).toBeCalled();
+    expect(otherSpy).toBeCalled();
+  });
+
+  it('find with paginator should use getEntriesWithPaginator function', async () => {
+    const spy = jest.spyOn(entryRepo as any, 'getEntriesWithPaginator');
+    await entryRepo.find(ExampleEntryGetOptionObject(), {
+      page: 0,
     });
     expect(spy).toBeCalled();
   });
-
+  it('find should return paginator', async () => {
+    const response = await entryRepo.find(ExampleEntryGetOptionObject(), {
+      page: 0,
+    });
+    expect(response).toHaveProperty('pageInfo');
+    expect(response.pageInfo).toHaveProperty('items');
+  });
   it('delete functions should use updateMany', async () => {
     const spy = jest.spyOn(entryModel, 'updateMany').mockReturnValueOnce({
       exec: jest.fn().mockResolvedValueOnce(Promise.resolve(true)),
