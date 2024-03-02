@@ -82,8 +82,8 @@ describe('EntryRepository', () => {
     expect(spy).toBeCalled();
   });
 
-  it('delete functions should use delete', async () => {
-    const spy = jest.spyOn(entryModel, 'deleteMany').mockReturnValueOnce({
+  it('delete functions should use updateMany', async () => {
+    const spy = jest.spyOn(entryModel, 'updateMany').mockReturnValueOnce({
       exec: jest.fn().mockResolvedValueOnce(Promise.resolve(true)),
     } as any);
     await entryRepo.delete({
@@ -94,8 +94,8 @@ describe('EntryRepository', () => {
     expect(spy).toBeCalled();
   });
 
-  it('delete by id should use model function findByIdAndDelete', async () => {
-    const spy = jest.spyOn(entryModel, 'findByIdAndDelete');
+  it('delete by id should use model function findByIdAndUpdate', async () => {
+    const spy = jest.spyOn(entryModel, 'findByIdAndUpdate');
 
     await entryRepo.deleteById('cd');
     expect(spy).toBeCalledTimes(1);
@@ -114,7 +114,7 @@ describe('EntryRepository', () => {
   });
 
   it('On update model should use updateOne', async () => {
-    const spy = jest.spyOn(entryModel, 'updateOne');
+    const spy = jest.spyOn(entryModel, 'findOneAndUpdate');
     await entryRepo.update({ username: 'ads', _id: 'asd' });
     expect(spy).toBeCalledTimes(1);
   });

@@ -1,12 +1,11 @@
 import { Document } from 'mongoose';
-import { PaginatorDto } from 'src/utils/paginator';
 import { DTO } from '../dto/object.interface';
 import { DeleteOption } from './deleteoption.interface';
 import { FilterOption } from './filteroption.interface';
 
 export interface Repository<T extends Document> {
   create(objectToSave: DTO): Promise<T>;
-  createMany?(objects: DTO[]): Promise<unknown>;
+  createMany?(objects: DTO[]): Promise<T[]>;
   find(
     option: FilterOption,
     paginator?: PaginatorPage,
