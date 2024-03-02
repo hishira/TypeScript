@@ -10,7 +10,7 @@ export class CreateEntryBulkHandler
   extends BaseCommandHandler<IEntry>
   implements ICommandHandler<CreateEntryBulkCommand>
 {
-  execute(command: CreateEntryBulkCommand): Promise<any> {
+  execute(command: CreateEntryBulkCommand): Promise<IEntry[]> {
     const { entriesObjects } = command;
     const mappedDto: DTO[] = entriesObjects.map(
       EntryDtoMapper.encryptDtoPassword,

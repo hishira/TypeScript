@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional } from 'class-validator';
 
-export class Paginator {
+export class Paginator implements IPaginator {
   constructor(
     public items: number,
     public hasMore: boolean,
@@ -12,7 +12,7 @@ export class Paginator {
   }
 }
 
-export class PaginatorDto {
+export class PaginatorDto implements PaginatorPage {
   @IsNumber()
   @IsOptional()
   page;

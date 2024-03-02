@@ -32,12 +32,6 @@ export class EntryRepository implements Repository<IEntry> {
     return Promise.all(promises);
   }
 
-  private getEntryData(
-    entires: IEntry[],
-    paginator: PaginatorDto,
-  ): Promise<EntryData> {
-    return UtilsRepository.getEntryPaginatorDateAsPromise(entires, paginator);
-  }
   find(
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
@@ -59,34 +53,17 @@ export class EntryRepository implements Repository<IEntry> {
     return this.entryModel.find(ActiveFilter).exec();
   }
 
-  getEntriesWithPaginator(
-    option: FilterOption<FilterQuery<IEntry>>,
-    paginator?: PaginatorDto,
-  ): Promise<IEntry[] | EntryData | any> {
-    const ActiveFilter = new ActiveEntryFilter(option).Filter();
-    return this.entryModel
-      .find(ActiveFilter)
-      .skip(paginator.page * 10)
-      .limit(10)
-      .exec()
-      .then((entires) => {
-        return this.getEntryData(entires, paginator);
-      });
-  }
-
   update(entry: Partial<IEntry>): Promise<IEntry> {
     return this.entryModel
       .findById(entry._id)
-      .exec()
-      .then((entryById) => {
-        const entryData = this.createEditentity(entry, entryById);
-
-        return this.entryModel.updateOne(
+      .then((entryById: IEntry) => this.createEditentity(entry, entryById))
+      .then((updatedEntry: Partial<IEntry>) =>
+        this.entryModel.findOneAndUpdate(
           { _id: entry._id },
-          { $set: { ...entryData } },
-        );
-      })
-      .then((d) => entry as IEntry); //TODO: Fix
+          { $set: { ...updatedEntry } },
+          { returnDocument: 'after' },
+        ),
+      );
   }
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
@@ -108,7 +85,7 @@ export class EntryRepository implements Repository<IEntry> {
     return createdEntry.save();
   }
 
-  deleteById(id: string): Promise<unknown> {
+  deleteById(id: string): Promise<IEntry> {
     return this.entryModel
       .findByIdAndUpdate(id, new DeleteEntryUpdate())
       .exec();
@@ -118,6 +95,27 @@ export class EntryRepository implements Repository<IEntry> {
     throw new NotImplementedError();
   }
 
+  private getEntryData(
+    entires: IEntry[],
+    paginator: PaginatorDto,
+  ): Promise<EntryData> {
+    return UtilsRepository.getEntryPaginatorDateAsPromise(entires, paginator);
+  }
+
+  private getEntriesWithPaginator(
+    option: FilterOption<FilterQuery<IEntry>>,
+    paginator?: PaginatorDto,
+  ): Promise<IEntry[] | EntryData | any> {
+    const ActiveFilter = new ActiveEntryFilter(option).Filter();
+    return this.entryModel
+      .find(ActiveFilter)
+      .skip(paginator.page * 10)
+      .limit(10)
+      .exec()
+      .then((entires) => {
+        return this.getEntryData(entires, paginator);
+      });
+  }
   private removeUnecessaryElementFromEntry(
     entry: Partial<IEntry>,
   ): Partial<IEntry> {

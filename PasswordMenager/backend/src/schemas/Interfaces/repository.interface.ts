@@ -2,15 +2,14 @@ import { Document } from 'mongoose';
 import { DTO } from '../dto/object.interface';
 import { DeleteOption } from './deleteoption.interface';
 import { FilterOption } from './filteroption.interface';
-import { Paginator, PaginatorDto } from 'src/utils/paginator';
 
 export interface Repository<T extends Document> {
   create(objectToSave: DTO): Promise<T>;
-  createMany?(objects: DTO[]): Promise<unknown>;
+  createMany?(objects: DTO[]): Promise<T[]>;
   find(
     option: FilterOption,
-    paginator?: PaginatorDto,
-  ): Promise<T[] | { data: T[]; pageInfo: Paginator }>;
+    paginator?: PaginatorPage,
+  ): Promise<T[] | PaginatorData<T>>;
   findById(id: string): Promise<T>;
   update(entry: Partial<T>): Promise<T>;
   delete(option: DeleteOption): Promise<unknown>;

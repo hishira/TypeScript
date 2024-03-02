@@ -48,10 +48,15 @@ export class GroupModelMock {
       exec: () => Promise.resolve(true),
     };
   }
+
+  static findByIdAndUpdate(...args: any[]) {
+    return Promise.resolve(groupMock());
+  }
   static findById(id: string) {
-    return {
-      exec: () => Promise.resolve(groupMock()),
-    };
+    // return {
+    //   exec: () => Promise.resolve(groupMock()),
+    // }
+    return Promise.resolve(groupMock());
   }
   static updateOne(filterOption, objectOption) {
     return Promise.resolve(groupMock());
