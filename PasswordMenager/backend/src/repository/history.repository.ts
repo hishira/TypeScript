@@ -36,13 +36,24 @@ export class HistoryRepository implements Repository<IHistory> {
   }
 
   update(entry: Partial<IHistory>): Promise<IHistory> {
-    return this.historyModel
-      .updateOne(
-        { userid: entry.userid },
-        new HistoryBuilder().updateBaseOnIHistory(entry).getPushObject(),
+    // return this.historyModel
+    //   .updateOne(
+    //     { userid: entry.userid },
+    //     new HistoryBuilder().updateBaseOnIHistory(entry).getPushObject(),
+    //   )
+    //   .exec()
+    //   .then((e) => entry as IHistory); // TODO: FIx;
+    return Promise.resolve(entry)
+      .then((historyEntry) =>
+        new HistoryBuilder().updateBaseOnIHistory(historyEntry).getPushObject(),
       )
-      .exec()
-      .then((e) => entry as IHistory); // TODO: FIx;
+      .then((historyPushObject) =>
+        this.historyModel.findOneAndUpdate(
+          { userid: entry.userid },
+          historyPushObject,
+          { returnDocument: 'after' },
+        ),
+      );
   }
 
   delete(option: DeleteOption<unknown>): Promise<unknown> {
