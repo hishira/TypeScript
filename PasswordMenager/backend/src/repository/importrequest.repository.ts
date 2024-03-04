@@ -35,10 +35,13 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
   }
 
   update(entry: Partial<ImportRequest>): Promise<ImportRequest> {
-    return this.importRequestModal
-      .updateOne({ _id: entry._id }, { $set: { ...entry } })
-      .exec()
-      .then((r) => entry as ImportRequest); // TODO: FIx
+    return Promise.resolve(entry).then((updatedEntry) =>
+      this.importRequestModal.findOneAndUpdate(
+        { _id: entry.id },
+        { $set: { ...entry } },
+        { returnDocument: 'after' },
+      ),
+    );
   }
 
   delete(option: DeleteOption<Partial<ImportRequest>>): Promise<unknown> {
