@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
+import { DTO } from 'src/schemas/dto/object.interface';
 import { ImportRequestState } from 'src/schemas/importRequest.schema';
 
 export const importRequestMock = (
@@ -13,6 +14,15 @@ export const importRequestMock = (
     state: ImportRequestState.Active,
   } as unknown as ImportRequest);
 
+export const exampleImportRequestMock = (): DTO => ({
+  toObject: () => ({
+    _id: new Types.ObjectId(32),
+    userid: new Types.ObjectId(32),
+    created: new Date(Date.now()).toISOString(),
+    entriesToImport: [],
+    state: ImportRequestState.Active,
+  }),
+});
 export class ImporRequestMock {
   constructor(private data: ImportRequest = importRequestMock()) {}
 

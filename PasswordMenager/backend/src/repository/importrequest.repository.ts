@@ -27,7 +27,9 @@ export class ImportRequestRepository implements Repository<ImportRequest> {
   ): Promise<ImportRequest[] | { data: ImportRequest[]; pageInfo: Paginator }> {
     if ('_id' in option.getOption())
       return this.findById(option.getOption()._id).then((resp) => [resp]);
-    return this.importRequestModal.find({ ...option.getOption() }).exec();
+    return Promise.resolve(
+      this.importRequestModal.find({ ...option.getOption() }),
+    );
   }
 
   findById(id: string): Promise<ImportRequest> {
