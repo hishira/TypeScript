@@ -1,12 +1,13 @@
 import { Types } from 'mongoose';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
 import { AuthInfo } from 'src/schemas/dto/auth.dto';
+import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
-import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 
 export const userMock = (user?: IUser) =>
-  user ?? {
+  user ??
+  ({
     _id: new Types.ObjectId(32),
     login: 'test_login',
     password: 'testpassword',
@@ -18,7 +19,7 @@ export const userMock = (user?: IUser) =>
       lastPassword: 'test_last_password',
     },
     validatePassword: (_password) => Promise.resolve(true),
-  };
+  } as unknown as IUser);
 
 export const CreateUserDtoMock = (): CreateUserDto => ({
   login: 'example_login_test',
@@ -76,10 +77,8 @@ export class UserModelMock {
     };
   }
 
-  static findById(id: string) {
-    return {
-      exec: () => Promise.resolve(userMock()),
-    };
+  static findById(id: string): Promise<IUser> {
+    return Promise.resolve(userMock());
   }
 
   static updateOne(filterOption, objectOption) {

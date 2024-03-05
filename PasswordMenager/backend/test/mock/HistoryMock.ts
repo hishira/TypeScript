@@ -24,4 +24,8 @@ export class HistoryMockData {
       exec: () => Promise.resolve(historyMock()),
     };
   }
+
+  static findOneAndUpdate(find, setters, options): Promise<IHistory> {
+    return Promise.resolve(historyMock());
+  }
 }
