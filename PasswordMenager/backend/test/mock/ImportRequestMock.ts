@@ -43,4 +43,12 @@ export class ImporRequestMock {
   static findOneAndUpdate(option, seters, options): Promise<ImportRequest> {
     return Promise.resolve(importRequestMock());
   }
+
+  static updateOne(
+    option,
+    setters,
+    options,
+  ): { exec: () => Promise<ImportRequest> } {
+    return { exec: () => Promise.resolve(importRequestMock()) };
+  }
 }

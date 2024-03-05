@@ -27,7 +27,7 @@ export class UserRepository implements Repository<IUser> {
   }
 
   findById(id: string): Promise<IUser> {
-    return this.userModel.findById(id).exec();
+    return this.userModel.findById(id).then((r) => r);
   }
 
   update(entry: Partial<IUser>): Promise<IUser> {

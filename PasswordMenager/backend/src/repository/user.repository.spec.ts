@@ -1,9 +1,9 @@
-import { IUser } from 'src/schemas/Interfaces/user.interface';
-import { UserRepository } from './user.repository';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserModelMock, userMock } from '../../test/mock/UserModelMock';
 import { Model } from 'mongoose';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
+import { UserModelMock, userMock } from '../../test/mock/UserModelMock';
 import { TestUtils } from '../../test/utils/TestUtils';
+import { UserRepository } from './user.repository';
 
 describe('UserRepository', () => {
   let userModel: Model<IUser>;
@@ -69,8 +69,8 @@ describe('UserRepository', () => {
     expect(spy).toBeCalled();
   });
 
-  it('Find by id method should use group model findOne', async () => {
-    const spy = jest.spyOn(userModel, 'findOne');
+  it('Find by id method should use group model findById', async () => {
+    const spy = jest.spyOn(userModel, 'findById');
     await userRepo.findById('123');
 
     expect(spy).toBeCalled();
@@ -108,6 +108,13 @@ describe('UserRepository', () => {
 
   it('Uptdate method should use updateUserHandle method', async () => {
     const spy = jest.spyOn(userRepo as any, 'updateUserHandle');
+    await userRepo.update({ _id: '123', login: 'asd', password: 'asd' });
+
+    expect(spy).toBeCalledTimes(1);
+  });
+
+  it('Uptdate method should use createUserObject method', async () => {
+    const spy = jest.spyOn(userRepo as any, 'createUserObject');
     await userRepo.update({ _id: '123', login: 'asd', password: 'asd' });
 
     expect(spy).toBeCalledTimes(1);

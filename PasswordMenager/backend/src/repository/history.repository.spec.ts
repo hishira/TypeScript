@@ -5,15 +5,6 @@ import { DTO } from 'src/schemas/dto/object.interface';
 import { HistoryMockData } from '../../test/mock/HistoryMock';
 import { HistoryRepository } from './history.repository';
 
-// Mocking the mongoose Model
-const mockModel = {
-  findOne: jest.fn(),
-  find: jest.fn(),
-  updateOne: jest.fn(),
-  save: jest.fn(),
-  deleteMany: jest.fn(),
-};
-
 describe('HistoryRepository', () => {
   let historyRepository: HistoryRepository;
   let model: Model<IHistory>;
@@ -51,7 +42,7 @@ describe('HistoryRepository', () => {
 
   describe('update', () => {
     it('should update a history entry', async () => {
-      const spy = jest.spyOn(model, 'updateOne');
+      const spy = jest.spyOn(model, 'findOneAndUpdate');
       const partialHistory: Partial<IHistory> = {
         userid: '' as unknown as ObjectId,
         groups: [],
@@ -65,6 +56,12 @@ describe('HistoryRepository', () => {
   describe('find', () => {
     it('should be not implemented', async () => {
       expect(historyRepository.find).toThrow('Method not implemented.');
+    });
+  });
+
+  describe('getbyId', () => {
+    it('should be not implemented', async () => {
+      expect(historyRepository.getById).toThrow('Method not implemented.');
     });
   });
 });

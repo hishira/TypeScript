@@ -67,5 +67,28 @@ describe('ImportRequestRepository', () => {
       );
       expect(response).toBeDefined();
     });
+    it('Update import request should use findOneAndUpdate function from model', async () => {
+      const spy = jest.spyOn(model, 'findOneAndUpdate');
+      await importRequestRepository.update(importRequestMock());
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Delete', () => {
+    it('Should use updateOne funcion from model', async () => {
+      const spy = jest.spyOn(model, 'updateOne');
+      await importRequestRepository.delete({
+        getOption: () => ({ _id: 'test-id' }),
+      });
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getById ', () => {
+    it('should be not implemented', () => {
+      expect(importRequestRepository.getById).toThrow(
+        'Method not implemented.',
+      );
+    });
   });
 });
