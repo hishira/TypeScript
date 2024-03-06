@@ -4,7 +4,7 @@ import { Paginator, PaginatorDto } from 'src/utils/paginator';
 type LimitObject = {
   limit?: number;
 };
-class PaginatorData<T> {
+export class PaginatorData<T> {
   constructor(public readonly data: T[], public readonly pageInfo: Paginator) {}
 
   static DefaultPaginatorData<T>(
