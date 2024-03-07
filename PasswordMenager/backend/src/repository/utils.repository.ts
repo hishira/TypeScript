@@ -4,7 +4,7 @@ import { Paginator, PaginatorDto } from 'src/utils/paginator';
 type LimitObject = {
   limit?: number;
 };
-class PaginatorData<T> {
+export class PaginatorData<T> {
   constructor(public readonly data: T[], public readonly pageInfo: Paginator) {}
 
   static DefaultPaginatorData<T>(
@@ -37,7 +37,7 @@ export class UtilsRepository {
 
   static isPaginatorDefined(paginator?: PaginatorDto): boolean {
     return (
-      paginator &&
+      !!paginator &&
       'page' in paginator &&
       paginator?.page !== undefined &&
       paginator?.page !== null
