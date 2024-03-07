@@ -37,7 +37,7 @@ export class UtilsRepository {
 
   static isPaginatorDefined(paginator?: PaginatorDto): boolean {
     return (
-      paginator &&
+      !!paginator &&
       'page' in paginator &&
       paginator?.page !== undefined &&
       paginator?.page !== null

@@ -46,7 +46,7 @@ export class UserModelMock {
   constructor(private data) {}
 
   save() {
-    return Promise.resolve(this.data);
+    return Promise.resolve({ _id: new Types.ObjectId(32), ...this.data });
   }
 
   static exec = jest.fn();

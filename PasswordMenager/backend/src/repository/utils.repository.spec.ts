@@ -29,4 +29,21 @@ describe('UtilsRepository', () => {
       expect(response.data).toBeInstanceOf(Array);
     });
   });
+
+  describe('checkLimitInOptionPossible', () => {
+    it('should return true is option is LimitObjecect', () => {
+      expect(UtilsRepository.checkLimitInOptionPossible({ limit: 10 })).toBe(
+        true,
+      );
+    });
+  });
+
+  describe('isPaginatorDefined', () => {
+    it('should return true if paginator is defined', () => {
+      expect(UtilsRepository.isPaginatorDefined({ page: 10 })).toBe(true);
+    });
+    it('should return flase if paginator is not defined', () => {
+      expect(UtilsRepository.isPaginatorDefined()).toBe(false);
+    });
+  });
 });
