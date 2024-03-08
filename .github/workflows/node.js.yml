@@ -21,13 +21,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - run: ls /home/runner/work/TypeScript/TypeScript
-    - run: cd /home/runner/work/TypeScript/TypeScript/PasswordMenager
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
+        working-directory: /home/runner/work/TypeScript/TypeScript/PasswordMenager
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: ls
-    - run: cd PasswordMenager
     - run: npm test
