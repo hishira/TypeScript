@@ -27,5 +27,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - run: ls
     - run: cd PasswordMenager
     - run: npm test
