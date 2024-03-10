@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ImportRequestDeleteCommand } from 'src/commands/importRequest/ImportRequestDeleteCommand.1';
+import { ImportRequestDeleteCommand } from 'src/commands/importRequest/ImportRequestDeleteCommand';
 import { ImportRequestRepository } from 'src/repository/importrequest.repository';
 import { ImportEntrySchema } from 'src/schemas/Interfaces/importRequest.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
