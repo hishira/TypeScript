@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { ImportRequestDeleteCommand } from 'src/commands/importRequest/ImportRequestDeleteCommand.1';
+import { ImportRequestDeleteCommand } from 'src/commands/importRequest/ImportRequestDeleteCommand';
 import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
 import { BaseCommandHandler } from '../BaseCommandHandler';
 import { ImportRequestBuilder } from 'src/schemas/utils/builders/importRequest.builder';

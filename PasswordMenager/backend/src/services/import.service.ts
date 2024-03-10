@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateImportRequestCommand } from 'src/commands/importRequest/ImportRequestCreateCommand';
-import { ImportRequestDeleteCommand } from 'src/commands/importRequest/ImportRequestDeleteCommand.1';
+import { ImportRequestDeleteCommand } from 'src/commands/importRequest/ImportRequestDeleteCommand';
 import { ImportRequestEditCommand } from 'src/commands/importRequest/ImportRequestEditCommand';
 import { EventTypes } from 'src/events/eventTypes';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
