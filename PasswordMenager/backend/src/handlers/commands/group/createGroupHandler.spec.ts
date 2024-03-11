@@ -4,6 +4,7 @@ import { GroupRepository } from 'src/repository/group.repository';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { CreateGroupDto } from 'src/schemas/dto/group.dto';
+import { GroupDtoMapper } from 'src/schemas/mapper/groupDtoMapper';
 import { GroupModelMock } from '../../../../test/mock/GroupModelMock';
 import { CreateGrouCommandpHandler } from './createGroupHandler';
 
@@ -57,9 +58,13 @@ describe('CreateGroupCommandHandler', () => {
 
   it('should return promise', () => {
     const response = handler.execute(exampleCreateGroupCommand);
-    console.log(response);
+
     expect(response).toBeInstanceOf(Promise);
   });
 
-  // Add more test cases as needed
+  it('Should use CreatePureGroupDTO from GroupDtoMapper', async () => {
+    const spy = jest.spyOn(GroupDtoMapper, 'CreatePureGroupDTO');
+    await handler.execute(exampleCreateGroupCommand);
+    expect(spy).toBeCalledTimes(1);
+  });
 });
