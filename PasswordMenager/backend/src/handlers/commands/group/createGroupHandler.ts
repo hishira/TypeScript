@@ -8,7 +8,7 @@ export class CreateGrouCommandpHandler
   extends BaseCommandHandler<IGroup>
   implements ICommandHandler<CreateGroupCommand>
 {
-  execute(command: CreateGroupCommand): Promise<any> {
+  execute(command: CreateGroupCommand): Promise<IGroup> {
     const { userid, groupCreateDTO } = command;
     return this.repository.create(
       GroupDtoMapper.CreatePureGroupDTO(userid, groupCreateDTO),
