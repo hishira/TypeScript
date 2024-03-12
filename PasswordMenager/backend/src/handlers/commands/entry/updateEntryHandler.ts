@@ -9,9 +9,8 @@ export class UpdateEntryHandler
   extends BaseCommandHandler<IEntry>
   implements ICommandHandler<UpdateEntryCommand>
 {
-  execute(command: UpdateEntryCommand): Promise<any> {
+  execute(command: UpdateEntryCommand): Promise<IEntry> {
     const { input } = command;
-    console.dir(input);
     const entry = new EntryBuilder()
       .updateBaseOnEditEntryDto(input?.updateEntryDto)
       .updateIdIfExista(input?.id)
