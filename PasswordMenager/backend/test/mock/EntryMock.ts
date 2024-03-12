@@ -95,8 +95,8 @@ export class EntryMockModel {
     return { exec: () => Promise.resolve(true) };
   }
 
-  static updateMany(): Executable<boolean> {
-    return { exec: () => true };
+  static updateMany(): Executable<Promise<boolean>> {
+    return { exec: () => Promise.resolve(true) };
   }
 
   static findByIdAndUpdate(): Executable<Promise<IEntry>> {
