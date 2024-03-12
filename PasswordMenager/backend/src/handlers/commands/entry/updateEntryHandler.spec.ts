@@ -21,7 +21,7 @@ describe('UpdateEntryHandler', () => {
       _id: 'entryId123',
       title: 'Example Entry',
       username: 'example_user',
-      //password: 'example_password', TODO: Check problem
+      //password: 'example_password', //TODO: Check problem with password decsryption
       email: 'example@example.com',
       url: 'https://example.com',
       note: 'This is an example entry.',
