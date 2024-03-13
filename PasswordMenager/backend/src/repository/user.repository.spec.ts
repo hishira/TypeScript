@@ -83,7 +83,7 @@ describe('UserRepository', () => {
       },
     });
 
-    TestUtils.expectHasProperties(group, 'login', 'password');
+    TestUtils.expectHasProperties(group[0], 'login', 'password');
   });
 
   it('FindById method should return group', async () => {
