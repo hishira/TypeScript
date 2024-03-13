@@ -53,7 +53,7 @@ export class UserModelMock {
 
   static find(option) {
     return {
-      exec: () => Promise.resolve(userMock()),
+      exec: () => Promise.resolve([userMock()]),
     };
   }
 
