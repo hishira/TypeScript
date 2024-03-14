@@ -2,17 +2,20 @@ import { Types } from 'mongoose';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { CreateGroupDto } from 'src/schemas/dto/group.dto';
 
+const id = new Types.ObjectId(32);
+const userid = new Types.ObjectId(32);
+const meta = {
+  crateDate: Date.now(),
+  firstEditDate: Date.now(),
+  editDate: Date.now(),
+  lastName: null,
+};
 export const groupMock = (group?: IGroup) =>
   group ?? {
-    _id: new Types.ObjectId(32),
+    _id: id,
     name: 'group example name',
-    userid: new Types.ObjectId(32),
-    meta: {
-      crateDate: Date.now(),
-      firstEditDate: Date.now(),
-      editDate: Date.now(),
-      lastName: null,
-    },
+    userid,
+    meta,
   };
 
 export const CreateGroupDtoMock = (): CreateGroupDto => ({
