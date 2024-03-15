@@ -19,7 +19,7 @@ export class GetFilteredGroupQueryHandler
     return this.repository.find(groupOption);
   }
 
-  buildOption(query: GetFilteredGroup): Option<FilterQuery<IGroup>> {
+  private buildOption(query: GetFilteredGroup): Option<FilterQuery<IGroup>> {
     return new GroupOptionBuilder()
       .updateUserId(query.groupQueryInput.userId)
       .updateId(query.groupQueryInput.id)
