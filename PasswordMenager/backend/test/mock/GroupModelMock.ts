@@ -31,7 +31,7 @@ export class GroupModelMock {
   static exec = jest.fn();
   static find(option) {
     return {
-      exec: () => Promise.resolve(groupMock()),
+      exec: () => Promise.resolve([groupMock()]),
     };
   }
   static findOne(option) {
