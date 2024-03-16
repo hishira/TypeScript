@@ -10,13 +10,14 @@ const meta = {
   editDate: Date.now(),
   lastName: null,
 };
-export const groupMock = (group?: IGroup) =>
-  group ?? {
+export const groupMock = (group?: IGroup): IGroup =>
+  group ??
+  ({
     _id: id,
     name: 'group example name',
     userid,
     meta,
-  };
+  } as unknown as IGroup);
 
 export const CreateGroupDtoMock = (): CreateGroupDto => ({
   name: 'Test group example',

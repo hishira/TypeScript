@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { response } from 'express';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
 import { EntryRepository } from 'src/repository/entry.repository';
 import { EntryState, IEntry } from 'src/schemas/Interfaces/entry.interface';
@@ -63,5 +64,10 @@ describe('CreateEntryHandler', () => {
     const spy = jest.spyOn(repositoryMock, 'find');
     await handler.execute(getSpecificEntryQuery);
     expect(spy).toHaveBeenCalledTimes(1);
+  });
+  it('Should has paginator in return object', async () => {
+    const response = await handler.execute(getSpecificatEntryQueryWithLimit);
+    expect(response).toBeInstanceOf(Object);
+    expect(response).toHaveProperty('pageInfo');
   });
 });

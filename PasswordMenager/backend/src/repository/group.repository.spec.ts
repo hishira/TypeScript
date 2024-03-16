@@ -66,7 +66,7 @@ describe('GroupRepository', () => {
       },
     });
 
-    TestUtils.expectHasProperties(group, 'name', 'userid');
+    TestUtils.expectHasProperties(group[0], 'name', 'userid');
   });
 
   it('FindById method should return group', async () => {
