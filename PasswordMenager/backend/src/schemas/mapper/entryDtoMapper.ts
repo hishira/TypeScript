@@ -58,6 +58,8 @@ export class EntryDtoMapper {
       .setUsername(editEntryDTO.username)
       .updateUrl(editEntryDTO.url)
       .updatePasswordExpireDate(editEntryDTO.passwordExpiredDate)
+      .updatenNote(editEntryDTO.note)
+      .updateEmail(editEntryDTO.email)
       .removeMeta()
       .removeEmptyVariables()
       .getEntry();

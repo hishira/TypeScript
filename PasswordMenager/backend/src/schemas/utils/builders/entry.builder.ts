@@ -1,11 +1,11 @@
 import { ObjectId } from 'mongoose';
 import { EntryState, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { LastEditedVariable } from 'src/schemas/Interfaces/entryMeta.interface';
-import { EntrySchemaUtils, algorithm } from '../Entry.schema.utils';
-import { Cipher } from 'src/utils/cipher.utils';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { EntryDtoMapper } from 'src/schemas/mapper/entryDtoMapper';
+import { Cipher } from 'src/utils/cipher.utils';
 import { isDefined } from 'src/utils/utils';
+import { EntrySchemaUtils, algorithm } from '../Entry.schema.utils';
 
 export class EntryBuilder {
   constructor(private entry: Partial<IEntry> = {}) {}
@@ -22,6 +22,24 @@ export class EntryBuilder {
       ...this.entry,
       ...(isDefined(id) && { _id: id }),
     };
+    return this;
+  }
+
+  updatenNote(note: string | undefined) {
+    this.entry = {
+      ...this.entry,
+      ...(isDefined(note) && { note: note }),
+    };
+
+    return this;
+  }
+
+  updateEmail(email: string | undefined) {
+    this.entry = {
+      ...this.entry,
+      ...(isDefined(email) && { email: email }),
+    };
+
     return this;
   }
 
@@ -114,7 +132,7 @@ export class EntryBuilder {
   setUsername(userName: string): this {
     this.entry = {
       ...this.entry,
-      userName: userName,
+      username: userName,
       ['meta.lastUsername']: userName,
       ['meta.lastEditedVariable']: LastEditedVariable.LASTUSERNAME,
     } as unknown as Partial<IEntry>;
