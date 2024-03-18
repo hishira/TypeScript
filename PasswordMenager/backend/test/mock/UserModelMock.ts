@@ -32,10 +32,11 @@ export const EditUserDtoMock = (): EditUserDto => ({
   password: 'example_edited_password',
 });
 
-export const AuthInfoMock = (): AuthInfo => ({
-  login: 'example',
-  password: 'example',
-});
+export const AuthInfoMock = (): IUser =>
+  ({
+    login: 'example',
+    password: 'example',
+  } as unknown as IUser);
 export const UserRequestMock = () => ({
   user: {
     login: 'example',

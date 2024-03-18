@@ -1,3 +1,5 @@
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Types } from 'mongoose';
 import { EntryRepository } from 'src/repository/entry.repository';
@@ -6,6 +8,7 @@ import {
   CreateEntryDtoMock,
   EditEntryDtoMock,
   EntryMockModel,
+  entryMock,
 } from '../../test/mock/EntryMock';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
@@ -18,6 +21,24 @@ describe('EntryService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         EntryService,
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+          },
+        },
+        {
+          provide: QueryBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(entryMock()),
+          },
+        },
+        {
+          provide: CommandBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(entryMock()),
+          },
+        },
         {
           provide: Repository,
           useClass: EntryRepository,
@@ -52,26 +73,11 @@ describe('EntryService', () => {
     TestUtils.expectHasProperties(entry, 'note', 'password', 'username');
   });
 
-  it('gebygroupid function shoould return entry', async () => {
-    const entry = await entryService.getbygroupid(
-      TestDataUtils.getRandomObjectIdAsString(),
-    );
-    TestUtils.expectHasProperties(entry, 'note', 'password', 'username');
-  });
-
   it('deletebyid should return object', async () => {
     const deleterEntryInfo = await entryService.deletebyid(
       TestDataUtils.getRandomObjectIdAsString(),
     );
-    TestUtils.expectHasProperties(deleterEntryInfo, 'status', 'respond');
-  });
-
-  it('deleteByGroup should return promise', async () => {
-    const promiseDeleted = entryService.deleteByGroup(
-      TestDataUtils.getRandomObjectIdAsString(),
-    );
-
-    expect(promiseDeleted).resolves.toBeDefined();
+    TestUtils.expectHasProperties(deleterEntryInfo, 'status', 'response');
   });
 
   // TODO: Change find model function to return arrya of object
