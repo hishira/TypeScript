@@ -1,5 +1,6 @@
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Archiver } from 'archiver';
 import { Model } from 'mongoose';
 import { EntryRepository } from 'src/repository/entry.repository';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
@@ -19,6 +20,24 @@ describe('ExportService', () => {
       providers: [
         ExportService,
         EntryService,
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+          },
+        },
+        {
+          provide: QueryBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(entryMock()),
+          },
+        },
+        {
+          provide: CommandBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(entryMock()),
+          },
+        },
         {
           provide: Repository,
           useClass: EntryRepository,

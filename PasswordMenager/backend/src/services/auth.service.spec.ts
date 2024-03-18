@@ -1,8 +1,15 @@
+import { QueryBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
 import { UserRepository } from 'src/repository/user.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { AuthInfoMock, UserModelMock } from '../../test/mock/UserModelMock';
+import {
+  AuthInfoMock,
+  UserModelMock,
+  userMock,
+} from '../../test/mock/UserModelMock';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { AuthService } from './auth.service';
 
@@ -13,11 +20,24 @@ describe('AuthService', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        GetFilteredUserQueryHandler,
         AuthService,
         JwtService,
         {
+          provide: QueryBus,
+          useValue: {
+            execute: () => Promise.resolve(userMock()),
+          },
+        },
+        {
           provide: Repository,
           useClass: UserRepository,
+        },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+          },
         },
         {
           provide: 'USER_MODEL',
@@ -49,12 +69,6 @@ describe('AuthService', () => {
     it('Function should return promise', () => {
       const validationObject = authService.valideteUser(AuthInfoMock());
       expect(validationObject).resolves.toBeDefined();
-    });
-
-    it('find function should be user from user repo', async () => {
-      const spy = jest.spyOn(userRepository, 'find');
-      await authService.valideteUser(AuthInfoMock());
-      expect(spy).toBeCalledTimes(1);
     });
   });
 
