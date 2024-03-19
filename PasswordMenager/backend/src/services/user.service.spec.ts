@@ -1,3 +1,4 @@
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserRepository } from 'src/repository/user.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
@@ -5,6 +6,7 @@ import {
   CreateUserDtoMock,
   EditUserDtoMock,
   UserModelMock,
+  userMock,
 } from '../../test/mock/UserModelMock';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
@@ -17,6 +19,18 @@ describe('UserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        {
+          provide: QueryBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(userMock()),
+          },
+        },
+        {
+          provide: CommandBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(userMock()),
+          },
+        },
         {
           provide: Repository,
           useClass: UserRepository,
