@@ -44,3 +44,9 @@ export class NotificationMock {
     return { exec: () => Promise.resolve(true) }; // tests
   }
 }
+
+export class EmailSenderMock {
+  sendEmail() {
+    return Promise.resolve(true);
+  }
+}

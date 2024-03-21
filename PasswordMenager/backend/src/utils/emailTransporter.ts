@@ -1,7 +1,4 @@
 import { Transporter, createTransport } from 'nodemailer';
-import SMTPConnection, {
-  AuthenticationType,
-} from 'nodemailer/lib/smtp-connection';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { SMTPConfigurationFabric } from './smtp';
 
