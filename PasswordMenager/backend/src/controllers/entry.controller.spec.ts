@@ -1,13 +1,17 @@
 import { CanActivate } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { GroupGuard } from 'src/guards/GroupExists.guard';
 import { EntryRepository } from 'src/repository/entry.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EntryService } from 'src/services/entry.service';
+import { ExportService } from 'src/services/export.service';
 import {
   CreateEntryDtoMock,
   EditEntryDtoMock,
   EntryMockModel,
+  entryMock,
 } from '../../test/mock/EntryMock';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
@@ -27,6 +31,25 @@ describe('EntryController', () => {
       controllers: [EntryContoller],
       providers: [
         EntryService,
+        ExportService,
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+          },
+        },
+        {
+          provide: QueryBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(entryMock()),
+          },
+        },
+        {
+          provide: CommandBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(entryMock()),
+          },
+        },
         {
           provide: Repository,
           useClass: EntryRepository,
@@ -93,17 +116,19 @@ describe('EntryController', () => {
 
   describe('getbygroupid function', () => {
     it('should use getbygroupid from entry service', async () => {
-      const spy = jest.spyOn(entryService, 'getbygroupid');
-      await entryController.getbygroupid(
-        TestDataUtils.getRandomObjectIdAsString(),
+      const spy = jest.spyOn(entryService, 'getUserEntriesBy');
+      await entryController.getByGroup(
+        { user: { _id: 'test-id' } },
+        { paginator: { page: 0 } },
       );
 
       expect(spy).toBeCalledTimes(1);
     });
 
     it('Returned object should be defined', async () => {
-      const response = entryController.getbygroupid(
-        TestDataUtils.getRandomObjectIdAsString(),
+      const response = entryController.getByGroup(
+        { user: { _id: 'test-id' } },
+        { paginator: { page: 0 } },
       );
       expect(response).resolves.toBeDefined();
     });
@@ -162,7 +187,11 @@ describe('EntryController', () => {
           TestDataUtils.getRandomObjectIdAsString(),
         );
 
-        TestUtils.expectHasProperties(response, 'status', 'respond');
+        TestUtils.expectHasProperties(
+          (response as any).response,
+          '_id',
+          'groupid',
+        );
       });
     });
     describe('editentry function', () => {
