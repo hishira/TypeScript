@@ -1,5 +1,8 @@
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
 import { UserRepository } from 'src/repository/user.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { AuthService } from 'src/services/auth.service';
@@ -9,8 +12,8 @@ import {
   CreateUserDtoMock,
   UserModelMock,
   UserRequestMock,
+  userMock,
 } from '../../test/mock/UserModelMock';
-import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { AuthController } from './auth.controller';
 
@@ -25,8 +28,28 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         UserService,
+        GetFilteredUserQueryHandler,
         AuthService,
         JwtService,
+        {
+          provide: QueryBus,
+          useValue: {
+            execute: () => Promise.resolve(userMock()),
+          },
+        },
+        {
+          provide: CommandBus,
+          useValue: {
+            execute: () => Promise.resolve(userMock()),
+          },
+        },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: (...params) => userMock(),
+          },
+        },
         {
           provide: Repository,
           useClass: UserRepository,
@@ -63,8 +86,8 @@ describe('AuthController', () => {
   });
 
   describe('Create method', () => {
-    it('Should use user service create method', async () => {
-      const spy = jest.spyOn(userService, 'create');
+    it('Should use auth service create method', async () => {
+      const spy = jest.spyOn(authService, 'createUser');
 
       await authController.create(CreateUserDtoMock());
 
