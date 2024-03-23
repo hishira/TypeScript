@@ -1,3 +1,4 @@
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserRepository } from 'src/repository/user.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
@@ -6,9 +7,10 @@ import {
   EditUserDtoMock,
   UserModelMock,
   UserRequestMock,
+  userMock,
 } from '../../test/mock/UserModelMock';
-import { UsersController } from './user.contaoller';
 import { TestUtils } from '../../test/utils/TestUtils';
+import { UsersController } from './user.contaoller';
 
 describe('UserController', () => {
   let userController: UsersController;
@@ -26,6 +28,18 @@ describe('UserController', () => {
         {
           provide: 'USER_MODEL',
           useValue: UserModelMock,
+        },
+        {
+          provide: QueryBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(userMock()),
+          },
+        },
+        {
+          provide: CommandBus,
+          useValue: {
+            execute: (...params) => Promise.resolve(userMock()),
+          },
         },
       ],
     }).compile();
