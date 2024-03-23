@@ -3,17 +3,21 @@ import {
   INotification,
   NotificationChannel,
 } from 'src/schemas/Interfaces/notification.interface';
+
+const NOTIFICATIONID = new Types.ObjectId(32);
+const ENTRYID = new Types.ObjectId(32);
+const USERID = new Types.ObjectId(32);
 export const notificationMock = (
   iNotification?: INotification,
 ): INotification =>
   iNotification ??
   ({
-    _id: new Types.ObjectId(32),
-    entryId: new Types.ObjectId(32),
+    _id: NOTIFICATIONID,
+    entryId: ENTRYID,
     notificationDate: new Date(Date.now()).toISOString(),
     notificationChannel: NotificationChannel.Email,
     active: true,
-    userid: new Types.ObjectId(32),
+    userid: USERID,
   } as unknown as INotification);
 export class NotificationMock {
   constructor(private data: INotification) {}
