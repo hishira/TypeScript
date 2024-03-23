@@ -1,6 +1,6 @@
 import { CsvEntry } from './csvEntry';
 
-enum TitleCsvHeader {
+export enum TitleCsvHeader {
   Title = 'title',
   Username = 'username',
   Password = 'password',
@@ -12,7 +12,7 @@ export class CsvFile {
   private _titles: TitleCsvHeader[];
   private _rows: CsvEntry[];
 
-  static DefaultCsvHeader = [
+  static readonly DefaultCsvHeader = [
     TitleCsvHeader.Title,
     TitleCsvHeader.Username,
     TitleCsvHeader.Password,
