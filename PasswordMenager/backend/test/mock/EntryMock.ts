@@ -4,16 +4,18 @@ import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { TestDataUtils } from '../utils/TestDataUtils';
+const ID = new Types.ObjectId(32);
+const GROUPID = new Types.ObjectId(32);
 export const entryMock = (entry?: IEntry): IEntry =>
   entry ??
   ({
-    _id: new Types.ObjectId(32),
+    _id: ID,
     title: 'test title',
     userid: 'asd123cxz',
     username: 'test username',
     password: 'dupa123',
     note: 'dupa',
-    groupid: new Types.ObjectId(32),
+    groupid: GROUPID,
     passwordExpiredDate: Date.now(),
     meta: {
       crateDate: Date.now(),
