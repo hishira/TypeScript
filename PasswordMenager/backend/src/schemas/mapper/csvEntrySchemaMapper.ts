@@ -7,12 +7,14 @@ export class CsvEntrySchemaMapper extends EntrySchemaFileMapper {
   }
   mapStringToImportSchemas(): void {
     const fileRows = this.stringContent.split('\r\n');
-    fileRows.forEach((csvRow) => {
-      const values = csvRow.split(this.separator);
-      const [name, username, password, note] = values;
-      this.importEntrySchemas.push(
-        new ImportEntrySchema(password, username, name, note, ''),
-      );
-    });
+    fileRows
+      .filter((row) => !!row && row !== '')
+      .forEach((csvRow) => {
+        const values = csvRow.split(this.separator);
+        const [name, username, password, note] = values;
+        this.importEntrySchemas.push(
+          new ImportEntrySchema(password, username, name, note, ''),
+        );
+      });
   }
 }
