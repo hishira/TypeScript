@@ -31,8 +31,18 @@ export class JsonEntrySchemaMapper extends EntrySchemaFileMapper {
     });
     return importEntriesSchema;
   }
+
+  // TODO FIX
   objectJsonMapper(): ImportEntrySchema[] {
-    const importEntriesSchema: ImportEntrySchema[] = [];
+    const importEntriesSchema: ImportEntrySchema[] = [
+      new ImportEntrySchema(
+        (this.parsedJsonData as any)?.password,
+        (this.parsedJsonData as any)?.username,
+        (this.parsedJsonData as any)?.url,
+        (this.parsedJsonData as any)?.title,
+        (this.parsedJsonData as any)?.email,
+      ),
+    ];
 
     return importEntriesSchema;
   }

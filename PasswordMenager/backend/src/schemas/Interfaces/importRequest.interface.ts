@@ -12,9 +12,9 @@ export class ImportEntrySchema {
   constructor(
     public readonly password: string,
     public readonly username: string,
-    public readonly url: string,
-    public readonly title: string,
-    public readonly email: string,
+    public readonly url: string = undefined,
+    public readonly title: string = undefined,
+    public readonly email: string = undefined,
   ) {}
 
   static MongoDbSchema() {
