@@ -7,6 +7,7 @@ import {
 const NOTIFICATIONID = new Types.ObjectId(32);
 const ENTRYID = new Types.ObjectId(32);
 const USERID = new Types.ObjectId(32);
+const NOTIFICATIONDATE = new Date(Date.now()).toISOString();
 export const notificationMock = (
   iNotification?: INotification,
 ): INotification =>
@@ -14,7 +15,7 @@ export const notificationMock = (
   ({
     _id: NOTIFICATIONID,
     entryId: ENTRYID,
-    notificationDate: new Date(Date.now()).toISOString(),
+    notificationDate: NOTIFICATIONDATE,
     notificationChannel: NotificationChannel.Email,
     active: true,
     userid: USERID,

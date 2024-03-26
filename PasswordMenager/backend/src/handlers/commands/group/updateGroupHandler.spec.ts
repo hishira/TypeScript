@@ -49,7 +49,6 @@ describe('UpdateGroupCommandHandler', () => {
 
   it('should return promise', () => {
     const response = handler.execute(exampleDeleteGroupCommand);
-    console.log(response);
     expect(response).toBeInstanceOf(Promise);
   });
 

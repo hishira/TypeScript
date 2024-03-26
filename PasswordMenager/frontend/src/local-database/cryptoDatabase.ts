@@ -51,6 +51,6 @@ export class CryptoDatabase {
 
     crypto.subtle
       .decrypt({ name: "AES-GCM", iv }, keyPair, cs)
-      .catch((a) => console.log(a));
+      .catch((a) => console.error(a));
   }
 }

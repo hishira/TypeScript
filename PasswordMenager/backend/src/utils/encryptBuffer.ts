@@ -27,7 +27,6 @@ export class EncryptBuffer {
       32,
       'sha256',
     );
-    console.log(this.ivFromBuffer.byteLength);
     const decipher = createDecipheriv(
       this.algorithm,
       pbkdfKey,

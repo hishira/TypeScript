@@ -4,10 +4,11 @@ import { CreateGroupDto } from 'src/schemas/dto/group.dto';
 
 const id = new Types.ObjectId(32);
 const userid = new Types.ObjectId(32);
+const DATENOW = Date.now();
 const meta = {
-  crateDate: Date.now(),
-  firstEditDate: Date.now(),
-  editDate: Date.now(),
+  crateDate: DATENOW,
+  firstEditDate: DATENOW,
+  editDate: DATENOW,
   lastName: null,
 };
 export const groupMock = (group?: IGroup): IGroup =>

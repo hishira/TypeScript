@@ -15,8 +15,6 @@ export class CreateEntryBulkHandler
     const mappedDto: DTO[] = entriesObjects.map(
       EntryDtoMapper.encryptDtoPassword,
     );
-    console.log('After decryption ');
-    mappedDto.forEach((val) => console.log(val.toObject()));
     return this.repository.createMany(mappedDto);
   }
 }

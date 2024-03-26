@@ -4,7 +4,7 @@ export class CustomFileValidator extends FileValidator<any> {
   constructor(validationOptions: any = {}) {
     super(validationOptions);
   }
-  isValid(file?: any): boolean | Promise<boolean> {
+  isValid(file?: Express.Multer.File): boolean | Promise<boolean> {
     const buffer = file.buffer as Buffer;
     const stream = this.getStream(buffer);
     const chunks = [];
@@ -17,7 +17,7 @@ export class CustomFileValidator extends FileValidator<any> {
     return true;
   }
 
-  buildErrorMessage(file: any): string {
+  buildErrorMessage(file: Express.Multer.File): string {
     return 'Inproper csv file';
   }
 

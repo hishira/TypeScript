@@ -5,7 +5,7 @@ export class NotFileValidator extends FileValidator<any> {
     super(validationOptions);
   }
 
-  isValid(file?: any): boolean | Promise<boolean> {
+  isValid(file?: Express.Multer.File): boolean | Promise<boolean> {
     if (file === null && !file.buffer) return false;
     if (!(file.buffer instanceof Buffer)) return false;
     return true;
