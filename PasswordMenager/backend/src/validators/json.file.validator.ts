@@ -18,6 +18,13 @@ export class JSONFileValidator extends FileValidator<any> {
 
   isValid(file?: Express.Multer.File): boolean | Promise<boolean> {
     const buffer = file.buffer;
+    return this.preparePromiseFileValidation(buffer);
+  }
+  buildErrorMessage(file: any): string {
+    return this.currectErrorMessage;
+  }
+
+  private preparePromiseFileValidation(buffer: Buffer): Promise<boolean> {
     const stream = this.getStream(buffer);
     const chunks = [];
     return new Promise<boolean>((resolve, reject) => {
@@ -39,9 +46,6 @@ export class JSONFileValidator extends FileValidator<any> {
         resolve(true);
       });
     });
-  }
-  buildErrorMessage(file: any): string {
-    return this.currectErrorMessage;
   }
 
   private getStream(buffer: Buffer): Duplex {

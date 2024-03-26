@@ -6,6 +6,7 @@ import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { TestDataUtils } from '../utils/TestDataUtils';
 const ID = new Types.ObjectId(32);
 const GROUPID = new Types.ObjectId(32);
+const DATENOW = Date.now();
 export const entryMock = (entry?: IEntry): IEntry =>
   entry ??
   ({
@@ -16,11 +17,11 @@ export const entryMock = (entry?: IEntry): IEntry =>
     password: 'dupa123',
     note: 'dupa',
     groupid: GROUPID,
-    passwordExpiredDate: Date.now(),
+    passwordExpiredDate: DATENOW,
     meta: {
-      crateDate: Date.now(),
-      firstEditDate: Date.now(),
-      editDate: Date.now(),
+      crateDate: DATENOW,
+      firstEditDate: DATENOW,
+      editDate: DATENOW,
       lastNote: null,
       lastPassword: null,
       lastTitle: null,
