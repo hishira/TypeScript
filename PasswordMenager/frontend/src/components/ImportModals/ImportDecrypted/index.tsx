@@ -31,7 +31,6 @@ export const ImportDecrypted = ({
   };
 
   const acceptHandleFunction = () => {
-    console.log(formData)
     if (!formData) return;
     Import.getInstance()
       .ImportFile(formData, 0)

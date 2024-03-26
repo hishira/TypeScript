@@ -60,7 +60,6 @@ export const ImportRequestUtilsHook = () => {
     refetch: Dispatch<SetStateAction<boolean>>,
     store?: IGeneral
   ) => {
-    console.log(actionImportRequest);
     if (actionImportRequest === undefined) return;
     Import.getInstance()
       .AcceptImportRequest(actionImportRequest)
