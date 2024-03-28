@@ -73,9 +73,15 @@ export const CardExpandContent = styled.div`
 export const CardFieldName = styled.div`
   font-weight: 550;
   width: 50%;
+  min-width: 50%;
+  max-width: 50%;
 `;
 export const CardFieldValue = styled.div`
+  display: flex;
   min-width: 50%;
+  max-width: 50%;
+  text-overflow: clip;
+  overflow: hidden;
   &[type="password"] {
     cursor: pointer;
   }

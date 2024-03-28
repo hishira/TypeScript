@@ -1,9 +1,10 @@
-import { DOMAttributes } from "react";
+import { DOMAttributes, useRef } from "react";
+import { TooLongValue } from "../../../hooks/tooLongValue.hook";
 import { branch } from "../../../utils/helpers.utils";
 import { PasswordFieldsHelper } from "../../PasswordTable/PasswordField";
 import { CardFieldValue, CardFieldValueURL } from "../component.styled";
 
-type PasswordUrlField = "password" | "url" | "other";
+type PasswordUrlField = "password" | "url" | "Other";
 
 const ComponentMapper: {
   [key in PasswordUrlField]: (props: object, value: unknown) => JSX.Element;
@@ -16,7 +17,15 @@ const ComponentMapper: {
   url: (props, value) => (
     <CardFieldValueURL {...props}>{value}</CardFieldValueURL>
   ),
-  other: (props, value) => <CardFieldValue {...props}>{value}</CardFieldValue>,
+  Other: (props, value) => {
+    const ElementRef = useRef<HTMLDivElement>(null);
+    TooLongValue(ElementRef);
+    return (
+      <CardFieldValue ref={ElementRef} {...props}>
+        {value}
+      </CardFieldValue>
+    );
+  },
 };
 
 const urlOpenFunction = (value: unknown) =>
@@ -42,13 +51,8 @@ export const ValueField = ({ isPassword, value, isUrl }: ValueFieldPropd) => {
   const passowrUrl = branch(
     isPassword === true,
     "password",
-    branch(
-      isUrl === true,
-      "url",
-     'other'
-    )
+    branch(isUrl === true, "url", "Other")
   );
 
-  
   return ComponentMapper[passowrUrl](props, value);
 };

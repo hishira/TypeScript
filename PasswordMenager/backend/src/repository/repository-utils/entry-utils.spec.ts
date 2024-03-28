@@ -95,7 +95,7 @@ describe('EntryRepositoryUtils', () => {
 
   describe('IsProperDtosObjects', () => {
     it('should return true for proper DTO objects', () => {
-      const dtos: any[] = [
+      const dtos = [
         {
           title: 'Title1',
           username: 'User1',

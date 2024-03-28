@@ -33,7 +33,7 @@ const AccountContainer = ({ store }: AccountContainerProps) => {
           <Button onClick={() => accountInfoClick()}>
             {Translation("account.action.accountInfo")}
           </Button>
-          <Button onClick={logouthandle} color="lightblue">
+          <Button onClick={logouthandle} color="lightgrey">
             {Translation("account.action.logout")}
           </Button>
         </AccountButtons>
