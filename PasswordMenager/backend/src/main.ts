@@ -1,6 +1,6 @@
 import { Application } from './Application';
 declare const module: any;
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const application = new Application();
   await application.createApp();
   application.enableCors();

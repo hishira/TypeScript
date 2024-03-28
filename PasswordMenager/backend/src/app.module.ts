@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './modules/auth.module';
 import { EntryModule } from './modules/entry.module';
 import { ExportModule } from './modules/export.module';
@@ -27,7 +25,5 @@ const NestModules = [
     NotificationModule,
     ...NestModules,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

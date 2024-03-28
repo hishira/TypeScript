@@ -6,16 +6,19 @@ export class Application {
   private readonly PORT: number = 8080;
   private _nestApp: NestExpressApplication;
 
-  async createApp() {
+  async createApp(): Promise<void> {
     this._nestApp = await NestFactory.create<NestExpressApplication>(AppModule);
   }
-  enableCors() {
+
+  enableCors(): void {
     this._nestApp.enableCors();
   }
-  async listen() {
+
+  async listen(): Promise<void> {
     await this._nestApp.listen(this.PORT);
   }
-  closeApp() {
+
+  closeApp(): void {
     this._nestApp.close();
   }
 }
