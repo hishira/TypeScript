@@ -19,4 +19,7 @@ export const Modal = styled.div.attrs({ role: "dialog" })<ModalProps>`
 
 export const ModalContainer = styled.div`
   background-color: whitesmoke;
+  border: .5px solid lightgrey;
+  border-radius: 5px !important;
+
 `;
