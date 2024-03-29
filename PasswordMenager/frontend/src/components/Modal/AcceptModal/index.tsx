@@ -29,7 +29,7 @@ export const AcceptModalComponent = ({
         <ModalContainer>
           {component}
           <ButtonGroup>
-            <Button color='gainsboro' onClick={onClose}>
+            <Button color='whitesmoke' onClick={onClose}>
               {Translation("modal.button.cancel")}
             </Button>
             {extend ? (

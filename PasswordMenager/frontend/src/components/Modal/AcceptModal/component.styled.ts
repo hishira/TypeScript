@@ -10,7 +10,9 @@ export const ButtonGroup = styled.div`
         &:hover{
             z-index: 10000;
             border: none;
+            transition: background-color .5s;
             outline: none;
+            background-color: lightgrey;
         }
     }
 `
