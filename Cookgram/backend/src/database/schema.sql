@@ -19,6 +19,6 @@ CREATE TABLE IF NOT EXISTS RECIPIES (
 );
 
 Create TABLE IF NOT EXISTS META (
-    createDate TIMESTAMP
-    editDate TIMESTAMP
+    create_date TIMESTAMP
+    edit_date TIMESTAMP
 );

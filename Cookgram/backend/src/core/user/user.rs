@@ -19,13 +19,22 @@ impl Entity for User {
 }
 
 impl User {
-    pub fn new(username: String, password: String, email: String) -> Self {
-        Self {
-            id: User::generate_id(),
-            username,
-            password,
-            email,
-            meta: Meta::new()
+    pub fn new(id: Option<Uuid>, username: String, password: String, email: String) -> Self {
+        match id {
+            Some(id) => Self {
+                id,
+                username,
+                password,
+                email,
+                meta: Meta::new(),
+            },
+            None => Self {
+                id: User::generate_id(),
+                username,
+                password,
+                email,
+                meta: Meta::new(),
+            },
         }
     }
 }
@@ -44,7 +53,7 @@ mod tests {
         }
 
         fn date(&self) -> Date {
-            Date::from_iso_week_date(2024, 10,time::Weekday::Monday).expect("Invalid date")
+            Date::from_iso_week_date(2024, 10, time::Weekday::Monday).expect("Invalid date")
         }
     }
     #[test]
@@ -52,14 +61,12 @@ mod tests {
         let id = User::generate_id();
         assert!(id.to_string().len() > 10)
     }
-    
+
     #[test]
     fn test_generate_id() {
-        // Generate two UUIDs
         let id1 = User::generate_id();
         let id2 = User::generate_id();
 
-        // Check if the UUIDs are different
         assert_ne!(id1, id2);
     }
 
@@ -69,6 +76,7 @@ mod tests {
 
         // Create a new user
         let user = User::new(
+            None,
             "test_user".to_string(),
             "password123".to_string(),
             "test@example.com".to_string(),
@@ -85,5 +93,33 @@ mod tests {
         assert_eq!(user.meta.create_date.day(), 30); // Day is set to 1 for example
         assert_eq!(user.meta.edit_date, user.meta.create_date);
     }
-}
 
+    #[test]
+    fn test_user_new_with_id() {
+        // Set up a mock OffsetDateTime for testing
+        let offset_date_time = MockOffsetDateTime::now_utc();
+
+        // Create a new user with a specific id
+        let user_id = Uuid::new_v4();
+        let user = User::new(
+            Some(user_id),
+            "test_user".to_string(),
+            "password123".to_string(),
+            "test@example.com".to_string(),
+        );
+
+        // Check if the user has the correct id
+        assert_eq!(user.id, user_id);
+
+        // Check if the username, password, and email are set correctly
+        assert_eq!(user.username, "test_user");
+        assert_eq!(user.password, "password123");
+        assert_eq!(user.email, "test@example.com");
+
+        // Check if the meta field is initialized correctly
+        assert_eq!(user.meta.create_date.year(), 2024);
+        assert_eq!(user.meta.create_date.month(), Month::March);
+        assert_eq!(user.meta.create_date.day(), 30); // Day is set to 1 for example
+        assert_eq!(user.meta.edit_date, user.meta.create_date);
+    }
+}
