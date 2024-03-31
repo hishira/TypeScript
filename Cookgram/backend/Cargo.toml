@@ -1,0 +1,18 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = "0.7.5"
+tokio = { version = "1.36.0", features = ["full"] }
+sqlx = { version = "0.7", features = [
+    "runtime-tokio-rustls",
+    "any",
+    "postgres",
+] }
+dotenv = "0.15.0"
+uuid = { version = "1.8.0", features = ["v4", "macro-diagnostics"] }
+time = "0.3.34"
