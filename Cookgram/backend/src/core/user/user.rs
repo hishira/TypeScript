@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::core::{entity::Entity, meta::meta::Meta, recipie::recipie::Recipie};
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct User {
     pub id: Uuid,
     pub username: String,
