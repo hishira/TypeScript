@@ -1,6 +1,7 @@
 
 mod database;
 mod core;
+mod api;
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
