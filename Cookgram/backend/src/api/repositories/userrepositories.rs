@@ -1,6 +1,6 @@
 use sqlx::{Pool, Postgres};
 
-use crate::core::user::user::User;
+use crate::{api::dtos::userdto::userdto::UserDtos, core::{entity::Entity, user::user::User}};
 
 use super::repositories::Repositories;
 
@@ -46,8 +46,8 @@ impl Repositories<User, UserFilterOption> for UserRepositories {
         ]
     }
 
-    fn delete(option: UserFilterOption) {
-        todo!()
+    fn delete(entity: User) -> User {
+        entity
     }
 
     fn update(update_entity: User) -> User {
@@ -133,11 +133,16 @@ mod tests {
     // Test the delete method of the UserRepositories struct
     #[test]
     fn test_user_repositories_delete() {
-        let filter_option = UserFilterOption {
-            username: "test".to_string(),
-        };
+        let user_id = Uuid::new_v4();
+        let user = User::new(
+            Some(user_id),
+            "test_user".to_string(),
+            "password123".to_string(),
+            "test@example.com".to_string(),
+            None,
+        );
 
         // Call the delete method and expect no panic
-        UserRepositories::delete(filter_option);
+        let _ = UserRepositories::delete(user);
     }
 }
