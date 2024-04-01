@@ -1,6 +1,6 @@
 use time::OffsetDateTime;
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct Meta {
     pub create_date: time::Date,
     pub edit_date: time::Date,

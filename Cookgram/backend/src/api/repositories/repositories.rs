@@ -2,10 +2,10 @@ use uuid::Uuid;
 
 use crate::core::entity::Entity;
 
-pub trait Repositories<T: Entity, ActionOption> {
-    fn create(entity: T) -> T;
-    fn find_by_id(id: Uuid) -> T;
-    fn find(option: ActionOption) -> Vec<T>;
-    fn delete(option: ActionOption);
-    fn update(update_entity: T) -> T;
+pub trait Repositories<E: Entity, ActionOption> {
+    fn create(entity: E) -> E;
+    fn find(option: ActionOption) -> Vec<E>;
+    fn find_by_id(id: Uuid) -> E;
+    fn delete(option: E) -> E;
+    fn update(update_entity: E) -> E;
 }

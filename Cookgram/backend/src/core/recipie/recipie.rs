@@ -5,7 +5,7 @@ use crate::core::{
     meta::meta::{self, Meta},
 };
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct Recipie {
     pub id: Uuid,
     pub recipie: String,
