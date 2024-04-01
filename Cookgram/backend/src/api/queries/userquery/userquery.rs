@@ -1,9 +1,12 @@
 use sqlx::{Execute, Postgres, QueryBuilder};
 use uuid::Uuid;
 
-use crate::api::queries::query::Query;
+use crate::{
+    api::queries::{actionquery::ActionQuery, query::Query},
+    core::user::user::User,
+};
 
-pub struct UserQuery{
+pub struct UserQuery {
     id: Option<Uuid>,
     username: Option<String>,
     email: Option<String>,
@@ -18,30 +21,38 @@ impl UserQuery {
         }
     }
 
-    fn prepare_username(user_query: &mut QueryBuilder<Postgres>, mut count: i8, username: Option<String>) {
+    fn prepare_username(
+        user_query: &mut QueryBuilder<Postgres>,
+        mut count: i8,
+        username: Option<String>,
+    ) {
         if let Some(user_name) = username {
             if count > 0 {
                 user_query.push(" AND username = ");
                 user_query.push_bind(user_name);
-                count+=1;
+                count += 1;
             } else {
                 user_query.push(" username = ");
                 user_query.push_bind(user_name);
-                count+=1;
+                count += 1;
             }
         }
     }
-    
-    fn prepare_email(user_query: &mut QueryBuilder<Postgres>, mut count: i8, email: Option<String>) {
+
+    fn prepare_email(
+        user_query: &mut QueryBuilder<Postgres>,
+        mut count: i8,
+        email: Option<String>,
+    ) {
         if let Some(email) = email {
             if count > 0 {
                 user_query.push(" AND email = ");
                 user_query.push_bind(email);
-                count+=1;
+                count += 1;
             } else {
                 user_query.push(" email = ");
                 user_query.push_bind(email);
-                count+=1;
+                count += 1;
             }
         }
     }
@@ -53,7 +64,7 @@ impl Query for UserQuery {
         let mut count: i8 = 0;
         if let Some(id) = self.id {
             user_query.push(" id = ");
-            count+=1;
+            count += 1;
             user_query.push_bind(id.to_string());
         }
         UserQuery::prepare_username(&mut user_query, count, self.username.clone());
@@ -62,10 +73,51 @@ impl Query for UserQuery {
     }
 }
 
+impl ActionQuery<User> for UserQuery {
+    fn create(&self, entity: User) -> String {
+        let mut create_builder: QueryBuilder<Postgres> =
+            QueryBuilder::new("INSERT INTO USERS(id, username, password, email) ");
+        create_builder.push_values(vec![entity], |mut b, user| {
+            b.push_bind(user.id.to_string())
+                .push_bind(user.username)
+                .push_bind(user.password)
+                .push_bind(user.email);
+        });
+        create_builder.build().sql().to_string()
+    }
+
+    fn update(&self, entity: User) -> String {
+        let mut update_query: QueryBuilder<Postgres> = QueryBuilder::new("UPDATE USERS SET");
+        update_query.push(" username = ");
+        update_query.push_bind(entity.username);
+        update_query.push(" email = ");
+        update_query.push_bind(entity.email);
+        update_query.push(" password = ");
+        update_query.push_bind(entity.password);
+        update_query.push(" WHERE id = ");
+        update_query.push_bind(entity.id.to_string());
+
+        update_query.build().sql().to_string()
+    }
+
+    fn delete(&self, entity: User) -> String {
+        todo!()
+    }
+}
 
 #[cfg(test)]
 mod tests {
+    use crate::core::meta::meta::Meta;
+
     use super::*;
+
+    fn validate_action_query(user_query: &UserQuery, entity: User) -> String {
+        user_query.create(entity)
+    }
+
+    fn validate_update_action_query(user_query: &UserQuery, entity: User) -> String {
+        user_query.update(entity)
+    }
 
     #[test]
     fn test_user_query_build_with_all_params() {
@@ -109,5 +161,72 @@ mod tests {
 
         assert_eq!(built_query, "SELECT * FROM users where");
     }
-}
 
+    #[test]
+    fn test_user_query_create() {
+        let user_query = UserQuery::new(None, None, None);
+
+        let test_user = User {
+            id: Uuid::new_v4(),
+            username: "test_user".to_string(),
+            password: "password".to_string(),
+            email: "test@example.com".to_string(),
+            recipies: None,
+            meta: Meta::new(),
+        };
+
+        let create_query = validate_action_query(&user_query, test_user);
+
+        assert_eq!(
+            create_query,
+            "INSERT INTO USERS(id, username, password, email) VALUES ($1, $2, $3, $4)"
+        );
+    }
+    // TODO: Check
+    #[test]
+    fn test_user_query_update() {
+        // Create a UserQuery
+        let user_query = UserQuery::new(None, None, None);
+
+        // Create a User entity for testing
+        let test_user = User {
+            id: Uuid::new_v4(),
+            username: "test_user".to_string(),
+            password: "password".to_string(),
+            email: "test@example.com".to_string(),
+            recipies: None,
+            meta: Meta::new(),
+        };
+
+        // Validate the built SQL query for updating
+        let update_query = validate_update_action_query(&user_query, test_user.clone());
+
+        // Assert that the built update query is correct
+        assert_eq!(
+            update_query,
+            format!(
+                "UPDATE USERS SET username = {}, email = {}, password = {} WHERE id = {}",
+                test_user.username, test_user.email, test_user.password, test_user.id
+            )
+        );
+    }
+
+    #[test]
+    #[should_panic]
+
+    fn test_user_query_delete() {
+        let user_query = UserQuery::new(None, None, None);
+
+        let test_user = User {
+            id: Uuid::new_v4(),
+            username: "test_user".to_string(),
+            password: "password".to_string(),
+            email: "test@example.com".to_string(),
+            recipies: None,
+            meta: Meta::new(),
+        };
+
+        let _ = user_query.delete(test_user);
+
+    }
+}

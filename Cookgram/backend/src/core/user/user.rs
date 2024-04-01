@@ -6,7 +6,7 @@ use crate::core::{entity::Entity, meta::meta::Meta, recipie::recipie::Recipie};
 pub struct User {
     pub id: Uuid,
     pub username: String,
-    password: String,
+    pub password: String,
     pub email: String,
     pub recipies: Option<Vec<Recipie>>,
     pub meta: Meta,
