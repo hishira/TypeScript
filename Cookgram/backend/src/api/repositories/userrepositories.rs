@@ -1,19 +1,44 @@
 use sqlx::{Pool, Postgres};
 
-use crate::{api::dtos::userdto::userdto::UserDtos, core::{entity::Entity, user::user::User}};
+use crate::{
+    api::{
+        dtos::userdto::userdto::UserDtos,
+        queries::{actionquery::ActionQuery, userquery::userquery::UserQuery},
+    },
+    core::{entity::Entity, user::user::User},
+};
 
-use super::repositories::Repositories;
+use super::repositories::Repository;
 
+#[derive(Clone)]
 pub struct UserRepositories {
     pub pool: Pool<Postgres>,
+    pub user_queries: UserQuery,
 }
 
+trait Filter: Send + Sync {}
+
+#[derive(Clone)]
 pub struct UserFilterOption {
     pub username: String,
 }
 
-impl Repositories<User, UserFilterOption> for UserRepositories {
-    fn create(entity: User) -> User {
+impl  Filter for UserFilterOption {
+    
+}
+
+impl Repository<User, UserFilterOption> for UserRepositories {
+    async fn create(&self, entity: User) -> User {
+        let mut create_query = self.user_queries.create(entity.clone());
+        let re = create_query.build().fetch_one(&self.pool).await;
+        match re{
+            Ok(row) => {
+                println!("OK");
+            },
+            Err(e)=>{
+                println!("{}", e);
+            }
+        }
         entity
     }
 

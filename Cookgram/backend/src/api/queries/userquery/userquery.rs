@@ -1,4 +1,6 @@
-use sqlx::{Execute, Postgres, QueryBuilder};
+use std::borrow::{Borrow, BorrowMut};
+
+use sqlx::{ postgres::PgArguments, Execute, Postgres, QueryBuilder};
 use uuid::Uuid;
 
 use crate::{
@@ -6,6 +8,7 @@ use crate::{
     core::user::user::User,
 };
 
+#[derive(Clone)]
 pub struct UserQuery {
     id: Option<Uuid>,
     username: Option<String>,
@@ -74,16 +77,16 @@ impl Query for UserQuery {
 }
 
 impl ActionQuery<User> for UserQuery {
-    fn create(&self, entity: User) -> String {
+    fn create(&self, entity: User) -> QueryBuilder<'static, Postgres> {
         let mut create_builder: QueryBuilder<Postgres> =
             QueryBuilder::new("INSERT INTO USERS(id, username, password, email) ");
         create_builder.push_values(vec![entity], |mut b, user| {
-            b.push_bind(user.id.to_string())
+            b.push_bind(user.id)
                 .push_bind(user.username)
                 .push_bind(user.password)
                 .push_bind(user.email);
         });
-        create_builder.build().sql().to_string()
+        create_builder //.build().borrow_mut()
     }
 
     fn update(&self, entity: User) -> String {

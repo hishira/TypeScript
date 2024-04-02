@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::core::{
@@ -5,7 +6,7 @@ use crate::core::{
     meta::meta::{self, Meta},
 };
 
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, Deserialize, Serialize)]
 pub struct Recipie {
     pub id: Uuid,
     pub recipie: String,

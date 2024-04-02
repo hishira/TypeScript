@@ -12,8 +12,10 @@ sqlx = { version = "0.7", features = [
     "runtime-tokio-rustls",
     "any",
     "postgres",
+    "uuid"
 ] }
 dotenv = "0.15.0"
-uuid = { version = "1.8.0", features = ["v4", "macro-diagnostics"] }
-time = "0.3.34"
+uuid = { version = "1.8.0", features = ["v4", "macro-diagnostics", "serde"] }
+time = {version = "0.3.34", features = ["serde"]}
 validator = { version = "0.16", features = ["derive"] }
+serde = {version = "1.0.197", features = ["derive"]}
