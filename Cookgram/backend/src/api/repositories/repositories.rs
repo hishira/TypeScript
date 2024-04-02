@@ -2,8 +2,8 @@ use uuid::Uuid;
 
 use crate::core::entity::Entity;
 
-pub trait Repositories<E: Entity, ActionOption> {
-    fn create(entity: E) -> E;
+pub trait Repository<E: Entity, ActionOption>: Send + Sync {
+    async fn create(&self, entity: E) -> E;
     fn find(option: ActionOption) -> Vec<E>;
     fn find_by_id(id: Uuid) -> E;
     fn delete(option: E) -> E;

@@ -4,7 +4,7 @@ use sqlx::{postgres::PgPoolOptions, Executor, Pool, Postgres};
 
 pub struct Database {
     url: String,
-    pool: Option<Pool<Postgres>>,
+    pub pool: Option<Pool<Postgres>>,
 }
 
 impl Database {

@@ -1,6 +1,6 @@
+use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
-
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Meta {
     pub create_date: time::Date,
     pub edit_date: time::Date,
