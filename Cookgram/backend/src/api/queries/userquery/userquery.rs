@@ -77,7 +77,7 @@ impl Query for UserQuery {
 }
 
 impl ActionQuery<User> for UserQuery {
-    fn create(&self, entity: User) -> QueryBuilder<'static, Postgres> {
+    fn create(&self, entity: User) -> QueryBuilder<Postgres> {
         let mut create_builder: QueryBuilder<Postgres> =
             QueryBuilder::new("INSERT INTO USERS(id, username, password, email) ");
         create_builder.push_values(vec![entity], |mut b, user| {
@@ -86,7 +86,8 @@ impl ActionQuery<User> for UserQuery {
                 .push_bind(user.password)
                 .push_bind(user.email);
         });
-        create_builder //.build().borrow_mut()
+        create_builder.push(" RETURNING id, username, password, email");
+        create_builder 
     }
 
     fn update(&self, entity: User) -> String {
@@ -114,7 +115,7 @@ mod tests {
 
     use super::*;
 
-    fn validate_action_query(user_query: &UserQuery, entity: User) -> String {
+    fn validate_action_query(user_query: &UserQuery, entity: User) -> QueryBuilder< Postgres> {
         user_query.create(entity)
     }
 
@@ -178,10 +179,10 @@ mod tests {
             meta: Meta::new(),
         };
 
-        let create_query = validate_action_query(&user_query, test_user);
+        let mut create_query = validate_action_query(&user_query, test_user);
 
         assert_eq!(
-            create_query,
+            create_query.build().sql().to_string(),
             "INSERT INTO USERS(id, username, password, email) VALUES ($1, $2, $3, $4)"
         );
     }
