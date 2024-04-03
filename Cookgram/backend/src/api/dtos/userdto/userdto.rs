@@ -11,14 +11,14 @@ pub struct CreateUserDto {
     pub email: String,
 }
 
-#[derive(Debug, Validate)]
+#[derive(Debug, Validate, Deserialize)]
 pub struct UpdateUserDto {
     #[validate(length(min = 1))]
-    username: String,
+    pub username: String,
     #[validate(length(min=6))]
-    password: String,
+    pub password: String,
     #[validate(email)]
-    email: String,
+    pub email: String,
 }
 
 

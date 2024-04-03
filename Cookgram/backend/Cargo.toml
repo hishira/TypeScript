@@ -21,3 +21,4 @@ validator = { version = "0.16", features = ["derive"] }
 serde = {version = "1.0.197", features = ["derive"]}
 async-trait = "0.1.79"
 thiserror = "1.0.58"
+serde_test = "1.0.176"

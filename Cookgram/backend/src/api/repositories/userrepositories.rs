@@ -1,13 +1,8 @@
-use std::borrow::Borrow;
-
-use sqlx::{Pool, Postgres, Row};
+use sqlx::{Pool, Postgres, Row, Column};
 
 use crate::{
-    api::{
-        dtos::userdto::userdto::UserDtos,
-        queries::{actionquery::ActionQuery, userquery::userquery::UserQuery},
-    },
-    core::{entity::Entity, user::user::User},
+    api::queries::{actionquery::ActionQueryBuilder, userquery::userquery::UserQuery},
+    core::user::user::User,
 };
 
 use super::repositories::Repository;
@@ -25,20 +20,21 @@ pub struct UserFilterOption {
     pub username: String,
 }
 
-impl  Filter for UserFilterOption {
-    
-}
+impl Filter for UserFilterOption {}
 
 impl Repository<User, UserFilterOption> for UserRepositories {
     async fn create(&self, entity: User) -> User {
         let mut create_query = self.user_queries.create(entity.clone());
         let re = create_query.build().fetch_one(&self.pool).await;
-        match re{
+        match re {
             Ok(row) => {
                 println!("OK");
-                println!("{}", row.len());
-            },
-            Err(e)=>{
+                match row.try_column(0) {
+                    Ok(id)=>println!("User with id created {}", row.get::<uuid::Uuid, _>(id.ordinal())),
+                    Err(_) => todo!(),
+                }
+            }
+            Err(e) => {
                 println!("{}", e);
             }
         }
