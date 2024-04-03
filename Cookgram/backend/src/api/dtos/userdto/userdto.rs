@@ -1,13 +1,14 @@
+use serde::Deserialize;
 use validator::{Validate};
 
-#[derive(Debug, Validate)]
+#[derive(Debug, Validate, Deserialize)]
 pub struct CreateUserDto {
-    #[validate(length(min = 1))]
-    username: String,
-    #[validate(length(min=6))]
-    password: String,
+    #[validate(length(min = 1, message="Can not be empty"))]
+    pub username: String,
+    #[validate(length(min=6, message="Passoword length must have exceed 6"))]
+    pub password: String,
     #[validate(email)]
-    email: String,
+    pub email: String,
 }
 
 #[derive(Debug, Validate)]
@@ -19,6 +20,7 @@ pub struct UpdateUserDto {
     #[validate(email)]
     email: String,
 }
+
 
 pub enum UserDtos {
     Create(CreateUserDto),

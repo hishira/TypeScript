@@ -19,3 +19,5 @@ uuid = { version = "1.8.0", features = ["v4", "macro-diagnostics", "serde"] }
 time = {version = "0.3.34", features = ["serde"]}
 validator = { version = "0.16", features = ["derive"] }
 serde = {version = "1.0.197", features = ["derive"]}
+async-trait = "0.1.79"
+thiserror = "1.0.58"
