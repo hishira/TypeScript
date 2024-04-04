@@ -1,9 +1,13 @@
 use serde::ser::SerializeStruct;
 use serde::{Deserialize, Serialize, Serializer};
 use time::OffsetDateTime;
+use uuid::Uuid;
+
+use crate::core::entity::Entity;
 
 #[derive(PartialEq, Debug, Clone, Deserialize)]
 pub struct Meta {
+    pub id: Uuid,
     pub create_date: time::Date,
     pub edit_date: time::Date,
 }
@@ -11,6 +15,7 @@ pub struct Meta {
 impl Meta {
     pub fn new() -> Self {
         Self {
+            id: Meta::generate_id(),
             create_date: OffsetDateTime::now_utc().date(),
             edit_date: OffsetDateTime::now_utc().date(),
         }
@@ -27,6 +32,12 @@ impl Serialize for Meta {
         state.serialize_field("edit_date", &self.create_date.to_string());
 
         state.end()
+    }
+}
+
+impl Entity for Meta{
+    fn generate_id() -> Uuid {
+        Uuid::new_v4()
     }
 }
 
@@ -53,6 +64,7 @@ mod tests {
         let offset_date_time = MockOffsetDateTime::now_utc();
 
         let meta = Meta {
+            id: Meta::generate_id(),
             create_date: offset_date_time.date(),
             edit_date: offset_date_time.date(),
         };
@@ -69,6 +81,7 @@ mod tests {
         let offset_date_time = MockOffsetDateTime::now_utc();
 
         let meta = Meta {
+            id: Meta::generate_id(),
             create_date: offset_date_time.date(),
             edit_date: offset_date_time.date(),
         };

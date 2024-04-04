@@ -1,4 +1,4 @@
-use sqlx::{Pool, Postgres, Row, Column};
+use sqlx::{Column, Pool, Postgres, Row};
 
 use crate::{
     api::queries::{actionquery::ActionQueryBuilder, userquery::userquery::UserQuery},
@@ -28,9 +28,11 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         let re = create_query.build().fetch_one(&self.pool).await;
         match re {
             Ok(row) => {
-                println!("OK");
                 match row.try_column(0) {
-                    Ok(id)=>println!("User with id created {}", row.get::<uuid::Uuid, _>(id.ordinal())),
+                    Ok(id) => tracing::debug!(
+                        "User with id created {}",
+                        row.get::<uuid::Uuid, _>(id.ordinal())
+                    ),
                     Err(_) => todo!(),
                 }
             }

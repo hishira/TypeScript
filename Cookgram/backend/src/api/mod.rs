@@ -6,3 +6,4 @@ pub mod router;
 pub mod validators;
 pub mod errors;
 pub mod services;
+pub mod logs;
