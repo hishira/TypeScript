@@ -14,7 +14,7 @@ mod api;
 mod core;
 mod database;
 
-#[tokio::main]
+#[tokio::main(flavor = "multi_thread", worker_threads = 2)]
 async fn main() {
     ApplicationLog::register_tracing();
     let database = database::init::Database::new().await;

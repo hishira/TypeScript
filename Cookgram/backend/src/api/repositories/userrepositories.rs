@@ -1,3 +1,5 @@
+use std::{any::Any, future::IntoFuture};
+
 use sqlx::{Column, Pool, Postgres, Row};
 
 use crate::{
@@ -36,15 +38,6 @@ impl Repository<User, UserFilterOption> for UserRepositories {
                         "User with id created {}",
                         row.get::<uuid::Uuid, _>(id.ordinal())
                     );
-                    let mut meta_query = MetaQuery{}.create(entity.meta.clone());
-                    let meta_query_result = meta_query.build().fetch_one(&self.pool).await;
-                    match meta_query_result {
-                        Ok(_)=> tracing::debug!("Meta object created"),
-                        Err(error)=> {
-                            tracing::debug!("Meta object not created, {}", error);
-                        }
-                        
-                    };
                 }
                 Err(_) => tracing::error!("User not created"),
             },
@@ -52,6 +45,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
                 println!("{}", e);
             }
         }
+        //mete_create(self.pool.clone(), entity.clone()); -> At moment not delete
         entity
     }
 
@@ -99,6 +93,19 @@ impl Repository<User, UserFilterOption> for UserRepositories {
     }
 }
 
+// Working example of spaming meta
+pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User){
+     tokio::task::spawn(async move {
+        let mut meta_query = MetaQuery {}.create(entity.meta.clone());
+        let meta_query_result = meta_query.build().fetch_one(&postgres_pool).await;
+        match meta_query_result {
+            Ok(_) => tracing::debug!("Meta object created"),
+            Err(error) => {
+                tracing::debug!("Meta object not created, {}", error);
+            }
+        };
+    });
+}
 #[cfg(test)]
 mod tests {
 

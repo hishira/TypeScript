@@ -1,10 +1,10 @@
 use std::borrow::{Borrow, BorrowMut};
 
-use sqlx::{ postgres::PgArguments, Execute, Postgres, QueryBuilder};
+use sqlx::{postgres::PgArguments, Execute, Postgres, QueryBuilder};
 use uuid::Uuid;
 
 use crate::{
-    api::queries::{actionquery::{ActionQueryBuilder}, query::Query},
+    api::queries::{actionquery::ActionQueryBuilder, query::Query},
     core::user::user::User,
 };
 
@@ -78,16 +78,25 @@ impl Query for UserQuery {
 
 impl ActionQueryBuilder<User> for UserQuery {
     fn create(&self, entity: User) -> QueryBuilder<Postgres> {
+        // let mut create_builder: QueryBuilder<Postgres> =
+        //     QueryBuilder::new("INSERT INTO USERS(id, username, password, email) ");
         let mut create_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO USERS(id, username, password, email) ");
+            QueryBuilder::new("INSERT INTO META(id, create_date, edit_date) ");
+        create_builder.push_values(vec![entity.meta.clone()], |mut b, meta| {
+            b.push_bind(meta.id)
+                .push_bind(meta.create_date)
+                .push_bind(meta.edit_date);
+        });
+        create_builder.push("; INSERT INTO USERS(id, username, password, email, meta_id) ");
         create_builder.push_values(vec![entity], |mut b, user| {
             b.push_bind(user.id)
                 .push_bind(user.username)
                 .push_bind(user.password)
-                .push_bind(user.email);
+                .push_bind(user.email)
+                .push_bind(user.meta.id);
         });
-        create_builder.push(" RETURNING id, username, password, email");
-        create_builder 
+        create_builder.push(" RETURNING id, username, password, email;");
+        create_builder
     }
 
     fn update(&self, entity: User) -> QueryBuilder<Postgres> {
@@ -115,7 +124,7 @@ mod tests {
 
     use super::*;
 
-    fn validate_action_query(user_query: &UserQuery, entity: User) -> QueryBuilder< Postgres> {
+    fn validate_action_query(user_query: &UserQuery, entity: User) -> QueryBuilder<Postgres> {
         user_query.create(entity)
     }
 
@@ -231,6 +240,5 @@ mod tests {
         };
 
         let _ = user_query.delete(test_user);
-
     }
 }
