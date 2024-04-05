@@ -1,7 +1,12 @@
+use std::{any::Any, future::IntoFuture};
+
 use sqlx::{Column, Pool, Postgres, Row};
 
 use crate::{
-    api::queries::{actionquery::ActionQueryBuilder, userquery::userquery::UserQuery},
+    api::queries::{
+        actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery,
+        userquery::userquery::UserQuery,
+    },
     core::user::user::User,
 };
 
@@ -27,19 +32,20 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         let mut create_query = self.user_queries.create(entity.clone());
         let re = create_query.build().fetch_one(&self.pool).await;
         match re {
-            Ok(row) => {
-                match row.try_column(0) {
-                    Ok(id) => tracing::debug!(
+            Ok(row) => match row.try_column(0) {
+                Ok(id) => {
+                    tracing::debug!(
                         "User with id created {}",
                         row.get::<uuid::Uuid, _>(id.ordinal())
-                    ),
-                    Err(_) => todo!(),
+                    );
                 }
-            }
+                Err(_) => tracing::error!("User not created"),
+            },
             Err(e) => {
                 println!("{}", e);
             }
         }
+        //mete_create(self.pool.clone(), entity.clone()); -> At moment not delete
         entity
     }
 
@@ -87,6 +93,19 @@ impl Repository<User, UserFilterOption> for UserRepositories {
     }
 }
 
+// Working example of spaming meta
+pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User){
+     tokio::task::spawn(async move {
+        let mut meta_query = MetaQuery {}.create(entity.meta.clone());
+        let meta_query_result = meta_query.build().fetch_one(&postgres_pool).await;
+        match meta_query_result {
+            Ok(_) => tracing::debug!("Meta object created"),
+            Err(error) => {
+                tracing::debug!("Meta object not created, {}", error);
+            }
+        };
+    });
+}
 #[cfg(test)]
 mod tests {
 
