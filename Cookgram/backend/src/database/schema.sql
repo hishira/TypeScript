@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS USERS;
 DROP TABLE IF EXISTS META;
 Create TABLE IF NOT EXISTS META (
     id uuid NOT NULL,
-    create_date TIMESTAMP,
-    edit_date TIMESTAMP,
+    create_date DATE,
+    edit_date DATE,
     UNIQUE(id)
 );
 CREATE TABLE IF NOT EXISTS USERS (
