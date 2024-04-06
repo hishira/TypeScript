@@ -81,13 +81,7 @@ impl ActionQueryBuilder<User> for UserQuery {
         // let mut create_builder: QueryBuilder<Postgres> =
         //     QueryBuilder::new("INSERT INTO USERS(id, username, password, email) ");
         let mut create_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO META(id, create_date, edit_date) ");
-        create_builder.push_values(vec![entity.meta.clone()], |mut b, meta| {
-            b.push_bind(meta.id)
-                .push_bind(meta.create_date)
-                .push_bind(meta.edit_date);
-        });
-        create_builder.push("; INSERT INTO USERS(id, username, password, email, meta_id) ");
+            QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id) ");
         create_builder.push_values(vec![entity], |mut b, user| {
             b.push_bind(user.id)
                 .push_bind(user.username)

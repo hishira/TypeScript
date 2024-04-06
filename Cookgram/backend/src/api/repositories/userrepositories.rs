@@ -1,7 +1,5 @@
 use std::{any::Any, future::IntoFuture};
 
-use sqlx::{Column, Pool, Postgres, Row};
-
 use crate::{
     api::queries::{
         actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery,
@@ -9,6 +7,8 @@ use crate::{
     },
     core::user::user::User,
 };
+use sqlx::{Column, Executor, Pool, Postgres, Row};
+use std::ops::DerefMut;
 
 use super::repositories::Repository;
 
@@ -29,23 +29,19 @@ impl Filter for UserFilterOption {}
 
 impl Repository<User, UserFilterOption> for UserRepositories {
     async fn create(&self, entity: User) -> User {
+        let mut transaction = self.pool.begin().await.unwrap();
+        let mut meta_query = MetaQuery {}.create(entity.meta.clone());
         let mut create_query = self.user_queries.create(entity.clone());
-        let re = create_query.build().fetch_one(&self.pool).await;
-        match re {
-            Ok(row) => match row.try_column(0) {
-                Ok(id) => {
-                    tracing::debug!(
-                        "User with id created {}",
-                        row.get::<uuid::Uuid, _>(id.ordinal())
-                    );
-                }
-                Err(_) => tracing::error!("User not created"),
-            },
-            Err(e) => {
-                println!("{}", e);
-            }
+        let meta_response = meta_query.build().execute(transaction.deref_mut()).await;
+        let re = create_query.build().execute(transaction.deref_mut()).await;
+        match (re, meta_response) {
+            (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
+            (Ok(_), Err(_)) => tracing::debug!("User created, meta not created"),
+            (Err(_), Ok(_)) =>tracing::debug!("User not created, meta created"),
+            (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
         }
         //mete_create(self.pool.clone(), entity.clone()); -> At moment not delete
+        transaction.commit().await;
         entity
     }
 
@@ -94,8 +90,8 @@ impl Repository<User, UserFilterOption> for UserRepositories {
 }
 
 // Working example of spaming meta
-pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User){
-     tokio::task::spawn(async move {
+pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User) {
+    tokio::task::spawn(async move {
         let mut meta_query = MetaQuery {}.create(entity.meta.clone());
         let meta_query_result = meta_query.build().fetch_one(&postgres_pool).await;
         match meta_query_result {
