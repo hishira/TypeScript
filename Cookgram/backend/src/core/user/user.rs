@@ -1,3 +1,4 @@
+use bcrypt::{hash, verify, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -7,6 +8,7 @@ use crate::core::{entity::Entity, meta::meta::Meta, recipie::recipie::Recipie};
 pub struct User {
     pub id: Uuid,
     pub username: String,
+    #[serde(skip_serializing)]
     pub password: String,
     pub email: String,
     pub recipies: Option<Vec<Recipie>>,
@@ -28,14 +30,14 @@ impl User {
         recipies: Option<Vec<Recipie>>,
     ) -> Self {
         let recipies: Option<Vec<Recipie>> = match recipies {
-            Some(r)=> Some(r),
-            None => Some(vec![])
+            Some(r) => Some(r),
+            None => Some(vec![]),
         };
         match id {
             Some(id) => Self {
                 id,
                 username,
-                password,
+                password: User::prepare_password_hash(password),
                 email,
                 recipies,
                 meta: Meta::new(),
@@ -43,18 +45,30 @@ impl User {
             None => Self {
                 id: User::generate_id(),
                 username,
-                password,
+                password: User::prepare_password_hash(password),
                 email,
                 recipies,
                 meta: Meta::new(),
             },
         }
     }
+
+    fn prepare_password_hash(password: String) -> String {
+        hash(password, 10).unwrap()
+    }
+
+    fn verify_password(
+        entered_password: String,
+        hash: String,
+    ) -> Result<bool, bcrypt::BcryptError> {
+        verify(entered_password, &hash)
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use time::{Date, Month};
+    use serde_json::json;
+    use time::{Date, Month, OffsetDateTime};
 
     use super::*;
 
@@ -93,7 +107,7 @@ mod tests {
             "test_user".to_string(),
             "password123".to_string(),
             "test@example.com".to_string(),
-            Some(vec![])
+            Some(vec![]),
         );
 
         assert_ne!(user.id, Uuid::nil());
@@ -103,8 +117,6 @@ mod tests {
         assert_eq!(user.email, "test@example.com");
 
         assert_eq!(user.meta.create_date.year(), 2024);
-        assert_eq!(user.meta.create_date.month(), Month::March);
-        assert_eq!(user.meta.create_date.day(), 31); // Day is set to 1 for example
         assert_eq!(user.meta.edit_date, user.meta.create_date);
     }
 
@@ -133,8 +145,6 @@ mod tests {
 
         // Check if the meta field is initialized correctly
         assert_eq!(user.meta.create_date.year(), 2024);
-        assert_eq!(user.meta.create_date.month(), Month::March);
-        assert_eq!(user.meta.create_date.day(), 31); // Day is set to 1 for example
         assert_eq!(user.meta.edit_date, user.meta.create_date);
     }
 
@@ -194,5 +204,69 @@ mod tests {
 
         // Check if the meta field is initialized correctly
         assert_eq!(user.meta.edit_date, user.meta.create_date);
+    }
+
+    #[test]
+    fn test_user_serialization() {
+        let id = uuid::Uuid::new_v4();
+        let date = OffsetDateTime::now_utc().date();
+        // Create a sample user
+        let user = User {
+            id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
+            username: String::from("test_user"),
+            password: String::from("password123"),
+            email: String::from("test@example.com"),
+            recipies: Some(vec![]),
+            meta: Meta {
+                id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
+                create_date: date,
+                edit_date: date,
+            },
+        };
+
+        // Serialize the user to JSON
+        let serialized_user = serde_json::to_value(&user).unwrap();
+
+        // Define expected JSON
+        let expected_json = json!({
+            "id": "d6fcdff0-0c94-42a8-8dd1-8d354c742046",
+            "username": "test_user",
+            "email": "test@example.com",
+            "recipies": [],
+            "meta": {
+                "create_date": date.to_string(),
+                "edit_date":  date.to_string(),
+            }
+        });
+
+        // Ensure serialization works as expected
+        assert_eq!(serialized_user, expected_json);
+    }
+
+    #[test]
+    fn test_user_deserialization() {
+        // Sample JSON representing a user
+        let date = OffsetDateTime::now_utc().date();
+        let json = json!({
+            "id": "d6fcdff0-0c94-42a8-8dd1-8d354c742046",
+            "username": "test_user",
+            "email": "test@example.com",
+            "password": "123456",
+            "recipies": [],
+            "meta": {
+                "id": "d6fcdff0-0c94-42a8-8dd1-8d354c742046",
+                "create_date": date.to_string(),
+                "edit_date":  date.to_string(),
+            }
+        })
+        .to_string();
+
+        // Deserialize the JSON into a User object
+        let user: User = serde_json::from_str(&json).unwrap();
+
+        // Ensure deserialization works as expected
+        assert_eq!(user.username, "test_user");
+        assert_eq!(user.email, "test@example.com");
+        // Add more assertions as needed...
     }
 }
