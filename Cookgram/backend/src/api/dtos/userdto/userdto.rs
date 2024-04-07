@@ -1,11 +1,11 @@
 use serde::Deserialize;
-use validator::{Validate};
+use validator::{Validate, ValidationError, ValidationErrors};
 
 #[derive(Debug, Validate, Deserialize)]
 pub struct CreateUserDto {
-    #[validate(length(min = 1, message="Can not be empty"))]
+    #[validate(length(min = 1, message = "Can not be empty"))]
     pub username: String,
-    #[validate(length(min=6, message="Passoword length must have exceed 6"))]
+    #[validate(length(min = 6, message = "Passoword length must have exceed 6"))]
     pub password: String,
     #[validate(email)]
     pub email: String,
@@ -15,18 +15,33 @@ pub struct CreateUserDto {
 pub struct UpdateUserDto {
     #[validate(length(min = 1))]
     pub username: String,
-    #[validate(length(min=6))]
+    #[validate(length(min = 6))]
     pub password: String,
     #[validate(email)]
     pub email: String,
 }
 
+#[derive(Debug, Validate, Deserialize)]
+#[validate(schema(function = "validatete_auth", skip_on_field_errors = true))]
+pub struct UserAuthDto {
+    pub username: Option<String>,
+    pub email: Option<String>,
+    pub password: String,
+}
+
+pub fn validatete_auth(user_auth_dto: &UserAuthDto) -> Result<(), ValidationError> {
+    match (user_auth_dto.username.clone(), user_auth_dto.email.clone()) {
+        (None, None) => Err(ValidationError::new("Username or email should be giver")),
+        (None, Some(_)) => Ok(()),
+        (Some(_), None) => Ok(()),
+        (Some(_), Some(_)) => Ok(()),
+    }
+}
 
 pub enum UserDtos {
     Create(CreateUserDto),
     Update(UpdateUserDto),
 }
-
 
 #[cfg(test)]
 mod tests {

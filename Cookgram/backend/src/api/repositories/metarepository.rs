@@ -16,7 +16,7 @@ impl Repository<Meta, MetaFilterOption> for MetaRepository {
         todo!()
     }
 
-    fn find(option: MetaFilterOption) -> Vec<Meta> {
+    async fn find(&self, option: MetaFilterOption) -> Vec<Meta> {
         todo!()
     }
 

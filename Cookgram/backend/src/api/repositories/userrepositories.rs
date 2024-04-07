@@ -2,12 +2,12 @@ use std::{any::Any, future::IntoFuture};
 
 use crate::{
     api::queries::{
-        actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery,
-        userquery::userquery::UserQuery,
+        actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query, userquery::userquery::UserQuery
     },
-    core::user::user::User,
+    core::{meta::meta::Meta, user::user::User},
 };
-use sqlx::{Column, Executor, Pool, Postgres, Row};
+use serde::Deserialize;
+use sqlx::{postgres::PgRow, Column, Executor, Pool, Postgres, Row};
 use std::ops::DerefMut;
 
 use super::repositories::Repository;
@@ -20,9 +20,9 @@ pub struct UserRepositories {
 
 trait Filter: Send + Sync {}
 
-#[derive(Clone)]
+#[derive(Clone, Deserialize)]
 pub struct UserFilterOption {
-    pub username: String,
+    pub username: Option<String>,
 }
 
 impl Filter for UserFilterOption {}
@@ -55,23 +55,33 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         )
     }
 
-    fn find(option: UserFilterOption) -> Vec<User> {
-        vec![
-            User::new(
-                None,
-                "test".to_string(),
-                "password".to_string(),
-                "test@test.com".to_string(),
-                Some(vec![]),
-            ),
-            User::new(
-                None,
-                "test".to_string(),
-                "password".to_string(),
-                "test@test.com".to_string(),
-                Some(vec![]),
-            ),
-        ]
+    async fn find(&self, option: UserFilterOption) -> Vec<User> {
+       let mut find_query = self.user_queries.find(option);
+       let response = find_query.build().map(|row: PgRow| User{
+        id: row.get("id"),
+        username: row.get("username"),
+        password: "".to_string(),
+        email: row.get("email"),
+        recipies: None,
+        meta: Meta::new(),
+    }).fetch_all(&self.pool).await.unwrap();
+    response
+        // vec![
+        //     User::new(
+        //         None,
+        //         "test".to_string(),
+        //         "password".to_string(),
+        //         "test@test.com".to_string(),
+        //         Some(vec![]),
+        //     ),
+        //     User::new(
+        //         None,
+        //         "test".to_string(),
+        //         "password".to_string(),
+        //         "test@test.com".to_string(),
+        //         Some(vec![]),
+        //     ),
+        // ]
     }
 
     fn delete(entity: User) -> User {
