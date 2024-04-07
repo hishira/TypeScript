@@ -4,7 +4,7 @@ use crate::{
     api::{dtos::userdto::userdto::UserFilterOption, queries::{
         actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
         userquery::userquery::UserQuery,
-    }},
+    }, services::userservice::UserService},
     core::{meta::meta::Meta, user::user::User},
 };
 use serde::Deserialize;
@@ -51,14 +51,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         let mut find_query = self.user_queries.find(option);
         let response = find_query
             .build()
-            .map(|row: PgRow| User {
-                id: row.get("id"),
-                username: row.get("username"),
-                password: "".to_string(),
-                email: row.get("email"),
-                recipies: None,
-                meta: Meta::new(), //TODO: Inner join table to retrieve 
-            })
+            .map(UserService::get_user_from_row)
             .fetch_all(&self.pool)
             .await
             .unwrap();
