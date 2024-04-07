@@ -30,7 +30,7 @@ pub struct UserAuthDto {
 }
 
 pub fn validatete_auth(user_auth_dto: &UserAuthDto) -> Result<(), ValidationError> {
-    match (user_auth_dto.username, user_auth_dto.email) {
+    match (user_auth_dto.username.clone(), user_auth_dto.email.clone()) {
         (None, None) => Err(ValidationError::new("Username or email should be giver")),
         (None, Some(_)) => Ok(()),
         (Some(_), None) => Ok(()),

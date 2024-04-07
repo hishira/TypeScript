@@ -4,7 +4,7 @@ use sqlx::{postgres::PgArguments, Execute, Postgres, QueryBuilder};
 use uuid::Uuid;
 
 use crate::{
-    api::queries::{actionquery::ActionQueryBuilder, query::Query},
+    api::{queries::{actionquery::ActionQueryBuilder, query::Query}, repositories::userrepositories::UserFilterOption},
     core::user::user::User,
 };
 
@@ -61,7 +61,7 @@ impl UserQuery {
     }
 }
 
-impl Query for UserQuery {
+impl Query<UserFilterOption> for UserQuery {
     fn build(&self) -> String {
         let mut user_query: QueryBuilder<Postgres> = QueryBuilder::new("SELECT * FROM users where");
         let mut count: i8 = 0;
@@ -73,6 +73,13 @@ impl Query for UserQuery {
         UserQuery::prepare_username(&mut user_query, count, self.username.clone());
         UserQuery::prepare_email(&mut user_query, count, self.email.clone());
         user_query.build().sql().to_string()
+    }
+    
+    fn find(&self, option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
+        let mut user_query: QueryBuilder<Postgres> = QueryBuilder::new("SELECT id, username, email FROM users where");
+        let mut count: i8 = 0;
+        UserQuery::prepare_username(&mut user_query, count, option.username.clone());
+        user_query
     }
 }
 

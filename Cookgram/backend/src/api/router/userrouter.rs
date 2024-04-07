@@ -1,4 +1,8 @@
-use axum::{extract::State, routing::post, Json, Router};
+use axum::{
+    extract::State,
+    routing::{get, post},
+    Json, Router,
+};
 
 use crate::{
     api::{
@@ -44,12 +48,26 @@ impl UserRouter {
             .await;
         Json(user)
     }
+
+    async fn user_find<T>(
+        State(state): State<AppState<T>>,
+        Json(params): Json<UserFilterOption>,
+    ) -> Json<Vec<User>>
+    where
+        T: Repository<User, UserFilterOption>,
+    {
+        let users = state.repo.find(params).await;
+        Json(users)
+    }
 }
 
 impl ApplicationRouter for UserRouter {
     fn get_router(&self) -> axum::Router {
         Router::new()
-            .route("/users", post(UserRouter::user_create))
+            .route(
+                "/users",
+                get(UserRouter::user_find).post(UserRouter::user_create),
+            )
             .with_state(AppState {
                 repo: self.user_repo.clone(),
             })
