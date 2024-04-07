@@ -1,18 +1,15 @@
 use axum::{
     extract::State,
-    routing::{get, post},
+    routing::{get},
     Json, Router,
 };
 
 use crate::{
     api::{
         appstate::appstate::AppState,
-        dtos::userdto::userdto::{CreateUserDto, UserDtos},
+        dtos::userdto::userdto::{CreateUserDto, UserDtos, UserFilterOption},
         queries::userquery::userquery::UserQuery,
-        repositories::{
-            repositories::Repository,
-            userrepositories::{UserFilterOption, UserRepositories},
-        },
+        repositories::{repositories::Repository, userrepositories::UserRepositories},
         services::userservice::UserService,
         validators::dtovalidator::ValidateDtos,
     },

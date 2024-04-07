@@ -1,9 +1,10 @@
 use std::{any::Any, future::IntoFuture};
 
 use crate::{
-    api::queries::{
-        actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query, userquery::userquery::UserQuery
-    },
+    api::{dtos::userdto::userdto::UserFilterOption, queries::{
+        actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
+        userquery::userquery::UserQuery,
+    }},
     core::{meta::meta::Meta, user::user::User},
 };
 use serde::Deserialize;
@@ -18,15 +19,6 @@ pub struct UserRepositories {
     pub user_queries: UserQuery,
 }
 
-trait Filter: Send + Sync {}
-
-#[derive(Clone, Deserialize)]
-pub struct UserFilterOption {
-    pub username: Option<String>,
-}
-
-impl Filter for UserFilterOption {}
-
 impl Repository<User, UserFilterOption> for UserRepositories {
     async fn create(&self, entity: User) -> User {
         let mut transaction = self.pool.begin().await.unwrap();
@@ -37,7 +29,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         match (re, meta_response) {
             (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
             (Ok(_), Err(_)) => tracing::debug!("User created, meta not created"),
-            (Err(_), Ok(_)) =>tracing::debug!("User not created, meta created"),
+            (Err(_), Ok(_)) => tracing::debug!("User not created, meta created"),
             (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
         }
         //mete_create(self.pool.clone(), entity.clone()); -> At moment not delete
@@ -56,32 +48,21 @@ impl Repository<User, UserFilterOption> for UserRepositories {
     }
 
     async fn find(&self, option: UserFilterOption) -> Vec<User> {
-       let mut find_query = self.user_queries.find(option);
-       let response = find_query.build().map(|row: PgRow| User{
-        id: row.get("id"),
-        username: row.get("username"),
-        password: "".to_string(),
-        email: row.get("email"),
-        recipies: None,
-        meta: Meta::new(),
-    }).fetch_all(&self.pool).await.unwrap();
-    response
-        // vec![
-        //     User::new(
-        //         None,
-        //         "test".to_string(),
-        //         "password".to_string(),
-        //         "test@test.com".to_string(),
-        //         Some(vec![]),
-        //     ),
-        //     User::new(
-        //         None,
-        //         "test".to_string(),
-        //         "password".to_string(),
-        //         "test@test.com".to_string(),
-        //         Some(vec![]),
-        //     ),
-        // ]
+        let mut find_query = self.user_queries.find(option);
+        let response = find_query
+            .build()
+            .map(|row: PgRow| User {
+                id: row.get("id"),
+                username: row.get("username"),
+                password: "".to_string(),
+                email: row.get("email"),
+                recipies: None,
+                meta: Meta::new(), //TODO: Inner join table to retrieve 
+            })
+            .fetch_all(&self.pool)
+            .await
+            .unwrap();
+        response
     }
 
     fn delete(entity: User) -> User {
