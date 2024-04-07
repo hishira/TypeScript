@@ -29,6 +29,13 @@ pub struct UserAuthDto {
     pub password: String,
 }
 
+trait Filter: Send + Sync {}
+
+#[derive(Clone, Deserialize)]
+pub struct UserFilterOption {
+    pub username: Option<String>,
+}
+
 pub fn validatete_auth(user_auth_dto: &UserAuthDto) -> Result<(), ValidationError> {
     match (user_auth_dto.username.clone(), user_auth_dto.email.clone()) {
         (None, None) => Err(ValidationError::new("Username or email should be giver")),
@@ -43,6 +50,10 @@ pub enum UserDtos {
     Update(UpdateUserDto),
 }
 
+#[derive(Debug, Deserialize)]
+pub struct UserParamsDto {
+    id: Option<uuid::Uuid>
+}
 #[cfg(test)]
 mod tests {
     use validator::ValidationErrors;

@@ -1,4 +1,7 @@
-use crate::{api::dtos::userdto::userdto::UserDtos, core::user::user::User};
+use sqlx::postgres::{PgRow};
+use sqlx::Row;
+
+use crate::{api::dtos::userdto::userdto::UserDtos, core::{meta::meta::Meta, user::user::User}};
 
 pub struct UserService {}
 
@@ -11,6 +14,17 @@ impl UserService {
             UserDtos::Update(user) => {
                 User::new(None, user.username, user.password, user.email, None)
             }
+        }
+    }
+
+    pub fn get_user_from_row(pg_row: PgRow) -> User {
+        User {
+            id: pg_row.get("id"),
+            username: pg_row.get("username"),
+            password: "".to_string(),
+            email: pg_row.get("email"),
+            recipies: None,
+            meta: Meta::new(), //TODO: Inner join table to retrieve
         }
     }
 }
