@@ -37,14 +37,12 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         entity
     }
 
-    fn find_by_id(id: uuid::Uuid) -> User {
-        User::new(
-            Some(id),
-            "test".to_string(),
-            "password".to_string(),
-            "test@test.com".to_string(),
-            Some(vec![]),
-        )
+    async fn find_by_id(&self, id: uuid::Uuid) -> User {
+        let mut find_by_id_query = self.user_queries.find_by_id(id);
+        find_by_id_query.build().map(UserService::get_user_from_row)
+        .fetch_one(&self.pool)
+        .await
+        .unwrap()
     }
 
     async fn find(&self, option: UserFilterOption) -> Vec<User> {
