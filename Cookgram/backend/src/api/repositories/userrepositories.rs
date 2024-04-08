@@ -33,7 +33,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
             (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
         }
         //mete_create(self.pool.clone(), entity.clone()); -> At moment not delete
-        transaction.commit().await;
+        let _ = transaction.commit().await;
         entity
     }
 
