@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use bcrypt::{hash, verify, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -21,6 +23,11 @@ impl Entity for User {
     }
 }
 
+impl Display for User {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.id.to_string())
+    }
+}
 impl User {
     pub fn new(
         id: Option<Uuid>,

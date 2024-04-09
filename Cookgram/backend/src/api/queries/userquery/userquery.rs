@@ -80,7 +80,7 @@ impl Query<UserFilterOption> for UserQuery {
 
     fn find(&self, option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut user_query: QueryBuilder<Postgres> =
-            QueryBuilder::new("SELECT id, username, email FROM users");
+            QueryBuilder::new("SELECT id, username, email, password FROM users");
         let mut count: i8 = 0;
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
         user_query

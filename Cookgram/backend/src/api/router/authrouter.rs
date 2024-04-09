@@ -1,6 +1,12 @@
 use std::borrow::Borrow;
 
-use axum::{extract::State, http::StatusCode, response::{IntoResponse, Response}, routing::post, Json, Router};
+use axum::{
+    extract::State,
+    http::StatusCode,
+    response::{IntoResponse, Response},
+    routing::post,
+    Json, Router,
+};
 use bcrypt::verify;
 use dotenv::dotenv;
 use jsonwebtoken::{encode, DecodingKey, EncodingKey, Header};
@@ -12,9 +18,15 @@ use validator::Validate;
 
 use crate::{
     api::{
-        appstate::appstate::AppState, dtos::userdto::userdto::{UserAuthDto, UserFilterOption}, queries::userquery::userquery::UserQuery, repositories::{repositories::Repository, userrepositories::UserRepositories}, utils::jwt::jwt::Claims, validators::dtovalidator::ValidateDtos
+        appstate::appstate::AppState,
+        dtos::userdto::userdto::{UserAuthDto, UserFilterOption},
+        queries::userquery::userquery::UserQuery,
+        repositories::{repositories::Repository, userrepositories::UserRepositories},
+        utils::jwt::jwt::Claims,
+        validators::dtovalidator::ValidateDtos,
     },
-    core::user::user::User, database::init::Database,
+    core::user::user::User,
+    database::init::Database,
 };
 
 use super::router::ApplicationRouter;
@@ -36,7 +48,7 @@ static KEYS: Lazy<Keys> = Lazy::new(|| {
     let secret = dotenv::var("JWT_SECRET").expect("JWT_SECRET must be set");
     Keys::new(secret.as_bytes())
 });
-#[derive(Debug,Validate, Deserialize, Serialize)]
+#[derive(Debug, Validate, Deserialize, Serialize)]
 pub struct AuthBody {
     access_token: String,
     refresh_token: String,
@@ -48,6 +60,7 @@ enum AuthError {
     MissingCredentials,
     TokenCreation,
     InvalidToken,
+    UserNotExists,
 }
 pub struct AuthRouter {
     user_repo: UserRepositories,
@@ -57,7 +70,8 @@ impl AuthRouter {
     pub fn new(database: &Database) -> Self {
         Self {
             user_repo: UserRepositories {
-                pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool).unwrap(),
+                pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                    .unwrap(),
                 user_queries: UserQuery::new(None, None, None),
             },
         }
@@ -82,19 +96,23 @@ impl AuthRouter {
                 user_id: None,
                 user_info: email,
             },
-            (Some(email), Some(password)) => Claims {
+            (Some(email), Some(username)) => Claims {
                 user_id: None,
-                user_info: email,
+                user_info: username,
             },
         };
         let filter = UserFilterOption {
             username: Some(claims.user_info.clone()),
         };
-        let users = state.repo.find(filter).await;
+        let users = state.repo.find(filter.clone()).await;
+        if users.len() <= 0 {
+            return Result::Err(AuthError::UserNotExists);
+        }
         let user = users.get(0).unwrap();
         claims.user_id = Some(user.id);
         let token = encode(&Header::default(), &claims, &KEYS.encoding)
             .map_err(|_| AuthError::TokenCreation)?;
+        println!("{}, {}",params.password, user.password);
         match verify(params.password, &user.password) {
             Ok(_) => Ok(Json(AuthBody {
                 access_token: token.clone(),
@@ -122,6 +140,7 @@ impl IntoResponse for AuthError {
             AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
             AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
+            AuthError::UserNotExists => (StatusCode::BAD_REQUEST, "User not Exists"),
         };
         let body = Json(json!({
             "error": error_message,

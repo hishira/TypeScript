@@ -21,7 +21,7 @@ impl UserService {
         User {
             id: pg_row.get("id"),
             username: pg_row.get("username"),
-            password: "".to_string(),
+            password: pg_row.get("password"),
             email: pg_row.get("email"),
             recipies: None,
             meta: Meta::new(), //TODO: Inner join table to retrieve
