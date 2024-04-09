@@ -3,6 +3,7 @@ use axum::{
     routing::{get},
     Json, Router,
 };
+use sqlx::{Pool, Postgres};
 
 use crate::{
     api::{
@@ -24,10 +25,10 @@ pub struct UserRouter {
 }
 
 impl UserRouter {
-    pub fn new(database: Database) -> Self {
+    pub fn new(database: &Database) -> Self {
         Self {
             user_repo: UserRepositories {
-                pool: database.pool.unwrap(),
+                pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool).unwrap(),
                 user_queries: UserQuery::new(None, None, None),
             },
         }

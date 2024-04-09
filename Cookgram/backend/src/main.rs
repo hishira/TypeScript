@@ -8,7 +8,7 @@ use axum::{
 use tokio::net::TcpListener;
 use tower_http::{ trace::TraceLayer};
 use tracing::{info_span};
-use crate::api::logs::applicationlog::ApplicationLog;
+use crate::api::{logs::applicationlog::ApplicationLog, router::authrouter::AuthRouter};
 
 mod api;
 mod core;
@@ -21,7 +21,8 @@ async fn main() {
     database.prepare_tables().await;
 
     let app = Router::new()
-        .nest("/test", UserRouter::new(database).get_router())
+        .nest("/test", UserRouter::new(&database).get_router())
+        .nest("/testauth", AuthRouter::new(&database).get_router())
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
                 let matched_path = request

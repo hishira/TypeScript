@@ -20,7 +20,7 @@ impl Repository<Meta, MetaFilterOption> for MetaRepository {
         todo!()
     }
 
-    fn find_by_id(id: uuid::Uuid) -> Meta {
+    async fn find_by_id(&self, id: uuid::Uuid) -> Meta {
         todo!()
     }
 
