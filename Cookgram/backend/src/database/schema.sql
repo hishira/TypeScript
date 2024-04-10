@@ -8,6 +8,7 @@ Create TABLE IF NOT EXISTS META (
     edit_date TIMESTAMP,
     UNIQUE(id)
 );
+CREATE TYPE Role as ENUM ('User', 'Admin', 'SuperAdmin'); 
 CREATE TABLE IF NOT EXISTS USERS (
     id uuid NOT NULL,
     username VARCHAR(255) NOT NULL,
@@ -16,6 +17,7 @@ CREATE TABLE IF NOT EXISTS USERS (
     meta_id uuid,
     PRIMARY KEY (id),
     UNIQUE(id),
+    role Role DEFAULT 'User',
     CONSTRAINT fk_meta FOREIGN KEY(meta_id) REFERENCES META(id) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS RECIPIES (

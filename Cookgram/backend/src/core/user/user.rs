@@ -1,8 +1,15 @@
+use std::fmt::Display;
+
 use bcrypt::{hash, verify, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::core::{entity::Entity, meta::meta::Meta, recipie::recipie::Recipie};
+use crate::core::{
+    entity::Entity,
+    meta::meta::Meta,
+    recipie::recipie::Recipie,
+    role::role::{AdminRole, Roles, SuperAdminRole, UserRole},
+};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct User {
@@ -13,6 +20,7 @@ pub struct User {
     pub email: String,
     pub recipies: Option<Vec<Recipie>>,
     pub meta: Meta,
+    pub role: Roles,
 }
 
 impl Entity for User {
@@ -28,10 +36,19 @@ impl User {
         password: String,
         email: String,
         recipies: Option<Vec<Recipie>>,
+        role: Option<Roles>,
     ) -> Self {
         let recipies: Option<Vec<Recipie>> = match recipies {
             Some(r) => Some(r),
             None => Some(vec![]),
+        };
+        let role: Roles = match role {
+            Some(r) => match r {
+                Roles::User(User) => Roles::User(UserRole {}),
+                Roles::Admin(Admin) => Roles::Admin(AdminRole {}),
+                Roles::SuperAdmin(Admin) => Roles::SuperAdmin(SuperAdminRole {}),
+            },
+            None => Roles::User(UserRole{}),
         };
         match id {
             Some(id) => Self {
@@ -41,6 +58,7 @@ impl User {
                 email,
                 recipies,
                 meta: Meta::new(),
+                role,
             },
             None => Self {
                 id: User::generate_id(),
@@ -49,6 +67,7 @@ impl User {
                 email,
                 recipies,
                 meta: Meta::new(),
+                role
             },
         }
     }
@@ -108,6 +127,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             Some(vec![]),
+            None
         );
 
         assert_ne!(user.id, Uuid::nil());
@@ -133,6 +153,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             None,
+            None
         );
 
         // Check if the user has the correct id
@@ -162,6 +183,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             Some(vec![recipie1, recipie2]),
+            None
         );
 
         // Check if the user has the correct id
@@ -189,6 +211,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             None,
+            None
         );
 
         // Check if the user has a UUID id
@@ -222,6 +245,7 @@ mod tests {
                 create_date: date,
                 edit_date: date,
             },
+            role: Roles::User(UserRole{}),
         };
 
         // Serialize the user to JSON
