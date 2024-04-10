@@ -61,6 +61,7 @@ enum AuthError {
     TokenCreation,
     InvalidToken,
     UserNotExists,
+    BCryptError,
 }
 pub struct AuthRouter {
     user_repo: UserRepositories,
@@ -110,15 +111,20 @@ impl AuthRouter {
         }
         let user = users.get(0).unwrap();
         claims.user_id = Some(user.id);
-        let token = encode(&Header::default(), &claims, &KEYS.encoding)
+        let token = encode(&Header::new(jsonwebtoken::Algorithm::HS256), &claims, &KEYS.encoding)
             .map_err(|_| AuthError::TokenCreation)?;
-        println!("{}, {}",params.password, user.password);
         match verify(params.password, &user.password) {
-            Ok(_) => Ok(Json(AuthBody {
-                access_token: token.clone(),
-                refresh_token: token.clone(),
-            })),
-            Err(_) => Result::Err(AuthError::WrongCredentials),
+            Ok(bcrypt_verify_respoonse) => {
+                if bcrypt_verify_respoonse {
+                    Ok(Json(AuthBody {
+                        access_token: token.clone(),
+                        refresh_token: token.clone(),
+                    }))
+                } else {
+                    Result::Err(AuthError::WrongCredentials)
+                }
+            }
+            Err(_) => Result::Err(AuthError::BCryptError),
         }
     }
 }
@@ -141,6 +147,7 @@ impl IntoResponse for AuthError {
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
             AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
             AuthError::UserNotExists => (StatusCode::BAD_REQUEST, "User not Exists"),
+            AuthError::BCryptError => (StatusCode::INTERNAL_SERVER_ERROR, "Server error occur"),
         };
         let body = Json(json!({
             "error": error_message,

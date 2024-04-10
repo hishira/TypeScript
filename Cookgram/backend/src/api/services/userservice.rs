@@ -1,6 +1,7 @@
 use sqlx::postgres::{PgRow};
 use sqlx::Row;
 
+use crate::core::role::role::{Roles, UserRole};
 use crate::{api::dtos::userdto::userdto::UserDtos, core::{meta::meta::Meta, user::user::User}};
 
 pub struct UserService {}
@@ -9,10 +10,10 @@ impl UserService {
     pub fn get_user_from_dto(user_dto: UserDtos) -> User {
         match user_dto {
             UserDtos::Create(user) => {
-                User::new(None, user.username, user.password, user.email, None)
+                User::new(None, user.username, user.password, user.email, None, None) //TODO: Fix role
             }
             UserDtos::Update(user) => {
-                User::new(None, user.username, user.password, user.email, None)
+                User::new(None, user.username, user.password, user.email, None, None) // FOX role
             }
         }
     }
@@ -24,7 +25,8 @@ impl UserService {
             password: pg_row.get("password"),
             email: pg_row.get("email"),
             recipies: None,
-            meta: Meta::new(), //TODO: Inner join table to retrieve
+            meta: Meta::new(), //TODO: Inner join table to retrieve,
+            role: Roles::User(UserRole{})
         }
     }
 }
