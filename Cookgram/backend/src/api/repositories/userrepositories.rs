@@ -1,11 +1,15 @@
 use std::{any::Any, future::IntoFuture};
 
 use crate::{
-    api::{dtos::userdto::userdto::UserFilterOption, queries::{
-        actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
-        userquery::userquery::UserQuery,
-    }, services::userservice::UserService},
-    core::{meta::meta::Meta, user::user::User},
+    api::{
+        dtos::userdto::userdto::UserFilterOption,
+        queries::{
+            actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
+            userquery::userquery::UserQuery,
+        },
+        services::userservice::UserService,
+    },
+    core::{meta::meta::Meta, role::role::Roles, user::user::User},
 };
 use serde::Deserialize;
 use sqlx::{postgres::PgRow, Column, Executor, Pool, Postgres, Row};
@@ -39,10 +43,12 @@ impl Repository<User, UserFilterOption> for UserRepositories {
 
     async fn find_by_id(&self, id: uuid::Uuid) -> User {
         let mut find_by_id_query = self.user_queries.find_by_id(id);
-        find_by_id_query.build().map(UserService::get_user_from_row)
-        .fetch_one(&self.pool)
-        .await
-        .unwrap()
+        find_by_id_query
+            .build()
+            .map(UserService::get_user_from_row)
+            .fetch_one(&self.pool)
+            .await
+            .unwrap()
     }
 
     async fn find(&self, option: UserFilterOption) -> Vec<User> {
@@ -67,6 +73,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
             "password".to_string(),
             "test@test.com".to_string(),
             Some(vec![]),
+            None
         )
     }
 }
@@ -102,6 +109,7 @@ mod tests {
             "test_user".to_string(),
             "password123".to_string(),
             "test@example.com".to_string(),
+            None,
             None,
         );
 

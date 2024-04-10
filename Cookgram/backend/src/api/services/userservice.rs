@@ -26,7 +26,20 @@ impl UserService {
             email: pg_row.get("email"),
             recipies: None,
             meta: Meta::new(), //TODO: Inner join table to retrieve,
-            role: Roles::User(UserRole{})
+            role: UserService::retrive_role_from_row(&pg_row),
+        }
+    }
+
+    fn retrive_role_from_row(pg_row: &PgRow) -> Roles {
+        let role: String = pg_row.get("role");
+        match role.as_str() {
+            "User" => Roles::user_role(),
+            "Admin" => Roles::admin_role(),
+            "SuperAdmin" => Roles::super_admin_role(),
+            _ => {
+                tracing::error!("Not recognized roles");
+                Roles::user_role()
+            }
         }
     }
 }

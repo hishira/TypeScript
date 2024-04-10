@@ -44,11 +44,11 @@ impl User {
         };
         let role: Roles = match role {
             Some(r) => match r {
-                Roles::User(User) => Roles::User(UserRole {}),
-                Roles::Admin(Admin) => Roles::Admin(AdminRole {}),
-                Roles::SuperAdmin(Admin) => Roles::SuperAdmin(SuperAdminRole {}),
+                Roles::User(User) => Roles::user_role(),
+                Roles::Admin(Admin) => Roles::admin_role(),
+                Roles::SuperAdmin(Admin) => Roles::super_admin_role(),
             },
-            None => Roles::User(UserRole{}),
+            None => Roles::User(UserRole {}),
         };
         match id {
             Some(id) => Self {
@@ -67,7 +67,7 @@ impl User {
                 email,
                 recipies,
                 meta: Meta::new(),
-                role
+                role,
             },
         }
     }
@@ -127,7 +127,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             Some(vec![]),
-            None
+            None,
         );
 
         assert_ne!(user.id, Uuid::nil());
@@ -153,7 +153,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             None,
-            None
+            None,
         );
 
         // Check if the user has the correct id
@@ -183,7 +183,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             Some(vec![recipie1, recipie2]),
-            None
+            None,
         );
 
         // Check if the user has the correct id
@@ -211,7 +211,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             None,
-            None
+            None,
         );
 
         // Check if the user has a UUID id
@@ -245,7 +245,7 @@ mod tests {
                 create_date: date,
                 edit_date: date,
             },
-            role: Roles::User(UserRole{}),
+            role: Roles::User(UserRole {}),
         };
 
         // Serialize the user to JSON
