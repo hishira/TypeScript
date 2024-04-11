@@ -12,7 +12,7 @@ CREATE TYPE EventType as ENUM ('Create', 'Delete', 'Update');
 CREATE TABLE IF NOT EXISTS EVENTS (
     id uuid not null,
     created_date TIMESTAMP not null,
-    type EventType,
+    event_type EventType,
     related_entity uuid not null,
     completed boolean,
 );

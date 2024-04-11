@@ -1,16 +1,24 @@
 use time::OffsetDateTime;
 
+use crate::core::entity::Entity;
+
 pub enum EventType {
     Create,
     Delete,
     Update,
 }
 pub struct Event {
-    id: uuid::Uuid,
-    create_date: time::Date,
-    event_type: EventType,
-    related_entity: uuid::Uuid,
-    completed: bool,
+    pub id: uuid::Uuid,
+    pub create_date: time::Date,
+    pub event_type: EventType,
+    pub related_entity: uuid::Uuid,
+    pub completed: bool,
+}
+
+impl Entity for Event{
+    fn generate_id() -> uuid::Uuid {
+        uuid::Uuid::new_v4()
+    }
 }
 
 impl Event {
@@ -23,7 +31,7 @@ impl Event {
     ) -> Self {
         let current_id = match id {
             Some(id) => id,
-            None => uuid::Uuid::new_v4(),
+            None => Event::generate_id(),
         };
         let event_type = match event {
             Some(event) => event,
