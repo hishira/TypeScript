@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS EVENTS (
     created_date TIMESTAMP not null,
     event_type EventType,
     related_entity uuid not null,
-    completed boolean,
+    completed boolean
 );
 Create TABLE IF NOT EXISTS META (
     id uuid NOT NULL,

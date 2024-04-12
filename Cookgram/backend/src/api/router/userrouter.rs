@@ -9,12 +9,12 @@ use crate::{
     api::{
         appstate::appstate::AppState,
         dtos::userdto::userdto::{CreateUserDto, UserDtos, UserFilterOption},
-        queries::userquery::userquery::UserQuery,
-        repositories::{repositories::Repository, userrepositories::UserRepositories},
+        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
+        repositories::{eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories},
         services::userservice::UserService,
         validators::dtovalidator::ValidateDtos,
     },
-    core::user::user::User,
+    core::{event::userevent::UserEvent, user::user::User},
     database::init::Database,
 };
 
@@ -22,6 +22,7 @@ use super::router::ApplicationRouter;
 
 pub struct UserRouter {
     user_repo: UserRepositories,
+    event_repo: EventRepository,
 }
 
 impl UserRouter {
@@ -31,6 +32,11 @@ impl UserRouter {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool).unwrap(),
                 user_queries: UserQuery::new(None, None, None),
             },
+            event_repo: EventRepository {
+                pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                    .unwrap(),
+                event_query: EventQuery{}
+            }
         }
     }
     async fn user_create<T>(
@@ -44,6 +50,7 @@ impl UserRouter {
             .repo
             .create(UserService::get_user_from_dto(UserDtos::Create(params)))
             .await;
+        let t = state.event_repo.create_later(UserEvent::create_event(user.id.clone()));
         Json(user)
     }
 
@@ -68,6 +75,7 @@ impl ApplicationRouter for UserRouter {
             )
             .with_state(AppState {
                 repo: self.user_repo.clone(),
+                event_repo: self.event_repo.clone()
             })
     }
 }

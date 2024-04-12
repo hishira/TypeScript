@@ -2,11 +2,13 @@ use time::OffsetDateTime;
 
 use crate::core::entity::Entity;
 
+#[derive(Clone)]
 pub enum EventType {
     Create,
     Delete,
     Update,
 }
+#[derive(Clone)]
 pub struct Event {
     pub id: uuid::Uuid,
     pub create_date: time::Date,
@@ -23,7 +25,6 @@ impl Entity for Event{
 
 impl Event {
     pub fn new(
-        &self,
         id: Option<uuid::Uuid>,
         event: Option<EventType>,
         related_entity_id: uuid::Uuid,

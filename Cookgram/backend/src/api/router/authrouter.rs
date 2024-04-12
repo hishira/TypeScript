@@ -20,8 +20,8 @@ use crate::{
     api::{
         appstate::appstate::AppState,
         dtos::userdto::userdto::{UserAuthDto, UserFilterOption},
-        queries::userquery::userquery::UserQuery,
-        repositories::{repositories::Repository, userrepositories::UserRepositories},
+        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
+        repositories::{eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories},
         utils::jwt::jwt::Claims,
         validators::dtovalidator::ValidateDtos,
     },
@@ -65,6 +65,7 @@ enum AuthError {
 }
 pub struct AuthRouter {
     user_repo: UserRepositories,
+    event_repo: EventRepository,
 }
 
 impl AuthRouter {
@@ -75,6 +76,11 @@ impl AuthRouter {
                     .unwrap(),
                 user_queries: UserQuery::new(None, None, None),
             },
+            event_repo: EventRepository {
+                pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                    .unwrap(),
+                event_query: EventQuery{}
+            }
         }
     }
     async fn login<T>(
@@ -135,6 +141,7 @@ impl ApplicationRouter for AuthRouter {
             .route("/login", post(AuthRouter::login))
             .with_state(AppState {
                 repo: self.user_repo.clone(),
+                event_repo: self.event_repo.clone()
             })
     }
 }
