@@ -15,10 +15,26 @@ pub struct EventRepository {
 
 pub struct EventFilterOption {}
 
-impl Repository<Event, EventFilterOption> for EventRepository {
-    async fn create(&self, entity: Event) -> Event {
+impl EventRepository {
+    pub fn create_later(&self, entity: Event) -> Event {
         println!("Event to create");
         run_thread(self.pool.clone(), entity.clone());
+
+        entity
+    }
+}
+
+impl Repository<Event, EventFilterOption> for EventRepository {
+    async fn create(&self, entity: Event) -> Event {
+        let mut creation_query = EventQuery {}.create(entity.clone());
+        let event_response = creation_query.build().fetch_one(&self.pool).await;
+        match event_response {
+            Ok(_) => tracing::debug!(
+                "Event created for entity: {} created",
+                entity.related_entity
+            ),
+            Err(err) => tracing::error!("Error occur while event creating, {}", err),
+        }
 
         entity
     }
@@ -43,14 +59,14 @@ impl Repository<Event, EventFilterOption> for EventRepository {
 fn run_thread(postgres_pool: Pool<Postgres>, entity: Event) {
     //let mut creation_query = self.event_query.create(entity.clone());
     tokio::task::spawn(async move {
-        let mut creation_query = EventQuery{}.create(entity.clone());
-        let event_response = creation_query.build().fetch_one(&postgres_pool).await;
+        let mut creation_query = EventQuery {}.create(entity.clone());
+        let event_response = creation_query.build().execute(&postgres_pool).await;
         match event_response {
             Ok(_) => tracing::debug!(
                 "Event created for entity: {} created",
                 entity.related_entity
             ),
-            Err(_) => tracing::error!("Error occur while event creating"),
+            Err(err) => tracing::error!("Error occur while event creating, {}", err),
         }
     });
 }

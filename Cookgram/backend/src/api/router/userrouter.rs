@@ -50,7 +50,7 @@ impl UserRouter {
             .repo
             .create(UserService::get_user_from_dto(UserDtos::Create(params)))
             .await;
-        state.event_repo.create(UserEvent::create_event(user.id.clone()));
+        let t = state.event_repo.create_later(UserEvent::create_event(user.id.clone()));
         Json(user)
     }
 

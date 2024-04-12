@@ -2,12 +2,10 @@ use std::{any::Any, future::IntoFuture};
 
 use crate::{
     api::{
-        dtos::userdto::userdto::UserFilterOption,
-        queries::{
+        dtos::userdto::userdto::UserFilterOption, errors::usererror::UserError, queries::{
             actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
             userquery::userquery::UserQuery,
-        },
-        services::userservice::UserService,
+        }, services::userservice::UserService
     },
     core::{meta::meta::Meta, role::role::Roles, user::user::User},
 };
@@ -25,20 +23,29 @@ pub struct UserRepositories {
 
 impl Repository<User, UserFilterOption> for UserRepositories {
     async fn create(&self, entity: User) -> User {
-        let mut transaction = self.pool.begin().await.unwrap();
-        let mut meta_query = MetaQuery {}.create(entity.meta.clone());
-        let mut create_query = self.user_queries.create(entity.clone());
-        let meta_response = meta_query.build().execute(transaction.deref_mut()).await;
-        let re = create_query.build().execute(transaction.deref_mut()).await;
-        match (re, meta_response) {
-            (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
-            (Ok(_), Err(_)) => tracing::debug!("User created, meta not created"),
-            (Err(_), Ok(_)) => tracing::debug!("User not created, meta created"),
-            (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
+        let transaction_res = self.pool.begin().await;
+        match transaction_res {
+            Ok(mut tranaction) => {
+                let mut meta_query = MetaQuery {}.create(entity.meta.clone());
+                let mut create_query = self.user_queries.create(entity.clone());
+                let meta_response = meta_query.build().execute(tranaction.deref_mut()).await;
+                let re = create_query.build().execute(tranaction.deref_mut()).await;
+                match (re, meta_response) {
+                    (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
+                    (Ok(_), Err(_)) => tracing::debug!("User created, meta not created"),
+                    (Err(_), Ok(_)) => tracing::debug!("User not created, meta created"),
+                    (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
+                }
+                //mete_create(self.pool.clone(), entity.clone()); -> At moment not delete
+                let _ = tranaction.commit().await;
+                entity
+            },
+            Err(error) => {
+                tracing::error!("Error occur while user create, {}", error);
+                entity
+            },
         }
-        //mete_create(self.pool.clone(), entity.clone()); -> At moment not delete
-        let _ = transaction.commit().await;
-        entity
+        
     }
 
     async fn find_by_id(&self, id: uuid::Uuid) -> User {

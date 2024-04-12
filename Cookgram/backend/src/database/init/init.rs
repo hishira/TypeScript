@@ -33,8 +33,8 @@ impl Database {
     }
     async fn get_optional_pool(database_url: String) -> Option<Pool<Postgres>> {
         let pool = PgPoolOptions::new()
-            .max_connections(5)
-            .acquire_timeout(Duration::from_secs(3))
+            .max_connections(10)
+            .acquire_timeout(Duration::from_secs(10))
             .connect(&database_url)
             .await
             .expect("can't connect to database");
