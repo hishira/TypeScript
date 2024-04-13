@@ -24,7 +24,7 @@ impl ActionQueryBuilder<Event> for EventQuery {
         todo!()
     }
 
-    fn delete(&self, entity: Event) -> String {
+    fn delete(&self, entity: Event) -> QueryBuilder< Postgres>  {
         todo!()
     }
 }

@@ -24,7 +24,7 @@ impl Repository<Meta, MetaFilterOption> for MetaRepository {
         todo!()
     }
 
-    fn delete(option: Meta) -> Meta {
+    async fn delete(&self, option: Meta) -> Meta {
         todo!()
     }
 

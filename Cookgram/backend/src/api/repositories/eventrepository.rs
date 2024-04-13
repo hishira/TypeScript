@@ -47,7 +47,7 @@ impl Repository<Event, EventFilterOption> for EventRepository {
         todo!()
     }
 
-    fn delete(option: Event) -> Event {
+    async fn delete(&self, option: Event) -> Event {
         todo!()
     }
 
