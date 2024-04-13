@@ -57,7 +57,6 @@ impl Repository<Event, EventFilterOption> for EventRepository {
 }
 
 fn run_thread(postgres_pool: Pool<Postgres>, entity: Event) {
-    //let mut creation_query = self.event_query.create(entity.clone());
     tokio::task::spawn(async move {
         let mut creation_query = EventQuery {}.create(entity.clone());
         let event_response = creation_query.build().execute(&postgres_pool).await;

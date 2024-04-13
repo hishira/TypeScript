@@ -7,18 +7,13 @@ use sqlx::{Pool, Postgres};
 
 use crate::{
     api::{
-        appstate::appstate::AppState,
-        dtos::userdto::userdto::{CreateUserDto, UserDtos, UserFilterOption},
-        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
-        repositories::{eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories},
-        services::userservice::UserService,
-        validators::dtovalidator::ValidateDtos,
+        appstate::appstate::AppState, dtos::userdto::userdto::{CreateUserDto, UserDtos, UserFilterOption}, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories}, services::userservice::UserService, utils::jwt::jwt::Claims, validators::dtovalidator::ValidateDtos
     },
     core::{event::userevent::UserEvent, user::user::User},
     database::init::Database,
 };
 
-use super::router::ApplicationRouter;
+use super::{authrouter::AuthError, router::ApplicationRouter};
 
 pub struct UserRouter {
     user_repo: UserRepositories,
@@ -73,9 +68,14 @@ impl ApplicationRouter for UserRouter {
                 "/users",
                 get(UserRouter::user_find).post(UserRouter::user_create),
             )
+            .route("/protected", get(protected))
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone()
             })
     }
+}
+
+async fn protected(claims: Claims)->Result<String, AuthError> {
+    Ok(format!("{}", claims.user_id.unwrap()))
 }

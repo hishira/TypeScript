@@ -31,9 +31,9 @@ use crate::{
 
 use super::router::ApplicationRouter;
 
-struct Keys {
-    encoding: EncodingKey,
-    decoding: DecodingKey,
+pub struct Keys {
+    pub encoding: EncodingKey,
+    pub decoding: DecodingKey,
 }
 
 impl Keys {
@@ -44,7 +44,7 @@ impl Keys {
         }
     }
 }
-static KEYS: Lazy<Keys> = Lazy::new(|| {
+pub static KEYS: Lazy<Keys> = Lazy::new(|| {
     let secret = dotenv::var("JWT_SECRET").expect("JWT_SECRET must be set");
     Keys::new(secret.as_bytes())
 });
@@ -55,7 +55,7 @@ pub struct AuthBody {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-enum AuthError {
+pub enum AuthError {
     WrongCredentials,
     MissingCredentials,
     TokenCreation,
@@ -94,18 +94,22 @@ impl AuthRouter {
             (None, None) => Claims {
                 user_id: None,
                 user_info: "TEst".to_string(),
+                exp: 2000000000, // May 2033
             },
             (None, Some(username)) => Claims {
                 user_id: None,
                 user_info: username,
+                exp: 2000000000, // May 2033
             },
             (Some(email), None) => Claims {
                 user_id: None,
                 user_info: email,
+                exp: 2000000000, // May 2033
             },
             (Some(email), Some(username)) => Claims {
                 user_id: None,
                 user_info: username,
+                exp: 2000000000, // May 2033
             },
         };
         let filter = UserFilterOption {
@@ -117,7 +121,7 @@ impl AuthRouter {
         }
         let user = users.get(0).unwrap();
         claims.user_id = Some(user.id);
-        let token = encode(&Header::new(jsonwebtoken::Algorithm::HS256), &claims, &KEYS.encoding)
+        let token = encode(&Header::default(), &claims, &KEYS.encoding)
             .map_err(|_| AuthError::TokenCreation)?;
         match verify(params.password, &user.password) {
             Ok(bcrypt_verify_respoonse) => {

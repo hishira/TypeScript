@@ -1,16 +1,15 @@
-use std::{any::Any, future::IntoFuture};
-
 use crate::{
     api::{
-        dtos::userdto::userdto::UserFilterOption, errors::usererror::UserError, queries::{
+        dtos::userdto::userdto::UserFilterOption,
+        queries::{
             actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
             userquery::userquery::UserQuery,
-        }, services::userservice::UserService
+        },
+        services::userservice::UserService,
     },
-    core::{meta::meta::Meta, role::role::Roles, user::user::User},
+    core::user::user::User,
 };
-use serde::Deserialize;
-use sqlx::{postgres::PgRow, Column, Executor, Pool, Postgres, Row};
+use sqlx::{Pool, Postgres, Transaction};
 use std::ops::DerefMut;
 
 use super::repositories::Repository;
@@ -20,32 +19,36 @@ pub struct UserRepositories {
     pub pool: Pool<Postgres>,
     pub user_queries: UserQuery,
 }
-
+impl UserRepositories {
+    async fn create_user_using_transaction(
+        &self,
+        mut transaction: Transaction<'static, Postgres>,
+        entity: User,
+    ) -> User {
+        let mut meta_query = MetaQuery {}.create(entity.meta.clone());
+        let mut create_query = self.user_queries.create(entity.clone());
+        let meta_response = meta_query.build().execute(transaction.deref_mut()).await;
+        let re = create_query.build().execute(transaction.deref_mut()).await;
+        match (re, meta_response) {
+            (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
+            (Ok(_), Err(_)) => tracing::debug!("User created, meta not created"),
+            (Err(_), Ok(_)) => tracing::debug!("User not created, meta created"),
+            (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
+        }
+        let _ = transaction.commit().await;
+        entity
+    }
+}
 impl Repository<User, UserFilterOption> for UserRepositories {
     async fn create(&self, entity: User) -> User {
         let transaction_res = self.pool.begin().await;
         match transaction_res {
-            Ok(mut tranaction) => {
-                let mut meta_query = MetaQuery {}.create(entity.meta.clone());
-                let mut create_query = self.user_queries.create(entity.clone());
-                let meta_response = meta_query.build().execute(tranaction.deref_mut()).await;
-                let re = create_query.build().execute(tranaction.deref_mut()).await;
-                match (re, meta_response) {
-                    (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
-                    (Ok(_), Err(_)) => tracing::debug!("User created, meta not created"),
-                    (Err(_), Ok(_)) => tracing::debug!("User not created, meta created"),
-                    (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
-                }
-                //mete_create(self.pool.clone(), entity.clone()); -> At moment not delete
-                let _ = tranaction.commit().await;
-                entity
-            },
+            Ok(tranaction) => self.create_user_using_transaction(tranaction, entity).await,
             Err(error) => {
                 tracing::error!("Error occur while user create, {}", error);
                 entity
-            },
+            }
         }
-        
     }
 
     async fn find_by_id(&self, id: uuid::Uuid) -> User {
@@ -80,7 +83,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
             "password".to_string(),
             "test@test.com".to_string(),
             Some(vec![]),
-            None
+            None,
         )
     }
 }

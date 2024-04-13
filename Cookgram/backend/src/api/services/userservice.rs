@@ -1,6 +1,7 @@
 use sqlx::postgres::{PgRow};
 use sqlx::Row;
 
+use crate::api::dtos::roledto::roledto::RoleDto;
 use crate::core::role::role::{Roles, UserRole};
 use crate::{api::dtos::userdto::userdto::UserDtos, core::{meta::meta::Meta, user::user::User}};
 
@@ -26,19 +27,19 @@ impl UserService {
             email: pg_row.get("email"),
             recipies: None,
             meta: Meta::new(), //TODO: Inner join table to retrieve,
-            role: UserService::retrive_role_from_row(&pg_row),
+            role: UserService::retrive_role_from_row(&pg_row).unwrap(),
         }
     }
 
-    fn retrive_role_from_row(pg_row: &PgRow) -> Roles {
-        let role: String = pg_row.get("role");
-        match role.as_str() {
-            "User" => Roles::user_role(),
-            "Admin" => Roles::admin_role(),
-            "SuperAdmin" => Roles::super_admin_role(),
-            _ => {
+    fn retrive_role_from_row(pg_row: &PgRow) -> Result<Roles, sqlx::Error> {
+        let role: Result<RoleDto, sqlx::Error> = pg_row.try_get("role");
+        match role {
+            Ok(res) => {
+                Ok(res.map_to_roles())
+            },
+            Err(error) => {
                 tracing::error!("Not recognized roles");
-                Roles::user_role()
+                Err(error)
             }
         }
     }
