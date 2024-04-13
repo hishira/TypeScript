@@ -122,8 +122,10 @@ impl ActionQueryBuilder<User> for UserQuery {
         update_query
     }
 
-    fn delete(&self, entity: User) -> String {
-        todo!()
+    fn delete(&self, entity: User) -> QueryBuilder<Postgres> {
+        let mut delete_query: QueryBuilder<Postgres> = QueryBuilder::new("DELETE FROM USERS WHERE id = ");
+        delete_query.push_bind(entity.id);
+        delete_query
     }
 }
 

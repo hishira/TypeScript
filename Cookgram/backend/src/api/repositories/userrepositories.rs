@@ -72,8 +72,16 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         response
     }
 
-    fn delete(entity: User) -> User {
-        entity
+    async fn delete(&self, entity: User) -> User {
+        let mut delete_query = self.user_queries.delete(entity.clone());
+        let delete_user_reponse = delete_query.build().execute(&self.pool).await;
+        match delete_user_reponse {
+            Ok(_) => entity,
+            Err(error) => {
+                tracing::error!("error while user delete: {}", error);
+                entity
+            },
+        }
     }
 
     fn update(update_entity: User) -> User {
