@@ -1,8 +1,4 @@
-use axum::{
-    extract::State,
-    routing::{get},
-    Json, Router,
-};
+use axum::{extract::State, routing::{get, post}, Error, Json, Router};
 use sqlx::{Pool, Postgres};
 
 use crate::{
@@ -10,15 +6,19 @@ use crate::{
         appstate::appstate::AppState,
         dtos::userdto::userdto::{CreateUserDto, UserDtos, UserFilterOption},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
-        repositories::{eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories},
+        repositories::{
+            eventrepository::EventRepository, repositories::Repository,
+            userrepositories::UserRepositories,
+        },
         services::userservice::UserService,
+        utils::jwt::jwt::Claims,
         validators::dtovalidator::ValidateDtos,
     },
     core::{event::userevent::UserEvent, user::user::User},
     database::init::Database,
 };
 
-use super::router::ApplicationRouter;
+use super::{authrouter::AuthError, router::ApplicationRouter};
 
 pub struct UserRouter {
     user_repo: UserRepositories,
@@ -29,14 +29,15 @@ impl UserRouter {
     pub fn new(database: &Database) -> Self {
         Self {
             user_repo: UserRepositories {
-                pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool).unwrap(),
+                pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                    .unwrap(),
                 user_queries: UserQuery::new(None, None, None),
             },
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
                     .unwrap(),
-                event_query: EventQuery{}
-            }
+                event_query: EventQuery {},
+            },
         }
     }
     async fn user_create<T>(
@@ -50,7 +51,9 @@ impl UserRouter {
             .repo
             .create(UserService::get_user_from_dto(UserDtos::Create(params)))
             .await;
-        let t = state.event_repo.create_later(UserEvent::create_event(user.id.clone()));
+        let t = state
+            .event_repo
+            .create_later(UserEvent::create_event(user.id.clone()));
         Json(user)
     }
 
@@ -73,9 +76,26 @@ impl ApplicationRouter for UserRouter {
                 "/users",
                 get(UserRouter::user_find).post(UserRouter::user_create),
             )
+            .route("/protected", get(protected))
+            .route("/test-protected", post(pp))
             .with_state(AppState {
                 repo: self.user_repo.clone(),
-                event_repo: self.event_repo.clone()
+                event_repo: self.event_repo.clone(),
             })
     }
+}
+
+async fn protected(claims: Claims) -> Result<String, AuthError> {
+    Ok(format!("{}", claims.user_id.unwrap()))
+}
+async fn pp<T>(
+    claims: Claims,
+    State(state): State<AppState<T>>,
+    ValidateDtos(params): ValidateDtos<CreateUserDto>,
+) -> Result<String, AuthError>
+where
+    T: Repository<User, UserFilterOption>,
+{
+    print!("{}", params.email);
+    Ok(format!("OK"))
 }

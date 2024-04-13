@@ -22,7 +22,7 @@ impl ActionQueryBuilder<Meta> for MetaQuery {
         todo!()
     }
 
-    fn delete(&self, entity: Meta) -> String {
+    fn delete(&self, entity: Meta) -> QueryBuilder< Postgres>   {
         todo!()
     }
 }
