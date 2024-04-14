@@ -117,7 +117,7 @@ impl ActionQueryBuilder<User> for UserQuery {
         update_query.push(" password = ");
         update_query.push_bind(entity.password);
         update_query.push(" WHERE id = ");
-        update_query.push_bind(entity.id.to_string());
+        update_query.push_bind(entity.id);
 
         update_query
     }
@@ -131,7 +131,7 @@ impl ActionQueryBuilder<User> for UserQuery {
 
 #[cfg(test)]
 mod tests {
-    use crate::core::meta::meta::Meta;
+    use crate::core::{meta::meta::Meta, role::role::Roles};
 
     use super::*;
 
@@ -197,6 +197,7 @@ mod tests {
             email: "test@example.com".to_string(),
             recipies: None,
             meta: Meta::new(),
+            role: Roles::user_role()
         };
 
         let mut create_query = validate_action_query(&user_query, test_user);
@@ -248,6 +249,7 @@ mod tests {
             email: "test@example.com".to_string(),
             recipies: None,
             meta: Meta::new(),
+            role: Roles::user_role()
         };
 
         let _ = user_query.delete(test_user);

@@ -51,7 +51,7 @@ impl Repository<Event, EventFilterOption> for EventRepository {
         todo!()
     }
 
-    fn update(update_entity: Event) -> Event {
+    async fn update(&self, update_entity: Event) -> Event {
         todo!()
     }
 }

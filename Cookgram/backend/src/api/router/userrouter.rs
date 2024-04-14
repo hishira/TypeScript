@@ -1,20 +1,23 @@
-use axum::{extract::State, routing::{get, post}, Error, Json, Router};
+use axum::{
+    extract::State,
+    routing::{get, post},
+    Error, Json, Router,
+};
 use sqlx::{Pool, Postgres};
 
 use crate::{
     api::{
         appstate::appstate::AppState,
-        dtos::userdto::userdto::{CreateUserDto, UserDtos, UserFilterOption},
+        dtos::userdto::userdto::{CreateUserDto, DeleteUserDto, UserDtos, UserFilterOption},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
-            eventrepository::EventRepository, repositories::Repository,
-            userrepositories::UserRepositories,
+            eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories,
         },
         services::userservice::UserService,
         utils::jwt::jwt::Claims,
         validators::dtovalidator::ValidateDtos,
     },
-    core::{event::userevent::UserEvent, user::user::User},
+    core::{event::userevent::UserEvent, user::{self, user::User}},
     database::init::Database,
 };
 
@@ -66,6 +69,11 @@ impl UserRouter {
     {
         let users = state.repo.find(params).await;
         Json(users)
+    }
+
+    async fn user_delete<T>(claims: Claims, State(state): State<AppState<T>>, ValidateDtos(params): ValidateDtos<DeleteUserDto>) -> Json<User> where
+    T: Repository<User, UserFilterOption>, {
+        todo!()//let user = state.repo.delete(None);
     }
 }
 
