@@ -28,7 +28,7 @@ impl Repository<Meta, MetaFilterOption> for MetaRepository {
         todo!()
     }
 
-    fn update(update_entity: Meta) -> Meta {
+    async fn update(&self, update_entity: Meta) -> Meta {
         todo!()
     }
 }

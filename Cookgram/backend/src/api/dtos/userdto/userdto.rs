@@ -22,6 +22,11 @@ pub struct UpdateUserDto {
 }
 
 #[derive(Debug, Validate, Deserialize)]
+pub struct DeleteUserDto {
+    pub id: uuid::Uuid,
+    pub username: String,
+}
+#[derive(Debug, Validate, Deserialize)]
 #[validate(schema(function = "validatete_auth", skip_on_field_errors = true))]
 pub struct UserAuthDto {
     pub username: Option<String>,
@@ -48,6 +53,7 @@ pub fn validatete_auth(user_auth_dto: &UserAuthDto) -> Result<(), ValidationErro
 pub enum UserDtos {
     Create(CreateUserDto),
     Update(UpdateUserDto),
+    Delete(DeleteUserDto),
 }
 
 #[derive(Debug, Deserialize)]

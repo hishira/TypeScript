@@ -16,6 +16,7 @@ impl UserService {
             UserDtos::Update(user) => {
                 User::new(None, user.username, user.password, user.email, None, None) // FOX role
             }
+            UserDtos::Delete(_) => todo!(),
         }
     }
 
