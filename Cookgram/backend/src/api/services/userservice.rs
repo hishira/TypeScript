@@ -2,16 +2,18 @@ use sqlx::postgres::{PgRow};
 use sqlx::Row;
 
 use crate::api::dtos::roledto::roledto::RoleDto;
+use crate::api::utils::password_worker::password_worker::PasswordWorker;
 use crate::core::role::role::{Roles, UserRole};
 use crate::{api::dtos::userdto::userdto::UserDtos, core::{meta::meta::Meta, user::user::User}};
 
 pub struct UserService {}
 
 impl UserService {
-    pub fn get_user_from_dto(user_dto: UserDtos) -> User {
+    pub async  fn get_user_from_dto(user_dto: UserDtos, pass_worker: &PasswordWorker) -> User {
         match user_dto {
             UserDtos::Create(user) => {
-                User::new(None, user.username, user.password, user.email, None, None) //TODO: Fix role
+                let hash = pass_worker.hash(user.password.clone()).await.unwrap();
+                User::new(None, user.username, hash, user.email, None, None) //TODO: Fix role
             }
             UserDtos::Update(user) => {
                 User::new(None, user.username, user.password, user.email, None, None) // FOX role

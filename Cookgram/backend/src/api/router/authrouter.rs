@@ -22,7 +22,7 @@ use crate::{
         dtos::userdto::userdto::{UserAuthDto, UserFilterOption},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories},
-        utils::jwt::jwt::Claims,
+        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
         validators::dtovalidator::ValidateDtos,
     },
     core::user::user::User,
@@ -145,7 +145,8 @@ impl ApplicationRouter for AuthRouter {
             .route("/login", post(AuthRouter::login))
             .with_state(AppState {
                 repo: self.user_repo.clone(),
-                event_repo: self.event_repo.clone()
+                event_repo: self.event_repo.clone(),
+                pass_worker: PasswordWorker::new(12,4).unwrap()
             })
     }
 }
