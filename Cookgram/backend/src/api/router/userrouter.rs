@@ -14,7 +14,7 @@ use crate::{
             eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories,
         },
         services::userservice::UserService,
-        utils::jwt::jwt::Claims,
+        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
         validators::dtovalidator::ValidateDtos,
     },
     core::{event::userevent::UserEvent, user::{self, user::User}},
@@ -50,13 +50,14 @@ impl UserRouter {
     where
         T: Repository<User, UserFilterOption>,
     {
+        let user_tmp = UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker).await;
         let user = state
             .repo
-            .create(UserService::get_user_from_dto(UserDtos::Create(params)))
+            .create(user_tmp)
             .await;
-        let t = state
-            .event_repo
-            .create_later(UserEvent::create_event(user.id.clone()));
+        // let t = state
+        //     .event_repo
+        //     .create_later(UserEvent::create_event(user.id.clone()));
         Json(user)
     }
 
@@ -89,6 +90,7 @@ impl ApplicationRouter for UserRouter {
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
+                pass_worker: PasswordWorker::new(10,4).unwrap()
             })
     }
 }
