@@ -55,9 +55,6 @@ impl UserRouter {
             .repo
             .create(user_tmp)
             .await;
-        // let t = state
-        //     .event_repo
-        //     .create_later(UserEvent::create_event(user.id.clone()));
         Json(user)
     }
 
