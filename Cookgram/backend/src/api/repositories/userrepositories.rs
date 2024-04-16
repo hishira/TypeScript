@@ -7,12 +7,12 @@ use crate::{
         },
         services::userservice::UserService,
     },
-    core::user::user::User,
+    core::{event::event::{Event, EventType}, user::user::User},
 };
 use sqlx::{Pool, Postgres, Transaction};
 use std::ops::DerefMut;
 
-use super::repositories::Repository;
+use super::{eventrepository::EventRepository, repositories::Repository};
 
 #[derive(Clone)]
 pub struct UserRepositories {
@@ -36,6 +36,7 @@ impl UserRepositories {
             (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
         }
         let _ = transaction.commit().await;
+        EventRepository::create_later(self.pool.clone(), Event::new(None, Some(EventType::Create), entity.id.clone(), true));
         entity
     }
 

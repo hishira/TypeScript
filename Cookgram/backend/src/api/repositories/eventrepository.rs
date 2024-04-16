@@ -16,9 +16,9 @@ pub struct EventRepository {
 pub struct EventFilterOption {}
 
 impl EventRepository {
-    pub fn create_later(&self, entity: Event) -> Event {
+    pub fn create_later(pool: Pool<Postgres>, entity: Event) -> Event {
         println!("Event to create");
-        run_thread(self.pool.clone(), entity.clone());
+        run_thread(pool.clone(), entity.clone());
 
         entity
     }
