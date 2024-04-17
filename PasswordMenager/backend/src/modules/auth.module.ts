@@ -15,6 +15,7 @@ import { JwtStrategy2 } from '../refreshtoken.strategy';
 import { AuthService } from '../services/auth.service';
 import { DatabaseModule } from './database.module';
 import { UserModule } from './user.module';
+import { LoggerModule } from './logger.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -26,6 +27,7 @@ import { UserModule } from './user.module';
       secret: jwtConstants.secret,
     }),
     CqrsModule,
+    LoggerModule,
   ],
   controllers: [AuthController],
   providers: [

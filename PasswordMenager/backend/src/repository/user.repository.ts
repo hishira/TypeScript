@@ -8,18 +8,23 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
 import { UserBuilder } from 'src/schemas/utils/builders/user.builder';
 import { UserMetaBuilder } from 'src/schemas/utils/builders/userMeta.builder';
+import { Logger } from 'src/utils/Logger';
 
 @Injectable()
 export class UserRepository implements Repository<IUser> {
   constructor(
     @Inject('USER_MODEL')
     private userModel: Model<IUser>,
+    private readonly logger: Logger,
   ) {}
   create(objectToSave: DTO): Promise<IUser> {
     const newUser = new this.userModel({
       ...objectToSave.toObject(),
     });
-    return newUser.save();
+    return newUser.save().catch((err) => {
+      this.logger.error('Error occur in user creation, ', err);
+      return {} as IUser;
+    });
   }
 
   find(option: FilterOption<unknown>): Promise<IUser[]> {

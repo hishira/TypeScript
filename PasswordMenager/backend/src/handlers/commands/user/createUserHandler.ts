@@ -9,7 +9,7 @@ export class CreateUserHandler
   extends BaseCommandHandler<IUser>
   implements ICommandHandler<CreateUserCommand>
 {
-  execute(command: CreateUserCommand): Promise<IUser> {
+  execute(command: CreateUserCommand): Promise<IUser | void> {
     return this.repository.create(
       UserDTOMapper.GetDTOFromCreateUserDTO({
         email: command.createUserDto.email,
