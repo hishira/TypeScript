@@ -10,6 +10,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { NotificationModule } from './modules/notification.module';
 import { EventModule } from './modules/event.module';
+import { LoggerModule } from './modules/logger.module';
 const NestModules = [
   ConfigModule.forRoot(),
   ScheduleModule.forRoot(),
@@ -18,6 +19,7 @@ const NestModules = [
 @Module({
   imports: [
     UserModule,
+    LoggerModule,
     AuthModule,
     GroupModule,
     EntryModule,

@@ -20,9 +20,7 @@ export class EventRepository implements Repository<IEvent> {
 
     return createdEvent.save();
   }
-  createMany?(objects: DTO[]): Promise<unknown> {
-    throw new Error('Method not implemented.');
-  }
+
   find(
     option: FilterOption<unknown>,
     paginator?: PaginatorDto,
@@ -32,7 +30,7 @@ export class EventRepository implements Repository<IEvent> {
   findById(id: string): Promise<IEvent> {
     return this.eventModel.findById(id).exec();
   }
-  update(entry: Partial<IEvent>): Promise<unknown> {
+  update(entry: Partial<IEvent>): Promise<IEvent> {
     throw new Error('Method not implemented.');
   }
   delete(option: DeleteOption<unknown>): Promise<unknown> {

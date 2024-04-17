@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from '../controllers/user.contaoller';
-import { UserService } from '../services/user.service';
-import { userProviders } from '../providers/user.providers';
-import { DatabaseModule } from './database.module';
-import { Repository } from 'src/schemas/Interfaces/repository.interface';
-import { UserRepository } from 'src/repository/user.repository';
-import { HistoryModule } from './history.module';
-import { CreateUserHandler } from 'src/handlers/commands/user/createUserHandler';
 import { CqrsModule } from '@nestjs/cqrs';
-import { GetAllUserQueryHandler } from 'src/handlers/queries/user/getAllUserHandler.queries';
+import { CreateUserHandler } from 'src/handlers/commands/user/createUserHandler';
 import { UpdateUserHandler } from 'src/handlers/commands/user/updateUserHandler';
+import { GetAllUserQueryHandler } from 'src/handlers/queries/user/getAllUserHandler.queries';
 import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilteredUserhandler.queries';
-import { CreateHisotryHandler } from 'src/handlers/commands/history/createHistoryHandler';
+import { UserRepository } from 'src/repository/user.repository';
+import { Repository } from 'src/schemas/Interfaces/repository.interface';
+import { UsersController } from '../controllers/user.contaoller';
+import { userProviders } from '../providers/user.providers';
+import { UserService } from '../services/user.service';
+import { DatabaseModule } from './database.module';
+import { HistoryModule } from './history.module';
+import { LoggerModule } from './logger.module';
 const commandHandles = [CreateUserHandler];
 @Module({
-  imports: [DatabaseModule, CqrsModule],
+  imports: [DatabaseModule, CqrsModule, LoggerModule],
   providers: [
     {
       provide: Repository,
@@ -25,20 +25,24 @@ const commandHandles = [CreateUserHandler];
     GetAllUserQueryHandler,
     GetFilteredUserQueryHandler,
     UpdateUserHandler,
-    CreateHisotryHandler,
   ],
   exports: [
     CreateUserHandler,
     GetAllUserQueryHandler,
     GetFilteredUserQueryHandler,
     UpdateUserHandler,
-    CreateHisotryHandler,
   ],
 })
 export class UserCommandsModule {}
 
 @Module({
-  imports: [DatabaseModule, HistoryModule, CqrsModule, UserCommandsModule],
+  imports: [
+    DatabaseModule,
+    HistoryModule,
+    CqrsModule,
+    UserCommandsModule,
+    LoggerModule,
+  ],
   controllers: [UsersController],
   providers: [
     {
@@ -47,11 +51,6 @@ export class UserCommandsModule {}
     },
     UserService,
     ...userProviders,
-    // CreateUserHandler,
-    // GetAllUserQueryHandler,
-    // GetFilteredUserQueryHandler,
-    // UpdateUserHandler,
-    // CreateHisotryHandler,
   ],
   exports: [
     {

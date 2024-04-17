@@ -13,6 +13,7 @@ import { ErrorUserCreateResponse } from 'src/response/userErrorCreate.response';
 import { EventType } from 'src/schemas/Interfaces/event.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
+import { Logger } from 'src/utils/Logger';
 import { Paginator } from 'src/utils/paginator';
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
@@ -21,6 +22,7 @@ export class UserService {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    private readonly logger: Logger,
   ) {}
 
   @OnEvent(EventTypes.CreateUser, { async: true })
@@ -34,17 +36,22 @@ export class UserService {
     return this.commandBus
       .execute(new CreateUserCommand(userCreateDTO))
       .then((user) => {
-        return this.commandBus.execute(new CreateHistoryCommand(user._id));
+        this.commandBus.execute(new CreateHistoryCommand(user._id));
+        this.logger.log(`User create id = ${user._id}`);
+        return user;
       })
-      .then((_) => {
-        this.commandBus.execute(
-          new CreateEventCommand({
-            eventType: EventType.Create,
-            relatedEnittyId: 'test',
-          }),
-        );
-        return _;
+      .then((user) => {
+        return this.commandBus
+          .execute(
+            new CreateEventCommand({
+              eventType: EventType.Create,
+              relatedEnittyId: 'test',
+            }),
+          )
+          .then((_) => this.logger.log('Create event created'))
+          .then((_) => user);
       })
+      .then((_) => _)
       .catch((err) => {
         return ErrorUserCreateResponse;
       });

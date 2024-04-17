@@ -30,7 +30,6 @@ describe('EntryRepositoryUtils', () => {
       ];
       const mappedDtos =
         EntryRepositoryUtils.GetMappedDtosToProperEntryDto(dtos);
-      console.log(mappedDtos);
       expect(mappedDtos).toHaveLength(2);
       expect(mappedDtos[0].toObject()).toHaveProperty('title', 'Title1');
       expect(mappedDtos[0].toObject()).toHaveProperty('username', 'User1');
