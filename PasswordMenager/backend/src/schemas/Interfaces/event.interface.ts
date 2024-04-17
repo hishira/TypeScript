@@ -1,9 +1,13 @@
 import { Document } from 'mongoose';
+
 export enum EventType {
-  Create = 'Create',
-  Delete = 'Delete',
-  Update = 'Update',
-  Notify = 'Notify',
+  Create = 'CreateEvent',
+  Delete = 'DeleteEvent',
+  Update = 'UpdateEvent',
+  Notify = 'NotifyEvent',
+  Import = 'ImportRequestEvent',
+  Export = 'ExportRequestEvent',
+  Restore = 'RestoreEvent',
 }
 export interface IEvent extends Document {
   readonly _id: string;

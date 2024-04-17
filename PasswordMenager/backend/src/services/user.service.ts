@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { OnEvent } from '@nestjs/event-emitter';
+import { CreateEventCommand } from 'src/commands/event/CreateEventCommand';
 import { CreateHistoryCommand } from 'src/commands/history/CreateHistoryCommand';
 import { CreateUserCommand } from 'src/commands/user/CreateUserCommand';
 import { UpdateUserCommand } from 'src/commands/user/UpdateUserCommand';
@@ -9,6 +10,7 @@ import { EventTypes } from 'src/events/eventTypes';
 import { GetAllUserQuery } from 'src/queries/user/getAllUser.queries';
 import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
 import { ErrorUserCreateResponse } from 'src/response/userErrorCreate.response';
+import { EventType } from 'src/schemas/Interfaces/event.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 import { Paginator } from 'src/utils/paginator';
@@ -33,6 +35,15 @@ export class UserService {
       .execute(new CreateUserCommand(userCreateDTO))
       .then((user) => {
         return this.commandBus.execute(new CreateHistoryCommand(user._id));
+      })
+      .then((_) => {
+        this.commandBus.execute(
+          new CreateEventCommand({
+            eventType: EventType.Create,
+            relatedEnittyId: 'test',
+          }),
+        );
+        return _;
       })
       .catch((err) => {
         return ErrorUserCreateResponse;
