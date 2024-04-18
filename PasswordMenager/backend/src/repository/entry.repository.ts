@@ -9,6 +9,7 @@ import { DTO } from 'src/schemas/dto/object.interface';
 import { ActiveEntryFilter } from 'src/schemas/utils/activeEntryFilter';
 import { EntryBuilder } from 'src/schemas/utils/builders/entry.builder';
 import { DeleteEntryUpdate } from 'src/schemas/utils/deleteEntryUpdate.object';
+import { Logger } from 'src/utils/Logger';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryRepositoryUtils } from './repository-utils/entry-utils';
 import { UtilsRepository } from './utils.repository';
@@ -17,7 +18,8 @@ import { UtilsRepository } from './utils.repository';
 export class EntryRepository implements Repository<IEntry> {
   constructor(
     @Inject('ENTRY_MODEL')
-    private entryModel: Model<IEntry>,
+    private readonly entryModel: Model<IEntry>,
+    private readonly logger: Logger,
   ) {}
 
   findById(id: string): Promise<IEntry> {
@@ -63,13 +65,25 @@ export class EntryRepository implements Repository<IEntry> {
           { $set: { ...updatedEntry } },
           { returnDocument: 'after' },
         ),
-      );
+      )
+      .catch((error) => {
+        this.logger.error(
+          `Error occur while update entry with id = ${entry._id} :=> error: ${error} `,
+        );
+        return error;
+      });
   }
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
     return this.entryModel
       .updateMany(option.getOption(), new DeleteEntryUpdate())
-      .exec();
+      .exec()
+      .catch((error) => {
+        this.logger.error(
+          `Error occur while deleting entry with option: ${option.getOption()} :=> error: ${error}`,
+        );
+        return error;
+      });
   }
 
   deleteMany(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
@@ -82,13 +96,23 @@ export class EntryRepository implements Repository<IEntry> {
     const createdEntry = new this.entryModel({
       ...objectToSave.toObject(),
     });
-    return createdEntry.save();
+    return createdEntry.save().catch((error) => {
+      this.logger.error('Errror occur while crete entry, ', error);
+      return error;
+    });
   }
 
   deleteById(id: string): Promise<IEntry> {
     return this.entryModel
       .findByIdAndUpdate(id, new DeleteEntryUpdate())
-      .exec();
+      .exec()
+      .catch((error) => {
+        this.logger.error(
+          `Error occur while deleting entry with id: ${id} :=> error: `,
+          error,
+        );
+        return error;
+      });
   }
 
   getById(): Promise<IEntry> {

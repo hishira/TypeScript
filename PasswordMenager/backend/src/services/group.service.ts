@@ -9,11 +9,12 @@ import { EventTypes } from 'src/events/eventTypes';
 import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { GetExistingGroupQuery } from 'src/queries/group/getExistingGroup.queries';
 import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
+import { Logger } from 'src/utils/Logger';
+import { Paginator } from 'src/utils/paginator';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
-import { IGroup } from 'src/schemas/Interfaces/group.interface';
-import { Paginator } from 'src/utils/paginator';
 
 @Injectable()
 export class GroupService {
@@ -21,15 +22,21 @@ export class GroupService {
     private readonly eventEmitter: EventEmitter2,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    private readonly logger: Logger,
   ) {}
 
   create(
     groupcreateDTO: CreateGroupDto,
     userid: string,
   ): Promise<CreateGroupDto> {
-    return this.commandBus.execute(
-      new CreateGroupCommand(userid, groupcreateDTO),
-    );
+    return this.commandBus
+      .execute(new CreateGroupCommand(userid, groupcreateDTO))
+      .then(
+        (response) =>
+          this.logger.log(
+            `Group with name = ${groupcreateDTO.name} created for user with id = ${userid},`,
+          ) === void 0 && response,
+      );
   }
 
   async checkIfexists(groupId: string): Promise<any> {
