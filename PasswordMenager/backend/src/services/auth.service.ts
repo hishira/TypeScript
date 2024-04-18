@@ -7,6 +7,7 @@ import { EventTypes } from 'src/events/eventTypes';
 import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { UserUtils } from 'src/schemas/utils/user.utils';
+import { Logger } from 'src/utils/Logger';
 import {
   AccessTokenOptions,
   RefreshAccessTokenOptions,
@@ -17,16 +18,24 @@ import { AuthInfo } from '../schemas/dto/auth.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
-    private eventEmitter: EventEmitter2,
-    private queryBus: QueryBus,
+    private readonly jwtService: JwtService,
+    private readonly eventEmitter: EventEmitter2,
+    private readonly queryBus: QueryBus,
+    private readonly logger: Logger,
   ) {}
 
-  async createUser(user: CreateUserDto) {
-    return this.eventEmitter.emitAsync(
-      EventTypes.CreateUser,
-      new CreateUserEvent(user),
-    );
+  createUser(user: CreateUserDto): Promise<CreateUserDto> {
+    this.logger.log('Emit user create event');
+
+    return Promise.resolve(() => {
+      return true;
+    }).then((_) => {
+      this.eventEmitter.emitAsync(
+        EventTypes.CreateUser,
+        new CreateUserEvent(user),
+      );
+      return user;
+    });
   }
   async valideteUser(userinfo: AuthInfo): Promise<IUser | null> {
     return this.queryBus
