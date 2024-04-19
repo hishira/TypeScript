@@ -39,16 +39,16 @@ export class GroupService {
       );
   }
 
-  async checkIfexists(groupId: string): Promise<any> {
+  checkIfexists(groupId: string): Promise<any> {
     return this.queryBus.execute(new GetExistingGroupQuery({ id: groupId }));
   }
 
-  async getbyuser(userid: string): Promise<GroupDto[] | any> {
+  getbyuser(userid: string): Promise<GroupDto[] | any> {
     return this.queryBus.execute(new GetFilteredGroup({ userId: userid }));
   }
 
-  async deleteGroup(groupId: string): Promise<unknown> {
-    await this.eventEmitter.emitAsync(
+  deleteGroup(groupId: string): Promise<unknown> {
+    this.eventEmitter.emitAsync(
       EventTypes.DeleteEntryByGroup,
       new DeleteByGroupEvent(groupId),
     );
@@ -73,7 +73,7 @@ export class GroupService {
       : promise;
   }
 
-  async editGroup(groupId: string, groupDto: EditGroupDto): Promise<unknown> {
+  editGroup(groupId: string, groupDto: EditGroupDto): Promise<unknown> {
     return this.commandBus.execute(new UpdateGroupCommand(groupId, groupDto));
   }
 }
