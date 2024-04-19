@@ -9,16 +9,23 @@ import { DTO } from 'src/schemas/dto/object.interface';
 import { ActiveEntryFilter } from 'src/schemas/utils/activeEntryFilter';
 import { EntryBuilder } from 'src/schemas/utils/builders/entry.builder';
 import { DeleteEntryUpdate } from 'src/schemas/utils/deleteEntryUpdate.object';
+import { Logger } from 'src/utils/Logger';
+import { ErrorHandler, LoggerContext } from 'src/utils/error.handlers';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryRepositoryUtils } from './repository-utils/entry-utils';
 import { UtilsRepository } from './utils.repository';
+import { EntryErrorMessages } from 'src/errors/errors-messages/entryErrorMessages';
 
 @Injectable()
-export class EntryRepository implements Repository<IEntry> {
+export class EntryRepository implements Repository<IEntry>, LoggerContext {
+  errorHandler: ErrorHandler;
   constructor(
     @Inject('ENTRY_MODEL')
-    private entryModel: Model<IEntry>,
-  ) {}
+    private readonly entryModel: Model<IEntry>,
+    readonly logger: Logger,
+  ) {
+    this.errorHandler = new ErrorHandler(this);
+  }
 
   findById(id: string): Promise<IEntry> {
     return this.entryModel.findOne({ _id: id }).exec();
@@ -35,7 +42,7 @@ export class EntryRepository implements Repository<IEntry> {
   find(
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
-  ): Promise<IEntry[] | EntryData | any> {
+  ): Promise<IEntry[] | EntryData | never> {
     if (UtilsRepository.isPaginatorDefined(paginator)) {
       return this.getEntriesWithPaginator(option, paginator);
     }
@@ -63,13 +70,19 @@ export class EntryRepository implements Repository<IEntry> {
           { $set: { ...updatedEntry } },
           { returnDocument: 'after' },
         ),
+      )
+      .catch((error) =>
+        this.errorHandler.handle(error, EntryErrorMessages.Update),
       );
   }
 
   delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
     return this.entryModel
       .updateMany(option.getOption(), new DeleteEntryUpdate())
-      .exec();
+      .exec()
+      .catch((error) =>
+        this.errorHandler.handle(error, EntryErrorMessages.Delete),
+      );
   }
 
   deleteMany(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
@@ -82,13 +95,20 @@ export class EntryRepository implements Repository<IEntry> {
     const createdEntry = new this.entryModel({
       ...objectToSave.toObject(),
     });
-    return createdEntry.save();
+    return createdEntry
+      .save()
+      .catch((error) =>
+        this.errorHandler.handle(error, EntryErrorMessages.Create),
+      );
   }
 
   deleteById(id: string): Promise<IEntry> {
     return this.entryModel
       .findByIdAndUpdate(id, new DeleteEntryUpdate())
-      .exec();
+      .exec()
+      .catch((error) =>
+        this.errorHandler.handle(error, EntryErrorMessages.DeleteById),
+      );
   }
 
   getById(): Promise<IEntry> {
