@@ -3,6 +3,9 @@ import {
   MetaAttributeUser,
 } from 'src/schemas/Interfaces/user.interface';
 
+export type UserMetaLikeObject = {
+  [key in MetaAttributeUser]?: number | string;
+};
 export class UserMetaBuilder {
   constructor(
     private lastValue: string = '',
@@ -27,7 +30,7 @@ export class UserMetaBuilder {
     return this;
   }
 
-  getMetaObject() {
+  getMetaObject(): UserMetaLikeObject {
     return {
       [MetaAttributeUser.EDITDATE]: Date.now(),
       [this.filedsToUpdate]: this.lastValue,
