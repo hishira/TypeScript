@@ -9,23 +9,39 @@ import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { UserUtils } from 'src/schemas/utils/user.utils';
 import { Logger } from 'src/utils/Logger';
 import {
+  DebugHandler,
+  LoggerContext,
+  LoggerHandler,
+} from 'src/utils/error.handlers';
+import {
   AccessTokenOptions,
   RefreshAccessTokenOptions,
   RefreshTokenOptions,
 } from '../constans';
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
+enum AuthError {
+  ValidateUserNotExists = 'User not exists',
+  ValidateUserNotExistsWrongPassword = 'User passowrds not match',
+  ValidateUserNotExistsContext = 'Auth service: validateUser method',
+  CreateUserEventEmit = 'Emit create user event',
+  CreateUserContext = 'User service: createUser method',
+}
 @Injectable()
-export class AuthService {
+export class AuthService implements LoggerContext {
+  debugHandler: LoggerHandler = new DebugHandler(this);
   constructor(
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
     private readonly queryBus: QueryBus,
-    private readonly logger: Logger,
+    readonly logger: Logger,
   ) {}
 
   createUser(user: CreateUserDto): Promise<CreateUserDto> {
-    this.logger.log('Emit user create event');
+    this.debugHandler.handle(
+      AuthError.CreateUserEventEmit,
+      AuthError.CreateUserContext,
+    );
 
     return Promise.resolve(() => {
       return true;
@@ -43,11 +59,19 @@ export class AuthService {
       .then(UserUtils.GetFirstUserFromTableOrNull)
       .then((user) => {
         if (user === null) {
+          this.debugHandler.handle(
+            AuthError.ValidateUserNotExists,
+            AuthError.ValidateUserNotExistsContext,
+          );
           return null;
         }
         if (user.validatePassword(userinfo.password)) {
           return user;
         }
+        this.debugHandler.handle(
+          AuthError.ValidateUserNotExistsWrongPassword,
+          AuthError.ValidateUserNotExistsContext,
+        );
       });
   }
 

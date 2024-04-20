@@ -10,9 +10,10 @@ import { GetImportQueryHandler } from 'src/handlers/queries/import/getImportsHan
 import { CreateImportRequestHandler } from 'src/handlers/commands/importRequest/createImportRequestHandler';
 import { DeleteImportRequestHandler } from 'src/handlers/commands/importRequest/deleteImportRequestHandler';
 import { EditImportRequestHandler } from 'src/handlers/commands/importRequest/editImportRequestHandler';
+import { LoggerModule } from './logger.module';
 
 @Module({
-  imports: [DatabaseModule, CqrsModule],
+  imports: [DatabaseModule, CqrsModule, LoggerModule],
   controllers: [ImportController],
   providers: [
     {

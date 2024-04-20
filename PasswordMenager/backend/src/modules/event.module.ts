@@ -5,9 +5,10 @@ import { EventRepository } from 'src/repository/event.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { DatabaseModule } from './database.module';
 import { eventProvider } from 'src/providers/event.provider';
+import { LoggerModule } from './logger.module';
 
 @Module({
-  imports: [DatabaseModule, CqrsModule],
+  imports: [DatabaseModule, CqrsModule, LoggerModule],
   providers: [
     ...eventProvider,
     {
