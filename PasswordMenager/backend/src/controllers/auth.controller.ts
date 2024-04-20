@@ -20,7 +20,7 @@ export class AuthController {
   @Post('signup')
   async create(
     @Body(new ValidationPipe({ transform: false })) newuser: CreateUserDto,
-  ) {
+  ): Promise<CreateUserDto> {
     return this.authservice.createUser(newuser);
   }
 
@@ -29,13 +29,13 @@ export class AuthController {
   async login(
     @Body(new ValidationPipe({ transform: false })) authinfo: AuthInfo,
     @Request() req,
-  ) {
+  ): Promise<TokenObject> {
     return this.authservice.login(req.user);
   }
 
   @UseGuards(AuthGuard('refreshtoken'))
   @Get('refresh')
-  async refresh(@Request() req) {
+  async refresh(@Request() req): Promise<AccesTokenObject> {
     return this.authservice.refreshaccesstoken(req.user);
   }
 }

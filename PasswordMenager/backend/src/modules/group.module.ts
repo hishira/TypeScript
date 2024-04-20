@@ -13,9 +13,10 @@ import { GetFilteredUserQueryHandler } from 'src/handlers/queries/user/getFilter
 import { GetFilteredGroupQueryHandler } from 'src/handlers/queries/group/getFilteredGroup.queries';
 import { DeleteGroupCommandHandler } from 'src/handlers/commands/group/deleteGroupHandler';
 import { UpdateGroupCommandHandler } from 'src/handlers/commands/group/updateGroupHandler';
+import { LoggerModule } from './logger.module';
 
 @Module({
-  imports: [DatabaseModule, ExperimentModule, HistoryModule, CqrsModule],
+  imports: [DatabaseModule, ExperimentModule, HistoryModule, CqrsModule, LoggerModule],
   controllers: [GroupController],
   providers: [
     {

@@ -15,11 +15,13 @@ export class ImportRequestRepository
   implements Repository<ImportRequest>, LoggerContext
 {
   errorHandler = new ErrorHandler(this);
+
   constructor(
     @Inject('IMPORT_REQUEST_MODEL')
     private readonly importRequestModal: Model<ImportRequest>,
     readonly logger: Logger,
   ) {}
+
   create(objectToSave: DTO): Promise<ImportRequest> {
     const createdImportRequest = new this.importRequestModal({
       ...objectToSave.toObject(),

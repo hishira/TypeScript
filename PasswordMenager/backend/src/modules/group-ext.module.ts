@@ -11,9 +11,16 @@ import { GroupService } from 'src/services/group.service';
 import { DatabaseModule } from './database.module';
 import { ExperimentModule } from './experiment.module';
 import { HistoryModule } from './history.module';
+import { LoggerModule } from './logger.module';
 
 @Module({
-  imports: [DatabaseModule, ExperimentModule, HistoryModule, CqrsModule],
+  imports: [
+    DatabaseModule,
+    ExperimentModule,
+    HistoryModule,
+    CqrsModule,
+    LoggerModule,
+  ],
   providers: [
     {
       provide: Repository,

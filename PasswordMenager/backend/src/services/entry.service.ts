@@ -13,6 +13,13 @@ import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
 import { EmptyResponse } from 'src/response/empty.response';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
+import { Logger } from 'src/utils/Logger';
+import {
+  ErrorHandler,
+  LogHandler,
+  LoggerContext,
+  LoggerHandler,
+} from 'src/utils/error.handlers';
 import {
   EntryData,
   EntryState,
@@ -20,35 +27,53 @@ import {
 } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
 
+enum EntryServiceMessage {
+  Create = 'Entry service: create method',
+  RestoreMessage = 'Try to restore entry',
+  Restore = 'Entry service: restore method',
+  Delete = 'Entry service: delete method',
+  DeleteMessage = 'Delete entry not possible, error occur',
+  Update = 'Entry service: update method',
+  ActiveDeleted = 'Entry service: activateDeletedEntreis method',
+}
 //TODO: Temporary fix, for event catcher
 @Injectable()
 export class EntryEmitService {
   constructor(private readonly commandBus: CommandBus) {}
 
   @OnEvent(EventTypes.InsertManyEntry, { async: true })
-  insertMany(payload: InsertmanyEntryEvent) {
+  insertMany(payload: InsertmanyEntryEvent): Promise<IEntry[]> {
     return this.commandBus.execute(new CreateEntryBulkCommand(payload.dtos));
   }
 }
 @Injectable()
-export class EntryService {
+export class EntryService implements LoggerContext {
+  private logHandler: LoggerHandler = new LogHandler(this);
+  private errorHandler: LoggerHandler = new ErrorHandler(this);
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    readonly logger: Logger,
   ) {}
 
   create(
     entrycreateDTO: CreateEntryDto,
     userid: string,
   ): Promise<IEntry | { message: string }> {
-    return this.commandBus.execute(
-      new CreateEntryCommand(userid, entrycreateDTO),
-    );
+    return this.commandBus
+      .execute(new CreateEntryCommand(userid, entrycreateDTO))
+      .then((entry) => {
+        this.logHandler.handle(
+          `Entry with ${entry._id} created`,
+          EntryServiceMessage.Create,
+        );
+        return entry;
+      });
   }
 
   @OnEvent(EventTypes.DeleteEntryByGroup, { async: true })
-  deleteByGroupEvent(payload: DeleteByGroupEvent) {
+  deleteByGroupEvent(payload: DeleteByGroupEvent): Promise<unknown> {
     return this.deleteByGroup(payload.groupId);
   }
 
@@ -67,13 +92,25 @@ export class EntryService {
       });
   }
 
-  restoreEntry(restoreBody: { entryId: string }) {
-    return this.commandBus.execute(
-      new UpdateEntryCommand({
-        id: restoreBody.entryId,
-        entryState: EntryState.ACTIVE,
-      }),
+  restoreEntry(restoreBody: { entryId: string }): Promise<IEntry> {
+    this.logHandler.handle(
+      EntryServiceMessage.RestoreMessage,
+      EntryServiceMessage.Restore,
     );
+    return this.commandBus
+      .execute(
+        new UpdateEntryCommand({
+          id: restoreBody.entryId,
+          entryState: EntryState.ACTIVE,
+        }),
+      )
+      .then((restoredEntry) => {
+        this.logHandler.handle(
+          `Entry with id = ${restoreBody.entryId} restorect succesfull`,
+          EntryServiceMessage.Restore,
+        );
+        return restoredEntry;
+      });
   }
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse<IEntry>> {
@@ -93,10 +130,18 @@ export class EntryService {
           return { status: true, response: res[0] } as any;
         })
         .catch((_err) => {
+          this.errorHandler.handle(
+            EntryServiceMessage.DeleteMessage,
+            EntryServiceMessage.Delete,
+          );
           console.error(_err);
           return EmptyResponse;
         });
     } catch (e) {
+      this.errorHandler.handle(
+        EntryServiceMessage.DeleteMessage,
+        EntryServiceMessage.Delete,
+      );
       return Promise.resolve(EmptyResponse);
     }
   }
@@ -111,13 +156,21 @@ export class EntryService {
     );
   }
 
-  activateDeletedEntreis(entryId: string) {
-    return this.commandBus.execute(
-      new UpdateEntryCommand({
-        id: entryId,
-        entryState: EntryState.ACTIVE,
-      }),
-    );
+  activateDeletedEntreis(entryId: string): Promise<IEntry[]> {
+    return this.commandBus
+      .execute(
+        new UpdateEntryCommand({
+          id: entryId,
+          entryState: EntryState.ACTIVE,
+        }),
+      )
+      .then((respnse) => {
+        this.logHandler.handle(
+          'Deleted entries activated sucessfull',
+          EntryServiceMessage.ActiveDeleted,
+        );
+        return respnse;
+      });
   }
 
   getByUser(userId: string, limit?: number): Promise<IEntry[] | EntryData> {
@@ -134,15 +187,19 @@ export class EntryService {
           const upadednoew = await this.queryBus.execute(
             new GetSpecificEntry({ id: neweditedentry._id }),
           );
-
+          this.logHandler.handle(
+            `Entry with id = ${neweditedentry._id} edited succesfull`,
+            EntryServiceMessage.Update,
+          );
           return { status: true, respond: upadednoew };
         });
     } catch (e) {
+      this.errorHandler.handle(e, EntryServiceMessage.Update);
       return Promise.resolve(EmptyResponse);
     }
   }
 
-  private getHistoryEntryPromise(groupid: string) {
+  private getHistoryEntryPromise(groupid: string): Promise<IEntry[]> {
     return this.queryBus
       .execute(new GetSpecificEntry({ groupId: groupid }))
       .then((entires) => {
@@ -152,6 +209,7 @@ export class EntryService {
             new HistoryAppendEvent(entires[0].userid, entires, 'entry'),
           );
         }
+        return entires;
       });
   }
 
@@ -160,6 +218,17 @@ export class EntryService {
     const deletePromise = this.commandBus.execute(
       new DeleteEntryCommand({ groupId: groupid }),
     );
-    return promiseEntryHistory.then(() => deletePromise);
+    return promiseEntryHistory
+      .then(() => deletePromise)
+      .then((promise) => {
+        this.logHandler.handle(
+          'Group deleted sucessfull',
+          EntryServiceMessage.Delete,
+        );
+        return promise;
+      })
+      .catch((error) =>
+        this.errorHandler.handle(error, EntryServiceMessage.Delete),
+      );
   }
 }
