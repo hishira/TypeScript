@@ -15,11 +15,11 @@ export class ErrorHandler implements LoggerHandler {
   }
 }
 
-export class DebugHandler implements LoggerHandler {
+export class LogHandler implements LoggerHandler {
   constructor(private readonly classContext: LoggerContext) {}
 
   handle<T>(handleObject: T, context: string): T {
-    this.classContext.logger.debug(handleObject, context);
+    this.classContext.logger.log(handleObject, context);
     return handleObject;
   }
 }

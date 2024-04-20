@@ -9,7 +9,7 @@ import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { UserUtils } from 'src/schemas/utils/user.utils';
 import { Logger } from 'src/utils/Logger';
 import {
-  DebugHandler,
+  LogHandler,
   LoggerContext,
   LoggerHandler,
 } from 'src/utils/error.handlers';
@@ -29,7 +29,7 @@ enum AuthError {
 }
 @Injectable()
 export class AuthService implements LoggerContext {
-  debugHandler: LoggerHandler = new DebugHandler(this);
+  debugHandler: LoggerHandler = new LogHandler(this);
   constructor(
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
