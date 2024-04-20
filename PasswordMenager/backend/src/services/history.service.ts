@@ -18,7 +18,7 @@ export class HistoryService {
   }
 
   @OnEvent(EventTypes.HistoryAppend, { async: true })
-  eventHistoryUpdate(payload: HistoryAppendEvent) {
+  eventHistoryUpdate(payload: HistoryAppendEvent): Promise<unknown> {
     return payload.historyAddType === 'entry'
       ? this.appendEntityToHistory(
           payload.useridString,
