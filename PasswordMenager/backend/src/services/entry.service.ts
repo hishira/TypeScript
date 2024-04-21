@@ -115,17 +115,15 @@ export class EntryService implements LoggerContext {
 
   deletebyid(entryid: string): Promise<DeleteEntryResponse<IEntry>> {
     try {
-      const deletedentry: Promise<IEntry> = this.queryBus.execute(
-        new GetSpecificEntry({ id: entryid }),
-      );
-      const deletedPromise = this.commandBus.execute(
-        new DeleteEntryCommand({ id: entryid }),
-      );
-      return Promise.all([deletedentry, deletedPromise])
+      return Promise.all(this.prepareDeletedEntryPromise(entryid))
         .then((res) => {
           this.eventEmitter.emit(
             EventTypes.HistoryAppend,
             new HistoryAppendEvent(res[0].userid, [res[0]], 'entry'),
+          );
+          this.logHandler.handle(
+            `Entry with id = ${entryid} deleted succesfull`,
+            EntryServiceMessage.Delete,
           );
           return { status: true, response: res[0] } as any;
         })
@@ -134,7 +132,6 @@ export class EntryService implements LoggerContext {
             EntryServiceMessage.DeleteMessage,
             EntryServiceMessage.Delete,
           );
-          console.error(_err);
           return EmptyResponse;
         });
     } catch (e) {
@@ -144,6 +141,19 @@ export class EntryService implements LoggerContext {
       );
       return Promise.resolve(EmptyResponse);
     }
+  }
+
+  private prepareDeletedEntryPromise(
+    entryId: string,
+  ): [Promise<IEntry>, Promise<IEntry[]>] {
+    const deletedentry: Promise<IEntry> = this.queryBus.execute(
+      new GetSpecificEntry({ id: entryId }),
+    );
+    const deletedPromise = this.commandBus.execute(
+      new DeleteEntryCommand({ id: entryId }),
+    );
+
+    return [deletedentry, deletedPromise];
   }
 
   getLastDeletedUserEntries(userid: string): Promise<IEntry[] | EntryData> {

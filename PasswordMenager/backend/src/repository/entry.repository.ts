@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
 import { NotImplementedError } from 'src/errors/NotImplemented';
+import { EntryErrorMessages } from 'src/errors/errors-messages/entryErrorMessages';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { EntryData, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -14,7 +15,6 @@ import { ErrorHandler, LoggerContext } from 'src/utils/error.handlers';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryRepositoryUtils } from './repository-utils/entry-utils';
 import { UtilsRepository } from './utils.repository';
-import { EntryErrorMessages } from 'src/errors/errors-messages/entryErrorMessages';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry>, LoggerContext {
@@ -36,7 +36,9 @@ export class EntryRepository implements Repository<IEntry>, LoggerContext {
     const newEntryObjects =
       EntryRepositoryUtils.GetMappedDtosToProperEntryDto(objects);
     const promises = newEntryObjects.map((t) => this.create(t));
-    return Promise.all(promises);
+    return Promise.all(promises).catch((error) =>
+      this.errorHandler.handle(error, EntryErrorMessages.CreateMany),
+    );
   }
 
   find(

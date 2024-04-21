@@ -104,7 +104,7 @@ export class GroupService implements LoggerContext {
       .execute(new UpdateGroupCommand(groupId, groupDto))
       .then((response) => {
         this.logHandler.handle(
-          `Group with id = ${groupId} edidet succesfull`,
+          `Group with id = ${groupId} edited succesfull`,
           GroupServiceMessages.Update,
         );
         return response;

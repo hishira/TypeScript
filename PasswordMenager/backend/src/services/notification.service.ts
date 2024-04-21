@@ -19,12 +19,27 @@ import { EditNotificationDTO } from 'src/schemas/dto/editnotification.dto';
 import { NotificationUtils } from 'src/schemas/utils/Notification.utils';
 import { Logger } from 'src/utils/Logger';
 import { EmailSender } from 'src/utils/emailTransporter';
+import {
+  ErrorHandler,
+  LogHandler,
+  LoggerContext,
+  LoggerHandler,
+} from 'src/utils/error.handlers';
 
 interface NotificationCron {
   notificationSendCronHandle(): void;
 }
+
+enum NotificationServiceMessages {
+  Send = 'NotificationService; notificationSendCronHandle method',
+  Create = 'NotificationService; createEmailNotification method',
+  EmailNotificationSend = 'Email notification sedn',
+  ErrorEmailNotificationSend = 'Error occus while email notification send',
+}
 @Injectable()
-export class NotificationService implements NotificationCron {
+export class NotificationService implements NotificationCron, LoggerContext {
+  logHandler: LoggerHandler = new LogHandler(this);
+  errorHandler: LoggerHandler = new ErrorHandler(this);
   private emailSender: EmailSender;
 
   get activeNotification(): Promise<INotification[]> {
@@ -34,7 +49,7 @@ export class NotificationService implements NotificationCron {
   }
 
   constructor(
-    private readonly logger: Logger,
+    readonly logger: Logger,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {
@@ -43,14 +58,22 @@ export class NotificationService implements NotificationCron {
   }
 
   @Cron(CronExpression.EVERY_10_SECONDS)
-  notificationSendCronHandle() {
+  notificationSendCronHandle(): void {
     this.getActiveNotificationAsPromise()
       .then((promises) => Promise.all(promises))
-      .catch(() => this.logger.error('Problem with notification send'));
+      .catch((error) => {
+        this.errorHandler.handle(
+          'Problem with notification send',
+          NotificationServiceMessages.Send,
+        );
+        return error;
+      });
   }
 
   @OnEvent(EventTypes.CreateNotification, { async: true })
-  eventNotificationCreateHandle(payload: CreateNotificationEvent) {
+  eventNotificationCreateHandle(
+    payload: CreateNotificationEvent,
+  ): Promise<SMTPTransport.SentMessageInfo> {
     return this.createEmailNotification(
       payload.entry,
       payload.passwordExpireDate,
@@ -69,17 +92,25 @@ export class NotificationService implements NotificationCron {
     });
   }
 
-  create(notificationDTO: CreateNotificationDTO) {
-    return this.commandBus.execute(
-      new CreateNotificationCommand(notificationDTO),
-    );
+  create(notificationDTO: CreateNotificationDTO): Promise<INotification> {
+    return this.commandBus
+      .execute(new CreateNotificationCommand(notificationDTO))
+      .then((r) =>
+        this.logHandler.handle(r, NotificationServiceMessages.Create),
+      )
+      .catch((error) =>
+        this.errorHandler.handle(error, NotificationServiceMessages.Create),
+      );
   }
 
-  userNotification(userId: string) {
+  userNotification(userId: string): Promise<INotification[]> {
     return this.queryBus.execute(new GetNotificationQuery({ userId: userId }));
   }
 
-  createEmailNotification(entry: IEntry, passwordExpireDate: Date | string) {
+  createEmailNotification(
+    entry: IEntry,
+    passwordExpireDate: Date | string,
+  ): Promise<SMTPTransport.SentMessageInfo> {
     return this.create(
       new CreateNotificationEmailDTO(
         entry._id,
@@ -87,15 +118,29 @@ export class NotificationService implements NotificationCron {
         entry.userid as unknown as string,
       ),
     ).then(async (_) => {
-      this.logger.logMessage(
-        `Notification created for date ${passwordExpireDate}`,
+      this.logHandler.handle(
+        'Email notification create',
+        NotificationServiceMessages.Create,
       );
       return this.notificationSend();
     });
   }
 
   notificationSend(): Promise<SMTPTransport.SentMessageInfo> {
-    return this.emailSender.sendEmail('', '', 'You got message example');
+    return this.emailSender
+      .sendEmail('', '', 'You got message example')
+      .then((r) =>
+        this.logHandler.handle(
+          r,
+          NotificationServiceMessages.EmailNotificationSend,
+        ),
+      )
+      .catch((error) =>
+        this.errorHandler.handle(
+          error,
+          NotificationServiceMessages.ErrorEmailNotificationSend,
+        ),
+      );
   }
 
   checkAndSendNotification(): Promise<unknown> {
@@ -112,15 +157,39 @@ export class NotificationService implements NotificationCron {
       });
   }
 
-  deleteNotification(notificationId: string) {
-    return this.commandBus.execute(
-      new DeleteNotificationCommand({ _id: notificationId }),
-    );
+  deleteNotification(notificationId: string): Promise<INotification> {
+    return this.commandBus
+      .execute(new DeleteNotificationCommand({ _id: notificationId }))
+      .then((response) =>
+        this.logHandler.handle(
+          response,
+          'NotificationService; deleteNotification method',
+        ),
+      )
+      .catch((error) =>
+        this.errorHandler.handle(
+          error,
+          'NotificationService; deleteNotification method',
+        ),
+      );
   }
 
-  editNotification(notificationBody: EditNotificationDTO) {
-    return this.commandBus.execute(
-      new EditNotificationCommand({ ...notificationBody }),
-    );
+  editNotification(
+    notificationBody: EditNotificationDTO,
+  ): Promise<INotification> {
+    return this.commandBus
+      .execute(new EditNotificationCommand({ ...notificationBody }))
+      .then((response) =>
+        this.logHandler.handle(
+          response,
+          'NotificationService; editNotification method',
+        ),
+      )
+      .catch((error) =>
+        this.errorHandler.handle(
+          error,
+          'NotificationService; editNotification method',
+        ),
+      );
   }
 }

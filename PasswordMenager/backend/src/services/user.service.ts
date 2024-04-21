@@ -14,19 +14,28 @@ import { EventType } from 'src/schemas/Interfaces/event.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 import { Logger } from 'src/utils/Logger';
+import {
+  ErrorHandler,
+  LogHandler,
+  LoggerContext,
+  LoggerHandler,
+} from 'src/utils/error.handlers';
 import { Paginator } from 'src/utils/paginator';
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { CreateUserDto } from '../schemas/dto/user.dto';
+
 @Injectable()
-export class UserService {
+export class UserService implements LoggerContext {
+  logHandler: LoggerHandler = new LogHandler(this);
+  errorHandler: LoggerHandler = new ErrorHandler(this);
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
-    private readonly logger: Logger,
+    readonly logger: Logger,
   ) {}
 
   @OnEvent(EventTypes.CreateUser, { async: true })
-  createUserEvent(createUserEvent: CreateUserEvent) {
+  createUserEvent(createUserEvent: CreateUserEvent): Promise<unknown> {
     return this.create(createUserEvent.createUserDto);
   }
 
@@ -35,26 +44,10 @@ export class UserService {
   ): Promise<IUser | { message: string } | IHistory> {
     return this.commandBus
       .execute(new CreateUserCommand(userCreateDTO))
-      .then((user) => {
-        this.commandBus.execute(new CreateHistoryCommand(user._id));
-        this.logger.log(`User create id = ${user._id}`);
-        return user;
-      })
-      .then((user) => {
-        return this.commandBus
-          .execute(
-            new CreateEventCommand({
-              eventType: EventType.Create,
-              relatedEnittyId: 'test',
-            }),
-          )
-          .then((_) => this.logger.log('Create event created'))
-          .then((_) => user);
-      })
+      .then((user) => this.createHistoryForUser(user))
+      .then((user) => this.createEvent(user))
       .then((_) => _)
-      .catch((err) => {
-        return ErrorUserCreateResponse;
-      });
+      .catch((err) => ErrorUserCreateResponse);
   }
 
   getAll(): Promise<IUser[] | { data: IUser[]; pageInfo: Paginator }> {
@@ -75,5 +68,22 @@ export class UserService {
 
   update(userId: string, userEditDto: EditUserDto): Promise<IUser> {
     return this.commandBus.execute(new UpdateUserCommand(userId, userEditDto));
+  }
+
+  private createHistoryForUser(user: IUser): IUser {
+    this.commandBus.execute(new CreateHistoryCommand(user._id));
+    this.logger.log(`User create id = ${user._id}`);
+    return user;
+  }
+  private createEvent(user: IUser): Promise<IUser> {
+    return this.commandBus
+      .execute(
+        new CreateEventCommand({
+          eventType: EventType.Create,
+          relatedEnittyId: 'test',
+        }),
+      )
+      .then((_) => this.logger.log('Create event created'))
+      .then((_) => user);
   }
 }
