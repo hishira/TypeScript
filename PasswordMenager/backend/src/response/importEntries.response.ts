@@ -3,7 +3,7 @@ import {
   ImportRequest,
 } from 'src/schemas/Interfaces/importRequest.interface';
 
-type ImportEntryResponse = {
+export type ImportEntryResponse = {
   numberOfEntriesToAdd: number;
   entiresToImport: ImportEntrySchema[];
   importRequestId: any;

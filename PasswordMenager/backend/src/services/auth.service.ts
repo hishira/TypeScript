@@ -22,7 +22,7 @@ import { IUser } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
 enum AuthError {
   ValidateUserNotExists = 'User not exists',
-  ValidateUserNotExistsWrongPassword = 'User passowrds not match',
+  ValidateUserNotExistsWrongPassword = 'User try to log into system, passowrd not match',
   ValidateUserNotExistsContext = 'Auth service: validateUser method',
   CreateUserEventEmit = 'Emit create user event',
   CreateUserContext = 'User service: createUser method',

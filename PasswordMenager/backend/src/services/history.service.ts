@@ -8,13 +8,39 @@ import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
+import { Logger } from 'src/utils/Logger';
+import {
+  LogHandler,
+  LoggerContext,
+  LoggerHandler,
+} from 'src/utils/error.handlers';
+enum HistoryServiceMessage {
+  Create = 'History service; create method',
+  CreateMessage = 'History created for user = ',
+  UpdateGroupToHistory = 'History service; appendGroupToHistory method',
+  UpdateEntietiesToHistory = 'History service; appendEntityToHistory method',
+  UpdateGroupMessage = 'Group appended to history with userid = ',
+  UpdateEntitiesMessage = 'Entieties appended to history with userid = ',
+}
 
 @Injectable()
-export class HistoryService {
-  constructor(private readonly commandBus: CommandBus) {}
+export class HistoryService implements LoggerContext {
+  readonly logHanlder: LoggerHandler = new LogHandler(this);
+  constructor(
+    private readonly commandBus: CommandBus,
+    readonly logger: Logger,
+  ) {}
 
   create(userid: string): Promise<IHistory> {
-    return this.commandBus.execute(new CreateHistoryCommand(userid));
+    return this.commandBus
+      .execute(new CreateHistoryCommand(userid))
+      .then((historyResponse) => {
+        this.logHanlder.handle(
+          HistoryServiceMessage.CreateMessage + userid,
+          HistoryServiceMessage.Create,
+        );
+        return historyResponse;
+      });
   }
 
   @OnEvent(EventTypes.HistoryAppend, { async: true })
@@ -30,21 +56,37 @@ export class HistoryService {
         );
   }
 
-  appendEntityToHistory(userid: string, entries: IEntry[]): Promise<unknown> {
-    return this.commandBus.execute(
-      new UpdateHistoryCommand({
-        userId: userid,
-        entries: entries,
-      }),
-    );
+  appendEntityToHistory(userid: string, entries: IEntry[]): Promise<IHistory> {
+    return this.commandBus
+      .execute(
+        new UpdateHistoryCommand({
+          userId: userid,
+          entries: entries,
+        }),
+      )
+      .then((updatedHistory) => {
+        this.logHanlder.handle(
+          HistoryServiceMessage.UpdateEntitiesMessage + userid,
+          HistoryServiceMessage.UpdateEntietiesToHistory,
+        );
+        return updatedHistory;
+      });
   }
 
-  appendGroupToHistory(userid: string, groups: IGroup[]): Promise<unknown> {
-    return this.commandBus.execute(
-      new UpdateHistoryCommand({
-        userId: userid,
-        groups: groups,
-      }),
-    );
+  appendGroupToHistory(userid: string, groups: IGroup[]): Promise<IHistory> {
+    return this.commandBus
+      .execute(
+        new UpdateHistoryCommand({
+          userId: userid,
+          groups: groups,
+        }),
+      )
+      .then((updatedHistory) => {
+        this.logHanlder.handle(
+          HistoryServiceMessage.UpdateGroupMessage + userid,
+          HistoryServiceMessage.UpdateGroupToHistory,
+        );
+        return updatedHistory;
+      });
   }
 }

@@ -10,7 +10,7 @@ export class EventService {
   ) {}
 
   @OnEvent(EventType.Create, { async: true })
-  create(payload: any) {
+  create(payload: any): void {
     this.eventRepository.create({ toObject: () => ({ ...payload }) });
   }
 }

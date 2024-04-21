@@ -3,4 +3,5 @@ export enum EntryErrorMessages {
   Update = 'Entry repository: update method',
   Delete = 'Entry repository: delete method',
   DeleteById = 'Entry repository: deleteById method',
+  CreateMany = 'Entry repository: createMany method',
 }
