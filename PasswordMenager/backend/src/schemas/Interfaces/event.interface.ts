@@ -8,7 +8,10 @@ export enum EventType {
   Import = 'ImportRequestEvent',
   Export = 'ExportRequestEvent',
   Restore = 'RestoreEvent',
+  Login = 'Login',
+  Register = 'Register',
 }
+
 export enum EntityType {
   User = 'User',
   Entry = 'Entry',
@@ -22,5 +25,5 @@ export interface IEvent extends Document {
   readonly eventType: EventType;
   readonly entityType: EntityType;
   readonly related_entity: string;
-  readonly payloadObject: Record<string, unknown> | string | number;
+  readonly payloadObject: Record<string, unknown> | string | number | Document;
 }

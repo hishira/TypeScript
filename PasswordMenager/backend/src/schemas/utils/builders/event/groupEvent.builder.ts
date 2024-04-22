@@ -18,13 +18,28 @@ export class GroupEventBuilder implements EventBuilder {
     private eventType?: GroupEventType,
   ) {}
 
+  setCreateEvent(): this {
+    this.eventType = EventType.Create;
+    return this;
+  }
+
+  setDeleteEvent(): this {
+    this.eventType = EventType.Delete;
+    return this;
+  }
+
+  setEditEvent(): this {
+    this.eventType = EventType.Update;
+    return this;
+  }
+
   build(): IEvent {
     return {
       created: new Date(Date.now()),
       eventType: this.eventType,
       entityType: this.entityType,
       related_entity: this.related_entity,
-      payloadObject: this.payloadObject as unknown as Record<string, unknown>,
-    } as IEvent;
+      payloadObject: this.payloadObject,
+    } as unknown as IEvent;
   }
 }

@@ -1,22 +1,26 @@
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import {
   EntityType,
   EventType,
   IEvent,
 } from 'src/schemas/Interfaces/event.interface';
-import { IUser } from 'src/schemas/Interfaces/user.interface';
-import { EditUserDto } from 'src/schemas/dto/edituser.dto';
-import { CreateUserDto } from 'src/schemas/dto/user.dto';
+import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
+import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { EventBuilder } from './event.builder';
 
-type UserEventType = EventType.Create | EventType.Delete | EventType.Update;
+type EntityEventType =
+  | EventType.Create
+  | EventType.Delete
+  | EventType.Update
+  | EventType.Restore;
 
-export class UserEventBuilder implements EventBuilder {
-  private readonly entityType: EntityType = EntityType.User;
+export class EventEntryBuilder implements EventBuilder {
+  private readonly entityType: EntityType = EntityType.Entry;
 
   constructor(
     private readonly related_entity: string,
-    private readonly payloadObject: CreateUserDto | EditUserDto | IUser,
-    private eventType?: UserEventType,
+    private readonly payloadObject: CreateEntryDto | EditEntryDto | IEntry,
+    private eventType?: EntityEventType,
   ) {}
 
   setCreateEvent(): this {
@@ -34,6 +38,11 @@ export class UserEventBuilder implements EventBuilder {
     return this;
   }
 
+  setRestoreEvent(): this {
+    this.eventType = EventType.Restore;
+    return this;
+  }
+
   build(): IEvent {
     return {
       created: new Date(Date.now()),
@@ -41,6 +50,6 @@ export class UserEventBuilder implements EventBuilder {
       entityType: this.entityType,
       related_entity: this.related_entity,
       payloadObject: this.payloadObject,
-    } as IEvent;
+    } as unknown as IEvent;
   }
 }
