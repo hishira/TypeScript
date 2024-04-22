@@ -28,11 +28,12 @@ const NestModules = [
     EventModule,
     ImportModule,
     NotificationModule,
+    EventModule,
     ...NestModules,
   ],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  configure(consumer: MiddlewareConsumer): void {
     consumer.apply(RequestLogger).forRoutes('*');
   }
 }
