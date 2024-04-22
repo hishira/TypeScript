@@ -1,7 +1,7 @@
 import {
-    EntityType,
-    EventType,
-    IEvent,
+  EntityType,
+  EventType,
+  IEvent,
 } from 'src/schemas/Interfaces/event.interface';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
