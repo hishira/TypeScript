@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { OnEvent } from '@nestjs/event-emitter';
-import { CreateEventCommand } from 'src/commands/event/CreateEventCommand';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { CreateHistoryCommand } from 'src/commands/history/CreateHistoryCommand';
 import { CreateUserCommand } from 'src/commands/user/CreateUserCommand';
 import { UpdateUserCommand } from 'src/commands/user/UpdateUserCommand';
@@ -13,6 +12,7 @@ import { ErrorUserCreateResponse } from 'src/response/userErrorCreate.response';
 import { EventType } from 'src/schemas/Interfaces/event.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
+import { UserEventBuilder } from 'src/schemas/utils/builders/event/userEvent.builder';
 import { Logger } from 'src/utils/Logger';
 import {
   ErrorHandler,
@@ -32,6 +32,7 @@ export class UserService implements LoggerContext {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
     readonly logger: Logger,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   @OnEvent(EventTypes.CreateUser, { async: true })
@@ -47,7 +48,7 @@ export class UserService implements LoggerContext {
       .then((user) => this.createHistoryForUser(user))
       .then((user) => this.createEvent(user))
       .then((_) => _)
-      .catch((err) => ErrorUserCreateResponse);
+      .catch((_) => ErrorUserCreateResponse);
   }
 
   getAll(): Promise<IUser[] | { data: IUser[]; pageInfo: Paginator }> {
@@ -76,14 +77,10 @@ export class UserService implements LoggerContext {
     return user;
   }
   private createEvent(user: IUser): Promise<IUser> {
-    return this.commandBus
-      .execute(
-        new CreateEventCommand({
-          eventType: EventType.Create,
-          relatedEnittyId: 'test',
-        }),
-      )
-      .then((_) => this.logger.log('Create event created'))
-      .then((_) => user);
+    this.eventEmitter.emitAsync(
+      EventType.Create,
+      new UserEventBuilder(user._id, user).setCreateEvent().build(),
+    );
+    return Promise.resolve(user);
   }
 }
