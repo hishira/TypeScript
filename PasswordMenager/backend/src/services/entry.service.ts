@@ -12,7 +12,9 @@ import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
 import { EmptyResponse } from 'src/response/empty.response';
+import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
+import { EventEntryBuilder } from 'src/schemas/utils/builders/event/entryEvent.builder';
 import { Logger } from 'src/utils/Logger';
 import {
   ErrorHandler,
@@ -37,6 +39,7 @@ enum EntryServiceMessage {
   ActiveDeleted = 'Entry service: activateDeletedEntreis method',
 }
 //TODO: Temporary fix, for event catcher
+// Fix class length
 @Injectable()
 export class EntryEmitService {
   constructor(private readonly commandBus: CommandBus) {}
@@ -67,6 +70,10 @@ export class EntryService implements LoggerContext {
         this.logHandler.handle(
           `Entry with ${entry._id} created`,
           EntryServiceMessage.Create,
+        );
+        this.eventEmitter.emitAsync(
+          EventAction.Create,
+          new EventEntryBuilder(entry._id, entry).setCreateEvent().build(),
         );
         return entry;
       });
@@ -143,19 +150,6 @@ export class EntryService implements LoggerContext {
     }
   }
 
-  private prepareDeletedEntryPromise(
-    entryId: string,
-  ): [Promise<IEntry>, Promise<IEntry[]>] {
-    const deletedentry: Promise<IEntry> = this.queryBus.execute(
-      new GetSpecificEntry({ id: entryId }),
-    );
-    const deletedPromise = this.commandBus.execute(
-      new DeleteEntryCommand({ id: entryId }),
-    );
-
-    return [deletedentry, deletedPromise];
-  }
-
   getLastDeletedUserEntries(userid: string): Promise<IEntry[] | EntryData> {
     return this.queryBus.execute(
       new GetSpecificEntry({
@@ -221,6 +215,19 @@ export class EntryService implements LoggerContext {
         }
         return entires;
       });
+  }
+
+  private prepareDeletedEntryPromise(
+    entryId: string,
+  ): [Promise<IEntry>, Promise<IEntry[]>] {
+    const deletedentry: Promise<IEntry> = this.queryBus.execute(
+      new GetSpecificEntry({ id: entryId }),
+    );
+    const deletedPromise = this.commandBus.execute(
+      new DeleteEntryCommand({ id: entryId }),
+    );
+
+    return [deletedentry, deletedPromise];
   }
 
   private deleteByGroup(groupid: string): Promise<unknown> {
