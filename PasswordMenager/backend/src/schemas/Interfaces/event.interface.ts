@@ -1,5 +1,7 @@
 import { Document } from 'mongoose';
-
+export enum EventAction {
+  Create = 'Create',
+}
 export enum EventType {
   Create = 'CreateEvent',
   Delete = 'DeleteEvent',

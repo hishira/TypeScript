@@ -9,7 +9,7 @@ import { EventTypes } from 'src/events/eventTypes';
 import { GetAllUserQuery } from 'src/queries/user/getAllUser.queries';
 import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
 import { ErrorUserCreateResponse } from 'src/response/userErrorCreate.response';
-import { EventType } from 'src/schemas/Interfaces/event.interface';
+import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 import { UserEventBuilder } from 'src/schemas/utils/builders/event/userEvent.builder';
@@ -46,7 +46,7 @@ export class UserService implements LoggerContext {
     return this.commandBus
       .execute(new CreateUserCommand(userCreateDTO))
       .then((user) => this.createHistoryForUser(user))
-      .then((user) => this.createEvent(user))
+      .then((user) => this.createCreateEvent(user))
       .then((_) => _)
       .catch((_) => ErrorUserCreateResponse);
   }
@@ -68,7 +68,9 @@ export class UserService implements LoggerContext {
   }
 
   update(userId: string, userEditDto: EditUserDto): Promise<IUser> {
-    return this.commandBus.execute(new UpdateUserCommand(userId, userEditDto));
+    return this.commandBus
+      .execute(new UpdateUserCommand(userId, userEditDto))
+      .then((user) => this.createUpdateEvent(user));
   }
 
   private createHistoryForUser(user: IUser): IUser {
@@ -76,11 +78,21 @@ export class UserService implements LoggerContext {
     this.logger.log(`User create id = ${user._id}`);
     return user;
   }
-  private createEvent(user: IUser): Promise<IUser> {
+
+  private createCreateEvent(user: IUser): Promise<IUser> {
     this.eventEmitter.emitAsync(
-      EventType.Create,
+      EventAction.Create,
       new UserEventBuilder(user._id, user).setCreateEvent().build(),
     );
+    return Promise.resolve(user);
+  }
+
+  private createUpdateEvent(user: IUser): Promise<IUser> {
+    this.eventEmitter.emitAsync(
+      EventAction.Create,
+      new UserEventBuilder(user._id, user).setEditEvent().build(),
+    );
+
     return Promise.resolve(user);
   }
 }
