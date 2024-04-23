@@ -5,9 +5,9 @@ import { CreateEntryBulkCommand } from 'src/commands/entry/CreateEntryBulkComman
 import { CreateEntryCommand } from 'src/commands/entry/CreateEntryCommand';
 import { DeleteEntryCommand } from 'src/commands/entry/DeleteEntryCommand';
 import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
+import { EntryServiceMessage } from 'src/errors/errors-messages/entryServiceMessages';
 import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 import { EventTypes } from 'src/events/eventTypes';
-import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
@@ -16,6 +16,7 @@ import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { EventEntryBuilder } from 'src/schemas/utils/builders/event/entryEvent.builder';
 import { Logger } from 'src/utils/Logger';
+import { EntryServiceEmitterLogger } from 'src/utils/entryServiceEmitterLogger';
 import {
   ErrorHandler,
   LogHandler,
@@ -29,15 +30,6 @@ import {
 } from '../schemas/Interfaces/entry.interface';
 import { EditEntryDto } from './../schemas/dto/editentry.dto';
 
-enum EntryServiceMessage {
-  Create = 'Entry service: create method',
-  RestoreMessage = 'Try to restore entry',
-  Restore = 'Entry service: restore method',
-  Delete = 'Entry service: delete method',
-  DeleteMessage = 'Delete entry not possible, error occur',
-  Update = 'Entry service: update method',
-  ActiveDeleted = 'Entry service: activateDeletedEntreis method',
-}
 //TODO: Temporary fix, for event catcher
 // Fix class length
 @Injectable()
@@ -51,12 +43,15 @@ export class EntryEmitService {
 }
 @Injectable()
 export class EntryService implements LoggerContext {
-  private logHandler: LoggerHandler = new LogHandler(this);
-  private errorHandler: LoggerHandler = new ErrorHandler(this);
+  private readonly logHandler: LoggerHandler = new LogHandler(this);
+  private readonly errorHandler: LoggerHandler = new ErrorHandler(this);
+  private readonly entryServiceEmitLogger: EntryServiceEmitterLogger =
+    new EntryServiceEmitterLogger(this, this.logHandler, this.errorHandler);
+
   constructor(
-    private readonly eventEmitter: EventEmitter2,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    readonly eventEmitter: EventEmitter2,
     readonly logger: Logger,
   ) {}
 
@@ -112,9 +107,9 @@ export class EntryService implements LoggerContext {
         }),
       )
       .then((restoredEntry) => {
-        this.logHandler.handle(
-          `Entry with id = ${restoreBody.entryId} restorect succesfull`,
-          EntryServiceMessage.Restore,
+        this.entryServiceEmitLogger.handleEntryRestore(
+          restoreBody.entryId,
+          restoredEntry,
         );
         return restoredEntry;
       });
@@ -124,28 +119,15 @@ export class EntryService implements LoggerContext {
     try {
       return Promise.all(this.prepareDeletedEntryPromise(entryid))
         .then((res) => {
-          this.eventEmitter.emit(
-            EventTypes.HistoryAppend,
-            new HistoryAppendEvent(res[0].userid, [res[0]], 'entry'),
-          );
-          this.logHandler.handle(
-            `Entry with id = ${entryid} deleted succesfull`,
-            EntryServiceMessage.Delete,
-          );
+          this.entryServiceEmitLogger.deleteActionHandler(entryid, res);
           return { status: true, response: res[0] } as any;
         })
         .catch((_err) => {
-          this.errorHandler.handle(
-            EntryServiceMessage.DeleteMessage,
-            EntryServiceMessage.Delete,
-          );
+          this.entryServiceEmitLogger.errorDeleteByid();
           return EmptyResponse;
         });
     } catch (e) {
-      this.errorHandler.handle(
-        EntryServiceMessage.DeleteMessage,
-        EntryServiceMessage.Delete,
-      );
+      this.entryServiceEmitLogger.errorDeleteByid();
       return Promise.resolve(EmptyResponse);
     }
   }
@@ -169,10 +151,7 @@ export class EntryService implements LoggerContext {
         }),
       )
       .then((respnse) => {
-        this.logHandler.handle(
-          'Deleted entries activated sucessfull',
-          EntryServiceMessage.ActiveDeleted,
-        );
+        this.entryServiceEmitLogger.activateDeletedEntriesLog();
         return respnse;
       });
   }
@@ -187,7 +166,7 @@ export class EntryService implements LoggerContext {
     try {
       return this.commandBus
         .execute(new UpdateEntryCommand({ updateEntryDto: neweditedentry }))
-        .then(async (_data) => {
+        .then(async (_) => {
           const upadednoew = await this.queryBus.execute(
             new GetSpecificEntry({ id: neweditedentry._id }),
           );
@@ -207,12 +186,7 @@ export class EntryService implements LoggerContext {
     return this.queryBus
       .execute(new GetSpecificEntry({ groupId: groupid }))
       .then((entires) => {
-        if (Array.isArray(entires) && entires.length > 0) {
-          this.eventEmitter.emit(
-            EventTypes.HistoryAppend,
-            new HistoryAppendEvent(entires[0].userid, entires, 'entry'),
-          );
-        }
+        this.entryServiceEmitLogger.historyEntriesAppend(entires);
         return entires;
       });
   }
@@ -236,13 +210,10 @@ export class EntryService implements LoggerContext {
       new DeleteEntryCommand({ groupId: groupid }),
     );
     return promiseEntryHistory
-      .then(() => deletePromise)
-      .then((promise) => {
-        this.logHandler.handle(
-          'Group deleted sucessfull',
-          EntryServiceMessage.Delete,
-        );
-        return promise;
+      .then((_) => deletePromise.then((__) => _))
+      .then((fetchedEntries) => {
+        this.entryServiceEmitLogger.handleDeleteEntriesByGroup(fetchedEntries);
+        return fetchedEntries;
       })
       .catch((error) =>
         this.errorHandler.handle(error, EntryServiceMessage.Delete),
