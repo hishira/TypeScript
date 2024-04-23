@@ -12,14 +12,19 @@ type EntityEventType =
   | EventType.Create
   | EventType.Delete
   | EventType.Update
-  | EventType.Restore;
+  | EventType.Restore
+  | EventType.MultiDelete;
 
 export class EventEntryBuilder implements EventBuilder {
   private readonly entityType: EntityType = EntityType.Entry;
 
   constructor(
     private readonly related_entity: string,
-    private readonly payloadObject: CreateEntryDto | EditEntryDto | IEntry,
+    private readonly payloadObject:
+      | CreateEntryDto
+      | EditEntryDto
+      | IEntry
+      | IEntry[],
     private eventType?: EntityEventType,
   ) {}
 
@@ -35,6 +40,11 @@ export class EventEntryBuilder implements EventBuilder {
 
   setEditEvent(): this {
     this.eventType = EventType.Update;
+    return this;
+  }
+
+  setMultiDelete(): this {
+    this.eventType = EventType.MultiDelete;
     return this;
   }
 

@@ -12,6 +12,9 @@ export enum EventType {
   Restore = 'RestoreEvent',
   Login = 'Login',
   Register = 'Register',
+  MultiDelete = 'MultiDelete',
+  MultiUpdate = 'MultiUpdate',
+  MultiCreate = 'MultiCreate',
 }
 
 export enum EntityType {
@@ -27,5 +30,10 @@ export interface IEvent extends Document {
   readonly eventType: EventType;
   readonly entityType: EntityType;
   readonly related_entity: string;
-  readonly payloadObject: Record<string, unknown> | string | number | Document;
+  readonly payloadObject:
+    | Record<string, unknown>
+    | string
+    | number
+    | Document
+    | Document[];
 }
