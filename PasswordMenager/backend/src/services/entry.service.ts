@@ -16,7 +16,7 @@ import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { EventEntryBuilder } from 'src/schemas/utils/builders/event/entryEvent.builder';
 import { Logger } from 'src/utils/Logger';
-import { EntryServiceEmitterLogger } from 'src/utils/entryServiceEmitterLogger';
+import { EntryServiceEmitterLogger } from 'src/services/eventAndLog/entryServiceEmitterLogger';
 import {
   ErrorHandler,
   LogHandler,
