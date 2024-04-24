@@ -2,12 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserEvent } from 'src/events/createUserEvent';
-import { EventTypes } from 'src/events/eventTypes';
 import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
-import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
-import { UserEventBuilder } from 'src/schemas/utils/builders/event/userEvent.builder';
 import { UserUtils } from 'src/schemas/utils/user.utils';
 import { Logger } from 'src/utils/Logger';
 import {
@@ -22,7 +18,8 @@ import {
 } from '../constans';
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
-enum AuthError {
+import { AuthServiceEventLog } from './eventAndLog/authServiceEventLog';
+export enum AuthError {
   ValidateUserNotExists = 'User not exists',
   ValidateUserNotExistsWrongPassword = 'User try to log into system, passowrd not match',
   ValidateUserNotExistsContext = 'Auth service: validateUser method',
@@ -32,12 +29,18 @@ enum AuthError {
 @Injectable()
 export class AuthService implements LoggerContext {
   debugHandler: LoggerHandler = new LogHandler(this);
+  private eventLogHelper: AuthServiceEventLog;
   constructor(
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
     private readonly queryBus: QueryBus,
     readonly logger: Logger,
-  ) {}
+  ) {
+    this.eventLogHelper = new AuthServiceEventLog(
+      this.debugHandler,
+      this.eventEmitter,
+    );
+  }
 
   createUser(user: CreateUserDto): Promise<CreateUserDto> {
     this.debugHandler.handle(
@@ -45,15 +48,7 @@ export class AuthService implements LoggerContext {
       AuthError.CreateUserContext,
     );
 
-    return Promise.resolve(() => {
-      return true;
-    }).then((_) => {
-      this.eventEmitter.emitAsync(
-        EventTypes.CreateUser,
-        new CreateUserEvent(user),
-      );
-      return user;
-    });
+    return this.eventLogHelper.emitPromiseCreateUserEvent(user);
   }
   async valideteUser(userinfo: AuthInfo): Promise<IUser | null> {
     return this.queryBus
@@ -61,23 +56,13 @@ export class AuthService implements LoggerContext {
       .then(UserUtils.GetFirstUserFromTableOrNull)
       .then((user) => {
         if (user === null) {
-          this.debugHandler.handle(
-            AuthError.ValidateUserNotExists,
-            AuthError.ValidateUserNotExistsContext,
-          );
+          this.eventLogHelper.userNotExistsDebug();
           return null;
         }
         if (user.validatePassword(userinfo.password)) {
           return user;
         }
-        this.debugHandler.handle(
-          AuthError.ValidateUserNotExistsWrongPassword,
-          AuthError.ValidateUserNotExistsContext,
-        );
-        this.eventEmitter.emitAsync(
-          EventAction.Create,
-          new UserEventBuilder(null, userinfo).setLoginEvent().build(),
-        );
+        this.eventLogHelper.createLoginEventAndDebug(userinfo);
       });
   }
 

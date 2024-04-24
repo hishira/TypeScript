@@ -4,39 +4,36 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateGroupCommand } from 'src/commands/group/CreateGroupCommand';
 import { DeleteGroupCommand } from 'src/commands/group/DeleteGroupCommand';
 import { UpdateGroupCommand } from 'src/commands/group/UpdateGroupCommand';
-import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
-import { EventTypes } from 'src/events/eventTypes';
-import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { GetExistingGroupQuery } from 'src/queries/group/getExistingGroup.queries';
 import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 import { Logger } from 'src/utils/Logger';
 import {
-  ErrorHandler,
   LogHandler,
-  LoggerContext,
+  LoggerContext
 } from 'src/utils/error.handlers';
 import { Paginator } from 'src/utils/paginator';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
-enum GroupServiceMessages {
-  Create = 'Group service; create method',
-  Delete = 'Group service; deleteGroup method',
+import { GroupServiceEmitterLogger } from './eventAndLog/groupServiceEmitterLogger';
   Update = 'Group service; editGroup method',
   HistoryAppendEvent = 'Create event to append group to history',
 }
 @Injectable()
 export class GroupService implements LoggerContext {
-  readonly logHandler = new LogHandler(this);
-  readonly errorHandler = new ErrorHandler(this);
-
+  readonly groupEventLogHandler: GroupServiceEmitterLogger;
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
     readonly logger: Logger,
-  ) {}
+  ) {
+    this.groupEventLogHandler = new GroupServiceEmitterLogger(
+      new LogHandler(this),
+      this.eventEmitter,
+    );
+  }
 
   create(
     groupcreateDTO: CreateGroupDto,
@@ -45,10 +42,7 @@ export class GroupService implements LoggerContext {
     return this.commandBus
       .execute(new CreateGroupCommand(userid, groupcreateDTO))
       .then((group) => {
-        this.logHandler.handle(
-          `Group created, id = ${group._id}`,
-          GroupServiceMessages.Create,
-        );
+        this.groupEventLogHandler.createEventAndLog(group);
         return group;
       });
   }
@@ -62,52 +56,44 @@ export class GroupService implements LoggerContext {
   }
 
   deleteGroup(groupId: string): Promise<unknown> {
-    this.eventEmitter.emitAsync(
-      EventTypes.DeleteEntryByGroup,
-      new DeleteByGroupEvent(groupId),
-    );
-    const promiseToResolve = this.queryBus
-      .execute<GetFilteredGroup, GroupResponse<IGroup, Paginator>>(
-        new GetFilteredGroup({ id: groupId }),
-      )
-      .then((groups) => {
-        if (Array.isArray(groups) && groups.length > 0) {
-          this.logHandler.handle(
-            GroupServiceMessages.HistoryAppendEvent,
-            GroupServiceMessages.Delete,
-          );
-          this.eventEmitter.emit(
-            EventTypes.HistoryAppend,
-            new HistoryAppendEvent(groups[0].userid, groups, 'group'),
-          );
-        }
-        return Promise.resolve(true);
-      });
-    const promise = this.commandBus
-      .execute<DeleteGroupCommand, unknown>(
-        new DeleteGroupCommand({ id: groupId }),
-      )
-      .then((response) => {
-        this.logHandler.handle(
-          'Group deleted succesfull',
-          GroupServiceMessages.Delete,
-        );
-        return response;
-      });
+    this.groupEventLogHandler.emitDeleteGroupEvent(groupId);
+    const promiseToResolve = this.prepareEntryToDeleteAndHistorySave(groupId);
+    const promise = this.prepareDeleteGroupPromise(groupId);
     return promiseToResolve !== null
-      ? promiseToResolve.then((re) => promise)
+      ? promiseToResolve.then((_) => promise)
       : promise;
   }
 
   editGroup(groupId: string, groupDto: EditGroupDto): Promise<unknown> {
     return this.commandBus
       .execute(new UpdateGroupCommand(groupId, groupDto))
-      .then((response) => {
-        this.logHandler.handle(
-          `Group with id = ${groupId} edited succesfull`,
-          GroupServiceMessages.Update,
-        );
+      .then((response: IGroup) => {
+        this.groupEventLogHandler.editEventAndLog(groupId, groupDto);
         return response;
       });
+  }
+
+  private prepareEntryToDeleteAndHistorySave(
+    groupId: string,
+  ): Promise<boolean> {
+    return this.queryBus
+      .execute<GetFilteredGroup, GroupResponse<IGroup, Paginator>>(
+        new GetFilteredGroup({ id: groupId }),
+      )
+      .then((groups) => {
+        this.groupEventLogHandler.logAndEmitHistoryAppendEvent(groups);
+        return Promise.resolve(true);
+      });
+  }
+
+  private prepareDeleteGroupPromise(groupId: string): Promise<unknown>{
+    return this.commandBus
+    .execute<DeleteGroupCommand, unknown>(
+      new DeleteGroupCommand({ id: groupId }),
+    )
+    .then((response) => {
+      this.groupEventLogHandler.deleteEventAndLog(response);
+      return response;
+    });
   }
 }
