@@ -8,7 +8,11 @@ import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { EventBuilder } from './event.builder';
 
-type UserEventType = EventType.Create | EventType.Delete | EventType.Update;
+type UserEventType =
+  | EventType.Create
+  | EventType.Delete
+  | EventType.Update
+  | EventType.Login;
 
 export class UserEventBuilder implements EventBuilder {
   private readonly entityType: EntityType = EntityType.User;
@@ -31,6 +35,11 @@ export class UserEventBuilder implements EventBuilder {
 
   setEditEvent(): this {
     this.eventType = EventType.Update;
+    return this;
+  }
+
+  setLoginEvent(): this {
+    this.eventType = EventType.Login;
     return this;
   }
 

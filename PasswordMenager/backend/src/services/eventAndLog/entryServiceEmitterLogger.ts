@@ -5,8 +5,7 @@ import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { EventEntryBuilder } from 'src/schemas/utils/builders/event/entryEvent.builder';
 import { EntryService } from 'src/services/entry.service';
-import { LoggerHandler } from './error.handlers';
-
+import { LoggerHandler } from '../../utils/error.handlers';
 export class EntryServiceEmitterLogger {
   constructor(
     private readonly entryService: EntryService,
@@ -52,7 +51,7 @@ export class EntryServiceEmitterLogger {
     );
   }
   //TODO: entries type
-  historyEntriesAppend(entries): void {
+  historyEntriesAppend(entries: IEntry[]): void {
     if (Array.isArray(entries) && entries.length > 0) {
       this.entryService.eventEmitter.emit(
         EventTypes.HistoryAppend,

@@ -5,7 +5,9 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserEvent } from 'src/events/createUserEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
+import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
+import { UserEventBuilder } from 'src/schemas/utils/builders/event/userEvent.builder';
 import { UserUtils } from 'src/schemas/utils/user.utils';
 import { Logger } from 'src/utils/Logger';
 import {
@@ -71,6 +73,10 @@ export class AuthService implements LoggerContext {
         this.debugHandler.handle(
           AuthError.ValidateUserNotExistsWrongPassword,
           AuthError.ValidateUserNotExistsContext,
+        );
+        this.eventEmitter.emitAsync(
+          EventAction.Create,
+          new UserEventBuilder(null, userinfo).setLoginEvent().build(),
         );
       });
   }
