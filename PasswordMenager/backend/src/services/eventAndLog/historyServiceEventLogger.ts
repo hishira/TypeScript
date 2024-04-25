@@ -1,4 +1,5 @@
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand';
 import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { HistoryEventBuilder } from 'src/schemas/utils/builders/event/historyEvent.builder';
 import { LoggerHandler } from 'src/utils/error.handlers';
@@ -19,6 +20,34 @@ export class HistoryServiceEventLogger {
       EventAction.Create,
       new HistoryEventBuilder(historyResponse?.id ?? null, historyResponse)
         .setCreateEvent()
+        .build(),
+    );
+  }
+
+  historyEntityAppendEventAndLog(historyCommand: UpdateHistoryCommand): void {
+    this.logHandler.handle(
+      HistoryServiceMessage.UpdateEntitiesMessage + historyCommand.input.userId,
+      HistoryServiceMessage.UpdateEntietiesToHistory,
+    );
+
+    this.eventEmitter.emitAsync(
+      EventAction.Create,
+      new HistoryEventBuilder(null, historyCommand)
+        .setEntityHistoryAppendEvent()
+        .build(),
+    );
+  }
+
+  historyGroupAppendEventAndLog(historyCommand: UpdateHistoryCommand): void {
+    this.logHandler.handle(
+      HistoryServiceMessage.UpdateEntitiesMessage + historyCommand.input.userId,
+      HistoryServiceMessage.UpdateEntietiesToHistory,
+    );
+
+    this.eventEmitter.emitAsync(
+      EventAction.Create,
+      new HistoryEventBuilder(null, historyCommand)
+        .setGroupHistoryAppendEvent()
         .build(),
     );
   }

@@ -15,6 +15,8 @@ export enum EventType {
   MultiDelete = 'MultiDelete',
   MultiUpdate = 'MultiUpdate',
   MultiCreate = 'MultiCreate',
+  EntityHistoryAppend = 'EntityHistoryAppend',
+  GroupHistoryAppend = 'GroupHistoryAppend',
 }
 
 export enum EntityType {

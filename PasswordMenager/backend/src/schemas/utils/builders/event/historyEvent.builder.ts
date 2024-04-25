@@ -1,3 +1,4 @@
+import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand';
 import {
   EntityType,
   EventType,
@@ -6,13 +7,23 @@ import {
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { EventBuilder } from './event.builder';
 
+type HistoryEventType =
+  | EventType.Create
+  | EventType.Delete
+  | EventType.Update
+  | EventType.EntityHistoryAppend
+  | EventType.GroupHistoryAppend;
 export class HistoryEventBuilder implements EventBuilder {
   private readonly entityType: EntityType = EntityType.History;
 
   constructor(
     private readonly related_entity: string,
-    private readonly payloadObject: IHistory | IHistory[] | any,
-    private eventType?: EventType,
+    private readonly payloadObject:
+      | IHistory
+      | IHistory[]
+      | UpdateHistoryCommand
+      | any,
+    private eventType?: HistoryEventType,
   ) {}
 
   setCreateEvent(): this {
@@ -22,11 +33,25 @@ export class HistoryEventBuilder implements EventBuilder {
 
   setDeleteEvent(): this {
     this.eventType = EventType.Delete;
+
     return this;
   }
 
   setEditEvent(): this {
     this.eventType = EventType.Update;
+
+    return this;
+  }
+
+  setEntityHistoryAppendEvent(): this {
+    this.eventType = EventType.EntityHistoryAppend;
+
+    return this;
+  }
+
+  setGroupHistoryAppendEvent(): this {
+    this.eventType = EventType.GroupHistoryAppend;
+
     return this;
   }
 

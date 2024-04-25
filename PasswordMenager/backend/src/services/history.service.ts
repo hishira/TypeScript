@@ -9,11 +9,7 @@ import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { Logger } from 'src/utils/Logger';
-import {
-  LogHandler,
-  LoggerContext,
-  LoggerHandler,
-} from 'src/utils/error.handlers';
+import { LogHandler, LoggerContext } from 'src/utils/error.handlers';
 import { HistoryServiceEventLogger } from './eventAndLog/historyServiceEventLogger';
 export enum HistoryServiceMessage {
   Create = 'History service; create method',
@@ -26,7 +22,6 @@ export enum HistoryServiceMessage {
 
 @Injectable()
 export class HistoryService implements LoggerContext {
-  readonly logHanlder: LoggerHandler = new LogHandler(this);
   private historyServiceEventLogger: HistoryServiceEventLogger;
   constructor(
     private readonly commandBus: CommandBus,
@@ -43,10 +38,6 @@ export class HistoryService implements LoggerContext {
     return this.commandBus
       .execute(new CreateHistoryCommand(userid))
       .then((historyResponse) => {
-        // this.logHanlder.handle(
-        //   HistoryServiceMessage.CreateMessage + userid,
-        //   HistoryServiceMessage.Create,
-        // );
         this.historyServiceEventLogger.createEventAndLogger(
           userid,
           historyResponse,
@@ -69,34 +60,30 @@ export class HistoryService implements LoggerContext {
   }
 
   appendEntityToHistory(userid: string, entries: IEntry[]): Promise<IHistory> {
+    const updateHistoryCommand = new UpdateHistoryCommand({
+      userId: userid,
+      entries: entries,
+    });
     return this.commandBus
-      .execute(
-        new UpdateHistoryCommand({
-          userId: userid,
-          entries: entries,
-        }),
-      )
+      .execute(updateHistoryCommand)
       .then((updatedHistory) => {
-        this.logHanlder.handle(
-          HistoryServiceMessage.UpdateEntitiesMessage + userid,
-          HistoryServiceMessage.UpdateEntietiesToHistory,
+        this.historyServiceEventLogger.historyEntityAppendEventAndLog(
+          updateHistoryCommand,
         );
         return updatedHistory;
       });
   }
 
   appendGroupToHistory(userid: string, groups: IGroup[]): Promise<IHistory> {
+    const updateHistoryCommand = new UpdateHistoryCommand({
+      userId: userid,
+      groups: groups,
+    });
     return this.commandBus
-      .execute(
-        new UpdateHistoryCommand({
-          userId: userid,
-          groups: groups,
-        }),
-      )
+      .execute(updateHistoryCommand)
       .then((updatedHistory) => {
-        this.logHanlder.handle(
-          HistoryServiceMessage.UpdateGroupMessage + userid,
-          HistoryServiceMessage.UpdateGroupToHistory,
+        this.historyServiceEventLogger.historyGroupAppendEventAndLog(
+          updateHistoryCommand,
         );
         return updatedHistory;
       });
