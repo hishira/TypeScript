@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { CreateHistoryCommand } from 'src/commands/history/CreateHistoryCommand';
 import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand';
 import { EventTypes } from 'src/events/eventTypes';
@@ -14,7 +14,8 @@ import {
   LoggerContext,
   LoggerHandler,
 } from 'src/utils/error.handlers';
-enum HistoryServiceMessage {
+import { HistoryServiceEventLogger } from './eventAndLog/historyServiceEventLogger';
+export enum HistoryServiceMessage {
   Create = 'History service; create method',
   CreateMessage = 'History created for user = ',
   UpdateGroupToHistory = 'History service; appendGroupToHistory method',
@@ -26,18 +27,29 @@ enum HistoryServiceMessage {
 @Injectable()
 export class HistoryService implements LoggerContext {
   readonly logHanlder: LoggerHandler = new LogHandler(this);
+  private historyServiceEventLogger: HistoryServiceEventLogger;
   constructor(
     private readonly commandBus: CommandBus,
+    private readonly eventEmitter: EventEmitter2,
     readonly logger: Logger,
-  ) {}
+  ) {
+    this.historyServiceEventLogger = new HistoryServiceEventLogger(
+      new LogHandler(this),
+      this.eventEmitter,
+    );
+  }
 
   create(userid: string): Promise<IHistory> {
     return this.commandBus
       .execute(new CreateHistoryCommand(userid))
       .then((historyResponse) => {
-        this.logHanlder.handle(
-          HistoryServiceMessage.CreateMessage + userid,
-          HistoryServiceMessage.Create,
+        // this.logHanlder.handle(
+        //   HistoryServiceMessage.CreateMessage + userid,
+        //   HistoryServiceMessage.Create,
+        // );
+        this.historyServiceEventLogger.createEventAndLogger(
+          userid,
+          historyResponse,
         );
         return historyResponse;
       });
