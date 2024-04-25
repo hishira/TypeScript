@@ -9,14 +9,14 @@ import { GetFilteredGroup } from 'src/queries/group/getFilteredGroup.queries';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 import { Logger } from 'src/utils/Logger';
-import {
-  LogHandler,
-  LoggerContext
-} from 'src/utils/error.handlers';
+import { LogHandler, LoggerContext } from 'src/utils/error.handlers';
 import { Paginator } from 'src/utils/paginator';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { GroupServiceEmitterLogger } from './eventAndLog/groupServiceEmitterLogger';
+export enum GroupServiceMessages {
+  Create = 'Group service; create method',
+  Delete = 'Group service; deleteGroup method',
   Update = 'Group service; editGroup method',
   HistoryAppendEvent = 'Create event to append group to history',
 }
@@ -86,14 +86,14 @@ export class GroupService implements LoggerContext {
       });
   }
 
-  private prepareDeleteGroupPromise(groupId: string): Promise<unknown>{
+  private prepareDeleteGroupPromise(groupId: string): Promise<unknown> {
     return this.commandBus
-    .execute<DeleteGroupCommand, unknown>(
-      new DeleteGroupCommand({ id: groupId }),
-    )
-    .then((response) => {
-      this.groupEventLogHandler.deleteEventAndLog(response);
-      return response;
-    });
+      .execute<DeleteGroupCommand, unknown>(
+        new DeleteGroupCommand({ id: groupId }),
+      )
+      .then((response) => {
+        this.groupEventLogHandler.deleteEventAndLog(response);
+        return response;
+      });
   }
 }
