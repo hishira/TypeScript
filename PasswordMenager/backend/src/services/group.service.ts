@@ -14,12 +14,6 @@ import { Paginator } from 'src/utils/paginator';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { GroupServiceEmitterLogger } from './eventAndLog/groupServiceEmitterLogger';
-export enum GroupServiceMessages {
-  Create = 'Group service; create method',
-  Delete = 'Group service; deleteGroup method',
-  Update = 'Group service; editGroup method',
-  HistoryAppendEvent = 'Create event to append group to history',
-}
 @Injectable()
 export class GroupService implements LoggerContext {
   readonly groupEventLogHandler: GroupServiceEmitterLogger;

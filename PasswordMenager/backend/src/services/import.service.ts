@@ -22,33 +22,26 @@ import {
   ErrorHandler,
   LogHandler,
   LoggerContext,
-  LoggerHandler,
 } from 'src/utils/error.handlers';
 import { ImportRequestStream } from 'src/utils/importRequest.util';
 import { Paginator } from 'src/utils/paginator';
-
-enum ImportServiceMessage {
-  Activate = 'ImportService; activateImportRequest method',
-  ActivateError = 'Activate importrequest not pass',
-  ActivateSuccess = 'Activate importrequest pass',
-  TryToImport = 'Try to import entries for user = ',
-  ImportEntriesFile = 'ImportService; importEntriesFromFile method',
-  ImportEntriesFilePass = 'Import entries from file pass',
-  ImportEntriesFail = 'Import entries from file fail',
-  Delete = 'ImportService: deleteImportRequest method',
-  Update = 'ImportService: editImpoerRequest method',
-}
+import { ImportServiceEventLogger } from './eventAndLog/importServiceEventLogger';
 
 @Injectable()
 export class ImportService implements LoggerContext {
-  logHandler: LoggerHandler = new LogHandler(this);
-  errorHandler: LoggerHandler = new ErrorHandler(this);
+  private importServiceEventLogger: ImportServiceEventLogger;
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     readonly logger: Logger,
-  ) {}
+  ) {
+    this.importServiceEventLogger = new ImportServiceEventLogger(
+      new LogHandler(this),
+      new ErrorHandler(this),
+      this.eventEmitter,
+    );
+  }
 
   activateImportRequest(
     importRequestId: string,
@@ -61,13 +54,16 @@ export class ImportService implements LoggerContext {
       )
       .then((importRequest) => {
         this.handleActivateImportRequest(importRequest, userId);
-        return true;
+        return importRequest;
       })
       .then((response) =>
-        this.logHandler.handle(response, ImportServiceMessage.Activate),
+        this.importServiceEventLogger.activeImportRequestSuccessfull(response),
       )
       .catch((error) =>
-        this.errorHandler.handle(error, ImportServiceMessage.Activate),
+        this.importServiceEventLogger.activeImportRequestError(
+          importRequestId,
+          error,
+        ),
       );
   }
 
@@ -89,10 +85,7 @@ export class ImportService implements LoggerContext {
   ): Promise<ImportEntryResponse> {
     const importRequestStream = new ImportRequestStream(file, writeType);
     let entries = [];
-    this.logHandler.handle(
-      ImportServiceMessage.TryToImport + userid,
-      ImportServiceMessage.ImportEntriesFile,
-    );
+    this.importServiceEventLogger.tryToImportEntries(userid);
     return importRequestStream
       .getPromise()
       .then((entryImport) => {
@@ -108,17 +101,12 @@ export class ImportService implements LoggerContext {
           .ResponseResolve;
       })
       .then((response) => {
-        this.logHandler.handle(
-          ImportServiceMessage.ImportEntriesFilePass,
-          ImportServiceMessage.ImportEntriesFile,
-        );
+        this.importServiceEventLogger.importEntriesSuccess(response);
+
         return response;
       })
       .catch((error) => {
-        this.logHandler.handle(
-          ImportServiceMessage.ImportEntriesFail,
-          ImportServiceMessage.ImportEntriesFile,
-        );
+        this.importServiceEventLogger.importEntriesError();
         return error;
       });
   }
@@ -132,10 +120,10 @@ export class ImportService implements LoggerContext {
         }),
       )
       .then((response) =>
-        this.logHandler.handle(response, ImportServiceMessage.Delete),
+        this.importServiceEventLogger.deleteEventLogSuccess(response),
       )
       .catch((error) =>
-        this.errorHandler.handle(error, ImportServiceMessage.Delete),
+        this.importServiceEventLogger.deleteEventLogError(error),
       );
   }
 
@@ -151,11 +139,9 @@ export class ImportService implements LoggerContext {
         }),
       )
       .then((response) =>
-        this.logHandler.handle(response, ImportServiceMessage.Update),
+        this.importServiceEventLogger.editEventLogSuccess(response),
       )
-      .catch((error) =>
-        this.errorHandler.handle(error, ImportServiceMessage.Update),
-      );
+      .catch((error) => this.importServiceEventLogger.editEventLogError(error));
   }
 
   private retrieveFirstImportRequest(

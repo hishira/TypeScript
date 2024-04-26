@@ -4,7 +4,7 @@ import { AuthInfo } from 'src/schemas/dto/auth.dto';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { UserEventBuilder } from 'src/schemas/utils/builders/event/userEvent.builder';
 import { LoggerHandler } from 'src/utils/error.handlers';
-import { AuthError } from '../auth.service';
+import { AuthError } from 'src/errors/errors-messages/authenticationErrorMessages';
 import { EventTypes } from 'src/events/eventTypes';
 import { CreateUserEvent } from 'src/events/createUserEvent';
 

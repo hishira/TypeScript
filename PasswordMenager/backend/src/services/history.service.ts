@@ -11,15 +11,6 @@ import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { Logger } from 'src/utils/Logger';
 import { LogHandler, LoggerContext } from 'src/utils/error.handlers';
 import { HistoryServiceEventLogger } from './eventAndLog/historyServiceEventLogger';
-export enum HistoryServiceMessage {
-  Create = 'History service; create method',
-  CreateMessage = 'History created for user = ',
-  UpdateGroupToHistory = 'History service; appendGroupToHistory method',
-  UpdateEntietiesToHistory = 'History service; appendEntityToHistory method',
-  UpdateGroupMessage = 'Group appended to history with userid = ',
-  UpdateEntitiesMessage = 'Entieties appended to history with userid = ',
-}
-
 @Injectable()
 export class HistoryService implements LoggerContext {
   private historyServiceEventLogger: HistoryServiceEventLogger;

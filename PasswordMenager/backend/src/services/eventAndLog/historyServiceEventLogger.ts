@@ -3,7 +3,7 @@ import { UpdateHistoryCommand } from 'src/commands/history/UpdateHistoryCommand'
 import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { HistoryEventBuilder } from 'src/schemas/utils/builders/event/historyEvent.builder';
 import { LoggerHandler } from 'src/utils/error.handlers';
-import { HistoryServiceMessage } from '../history.service';
+import { HistoryServiceMessage } from 'src/errors/errors-messages/historyErrorMessages';
 
 export class HistoryServiceEventLogger {
   constructor(
