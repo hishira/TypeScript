@@ -7,7 +7,7 @@ import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { GroupEventBuilder } from 'src/schemas/utils/builders/event/groupEvent.builder';
 import { LoggerHandler } from 'src/utils/error.handlers';
 import { Paginator } from 'src/utils/paginator';
-import { GroupServiceMessages } from '../group.service';
+import { GroupServiceMessages } from 'src/errors/errors-messages/groupErrorMessages';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 
 export class GroupServiceEmitterLogger {

@@ -8,6 +8,7 @@ export enum EventType {
   Update = 'UpdateEvent',
   Notify = 'NotifyEvent',
   Import = 'ImportRequestEvent',
+  ActivateImport = 'ActivateImportRequestEvent',
   Export = 'ExportRequestEvent',
   Restore = 'RestoreEvent',
   Login = 'Login',

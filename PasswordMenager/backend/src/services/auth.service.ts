@@ -19,13 +19,7 @@ import {
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
 import { AuthServiceEventLog } from './eventAndLog/authServiceEventLog';
-export enum AuthError {
-  ValidateUserNotExists = 'User not exists',
-  ValidateUserNotExistsWrongPassword = 'User try to log into system, passowrd not match',
-  ValidateUserNotExistsContext = 'Auth service: validateUser method',
-  CreateUserEventEmit = 'Emit create user event',
-  CreateUserContext = 'User service: createUser method',
-}
+import { AuthError } from 'src/errors/errors-messages/authenticationErrorMessages';
 @Injectable()
 export class AuthService implements LoggerContext {
   debugHandler: LoggerHandler = new LogHandler(this);
