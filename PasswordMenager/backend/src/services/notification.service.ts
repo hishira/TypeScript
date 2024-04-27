@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { CreateNotificationCommand } from 'src/commands/notification/CreateNotificationCommand';
@@ -25,12 +25,13 @@ import {
   LoggerContext,
   LoggerHandler,
 } from 'src/utils/error.handlers';
+import { NotificationServiceEventLogger } from './eventAndLog/notificationServiceEventLogger';
 
 interface NotificationCron {
   notificationSendCronHandle(): void;
 }
 
-enum NotificationServiceMessages {
+export enum NotificationServiceMessages {
   Send = 'NotificationService; notificationSendCronHandle method',
   Create = 'NotificationService; createEmailNotification method',
   EmailNotificationSend = 'Email notification sedn',
@@ -40,6 +41,7 @@ enum NotificationServiceMessages {
 export class NotificationService implements NotificationCron, LoggerContext {
   logHandler: LoggerHandler = new LogHandler(this);
   errorHandler: LoggerHandler = new ErrorHandler(this);
+  private notificationserviceEventLogger: NotificationServiceEventLogger;
   private emailSender: EmailSender;
 
   get activeNotification(): Promise<INotification[]> {
@@ -52,9 +54,15 @@ export class NotificationService implements NotificationCron, LoggerContext {
     readonly logger: Logger,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    private readonly eventEmitter: EventEmitter2,
   ) {
     this.emailSender = new EmailSender();
     this.logger.setContext('Notification service');
+    this.notificationserviceEventLogger = new NotificationServiceEventLogger(
+      new LogHandler(this),
+      new ErrorHandler(this),
+      this.eventEmitter,
+    );
   }
 
   @Cron(CronExpression.EVERY_10_SECONDS)
@@ -95,12 +103,8 @@ export class NotificationService implements NotificationCron, LoggerContext {
   create(notificationDTO: CreateNotificationDTO): Promise<INotification> {
     return this.commandBus
       .execute(new CreateNotificationCommand(notificationDTO))
-      .then((r) =>
-        this.logHandler.handle(r, NotificationServiceMessages.Create),
-      )
-      .catch((error) =>
-        this.errorHandler.handle(error, NotificationServiceMessages.Create),
-      );
+      .then((r) => this.notificationserviceEventLogger.createSuccess(r))
+      .catch((error) => this.notificationserviceEventLogger.createError(error));
   }
 
   userNotification(userId: string): Promise<INotification[]> {
@@ -118,10 +122,7 @@ export class NotificationService implements NotificationCron, LoggerContext {
         entry.userid as unknown as string,
       ),
     ).then(async (_) => {
-      this.logHandler.handle(
-        'Email notification create',
-        NotificationServiceMessages.Create,
-      );
+      this.notificationserviceEventLogger.createEmailNotification();
       return this.notificationSend();
     });
   }
@@ -130,16 +131,10 @@ export class NotificationService implements NotificationCron, LoggerContext {
     return this.emailSender
       .sendEmail('', '', 'You got message example')
       .then((r) =>
-        this.logHandler.handle(
-          r,
-          NotificationServiceMessages.EmailNotificationSend,
-        ),
+        this.notificationserviceEventLogger.notificationSendSuccess(r),
       )
       .catch((error) =>
-        this.errorHandler.handle(
-          error,
-          NotificationServiceMessages.ErrorEmailNotificationSend,
-        ),
+        this.notificationserviceEventLogger.notificationSendError(error),
       );
   }
 
@@ -161,15 +156,15 @@ export class NotificationService implements NotificationCron, LoggerContext {
     return this.commandBus
       .execute(new DeleteNotificationCommand({ _id: notificationId }))
       .then((response) =>
-        this.logHandler.handle(
+        this.notificationserviceEventLogger.deleteNotifcationSuccess(
+          notificationId,
           response,
-          'NotificationService; deleteNotification method',
         ),
       )
       .catch((error) =>
-        this.errorHandler.handle(
+        this.notificationserviceEventLogger.deleteNotifcationError(
+          notificationId,
           error,
-          'NotificationService; deleteNotification method',
         ),
       );
   }
@@ -180,15 +175,15 @@ export class NotificationService implements NotificationCron, LoggerContext {
     return this.commandBus
       .execute(new EditNotificationCommand({ ...notificationBody }))
       .then((response) =>
-        this.logHandler.handle(
+        this.notificationserviceEventLogger.editNotifcationSuccess(
+          notificationBody,
           response,
-          'NotificationService; editNotification method',
         ),
       )
       .catch((error) =>
-        this.errorHandler.handle(
+        this.notificationserviceEventLogger.editNotifcationError(
+          notificationBody,
           error,
-          'NotificationService; editNotification method',
         ),
       );
   }
