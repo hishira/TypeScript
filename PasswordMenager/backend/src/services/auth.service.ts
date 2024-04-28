@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
+import { AuthError } from 'src/errors/errors-messages/authenticationErrorMessages';
 import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { UserUtils } from 'src/schemas/utils/user.utils';
@@ -19,7 +20,6 @@ import {
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
 import { AuthServiceEventLog } from './eventAndLog/authServiceEventLog';
-import { AuthError } from 'src/errors/errors-messages/authenticationErrorMessages';
 @Injectable()
 export class AuthService implements LoggerContext {
   debugHandler: LoggerHandler = new LogHandler(this);
@@ -51,9 +51,12 @@ export class AuthService implements LoggerContext {
       .then((user) => {
         if (user === null) {
           this.eventLogHelper.userNotExistsDebug();
+
           return null;
         }
         if (user.validatePassword(userinfo.password)) {
+          this.eventLogHelper.userLoginEvent(userinfo);
+
           return user;
         }
         this.eventLogHelper.createLoginEventAndDebug(userinfo);
