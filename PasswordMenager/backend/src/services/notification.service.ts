@@ -23,7 +23,6 @@ import {
   ErrorHandler,
   LogHandler,
   LoggerContext,
-  LoggerHandler,
 } from 'src/utils/error.handlers';
 import { NotificationServiceEventLogger } from './eventAndLog/notificationServiceEventLogger';
 
@@ -39,8 +38,6 @@ export enum NotificationServiceMessages {
 }
 @Injectable()
 export class NotificationService implements NotificationCron, LoggerContext {
-  logHandler: LoggerHandler = new LogHandler(this);
-  errorHandler: LoggerHandler = new ErrorHandler(this);
   private notificationserviceEventLogger: NotificationServiceEventLogger;
   private emailSender: EmailSender;
 
@@ -57,7 +54,6 @@ export class NotificationService implements NotificationCron, LoggerContext {
     private readonly eventEmitter: EventEmitter2,
   ) {
     this.emailSender = new EmailSender();
-    this.logger.setContext('Notification service');
     this.notificationserviceEventLogger = new NotificationServiceEventLogger(
       new LogHandler(this),
       new ErrorHandler(this),
@@ -69,13 +65,9 @@ export class NotificationService implements NotificationCron, LoggerContext {
   notificationSendCronHandle(): void {
     this.getActiveNotificationAsPromise()
       .then((promises) => Promise.all(promises))
-      .catch((error) => {
-        this.errorHandler.handle(
-          'Problem with notification send',
-          NotificationServiceMessages.Send,
-        );
-        return error;
-      });
+      .catch((error) =>
+        this.notificationserviceEventLogger.notificationSendCronError(error),
+      );
   }
 
   @OnEvent(EventTypes.CreateNotification, { async: true })

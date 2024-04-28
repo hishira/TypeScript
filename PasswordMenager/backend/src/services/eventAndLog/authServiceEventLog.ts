@@ -24,17 +24,31 @@ export class AuthServiceEventLog {
       return user;
     });
   }
+
   userNotExistsDebug(): void {
     this.logHandler.handle(
       AuthError.ValidateUserNotExists,
       AuthError.ValidateUserNotExistsContext,
     );
   }
+
   createLoginEventAndDebug(userinfo: AuthInfo): void {
     this.logHandler.handle(
       AuthError.ValidateUserNotExistsWrongPassword,
       AuthError.ValidateUserNotExistsContext,
     );
+    this.eventEmitter.emitAsync(
+      EventAction.Create,
+      new UserEventBuilder(null, userinfo).setLoginEvent().build(),
+    );
+  }
+
+  userLoginEvent(userinfo: AuthInfo): void {
+    this.logHandler.handle(
+      AuthError.UserLogin + ` ${userinfo.login}`,
+      AuthError.ValidateUserNotExistsContext,
+    );
+
     this.eventEmitter.emitAsync(
       EventAction.Create,
       new UserEventBuilder(null, userinfo).setLoginEvent().build(),

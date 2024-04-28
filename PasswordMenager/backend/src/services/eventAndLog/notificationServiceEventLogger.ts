@@ -117,4 +117,13 @@ export class NotificationServiceEventLogger {
 
     return error;
   }
+
+  notificationSendCronError<T>(error: T): T {
+    this.errorHandler.handle(
+      'Problem with notification send',
+      NotificationServiceMessages.Send,
+    );
+
+    return error;
+  }
 }
