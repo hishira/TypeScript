@@ -1,23 +1,41 @@
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { EntryServiceMessage } from 'src/errors/errors-messages/entryServiceMessages';
 import { EventTypes } from 'src/events/eventTypes';
 import { HistoryAppendEvent } from 'src/events/historyAppendEvent';
 import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { EventAction } from 'src/schemas/Interfaces/event.interface';
+import { EditEntryDto } from 'src/schemas/dto/editentry.dto';
 import { EventEntryBuilder } from 'src/schemas/utils/builders/event/entryEvent.builder';
-import { EntryService } from 'src/services/entry.service';
 import { LoggerHandler } from '../../utils/error.handlers';
 export class EntryServiceEmitterLogger {
   constructor(
-    private readonly entryService: EntryService,
+    private readonly eventEmitter: EventEmitter2,
     private readonly logger: LoggerHandler,
     private readonly errorLogger: LoggerHandler,
   ) {}
 
+  createEntryEventAndLog(entry: IEntry): void {
+    this.logger.handle(
+      `Entry with ${entry._id} created`,
+      EntryServiceMessage.Create,
+    );
+    this.eventEmitter.emitAsync(
+      EventAction.Create,
+      new EventEntryBuilder(entry._id, entry).setCreateEvent().build(),
+    );
+  }
+
+  tryToRestoreLog(): void {
+    this.logger.handle(
+      EntryServiceMessage.RestoreMessage,
+      EntryServiceMessage.Restore,
+    );
+  }
   deleteActionHandler(
     entryid: string,
     promiseResponse: [IEntry, IEntry[]],
   ): void {
-    this.entryService.eventEmitter.emit(
+    this.eventEmitter.emit(
       EventTypes.HistoryAppend,
       new HistoryAppendEvent(
         promiseResponse[0].userid,
@@ -25,7 +43,7 @@ export class EntryServiceEmitterLogger {
         'entry',
       ),
     );
-    this.entryService.eventEmitter.emitAsync(
+    this.eventEmitter.emitAsync(
       EventAction.Create,
       new EventEntryBuilder(promiseResponse[0]._id, promiseResponse[0])
         .setDeleteEvent()
@@ -44,6 +62,12 @@ export class EntryServiceEmitterLogger {
     );
   }
 
+  handleDeleteByGroupError<T>(error: T): T {
+    this.errorLogger.handle(error, EntryServiceMessage.Delete);
+
+    return error;
+  }
+
   activateDeletedEntriesLog(): void {
     this.logger.handle(
       'Deleted entries activated sucessfull',
@@ -53,7 +77,7 @@ export class EntryServiceEmitterLogger {
   //TODO: entries type
   historyEntriesAppend(entries: IEntry[]): void {
     if (Array.isArray(entries) && entries.length > 0) {
-      this.entryService.eventEmitter.emit(
+      this.eventEmitter.emit(
         EventTypes.HistoryAppend,
         new HistoryAppendEvent(entries[0].userid, entries, 'entry'),
       );
@@ -62,7 +86,7 @@ export class EntryServiceEmitterLogger {
 
   handleDeleteEntriesByGroup(entries: IEntry[]): void {
     this.logger.handle('Group deleted sucessfull', EntryServiceMessage.Delete);
-    this.entryService.eventEmitter.emitAsync(
+    this.eventEmitter.emitAsync(
       EventAction.Create,
       new EventEntryBuilder(null, entries).setMultiDelete().build(),
     );
@@ -73,10 +97,33 @@ export class EntryServiceEmitterLogger {
       `Entry with id = ${entryId} restorect succesfull`,
       EntryServiceMessage.Restore,
     );
-    this.entryService.eventEmitter.emitAsync(
+    this.eventEmitter.emitAsync(
       EventAction.Create,
       new EventEntryBuilder(restoredEntry._id, restoredEntry)
         .setRestoreEvent()
+        .build(),
+    );
+  }
+
+  editEntryEventLog(neweditedentry: EditEntryDto): void {
+    this.logger.handle(
+      `Entry with id = ${neweditedentry._id} edited succesfull`,
+      EntryServiceMessage.Update,
+    );
+    this.eventEmitter.emitAsync(
+      EventAction.Create,
+      new EventEntryBuilder(neweditedentry._id, neweditedentry)
+        .setEditEvent()
+        .build(),
+    );
+  }
+
+  editEntryEventLogError<T>(error: T, neweditedentry: EditEntryDto): void {
+    this.errorLogger.handle(error, EntryServiceMessage.Update);
+    this.eventEmitter.emitAsync(
+      EventAction.Create,
+      new EventEntryBuilder(neweditedentry._id, neweditedentry)
+        .setEditEvent()
         .build(),
     );
   }

@@ -14,6 +14,10 @@ export class AuthServiceEventLog {
     private readonly eventEmitter: EventEmitter2,
   ) {}
   emitPromiseCreateUserEvent(user: CreateUserDto): Promise<CreateUserDto> {
+    this.logHandler.handle(
+      AuthError.CreateUserEventEmit,
+      AuthError.CreateUserContext,
+    );
     return Promise.resolve(() => {
       return true;
     }).then((_) => {

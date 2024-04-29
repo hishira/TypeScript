@@ -12,11 +12,9 @@ import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
 import { EmptyResponse } from 'src/response/empty.response';
-import { EventAction } from 'src/schemas/Interfaces/event.interface';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
-import { EventEntryBuilder } from 'src/schemas/utils/builders/event/entryEvent.builder';
-import { Logger } from 'src/utils/Logger';
 import { EntryServiceEmitterLogger } from 'src/services/eventAndLog/entryServiceEmitterLogger';
+import { Logger } from 'src/utils/Logger';
 import {
   ErrorHandler,
   LogHandler,
@@ -43,17 +41,20 @@ export class EntryEmitService {
 }
 @Injectable()
 export class EntryService implements LoggerContext {
-  private readonly logHandler: LoggerHandler = new LogHandler(this);
-  private readonly errorHandler: LoggerHandler = new ErrorHandler(this);
-  private readonly entryServiceEmitLogger: EntryServiceEmitterLogger =
-    new EntryServiceEmitterLogger(this, this.logHandler, this.errorHandler);
+  private readonly entryServiceEmitLogger: EntryServiceEmitterLogger;
 
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
     readonly eventEmitter: EventEmitter2,
     readonly logger: Logger,
-  ) {}
+  ) {
+    this.entryServiceEmitLogger = new EntryServiceEmitterLogger(
+      this.eventEmitter,
+      new LogHandler(this),
+      new ErrorHandler(this),
+    );
+  }
 
   create(
     entrycreateDTO: CreateEntryDto,
@@ -61,15 +62,9 @@ export class EntryService implements LoggerContext {
   ): Promise<IEntry | { message: string }> {
     return this.commandBus
       .execute(new CreateEntryCommand(userid, entrycreateDTO))
-      .then((entry) => {
-        this.logHandler.handle(
-          `Entry with ${entry._id} created`,
-          EntryServiceMessage.Create,
-        );
-        this.eventEmitter.emitAsync(
-          EventAction.Create,
-          new EventEntryBuilder(entry._id, entry).setCreateEvent().build(),
-        );
+      .then((entry: IEntry) => {
+        this.entryServiceEmitLogger.createEntryEventAndLog(entry);
+
         return entry;
       });
   }
@@ -95,10 +90,7 @@ export class EntryService implements LoggerContext {
   }
 
   restoreEntry(restoreBody: { entryId: string }): Promise<IEntry> {
-    this.logHandler.handle(
-      EntryServiceMessage.RestoreMessage,
-      EntryServiceMessage.Restore,
-    );
+    this.entryServiceEmitLogger.tryToRestoreLog();
     return this.commandBus
       .execute(
         new UpdateEntryCommand({
@@ -170,14 +162,11 @@ export class EntryService implements LoggerContext {
           const upadednoew = await this.queryBus.execute(
             new GetSpecificEntry({ id: neweditedentry._id }),
           );
-          this.logHandler.handle(
-            `Entry with id = ${neweditedentry._id} edited succesfull`,
-            EntryServiceMessage.Update,
-          );
+          this.entryServiceEmitLogger.editEntryEventLog(neweditedentry);
           return { status: true, respond: upadednoew };
         });
     } catch (e) {
-      this.errorHandler.handle(e, EntryServiceMessage.Update);
+      this.entryServiceEmitLogger.editEntryEventLogError(e, neweditedentry);
       return Promise.resolve(EmptyResponse);
     }
   }
@@ -216,7 +205,7 @@ export class EntryService implements LoggerContext {
         return fetchedEntries;
       })
       .catch((error) =>
-        this.errorHandler.handle(error, EntryServiceMessage.Delete),
+        this.entryServiceEmitLogger.handleDeleteByGroupError(error),
       );
   }
 }
