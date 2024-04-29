@@ -22,7 +22,6 @@ import { AuthInfo } from '../schemas/dto/auth.dto';
 import { AuthServiceEventLog } from './eventAndLog/authServiceEventLog';
 @Injectable()
 export class AuthService implements LoggerContext {
-  debugHandler: LoggerHandler = new LogHandler(this);
   private eventLogHelper: AuthServiceEventLog;
   constructor(
     private readonly jwtService: JwtService,
@@ -31,19 +30,15 @@ export class AuthService implements LoggerContext {
     readonly logger: Logger,
   ) {
     this.eventLogHelper = new AuthServiceEventLog(
-      this.debugHandler,
+      new LogHandler(this),
       this.eventEmitter,
     );
   }
 
   createUser(user: CreateUserDto): Promise<CreateUserDto> {
-    this.debugHandler.handle(
-      AuthError.CreateUserEventEmit,
-      AuthError.CreateUserContext,
-    );
-
     return this.eventLogHelper.emitPromiseCreateUserEvent(user);
   }
+
   async valideteUser(userinfo: AuthInfo): Promise<IUser | null> {
     return this.queryBus
       .execute(new GetFilteredUserQueries({ login: userinfo.login }))
