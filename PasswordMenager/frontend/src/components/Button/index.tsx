@@ -43,9 +43,8 @@ const Button = styled.button<Props>`
     box-sizing: border-box;
   }
   &[disabled] {
-    background-color: #cccccc;
+    background-color: #ddd !important;
     box-sizing: border-box;
-    color: #666666;
     animation: none;
     &:hover {
       text-shadow: none;

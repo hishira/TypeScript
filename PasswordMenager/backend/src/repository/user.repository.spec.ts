@@ -4,6 +4,7 @@ import { IUser } from 'src/schemas/Interfaces/user.interface';
 import { UserModelMock, userMock } from '../../test/mock/UserModelMock';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { UserRepository } from './user.repository';
+import { Logger } from 'src/utils/Logger';
 
 describe('UserRepository', () => {
   let userModel: Model<IUser>;
@@ -17,6 +18,7 @@ describe('UserRepository', () => {
           provide: 'USER_MODEL',
           useValue: UserModelMock,
         },
+        Logger,
       ],
     }).compile();
 
