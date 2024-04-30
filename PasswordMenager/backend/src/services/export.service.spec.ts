@@ -10,6 +10,7 @@ import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { EntryService } from './entry.service';
 import { ExportService } from './export.service';
+import { Logger } from 'src/utils/Logger';
 
 describe('ExportService', () => {
   let entryService: EntryService;
@@ -29,13 +30,15 @@ describe('ExportService', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: (...params) => Promise.resolve(entryMock()),
+            execute: (...params): Promise<IEntry> =>
+              Promise.resolve(entryMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: (...params) => Promise.resolve(entryMock()),
+            execute: (...params): Promise<IEntry> =>
+              Promise.resolve(entryMock()),
           },
         },
         {
@@ -46,6 +49,7 @@ describe('ExportService', () => {
           provide: 'ENTRY_MODEL',
           useValue: EntryMockModel,
         },
+        Logger,
       ],
     }).compile();
     entryModel = module.get<Model<IEntry>>('ENTRY_MODEL');

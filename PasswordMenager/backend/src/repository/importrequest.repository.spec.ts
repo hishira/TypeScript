@@ -7,6 +7,7 @@ import {
   importRequestMock,
 } from '../../test/mock/ImportRequestMock';
 import { ImportRequestRepository } from './importrequest.repository';
+import { Logger } from 'src/utils/Logger';
 
 describe('ImportRequestRepository', () => {
   let importRequestRepository: ImportRequestRepository;
@@ -20,6 +21,7 @@ describe('ImportRequestRepository', () => {
           provide: 'IMPORT_REQUEST_MODEL',
           useValue: ImporRequestMock,
         },
+        Logger,
       ],
     }).compile();
 

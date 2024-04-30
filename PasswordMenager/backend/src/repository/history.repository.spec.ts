@@ -4,6 +4,7 @@ import { IHistory } from 'src/schemas/Interfaces/history.interface';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { HistoryMockData } from '../../test/mock/HistoryMock';
 import { HistoryRepository } from './history.repository';
+import { Logger } from 'src/utils/Logger';
 
 describe('HistoryRepository', () => {
   let historyRepository: HistoryRepository;
@@ -17,6 +18,7 @@ describe('HistoryRepository', () => {
           provide: 'HISTORY_MODEL',
           useValue: HistoryMockData,
         },
+        Logger,
       ],
     }).compile();
 

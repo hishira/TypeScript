@@ -11,6 +11,8 @@ import {
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { GroupService } from './group.service';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
+import { Logger } from 'src/utils/Logger';
 
 describe('GroupService', () => {
   let groupService: GroupService;
@@ -29,13 +31,15 @@ describe('GroupService', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: (...params) => Promise.resolve(groupMock()),
+            execute: (...params): Promise<IGroup> =>
+              Promise.resolve(groupMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: (...params) => Promise.resolve(groupMock()),
+            execute: (...params): Promise<IGroup> =>
+              Promise.resolve(groupMock()),
           },
         },
         {
@@ -46,6 +50,7 @@ describe('GroupService', () => {
           provide: 'GROUP_MODEL',
           useValue: GroupModelMock,
         },
+        Logger,
       ],
     }).compile();
     groupRepository = module.get<GroupRepository>(Repository);

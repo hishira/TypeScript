@@ -13,6 +13,8 @@ import {
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { EntryService } from './entry.service';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { Logger } from 'src/utils/Logger';
 
 describe('EntryService', () => {
   let entryService: EntryService;
@@ -25,18 +27,21 @@ describe('EntryService', () => {
           provide: EventEmitter2,
           useValue: {
             emit: jest.fn(),
+            emitAsync: (...params): Promise<[]> => Promise.resolve([]),
           },
         },
         {
           provide: QueryBus,
           useValue: {
-            execute: (...params) => Promise.resolve(entryMock()),
+            execute: (...params): Promise<IEntry> =>
+              Promise.resolve(entryMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: (...params) => Promise.resolve(entryMock()),
+            execute: (...params): Promise<IEntry> =>
+              Promise.resolve(entryMock()),
           },
         },
         {
@@ -47,6 +52,7 @@ describe('EntryService', () => {
           provide: 'ENTRY_MODEL',
           useValue: EntryMockModel,
         },
+        Logger,
       ],
     }).compile();
 

@@ -7,6 +7,7 @@ import { GetImportQuery } from 'src/queries/import/getImports.queries';
 import { ImportRequestState } from 'src/schemas/importRequest.schema';
 import { importRequestMock } from '../../test/mock/ImportRequestMock';
 import { ImportService } from './import.service';
+import { Logger } from 'src/utils/Logger';
 
 describe('ImportService', () => {
   let service: ImportService;
@@ -35,6 +36,7 @@ describe('ImportService', () => {
             execute: jest.fn(),
           },
         },
+        Logger,
       ],
     }).compile();
 

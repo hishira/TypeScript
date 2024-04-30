@@ -6,6 +6,7 @@ import {
   notificationMock,
 } from '../../test/mock/NotificationMock';
 import { NotificationRepository } from './notification.repository';
+import { Logger } from 'src/utils/Logger';
 
 describe('NotificationRepository', () => {
   let notificationModel: Model<INotification>;
@@ -19,6 +20,7 @@ describe('NotificationRepository', () => {
           provide: 'NOTIFICATION_MODEL',
           useValue: NotificationMock,
         },
+        Logger,
       ],
     }).compile();
 
