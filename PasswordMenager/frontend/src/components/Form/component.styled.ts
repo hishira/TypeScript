@@ -9,11 +9,10 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 0.05rem solid whitesmoke;
-  width: 50%;
+  width: 70%;
   padding: 10px;
   @media (max-width: 900px) {
-    width: 70%;
+    width: 80%;
   }
   @media (max-width: 600px) {
     width: 85%;
@@ -21,8 +20,6 @@ export const Form = styled.form`
   @media (max-width: 489px) {
     width: 100%;
   }
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 50px -5px;
-  border-radius: 10px;
   animation: ${clippath} 0.9s linear forwards;
 `;
 export const FormTitle = styled.p`

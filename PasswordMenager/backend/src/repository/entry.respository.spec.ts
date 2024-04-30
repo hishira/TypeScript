@@ -8,6 +8,7 @@ import {
 } from '../../test/mock/EntryMock';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { EntryRepository } from './entry.repository';
+import { Logger } from 'src/utils/Logger';
 
 describe('EntryRepository', () => {
   let entryModel: Model<IEntry>;
@@ -21,6 +22,7 @@ describe('EntryRepository', () => {
           provide: 'ENTRY_MODEL',
           useValue: EntryMockModel,
         },
+        Logger,
       ],
     }).compile();
 
@@ -96,7 +98,8 @@ describe('EntryRepository', () => {
       page: 0,
     });
     expect(response).toHaveProperty('pageInfo');
-    expect(response.pageInfo).toHaveProperty('items');
+    if ('pageInfo' in response)
+      expect(response.pageInfo).toHaveProperty('items');
   });
   it('delete functions should use updateMany', async () => {
     const spy = jest.spyOn(entryModel, 'updateMany').mockReturnValueOnce({

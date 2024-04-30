@@ -4,6 +4,7 @@ import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { GroupModelMock, groupMock } from '../../test/mock/GroupModelMock';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { GroupRepository } from './group.repository';
+import { Logger } from 'src/utils/Logger';
 
 describe('GroupRepository', () => {
   let groupModel: Model<IGroup>;
@@ -17,6 +18,7 @@ describe('GroupRepository', () => {
           provide: 'GROUP_MODEL',
           useValue: GroupModelMock,
         },
+        Logger,
       ],
     }).compile();
 
