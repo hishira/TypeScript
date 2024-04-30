@@ -12,6 +12,8 @@ import {
 } from '../../test/mock/UserModelMock';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { AuthService } from './auth.service';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
+import { Logger } from 'src/utils/Logger';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -26,7 +28,7 @@ describe('AuthService', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: () => Promise.resolve(userMock()),
+            execute: (): Promise<IUser> => Promise.resolve(userMock()),
           },
         },
         {
@@ -43,6 +45,7 @@ describe('AuthService', () => {
           provide: 'USER_MODEL',
           useValue: UserModelMock,
         },
+        Logger,
       ],
     }).compile();
     authService = module.get<AuthService>(AuthService);

@@ -10,6 +10,9 @@ import { entryMock } from '../../test/mock/EntryMock';
 import { groupMock } from '../../test/mock/GroupModelMock';
 import { HistoryMockData, historyMock } from '../../test/mock/HistoryMock';
 import { HistoryService } from './history.service';
+import { IHistory } from 'src/schemas/Interfaces/history.interface';
+import { Logger } from 'src/utils/Logger';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('HistoryRepository', () => {
   let service: HistoryService;
@@ -21,21 +24,31 @@ describe('HistoryRepository', () => {
         HistoryService,
         HistoryRepository,
         {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        {
           provide: QueryBus,
           useValue: {
-            execute: (...params) => Promise.resolve(historyMock()),
+            execute: (...params): Promise<IHistory> =>
+              Promise.resolve(historyMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: (...params) => Promise.resolve(historyMock()),
+            execute: (...params): Promise<IHistory> =>
+              Promise.resolve(historyMock()),
           },
         },
         {
           provide: 'HISTORY_MODEL',
           useValue: HistoryMockData,
         },
+        Logger,
       ],
     }).compile();
 

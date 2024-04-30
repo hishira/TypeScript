@@ -2,16 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtService } from '@nestjs/jwt';
-import { AuthError } from 'src/errors/errors-messages/authenticationErrorMessages';
 import { GetFilteredUserQueries } from 'src/queries/user/getFilteredUser.queries';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { UserUtils } from 'src/schemas/utils/user.utils';
 import { Logger } from 'src/utils/Logger';
-import {
-  LogHandler,
-  LoggerContext,
-  LoggerHandler,
-} from 'src/utils/error.handlers';
+import { LogHandler, LoggerContext } from 'src/utils/error.handlers';
 import {
   AccessTokenOptions,
   RefreshAccessTokenOptions,

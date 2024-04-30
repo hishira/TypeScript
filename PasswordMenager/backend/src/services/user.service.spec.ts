@@ -11,6 +11,9 @@ import {
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { UserService } from './user.service';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
+import { Logger } from 'src/utils/Logger';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -22,13 +25,13 @@ describe('UserService', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: (...params) => Promise.resolve(userMock()),
+            execute: (...params): Promise<IUser> => Promise.resolve(userMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: (...params) => Promise.resolve(userMock()),
+            execute: (...params): Promise<IUser> => Promise.resolve(userMock()),
           },
         },
         {
@@ -38,6 +41,13 @@ describe('UserService', () => {
         {
           provide: 'USER_MODEL',
           useValue: UserModelMock,
+        },
+        Logger,
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emitAsync: jest.fn(),
+          },
         },
       ],
     }).compile();

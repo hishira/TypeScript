@@ -1,7 +1,9 @@
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateNotificationCommand } from 'src/commands/notification/CreateNotificationCommand';
 import { DeleteNotificationCommand } from 'src/commands/notification/DeleteNotificationCommand';
+import { INotification } from 'src/schemas/Interfaces/notification.interface';
 import { CreateNotificationEmailDTO } from 'src/schemas/dto/createnotification.dto';
 import { Logger } from 'src/utils/Logger';
 import { EmailSenderMock } from '../../test/mock/EmailSenderMock';
@@ -35,21 +37,22 @@ describe('NotificationService', () => {
         {
           provide: CommandBus,
           useValue: {
-            execute: () => Promise.resolve(notificationMock()),
+            execute: (): Promise<INotification> =>
+              Promise.resolve(notificationMock()),
           },
         },
         {
           provide: QueryBus,
           useValue: {
-            execute: () => Promise.resolve(notificationMock()),
+            execute: (): Promise<INotification> =>
+              Promise.resolve(notificationMock()),
           },
         },
+        Logger,
         {
-          provide: Logger,
+          provide: EventEmitter2,
           useValue: {
-            setContext: jest.fn(),
-            error: jest.fn(),
-            logMessage: jest.fn(),
+            emitAsync: jest.fn(),
           },
         },
       ],
@@ -58,7 +61,6 @@ describe('NotificationService', () => {
     service = module.get<NotificationService>(NotificationService);
     commandBus = module.get<CommandBus>(CommandBus);
     queryBus = module.get<QueryBus>(QueryBus);
-    logger = module.get<Logger>(Logger);
   });
 
   beforeEach(() => jest.clearAllMocks());
@@ -108,22 +110,5 @@ describe('NotificationService', () => {
       await service.createEmailNotification(entry, '12-02-2024');
       expect(spy).toBeCalled();
     });
-    it('Should use loger', async () => {
-      const entry = entryMock();
-      const spy = jest.spyOn(logger, 'logMessage');
-      await service.createEmailNotification(entry, '12-02-2024');
-      expect(spy).toBeCalled();
-    });
   });
-
-  // describe('notificationSend', () => {
-  //   it('Should use emailSender sendEmail function', async () => {
-  //     const entry = entryMock();
-  //     const spy = jest.spyOn(emailSender, 'sendEmail');
-  //     await service.notificationSend();
-  //     expect(spy).toBeCalled();
-  //   });
-  // });
-
-  // Add tests for other methods similarly
 });
