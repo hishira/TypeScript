@@ -7,6 +7,8 @@ import { ImportRequestState } from 'src/schemas/importRequest.schema';
 import { ImportRequestBuilder } from 'src/schemas/utils/builders/importRequest.builder';
 import { ImporRequestMock } from '../../../../test/mock/ImportRequestMock';
 import { DeleteImportRequestHandler } from './deleteImportRequestHandler';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 describe('DeleteImportRequestHandler', () => {
   let handler: DeleteImportRequestHandler;
   let repository: ImportRequestRepository; // Replace with the actual type of your repository
@@ -19,6 +21,14 @@ describe('DeleteImportRequestHandler', () => {
           provide: 'IMPORT_REQUEST_MODEL',
           useValue: ImporRequestMock,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         { provide: Repository, useClass: ImportRequestRepository }, // Provide the mock repository
       ],
     }).compile();

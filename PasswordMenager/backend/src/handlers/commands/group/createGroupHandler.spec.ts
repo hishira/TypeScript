@@ -7,6 +7,8 @@ import { CreateGroupDto } from 'src/schemas/dto/group.dto';
 import { GroupDtoMapper } from 'src/schemas/mapper/groupDtoMapper';
 import { GroupModelMock } from '../../../../test/mock/GroupModelMock';
 import { CreateGrouCommandpHandler } from './createGroupHandler';
+import { Logger } from 'src/utils/Logger';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('CreateGroupCommandHandler', () => {
   let handler: CreateGrouCommandpHandler;
@@ -24,6 +26,14 @@ describe('CreateGroupCommandHandler', () => {
           provide: 'GROUP_MODEL',
           useValue: GroupModelMock,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         { provide: Repository, useClass: GroupRepository },
       ],
     }).compile();

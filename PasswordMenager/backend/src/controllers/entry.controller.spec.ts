@@ -16,9 +16,11 @@ import {
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { EntryContoller } from './entry.controller';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { Logger } from 'src/utils/Logger';
 
 class MockGroupGuard implements CanActivate {
-  canActivate() {
+  canActivate(): boolean {
     return true;
   }
 }
@@ -41,18 +43,28 @@ describe('EntryController', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: (...params) => Promise.resolve(entryMock()),
+            execute: (...params): Promise<IEntry> =>
+              Promise.resolve(entryMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: (...params) => Promise.resolve(entryMock()),
+            execute: (...params): Promise<IEntry> =>
+              Promise.resolve(entryMock()),
           },
         },
         {
           provide: Repository,
           useClass: EntryRepository,
+        },
+        Logger,
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
         },
         {
           provide: 'ENTRY_MODEL',

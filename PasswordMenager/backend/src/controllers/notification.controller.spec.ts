@@ -8,6 +8,7 @@ import {
   notificationMock,
 } from '../../test/mock/NotificationMock';
 import { NotificationController } from './notification.controller';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('NotificationController', () => {
   let controller: NotificationController;
@@ -34,14 +35,22 @@ describe('NotificationController', () => {
             execute: () => Promise.resolve(notificationMock()),
           },
         },
+        Logger,
         {
-          provide: Logger,
+          provide: EventEmitter2,
           useValue: {
-            setContext: jest.fn(),
-            error: jest.fn(),
-            logMessage: jest.fn(),
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
           },
         },
+        // {
+        //   provide: Logger,
+        //   useValue: {
+        //     setContext: jest.fn(),
+        //     error: jest.fn(),
+        //     logMessage: jest.fn(),
+        //   },
+        // },
       ],
     }).compile();
 

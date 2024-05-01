@@ -10,6 +10,7 @@ import {
   EntryMockModel,
 } from '../../../../test/mock/EntryMock';
 import { CreateEntryHandler } from './createEntryHandler';
+import { Logger } from 'src/utils/Logger';
 
 describe('CreateEntryHandler', () => {
   let handler: CreateEntryHandler;
@@ -24,8 +25,10 @@ describe('CreateEntryHandler', () => {
           provide: EventEmitter2,
           useValue: {
             emit: jest.fn(),
+            emitAsync: jest.fn(),
           },
         },
+        Logger,
         {
           provide: Repository,
           useClass: EntryRepository,

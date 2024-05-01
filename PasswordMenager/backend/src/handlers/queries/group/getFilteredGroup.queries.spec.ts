@@ -6,6 +6,8 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { GroupOptionBuilder } from 'src/schemas/utils/builders/groupOption.builder';
 import { GroupModelMock } from '../../../../test/mock/GroupModelMock';
 import { GetFilteredGroupQueryHandler } from './getFilteredGroup.queries';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('GetExistingGroupQueryHandler', () => {
   let handler: GetFilteredGroupQueryHandler;
@@ -19,6 +21,14 @@ describe('GetExistingGroupQueryHandler', () => {
           provide: 'GROUP_MODEL',
           useValue: GroupModelMock,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         { provide: Repository, useClass: GroupRepository },
       ],
     }).compile();

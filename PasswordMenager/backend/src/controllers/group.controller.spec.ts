@@ -13,6 +13,7 @@ import { UserRequestMock } from '../../test/mock/UserModelMock';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { GroupController } from './group.controller';
+import { Logger } from 'src/utils/Logger';
 
 describe('GroupController', () => {
   let groupController: GroupController;
@@ -42,6 +43,7 @@ describe('GroupController', () => {
             execute: (...params) => Promise.resolve(groupMock()),
           },
         },
+        Logger,
         {
           provide: Repository,
           useClass: GroupRepository,

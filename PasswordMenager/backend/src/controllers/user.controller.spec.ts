@@ -11,6 +11,8 @@ import {
 } from '../../test/mock/UserModelMock';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { UsersController } from './user.contaoller';
+import { Logger } from 'src/utils/Logger';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('UserController', () => {
   let userController: UsersController;
@@ -33,6 +35,14 @@ describe('UserController', () => {
           provide: QueryBus,
           useValue: {
             execute: (...params) => Promise.resolve(userMock()),
+          },
+        },
+        Logger,
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
           },
         },
         {

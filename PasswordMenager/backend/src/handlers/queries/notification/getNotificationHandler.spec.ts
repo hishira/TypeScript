@@ -6,6 +6,8 @@ import { NotificationUtils } from 'src/schemas/utils/Notification.utils';
 import { ActiveNotificationFilter } from 'src/schemas/utils/activeNotificationFilter';
 import { NotificationMock } from '../../../../test/mock/NotificationMock';
 import { GetNotificationQueryHandler } from './getNotificationHandler';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 describe('GetNotificationQueryHandler', () => {
   let handler: GetNotificationQueryHandler;
   let repositoryMock: NotificationRepository;
@@ -15,6 +17,14 @@ describe('GetNotificationQueryHandler', () => {
       providers: [
         GetNotificationQueryHandler,
         { provide: Repository, useClass: NotificationRepository },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         {
           provide: 'NOTIFICATION_MODEL',
           useValue: NotificationMock,
