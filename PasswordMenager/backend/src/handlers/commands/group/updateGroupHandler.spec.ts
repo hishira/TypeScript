@@ -6,6 +6,8 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 import { GroupModelMock } from '../../../../test/mock/GroupModelMock';
 import { UpdateGroupCommandHandler } from './updateGroupHandler';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('UpdateGroupCommandHandler', () => {
   let handler: UpdateGroupCommandHandler;
@@ -23,6 +25,14 @@ describe('UpdateGroupCommandHandler', () => {
           provide: 'GROUP_MODEL',
           useValue: GroupModelMock,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         { provide: Repository, useClass: GroupRepository },
       ],
     }).compile();

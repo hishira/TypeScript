@@ -9,6 +9,8 @@ import { entryMock } from '../../../../test/mock/EntryMock';
 import { groupMock } from '../../../../test/mock/GroupModelMock';
 import { HistoryMockData } from '../../../../test/mock/HistoryMock';
 import { UpdateHistoryHandler } from './updateHistoryHandler';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 // // Your actual repository implementation
 // class MyRepository {
@@ -34,6 +36,14 @@ describe('UpdateHistoryHandler', () => {
           provide: Repository,
           useClass: HistoryRepository,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
       ],
     }).compile();
 

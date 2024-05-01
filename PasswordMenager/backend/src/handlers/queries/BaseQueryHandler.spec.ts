@@ -4,6 +4,8 @@ import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserModelMock } from '../../../test/mock/UserModelMock';
 import { BaseQueryHandler } from './BaseQueryHandler';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('BaseCommandHandler', () => {
   let baseCommandHandler: BaseQueryHandler<IEntry>;
@@ -14,6 +16,14 @@ describe('BaseCommandHandler', () => {
           provide: Repository,
           useClass: UserRepository,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         {
           provide: 'USER_MODEL',
           useValue: UserModelMock,

@@ -6,6 +6,8 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { OptionModelBuilder } from 'src/schemas/utils/builders/optionModal.builder';
 import { EntryMockModel } from '../../../../test/mock/EntryMock';
 import { DeleteEntryHandler } from './deleteEntryHandler';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('DeleteEntryHandler', () => {
   let handler: DeleteEntryHandler;
@@ -23,6 +25,14 @@ describe('DeleteEntryHandler', () => {
           provide: 'ENTRY_MODEL',
           useValue: EntryMockModel,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
       ],
     }).compile();
 

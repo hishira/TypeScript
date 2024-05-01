@@ -8,6 +8,8 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { EntryBuilder } from 'src/schemas/utils/builders/entry.builder';
 import { EntryMockModel } from '../../../../test/mock/EntryMock';
 import { UpdateEntryHandler } from './updateEntryHandler';
+import { Logger } from 'src/utils/Logger';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('UpdateEntryHandler', () => {
   let handler: UpdateEntryHandler;
@@ -40,6 +42,14 @@ describe('UpdateEntryHandler', () => {
           provide: 'ENTRY_MODEL',
           useValue: EntryMockModel,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
       ],
     }).compile();
 

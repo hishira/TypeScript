@@ -4,6 +4,8 @@ import { UserRepository } from 'src/repository/user.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserModelMock } from '../../../../test/mock/UserModelMock';
 import { UpdateUserHandler } from './updateUserHandler';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('updateUserHandler', () => {
   let updateUserHandler: UpdateUserHandler;
@@ -19,6 +21,14 @@ describe('updateUserHandler', () => {
           provide: 'USER_MODEL',
           useValue: UserModelMock,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         UpdateUserHandler,
       ],
     }).compile();

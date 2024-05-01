@@ -4,6 +4,8 @@ import { NotificationRepository } from 'src/repository/notification.repository';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { NotificationMock } from '../../../../test/mock/NotificationMock';
 import { EditNotificationHandler } from './editNotificationHandler';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('EditNotificationHandler', () => {
   let handler: EditNotificationHandler;
@@ -16,6 +18,14 @@ describe('EditNotificationHandler', () => {
           provide: 'NOTIFICATION_MODEL',
           useValue: NotificationMock,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         EditNotificationHandler,
       ],
     }).compile();

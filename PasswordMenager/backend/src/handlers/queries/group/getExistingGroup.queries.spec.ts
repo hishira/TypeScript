@@ -9,6 +9,8 @@ import {
   groupMock,
 } from '../../../../test/mock/GroupModelMock';
 import { GetExistingGroupQueryHandler } from './getExistingGroup.queries';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('GetExistingGroupQueryHandler', () => {
   let handler: GetExistingGroupQueryHandler;
@@ -22,6 +24,14 @@ describe('GetExistingGroupQueryHandler', () => {
           provide: 'GROUP_MODEL',
           useValue: GroupModelMock,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         { provide: Repository, useClass: GroupRepository },
       ],
     }).compile();

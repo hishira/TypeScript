@@ -5,6 +5,7 @@ import { ImportRequestState } from 'src/schemas/importRequest.schema';
 import { ImportService } from 'src/services/import.service';
 import { importRequestMock } from '../../test/mock/ImportRequestMock';
 import { ImportController } from './import.controller';
+import { Logger } from 'src/utils/Logger';
 
 describe('ImportController', () => {
   let importController: ImportController;
@@ -15,9 +16,11 @@ describe('ImportController', () => {
       controllers: [ImportController],
       providers: [
         ImportService,
+        Logger,
         {
           provide: EventEmitter2,
           useValue: {
+            emit: jest.fn(),
             emitAsync: jest.fn(),
           },
         },

@@ -4,6 +4,8 @@ import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserModelMock } from '../../../test/mock/UserModelMock';
 import { BaseCommandHandler } from './BaseCommandHandler';
+import { Logger } from 'src/utils/Logger';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('BaseCommandHandler', () => {
   let baseCommandHandler: BaseCommandHandler<IEntry>;
@@ -17,6 +19,14 @@ describe('BaseCommandHandler', () => {
         {
           provide: 'USER_MODEL',
           useValue: UserModelMock,
+        },
+        Logger,
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
         },
         BaseCommandHandler<IEntry>,
       ],

@@ -5,6 +5,8 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { UserUtils } from 'src/schemas/utils/user.utils';
 import { UserModelMock } from '../../../../test/mock/UserModelMock';
 import { GetAllUserQueryHandler } from './getAllUserHandler.queries';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('GetAllUserQueryHandler', () => {
   let handler: GetAllUserQueryHandler;
@@ -19,6 +21,14 @@ describe('GetAllUserQueryHandler', () => {
           provide: Repository,
           useClass: UserRepository,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
         {
           provide: 'USER_MODEL',
           useValue: UserModelMock,

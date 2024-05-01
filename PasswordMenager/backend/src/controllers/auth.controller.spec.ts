@@ -16,6 +16,8 @@ import {
 } from '../../test/mock/UserModelMock';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { AuthController } from './auth.controller';
+import { Logger } from 'src/utils/Logger';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -34,22 +36,23 @@ describe('AuthController', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: () => Promise.resolve(userMock()),
+            execute: (): Promise<IUser> => Promise.resolve(userMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: () => Promise.resolve(userMock()),
+            execute: (): Promise<IUser> => Promise.resolve(userMock()),
           },
         },
         {
           provide: EventEmitter2,
           useValue: {
             emit: jest.fn(),
-            emitAsync: (...params) => userMock(),
+            emitAsync: (...params): IUser => userMock(),
           },
         },
+        Logger,
         {
           provide: Repository,
           useClass: UserRepository,

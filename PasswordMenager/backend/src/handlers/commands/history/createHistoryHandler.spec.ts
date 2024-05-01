@@ -6,6 +6,8 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { HistoryMockData } from '../../../../test/mock/HistoryMock';
 import { CreateHisotryHandler } from './createHistoryHandler';
 import { HistoryDTOMapper } from 'src/schemas/mapper/historyDtoMapper';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Logger } from 'src/utils/Logger';
 
 describe('CreateHisotryHandler', () => {
   let handler: CreateHisotryHandler;
@@ -23,6 +25,14 @@ describe('CreateHisotryHandler', () => {
           provide: Repository,
           useClass: HistoryRepository,
         },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+            emitAsync: jest.fn(),
+          },
+        },
+        Logger,
       ],
     }).compile();
 
