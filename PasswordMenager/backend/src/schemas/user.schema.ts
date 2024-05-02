@@ -3,8 +3,8 @@ import * as mongoose from 'mongoose';
 import { IUser } from './Interfaces/user.interface';
 import UserMetaSchema from './userMeta.schema';
 
-async function beforeUserSave<IUser>(next) {
-  const user = this;
+async function beforeUserSave<T extends IUser>(next): Promise<void> {
+  const user: T = this;
   if (user.isModified('password')) {
     user.password = await bcryptjs.hash(user.password, 10);
   }
@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema<IUser>({
   meta: {
     type: UserMetaSchema,
     required: true,
-    default: () => ({}),
+    default: (): Record<string, unknown> => ({}),
   },
 });
 UserSchema.pre('save', beforeUserSave);

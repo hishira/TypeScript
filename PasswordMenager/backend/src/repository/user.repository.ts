@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Error, Model } from 'mongoose';
 import { UserErrorMessages } from 'src/errors/errors-messages/userErrorMessages';
 import { NotImplementedError } from 'src/errors/NotImplemented';
+import { UserError } from 'src/errors/user/user-error';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -25,36 +26,42 @@ export class UserRepository implements Repository<IUser>, LoggerContext {
     readonly logger: Logger,
   ) {}
 
-  create(objectToSave: DTO): Promise<IUser> {
+  create(objectToSave: DTO): Promise<IUser | UserError> {
     const newUser = new this.userModel({
       ...objectToSave.toObject(),
     });
     return newUser
       .save()
-      .catch((error) =>
-        this.errorHandler.handle(error, UserErrorMessages.Create),
+      .catch((error: Error) =>
+        this.errorHandler.handle(
+          new UserError(error),
+          UserErrorMessages.Create,
+        ),
       );
   }
 
-  find(option: FilterOption<unknown>): Promise<IUser[]> {
+  find(option: FilterOption<unknown>): Promise<IUser[] | UserError> {
     return this.userModel
       .find(option.getOption())
       .exec()
       .catch((error) =>
-        this.errorHandler.handle(error, UserErrorMessages.Find),
+        this.errorHandler.handle(new UserError(error), UserErrorMessages.Find),
       );
   }
 
-  findById(id: string): Promise<IUser> {
+  findById(id: string): Promise<IUser | UserError> {
     return this.userModel
       .findById(id)
       .then((r) => r)
       .catch((error) =>
-        this.errorHandler.handle(error, UserErrorMessages.FindById),
+        this.errorHandler.handle(
+          new UserError(error),
+          UserErrorMessages.FindById,
+        ),
       );
   }
 
-  update(entry: Partial<IUser>): Promise<IUser> {
+  update(entry: Partial<IUser>): Promise<IUser | UserError> {
     return this.userModel
       .findById(entry._id)
       .then((user) => this.updateUserHandle(entry, user))
@@ -66,16 +73,22 @@ export class UserRepository implements Repository<IUser>, LoggerContext {
         ),
       )
       .catch((error) =>
-        this.errorHandler.handle(error, UserErrorMessages.Update),
+        this.errorHandler.handle(
+          new UserError(error),
+          UserErrorMessages.Update,
+        ),
       );
   }
 
-  delete(option: DeleteOption<unknown>): Promise<unknown> {
+  delete(option: DeleteOption<unknown>): Promise<IUser | UserError> {
     return this.userModel
-      .deleteOne(option.getOption())
+      .findOneAndDelete(option.getOption())
       .exec()
       .catch((error) =>
-        this.errorHandler.handle(error, UserErrorMessages.Delete),
+        this.errorHandler.handle(
+          new UserError(error),
+          UserErrorMessages.Delete,
+        ),
       );
   }
 
