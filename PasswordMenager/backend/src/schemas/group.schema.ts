@@ -6,7 +6,7 @@ const GroupSchema = new mongoose.Schema<IGroup>({
   name: {
     type: String,
     required: true,
-    set: function (name: string) {
+    set: function (name: string): string {
       this._name = this.name;
       return name;
     },
@@ -18,7 +18,7 @@ const GroupSchema = new mongoose.Schema<IGroup>({
   meta: {
     type: GroupMetaSchema,
     requred: true,
-    default: () => ({}),
+    default: (): Record<string, unknown> => ({}),
   },
 });
 
