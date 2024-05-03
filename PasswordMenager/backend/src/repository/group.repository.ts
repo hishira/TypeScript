@@ -4,6 +4,7 @@ import {
   GroupErrorMap,
   GroupModelErrorMap,
 } from 'src/errors/errors-messages/groupErrorMessages';
+import { GroupError } from 'src/errors/group/group-error';
 import { NotImplementedError } from 'src/errors/NotImplemented';
 import { DTO } from 'src/schemas/dto/object.interface';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
@@ -13,6 +14,7 @@ import { Repository } from 'src/schemas/Interfaces/repository.interface';
 import { GroupBuilder } from 'src/schemas/utils/builders/group.builder';
 import { ErrorHandler, LoggerContext } from 'src/utils/error.handlers';
 import { Logger } from 'src/utils/Logger';
+
 @Injectable()
 export class GroupRepository implements Repository<IGroup>, LoggerContext {
   errorHandler: ErrorHandler;
@@ -24,28 +26,35 @@ export class GroupRepository implements Repository<IGroup>, LoggerContext {
     this.errorHandler = new ErrorHandler(this);
   }
 
-  create(objectToSave: DTO): Promise<IGroup> {
+  create(objectToSave: DTO): Promise<IGroup | GroupError> {
     const createdGroup = new this.groupModel({
       ...objectToSave.toObject(),
     });
 
     return createdGroup
       .save()
-      .catch((error) => this.errorHandler.handle(error, GroupErrorMap.Create));
+      .catch((error) =>
+        this.errorHandler.handle(new GroupError(error), GroupErrorMap.Create),
+      );
   }
 
-  find(option: FilterOption<unknown>): Promise<IGroup[]> {
-    return this.groupModel.find(option.getOption()).exec();
+  find(option: FilterOption<unknown>): Promise<IGroup[] | GroupError> {
+    return this.groupModel
+      .find(option.getOption())
+      .exec()
+      .catch((error) => new GroupError(error));
   }
 
-  findById(id: string): Promise<IGroup> {
+  findById(id: string): Promise<IGroup | GroupError> {
     return this.groupModel
       .findOne({ _id: id })
       .exec()
-      .catch((error) => this.logger.error(error) === void 0 && error);
+      .catch(
+        (error) => this.logger.error(error) === void 0 && new GroupError(error),
+      );
   }
 
-  update(entry: Partial<IGroup>): Promise<IGroup> {
+  update(entry: Partial<IGroup>): Promise<IGroup | GroupError> {
     return this.groupModel
       .findById(entry._id)
       .then((group) => {
@@ -65,14 +74,18 @@ export class GroupRepository implements Repository<IGroup>, LoggerContext {
             ),
           );
       })
-      .catch((error) => this.errorHandler.handle(error, GroupErrorMap.Update));
+      .catch((error) =>
+        this.errorHandler.handle(new GroupError(error), GroupErrorMap.Update),
+      );
   }
 
-  delete(option: DeleteOption<unknown>): Promise<unknown> {
+  delete(option: DeleteOption<unknown>): Promise<IGroup | GroupError> {
     return this.groupModel
-      .deleteOne(option.getOption())
+      .findOneAndDelete(option.getOption())
       .exec()
-      .catch((error) => this.errorHandler.handle(error, GroupErrorMap.Delete));
+      .catch((error) =>
+        this.errorHandler.handle(new GroupError(error), GroupErrorMap.Delete),
+      );
   }
 
   getById(): Promise<IGroup> {
