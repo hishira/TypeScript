@@ -5,6 +5,7 @@ import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
 import { Paginator } from 'src/utils/paginator';
 import { BaseQueryHandler } from '../BaseQueryHandler';
+import { BaseError } from 'src/errors/bace-error';
 
 type UsersReturn =
   | IUser[]
@@ -17,7 +18,9 @@ export class GetFilteredUserQueryHandler
   extends BaseQueryHandler<IUser>
   implements IQueryHandler<GetFilteredUserQueries>
 {
-  execute(query: GetFilteredUserQueries): Promise<IUser | UsersReturn> {
+  execute(
+    query: GetFilteredUserQueries,
+  ): Promise<IUser | UsersReturn | PaginatorData<IUser> | BaseError> {
     const { input } = query;
     if ('login' in input) {
       const userByLogin: FilterOption<FilterQuery<IUser>> = {

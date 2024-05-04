@@ -8,13 +8,20 @@ import {
 } from 'src/schemas/utils/builders/groupOption.builder';
 import { Paginator } from 'src/utils/paginator';
 import { BaseQueryHandler } from '../BaseQueryHandler';
+import { BaseError } from 'src/errors/bace-error';
 
 @QueryHandler(GetFilteredGroup)
 export class GetFilteredGroupQueryHandler
   extends BaseQueryHandler<IGroup>
-  implements IQueryHandler<GetFilteredGroup, GroupResponse<IGroup, Paginator>>
+  implements
+    IQueryHandler<
+      GetFilteredGroup,
+      GroupResponse<IGroup, Paginator> | BaseError
+    >
 {
-  execute(query: GetFilteredGroup): Promise<GroupResponse<IGroup, Paginator>> {
+  execute(
+    query: GetFilteredGroup,
+  ): Promise<GroupResponse<IGroup, Paginator> | BaseError> {
     const groupOption = this.buildOption(query);
     return this.repository.find(groupOption);
   }

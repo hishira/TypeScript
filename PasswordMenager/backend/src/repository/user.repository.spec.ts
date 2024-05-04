@@ -51,7 +51,7 @@ describe('UserRepository', () => {
 
     TestUtils.expectHasProperties(user, 'meta');
     TestUtils.expectHasProperties(
-      user.meta,
+      (user as IUser).meta,
       'lastLogin',
       'lastPassword',
       'crateDate',
@@ -123,7 +123,7 @@ describe('UserRepository', () => {
   });
 
   it('Delete method should use model deleteOne function', async () => {
-    const spy = jest.spyOn(userModel, 'deleteOne');
+    const spy = jest.spyOn(userModel, 'findOneAndDelete');
 
     await userRepo.delete({
       getOption() {

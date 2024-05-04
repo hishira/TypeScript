@@ -7,7 +7,7 @@ class MongoObjectId {
     this.id = new Types.ObjectId(length);
   }
 
-  toString() {
+  toString(): string {
     return this.id.toString();
   }
 }

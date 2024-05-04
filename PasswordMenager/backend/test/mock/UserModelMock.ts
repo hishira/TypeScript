@@ -1,11 +1,11 @@
 import { Types } from 'mongoose';
+import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { IUser } from 'src/schemas/Interfaces/user.interface';
-import { AuthInfo } from 'src/schemas/dto/auth.dto';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
 import { CreateUserDto } from 'src/schemas/dto/user.dto';
 import { TestDataUtils } from '../../test/utils/TestDataUtils';
 
-export const userMock = (user?: IUser) =>
+export const userMock = (user?: IUser): IUser =>
   user ??
   ({
     _id: new Types.ObjectId(32),
@@ -37,7 +37,9 @@ export const AuthInfoMock = (): IUser =>
     login: 'example',
     password: 'example',
   } as unknown as IUser);
-export const UserRequestMock = () => ({
+export const UserRequestMock = (): {
+  user: { login: string; _id: string };
+} => ({
   user: {
     login: 'example',
     _id: TestDataUtils.getRandomObjectIdAsString(),
@@ -46,48 +48,54 @@ export const UserRequestMock = () => ({
 export class UserModelMock {
   constructor(private data) {}
 
-  save() {
+  save(): Promise<IUser> {
     return Promise.resolve({ _id: new Types.ObjectId(32), ...this.data });
   }
 
   static exec = jest.fn();
 
-  static find(option) {
+  static find(option): { exec: () => Promise<IUser[]> } {
     return {
-      exec: () => Promise.resolve([userMock()]),
+      exec: (): Promise<IUser[]> => Promise.resolve([userMock()]),
     };
   }
 
-  static findOne(option) {
+  static findOne(option): { exec: () => Promise<IUser> } {
     return {
-      exec: () => Promise.resolve(userMock()),
+      exec: (): Promise<IUser> => Promise.resolve(userMock()),
     };
   }
 
-  static deleteOne(options) {
+  static deleteOne(options): { exec: () => Promise<true> } {
     return {
-      exec: () => Promise.resolve(true),
+      exec: (): Promise<true> => Promise.resolve(true),
     };
   }
 
   static deleteMany = jest.fn().mockRejectedValue(Promise.resolve(true));
 
-  static findByIdAndDelete(id: string) {
+  static findByIdAndDelete(id: string): { exec: () => Promise<true> } {
     return {
-      exec: () => Promise.resolve(true),
+      exec: (): Promise<true> => Promise.resolve(true),
     };
+  }
+
+  static findOneAndDelete(option: DeleteOption): {
+    exec: () => Promise<IUser>;
+  } {
+    return { exec: (): Promise<IUser> => Promise.resolve(userMock()) };
   }
 
   static findById(id: string): Promise<IUser> {
     return Promise.resolve(userMock());
   }
 
-  static updateOne(filterOption, objectOption) {
+  static updateOne(filterOption, objectOption): Promise<IUser> {
     return Promise.resolve(userMock());
   }
 
   // TODO: Check and can be better implement this mock
-  static findOneAndUpdate(option, newentry: { $set }) {
+  static findOneAndUpdate(option, newentry: { $set }): Promise<IUser> {
     return Promise.resolve(userMock());
   }
 }
