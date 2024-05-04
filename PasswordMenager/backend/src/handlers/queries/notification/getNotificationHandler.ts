@@ -5,13 +5,16 @@ import { NotificationUtils } from 'src/schemas/utils/Notification.utils';
 import { ActiveNotificationFilter } from 'src/schemas/utils/activeNotificationFilter';
 import { UserActiveNotificationFilter } from 'src/schemas/utils/userActiveNotificationFilter';
 import { BaseQueryHandler } from '../BaseQueryHandler';
+import { BaseError } from 'src/errors/bace-error';
 
 @QueryHandler(GetNotificationQuery)
 export class GetNotificationQueryHandler
   extends BaseQueryHandler<INotification>
   implements IQueryHandler<GetNotificationQuery>
 {
-  execute(query: GetNotificationQuery): Promise<any> {
+  execute(
+    query: GetNotificationQuery,
+  ): Promise<INotification[] | BaseError | PaginatorData<INotification>> {
     const { input } = query;
     if ('userId' in input) {
       return this.repository.find(

@@ -88,7 +88,7 @@ describe('GroupRepository', () => {
   });
 
   it('Delete method should use model deleteOne function', async () => {
-    const spy = jest.spyOn(groupModel, 'deleteOne');
+    const spy = jest.spyOn(groupModel, 'findOneAndDelete');
 
     await groupRepo.delete({
       getOption() {

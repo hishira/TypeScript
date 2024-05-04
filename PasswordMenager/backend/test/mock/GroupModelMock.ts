@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
 import { CreateGroupDto } from 'src/schemas/dto/group.dto';
 
@@ -24,46 +25,48 @@ export const CreateGroupDtoMock = (): CreateGroupDto => ({
   name: 'Test group example',
 });
 export class GroupModelMock {
-  constructor(private data) {}
+  constructor(private data: IGroup) {}
 
-  save() {
+  save(): Promise<IGroup> {
     return Promise.resolve(this.data);
   }
 
   static exec = jest.fn();
-  static find(option) {
+  static find(option): { exec: () => Promise<IGroup[]> } {
     return {
-      exec: () => Promise.resolve([groupMock()]),
+      exec: (): Promise<IGroup[]> => Promise.resolve([groupMock()]),
     };
   }
-  static findOne(option) {
+  static findOne(option): { exec: () => Promise<IGroup> } {
     return {
-      exec: () => Promise.resolve(groupMock()),
+      exec: (): Promise<IGroup> => Promise.resolve(groupMock()),
     };
   }
   static findOneAndUpdate = jest.fn().mockResolvedValue({});
-  static deleteOne(options) {
+  static deleteOne(options): { exec: () => Promise<true> } {
     return {
-      exec: () => Promise.resolve(true),
+      exec: (): Promise<true> => Promise.resolve(true),
     };
   }
   static deleteMany = jest.fn().mockRejectedValue(Promise.resolve(true));
-  static findByIdAndDelete(id: string) {
+  static findByIdAndDelete(id: string): { exec: () => Promise<true> } {
     return {
-      exec: () => Promise.resolve(true),
+      exec: (): Promise<true> => Promise.resolve(true),
     };
   }
 
-  static findByIdAndUpdate(...args: any[]) {
+  static findOneAndDelete(option: DeleteOption<IGroup>): {
+    exec: () => Promise<IGroup>;
+  } {
+    return { exec: (): Promise<IGroup> => Promise.resolve(groupMock()) };
+  }
+  static findByIdAndUpdate(...args: any[]): Promise<IGroup> {
     return Promise.resolve(groupMock());
   }
-  static findById(id: string) {
-    // return {
-    //   exec: () => Promise.resolve(groupMock()),
-    // }
+  static findById(id: string): Promise<IGroup> {
     return Promise.resolve(groupMock());
   }
-  static updateOne(filterOption, objectOption) {
+  static updateOne(filterOption, objectOption): Promise<IGroup> {
     return Promise.resolve(groupMock());
   }
 }
