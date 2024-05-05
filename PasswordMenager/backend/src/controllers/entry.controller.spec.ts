@@ -199,11 +199,7 @@ describe('EntryController', () => {
           TestDataUtils.getRandomObjectIdAsString(),
         );
 
-        TestUtils.expectHasProperties(
-          (response as any).response,
-          '_id',
-          'groupid',
-        );
+        TestUtils.expectHasProperties(response.response, '_id', 'groupid');
       });
     });
     describe('editentry function', () => {

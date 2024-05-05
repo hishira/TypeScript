@@ -6,6 +6,7 @@ import { UserModelMock } from '../../../test/mock/UserModelMock';
 import { BaseCommandHandler } from './BaseCommandHandler';
 import { Logger } from 'src/utils/Logger';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
 
 describe('BaseCommandHandler', () => {
   let baseCommandHandler: BaseCommandHandler<IEntry>;
@@ -40,8 +41,9 @@ describe('BaseCommandHandler', () => {
   });
   it('Repository should be proper instance of', () => {
     // Quick fix for checking repository
-    expect((baseCommandHandler as any).repository).toBeInstanceOf(
-      UserRepository,
-    );
+    expect(
+      (baseCommandHandler as unknown as { repository: Record<string, unknown> })
+        .repository,
+    ).toBeInstanceOf(UserRepository);
   });
 });

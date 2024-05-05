@@ -1,6 +1,6 @@
 type DeleteEntryResponse<T> = {
   status: boolean;
-  respond: T | null;
+  response: T | null;
 };
 
 type EditEntryResponse<T> = {

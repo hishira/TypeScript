@@ -4,7 +4,7 @@ import { GroupNotExists } from './GroupNotExists.error';
 
 @Catch(GroupNotExists)
 export class GroupNotExistsFilter implements ExceptionFilter {
-  catch(exception: GroupNotExists, host: ArgumentsHost) {
+  catch(exception: GroupNotExists, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();

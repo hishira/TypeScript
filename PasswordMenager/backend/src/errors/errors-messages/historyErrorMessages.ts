@@ -8,5 +8,5 @@ export enum HistoryServiceMessage {
   UpdateGroupToHistory = 'History service; appendGroupToHistory method',
   UpdateEntietiesToHistory = 'History service; appendEntityToHistory method',
   UpdateGroupMessage = 'Group appended to history with userid = ',
-  UpdateEntitiesMessage = 'Entieties appended to history with userid = '
+  UpdateEntitiesMessage = 'Entieties appended to history with userid = ',
 }

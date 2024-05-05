@@ -4,7 +4,7 @@ import { UnknownUserException } from './UnknownUser.error';
 
 @Catch(UnknownUserException)
 export class UnknownUserExceptionFilter implements ExceptionFilter {
-  catch(exception: UnknownUserException, host: ArgumentsHost) {
+  catch(exception: UnknownUserException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();

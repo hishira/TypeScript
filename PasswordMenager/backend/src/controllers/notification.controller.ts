@@ -10,6 +10,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { INotification } from 'src/schemas/Interfaces/notification.interface';
 import { EditNotificationDTO } from 'src/schemas/dto/editnotification.dto';
 import { NotificationService } from 'src/services/notification.service';
 
@@ -19,13 +20,15 @@ export class NotificationController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get('/numberOfEntryWithNotifications')
-  async entiresWithNotifications(@Request() req) {
+  async entiresWithNotifications(@Request() req): Promise<INotification[]> {
     return this.notificationService.userNotification(req.user._id);
   }
 
   @UseGuards(AuthGuard('accessToken'))
   @Delete('/delete/:id')
-  async deleteNotification(@Param('id') notificationId: string) {
+  async deleteNotification(
+    @Param('id') notificationId: string,
+  ): Promise<INotification> {
     return this.notificationService.deleteNotification(notificationId);
   }
 
@@ -34,7 +37,7 @@ export class NotificationController {
   async editNotification(
     @Body(new ValidationPipe({ transform: true }))
     editnotification: EditNotificationDTO,
-  ) {
+  ): Promise<INotification> {
     return this.notificationService.editNotification(editnotification);
   }
 }

@@ -4,7 +4,10 @@ import { InsertmanyEntryEvent } from './insertManyEntryEvent';
 describe('InsertmanyEntryEvent', () => {
   it('should create an insert many entry event with an array of DTOs', () => {
     // Arrange
-    const dtos: DTO[] = [{ toObject: () => ({}) }, { toObject: () => ({}) }]; // Mock array of DTOs
+    const dtos: DTO[] = [
+      { toObject: (): Record<string, unknown> => ({}) },
+      { toObject: (): Record<string, unknown> => ({}) },
+    ]; // Mock array of DTOs
 
     // Act
     const event = new InsertmanyEntryEvent(dtos);

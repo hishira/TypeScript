@@ -51,7 +51,7 @@ export class EntryContoller {
   async activateDeletedEntries(
     @Body(new ValidationPipe({ transform: true }))
     entryIdObject: Pick<EditEntryDto, '_id'>,
-  ) {
+  ): Promise<IEntry[]> {
     return this.entryService.activateDeletedEntreis(entryIdObject._id);
   }
 
@@ -85,7 +85,7 @@ export class EntryContoller {
     restoreBody: {
       entryId: string;
     },
-  ) {
+  ): Promise<IEntry> {
     return this.entryService.restoreEntry(restoreBody);
   }
 }

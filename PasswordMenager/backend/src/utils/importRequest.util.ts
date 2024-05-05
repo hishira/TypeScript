@@ -4,7 +4,7 @@ import { WritableStream } from './writableStream';
 
 export class ImportRequestStream {
   private reader: Readable;
-  private readonly writer: WritableStream;// = new WritableStream(this.writeType);
+  private readonly writer: WritableStream; // = new WritableStream(this.writeType);
   constructor(
     file: Express.Multer.File,
     public writeType: 'csv' | 'json' = 'csv',

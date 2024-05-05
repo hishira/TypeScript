@@ -11,6 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { UserService } from '../services/user.service';
 import { EditUserDto } from 'src/schemas/dto/edituser.dto';
+import { Paginator } from 'src/utils/paginator';
 
 @Controller('users')
 export class UsersController {
@@ -18,13 +19,25 @@ export class UsersController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get()
-  async findAll(): Promise<IUser[] | any> {
+  async findAll(): Promise<
+    | IUser[]
+    | {
+        data: IUser[];
+        pageInfo: Paginator;
+      }
+  > {
     return this.userServices.getAll();
   }
 
   @UseGuards(AuthGuard('refreshtoken'))
   @Get('one')
-  async findOne(): Promise<IUser[] | any> {
+  async findOne(): Promise<
+    | IUser[]
+    | {
+        data: IUser[];
+        pageInfo: Paginator;
+      }
+  > {
     return this.userServices.getOne();
   }
 

@@ -39,7 +39,7 @@ export const CreateEntryDtoMock = (): CreateEntryDto => ({
   passwordExpiredDate: new Date(Date.now()).toLocaleDateString(),
   email: 'test-email@email.com',
   url: 'http://google.com',
-  toObject: () => ({}),
+  toObject: (): Record<string, unknown> => ({}),
 });
 
 export const EditEntryDtoMock = (): EditEntryDto => ({
@@ -59,15 +59,15 @@ type Skipable<T extends Record<string, any>> = T & {
 export const ExampleEntryGetOptionObject: () => FilterOption<
   FilterQuery<IEntry>
 > = () => ({
-  getOption: () => ({ _id: 'asd123' }),
+  getOption: (): { _id: string } => ({ _id: 'asd123' }),
 });
-interface Executable<T> {
+export interface Executable<T> {
   exec: () => T;
 }
 export class EntryMockModel {
   constructor(private data: Partial<IEntry>) {}
 
-  save() {
+  save(): Promise<Partial<IEntry>> {
     return Promise.resolve(this.data);
   }
 
@@ -75,18 +75,24 @@ export class EntryMockModel {
 
   static find(potion): Skipable<Executable<Promise<Partial<IEntry[]>>>> {
     return {
-      skip: (toSkip: number) => ({
-        limit: (toLimit: number) => ({
-          exec: () => Promise.resolve([entryMock(), entryMock()]),
+      skip: (
+        toSkip: number,
+      ): {
+        limit: (limit: number) => Executable<Promise<[IEntry, IEntry]>>;
+      } => ({
+        limit: (toLimit: number): Executable<Promise<[IEntry, IEntry]>> => ({
+          exec: (): Promise<[IEntry, IEntry]> =>
+            Promise.resolve([entryMock(), entryMock()]),
         }),
       }),
-      exec: () => Promise.resolve([entryMock(), entryMock()]),
+      exec: (): Promise<[IEntry, IEntry]> =>
+        Promise.resolve([entryMock(), entryMock()]),
     };
   }
 
   static findOne(option): Executable<Promise<Partial<IEntry>>> {
     return {
-      exec: () => Promise.resolve(entryMock()),
+      exec: (): Promise<IEntry> => Promise.resolve(entryMock()),
     };
   }
 
@@ -94,22 +100,22 @@ export class EntryMockModel {
 
   static readonly deleteOne = jest.fn().mockResolvedValue(true);
 
-  static deleteMany() {
-    return { exec: () => Promise.resolve(true) };
+  static deleteMany(): Executable<Promise<true>> {
+    return { exec: (): Promise<true> => Promise.resolve(true) };
   }
 
   static updateMany(): Executable<Promise<boolean>> {
-    return { exec: () => Promise.resolve(true) };
+    return { exec: (): Promise<true> => Promise.resolve(true) };
   }
 
   static findByIdAndUpdate(): Executable<Promise<IEntry>> {
     return {
-      exec: () => Promise.resolve(entryMock()),
+      exec: (): Promise<IEntry> => Promise.resolve(entryMock()),
     };
   }
-  static findByIdAndDelete(id: string) {
+  static findByIdAndDelete(id: string): Executable<Promise<true>> {
     return {
-      exec: () => Promise.resolve(true),
+      exec: (): Promise<true> => Promise.resolve(true),
     };
   }
 
@@ -117,13 +123,13 @@ export class EntryMockModel {
     return Promise.resolve(entryMock());
   }
 
-  static updateOne(filterOption, objectOption) {
+  static updateOne(filterOption, objectOption): Promise<IEntry> {
     return Promise.resolve(entryMock());
   }
 
-  static getValues = () => ({
-    new: (val) => val,
-    constructor: (val) => val,
+  static getValues = (): Record<string, unknown> => ({
+    new: <T>(val: T): T => val,
+    constructor: <T>(val: T): T => val,
     exec: jest.fn(),
     find: jest.fn().mockResolvedValue({}),
     findOne: jest.fn().mockResolvedValue({}),
