@@ -125,7 +125,10 @@ describe('CreateEntryHandler', () => {
       'testUserId',
       createEntryDto,
     );
-    const spy = jest.spyOn(handler as any, 'emitNotificationCreate');
+    const spy = jest.spyOn(
+      handler as unknown as { emitNotificationCreate: () => void },
+      'emitNotificationCreate',
+    );
     // Act
     await handler.execute(createEntryCommand);
 

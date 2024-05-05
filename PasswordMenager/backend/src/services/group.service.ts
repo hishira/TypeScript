@@ -49,7 +49,7 @@ export class GroupService implements LoggerContext {
     return this.queryBus.execute(new GetFilteredGroup({ userId: userid }));
   }
 
-  deleteGroup(groupId: string): Promise<unknown> {
+  deleteGroup(groupId: string): Promise<IGroup | boolean> {
     this.groupEventLogHandler.emitDeleteGroupEvent(groupId);
     const promiseToResolve = this.prepareEntryToDeleteAndHistorySave(groupId);
     const promise = this.prepareDeleteGroupPromise(groupId);
@@ -58,7 +58,7 @@ export class GroupService implements LoggerContext {
       : promise;
   }
 
-  editGroup(groupId: string, groupDto: EditGroupDto): Promise<unknown> {
+  editGroup(groupId: string, groupDto: EditGroupDto): Promise<IGroup> {
     return this.commandBus
       .execute(new UpdateGroupCommand(groupId, groupDto))
       .then((response: IGroup) => {
@@ -80,12 +80,12 @@ export class GroupService implements LoggerContext {
       });
   }
 
-  private prepareDeleteGroupPromise(groupId: string): Promise<unknown> {
+  private prepareDeleteGroupPromise(groupId: string): Promise<IGroup> {
     return this.commandBus
       .execute<DeleteGroupCommand, unknown>(
         new DeleteGroupCommand({ id: groupId }),
       )
-      .then((response) => {
+      .then((response: IGroup) => {
         this.groupEventLogHandler.deleteEventAndLog(response);
         return response;
       });

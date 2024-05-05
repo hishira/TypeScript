@@ -26,8 +26,8 @@ describe('Decipher', () => {
     expect(buffer.toString('hex')).toBe(hexString);
   });
 
-//   it('should decrypt a value correctly', () => {
-//     const decryptedValue = decipher.decryptValue(encryptedValue);
-//     expect(decryptedValue).toBe('Hello, World!');
-//   });
+  //   it('should decrypt a value correctly', () => {
+  //     const decryptedValue = decipher.decryptValue(encryptedValue);
+  //     expect(decryptedValue).toBe('Hello, World!');
+  //   });
 });

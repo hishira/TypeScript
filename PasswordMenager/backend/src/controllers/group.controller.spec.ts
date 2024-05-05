@@ -14,6 +14,7 @@ import { TestDataUtils } from '../../test/utils/TestDataUtils';
 import { TestUtils } from '../../test/utils/TestUtils';
 import { GroupController } from './group.controller';
 import { Logger } from 'src/utils/Logger';
+import { IGroup } from 'src/schemas/Interfaces/group.interface';
 
 describe('GroupController', () => {
   let groupController: GroupController;
@@ -34,13 +35,15 @@ describe('GroupController', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: (...params) => Promise.resolve(groupMock()),
+            execute: (...params): Promise<IGroup> =>
+              Promise.resolve(groupMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: (...params) => Promise.resolve(groupMock()),
+            execute: (...params): Promise<IGroup> =>
+              Promise.resolve(groupMock()),
           },
         },
         Logger,

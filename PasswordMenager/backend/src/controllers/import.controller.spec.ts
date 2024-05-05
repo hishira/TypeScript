@@ -6,6 +6,7 @@ import { ImportService } from 'src/services/import.service';
 import { importRequestMock } from '../../test/mock/ImportRequestMock';
 import { ImportController } from './import.controller';
 import { Logger } from 'src/utils/Logger';
+import { ImportRequest } from 'src/schemas/Interfaces/importRequest.interface';
 
 describe('ImportController', () => {
   let importController: ImportController;
@@ -27,13 +28,15 @@ describe('ImportController', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: () => Promise.resolve(importRequestMock()),
+            execute: (): Promise<ImportRequest> =>
+              Promise.resolve(importRequestMock()),
           },
         },
         {
           provide: CommandBus,
           useValue: {
-            execute: () => Promise.resolve(importRequestMock()),
+            execute: (): Promise<ImportRequest> =>
+              Promise.resolve(importRequestMock()),
           },
         },
       ],

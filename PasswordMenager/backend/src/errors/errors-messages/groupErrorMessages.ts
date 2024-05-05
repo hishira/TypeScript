@@ -11,5 +11,5 @@ export enum GroupServiceMessages {
   Create = 'Group service; create method',
   Delete = 'Group service; deleteGroup method',
   Update = 'Group service; editGroup method',
-  HistoryAppendEvent = 'Create event to append group to history'
+  HistoryAppendEvent = 'Create event to append group to history',
 }

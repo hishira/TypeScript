@@ -3,6 +3,7 @@ import {
   INotification,
   NotificationChannel,
 } from 'src/schemas/Interfaces/notification.interface';
+import { Executable } from './EntryMock';
 
 const NOTIFICATIONID = new Types.ObjectId(32);
 const ENTRYID = new Types.ObjectId(32);
@@ -23,29 +24,38 @@ export const notificationMock = (
 export class NotificationMock {
   constructor(private data: INotification) {}
 
-  save() {
+  save(): Promise<INotification> {
     return Promise.resolve(notificationMock());
   }
 
-  static find() {
+  static find(): {
+    populate: (value: string) => Executable<Promise<INotification[]>>;
+  } {
     return {
-      populate: (byWhat: string) => ({
-        exec: () => Promise.resolve([notificationMock()]),
+      populate: (byWhat: string): Executable<Promise<INotification[]>> => ({
+        exec: (): Promise<INotification[]> =>
+          Promise.resolve([notificationMock()]),
       }),
     };
   }
 
-  static findOne() {
+  static findOne(): Executable<Promise<INotification>> {
     return {
-      exec: () => Promise.resolve(notificationMock()),
+      exec: (): Promise<INotification> => Promise.resolve(notificationMock()),
     };
   }
 
-  static findOneAndUpdate(filter, setters, options) {
-    return { exec: () => Promise.resolve(notificationMock()) };
+  static findOneAndUpdate(
+    filter,
+    setters,
+    options,
+  ): Executable<Promise<INotification>> {
+    return {
+      exec: (): Promise<INotification> => Promise.resolve(notificationMock()),
+    };
   }
 
-  static deleteOne() {
-    return { exec: () => Promise.resolve(true) }; // tests
+  static deleteOne(): Executable<Promise<true>> {
+    return { exec: (): Promise<true> => Promise.resolve(true) }; // tests
   }
 }

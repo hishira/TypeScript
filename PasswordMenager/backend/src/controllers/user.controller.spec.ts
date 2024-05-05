@@ -13,6 +13,7 @@ import { TestUtils } from '../../test/utils/TestUtils';
 import { UsersController } from './user.contaoller';
 import { Logger } from 'src/utils/Logger';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { IUser } from 'src/schemas/Interfaces/user.interface';
 
 describe('UserController', () => {
   let userController: UsersController;
@@ -34,7 +35,7 @@ describe('UserController', () => {
         {
           provide: QueryBus,
           useValue: {
-            execute: (...params) => Promise.resolve(userMock()),
+            execute: (...params): Promise<IUser> => Promise.resolve(userMock()),
           },
         },
         Logger,
@@ -48,7 +49,7 @@ describe('UserController', () => {
         {
           provide: CommandBus,
           useValue: {
-            execute: (...params) => Promise.resolve(userMock()),
+            execute: (...params): Promise<IUser> => Promise.resolve(userMock()),
           },
         },
       ],

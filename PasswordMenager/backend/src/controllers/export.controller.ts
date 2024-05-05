@@ -23,8 +23,11 @@ export class ExportController {
 
   @Get('csv')
   @UseGuards(AuthGuard('accessToken'))
-  getCsv(@Request() req, @Res() response: Response) {
-    this.exportService.getCsvFile(req.user._id).then((csvString) => {
+  getCsv(
+    @Request() req,
+    @Res() response: Response,
+  ): Promise<void | Response<string, Record<string, Record<string, string>>>> {
+    return this.exportService.getCsvFile(req.user._id).then((csvString) => {
       response
         .set({
           'Content-Type': 'text/csv',
@@ -37,8 +40,11 @@ export class ExportController {
 
   @Get('json')
   @UseGuards(AuthGuard('accessToken'))
-  getJson(@Request() req, @Res() response: Response) {
-    this.exportService.getJsonFile(req.user._id).then((json) => {
+  getJson(
+    @Request() req,
+    @Res() response: Response,
+  ): Promise<void | Response<string, Record<string, Record<string, string>>>> {
+    return this.exportService.getJsonFile(req.user._id).then((json) => {
       response
         .set({
           'Content-Type': 'text/json',
@@ -55,13 +61,18 @@ export class ExportController {
     file: Express.Multer.File,
     @Res() response: Response,
     @Body() restOfParams,
-  ) {
-    response.status(200).send(ExportCsvUtils.GetEncryptedValueFromFile(file));
+  ): Promise<void | Response<string, Record<string, Record<string, string>>>> {
+    return response
+      .status(200)
+      .send(ExportCsvUtils.GetEncryptedValueFromFile(file));
   }
 
   @UseGuards(AuthGuard('accessToken'))
   @Get('encrypted')
-  async getEncryptFile(@Req() req, @Res() res: Response) {
+  async getEncryptFile(
+    @Req() req,
+    @Res() res: Response,
+  ): Promise<void | Response<string, Record<string, Record<string, string>>>> {
     const encyptedBuffer = await this.exportService.getEncryptedFile(
       req.user._id,
     );
@@ -69,19 +80,22 @@ export class ExportController {
       'Content-Disposition': 'attachment; filename=example.txt.xyz',
       'Content-Type': 'text/xyz',
     });
-    res.send(encyptedBuffer);
+    return res.send(encyptedBuffer);
   }
 
   @Get('encryptedCsv')
   @UseGuards(AuthGuard('accessToken'))
-  async getEncryptCsv(@Request() req, @Res() response: Response) {
+  async getEncryptCsv(
+    @Request() req,
+    @Res() response: Response,
+  ): Promise<void | Response<string, Record<string, Record<string, string>>>> {
     response
       .set({
         'Content-Type': 'application/zip',
         'Content-Disposition': `attachment; filename="users.zip"`,
       })
       .attachment('file.zip');
-    this.exportService.getCsvZipedFile(req.user.id).then((resp) => {
+    return this.exportService.getCsvZipedFile(req.user.id).then((resp) => {
       resp.pipe(response);
       resp.finalize();
     });

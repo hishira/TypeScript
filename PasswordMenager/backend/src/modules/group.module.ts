@@ -16,7 +16,13 @@ import { UpdateGroupCommandHandler } from 'src/handlers/commands/group/updateGro
 import { LoggerModule } from './logger.module';
 
 @Module({
-  imports: [DatabaseModule, ExperimentModule, HistoryModule, CqrsModule, LoggerModule],
+  imports: [
+    DatabaseModule,
+    ExperimentModule,
+    HistoryModule,
+    CqrsModule,
+    LoggerModule,
+  ],
   controllers: [GroupController],
   providers: [
     {
