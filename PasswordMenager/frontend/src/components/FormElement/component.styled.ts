@@ -41,5 +41,5 @@ export const InputLabel = styled.label<{ fontSize?: string, isError?: boolean }>
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 5px 5px 5px 0px;
   padding-left: 0.3rem;
-  color: ${({isError})=> isError ? 'lightsalmon' : 'grey'};
+  color: ${({isError})=> isError ? 'red' : 'grey'};
 `;

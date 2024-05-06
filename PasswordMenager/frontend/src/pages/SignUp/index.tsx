@@ -47,6 +47,7 @@ const SignUp = ({ store }: Prop) => {
     samePassowrds: TranslationFunction("page.signUp.popupMessage.samePassword"),
     userCreated: TranslationFunction("page.signUp.popupMessage.userCreated"),
   };
+
   const registerClickHandle = async (
     e: React.MouseEvent<HTMLElement>
   ): Promise<void> => {
@@ -74,7 +75,7 @@ const SignUp = ({ store }: Prop) => {
         email: registerinfo.email,
       })
       .then((response) => {
-        if (!!response) {
+        if (response) {
           store?.setPopUpinfo({
             open: true,
             message: translation.userCreated,

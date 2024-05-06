@@ -3,6 +3,8 @@ import Button from "../../components/Button/index";
 import FormElement from "../FormElement/";
 import { Translation } from "../Translation";
 import { Form, FormTitle, Link } from "./component.styled";
+import { ValidatorForm } from "../ValidatorForm";
+import { FormEmailField } from "./email-input";
 
 interface Props {
   buttonmessage: string;
@@ -17,25 +19,6 @@ interface Props {
   isEmail?: boolean;
   emailSetHandle?: (value: string) => void;
 }
-
-const FormEmailField = ({
-  isEmailAvailable,
-  emailSetHandle,
-}: {
-  isEmailAvailable: boolean;
-  emailSetHandle: (value: string) => void;
-}) => {
-  return isEmailAvailable ? (
-    <FormElement
-      label="input.label.email"
-      inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        emailSetHandle(e.target.value)
-      }
-      inputplaceholder="email.input.label.placeholder"
-      inputtype="text"
-    />
-  ) : null;
-};
 
 const ConfirmPasswordElement = ({
   confirmpassword,
