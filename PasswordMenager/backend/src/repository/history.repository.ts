@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { NotImplementedError } from 'src/errors/NotImplemented';
+import { BaseError } from 'src/errors/bace-error';
 import { HistoryErrorMapper } from 'src/errors/errors-messages/historyErrorMessages';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -61,11 +62,11 @@ export class HistoryRepository implements Repository<IHistory>, LoggerContext {
       );
   }
 
-  delete(option: DeleteOption<unknown>): Promise<unknown> {
+  delete(option: DeleteOption<unknown>): Promise<IHistory | BaseError> {
     throw new NotImplementedError();
   }
 
-  deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;
+  deleteMany?: (option: DeleteOption<unknown>) => Promise<IHistory | BaseError>;
 
   getById(): Promise<IHistory> {
     throw new NotImplementedError();

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { NotImplementedError } from 'src/errors/NotImplemented';
+import { BaseError } from 'src/errors/bace-error';
 import { NotificationErrorMessages } from 'src/errors/errors-messages/notificationErrorMessages';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -65,7 +66,7 @@ export class NotificationRepository
       );
   }
 
-  delete(option: DeleteOption<unknown>): Promise<unknown> {
+  delete(option: DeleteOption<unknown>): Promise<INotification | BaseError> {
     return this.notificationModel
       .deleteOne(option.getOption())
       .exec()
@@ -74,7 +75,9 @@ export class NotificationRepository
       );
   }
 
-  deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;
+  deleteMany?: (
+    option: DeleteOption<unknown>,
+  ) => Promise<INotification | BaseError>;
 
   getById(): Promise<INotification> {
     throw new NotImplementedError();

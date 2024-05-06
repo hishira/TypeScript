@@ -11,7 +11,7 @@ import { EventTypes } from 'src/events/eventTypes';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
 import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
-import { EmptyResponse } from 'src/response/empty.response';
+import { EmptyRespond, EmptyResponse } from 'src/response/empty.response';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { EntryServiceEmitterLogger } from 'src/services/eventAndLog/entryServiceEmitterLogger';
 import { Logger } from 'src/utils/Logger';
@@ -167,7 +167,7 @@ export class EntryService implements LoggerContext {
         });
     } catch (e) {
       this.entryServiceEmitLogger.editEntryEventLogError(e, neweditedentry);
-      return Promise.resolve(EmptyResponse);
+      return Promise.resolve(EmptyRespond);
     }
   }
 
