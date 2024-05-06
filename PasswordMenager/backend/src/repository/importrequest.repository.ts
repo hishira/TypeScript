@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
+import { BaseError } from 'src/errors/bace-error';
 import { ImportRequestErrorMessages } from 'src/errors/errors-messages/importRequestErrorMessages';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -70,7 +71,9 @@ export class ImportRequestRepository
       );
   }
 
-  delete(option: DeleteOption<Partial<ImportRequest>>): Promise<unknown> {
+  delete(
+    option: DeleteOption<Partial<ImportRequest>>,
+  ): Promise<ImportRequest | BaseError> {
     const optionValue = option.getOption();
     return this.importRequestModal
       .updateOne({ _id: optionValue._id }, { $set: { ...optionValue } })
@@ -80,7 +83,9 @@ export class ImportRequestRepository
       );
   }
 
-  deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;
+  deleteMany?: (
+    option: DeleteOption<unknown>,
+  ) => Promise<ImportRequest | BaseError>;
 
   getById(): Promise<ImportRequest> {
     throw new Error('Method not implemented.');

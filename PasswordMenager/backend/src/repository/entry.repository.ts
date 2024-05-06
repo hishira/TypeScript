@@ -15,6 +15,7 @@ import { ErrorHandler, LoggerContext } from 'src/utils/error.handlers';
 import { PaginatorDto } from 'src/utils/paginator';
 import { EntryRepositoryUtils } from './repository-utils/entry-utils';
 import { UtilsRepository } from './utils.repository';
+import { BaseError } from 'src/errors/bace-error';
 
 @Injectable()
 export class EntryRepository implements Repository<IEntry>, LoggerContext {
@@ -78,7 +79,9 @@ export class EntryRepository implements Repository<IEntry>, LoggerContext {
       );
   }
 
-  delete(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
+  delete(
+    option: DeleteOption<FilterQuery<IEntry>>,
+  ): Promise<IEntry | BaseError> {
     return this.entryModel
       .updateMany(option.getOption(), new DeleteEntryUpdate())
       .exec()
@@ -87,10 +90,13 @@ export class EntryRepository implements Repository<IEntry>, LoggerContext {
       );
   }
 
-  deleteMany(option: DeleteOption<FilterQuery<IEntry>>): Promise<unknown> {
+  deleteMany(
+    option: DeleteOption<FilterQuery<IEntry>>,
+  ): Promise<IEntry | BaseError> {
+    // Todo: Fix;
     return this.entryModel
       .updateMany(option.getOption(), new DeleteEntryUpdate())
-      .exec();
+      .exec() as unknown as Promise<IEntry | BaseError>;
   }
 
   create(objectToSave: DTO): Promise<IEntry> {

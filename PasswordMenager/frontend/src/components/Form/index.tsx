@@ -3,8 +3,8 @@ import Button from "../../components/Button/index";
 import FormElement from "../FormElement/";
 import { Translation } from "../Translation";
 import { Form, FormTitle, Link } from "./component.styled";
-import { ValidatorForm } from "../ValidatorForm";
 import { FormEmailField } from "./email-input";
+import { PasswordInputElement } from "./password-input";
 
 interface Props {
   buttonmessage: string;
@@ -38,7 +38,7 @@ const ConfirmPasswordElement = ({
     />
   ) : null;
 };
-type InputChangeHandler = {
+export type InputChangeHandler = {
   inputChangeHandler: (value: string) => void;
 };
 const LoginInputElement = ({ inputChangeHandler }: InputChangeHandler) => (
@@ -49,16 +49,6 @@ const LoginInputElement = ({ inputChangeHandler }: InputChangeHandler) => (
     }
     inputplaceholder="login.input.label.placeholder"
     inputtype="text"
-  />
-);
-const PasswordInputElement = ({ inputChangeHandler }: InputChangeHandler) => (
-  <FormElement
-    label="input.label.password"
-    inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-      inputChangeHandler(e.target.value)
-    }
-    inputplaceholder="*****"
-    inputtype="password"
   />
 );
 
