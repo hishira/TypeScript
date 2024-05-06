@@ -9,6 +9,7 @@ type ValidatorFormProps = FormProps & {
 };
 export const ValidatorForm = (formProps: ValidatorFormProps) => {
   const [errors, setErrors] = useState<ErrorValue[]>([]);
+  console.log(formProps);
   const inputValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
     formProps.inputChange(e);
     const tmpErrors: ErrorValue[] = [];
@@ -28,19 +29,19 @@ export const ValidatorForm = (formProps: ValidatorFormProps) => {
     formProps.isValid && formProps.isValid(errors.length <= 0);
   }, [errors]);
   return (
-    <ValidatorElement>
+    <>
       <FormElement
         {...formProps}
         inputChange={(e) => inputValidation(e)}
         isError={errors.length > 0}
       />
       {errors && (
-        <Errors>
+        <Errors width={formProps?.width ?? undefined}>
           {errors.map((e) => (
             <ErrorContainer>{e.message}</ErrorContainer>
           ))}
         </Errors>
       )}
-    </ValidatorElement>
+    </>
   );
 };

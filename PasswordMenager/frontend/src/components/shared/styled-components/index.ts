@@ -12,12 +12,15 @@ export const ContentContainer = styled.div`
   color: rgba(0, 0, 0, 0.65);
 `;
 
-export const Errors = styled.span`
+export const Errors = styled.span<{ width?: string }>`
   display: inline-flex;
   flex-direction: column;
+  width: ${({ width }) => (width ? `${width}` : "90%")};
 `;
 export const ErrorContainer = styled.span`
   font-size: 12px;
   font-weight: 500;
-  color: lightsalmon;
+  color: red;
+  text-align: left;
+//  width: 100% !important;
 `;

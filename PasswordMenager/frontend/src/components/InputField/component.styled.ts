@@ -5,7 +5,7 @@ const getInputFontSize = (userFontSize?: string): string => {
 };
 
 const hasBorderBottom = (withBorder?: boolean, isError?: boolean): string => {
-  return withBorder ? "none" : `1px solid ${isError ? "lightsalmon" : "grey"}`;
+  return withBorder ? "none" : `1px solid ${isError ? "red" : "grey"}`;
 };
 const getBorder = (
   radius: boolean,
@@ -13,11 +13,11 @@ const getBorder = (
   isError?: boolean
 ) => {
   if (radius) return withBorder ? "10px" : "none";
-  const errorColor = isError ? "lightsalmon" : "grey";
+  const errorColor = isError ? "red" : "grey";
   return withBorder ? `1px solid ${errorColor}` : "none";
 };
 const borderColorCalculate = (isError: boolean | undefined, color: string) => {
-  return isError ? "lightsalmon" : color;
+  return isError ? "red" : color;
 };
 export const Input = styled.input<{
   fontSize?: string;
@@ -33,6 +33,8 @@ export const Input = styled.input<{
   border-bottom: 0.2px solid
     ${({ isError }) => borderColorCalculate(isError, "slategrey")};
   margin-top: 0.5rem;
+  color: ${({isError})=> isError ? 'red' : 'black'};
+
   &:focus {
     outline: none;
     border: ${({ withBorder, isError }) =>
