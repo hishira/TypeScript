@@ -1,22 +1,8 @@
-const RequiredErrors: ValidatorErrors = {
-  required: {
-    message: "Field is required",
-  },
-};
-const MinLengthErrors: (minLength: number) => ValidatorErrors = (
-  minLength: number
-) => ({
-  minLength: {
-    message: `Minimum length is ${minLength}`,
-  },
-});
-const SameValueError: (message?: string) => ValidatorErrors = (
-  message?: string
-) => ({
-  saveValue: {
-    message: message ?? "Values should be the same",
-  },
-});
+import { RequiredErrors, MinLengthErrors, SameValueError, EmailError, PasswordError } from "./validation-errors";
+
+const PASSWORD_REGEXP: RegExp =
+  /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/;
+const EMAIL_REGEXP: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 export namespace Validators {
   export const Required: ValidatorFn = (value: unknown): ValidatorErrors => {
     return value === undefined ||
@@ -59,5 +45,12 @@ export namespace Validators {
       errors.push(error);
     });
     return errors.filter((val) => !!val).length > 0;
+  };
+
+  export const EmailValidation = (value: string): ValidatorErrors | null => {
+    return EMAIL_REGEXP.test(value) ? null : EmailError;
+  };
+  export const PasswordValidation = (value: string): ValidatorErrors | null => {
+    return PASSWORD_REGEXP.test(value) ? null : PasswordError;
   };
 }
