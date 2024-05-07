@@ -1,6 +1,6 @@
-import { InputChangeHandler } from ".";
 import { ValidatorForm } from "../ValidatorForm";
 import { Validators } from "../ValidatorForm/validators";
+import { InputChangeHandler } from "./login-input";
 
 export const PasswordInputElement = ({
   inputChangeHandler,
