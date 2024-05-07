@@ -5,6 +5,9 @@ import { Translation } from "../Translation";
 import { Form, FormTitle, Link } from "./component.styled";
 import { FormEmailField } from "./email-input";
 import { PasswordInputElement } from "./password-input";
+import { LoginInputElement } from "./login-input";
+import { ConfirmPasswordElement } from "./confirm-password-input";
+import { RedirectLinkElement } from "./redirect-link-element";
 
 interface Props {
   buttonmessage: string;
@@ -20,52 +23,7 @@ interface Props {
   emailSetHandle?: (value: string) => void;
 }
 
-const ConfirmPasswordElement = ({
-  confirmpassword,
-  handlethis,
-}: {
-  confirmpassword: boolean;
-  handlethis: (value: string) => void;
-}) => {
-  return confirmpassword ? (
-    <FormElement
-      label="input.label.confirmPassword"
-      inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        handlethis(e.target.value)
-      }
-      inputplaceholder="*****"
-      inputtype="password"
-    />
-  ) : null;
-};
-export type InputChangeHandler = {
-  inputChangeHandler: (value: string) => void;
-};
-const LoginInputElement = ({ inputChangeHandler }: InputChangeHandler) => (
-  <FormElement
-    label="input.label.login"
-    inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-      inputChangeHandler(e.target.value)
-    }
-    inputplaceholder="login.input.label.placeholder"
-    inputtype="text"
-  />
-);
 
-const RedirectLinkElement = ({
-  redirectFunction,
-  redirectTranslation,
-}: {
-  redirectFunction: () => void;
-  redirectTranslation: string;
-}) => (
-  <p>
-    {Translation("page.login.or")}
-    <Link onClick={() => redirectFunction()}>
-      {Translation(redirectTranslation)}
-    </Link>
-  </p>
-);
 const FormComponent = ({
   buttonmessage,
   buttonHandle,
