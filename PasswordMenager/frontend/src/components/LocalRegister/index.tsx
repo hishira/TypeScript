@@ -1,7 +1,6 @@
 import { LocalRegisterUtil } from "../../hooks/localRegisterUtil.hook";
 import Button from "../Button";
 import { Translation } from "../Translation";
-import { ValidatorForm } from "../ValidatorForm";
 import { ContentContainer, TitleContainer } from "../shared/styled-components";
 import { LocalRegisterElement } from "./component.styled";
 import { ValidateConfirmPasswordForm } from "./validate-confirm-password";
