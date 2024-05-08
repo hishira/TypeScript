@@ -5,14 +5,14 @@ enum JsonErrorsType {
   PARSE = 'parse',
   FORMAT = 'format',
 }
-export class JSONFileValidator extends FileValidator<any> {
+export class JSONFileValidator extends FileValidator<Record<string, unknown>> {
   ErrorsMapper: { [key in JsonErrorsType]: string } = {
     empty: 'JSON file is empty',
     parse: 'Cannot parse json file',
     format: 'Wrong json format',
   };
   currectErrorMessage = this.ErrorsMapper[JsonErrorsType.EMPTY];
-  constructor(validationOptions: any = {}) {
+  constructor(validationOptions: Record<string, unknown> = {}) {
     super(validationOptions);
   }
 
@@ -20,7 +20,7 @@ export class JSONFileValidator extends FileValidator<any> {
     const buffer = file.buffer;
     return this.preparePromiseFileValidation(buffer);
   }
-  buildErrorMessage(file: any): string {
+  buildErrorMessage(file: Express.Multer.File): string {
     return this.currectErrorMessage;
   }
 

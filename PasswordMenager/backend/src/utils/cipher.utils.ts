@@ -21,7 +21,7 @@ export class Cipher {
     return Buffer.from(bufferedValue, 'hex');
   }
 
-  public encryptValue(value: string) {
+  public encryptValue(value: string): string {
     const enryptedValue = Buffer.concat([
       this.cipher.update(value),
       this.cipher.final(),

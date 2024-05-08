@@ -5,7 +5,9 @@ import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
 import { IsNotUndefined, isDefined } from 'src/utils/utils';
 
 export class OptionModelBuilder {
-  static EMPTYOPTION = { getOption: () => ({}) };
+  static readonly EMPTYOPTION = {
+    getOption: (): Record<string, never> => ({}),
+  };
 
   private filterQuery: FilterQuery<IEntry> = {};
   constructor(
@@ -81,7 +83,7 @@ export class OptionModelBuilder {
     | FilterOption<FilterQuery<IEntry>>
     | DeleteOption<FilterQuery<IEntry>> {
     return {
-      getOption: () => this.filterQuery,
+      getOption: (): FilterQuery<IEntry> => this.filterQuery,
       ...(this.queryLimit > 0 && { limit: this.queryLimit }),
     };
   }

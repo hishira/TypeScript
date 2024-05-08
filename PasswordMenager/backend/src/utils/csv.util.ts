@@ -54,7 +54,7 @@ export class CsvFile {
     return this;
   }
 
-  setRow(rows: CsvEntry[] = []) {
+  setRow(rows: CsvEntry[] = []): this {
     this.Rows = rows;
     return this;
   }

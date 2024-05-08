@@ -1,7 +1,7 @@
 import { FileValidator } from '@nestjs/common';
 
-export class NotFileValidator extends FileValidator<any> {
-  constructor(validationOptions: any = {}) {
+export class NotFileValidator extends FileValidator<Record<string, unknown>> {
+  constructor(validationOptions: Record<string, unknown> = {}) {
     super(validationOptions);
   }
 
@@ -11,7 +11,7 @@ export class NotFileValidator extends FileValidator<any> {
     return true;
   }
 
-  buildErrorMessage(file: any): string {
+  buildErrorMessage(file: Express.Multer.File): string {
     return 'Inproper file';
   }
 }
