@@ -1,49 +1,10 @@
 import { LocalRegisterUtil } from "../../hooks/localRegisterUtil.hook";
 import Button from "../Button";
 import { Translation } from "../Translation";
-import { ValidatorForm } from "../ValidatorForm";
 import { ContentContainer, TitleContainer } from "../shared/styled-components";
 import { LocalRegisterElement } from "./component.styled";
-
-type ValidatorElementPropr = {
-  inputFunction: (value: string) => void;
-  validators: ValidatorFn[];
-  setValid: (val: boolean) => void;
-};
-const ValidatePasswordForm = ({
-  inputFunction,
-  validators,
-  setValid,
-}: ValidatorElementPropr) => (
-  <ValidatorForm
-    label="input.label.password"
-    width="100%"
-    inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-      inputFunction(e.target.value)
-    }
-    inputplaceholder="*****"
-    inputtype="password"
-    validators={validators}
-    isValid={(a) => setValid(a)}
-  />
-);
-const ValidateConfirmPasswordForm = ({
-  inputFunction,
-  validators,
-  setValid,
-}: ValidatorElementPropr) => (
-  <ValidatorForm
-    label="input.label.confirmPassword"
-    width="100%"
-    inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-      inputFunction(e.target.value)
-    }
-    isValid={(a) => setValid(a)}
-    inputplaceholder="*****"
-    inputtype="password"
-    validators={validators}
-  />
-);
+import { ValidateConfirmPasswordForm } from "./validate-confirm-password";
+import { ValidatePasswordForm } from "./validate-password-form";
 
 const CreateLocalRegisterButton = ({
   isDisabled,

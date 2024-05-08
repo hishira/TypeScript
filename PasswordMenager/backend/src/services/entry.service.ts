@@ -112,7 +112,7 @@ export class EntryService implements LoggerContext {
       return Promise.all(this.prepareDeletedEntryPromise(entryid))
         .then((res) => {
           this.entryServiceEmitLogger.deleteActionHandler(entryid, res);
-          return { status: true, response: res[0] } as any;
+          return { status: true, response: res[0] };
         })
         .catch((_err) => {
           this.entryServiceEmitLogger.errorDeleteByid();

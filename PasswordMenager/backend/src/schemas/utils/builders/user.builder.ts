@@ -1,8 +1,12 @@
 import { IUser, UserField } from 'src/schemas/Interfaces/user.interface';
 import { PasswordUtils } from 'src/utils/password.utils';
+import { UserMetaLikeObject } from './userMeta.builder';
 
 export class UserBuilder {
-  constructor(public user: Partial<IUser> = {}, public userMeta = {}) {}
+  constructor(
+    public user: Partial<IUser> = {},
+    public userMeta: UserMetaLikeObject = {},
+  ) {}
 
   async updatePassword(password: string): Promise<this> {
     const hashesPassword = await PasswordUtils.EncryptPassword(password);
@@ -80,7 +84,7 @@ export class UserBuilder {
     return this.user;
   }
 
-  getMetaObject() {
+  getMetaObject(): UserMetaLikeObject {
     return this.userMeta;
   }
   getUserAsPromise(): Promise<Partial<IUser>> {

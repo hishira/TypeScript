@@ -3,6 +3,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { isDefined } from 'src/utils/utils';
 
 @ValidatorConstraint({ name: 'ImportEntrySchemaValidation', async: false })
@@ -10,7 +11,7 @@ export class ImportEntrySchemaValidator
   implements ValidatorConstraintInterface
 {
   validate(
-    value: any,
+    value: IEntry,
     validationArguments?: ValidationArguments,
   ): boolean | Promise<boolean> {
     if (this.isAnyOfImportFieldUndefined(value)) return false;
@@ -21,7 +22,7 @@ export class ImportEntrySchemaValidator
     return `Error occur in ImportEntrySchema validation`;
   }
 
-  private isAnyOfImportFieldUndefined(value: any): boolean {
+  private isAnyOfImportFieldUndefined(value: Partial<IEntry>): boolean {
     return (
       !isDefined(value) ||
       !isDefined(value?.password) ||

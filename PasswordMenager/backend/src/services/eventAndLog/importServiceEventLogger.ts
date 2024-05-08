@@ -24,7 +24,7 @@ export class ImportServiceEventLogger {
     return response;
   }
 
-  activeImportRequestError(importRequestid, error: any): any {
+  activeImportRequestError(importRequestid: string, error: unknown): unknown {
     this.errorHandler.handle(error, ImportServiceMessage.Activate);
     this.eventEmitter.emitAsync(
       EventAction.Create,

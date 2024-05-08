@@ -14,6 +14,7 @@ import { Paginator } from 'src/utils/paginator';
 import { GroupDto } from '../schemas/dto/getroup.dto';
 import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { GroupServiceEmitterLogger } from './eventAndLog/groupServiceEmitterLogger';
+import { BaseError } from 'src/errors/bace-error';
 @Injectable()
 export class GroupService implements LoggerContext {
   readonly groupEventLogHandler: GroupServiceEmitterLogger;
@@ -41,11 +42,11 @@ export class GroupService implements LoggerContext {
       });
   }
 
-  checkIfexists(groupId: string): Promise<any> {
+  checkIfexists(groupId: string): Promise<boolean> {
     return this.queryBus.execute(new GetExistingGroupQuery({ id: groupId }));
   }
 
-  getbyuser(userid: string): Promise<GroupDto[] | any> {
+  getbyuser(userid: string): Promise<GroupDto[] | BaseError> {
     return this.queryBus.execute(new GetFilteredGroup({ userId: userid }));
   }
 

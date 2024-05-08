@@ -40,7 +40,7 @@ export class ImportRequestBuilder {
     return this;
   }
 
-  setState(state: ImportRequestState) {
+  setState(state: ImportRequestState): this {
     this.importRequest = {
       ...this.importRequest,
       ...(isDefined(state) && { state }),
@@ -50,7 +50,7 @@ export class ImportRequestBuilder {
 
   getOption(): DeleteOption<Partial<ImportRequest>> {
     return {
-      getOption: () => this.importRequest,
+      getOption: (): Partial<ImportRequest> => this.importRequest,
     };
   }
 

@@ -1,11 +1,13 @@
 import { FileValidator } from '@nestjs/common';
 import { Duplex } from 'stream';
-export class CustomFileValidator extends FileValidator<any> {
-  constructor(validationOptions: any = {}) {
+export class CustomFileValidator extends FileValidator<
+  Record<string, unknown>
+> {
+  constructor(validationOptions: Record<string, unknown> = {}) {
     super(validationOptions);
   }
   isValid(file?: Express.Multer.File): boolean | Promise<boolean> {
-    const buffer = file.buffer as Buffer;
+    const buffer = file.buffer;
     const stream = this.getStream(buffer);
     const chunks = [];
     stream.on('data', (chunk) => {
