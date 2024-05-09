@@ -43,7 +43,7 @@ export class ImportController {
   activateImportRequest(
     @Request() req,
     @Param('id') importRequestId: string,
-  ): Promise<boolean> {
+  ): Promise<unknown> {
     return this.importService.activateImportRequest(
       importRequestId,
       req.user._id,

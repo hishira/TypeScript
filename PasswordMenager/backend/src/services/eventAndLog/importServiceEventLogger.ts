@@ -28,7 +28,7 @@ export class ImportServiceEventLogger {
     this.errorHandler.handle(error, ImportServiceMessage.Activate);
     this.eventEmitter.emitAsync(
       EventAction.Create,
-      new ImportRequestEventBuilder(importRequestid, {})
+      new ImportRequestEventBuilder(importRequestid, null)
         .setActivateImportRequestEvent()
         .build(),
     );
@@ -82,7 +82,7 @@ export class ImportServiceEventLogger {
     return response;
   }
 
-  deleteEventLogError<T>(response: T): T {
+  deleteEventLogError<T extends { id: string }>(response: T): T {
     this.logHandler.handle(response, ImportServiceMessage.Delete);
     this.eventEmitter.emitAsync(
       EventAction.Create,
@@ -104,7 +104,7 @@ export class ImportServiceEventLogger {
     return response;
   }
 
-  editEventLogError<T>(response: T): T {
+  editEventLogError<T extends { id: string }>(response: T): T {
     this.logHandler.handle(response, ImportServiceMessage.Update);
     this.eventEmitter.emitAsync(
       EventAction.Create,

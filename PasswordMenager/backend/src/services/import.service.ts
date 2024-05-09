@@ -46,7 +46,7 @@ export class ImportService implements LoggerContext {
   activateImportRequest(
     importRequestId: string,
     userId: string,
-  ): Promise<boolean> {
+  ): Promise<unknown> {
     return this.queryBus
       .execute(new GetImportQuery({ id: importRequestId }))
       .then((importRequest: ImportRequest[]) =>

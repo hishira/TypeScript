@@ -1,6 +1,5 @@
 import { Cipher } from 'src/utils/cipher.utils';
 import { Decipher } from 'src/utils/decipher.utils';
-import { IUser } from '../Interfaces/user.interface';
 import { IEntry } from '../Interfaces/entry.interface';
 export const algorithm = 'aes-256-ctr';
 
@@ -43,7 +42,7 @@ export class EntrySchemaUtils {
     return result;
   }
 
-  static BeforeSave(this: IUser, next: () => void): void {
+  static BeforeSave(this: IEntry, next: () => void): void {
     const encryptedPasswod = this.password;
     const bs = EntrySchemaUtils.generateKeyValue(this.userid);
 
