@@ -4,10 +4,13 @@ import { EntryDtoMapper } from 'src/schemas/mapper/entryDtoMapper';
 type CreateEntry = CreateEntryDto & { userid: string };
 export class EntryRepositoryUtils {
   static GetMappedDtosToProperEntryDto(dtos: DTO[]): DTO[] {
-    const dtoObjects = dtos.map((a) => a.toObject() as any);
+    const dtoObjects = dtos.map((a) => a.toObject());
     EntryRepositoryUtils.EntryDtoGuard(dtoObjects);
     return dtoObjects.map((dto) =>
-      EntryDtoMapper.CreateEntryDtoToDto(dto, dto.userid),
+      EntryDtoMapper.CreateEntryDtoToDto(
+        dto as unknown as CreateEntry,
+        (dto as unknown as CreateEntry).userid,
+      ),
     );
   }
 

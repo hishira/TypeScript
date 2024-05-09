@@ -4,6 +4,7 @@ import { IUser } from './Interfaces/user.interface';
 import UserMetaSchema from './userMeta.schema';
 
 async function beforeUserSave<T extends IUser>(next): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user: T = this;
   if (user.isModified('password')) {
     user.password = await bcryptjs.hash(user.password, 10);

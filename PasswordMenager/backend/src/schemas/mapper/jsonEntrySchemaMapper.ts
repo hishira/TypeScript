@@ -18,7 +18,7 @@ export class JsonEntrySchemaMapper extends EntrySchemaFileMapper {
 
   arrayJsonMapper(): ImportEntrySchema[] {
     const importEntriesSchema: ImportEntrySchema[] = [];
-    (this.parsedJsonData as any[]).forEach((jsonData) => {
+    (this.parsedJsonData as Record<string, string>[]).forEach((jsonData) => {
       importEntriesSchema.push(
         new ImportEntrySchema(
           jsonData?.password ?? undefined,
@@ -36,11 +36,11 @@ export class JsonEntrySchemaMapper extends EntrySchemaFileMapper {
   objectJsonMapper(): ImportEntrySchema[] {
     const importEntriesSchema: ImportEntrySchema[] = [
       new ImportEntrySchema(
-        (this.parsedJsonData as any)?.password,
-        (this.parsedJsonData as any)?.username,
-        (this.parsedJsonData as any)?.url,
-        (this.parsedJsonData as any)?.title,
-        (this.parsedJsonData as any)?.email,
+        (this.parsedJsonData as Record<string, string>)?.password,
+        (this.parsedJsonData as Record<string, string>)?.username,
+        (this.parsedJsonData as Record<string, string>)?.url,
+        (this.parsedJsonData as Record<string, string>)?.title,
+        (this.parsedJsonData as Record<string, string>)?.email,
       ),
     ];
 

@@ -20,7 +20,7 @@ export class EntryDtoMapper {
       process.env.id,
     ).encryptValue(password);
     return {
-      toObject: () => ({
+      toObject: (): Record<string, unknown> => ({
         ...object,
         password: encryptedPassword,
       }),
@@ -40,7 +40,7 @@ export class EntryDtoMapper {
     }
 
     return new (class implements DTO {
-      toObject() {
+      toObject(): Record<string, unknown> {
         return {
           ...(isGroupIdEmpty && restParams ? restParams : entryCreateDTO),
           userid: userid,
