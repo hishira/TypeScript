@@ -1,6 +1,5 @@
 import { Cipher } from 'src/utils/cipher.utils';
 import { Decipher } from 'src/utils/decipher.utils';
-import { IUser } from '../Interfaces/user.interface';
 import { IEntry } from '../Interfaces/entry.interface';
 export const algorithm = 'aes-256-ctr';
 
