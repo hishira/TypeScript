@@ -5,7 +5,6 @@ import { CreateEntryBulkCommand } from 'src/commands/entry/CreateEntryBulkComman
 import { CreateEntryCommand } from 'src/commands/entry/CreateEntryCommand';
 import { DeleteEntryCommand } from 'src/commands/entry/DeleteEntryCommand';
 import { UpdateEntryCommand } from 'src/commands/entry/UpdateEntryCommand';
-import { EntryServiceMessage } from 'src/errors/errors-messages/entryServiceMessages';
 import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
@@ -19,7 +18,6 @@ import {
   ErrorHandler,
   LogHandler,
   LoggerContext,
-  LoggerHandler,
 } from 'src/utils/error.handlers';
 import {
   EntryData,
