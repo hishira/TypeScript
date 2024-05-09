@@ -1,6 +1,7 @@
 import { Cipher } from 'src/utils/cipher.utils';
 import { Decipher } from 'src/utils/decipher.utils';
 import { EntrySchemaUtils } from './Entry.schema.utils';
+import { IEntry } from '../Interfaces/entry.interface';
 
 describe('EntrySchemaUtils', () => {
   beforeEach(() => {
@@ -18,7 +19,9 @@ describe('EntrySchemaUtils', () => {
       const decryptSpy = jest.spyOn(Decipher.prototype, 'decryptValue');
 
       // Act
-      const decryptedResult = EntrySchemaUtils.PostFind(result);
+      const decryptedResult = EntrySchemaUtils.PostFind(
+        result as unknown as IEntry[],
+      );
 
       // Assert
       expect(decryptSpy).toHaveBeenCalledTimes(2);
@@ -39,7 +42,9 @@ describe('EntrySchemaUtils', () => {
       const decryptSpy = jest.spyOn(Decipher.prototype, 'decryptValue');
 
       // Act
-      const decryptedResult = EntrySchemaUtils.PostFindOne(result);
+      const decryptedResult = EntrySchemaUtils.PostFindOne(
+        result as unknown as IEntry,
+      );
 
       // Assert
       expect(decryptSpy).toHaveBeenCalledTimes(1);
