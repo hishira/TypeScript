@@ -21,7 +21,8 @@ export class ImportRequestEventBuilder implements EventBuilder {
       | ImportRequest
       | ImportRequest[]
       | ImportRequestDto
-      | ImportEntryResponse,
+      | ImportEntryResponse
+      | { id: string },
     private eventType?: ImportRequestEventType,
   ) {}
 

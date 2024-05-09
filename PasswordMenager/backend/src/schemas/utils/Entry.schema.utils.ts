@@ -43,7 +43,7 @@ export class EntrySchemaUtils {
     return result;
   }
 
-  static BeforeSave(this: IUser, next: () => void): void {
+  static BeforeSave(this: IEntry, next: () => void): void {
     const encryptedPasswod = this.password;
     const bs = EntrySchemaUtils.generateKeyValue(this.userid);
 

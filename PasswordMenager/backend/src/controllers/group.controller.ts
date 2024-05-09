@@ -17,6 +17,7 @@ import { CreateGroupDto } from '../schemas/dto/group.dto';
 import { GroupService } from '../services/group.service';
 import { EditGroupDto } from 'src/schemas/dto/editgroup.dto';
 import { IGroup } from 'src/schemas/Interfaces/group.interface';
+import { BaseError } from 'src/errors/bace-error';
 
 @Controller('group')
 export class GroupController {
@@ -42,7 +43,7 @@ export class GroupController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get('byuser')
-  async get(@Request() req): Promise<GroupDto[]> {
+  async get(@Request() req): Promise<GroupDto[] | BaseError> {
     return this.groupservice.getbyuser(req.user._id);
   }
 
