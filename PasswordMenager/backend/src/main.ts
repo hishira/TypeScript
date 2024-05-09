@@ -1,5 +1,6 @@
+import Module from 'module';
 import { Application } from './Application';
-declare const module: any;
+declare const module: Module;
 async function bootstrap(): Promise<void> {
   const application = new Application();
   await application.createApp();

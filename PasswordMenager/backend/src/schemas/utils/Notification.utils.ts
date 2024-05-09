@@ -11,7 +11,7 @@ export class NotificationUtils {
   }
 
   static get GetAllNotificationFilter(): FilterOption<unknown> {
-    return { getOption: () => ({}) };
+    return { getOption: (): Record<string, never> => ({}) };
   }
 
   static GetDataFromPaginator(

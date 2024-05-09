@@ -52,7 +52,7 @@ const EntrySchema = new mognoose.Schema<IEntry>(
     meta: {
       type: EntryMetaSchema,
       require: true,
-      default: () => ({}),
+      default: (): Record<string, never> => ({}),
     },
   },
   { toJSON: { getters: true } },

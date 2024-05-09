@@ -17,7 +17,7 @@ export class ImportEntrySchema {
     public readonly email: string = undefined,
   ) {}
 
-  static MongoDbSchema() {
+  static MongoDbSchema(): Record<string, StringConstructor> {
     return {
       password: String,
       username: String,

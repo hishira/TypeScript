@@ -4,7 +4,10 @@ import { CreateUserDto } from '../dto/user.dto';
 export class UserDTOMapper {
   static GetDTOFromCreateUserDTO(userCreateDTO: CreateUserDto): DTO {
     return {
-      toObject: () => ({ ...userCreateDTO, defaultPasswordForEntries: '' }),
+      toObject: (): Record<string, unknown> => ({
+        ...userCreateDTO,
+        defaultPasswordForEntries: '',
+      }),
     };
   }
 }

@@ -17,8 +17,7 @@ export class NotificationEventBuilder implements EventBuilder {
       | INotification
       | INotification[]
       | NotificationCommandInput
-      | CreateNotificationEmailDTO
-      | any,
+      | CreateNotificationEmailDTO,
     private eventType?: EventType,
   ) {}
 

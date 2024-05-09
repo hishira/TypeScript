@@ -54,7 +54,7 @@ export class EntryRepository implements Repository<IEntry>, LoggerContext {
 
   returnLimitedEntriesOrAll(
     option: FilterOption<FilterQuery<IEntry>>,
-  ): Promise<IEntry[] | EntryData | any> {
+  ): Promise<IEntry[] | EntryData> {
     const ActiveFilter = new ActiveEntryFilter(option).Filter();
 
     if (UtilsRepository.checkLimitInOptionPossible(option)) {
@@ -133,7 +133,7 @@ export class EntryRepository implements Repository<IEntry>, LoggerContext {
   private getEntriesWithPaginator(
     option: FilterOption<FilterQuery<IEntry>>,
     paginator?: PaginatorDto,
-  ): Promise<IEntry[] | EntryData | any> {
+  ): Promise<IEntry[] | EntryData> {
     const ActiveFilter = new ActiveEntryFilter(option).Filter();
     return this.entryModel
       .find(ActiveFilter)

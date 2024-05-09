@@ -6,7 +6,7 @@ import {
 export type ImportEntryResponse = {
   numberOfEntriesToAdd: number;
   entiresToImport: ImportEntrySchema[];
-  importRequestId: any;
+  importRequestId: string;
 };
 
 export class ImportEntriesResponse {

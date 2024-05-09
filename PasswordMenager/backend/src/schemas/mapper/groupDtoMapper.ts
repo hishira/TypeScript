@@ -7,7 +7,7 @@ export class GroupDtoMapper {
     groupcreateDTO: CreateGroupDto,
   ): DTO {
     return new (class implements DTO {
-      toObject() {
+      toObject(): Record<string, unknown> {
         return {
           ...groupcreateDTO,
           userid: userid,

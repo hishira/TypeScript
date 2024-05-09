@@ -17,7 +17,7 @@ export class EntryBuilder {
     return this;
   }
 
-  updateIdIfExista(id?: string) {
+  updateIdIfExista(id?: string): this {
     this.entry = {
       ...this.entry,
       ...(isDefined(id) && { _id: id }),
@@ -25,7 +25,7 @@ export class EntryBuilder {
     return this;
   }
 
-  updatenNote(note: string | undefined) {
+  updatenNote(note: string | undefined): this {
     this.entry = {
       ...this.entry,
       ...(isDefined(note) && { note: note }),
@@ -34,7 +34,7 @@ export class EntryBuilder {
     return this;
   }
 
-  updateEmail(email: string | undefined) {
+  updateEmail(email: string | undefined): this {
     this.entry = {
       ...this.entry,
       ...(isDefined(email) && { email: email }),
@@ -43,7 +43,7 @@ export class EntryBuilder {
     return this;
   }
 
-  updateStateIfExists(entryState?: EntryState) {
+  updateStateIfExists(entryState?: EntryState): this {
     this.entry = {
       ...this.entry,
       ...(isDefined(entryState) && { state: entryState }),

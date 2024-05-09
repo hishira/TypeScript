@@ -26,7 +26,7 @@ export class GroupOptionBuilder {
 
   getOption(): Option<FilterQuery<IGroup>> {
     return {
-      getOption: () => this.option,
+      getOption: (): FilterQuery<IGroup> => this.option,
     };
   }
 }
