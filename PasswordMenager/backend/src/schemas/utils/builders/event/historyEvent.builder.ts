@@ -21,8 +21,7 @@ export class HistoryEventBuilder implements EventBuilder {
     private readonly payloadObject:
       | IHistory
       | IHistory[]
-      | UpdateHistoryCommand
-      | any,
+      | UpdateHistoryCommand,
     private eventType?: HistoryEventType,
   ) {}
 

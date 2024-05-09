@@ -17,7 +17,10 @@ export class GroupBuilder implements MongoSetObject<IGroup> {
     return { $set: { ...this.entry } };
   }
 
-  private createMetaObject(lastName: string) {
+  private createMetaObject(lastName: string): {
+    'meta.lastName': string;
+    'meta.editDate': Date;
+  } {
     return {
       ['meta.lastName']: lastName,
       ['meta.editDate']: new Date(),
