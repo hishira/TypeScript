@@ -2,6 +2,7 @@ import FormElement from "../FormElement";
 
 export type InputChangeHandler = {
   inputChangeHandler: (value: string) => void;
+  isSignUp?: boolean,
 };
 export const LoginInputElement = ({
   inputChangeHandler,

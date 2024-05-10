@@ -4,9 +4,10 @@ import { InputChangeHandler } from "./login-input";
 
 export const PasswordInputElement = ({
   inputChangeHandler,
+  isSignUp,
 }: InputChangeHandler) => (
   <ValidatorForm
-    validators={[Validators.PasswordValidation]}
+    validators={isSignUp ? [Validators.PasswordValidation] : []}
     label="input.label.password"
     inputChange={(e: React.ChangeEvent<HTMLInputElement>) =>
       inputChangeHandler(e.target.value)
