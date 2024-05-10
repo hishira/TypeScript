@@ -23,7 +23,6 @@ interface Props {
   emailSetHandle?: (value: string) => void;
 }
 
-
 const FormComponent = ({
   buttonmessage,
   buttonHandle,
@@ -50,7 +49,10 @@ const FormComponent = ({
         isEmailAvailable={isEmailAvailable as boolean}
         emailSetHandle={emailSetHandle as any}
       />
-      <PasswordInputElement inputChangeHandler={secondinputhandle} />
+      <PasswordInputElement
+        inputChangeHandler={secondinputhandle}
+        isSignUp={isEmail}
+      />
       <ConfirmPasswordElement
         confirmpassword={confirmpassword as boolean}
         handlethis={handlethis}

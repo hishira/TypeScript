@@ -17,6 +17,8 @@ import {
   IsImportPasswordDefined,
   IsUserPasswordNotDefined,
 } from "./utils";
+import { ValidatorForm } from "../../../../../ValidatorForm";
+import { Validators } from "../../../../../ValidatorForm/validators";
 
 type UserEditModalType = {
   user: IUser | undefined;
@@ -79,7 +81,8 @@ export const UserEditModalComponent = ({
             inputFontSize="16px"
             value={login}
           />
-          <FormElement
+          <ValidatorForm
+            validators={[Validators.EmailValidation]}
             label={"userinformation.edit.email.label"}
             inputplaceholder="userinformation.edit.email.label"
             inputChange={(e) => {

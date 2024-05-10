@@ -21,6 +21,7 @@ export type FormProps = {
   tooltipText?: string;
   withBorder?: boolean;
   isError?: boolean;
+  errors?: JSX.Element;
 };
 const FormElement = ({
   label,
@@ -35,6 +36,7 @@ const FormElement = ({
   tooltipText,
   withBorder,
   isError,
+  errors,
 }: FormProps): JSX.Element => {
   return (
     <FormElementComponent width={width}>
@@ -58,6 +60,7 @@ const FormElement = ({
         inputFontSize={inputFontSize}
         isError={isError}
       />
+      {errors}
     </FormElementComponent>
   );
 };

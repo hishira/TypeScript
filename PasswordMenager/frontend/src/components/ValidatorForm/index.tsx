@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import FormElement, { FormProps } from "../FormElement";
 import { ErrorContainer, Errors } from "../shared/styled-components";
-import { ValidatorElement } from "./component.styled";
+import { ValidatorElement, ValidatorSpanElement } from "./component.styled";
 
 type ValidatorFormProps = FormProps & {
   validators: ValidatorFn[];
@@ -34,14 +34,16 @@ export const ValidatorForm = (formProps: ValidatorFormProps) => {
         {...formProps}
         inputChange={(e) => inputValidation(e)}
         isError={errors.length > 0}
+        errors={
+          errors && (
+            <Errors width={formProps?.width ?? undefined}>
+              {errors.map((e) => (
+                <ErrorContainer>{e.message}</ErrorContainer>
+              ))}
+            </Errors>
+          )
+        }
       />
-      {errors && (
-        <Errors width={formProps?.width ?? undefined}>
-          {errors.map((e) => (
-            <ErrorContainer>{e.message}</ErrorContainer>
-          ))}
-        </Errors>
-      )}
     </>
   );
 };

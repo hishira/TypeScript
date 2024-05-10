@@ -14,6 +14,7 @@ export const ContentContainer = styled.div`
 
 export const Errors = styled.span<{ width?: string }>`
   display: inline-flex;
+  margin-top: .5rem;
   flex-direction: column;
   width: ${({ width }) => (width ? `${width}` : "90%")};
 `;
