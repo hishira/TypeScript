@@ -33,6 +33,9 @@ export const UserEditModalComponent = ({
   const [login, setLogin] = useState<string>(user ? user.login : "");
   const [email, setEmail] = useState<string>(user ? user.email : "");
   const [password, setPassword] = useState<string | undefined>(undefined);
+  const [confirmPassword, setConfirmPassword] = useState<string | undefined>(
+    undefined
+  );
   const [importPassword, setImportPassword] = useState<string | undefined>(
     (user ? user.defaultPasswordForEntries : undefined) ?? undefined
   );
@@ -119,7 +122,8 @@ export const UserEditModalComponent = ({
           )}
         </PasswordText>
         <FormElements>
-          <FormElement
+          <ValidatorForm
+            validators={[Validators.PasswordValidation]}
             label={"userinformation.edit.password.label"}
             inputplaceholder="userinformation.edit.password.placeholder"
             inputChange={(e) => {
@@ -131,15 +135,21 @@ export const UserEditModalComponent = ({
             inputtype="password"
             value={password}
           />
-          <FormElement
+          <ValidatorForm
+            validators={[
+              Validators.PasswordValidation,
+              Validators.SaveValue(password, "Must be same as password"),
+            ]}
             label={"userinformation.edit.confirmpassword.label"}
             inputplaceholder="userinformation.edit.confirmpassword.label"
-            inputChange={() => {}}
+            inputChange={(e) => {
+              setConfirmPassword(e.target.value);
+            }}
             fontSize="16px"
             width="80%"
             inputFontSize="16px"
             inputtype="password"
-            value={""}
+            value={confirmPassword}
           />
         </FormElements>
         <UserEditModalButtons>
