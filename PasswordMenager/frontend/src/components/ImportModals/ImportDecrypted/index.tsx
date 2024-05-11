@@ -3,13 +3,18 @@ import { ImportModalOpenHandle } from "../../../hooks/importDecrypted.hook";
 import { Import } from "../../../utils/import.utils";
 import { ImportFile } from "../../ImportFille";
 import { AcceptModalComponent } from "../../Modal/AcceptModal";
+import { inject, observer } from "mobx-react";
+import { IGeneral } from "../../../models/General";
+import { InfoPopUpObject } from "../../../utils/popup.utils";
 type ImportDecryptedProps = {
   modalOpen: boolean;
   closeModalHandle: () => void;
+  store?: IGeneral
 };
-export const ImportDecrypted = ({
+const ImportDecrypted = ({
   modalOpen,
   closeModalHandle,
+  store
 }: ImportDecryptedProps): JSX.Element => {
   const [importModalOpen, setImportModalOpen] = useState<boolean>(modalOpen);
   const [formData, setFormData] = useState<FormData>();
@@ -31,10 +36,11 @@ export const ImportDecrypted = ({
   };
 
   const acceptHandleFunction = () => {
-    if (!formData) return;
-    Import.getInstance()
-      .ImportFile(formData, 0)
-      .catch(console.error);
+    if (!formData) {
+      store?.setPopUpinfo(InfoPopUpObject('Please select file'))
+      return;
+    }
+    Import.getInstance().ImportFile(formData, 0).catch(console.error);
   };
 
   ImportModalOpenHandle(setImportModalOpen, setuuid, modalOpen);
@@ -50,3 +56,5 @@ export const ImportDecrypted = ({
     <></>
   );
 };
+
+export default inject("store")(observer(ImportDecrypted));
