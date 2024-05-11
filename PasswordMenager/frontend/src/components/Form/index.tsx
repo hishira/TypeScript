@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../components/Button/index";
 import FormElement from "../FormElement/";
 import { Translation } from "../Translation";
@@ -21,6 +21,7 @@ interface Props {
   confirmpasshandle?: (value: string) => void;
   isEmail?: boolean;
   emailSetHandle?: (value: string) => void;
+  infoLogin?: UserAuth;
 }
 
 const FormComponent = ({
@@ -35,11 +36,23 @@ const FormComponent = ({
   confirmpasshandle,
   isEmail,
   emailSetHandle,
+  infoLogin,
 }: Props): JSX.Element => {
+  const [passwordErrors, setPasswordErrors] = useState<ErrorValue[]>([]);
   const handlethis = (value: string) => {
     if (confirmpasshandle) confirmpasshandle(value);
   };
-
+  const checkErrorsAndPass = (e: React.MouseEvent<HTMLElement>) => {
+    console.log(infoLogin);
+    if (infoLogin !== undefined) {
+      if (infoLogin.password === "") {
+        setPasswordErrors([{ message: "Pasword is required" }]);
+        return;
+      }
+    } else {
+      buttonHandle(e);
+    }
+  };
   const isEmailAvailable = isEmail && emailSetHandle;
   return (
     <Form>
@@ -50,6 +63,7 @@ const FormComponent = ({
         emailSetHandle={emailSetHandle as any}
       />
       <PasswordInputElement
+        formErrors={passwordErrors}
         inputChangeHandler={secondinputhandle}
         isSignUp={isEmail}
       />
@@ -62,7 +76,7 @@ const FormComponent = ({
         redirectTranslation={secondactionastirng}
       />
       <Button
-        onClick={buttonHandle}
+        onClick={(e) => checkErrorsAndPass(e)}
         type="submit"
         margintop={10}
         fullwidth

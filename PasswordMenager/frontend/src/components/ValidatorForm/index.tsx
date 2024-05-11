@@ -6,9 +6,10 @@ import { ValidatorElement, ValidatorSpanElement } from "./component.styled";
 type ValidatorFormProps = FormProps & {
   validators: ValidatorFn[];
   isValid?: (isValid: boolean) => void;
+  formErrors?: ErrorValue[];
 };
 export const ValidatorForm = (formProps: ValidatorFormProps) => {
-  const [errors, setErrors] = useState<ErrorValue[]>([]);
+  const [errors, setErrors] = useState<ErrorValue[]>(formProps.formErrors ?? []);
   console.log(formProps);
   const inputValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
     formProps.inputChange(e);
@@ -28,6 +29,15 @@ export const ValidatorForm = (formProps: ValidatorFormProps) => {
     setErrors((e) => e);
     formProps.isValid && formProps.isValid(errors.length <= 0);
   }, [errors]);
+  useEffect(() => {
+    if (
+      formProps?.errors !== undefined &&
+      Array.isArray(formProps?.errors) &&
+      formProps?.errors.length > 0
+    ) {
+      setErrors((e) => [...e, ...(formProps.formErrors as ErrorValue[])]);
+    }
+  }, [formProps.errors]);
   return (
     <>
       <FormElement

@@ -20,6 +20,7 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
     passwordchange,
     loginClickHandle,
     redirectFunction,
+    infoLogin,
   } = LoginUtils(history, store);
   LoginHook(history, store);
   return (
@@ -29,6 +30,7 @@ const LoginPage = ({ store }: Prop): JSX.Element => {
       ) : (
         <FormContainer>
           <FormComponent
+            infoLogin={infoLogin}
             firstinputhandle={loginchange}
             secondinputhandle={passwordchange}
             buttonmessage="page.login.button.text"
