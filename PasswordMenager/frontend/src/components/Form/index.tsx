@@ -39,6 +39,7 @@ const FormComponent = ({
   infoLogin,
 }: Props): JSX.Element => {
   const [passwordErrors, setPasswordErrors] = useState<ErrorValue[]>([]);
+  const [loginErrors, setLoginErrors] = useState<ErrorValue[]>([]);
   const handlethis = (value: string) => {
     if (confirmpasshandle) confirmpasshandle(value);
   };
@@ -47,7 +48,9 @@ const FormComponent = ({
     if (infoLogin !== undefined) {
       if (infoLogin.password === "") {
         setPasswordErrors([{ message: "Pasword is required" }]);
-        return;
+      }
+      if (infoLogin.login === "") {
+        setLoginErrors([{ message: "Login is required" }]);
       }
     } else {
       buttonHandle(e);
@@ -57,7 +60,10 @@ const FormComponent = ({
   return (
     <Form>
       <FormTitle>{Translation(maintitle)}</FormTitle>
-      <LoginInputElement inputChangeHandler={firstinputhandle} />
+      <LoginInputElement
+        formErrors={loginErrors}
+        inputChangeHandler={firstinputhandle}
+      />
       <FormEmailField
         isEmailAvailable={isEmailAvailable as boolean}
         emailSetHandle={emailSetHandle as any}
@@ -76,8 +82,8 @@ const FormComponent = ({
         redirectTranslation={secondactionastirng}
       />
       <Button
-        onClick={(e) => checkErrorsAndPass(e)}
-        type="submit"
+        onClick={checkErrorsAndPass}
+        type="button"
         margintop={10}
         fullwidth
         color="whitesmoke"
