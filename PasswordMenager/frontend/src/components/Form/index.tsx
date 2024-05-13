@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../components/Button/index";
 import FormElement from "../FormElement/";
 import { Translation } from "../Translation";
@@ -21,6 +21,7 @@ interface Props {
   confirmpasshandle?: (value: string) => void;
   isEmail?: boolean;
   emailSetHandle?: (value: string) => void;
+  infoLogin?: UserAuth;
 }
 
 const FormComponent = ({
@@ -35,21 +36,46 @@ const FormComponent = ({
   confirmpasshandle,
   isEmail,
   emailSetHandle,
+  infoLogin,
 }: Props): JSX.Element => {
+  const [passwordErrors, setPasswordErrors] = useState<ErrorValue[]>([]);
+  const [loginErrors, setLoginErrors] = useState<ErrorValue[]>([]);
   const handlethis = (value: string) => {
     if (confirmpasshandle) confirmpasshandle(value);
   };
-
+  const checkErrorsAndPass = (e: React.MouseEvent<HTMLElement>) => {
+    console.log(infoLogin);
+    if (infoLogin !== undefined) {
+      let isError = false;
+      if (infoLogin.password === "") {
+        setPasswordErrors([{ message: "Pasword is required" }]);
+        isError = true;
+      }
+      if (infoLogin.login === "") {
+        setLoginErrors([{ message: "Login is required" }]);
+        isError = true;
+      }
+      if (!isError) {
+        buttonHandle(e);
+      }
+    } else {
+      buttonHandle(e);
+    }
+  };
   const isEmailAvailable = isEmail && emailSetHandle;
   return (
     <Form>
       <FormTitle>{Translation(maintitle)}</FormTitle>
-      <LoginInputElement inputChangeHandler={firstinputhandle} />
+      <LoginInputElement
+        formErrors={loginErrors}
+        inputChangeHandler={firstinputhandle}
+      />
       <FormEmailField
         isEmailAvailable={isEmailAvailable as boolean}
         emailSetHandle={emailSetHandle as any}
       />
       <PasswordInputElement
+        formErrors={passwordErrors}
         inputChangeHandler={secondinputhandle}
         isSignUp={isEmail}
       />
@@ -62,8 +88,8 @@ const FormComponent = ({
         redirectTranslation={secondactionastirng}
       />
       <Button
-        onClick={buttonHandle}
-        type="submit"
+        onClick={checkErrorsAndPass}
+        type="button"
         margintop={10}
         fullwidth
         color="whitesmoke"

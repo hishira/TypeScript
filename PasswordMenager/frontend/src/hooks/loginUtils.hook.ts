@@ -68,5 +68,6 @@ export const LoginUtils = (history: { push: Function }, store?: IGeneral) => {
     loginchange,
     loginClickHandle,
     redirectFunction,
+    infoLogin,
   };
 };

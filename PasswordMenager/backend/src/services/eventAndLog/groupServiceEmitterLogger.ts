@@ -23,7 +23,7 @@ export class GroupServiceEmitterLogger {
     );
     this.eventEmitter.emitAsync(
       EventAction.Create,
-      new GroupEventBuilder(group._id, group).setCreateEvent().build,
+      new GroupEventBuilder(group._id, group).setCreateEvent().build(),
     );
   }
 
