@@ -22,25 +22,37 @@ export const ValidatorForm = (formProps: ValidatorFormProps) => {
         Object.keys(possibleErrors).forEach((errorKey) =>
           tmpErrors.push(possibleErrors[errorKey])
         );
-        tmpErrors = Array.from(new Set(tmpErrors));
+        tmpErrors = prepareUniqeErrorArray(...tmpErrors);
       }
     });
     formProps.isValid && formProps.isValid(tmpErrors.length <= 0);
     setErrors(tmpErrors);
   };
+  
   useEffect(() => {
     setErrors((e) => e);
     formProps.isValid && formProps.isValid(errors.length <= 0);
   }, [errors]);
+
   useEffect(() => {
     if (
       formProps?.formErrors !== undefined &&
       Array.isArray(formProps?.formErrors) &&
       formProps?.formErrors.length > 0
     ) {
-      setErrors((e) => [...e, ...(formProps.formErrors as ErrorValue[])]);
+      setErrors((e) =>
+        prepareUniqeErrorArray(...e, ...(formProps.formErrors as ErrorValue[]))
+      );
     }
   }, [formProps.formErrors]);
+
+  const prepareUniqeErrorArray = (...errors: ErrorValue[]): ErrorValue[] => {
+    const errorMessages: string[] = errors.map((error) => error.message);
+
+    return Array.from(new Set([...errorMessages])).map((errorMessage) => ({
+      message: errorMessage,
+    }));
+  };
   return (
     <FormElement
       {...formProps}

@@ -46,11 +46,17 @@ const FormComponent = ({
   const checkErrorsAndPass = (e: React.MouseEvent<HTMLElement>) => {
     console.log(infoLogin);
     if (infoLogin !== undefined) {
+      let isError = false;
       if (infoLogin.password === "") {
         setPasswordErrors([{ message: "Pasword is required" }]);
+        isError = true;
       }
       if (infoLogin.login === "") {
         setLoginErrors([{ message: "Login is required" }]);
+        isError = true;
+      }
+      if (!isError) {
+        buttonHandle(e);
       }
     } else {
       buttonHandle(e);
