@@ -63,7 +63,12 @@ export class HistoryRepository implements Repository<IHistory>, LoggerContext {
   }
 
   delete(option: DeleteOption<unknown>): Promise<IHistory | BaseError> {
-    throw new NotImplementedError();
+    return this.historyModel
+      .findOneAndDelete(option.getOption())
+      .exec()
+      .catch((error) =>
+        this.errorHandler.handle(error, HistoryErrorMapper.Delete),
+      );
   }
 
   deleteMany?: (option: DeleteOption<unknown>) => Promise<IHistory | BaseError>;

@@ -1,6 +1,7 @@
 export enum HistoryErrorMapper {
   Create = 'History repository: create method',
   Update = 'History repository: update method',
+  Delete = 'History reposityry: delete method',
 }
 export enum HistoryServiceMessage {
   Create = 'History service; create method',

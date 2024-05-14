@@ -76,7 +76,7 @@ export class ImportRequestRepository
   ): Promise<ImportRequest | BaseError> {
     const optionValue = option.getOption();
     return this.importRequestModal
-      .updateOne({ _id: optionValue._id }, { $set: { ...optionValue } })
+      .findOneAndUpdate({ _id: optionValue._id }, { $set: { ...optionValue } })
       .exec()
       .catch((error) =>
         this.errorHandler.handle(error, ImportRequestErrorMessages.Delete),
