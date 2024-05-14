@@ -68,7 +68,7 @@ export class NotificationRepository
 
   delete(option: DeleteOption<unknown>): Promise<INotification | BaseError> {
     return this.notificationModel
-      .deleteOne(option.getOption())
+      .findOneAndDelete(option.getOption())
       .exec()
       .catch((error) =>
         this.errorHandler.handle(error, NotificationErrorMessages.Delete),

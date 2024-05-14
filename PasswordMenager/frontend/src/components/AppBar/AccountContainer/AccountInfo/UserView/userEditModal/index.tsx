@@ -72,7 +72,8 @@ export const UserEditModalComponent = ({
       </UserEditTitle>
       <UserEditModalContainer>
         <FormElements>
-          <FormElement
+          <ValidatorForm
+            validators={[Validators.Required]}
             label={"userinformation.edit.login.label"}
             inputplaceholder="userinformation.edit.login.label"
             inputChange={(e) => {

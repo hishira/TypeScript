@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { BaseError } from 'src/errors/bace-error';
 import { DeleteOption } from 'src/schemas/Interfaces/deleteoption.interface';
 import { IEvent } from 'src/schemas/Interfaces/event.interface';
 import { FilterOption } from 'src/schemas/Interfaces/filteroption.interface';
@@ -33,10 +34,10 @@ export class EventRepository implements Repository<IEvent> {
   update(entry: Partial<IEvent>): Promise<IEvent> {
     throw new Error('Method not implemented.');
   }
-  delete(option: DeleteOption<unknown>): Promise<unknown> {
+  delete(option: DeleteOption<unknown>): Promise<IEvent | BaseError> {
     throw new Error('Method not implemented.');
   }
-  deleteMany?: (option: DeleteOption<unknown>) => Promise<unknown>;
+  deleteMany?: (option: DeleteOption<unknown>) => Promise<IEvent | BaseError>;
   getById(): Promise<IEvent> {
     throw new Error('Method not implemented.');
   }
