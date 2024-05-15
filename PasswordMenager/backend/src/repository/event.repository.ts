@@ -37,7 +37,7 @@ export class EventRepository implements Repository<IEvent> {
   delete(option: DeleteOption<unknown>): Promise<IEvent | BaseError> {
     throw new Error('Method not implemented.');
   }
-  deleteMany?: (option: DeleteOption<unknown>) => Promise<IEvent | BaseError>;
+  deleteMany?: (option: DeleteOption<unknown>) => Promise<IEvent | BaseError  >;
   getById(): Promise<IEvent> {
     throw new Error('Method not implemented.');
   }
