@@ -1,6 +1,8 @@
 import Button from "../../Button";
 import FormElement from "../../FormElement";
 import { Translation, TranslationFunction } from "../../Translation";
+import { ValidatorForm } from "../../ValidatorForm";
+import { Validators } from "../../ValidatorForm/validators";
 import { TitleContainer } from "../../shared/styled-components";
 import { NewGroup } from "./component.styled";
 
@@ -19,7 +21,8 @@ const NewGroupComponent = ({
       <TitleContainer>
         {TranslationFunction("group.newgroup.modal.title")}
       </TitleContainer>
-      <FormElement
+      <ValidatorForm
+        validators={[Validators.Required]}
         label="groups.newgroup.groupname"
         inputtype="text"
         inputplaceholder="groups.newgroup.name"

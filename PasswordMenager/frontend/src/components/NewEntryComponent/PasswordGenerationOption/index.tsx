@@ -67,7 +67,7 @@ export const PasswordGeneratorOption = ({
           </div>
           <Button
             size="small"
-            color="lightblue"
+            color="white"
             onClick={editEntry.generateHandle.bind(editEntry)}
           >
             {Translation("newentry.action.generate")}

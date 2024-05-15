@@ -158,7 +158,7 @@ const NewEntryComponent = ({
             />
 
             <ButtonsRangeContainer style={{ position: "relative" }}>
-              <Button onClick={() => setGeneratePasswordModal(true)}>
+              <Button color="#F6F5F2" onClick={() => setGeneratePasswordModal(true)}>
                 {Translation("newentry.action.generator")}
               </Button>
             </ButtonsRangeContainer>
