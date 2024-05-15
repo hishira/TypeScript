@@ -12,7 +12,6 @@ export class DeleteNotificationCommandHandler
   execute(
     command: DeleteNotificationCommand,
   ): Promise<INotification | BaseError> {
-    //TODO: Change to return notification
     return this.repository.delete({
       getOption: () => ({ _id: command.deleteNotificationInput._id }),
     });

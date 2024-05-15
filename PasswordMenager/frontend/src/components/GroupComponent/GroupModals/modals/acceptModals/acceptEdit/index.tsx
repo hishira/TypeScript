@@ -1,5 +1,7 @@
 import FormElement from "../../../../../FormElement";
 import { TranslationFunction } from "../../../../../Translation";
+import { ValidatorForm } from "../../../../../ValidatorForm";
+import { Validators } from "../../../../../ValidatorForm/validators";
 import { TitleContainer } from "../../../../../shared/styled-components";
 import { AcceptModalContainer } from "../../../component.styled";
 
@@ -14,9 +16,10 @@ export const AcceptEditModal = ({
   return (
     <AcceptModalContainer>
       <TitleContainer>
-        {TranslationFunction('group.editgroup.modal.title')}
+        {TranslationFunction("group.editgroup.modal.title")}
       </TitleContainer>
-      <FormElement
+      <ValidatorForm
+        validators={[Validators.Required]}
         label={"groups.groupsmodal.newgroupname"}
         inputplaceholder="groups.groupsmodal.newgroupname"
         inputChange={(e) => setNewName(e.target.value)}

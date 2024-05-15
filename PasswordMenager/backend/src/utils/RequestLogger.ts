@@ -5,19 +5,18 @@ import { NextFunction, Request, Response } from 'express';
 export class RequestLogger implements NestMiddleware {
   private logger = new Logger('HTTP');
   use(request: Request, response: Response, next: NextFunction): void {
-    const { ip, method, path: url } = request;
+    const { ip, method, path: url, baseUrl } = request;
     let startTime;
     let endTime;
     request.on('close', () => {
-      this.logger.log(`${method} ${url} - ${ip} - START`);
+      this.logger.log(`${method} ${baseUrl + url} - START`);
       startTime = new Date().getMilliseconds();
     });
     response.on('finish', () => {
       const { statusCode } = response;
-      const contentLength = response.get('content-length');
       endTime = new Date().getMilliseconds();
       this.logger.log(
-        `${method} ${url} ${statusCode} ${contentLength} ${ip} - END TIME ${
+        `${method} ${baseUrl + url} ${statusCode} - END TIME ${
           endTime - startTime
         }ms`,
       );
