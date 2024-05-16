@@ -69,23 +69,25 @@ export class ExportController {
 
   @UseGuards(AuthGuard('accessToken'))
   @Get('encrypted')
-  async getEncryptFile(
+  getEncryptFile(
     @Req() req,
     @Res() res: Response,
   ): Promise<void | Response<string, Record<string, Record<string, string>>>> {
-    const encyptedBuffer = await this.exportService.getEncryptedFile(
-      req.user._id,
-    );
-    res.set({
-      'Content-Disposition': 'attachment; filename=example.txt.xyz',
-      'Content-Type': 'text/xyz',
-    });
-    return res.send(encyptedBuffer);
+    //TODO: Check if work
+    return this.exportService
+      .getEncryptedFile(req.user._id)
+      .then((response) => {
+        res.set({
+          'Content-Disposition': 'attachment; filename=example.txt.xyz',
+          'Content-Type': 'text/xyz',
+        });
+        return res.send(response);
+      });
   }
 
   @Get('encryptedCsv')
   @UseGuards(AuthGuard('accessToken'))
-  async getEncryptCsv(
+  getEncryptCsv(
     @Request() req,
     @Res() response: Response,
   ): Promise<void | Response<string, Record<string, Record<string, string>>>> {
