@@ -59,6 +59,7 @@ const PassBar = ({ store }: { store?: IGeneral }): JSX.Element => {
           <NewEntryComponent
             refreshentry={false}
             refresh={refreshEntryAfterCreate}
+            closeModalDispatcherHandle={setmodalopen}
           />
         }
       />

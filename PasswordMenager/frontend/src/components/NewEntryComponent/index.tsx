@@ -18,6 +18,9 @@ import {
 } from "./component.styled";
 import { NewEntryUtils } from "./newentry.utils";
 import { NewEntryProps } from "./types";
+import { ValidatorForm } from "../ValidatorForm";
+import { Validators } from "../ValidatorForm/validators";
+import { CloseIcon } from "../icons/CloseIcon";
 
 const PasswordElementContainer = ({
   newentry,
@@ -31,7 +34,8 @@ const PasswordElementContainer = ({
   editEntry: EditEntryActionDispatcher;
 }) => (
   <PasswordFormContainer>
-    <FormElement
+    <ValidatorForm
+      validators={[Validators.Required]}
       label={"newentry.field.password"}
       inputplaceholder="***"
       width="90%"
@@ -116,16 +120,21 @@ const NewEntryComponent = ({
         <div>
           <EntryModalComponent disabled={generatePasswordModal}>
             <TitleContainer>
-              {TranslationFunction(edit ? "edit.title" : "newentry.title")}
+              <span>
+                {TranslationFunction(edit ? "edit.title" : "newentry.title")}
+              </span>
+              <CloseIcon click={() => closeModalDispatcherHandle?.(false)} />
             </TitleContainer>
-            <FormElement
+            <ValidatorForm
+              validators={[Validators.Required]}
               label={"newentry.field.title"}
               inputplaceholder="newentry.field.title"
               inputChange={editEntry.settitle.bind(editEntry)}
               inputtype="txt"
               value={newentry.title}
             />
-            <FormElement
+            <ValidatorForm
+              validators={[Validators.Required]}
               label={"newentry.field.username"}
               inputplaceholder="newentry.field.username"
               inputChange={editEntry.setusername.bind(editEntry)}
@@ -158,7 +167,10 @@ const NewEntryComponent = ({
             />
 
             <ButtonsRangeContainer style={{ position: "relative" }}>
-              <Button color="#F6F5F2" onClick={() => setGeneratePasswordModal(true)}>
+              <Button
+                color="#F6F5F2"
+                onClick={() => setGeneratePasswordModal(true)}
+              >
                 {Translation("newentry.action.generator")}
               </Button>
             </ButtonsRangeContainer>
