@@ -4,6 +4,11 @@ export const TitleContainer = styled.div`
   font-size: 20px;
   font-weight: 550;
   color: rgba(0, 0, 0, 0.8);
+  position: relative;
+  & > svg {
+    position: absolute;
+    right: 0;
+  }
 `;
 
 export const ContentContainer = styled.div`
