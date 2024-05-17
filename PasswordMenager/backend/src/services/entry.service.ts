@@ -9,7 +9,10 @@ import { DeleteByGroupEvent } from 'src/events/deleteEntryByGroupEvent';
 import { EventTypes } from 'src/events/eventTypes';
 import { InsertmanyEntryEvent } from 'src/events/insertManyEntryEvent';
 import { FindEntryInput } from 'src/handlers/queries/entry/entriesFindInput';
-import { GetSpecificEntry } from 'src/queries/entry/getSpecificEntry.queries';
+import {
+  DefaultDeleteSpecificEntry,
+  GetSpecificEntry,
+} from 'src/queries/entry/getSpecificEntry.queries';
 import { EmptyRespond, EmptyResponse } from 'src/response/empty.response';
 import { CreateEntryDto } from 'src/schemas/dto/createentry.dto';
 import { EntryServiceEmitterLogger } from 'src/services/eventAndLog/entryServiceEmitterLogger';
@@ -123,13 +126,7 @@ export class EntryService implements LoggerContext {
   }
 
   getLastDeletedUserEntries(userid: string): Promise<IEntry[] | EntryData> {
-    return this.queryBus.execute(
-      new GetSpecificEntry({
-        userId: userid,
-        entryState: EntryState.DELETED,
-        limit: 10,
-      }),
-    );
+    return this.queryBus.execute(DefaultDeleteSpecificEntry(userid));
   }
 
   activateDeletedEntreis(entryId: string): Promise<IEntry[]> {

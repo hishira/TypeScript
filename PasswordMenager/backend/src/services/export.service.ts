@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as Archiver from 'archiver';
-import { IEntry } from 'src/schemas/Interfaces/entry.interface';
+import { EntryData, IEntry } from 'src/schemas/Interfaces/entry.interface';
 import { Logger } from 'src/utils/Logger';
 import { CsvFile } from 'src/utils/csv.util';
 import { CsvEntry } from 'src/utils/csvEntry';
@@ -48,19 +48,9 @@ export class ExportService implements LoggerContext {
       `Prepare csv file for user = ${userId}`,
       ExportServiceMessage.CsvFile,
     );
-    return this.entryService.getByUser(userId, 100000).then((resp) => {
-      const csvRows: CsvEntry[] = EntryToCsvEntryMapper(
-        'data' in resp ? resp?.data : resp,
-      );
-      const csv = new CsvFile(CsvFile.DefaultCsvHeader)
-        .setRows(csvRows)
-        .getCsvAsString();
-      this.logHandler.handle(
-        `Csv file send for user id = ${userId}`,
-        ExportServiceMessage.CsvFile,
-      );
-      return csv;
-    });
+    return this.entryService
+      .getByUser(userId, 100000)
+      .then((resp) => this.prepareCsvAndLogHandle(userId, resp));
   }
 
   getJsonFile(userId): Promise<IEntry[]> {
@@ -93,5 +83,22 @@ export class ExportService implements LoggerContext {
   async getEncryptedFile(userId: string): Promise<Buffer> {
     const entries = await this.entryService.getByUser(userId);
     return ExportCsvUtils.GetEncryptedDataBuffer(entries);
+  }
+
+  private prepareCsvAndLogHandle(
+    userId: string,
+    resp: IEntry[] | EntryData,
+  ): string {
+    const csvRows: CsvEntry[] = EntryToCsvEntryMapper(
+      'data' in resp ? resp?.data : resp,
+    );
+    const csv = new CsvFile(CsvFile.DefaultCsvHeader)
+      .setRows(csvRows)
+      .getCsvAsString();
+    this.logHandler.handle(
+      `Csv file send for user id = ${userId}`,
+      ExportServiceMessage.CsvFile,
+    );
+    return csv;
   }
 }

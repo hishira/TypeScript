@@ -49,16 +49,16 @@ export class ImportService implements LoggerContext {
   ): Promise<unknown> {
     return this.queryBus
       .execute(new GetImportQuery({ id: importRequestId }))
-      .then((importRequest: ImportRequest[]) =>
-        this.retrieveFirstImportRequest(importRequest),
-      )
-      .then((importRequest) => {
-        this.handleActivateImportRequest(importRequest, userId);
-        return importRequest;
+      .then((importRequest: ImportRequest[]) => {
+        const firstImportRequest =
+          this.retrieveFirstImportRequest(importRequest);
+        this.handleActivateImportRequest(firstImportRequest, userId);
+        this.importServiceEventLogger.activeImportRequestSuccessfull(
+          firstImportRequest,
+        );
+        return firstImportRequest;
       })
-      .then((response) =>
-        this.importServiceEventLogger.activeImportRequestSuccessfull(response),
-      )
+
       .catch((error) =>
         this.importServiceEventLogger.activeImportRequestError(
           importRequestId,
