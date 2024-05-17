@@ -79,18 +79,6 @@ export class NotificationService implements NotificationCron, LoggerContext {
       payload.passwordExpireDate,
     );
   }
-  private getActiveNotificationAsPromise(): Promise<
-    Promise<boolean | SMTPTransport.SentMessageInfo>[]
-  > {
-    return this.activeNotification.then((notifications) => {
-      return notifications.map((notification) => {
-        if (NotificationUtils.SendNotification(notification)) {
-          return this.notificationSend();
-        }
-        return Promise.resolve(true);
-      });
-    });
-  }
 
   create(notificationDTO: CreateNotificationDTO): Promise<INotification> {
     return this.commandBus
@@ -178,5 +166,30 @@ export class NotificationService implements NotificationCron, LoggerContext {
           error,
         ),
       );
+  }
+
+  private getActiveNotificationAsPromise(): Promise<
+    Promise<boolean | SMTPTransport.SentMessageInfo>[]
+  > {
+    return this.activeNotification.then((notifications) =>
+      this.getPromiseSendedNotification(notifications),
+    );
+  }
+
+  private getPromiseSendedNotification(
+    notifications: INotification[],
+  ): Promise<boolean | SMTPTransport.SentMessageInfo>[] {
+    return notifications.map((notification) =>
+      this.sendNotificationOrGetTrue(notification),
+    );
+  }
+
+  private sendNotificationOrGetTrue(
+    notification: INotification,
+  ): Promise<boolean | SMTPTransport.SentMessageInfo> {
+    if (NotificationUtils.SendNotification(notification)) {
+      return this.notificationSend();
+    }
+    return Promise.resolve(true);
   }
 }

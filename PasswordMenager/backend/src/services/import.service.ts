@@ -26,6 +26,7 @@ import {
 import { ImportRequestStream } from 'src/utils/importRequest.util';
 import { Paginator } from 'src/utils/paginator';
 import { ImportServiceEventLogger } from './eventAndLog/importServiceEventLogger';
+import { IEntry } from 'src/schemas/Interfaces/entry.interface';
 
 @Injectable()
 export class ImportService implements LoggerContext {
@@ -83,27 +84,32 @@ export class ImportService implements LoggerContext {
     userid: string,
     writeType: 'csv' | 'json',
   ): Promise<ImportEntryResponse> {
-    const importRequestStream = new ImportRequestStream(file, writeType);
-    let entries = [];
-    this.importServiceEventLogger.tryToImportEntries(userid);
-    return importRequestStream
-      .getPromise()
-      .then((entryImport) => {
-        entries = entryImport;
-        return this.commandBus.execute(
-          new CreateImportRequestCommand(
-            new ImportRequestDto(userid, entryImport),
-          ),
-        );
-      })
-      .then((importRequest) => {
-        return new ImportEntriesResponse(entries, importRequest)
-          .ResponseResolve;
-      })
-      .then((response) => {
-        this.importServiceEventLogger.importEntriesSuccess(response);
+    // TODO: Check after refactor
+    // const importRequestStream = new ImportRequestStream(file, writeType);
+    // let entries = [];
+    // this.importServiceEventLogger.tryToImportEntries(userid);
+    // return importRequestStream
+    //   .getPromise()
+    //   .then((entryImport) => {
+    //     entries = entryImport;
+    //     return this.commandBus.execute<
+    //       CreateImportRequestCommand,
+    //       ImportRequest
+    //     >(
+    //       new CreateImportRequestCommand(
+    //         new ImportRequestDto(userid, entryImport),
+    //       ),
+    //     );
+    //   })
+    return this.getImportRequestStreamResult(file, userid, writeType)
+      .then(({ entries, importRequest }) => {
+        const importEntryResponse = new ImportEntriesResponse(
+          entries,
+          importRequest,
+        ).ResponseResolve;
+        this.importServiceEventLogger.importEntriesSuccess(importEntryResponse);
 
-        return response;
+        return importEntryResponse;
       })
       .catch((error) => {
         this.importServiceEventLogger.importEntriesError();
@@ -164,5 +170,29 @@ export class ImportService implements LoggerContext {
       EventTypes.InsertManyEntry,
       new InsertmanyEntryEvent(dtosObjects),
     );
+  }
+
+  private getImportRequestStreamResult(
+    file: Express.Multer.File,
+    userid: string,
+    writeType: 'csv' | 'json',
+  ): Promise<{ importRequest: ImportRequest; entries: IEntry[] }> {
+    const importRequestStream = new ImportRequestStream(file, writeType);
+    let entries = [];
+    this.importServiceEventLogger.tryToImportEntries(userid);
+    return importRequestStream
+      .getPromise()
+      .then((entryImport) => {
+        entries = entryImport;
+        return this.commandBus.execute<
+          CreateImportRequestCommand,
+          ImportRequest
+        >(
+          new CreateImportRequestCommand(
+            new ImportRequestDto(userid, entryImport),
+          ),
+        );
+      })
+      .then((importRequest) => ({ entries, importRequest }));
   }
 }
