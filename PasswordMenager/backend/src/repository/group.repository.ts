@@ -57,23 +57,7 @@ export class GroupRepository implements Repository<IGroup>, LoggerContext {
   update(entry: Partial<IGroup>): Promise<IGroup | GroupError> {
     return this.groupModel
       .findById(entry._id)
-      .then((group) => {
-        return this.groupModel
-          .findByIdAndUpdate(
-            { _id: entry._id },
-            new GroupBuilder(entry)
-              .metaLastNameUpdate(group.name)
-              .getUpdateSetObject(),
-            { returnDocument: 'after' },
-          )
-          .then((data) => data)
-          .catch((error) =>
-            this.errorHandler.handle(
-              error,
-              GroupModelErrorMap.FincByIdAndUpdate,
-            ),
-          );
-      })
+      .then((group) => this.handleGroupUpdate(group, entry))
       .catch((error) =>
         this.errorHandler.handle(new GroupError(error), GroupErrorMap.Update),
       );
@@ -90,5 +74,23 @@ export class GroupRepository implements Repository<IGroup>, LoggerContext {
 
   getById(): Promise<IGroup> {
     throw new NotImplementedError();
+  }
+
+  private handleGroupUpdate(
+    group: IGroup,
+    entry: Partial<IGroup>,
+  ): Promise<IGroup> {
+    return this.groupModel
+      .findByIdAndUpdate(
+        { _id: entry._id },
+        new GroupBuilder(entry)
+          .metaLastNameUpdate(group.name)
+          .getUpdateSetObject(),
+        { returnDocument: 'after' },
+      )
+      .then((data) => data)
+      .catch((error) =>
+        this.errorHandler.handle(error, GroupModelErrorMap.FincByIdAndUpdate),
+      );
   }
 }

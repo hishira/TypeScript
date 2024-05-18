@@ -41,11 +41,7 @@ export class ImportRequestRepository
   ): Promise<ImportRequest[] | { data: ImportRequest[]; pageInfo: Paginator }> {
     if ('_id' in option.getOption())
       return this.findById(option.getOption()._id).then((resp) => [resp]);
-    return Promise.resolve(
-      this.importRequestModal.find({ ...option.getOption() }),
-    ).catch((error) =>
-      this.errorHandler.handle(error, ImportRequestErrorMessages.Find),
-    );
+    return this.resolveDefaultFind(option);
   }
 
   findById(id: string): Promise<ImportRequest> {
@@ -89,5 +85,15 @@ export class ImportRequestRepository
 
   getById(): Promise<ImportRequest> {
     throw new Error('Method not implemented.');
+  }
+
+  private resolveDefaultFind(
+    option: FilterOption<FilterQuery<ImportRequest>>,
+  ): Promise<ImportRequest[]> {
+    return Promise.resolve(
+      this.importRequestModal.find({ ...option.getOption() }),
+    ).catch((error) =>
+      this.errorHandler.handle(error, ImportRequestErrorMessages.Find),
+    );
   }
 }

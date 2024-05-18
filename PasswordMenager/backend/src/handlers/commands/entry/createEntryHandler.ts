@@ -27,14 +27,17 @@ export class CreateEntryHandler
   }
 
   private emitNotificationCreate(response: IEntry): IEntry {
-    if ('message' in response) return response;
-    const passwordExpireDate = response.passwordExpiredDate;
-    if (passwordExpireDate === null || passwordExpireDate === undefined)
+    if ('message' in response) {
       return response;
-    this.eventEmitter.emit(
-      EventTypes.CreateNotification,
-      new CreateNotificationEvent(passwordExpireDate, response),
-    );
+    }
+
+    const { passwordExpiredDate } = response;
+    if (passwordExpiredDate != null) {
+      this.eventEmitter.emit(
+        EventTypes.CreateNotification,
+        new CreateNotificationEvent(passwordExpiredDate, response),
+      );
+    }
 
     return response;
   }
