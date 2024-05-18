@@ -15,9 +15,11 @@ import {
 import { IUser } from '../schemas/Interfaces/user.interface';
 import { AuthInfo } from '../schemas/dto/auth.dto';
 import { AuthServiceEventLog } from './eventAndLog/authServiceEventLog';
+import { TokenGenerator } from './service-utils/auth.utils';
 @Injectable()
 export class AuthService implements LoggerContext {
   private eventLogHelper: AuthServiceEventLog;
+  private tokenGenerator: TokenGenerator;
   constructor(
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
@@ -28,43 +30,44 @@ export class AuthService implements LoggerContext {
       new LogHandler(this),
       this.eventEmitter,
     );
+    this.tokenGenerator = new TokenGenerator(this.jwtService);
   }
 
   createUser(user: CreateUserDto): Promise<CreateUserDto> {
     return this.eventLogHelper.emitPromiseCreateUserEvent(user);
   }
 
-  async valideteUser(userinfo: AuthInfo): Promise<IUser | null> {
+  valideteUser(userinfo: AuthInfo): Promise<IUser | null> {
     return this.queryBus
       .execute(new GetFilteredUserQueries({ login: userinfo.login }))
       .then(UserUtils.GetFirstUserFromTableOrNull)
       .then((user) => {
-        if (user === null) {
-          this.eventLogHelper.userNotExistsDebug();
-
-          return null;
-        }
-        if (user.validatePassword(userinfo.password)) {
-          this.eventLogHelper.userLoginEvent(userinfo);
-
-          return user;
-        }
-        this.eventLogHelper.createLoginEventAndDebug(userinfo);
+        return this.userCheckAndEventHandle(user, userinfo);
       });
   }
 
   login(user: IUser): TokenObject {
-    const payload = { login: user.login, _id: user._id };
-    return {
-      access_token: this.jwtService.sign(payload, AccessTokenOptions),
-      refresh_token: this.jwtService.sign(payload, RefreshTokenOptions),
-    };
+    return this.tokenGenerator.generateLoginToken(user);
   }
 
   refreshaccesstoken(user: IUser): AccesTokenObject {
-    const payload = user;
-    return {
-      access_token: this.jwtService.sign(payload, RefreshAccessTokenOptions),
-    };
+    return this.tokenGenerator.refreshAccessToken(user);
+  }
+
+  private userCheckAndEventHandle(
+    user: IUser,
+    userinfo: AuthInfo,
+  ): IUser | null {
+    if (user === null) {
+      this.eventLogHelper.userNotExistsDebug();
+
+      return null;
+    }
+    if (user.validatePassword(userinfo.password)) {
+      this.eventLogHelper.userLoginEvent(userinfo);
+
+      return user;
+    }
+    this.eventLogHelper.createLoginEventAndDebug(userinfo);
   }
 }

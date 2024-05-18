@@ -6,6 +6,7 @@ import { IUser } from 'src/schemas/Interfaces/user.interface';
 import { Paginator } from 'src/utils/paginator';
 import { BaseQueryHandler } from '../BaseQueryHandler';
 import { BaseError } from 'src/errors/bace-error';
+import { FilterUserInput } from 'src/queries/user/FilterUserInput';
 
 type UsersReturn =
   | IUser[]
@@ -23,16 +24,20 @@ export class GetFilteredUserQueryHandler
   ): Promise<IUser | UsersReturn | PaginatorData<IUser> | BaseError> {
     const { input } = query;
     if ('login' in input) {
-      const userByLogin: FilterOption<FilterQuery<IUser>> = {
-        getOption() {
-          return {
-            login: input.login,
-          };
-        },
-      };
-
-      return this.repository.find(userByLogin);
+      return this.repository.find(this.prepareLoginInput(input));
     }
     return this.repository.findById(input.userid);
+  }
+
+  private prepareLoginInput(
+    input: FilterUserInput,
+  ): FilterOption<FilterQuery<IUser>> {
+    return {
+      getOption(): FilterQuery<IUser> {
+        return {
+          login: input.login,
+        };
+      },
+    };
   }
 }
