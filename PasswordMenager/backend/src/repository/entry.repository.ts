@@ -176,26 +176,13 @@ export class EntryRepository implements Repository<IEntry>, LoggerContext {
     updatedEntry: Partial<IEntry>,
     data: Partial<IEntry>,
   ): void {
-    const entryUpdateObject = this.getUpdateInfo(entry, updatedEntry);
-    if (entryUpdateObject.noteUpdate) {
-      builder.entryNoteUpdate(entry.note);
-    }
-    if (entryUpdateObject.passwordUpdate) {
-      builder.entryPasswordUpdate(
-        updatedEntry.userid,
-        updatedEntry.password,
-        data,
-      );
-    }
-    if (entryUpdateObject.titleUpdate) {
-      builder.setTitle(entry.title);
-    }
-    if (entryUpdateObject.userNameUpdate) {
-      builder.setUsername(entry.username);
-    }
-    if (entryUpdateObject.stateUpdate) {
-      builder.setState(entry.state);
-    }
+    EntryBuilder.partialBuildEntry(
+      builder,
+      entry,
+      data,
+      updatedEntry,
+      this.getUpdateInfo(entry, updatedEntry),
+    );
   }
 
   private createEditentity(

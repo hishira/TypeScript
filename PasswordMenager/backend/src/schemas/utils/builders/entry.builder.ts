@@ -175,4 +175,74 @@ export class EntryBuilder {
     };
     return this;
   }
+
+  static partialBuildEntry(
+    builder: EntryBuilder,
+    entry: Partial<IEntry>,
+    data: Partial<IEntry>,
+    updatedEntry: Partial<IEntry>,
+    entryUpdateObject: UpdateEntryCheck,
+  ): void {
+    builder
+      .partialUpdateNote(entryUpdateObject, entry)
+      .partialPasswordUpdate(entryUpdateObject, updatedEntry, data)
+      .partialTitleUpdate(entryUpdateObject, entry)
+      .partialUserNameUpdate(entryUpdateObject, entry)
+      .partialStateUpdate(entryUpdateObject, entry);
+  }
+
+  partialUpdateNote(
+    entryUpdateObject: UpdateEntryCheck,
+    entry: Partial<IEntry>,
+  ): this {
+    if (entryUpdateObject.noteUpdate) {
+      this.entryNoteUpdate(entry.note);
+    }
+    return this;
+  }
+
+  partialPasswordUpdate(
+    entryUpdateObject: UpdateEntryCheck,
+    updatedEntry: Partial<IEntry>,
+    data: Partial<IEntry>,
+  ): this {
+    if (entryUpdateObject.passwordUpdate) {
+      this.entryPasswordUpdate(
+        updatedEntry.userid,
+        updatedEntry.password,
+        data,
+      );
+    }
+    return this;
+  }
+
+  partialTitleUpdate(
+    entryUpdateObject: UpdateEntryCheck,
+    entry: Partial<IEntry>,
+  ): this {
+    if (entryUpdateObject.titleUpdate) {
+      this.setTitle(entry.title);
+    }
+    return this;
+  }
+
+  partialUserNameUpdate(
+    entryUpdateObject: UpdateEntryCheck,
+    entry: Partial<IEntry>,
+  ): this {
+    if (entryUpdateObject.userNameUpdate) {
+      this.setUsername(entry.username);
+    }
+    return this;
+  }
+
+  partialStateUpdate(
+    entryUpdateObject: UpdateEntryCheck,
+    entry: Partial<IEntry>,
+  ): this {
+    if (entryUpdateObject.stateUpdate) {
+      this.setState(entry.state);
+    }
+    return this;
+  }
 }
