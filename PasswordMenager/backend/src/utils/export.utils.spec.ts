@@ -101,7 +101,7 @@ describe('ExportCsvUtils', () => {
         'sha256',
       );
       expect(createCipheriv).toHaveBeenCalledWith('aes-256-cbc', key, iv);
-      expect(cipher.update).toHaveBeenCalledWith('dupa123', 'utf8', 'hex');
+      expect(cipher.update).toHaveBeenCalledWith('dupa123', 'utf8', 'base64');
       expect(cipher.final).toHaveBeenCalled();
     });
   });

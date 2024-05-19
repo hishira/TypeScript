@@ -1,8 +1,15 @@
+import i18next from "i18next";
+import i18n from "../../i18n";
 
-export const RequiredErrors: ValidatorErrors = {
-  required: {
-    message: "Field is required",
-  },
+import { TranslationFunction } from "../Translation";
+// import i18n from "i18next";
+export const RequiredErrors: () => ValidatorErrors = () => {
+  const text = i18next.t("validation.errors.required");
+  return {
+    required: {
+      message: text,
+    },
+  };
 };
 export const MinLengthErrors: (minLength: number) => ValidatorErrors = (
   minLength: number
@@ -23,6 +30,7 @@ export const EmailError: ValidatorErrors = {
 };
 export const PasswordError: ValidatorErrors = {
   password: {
-    message: "Password must contain at least 8 characters, has at least one big, small and speciall character.",
+    message:
+      "Password must contain at least 8 characters, has at least one big, small and speciall character.",
   },
 };

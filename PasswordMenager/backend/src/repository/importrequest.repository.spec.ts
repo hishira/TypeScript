@@ -78,7 +78,7 @@ describe('ImportRequestRepository', () => {
 
   describe('Delete', () => {
     it('Should use updateOne funcion from model', async () => {
-      const spy = jest.spyOn(model, 'updateOne');
+      const spy = jest.spyOn(model, 'findOneAndUpdate');
       await importRequestRepository.delete({
         getOption: () => ({ _id: 'test-id' }),
       });

@@ -98,7 +98,7 @@ describe('NotificationRepository', () => {
 
   describe('Delete', () => {
     it('should use deleteOne function', async () => {
-      const spy = jest.spyOn(notificationModel, 'deleteOne');
+      const spy = jest.spyOn(notificationModel, 'findOneAndDelete');
       await notificationRepo.delete({ getOption: () => ({}) });
       expect(spy).toHaveBeenCalledTimes(1);
     });

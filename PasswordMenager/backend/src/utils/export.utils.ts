@@ -54,13 +54,13 @@ export class ExportCsvUtils {
       ExportCsvUtils.GenerateValueForEntryptedData(password);
 
     const cipher = ExportCsvUtils.GetCipherForEncryptData(key, iv);
-    let encryptedContent = cipher.update(fileContent, 'utf8', 'hex');
-    encryptedContent += cipher.final('hex');
+    let encryptedContent = cipher.update(fileContent, 'utf8', 'base64');
+    encryptedContent += cipher.final('base64');
     // Save salt and iv in file
     const encryptedData = Buffer.concat([
       salt,
       iv,
-      Buffer.from(encryptedContent, 'hex'),
+      Buffer.from(encryptedContent, 'base64'),
     ]);
     return encryptedData;
   }
