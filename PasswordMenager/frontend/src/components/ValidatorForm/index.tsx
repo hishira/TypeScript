@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import FormElement, { FormProps } from "../FormElement";
 import { ErrorContainer, Errors } from "../shared/styled-components";
 import { ValidatorElement, ValidatorSpanElement } from "./component.styled";
+import i18next from "i18next";
 
 type ValidatorFormProps = FormProps & {
   validators: ValidatorFn[];
@@ -9,6 +10,7 @@ type ValidatorFormProps = FormProps & {
   formErrors?: ErrorValue[];
 };
 export const ValidatorForm = (formProps: ValidatorFormProps) => {
+  console.log(i18next.t('validation.errors.required'));
   const [errors, setErrors] = useState<ErrorValue[]>(
     formProps.formErrors ?? []
   );
@@ -28,7 +30,7 @@ export const ValidatorForm = (formProps: ValidatorFormProps) => {
     formProps.isValid && formProps.isValid(tmpErrors.length <= 0);
     setErrors(tmpErrors);
   };
-  
+
   useEffect(() => {
     setErrors((e) => e);
     formProps.isValid && formProps.isValid(errors.length <= 0);

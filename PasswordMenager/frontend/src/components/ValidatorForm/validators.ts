@@ -13,7 +13,7 @@ const PASSWORD_REGEXP: RegExp =
 const EMAIL_REGEXP: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 export namespace Validators {
   export const Required: ValidatorFn = (value: unknown): ValidatorErrors => {
-    return IsUndefined(value) ? RequiredErrors : null;
+    return IsUndefined(value) ? RequiredErrors() : null;
   };
 
   export const MinLength: (minLength: number) => ValidatorFn =

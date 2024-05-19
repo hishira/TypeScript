@@ -55,6 +55,12 @@ export class NotificationMock {
     };
   }
 
+  static findOneAndDelete(options) {
+    return {
+      exec: () => Promise.resolve(notificationMock()),
+    };
+  }
+
   static deleteOne(): Executable<Promise<true>> {
     return { exec: (): Promise<true> => Promise.resolve(true) }; // tests
   }
