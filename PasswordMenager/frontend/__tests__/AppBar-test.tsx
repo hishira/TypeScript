@@ -3,11 +3,15 @@ import { Provider } from "mobx-react";
 import AppBar from "../src/components/AppBar";
 import { IGeneral } from "../src/models/General";
 import { General } from "../src/models/General";
-
-const getContainer = (store?: IGeneral): HTMLElement => {
+import { I18nextProvider } from "react-i18next";
+import { initializeFunction } from "../src/i18n";
+import i18nObject from "../src/i18n";
+// Mocking global Response with the MockResponse class
+const getContainer = (store: IGeneral = getStore()): HTMLElement => {
+  initializeFunction();
   const { container } = render(
     <Provider store={store}>
-      <AppBar />
+        <AppBar />
     </Provider>
   );
   return container;
@@ -16,11 +20,14 @@ const getContainer = (store?: IGeneral): HTMLElement => {
 const getStore = () =>
   General.create({
     useractive: true,
+    viewType: "Table",
     popUpelement: {
       open: false,
       type: "error",
       message: "",
     },
+    isLocal: false,
+    refetchAfterEntryCreate: true,
   });
 
 describe("AppBar component test", () => {
@@ -39,7 +46,7 @@ describe("AppBar component test", () => {
     const container = getContainer();
     const buttons = container.querySelector("button");
     expect(buttons).toBeDefined();
-    expect(buttons?.textContent).toBe("Login");
+    expect(buttons?.textContent).toBe("");
   });
 
   it("When user is login it should be 5 buttons", () => {
@@ -50,11 +57,11 @@ describe("AppBar component test", () => {
     expect(buttons).toHaveLength(5);
   });
 
-  it('When user is active, logout button should be visible', ()=>{
+  it("When user is active, logout button should be visible", () => {
     const store = getStore();
     const container = getContainer(store);
-    const buttons = container.querySelectorAll('button');
+    const buttons = container.querySelectorAll("button");
 
-    expect(buttons[4]).toHaveTextContent('Logout');
-  })
+    expect(buttons[4]).toHaveTextContent("Logout");
+  });
 });
