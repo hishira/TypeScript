@@ -21,10 +21,10 @@ export namespace Validators {
     (value: unknown) => {
       const IsString = typeof value === "string";
       if (IsString && value.length < minLength)
-        return MinLengthErrors(minLength);
+        return MinLengthErrors(minLength)();
       return IsString && value.length >= minLength
         ? null
-        : MinLengthErrors(minLength);
+        : MinLengthErrors(minLength)();
     };
 
   export const SaveValue: (
@@ -34,8 +34,8 @@ export namespace Validators {
     (valueToCompare: unknown, message?: string): ValidatorFn =>
     (value: unknown) => {
       if (typeof valueToCompare === typeof value)
-        return valueToCompare !== value ? SameValueError(message) : null;
-      return valueToCompare !== value ? SameValueError(message) : null;
+        return valueToCompare !== value ? SameValueError(message)() : null;
+      return valueToCompare !== value ? SameValueError(message)() : null;
     };
 
   export const StaticFieldValidation = (
@@ -51,9 +51,9 @@ export namespace Validators {
   };
 
   export const EmailValidation = (value: string): ValidatorErrors | null => {
-    return EMAIL_REGEXP.test(value) ? null : EmailError;
+    return EMAIL_REGEXP.test(value) ? null : EmailError();
   };
   export const PasswordValidation = (value: string): ValidatorErrors | null => {
-    return PASSWORD_REGEXP.test(value) ? null : PasswordError;
+    return PASSWORD_REGEXP.test(value) ? null : PasswordError();
   };
 }

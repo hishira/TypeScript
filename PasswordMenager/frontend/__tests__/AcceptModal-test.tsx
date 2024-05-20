@@ -48,8 +48,8 @@ describe("AcceptModalComponent", () => {
     const container = getContainer();
     const buttons = container.querySelectorAll("button");
     expect(buttons).toHaveLength(2);
-    expect(buttons[0].textContent).toBe("Cancel");
-    expect(buttons[1].textContent).toBe(" Accept");
+    expect(buttons[0].textContent).toBe("modal.button.cancel");
+    expect(buttons[1].textContent).toBe("modal.button.accept");
   });
   it("Cancel button should hide modal", () => {
     const { container, rerender } = render(
