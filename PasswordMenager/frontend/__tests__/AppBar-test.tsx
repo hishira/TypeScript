@@ -6,6 +6,7 @@ import { General } from "../src/models/General";
 import { I18nextProvider } from "react-i18next";
 import { initializeFunction } from "../src/i18n";
 import i18nObject from "../src/i18n";
+import { getStore } from "./utils/store.utils";
 // Mocking global Response with the MockResponse class
 const getContainer = (store: IGeneral = getStore()): HTMLElement => {
   initializeFunction();
@@ -17,18 +18,7 @@ const getContainer = (store: IGeneral = getStore()): HTMLElement => {
   return container;
 };
 
-const getStore = () =>
-  General.create({
-    useractive: true,
-    viewType: "Table",
-    popUpelement: {
-      open: false,
-      type: "error",
-      message: "",
-    },
-    isLocal: false,
-    refetchAfterEntryCreate: true,
-  });
+
 
 describe("AppBar component test", () => {
   it("Container should be defined", () => {

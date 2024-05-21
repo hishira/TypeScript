@@ -5,6 +5,7 @@ export const GetEntryMock = (): IEntry => ({
   groupid: "2133-1234-77123-1234",
   password: "Mock password",
   username: "Mock_username",
+  url: 'http://google.com'
 });
 
 export const GetEntriesMock = (number: number = 2): IEntry[] => {

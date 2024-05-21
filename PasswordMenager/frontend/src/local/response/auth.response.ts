@@ -1,4 +1,5 @@
-export class MockResponse {
+// SHOULD BE Fixed to use response
+export class MockResponse implements Response {
   body: ReadableStream<Uint8Array> | null;
   bodyUsed: boolean;
   headers: Headers;
@@ -8,10 +9,11 @@ export class MockResponse {
   statusText: string;
   type: ResponseType;
   url: string;
-  // arrayBuffer: () => Promise<ArrayBuffer>;
-  // blob: () => Promise<Blob>;
-  // formData: () => Promise<FormData>;
-  // text: () => Promise<string>;
+  arrayBuffer: () => Promise<ArrayBuffer> = () =>
+    Promise.resolve(new ArrayBuffer(12));
+  blob: () => Promise<Blob> = () => Promise.resolve(new Blob());
+  formData: () => Promise<FormData> = () => Promise.resolve(new FormData());
+  text: () => Promise<string> = () => Promise.resolve("");
 
   constructor(body: BodyInit | null | undefined, init: ResponseInit = {}) {
     this.body = body instanceof ReadableStream ? body : null;
@@ -45,13 +47,10 @@ export class MockResponse {
     return new MockResponse(null, { status: 0, statusText: "" });
   }
 
-  // json(data: any, init: ResponseInit = {}) {
-  //   const body = JSON.stringify(data);
-  //   return new MockResponse(body, {
-  //     ...init,
-  //     headers: { "Content-Type": "application/json", ...init.headers },
-  //   });
-  // }
+  json(){
+    return Promise.resolve(null)
+  }
+
 
   static redirect(url: string, status: number = 302) {
     return new MockResponse(null, { status, headers: { Location: url } });
@@ -61,7 +60,7 @@ export class LocalResponse extends MockResponse {
   constructor(public authData: unknown) {
     super(null, { status: authData !== undefined ? 200 : 404 });
   }
-  json(): Promise<any> {
+  override json(): Promise<any> {
     return Promise.resolve(this.authData);
   }
 }
