@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import Button from "../../components/Button/index";
-import FormElement from "../FormElement/";
-import { Translation } from "../Translation";
-import { Form, FormTitle, Link } from "./component.styled";
-import { FormEmailField } from "./email-input";
-import { PasswordInputElement } from "./password-input";
-import { LoginInputElement } from "./login-input";
+import { Translation, TranslationFunction } from "../Translation";
+import { Form, FormTitle } from "./component.styled";
 import { ConfirmPasswordElement } from "./confirm-password-input";
+import { FormEmailField } from "./email-input";
+import { LoginInputElement } from "./login-input";
+import { PasswordInputElement } from "./password-input";
 import { RedirectLinkElement } from "./redirect-link-element";
 
 interface Props {
@@ -40,25 +39,36 @@ const FormComponent = ({
 }: Props): JSX.Element => {
   const [passwordErrors, setPasswordErrors] = useState<ErrorValue[]>([]);
   const [loginErrors, setLoginErrors] = useState<ErrorValue[]>([]);
+  const passwordRequired = TranslationFunction(
+    "validation.errors.passwordRequired"
+  );
+  const loginRequired = TranslationFunction("validation.errors.loginRequired");
   const handlethis = (value: string) => {
     if (confirmpasshandle) confirmpasshandle(value);
   };
+
   const checkErrorsAndPass = (e: React.MouseEvent<HTMLElement>) => {
-    console.log(infoLogin);
     if (infoLogin !== undefined) {
-      let isError = false;
-      if (infoLogin.password === "") {
-        setPasswordErrors([{ message: "Pasword is required" }]);
-        isError = true;
-      }
-      if (infoLogin.login === "") {
-        setLoginErrors([{ message: "Login is required" }]);
-        isError = true;
-      }
-      if (!isError) {
-        buttonHandle(e);
-      }
+      checkInfoLoginAndHandleError(infoLogin, e);
     } else {
+      buttonHandle(e);
+    }
+  };
+
+  const checkInfoLoginAndHandleError = (
+    infoLogin: UserAuth,
+    e: React.MouseEvent<HTMLElement>
+  ): void => {
+    let isError = false;
+    if (infoLogin.password === "") {
+      setPasswordErrors([{ message: passwordRequired }]);
+      isError = true;
+    }
+    if (infoLogin.login === "") {
+      setLoginErrors([{ message: loginRequired }]);
+      isError = true;
+    }
+    if (!isError) {
       buttonHandle(e);
     }
   };

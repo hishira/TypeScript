@@ -20,4 +20,4 @@ export const initializeFunction = (): void => {
   });
 };
 
-export default { i18n, initializeFunction };
+export default { i18nObject: i18n, initializeFunction };

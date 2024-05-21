@@ -24,3 +24,16 @@ export const getPrivateRouteStore = (useractive: boolean = true) => {
     popUpelement: DEFAULTPOPUPELEMENT,
   });
 };
+
+export const getStore = () =>
+  General.create({
+    useractive: true,
+    viewType: "Table",
+    popUpelement: {
+      open: false,
+      type: "error",
+      message: "",
+    },
+    isLocal: false,
+    refetchAfterEntryCreate: true,
+  });

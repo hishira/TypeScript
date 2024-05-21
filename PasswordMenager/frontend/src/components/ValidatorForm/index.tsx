@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import FormElement, { FormProps } from "../FormElement";
 import { ErrorContainer, Errors } from "../shared/styled-components";
-import { ValidatorElement, ValidatorSpanElement } from "./component.styled";
-import i18next from "i18next";
 
 type ValidatorFormProps = FormProps & {
   validators: ValidatorFn[];
@@ -10,11 +8,9 @@ type ValidatorFormProps = FormProps & {
   formErrors?: ErrorValue[];
 };
 export const ValidatorForm = (formProps: ValidatorFormProps) => {
-  console.log(i18next.t('validation.errors.required'));
   const [errors, setErrors] = useState<ErrorValue[]>(
     formProps.formErrors ?? []
   );
-  console.log(formProps);
   const inputValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
     formProps.inputChange(e);
     let tmpErrors: ErrorValue[] = [];

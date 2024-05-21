@@ -59,6 +59,8 @@
     "validation.errors.sameValue": "Values should be the same",
     "validation.errors.email": "Email is incorrect",
     "validation.errors.password": "Password must contain at least 8 characters, has at least one big, small and speciall character.",
+    "validation.errors.loginRequired": "Login is required",
+    "validation.errors.passwordRequired": "Password is required",
     "newentry.field.title": "Title",
     "newentry.field.username": "Username",
     "newentry.field.url": "Website",
