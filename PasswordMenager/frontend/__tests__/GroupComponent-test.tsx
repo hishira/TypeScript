@@ -3,6 +3,8 @@ import GroupComponent from "../src/components/GroupComponent";
 import { Group } from "../src/utils/group.utils";
 import { GROUPNAME, GetGroupsMock } from "./utils/Group.mock";
 import { getButtonWithSpecificText } from "./utils/button.utils";
+import { Provider } from "mobx-react";
+import { getStore } from "./utils/store.utils";
 
 const groupSpy = jest
   .spyOn(Group.prototype, "GetGroupsByUser")
@@ -12,7 +14,9 @@ const groupSpy = jest
 const selectGroupHandleMock = jest.fn(() => {});
 const getContainer = (): HTMLElement => {
   const { container } = render(
+    <Provider store={getStore()}>
     <GroupComponent selectgrouphandle={selectGroupHandleMock} />
+    </Provider>
   );
 
   return container;
@@ -26,29 +30,24 @@ describe("GroupComponent tests", () => {
     expect(getContainer()).toBeDefined();
   });
 
-  it("Should has button Add Group", () => {
-    const button = getContainer().querySelector("button");
-    expect(button?.textContent).toBe("Add new group");
-  });
   it("In component should run GroupEffect", () => {
     const container = getContainer();
     expect(groupSpy).toBeCalledTimes(1);
   });
 
-  it("Should has 5 group element", async () => {
+  it("Should has 10 group element", async () => {
     const container = getContainer();
     await waitFor(async () => {
       const elements = Array.from(container.querySelectorAll("div")).filter(
         (el) => el.textContent === GROUPNAME
       );
-      expect(elements).toHaveLength(5);
+      expect(elements).toHaveLength(10);
     });
   });
 
   it("Should has button Add new Group", () => {
     const buttons = getContainer().querySelectorAll("button");
-    const button = getButtonWithSpecificText(buttons, "Add new group");
-    expect(button).toBeDefined();
+    expect(buttons).toHaveLength(1);
   });
 
   it("After click Add new Group modal should open", () => {

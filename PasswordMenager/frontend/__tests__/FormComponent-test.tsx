@@ -54,7 +54,7 @@ describe("FormComponent test", () => {
 
   it("Should has proper label, Login and Password", () => {
     const labels = getContainer().querySelectorAll("label");
-    ["Login", "Password"].forEach((label, index) => {
+    ["input.label.login", "input.label.password"].forEach((label, index) => {
       expect(labels[index].textContent).toBe(label);
     });
   });
@@ -100,7 +100,7 @@ describe("FormComponent test", () => {
 
   it('With confirm password it should has 3 labels', ()=>{
     const labels = getContainer(true).querySelectorAll("label");
-    ["Login", "Password", "Confirm password"].forEach((label, index) => {
+    ["input.label.login", "input.label.password", "input.label.confirmPassword"].forEach((label, index) => {
       expect(labels[index].textContent).toBe(label);
     });
   })
