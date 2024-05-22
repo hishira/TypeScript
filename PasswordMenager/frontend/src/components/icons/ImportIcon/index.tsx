@@ -11,6 +11,7 @@ export const ImportIcon = ({ click }: IconProps): JSX.Element => {
       {...props}
       id="Design_Convert"
       viewBox="0 0 64 64"
+      role="import"
       width='34px'
       height='34px'
     >

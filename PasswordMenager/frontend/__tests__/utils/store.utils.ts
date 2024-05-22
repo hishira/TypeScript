@@ -22,6 +22,9 @@ export const getPrivateRouteStore = (useractive: boolean = true) => {
   return General.create({
     useractive,
     popUpelement: DEFAULTPOPUPELEMENT,
+    viewType: "Table",
+    isLocal: false,
+    refetchAfterEntryCreate: true,
   });
 };
 

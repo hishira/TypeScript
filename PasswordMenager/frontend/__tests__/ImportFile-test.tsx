@@ -43,7 +43,7 @@ describe("ImportFile component test", () => {
     const input = getInputElement();
 
     input && userEvent.upload(input, file);
-    expect(input?.files[0].name).toBe("exampleoffile.png");
+    expect(input?.files?.[0].name).toBe("exampleoffile.png");
   });
 
   it("File change should trigger filechange function", () => {
@@ -67,9 +67,9 @@ describe("ImportFile component test", () => {
     expect(inputs).toHaveLength(2);
   });
 
-  it("Should exists input with text type", () => {
+  it("Should exists input with password type", () => {
     const container = getContainer();
-    const input = container.querySelector("input[type=text]");
+    const input = container.querySelector("input[type=password]");
     expect(input).toBeTruthy();
   });
 });

@@ -1,7 +1,9 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { ImportDecrypted } from "../src/components/ImportModals/ImportDecrypted/index";
+import ImportDecrypted from "../src/components/ImportModals/ImportDecrypted/index";
 import userEvent from "@testing-library/user-event";
 import { Import } from "../src/utils/import.utils";
+import { Provider } from "mobx-react";
+import { getStore } from "./utils/store.utils";
 
 //jest.mock('../src/utils/import.utils')
 
@@ -11,7 +13,9 @@ let checkenImport = jest
 const closeMockHandle = jest.fn();
 const getContainer = (): HTMLElement => {
   const { container } = render(
-    <ImportDecrypted modalOpen={true} closeModalHandle={closeMockHandle} />
+    <Provider store={getStore()}>
+      <ImportDecrypted modalOpen={true} closeModalHandle={closeMockHandle} />
+    </Provider>
   );
 
   return container;

@@ -57,8 +57,8 @@ describe("MiniModal component (ModalButtonChoicer)", () => {
   });
   it("Buttons should be Delete and Edit", () => {
     const buttons = getContainer().querySelectorAll("button");
-    expect(buttons[0].textContent).toBe("Delete");
-    expect(buttons[1].textContent).toBe("Edit");
+    expect(buttons[0].textContent).toBe("minimodal.button.delete");
+    expect(buttons[1].textContent).toBe("minimodal.button.edit");
   });
   it("Main div should has id attribute", () => {
     const id = getContainer().querySelector("div")?.getAttribute("id");
