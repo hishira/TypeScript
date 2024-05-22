@@ -1,6 +1,8 @@
 import { cleanup, fireEvent, render } from "@testing-library/react";
 import PassBar from "../src/components/PassBarr";
 import { Export } from "../src/utils/export.utils";
+import { getStore } from "./utils/store.utils";
+import { Provider } from "mobx-react";
 
 const ExportExportEncryptedCSVSpy = jest
   .spyOn(Export.prototype, "ExportEntriesCsv")
@@ -11,13 +13,21 @@ const ExportEncrypted = jest
   .mockImplementation(() => Promise.resolve(true));
 
 const getContainer = (): HTMLElement => {
-  const { container } = render(<PassBar />);
+  const { container } = render(
+    <Provider store={getStore()}>
+      <PassBar />
+    </Provider>
+  );
 
   return container;
 };
 
 const getByRole = () => {
-  const { getByRole } = render(<PassBar />);
+  const { getByRole } = render(
+    <Provider store={getStore()}>
+      <PassBar />
+    </Provider>
+  );
 
   return getByRole;
 };
@@ -99,11 +109,11 @@ describe("PassBar component", () => {
     expect(getbyrole("dialog")).toBeDefined();
   });
 
-  it("Import encrypted modal should has input",async () => {
+  it("Import encrypted modal should has input", async () => {
     const container = getContainer();
     const button = container.querySelectorAll("button")[3];
     fireEvent.click(button);
-    await Promise.resolve().catch()
+    await Promise.resolve().catch();
     const buttons = container.querySelectorAll("button");
     let includeModalButtons = false;
     buttons.forEach((button) => {

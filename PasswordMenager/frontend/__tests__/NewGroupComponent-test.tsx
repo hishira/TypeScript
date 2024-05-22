@@ -8,6 +8,7 @@ const getContainer = (): HTMLElement => {
     <NewGroupComponent
       func={inputChangeFunctionMock}
       buttonhandle={buttonHandleFunctionMock}
+      isButtonDisabled={false}
     />
   );
   return container;
@@ -34,12 +35,12 @@ describe("NewGroupComponent test", () => {
 
   it("Button should has text content 'Add group'", () => {
     const button = getContainer().querySelector("button");
-    expect(button?.textContent).toBe("Add group");
+    expect(button?.textContent).toBe("groups.newgroup.addgroup");
   });
 
   it("Should has label with proper text", () => {
     const label = getContainer().querySelector("label");
-    expect(label?.textContent).toBe("Group name");
+    expect(label?.textContent).toBe("groups.newgroup.groupname");
   });
 
   it("Input change shoult trigger proper function", () => {
