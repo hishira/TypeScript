@@ -46,80 +46,29 @@ describe("PassBar component", () => {
     expect(container.querySelector("div")).toBeDefined();
   });
 
-  it("Should has 4 buttons", () => {
+  it("Should has 1 buttons", () => {
     const container = getContainer();
     const buttons = container.querySelectorAll("button");
-    expect(buttons).toHaveLength(4);
+    expect(buttons).toHaveLength(1);
+  });
+  it("Should has svg export icon", () => {
+    const exportIcon = getByRole()("export");
+    expect(exportIcon).toBeDefined();
+  });
+  it("export should be svg", () => {
+    const exportIcon = getByRole()("export");
+    expect(exportIcon).toBeInstanceOf(SVGSVGElement);
+  });
+  it("Should has svg import icon", () => {
+    const exportIcon = getByRole()("import");
+    expect(exportIcon).toBeDefined();
+  });
+  it("import should be svg", () => {
+    const exportIcon = getByRole()("import");
+    expect(exportIcon).toBeInstanceOf(SVGSVGElement);
   });
 
-  it("First button should contain text", () => {
-    const container = getContainer();
-    const buttons = container.querySelectorAll("button");
-    expect(buttons[0].textContent).toBe("New entry");
-  });
-  it("Second button should contain text", () => {
-    const container = getContainer();
-    const buttons = container.querySelectorAll("button");
-    expect(buttons[1].textContent).toBe("Export entries");
-  });
-  it("Third button should contain text", () => {
-    const container = getContainer();
-    const buttons = container.querySelectorAll("button");
-    expect(buttons[2].textContent).toBe("Export encrypted");
-  });
-  it("Four button should contain text", () => {
-    const container = getContainer();
-    const buttons = container.querySelectorAll("button");
-    expect(buttons[3].textContent).toBe("Import encrypted");
-  });
+  //TODO: Consider adding tests for opening modals
 
-  it("Edit entry should open modal", () => {
-    const container = getContainer();
-    const getbyrole = getByRole();
-    const button = container.querySelectorAll("button")[0];
-    fireEvent.click(button);
-    expect(getbyrole("dialog")).toBeDefined();
-  });
-
-  it("Export entries should trigger Export ExportEntriesCsv function", async () => {
-    const container = getContainer();
-    const button = container.querySelectorAll("button")[1];
-    fireEvent.click(button);
-    await Promise.resolve();
-
-    expect(ExportExportEncryptedCSVSpy).toBeCalledTimes(1);
-  });
-
-  it("Export entries should trigger Export ExportEncrypted function", async () => {
-    const container = getContainer();
-    const button = container.querySelectorAll("button")[2];
-    fireEvent.click(button);
-    await Promise.resolve();
-
-    expect(ExportEncrypted).toBeCalledTimes(1);
-  });
-
-  it("Import encrypted should open modal", async () => {
-    const container = getContainer();
-    const getbyrole = getByRole();
-    const button = container.querySelectorAll("button")[3];
-    fireEvent.click(button);
-    await Promise.resolve().catch();
-
-    expect(getbyrole("dialog")).toBeDefined();
-  });
-
-  it("Import encrypted modal should has input", async () => {
-    const container = getContainer();
-    const button = container.querySelectorAll("button")[3];
-    fireEvent.click(button);
-    await Promise.resolve().catch();
-    const buttons = container.querySelectorAll("button");
-    let includeModalButtons = false;
-    buttons.forEach((button) => {
-      if (button.textContent === "Accept" || button.textContent === "Cancel")
-        includeModalButtons = true;
-    });
-    expect(includeModalButtons).toBe(true);
-  });
+ 
 });

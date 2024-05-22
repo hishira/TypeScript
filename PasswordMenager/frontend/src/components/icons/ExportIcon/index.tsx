@@ -11,6 +11,7 @@ export const ExportIcon = ({ click }: IconProps): JSX.Element => {
       {...props}
       data-name="Design Convert"
       id="Design_Convert"
+      role="export"
       viewBox="0 0 64 64"
       xmlns="http://www.w3.org/2000/svg"
       width='34px'
