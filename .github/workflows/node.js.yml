@@ -24,3 +24,4 @@ jobs:
           node-version: '20.9.0'
       - run: cd /home/runner/work/TypeScript/TypeScript/PasswordMenager/backend && npm install && npm test
       - run: cd /home/runner/work/TypeScript/TypeScript/PasswordMenager/backend && npm install && npm run lint
+      - run: cd /home/runner/work/TypeScript/TypeScript/PasswordMenager/frontend && npm install && npm test
