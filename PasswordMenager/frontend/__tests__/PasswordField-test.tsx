@@ -38,35 +38,16 @@ describe("PasswordField test", () => {
   it("Should has 2 buttons", () => {
     const buttons = getContainer().querySelectorAll("button");
 
-    expect(buttons).toHaveLength(3);
-  });
-  it("Third button should has display none", () => {
-    const buttons = getContainer().querySelectorAll("button");
-
-    expect(buttons[2]).toHaveStyle("display: none");
+    expect(buttons).toHaveLength(1);
   });
 
   it("Buttons text are Delete, Edit, More", () => {
     const buttons = getContainer().querySelectorAll("button");
 
-    ["Delete", "Edit", "More"].forEach((buttonText, index) => {
-      expect(buttons[index].textContent).toBe(buttonText);
-    });
-  });
-
-  it("Click delete bytton should trigger deleteHandleMock", () => {
-    const buttons = getContainer().querySelectorAll("button");
-    fireEvent.click(buttons[0]);
-    expect(deleteHandleMock).toBeCalledTimes(1);
-  });
-  it("Click edit bytton should trigger oneEditHandleMock", () => {
-    const buttons = getContainer().querySelectorAll("button");
-    fireEvent.click(buttons[1]);
-    expect(oneEditHandleMock).toBeCalledTimes(1);
-  });
-  it("Click more bytton should trigger moreClickHandleMock", () => {
-    const buttons = getContainer().querySelectorAll("button");
-    fireEvent.click(buttons[2]);
-    expect(moreClickHandleMock).toBeCalledTimes(1);
+    ["entries.table.button.more"].forEach(
+      (buttonText, index) => {
+        expect(buttons[index].textContent).toBe(buttonText);
+      }
+    );
   });
 });

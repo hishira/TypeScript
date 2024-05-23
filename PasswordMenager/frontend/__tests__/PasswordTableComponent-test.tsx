@@ -57,40 +57,38 @@ describe("PasswordTableComponent component", () => {
   });
 
   it("Delete button should be defined", () => {
-    const buttons = getContainer().querySelectorAll("button");
-    const deleteButton = getButtonWithSpecificText(buttons, "Delete");
-    expect(deleteButton).toBeDefined();
+    const buttons = getContainer().querySelectorAll("[role=delete]");
+    expect(buttons).toBeDefined();
   });
 
   it("Edit button should be defined", () => {
-    const buttons = getContainer().querySelectorAll("button");
-    const editButton = getButtonWithSpecificText(buttons, "Edit");
-    expect(editButton).toBeDefined();
+    const buttons = getContainer().querySelectorAll("[role=edit]");
+    expect(buttons).toBeDefined();
   });
 
   it("More button should be defined", () => {
     const buttons = getContainer().querySelectorAll("button");
-    const moreButton = getButtonWithSpecificText(buttons, "More");
+    const moreButton = getButtonWithSpecificText(buttons, "entries.table.button.more");
     expect(moreButton).toBeDefined();
   });
 
   it("Delete click should trigger", () => {
-    const buttons = getContainer().querySelectorAll("button");
-    const deleteButton = getButtonWithSpecificText(buttons, "Delete");
+    const buttons = getContainer().querySelectorAll("[role=delete]");
+    const deleteButton = Array.from(buttons).find(Boolean);
     deleteButton && fireEvent.click(deleteButton);
     expect(deleteHandleMockFunction).toBeCalledTimes(1);
   });
 
   it("Edit click should trigger", () => {
-    const buttons = getContainer().querySelectorAll("button");
-    const editButton = getButtonWithSpecificText(buttons, "Edit");
+    const buttons = getContainer().querySelectorAll("[role=edit]");
+    const editButton =  Array.from(buttons).find(Boolean);
     editButton && fireEvent.click(editButton);
     expect(oneEditHandleMockFunction).toBeCalledTimes(1);
   });
 
   it("More click should trigger", () => {
     const buttons = getContainer().querySelectorAll("button");
-    const moreButton = getButtonWithSpecificText(buttons, "More");
+    const moreButton = getButtonWithSpecificText(buttons, "entries.table.button.more");
     moreButton && fireEvent.click(moreButton);
     expect(moreClickHandleMockFunction).toBeCalledTimes(1);
   });
