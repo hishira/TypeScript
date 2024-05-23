@@ -5,6 +5,9 @@ export const POPUPTYPE = "error";
 export const getStoreForPopUp = () =>
   General.create({
     useractive: true,
+    viewType: "Table",
+    isLocal: false,
+    refetchAfterEntryCreate: true,
     popUpelement: {
       open: true,
       type: POPUPTYPE,

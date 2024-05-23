@@ -32,7 +32,7 @@ describe("SignUp component", () => {
 
   it('Should has title "Log in to account"', () => {
     const pElement = getContainer().querySelector("p");
-    expect(pElement?.textContent).toBe("Create account");
+    expect(pElement?.textContent).toBe("page.signUp.mainTitle");
   });
 
   it("Should has button", () => {
@@ -42,12 +42,12 @@ describe("SignUp component", () => {
 
   it("Button should has text Login", () => {
     const button = getContainer().querySelector("button");
-    expect(button?.textContent).toBe("Sign Up");
+    expect(button?.textContent).toBe("page.signUp.buttonMessage");
   });
 
   it("Should has password and login labels", () => {
     const labels = getContainer().querySelectorAll("label");
-    checkElementMatchContent(labels, "Password", "Login");
+    checkElementMatchContent(labels, "input.label.login", "input.label.email", "input.label.password", "input.label.confirmPassword");
   });
 
   it("Click signup with wrong password policy should not trigger RegisterHandleSpyMock", () => {

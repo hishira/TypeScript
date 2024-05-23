@@ -12,6 +12,7 @@ export const PlusComponent = ({ click }: IconProps) => {
       height="24px"
       id="Layer_1"
       version="1.1"
+      role='plus'
       viewBox="0 0 50 50"
       width="24px"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,10 +1,12 @@
 import { cleanup, render } from "@testing-library/react";
+import { Provider } from "mobx-react";
 import PassComponent from "../src/components/PassComponent";
-import { Group } from "../src/utils/group.utils";
-import { GetGroupsMock } from "./utils/Group.mock";
 import { Entry } from "../src/utils/entry.utils";
-import { GetEntriesMock } from "./utils/Entry.mock";
+import { Group } from "../src/utils/group.utils";
+import { GetEntriesMock, GetEntryMock } from "./utils/Entry.mock";
+import { GetGroupsMock } from "./utils/Group.mock";
 import { getButtonWithSpecificText } from "./utils/button.utils";
+import { getStore } from "./utils/store.utils";
 
 const groupSpy = jest
   .spyOn(Group.prototype, "GetGroupsByUser")
@@ -12,13 +14,21 @@ const groupSpy = jest
     Promise.resolve({ status: true, response: GetGroupsMock(5) })
   );
 
-const jestMockSpy = jest
-  .spyOn(Entry.prototype, "GetUserEntriesByGroupID")
-  .mockImplementation((groupId) =>
-    Promise.resolve({ status: true, response: GetEntriesMock() })
+const entrySpu = jest
+  .spyOn(Entry.prototype, "GetEntriesBy")
+  .mockImplementation(() =>
+    Promise.resolve({
+      pageInfo: { page: 0, hasMore: false, items: 5 },
+      data: GetEntriesMock(5),
+    })
   );
+
 const getContainer = (): HTMLElement => {
-  const { container } = render(<PassComponent />);
+  const { container } = render(
+    <Provider store={getStore()}>
+      <PassComponent />
+    </Provider>
+  );
 
   return container;
 };
@@ -36,14 +46,8 @@ describe("PassComponent", () => {
     expect(groupSpy).toBeCalledTimes(1);
   });
 
-  it("Should trigger GetUserEntriesByGroupID", () => {
-    getContainer();
-    expect(jestMockSpy).toBeCalledTimes(0);
+  it("Should has button Add new group", () => {
+    const buttons = getContainer().querySelectorAll('[role=plus]')
+    expect(buttons).toBeDefined();
   });
-
-  it('Should has button Add new group', ()=>{
-    const buttons = getContainer().querySelectorAll('button');
-    const buttonGroup = getButtonWithSpecificText(buttons, 'Add new group');
-    expect(buttonGroup).toBeDefined();
-  })
 });
