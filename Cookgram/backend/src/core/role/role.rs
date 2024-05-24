@@ -14,7 +14,7 @@ pub struct SuperAdminRole {}
 
 impl Role for UserRole {
     fn has_access(&self, _: Access) -> bool {
-       true
+        true
     }
 }
 impl Role for AdminRole {
@@ -43,6 +43,30 @@ impl Roles {
     }
     pub fn super_admin_role() -> Self {
         Roles::SuperAdmin(SuperAdminRole {})
+    }
+
+    pub fn is_user(&self) -> bool {
+        match self {
+            Roles::User(_) => true,
+            Roles::Admin(_) => false,
+            Roles::SuperAdmin(_) => false,
+        }
+    }
+
+    pub fn is_admin(&self) -> bool {
+        match self {
+            Roles::User(_) => false,
+            Roles::Admin(_) => false,
+            Roles::SuperAdmin(_) => true,
+        }
+    }
+
+    pub fn is_super_user(&self) -> bool {
+        match self {
+            Roles::User(_) => false,
+            Roles::Admin(_) => false,
+            Roles::SuperAdmin(_) => true,
+        }
     }
 }
 

@@ -44,9 +44,9 @@ impl User {
         };
         let role: Roles = match role {
             Some(r) => match r {
-                Roles::User(User) => Roles::user_role(),
-                Roles::Admin(Admin) => Roles::admin_role(),
-                Roles::SuperAdmin(Admin) => Roles::super_admin_role(),
+                Roles::User(_) => Roles::user_role(),
+                Roles::Admin(_) => Roles::admin_role(),
+                Roles::SuperAdmin(_) => Roles::super_admin_role(),
             },
             None => Roles::User(UserRole {}),
         };
@@ -54,7 +54,7 @@ impl User {
             Some(id) => Self {
                 id,
                 username,
-                password: User::prepare_password_hash(password),
+                password,
                 email,
                 recipies,
                 meta: Meta::new(),
@@ -63,7 +63,7 @@ impl User {
             None => Self {
                 id: User::generate_id(),
                 username,
-                password: User::prepare_password_hash(password),
+                password,
                 email,
                 recipies,
                 meta: Meta::new(),

@@ -21,7 +21,10 @@ use crate::{
         appstate::appstate::AppState,
         dtos::userdto::userdto::{UserAuthDto, UserFilterOption},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
-        repositories::{eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories},
+        repositories::{
+            eventrepository::EventRepository, repositories::Repository,
+            userrepositories::UserRepositories,
+        },
         utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
         validators::dtovalidator::ValidateDtos,
     },
@@ -79,18 +82,12 @@ impl AuthRouter {
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
                     .unwrap(),
-                event_query: EventQuery{}
-            }
+                event_query: EventQuery {},
+            },
         }
     }
-    async fn login<T>(
-        State(state): State<AppState<T>>,
-        ValidateDtos(params): ValidateDtos<UserAuthDto>,
-    ) -> Result<Json<AuthBody>, AuthError>
-    where
-        T: Repository<User, UserFilterOption>,
-    {
-        let mut claims: Claims = match (params.email, params.username) {
+    fn prepare_claims(params: &UserAuthDto) -> Claims {
+        match (params.email.clone(), params.username.clone()) {
             (None, None) => Claims {
                 user_id: None,
                 user_info: "TEst".to_string(),
@@ -109,13 +106,22 @@ impl AuthRouter {
                 exp: 2000000000, // May 2033
                 role: None,
             },
-            (Some(email), Some(username)) => Claims {
+            (Some(_), Some(username)) => Claims {
                 user_id: None,
                 user_info: username,
                 exp: 2000000000, // May 2033
                 role: None,
             },
-        };
+        }
+    }
+    async fn login<T>(
+        State(state): State<AppState<T>>,
+        ValidateDtos(params): ValidateDtos<UserAuthDto>,
+    ) -> Result<Json<AuthBody>, AuthError>
+    where
+        T: Repository<User, UserFilterOption>,
+    {
+        let mut claims: Claims = AuthRouter::prepare_claims(&params);
         let filter = UserFilterOption {
             username: Some(claims.user_info.clone()),
         };
@@ -124,13 +130,15 @@ impl AuthRouter {
             return Result::Err(AuthError::UserNotExists);
         }
         let user = users.get(0).unwrap();
-        println!("{}", user.password);
         claims.user_id = Some(user.id);
         claims.role = Some(user.role);
         let token = encode(&Header::default(), &claims, &KEYS.encoding)
             .map_err(|_| AuthError::TokenCreation)?;
-        //TODO: Fix why not work???
-        match verify(params.password, &user.password) {
+        match state
+            .pass_worker
+            .verify(params.password, user.password.clone())
+            .await
+        {
             Ok(bcrypt_verify_respoonse) => {
                 if bcrypt_verify_respoonse {
                     Ok(Json(AuthBody {
@@ -138,11 +146,7 @@ impl AuthRouter {
                         refresh_token: token.clone(),
                     }))
                 } else {
-                    //Result::Err(AuthError::WrongCredentials)
-                    Ok(Json(AuthBody {
-                        access_token: token.clone(),
-                        refresh_token: token.clone(),
-                    }))
+                    Result::Err(AuthError::WrongCredentials)
                 }
             }
             Err(_) => Result::Err(AuthError::BCryptError),
@@ -157,7 +161,7 @@ impl ApplicationRouter for AuthRouter {
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
-                pass_worker: PasswordWorker::new(12,4).unwrap()
+                pass_worker: PasswordWorker::new(12, 4).unwrap(),
             })
     }
 }
