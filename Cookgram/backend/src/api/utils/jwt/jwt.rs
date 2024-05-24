@@ -6,12 +6,13 @@ use axum_extra::{
 use jsonwebtoken::{decode, Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
-use crate::api::router::authrouter::{AuthError, KEYS};
+use crate::{api::router::authrouter::{AuthError, KEYS}, core::role::role::{Roles, UserRole}};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
     pub user_id: Option<uuid::Uuid>,
     pub user_info: String,
+    pub role: Option<Roles>,
     pub exp: usize
 }
 

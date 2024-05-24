@@ -5,11 +5,11 @@ pub trait Role {
     fn has_access(&self, access: Access) -> bool;
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
 pub struct UserRole {}
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
 pub struct AdminRole {}
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
 pub struct SuperAdminRole {}
 
 impl Role for UserRole {
@@ -27,7 +27,7 @@ impl Role for SuperAdminRole {
         true
     }
 }
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
 pub enum Roles {
     User(UserRole),
     Admin(AdminRole),
