@@ -19,7 +19,7 @@ use validator::Validate;
 use crate::{
     api::{
         appstate::appstate::AppState,
-        dtos::userdto::userdto::{UserAuthDto, UserFilterOption},
+        dtos::userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
             eventrepository::EventRepository, repositories::Repository,
@@ -113,6 +113,12 @@ impl AuthRouter {
                 role: None,
             },
         }
+    }
+    async fn register<T>(
+        State(state): State<AppState<T>>,
+        ValidateDtos(params): ValidateDtos<UserRegisterDto>,
+    ) -> Result<Json<User>, AuthError> {
+        todo!();
     }
     async fn login<T>(
         State(state): State<AppState<T>>,

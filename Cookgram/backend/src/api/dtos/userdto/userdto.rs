@@ -34,6 +34,14 @@ pub struct UserAuthDto {
     pub password: String,
 }
 
+#[derive(Debug, Validate, Deserialize)]
+pub struct UserRegisterDto {
+    pub username: String,
+    #[validate(email)]
+    pub email: String,
+    #[validate(length(min = 6))]
+    pub password: String,
+}
 trait Filter: Send + Sync {}
 
 #[derive(Clone, Deserialize)]
@@ -58,7 +66,7 @@ pub enum UserDtos {
 
 #[derive(Debug, Deserialize)]
 pub struct UserParamsDto {
-    id: Option<uuid::Uuid>
+    id: Option<uuid::Uuid>,
 }
 #[cfg(test)]
 mod tests {
