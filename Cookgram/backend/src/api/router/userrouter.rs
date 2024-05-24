@@ -11,13 +11,17 @@ use crate::{
         dtos::userdto::userdto::{CreateUserDto, DeleteUserDto, UserDtos, UserFilterOption},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
-            eventrepository::EventRepository, repositories::Repository, userrepositories::UserRepositories,
+            eventrepository::EventRepository, repositories::Repository,
+            userrepositories::UserRepositories,
         },
         services::userservice::UserService,
         utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
         validators::dtovalidator::ValidateDtos,
     },
-    core::{event::userevent::UserEvent, user::{self, user::User}},
+    core::{
+        event::userevent::UserEvent,
+        user::{self, user::User},
+    },
     database::init::Database,
 };
 
@@ -50,28 +54,41 @@ impl UserRouter {
     where
         T: Repository<User, UserFilterOption>,
     {
-        let user_tmp = UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker).await;
-        let user = state
-            .repo
-            .create(user_tmp)
-            .await;
+        let user_tmp =
+            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker).await;
+        let user = state.repo.create(user_tmp).await;
         Json(user)
     }
 
     async fn user_find<T>(
+        claims: Claims,
         State(state): State<AppState<T>>,
         Json(params): Json<UserFilterOption>,
-    ) -> Json<Vec<User>>
+    ) -> Result<Json<Vec<User>>, AuthError>
     where
         T: Repository<User, UserFilterOption>,
     {
-        let users = state.repo.find(params).await;
-        Json(users)
+        match claims.role {
+            Some(role) => {
+                if !role.is_admin() {
+                    return Err(AuthError::WrongCredentials);
+                }
+                let users = state.repo.find(params).await;
+                Ok(Json(users))
+            }
+            None => Err(AuthError::MissingCredentials),
+        }
     }
 
-    async fn user_delete<T>(claims: Claims, State(state): State<AppState<T>>, ValidateDtos(params): ValidateDtos<DeleteUserDto>) -> Json<User> where
-    T: Repository<User, UserFilterOption>, {
-        todo!()//let user = state.repo.delete(None);
+    async fn user_delete<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+        ValidateDtos(params): ValidateDtos<DeleteUserDto>,
+    ) -> Json<User>
+    where
+        T: Repository<User, UserFilterOption>,
+    {
+        todo!() //let user = state.repo.delete(None);
     }
 }
 
@@ -87,7 +104,7 @@ impl ApplicationRouter for UserRouter {
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
-                pass_worker: PasswordWorker::new(10,4).unwrap()
+                pass_worker: PasswordWorker::new(10, 4).unwrap(),
             })
     }
 }
