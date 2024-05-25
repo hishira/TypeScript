@@ -1,0 +1,2 @@
+
+pub trait ValueObject{}
