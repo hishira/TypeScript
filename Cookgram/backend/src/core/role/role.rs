@@ -1,3 +1,4 @@
+use std::fmt;
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
@@ -38,7 +39,14 @@ pub enum Roles {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-struct ParseFromStringRoleError;
+pub struct ParseFromStringRoleError;
+
+impl fmt::Display for ParseFromStringRoleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Problem with role conversion")
+            // ...
+    }
+}
 impl FromStr for Roles {
     type Err = ParseFromStringRoleError;
 
