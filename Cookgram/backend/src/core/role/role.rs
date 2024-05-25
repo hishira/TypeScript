@@ -1,4 +1,8 @@
+use std::fmt;
+use std::str::FromStr;
+
 use serde::{Deserialize, Serialize};
+use serde::de::Error;
 
 pub struct Access {}
 pub trait Role {
@@ -27,11 +31,61 @@ impl Role for SuperAdminRole {
         true
     }
 }
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Roles {
     User(UserRole),
     Admin(AdminRole),
     SuperAdmin(SuperAdminRole),
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct ParseFromStringRoleError;
+
+impl fmt::Display for ParseFromStringRoleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Problem with role conversion")
+            // ...
+    }
+}
+impl FromStr for Roles {
+    type Err = ParseFromStringRoleError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "User" => Ok(Roles::user_role()),
+            "Admin" => Ok(Roles::admin_role()),
+            "SuperAdmin" => Ok(Roles::super_admin_role()),
+            _ => Err(ParseFromStringRoleError),
+        }
+    }
+}
+impl Serialize for Roles {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            Roles::User(_) => serializer.serialize_str("User"),
+            Roles::Admin(_) => serializer.serialize_str("Admin"),
+            Roles::SuperAdmin(_) => serializer.serialize_str("SuperAdmin"),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for Roles {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let r_string = String::deserialize(deserializer);
+        match r_string {
+            Ok(role_string) => match Roles::from_str(role_string.as_str()) {
+                Ok(role) => Ok(role),
+                Err(error) => Err(error).map_err(D::Error::custom),
+            },
+            Err(error) => Err(error),
+        }
+    }
 }
 
 impl Roles {

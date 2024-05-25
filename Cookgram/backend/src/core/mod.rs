@@ -4,3 +4,5 @@ pub mod meta;
 pub mod recipie;
 pub mod role;
 pub mod event;
+pub mod address;
+pub mod valueObject;
