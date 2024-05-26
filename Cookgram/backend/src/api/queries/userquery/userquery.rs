@@ -195,9 +195,9 @@ mod tests {
             username: "test_user".to_string(),
             password: "password".to_string(),
             email: "test@example.com".to_string(),
-            recipies: None,
             meta: Meta::new(),
-            role: Roles::user_role()
+            role: Roles::user_role(),
+            address: None
         };
 
         let mut create_query = validate_action_query(&user_query, test_user);
@@ -247,9 +247,9 @@ mod tests {
             username: "test_user".to_string(),
             password: "password".to_string(),
             email: "test@example.com".to_string(),
-            recipies: None,
             meta: Meta::new(),
-            role: Roles::user_role()
+            role: Roles::user_role(),
+            address: None,
         };
 
         let _ = user_query.delete(test_user);

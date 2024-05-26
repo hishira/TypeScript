@@ -21,12 +21,11 @@ impl UserService {
                     user.username,
                     hash,
                     user.email,
-                    None,
                     Some(Roles::user_role()),
                 ) //TODO: Fix role
             }
             UserDtos::Update(user) => {
-                User::new(None, user.username, user.password, user.email, None, None)
+                User::new(None, user.username, user.password, user.email, None)
                 // FOX role
             }
             UserDtos::Delete(_) => todo!(),
@@ -39,9 +38,9 @@ impl UserService {
             username: pg_row.get("username"),
             password: pg_row.get("password"),
             email: pg_row.get("email"),
-            recipies: None,
             meta: Meta::new(), //TODO: Inner join table to retrieve,
             role: UserService::retrive_role_from_row(&pg_row).unwrap(),
+            address: None,
         }
     }
 
