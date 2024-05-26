@@ -1,8 +1,8 @@
 use std::fmt;
 use std::str::FromStr;
 
-use serde::{Deserialize, Serialize};
 use serde::de::Error;
+use serde::{Deserialize, Serialize};
 
 pub struct Access {}
 pub trait Role {
@@ -15,6 +15,15 @@ pub struct UserRole {}
 pub struct AdminRole {}
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
 pub struct SuperAdminRole {}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
+pub struct Employee {}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
+pub struct Manager {}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
+pub struct Director {}
 
 impl Role for UserRole {
     fn has_access(&self, _: Access) -> bool {
@@ -31,11 +40,94 @@ impl Role for SuperAdminRole {
         true
     }
 }
+impl Role for Employee {
+    fn has_access(&self, access: Access) -> bool {
+        true
+    }
+}
+impl Role for Manager {
+    fn has_access(&self, access: Access) -> bool {
+        true
+    }
+}
+impl Role for Director {
+    fn has_access(&self, access: Access) -> bool {
+        true
+    }
+}
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Roles {
     User(UserRole),
     Admin(AdminRole),
     SuperAdmin(SuperAdminRole),
+    Employee(Employee),
+    Manager(Manager),
+    Director(Director),
+}
+impl Roles {
+    pub fn user_role() -> Self {
+        Roles::User(UserRole {})
+    }
+    pub fn admin_role() -> Self {
+        Roles::Admin(AdminRole {})
+    }
+    pub fn super_admin_role() -> Self {
+        Roles::SuperAdmin(SuperAdminRole {})
+    }
+
+    pub fn employee_role() -> Self {
+        Roles::Employee(Employee {})
+    }
+
+    pub fn manager_role() -> Self {
+        Roles::Manager(Manager {})
+    }
+
+    pub fn director_role() -> Self {
+        Roles::Director(Director {})
+    }
+
+    pub fn is_user(&self) -> bool {
+        match self {
+            Roles::User(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_admin(&self) -> bool {
+        match self {
+            Roles::Admin(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_super_user(&self) -> bool {
+        match self {
+            Roles::SuperAdmin(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_employee(&self) -> bool {
+        match self {
+            Roles::Employee(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_manager(&self) -> bool {
+        match self {
+            Roles::Manager(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_director(&self) -> bool {
+        match self {
+            Roles::Director(_) => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -44,7 +136,7 @@ pub struct ParseFromStringRoleError;
 impl fmt::Display for ParseFromStringRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Problem with role conversion")
-            // ...
+        // ...
     }
 }
 impl FromStr for Roles {
@@ -55,6 +147,9 @@ impl FromStr for Roles {
             "User" => Ok(Roles::user_role()),
             "Admin" => Ok(Roles::admin_role()),
             "SuperAdmin" => Ok(Roles::super_admin_role()),
+            "Employee" => Ok(Roles::employee_role()),
+            "Manager" => Ok(Roles::manager_role()),
+            "Director" => Ok(Roles::director_role()),
             _ => Err(ParseFromStringRoleError),
         }
     }
@@ -68,6 +163,9 @@ impl Serialize for Roles {
             Roles::User(_) => serializer.serialize_str("User"),
             Roles::Admin(_) => serializer.serialize_str("Admin"),
             Roles::SuperAdmin(_) => serializer.serialize_str("SuperAdmin"),
+            Roles::Employee(_) => serializer.serialize_str("Employee"),
+            Roles::Manager(_) => serializer.serialize_str("Manager"),
+            Roles::Director(_) => serializer.serialize_str("Director"),
         }
     }
 }
@@ -84,42 +182,6 @@ impl<'de> Deserialize<'de> for Roles {
                 Err(error) => Err(error).map_err(D::Error::custom),
             },
             Err(error) => Err(error),
-        }
-    }
-}
-
-impl Roles {
-    pub fn user_role() -> Self {
-        Roles::User(UserRole {})
-    }
-    pub fn admin_role() -> Self {
-        Roles::Admin(AdminRole {})
-    }
-    pub fn super_admin_role() -> Self {
-        Roles::SuperAdmin(SuperAdminRole {})
-    }
-
-    pub fn is_user(&self) -> bool {
-        match self {
-            Roles::User(_) => true,
-            Roles::Admin(_) => false,
-            Roles::SuperAdmin(_) => false,
-        }
-    }
-
-    pub fn is_admin(&self) -> bool {
-        match self {
-            Roles::User(_) => false,
-            Roles::Admin(_) => false,
-            Roles::SuperAdmin(_) => true,
-        }
-    }
-
-    pub fn is_super_user(&self) -> bool {
-        match self {
-            Roles::User(_) => false,
-            Roles::Admin(_) => false,
-            Roles::SuperAdmin(_) => true,
         }
     }
 }

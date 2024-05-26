@@ -1,12 +1,12 @@
-use bcrypt::{hash, verify, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::core::{
+    address::address::Address,
     entity::Entity,
     meta::meta::Meta,
     recipie::recipie::Recipie,
-    role::role::{Roles, UserRole},
+    role::role::{Role, Roles, UserRole},
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -16,7 +16,7 @@ pub struct User {
     #[serde(skip_serializing)]
     pub password: String,
     pub email: String,
-    pub recipies: Option<Vec<Recipie>>,
+    pub address: Option<Address>,
     pub meta: Meta,
     pub role: Roles,
 }
@@ -33,52 +33,43 @@ impl User {
         username: String,
         password: String,
         email: String,
-        recipies: Option<Vec<Recipie>>,
         role: Option<Roles>,
     ) -> Self {
-        let recipies: Option<Vec<Recipie>> = match recipies {
-            Some(r) => Some(r),
-            None => Some(vec![]),
-        };
-        let role: Roles = match role {
-            Some(r) => match r {
-                Roles::User(_) => Roles::user_role(),
-                Roles::Admin(_) => Roles::admin_role(),
-                Roles::SuperAdmin(_) => Roles::super_admin_role(),
-            },
-            None => Roles::User(UserRole {}),
-        };
+        let user_role: Roles = User::prepare_proper_role(role);
         match id {
             Some(id) => Self {
                 id,
                 username,
                 password,
                 email,
-                recipies,
                 meta: Meta::new(),
-                role,
+                role: user_role,
+                address: None,
             },
             None => Self {
                 id: User::generate_id(),
                 username,
                 password,
                 email,
-                recipies,
                 meta: Meta::new(),
-                role,
+                role: user_role,
+                address: None,
             },
         }
     }
 
-    fn prepare_password_hash(password: String) -> String {
-        hash(password, 10).unwrap()
-    }
-
-    fn verify_password(
-        entered_password: String,
-        hash: String,
-    ) -> Result<bool, bcrypt::BcryptError> {
-        verify(entered_password, &hash)
+    fn prepare_proper_role(role: Option<Roles>) -> Roles {
+        match role {
+            Some(r) => match r {
+                Roles::User(_) => Roles::user_role(),
+                Roles::Admin(_) => Roles::admin_role(),
+                Roles::SuperAdmin(_) => Roles::super_admin_role(),
+                Roles::Employee(_) => Roles::employee_role(),
+                Roles::Manager(_) => Roles::manager_role(),
+                Roles::Director(_) => Roles::director_role(),
+            },
+            None => Roles::User(UserRole {}),
+        }
     }
 }
 
@@ -124,7 +115,6 @@ mod tests {
             "test_user".to_string(),
             "password123".to_string(),
             "test@example.com".to_string(),
-            Some(vec![]),
             Some(Roles::admin_role()),
         );
 
@@ -150,7 +140,6 @@ mod tests {
             "test_user".to_string(),
             "password123".to_string(),
             "test@example.com".to_string(),
-            None,
             Some(Roles::user_role()),
         );
 
@@ -181,7 +170,6 @@ mod tests {
             "test_user".to_string(),
             "password123".to_string(),
             "test@example.com".to_string(),
-            Some(vec![recipie1, recipie2]),
             None,
         );
 
@@ -194,7 +182,6 @@ mod tests {
         assert_eq!(user.email, "test@example.com");
 
         // Check if the recipies are set correctly
-        assert_eq!(user.recipies.unwrap().len(), 2);
 
         // Check if the meta field is initialized correctly
         assert_eq!(user.meta.edit_date, user.meta.create_date);
@@ -210,7 +197,6 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             None,
-            None,
         );
 
         // Check if the user has a UUID id
@@ -221,11 +207,7 @@ mod tests {
         //assert_eq!(user.password, "password123");
         assert_eq!(user.email, "test@example.com");
 
-        // Check if the recipies are initialized as an empty vector
-        assert_eq!(user.recipies.unwrap().len(), 0);
-
         // Check if the meta field is initialized correctly
-        assert_eq!(user.meta.edit_date, user.meta.create_date);
     }
 
     #[test]
@@ -238,13 +220,13 @@ mod tests {
             username: String::from("test_user"),
             password: String::from("password123"),
             email: String::from("test@example.com"),
-            recipies: Some(vec![]),
             meta: Meta {
                 id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
                 create_date: date,
                 edit_date: date,
             },
             role: Roles::User(UserRole {}),
+            address: None,
         };
 
         // Serialize the user to JSON
