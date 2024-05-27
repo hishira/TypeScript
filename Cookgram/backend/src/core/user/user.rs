@@ -68,7 +68,7 @@ impl User {
                 Roles::Manager(_) => Roles::manager_role(),
                 Roles::Director(_) => Roles::director_role(),
             },
-            None => Roles::User(UserRole {}),
+            None => Roles::User(UserRole::default()),
         }
     }
 }
@@ -225,7 +225,7 @@ mod tests {
                 create_date: date,
                 edit_date: date,
             },
-            role: Roles::User(UserRole {}),
+            role: Roles::User(UserRole::default()),
             address: None,
         };
 

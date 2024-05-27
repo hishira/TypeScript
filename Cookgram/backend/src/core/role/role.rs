@@ -4,13 +4,24 @@ use std::str::FromStr;
 use serde::de::Error;
 use serde::{Deserialize, Serialize};
 
-pub struct Access {}
+use super::access::{Access, Action, Queries};
+
 pub trait Role {
-    fn has_access(&self, access: Access) -> bool;
+    fn has_access(&self, access: impl Access) -> bool;
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
-pub struct UserRole {}
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Hash)]
+pub struct UserRole {
+    access: Vec<Queries>,
+}
+
+impl Default for UserRole {
+    fn default() -> Self {
+        UserRole {
+            access: vec![Queries::User(Action::Create)]
+        }
+    }
+}
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
 pub struct AdminRole {}
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
@@ -26,36 +37,36 @@ pub struct Manager {}
 pub struct Director {}
 
 impl Role for UserRole {
-    fn has_access(&self, _: Access) -> bool {
+    fn has_access(&self, _: impl Access) -> bool {
         true
     }
 }
 impl Role for AdminRole {
-    fn has_access(&self, _: Access) -> bool {
+    fn has_access(&self, _: impl Access) -> bool {
         true
     }
 }
 impl Role for SuperAdminRole {
-    fn has_access(&self, _: Access) -> bool {
+    fn has_access(&self, _: impl Access) -> bool {
         true
     }
 }
 impl Role for Employee {
-    fn has_access(&self, access: Access) -> bool {
+    fn has_access(&self, access: impl Access) -> bool {
         true
     }
 }
 impl Role for Manager {
-    fn has_access(&self, access: Access) -> bool {
+    fn has_access(&self, access: impl Access) -> bool {
         true
     }
 }
 impl Role for Director {
-    fn has_access(&self, access: Access) -> bool {
+    fn has_access(&self, access: impl Access) -> bool {
         true
     }
 }
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Roles {
     User(UserRole),
     Admin(AdminRole),
@@ -66,7 +77,7 @@ pub enum Roles {
 }
 impl Roles {
     pub fn user_role() -> Self {
-        Roles::User(UserRole {})
+        Roles::User(UserRole::default())
     }
     pub fn admin_role() -> Self {
         Roles::Admin(AdminRole {})
@@ -189,7 +200,9 @@ impl<'de> Deserialize<'de> for Roles {
 #[cfg(test)]
 mod tests {
     use super::*;
+    struct TestAccess {}
 
+    impl Access for TestAccess {}
     #[test]
     fn test_user_role_has_access() {
         // Create a user role
@@ -197,7 +210,7 @@ mod tests {
 
         // Ensure user role has access
         assert!(match user_role {
-            Roles::User(role) => role.has_access(Access {}),
+            Roles::User(role) => role.has_access(TestAccess {}),
             _ => false,
         });
     }
@@ -209,7 +222,7 @@ mod tests {
 
         // Ensure admin role has access
         assert!(match admin_role {
-            Roles::Admin(role) => role.has_access(Access {}),
+            Roles::Admin(role) => role.has_access(TestAccess {}),
             _ => false,
         });
     }
@@ -221,7 +234,7 @@ mod tests {
 
         // Ensure super admin role has access
         assert!(match super_admin_role {
-            Roles::SuperAdmin(role) => role.has_access(Access {}),
+            Roles::SuperAdmin(role) => role.has_access(TestAccess {}),
             _ => false,
         });
     }
