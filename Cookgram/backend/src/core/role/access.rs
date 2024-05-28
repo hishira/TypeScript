@@ -6,15 +6,16 @@ pub trait QueryAccess: Access{}
 
 pub trait ActionAccess: Access{}
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy, Hash, Eq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub enum Queries {
-    User(Action),
+    User(Vec<Action>),
     Address(Action),
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy, Hash, Eq)]
 
 pub enum Action {
+    View,
     Create,
     Edit,
     Delete,
