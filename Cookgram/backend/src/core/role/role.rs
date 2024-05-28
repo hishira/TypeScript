@@ -10,16 +10,22 @@ pub trait Role {
     fn has_access(&self, access: impl Access) -> bool;
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Hash)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct UserRole {
-    access: Vec<Queries>,
+    access: Queries,
 }
 
 impl Default for UserRole {
     fn default() -> Self {
         UserRole {
-            access: vec![Queries::User(Action::Create)]
+            access: Queries::User(vec![Action::View, Action::Create, Action::Edit]),
         }
+    }
+}
+
+impl UserRole {
+    pub fn has_access_to(&self, query: Queries) -> bool {
+        todo!()
     }
 }
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
