@@ -137,7 +137,7 @@ impl AuthRouter {
         }
         let user = users.get(0).unwrap();
         claims.user_id = Some(user.id);
-        claims.role = Some(user.role);
+        claims.role = Some(user.role.clone());
         let token = encode(&Header::default(), &claims, &KEYS.encoding)
             .map_err(|_| AuthError::TokenCreation)?;
         match state

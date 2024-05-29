@@ -3,7 +3,7 @@ use sqlx::Row;
 
 use crate::api::dtos::roledto::roledto::RoleDto;
 use crate::api::utils::password_worker::password_worker::PasswordWorker;
-use crate::core::role::role::{Roles, UserRole};
+use crate::core::role::role::{Roles};
 use crate::{
     api::dtos::userdto::userdto::UserDtos,
     core::{meta::meta::Meta, user::user::User},

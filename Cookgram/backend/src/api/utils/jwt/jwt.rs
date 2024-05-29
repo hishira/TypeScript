@@ -6,14 +6,17 @@ use axum_extra::{
 use jsonwebtoken::{decode, Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
-use crate::{api::router::authrouter::{AuthError, KEYS}, core::role::role::{Roles, UserRole}};
+use crate::{
+    api::router::authrouter::{AuthError, KEYS},
+    core::role::role::Roles,
+};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
     pub user_id: Option<uuid::Uuid>,
     pub user_info: String,
     pub role: Option<Roles>,
-    pub exp: usize
+    pub exp: usize,
 }
 
 #[async_trait]
@@ -28,9 +31,9 @@ where
             .extract::<TypedHeader<Authorization<Bearer>>>()
             .await
             .map_err(|_| AuthError::InvalidToken)?;
-        println!("{}", bearer.token());
-        let token_data = decode::<Claims>(bearer.token(), &KEYS.decoding, &Validation::default()).map_err(|_|AuthError::InvalidToken)?;
-        
+        let token_data = decode::<Claims>(bearer.token(), &KEYS.decoding, &Validation::default())
+            .map_err(|_| AuthError::InvalidToken)?;
+
         Ok(token_data.claims)
     }
 }

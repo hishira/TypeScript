@@ -4,74 +4,19 @@ use std::str::FromStr;
 use serde::de::Error;
 use serde::{Deserialize, Serialize};
 
-use super::access::{Access, Action, Queries};
+use super::access::{Access, Action, Queries, QueriesActions, QueryAccess};
+use super::adminrole::AdminRole;
+use super::director::Director;
+use super::employee::Employee;
+use super::manager::Manager;
+use super::superadminrole::SuperAdminRole;
+use super::userrole::UserRole;
 
 pub trait Role {
     fn has_access(&self, access: impl Access) -> bool;
+    fn has_access_to(&self, query_action: QueriesActions) -> bool;
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
-pub struct UserRole {
-    access: Queries,
-}
-
-impl Default for UserRole {
-    fn default() -> Self {
-        UserRole {
-            access: Queries::User(vec![Action::View, Action::Create, Action::Edit]),
-        }
-    }
-}
-
-impl UserRole {
-    pub fn has_access_to(&self, query: Queries) -> bool {
-        todo!()
-    }
-}
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
-pub struct AdminRole {}
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
-pub struct SuperAdminRole {}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
-pub struct Employee {}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
-pub struct Manager {}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
-pub struct Director {}
-
-impl Role for UserRole {
-    fn has_access(&self, _: impl Access) -> bool {
-        true
-    }
-}
-impl Role for AdminRole {
-    fn has_access(&self, _: impl Access) -> bool {
-        true
-    }
-}
-impl Role for SuperAdminRole {
-    fn has_access(&self, _: impl Access) -> bool {
-        true
-    }
-}
-impl Role for Employee {
-    fn has_access(&self, access: impl Access) -> bool {
-        true
-    }
-}
-impl Role for Manager {
-    fn has_access(&self, access: impl Access) -> bool {
-        true
-    }
-}
-impl Role for Director {
-    fn has_access(&self, access: impl Access) -> bool {
-        true
-    }
-}
 #[derive(Debug, PartialEq, Clone)]
 pub enum Roles {
     User(UserRole),
@@ -86,22 +31,33 @@ impl Roles {
         Roles::User(UserRole::default())
     }
     pub fn admin_role() -> Self {
-        Roles::Admin(AdminRole {})
+        Roles::Admin(AdminRole::default())
     }
     pub fn super_admin_role() -> Self {
-        Roles::SuperAdmin(SuperAdminRole {})
+        Roles::SuperAdmin(SuperAdminRole::default())
     }
 
     pub fn employee_role() -> Self {
-        Roles::Employee(Employee {})
+        Roles::Employee(Employee::default())
     }
 
     pub fn manager_role() -> Self {
-        Roles::Manager(Manager {})
+        Roles::Manager(Manager::default())
     }
 
     pub fn director_role() -> Self {
-        Roles::Director(Director {})
+        Roles::Director(Director::default())
+    }
+
+    pub fn get_role(&self) -> impl Role {
+        match self {
+            Roles::User(user) => user,
+            Roles::Admin(admin) => admin,
+            Roles::SuperAdmin(superAdmin) => superAdmin,
+            Roles::Employee(employee) => employee,
+            Roles::Manager(manager) => manager,
+            Roles::Director(director) => director,
+        }
     }
 
     pub fn is_user(&self) -> bool {

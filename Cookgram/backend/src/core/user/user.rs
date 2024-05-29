@@ -6,7 +6,7 @@ use crate::core::{
     entity::Entity,
     meta::meta::Meta,
     recipie::recipie::Recipie,
-    role::role::{Role, Roles, UserRole},
+    role::{role::{Role, Roles}, userrole::UserRole},
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]

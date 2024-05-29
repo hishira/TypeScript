@@ -1,2 +1,2 @@
 
-pub trait ValueObject{}
+pub trait ValueObject{ }
