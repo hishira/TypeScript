@@ -49,14 +49,14 @@ impl Roles {
         Roles::Director(Director::default())
     }
 
-    pub fn get_role(&self) -> impl Role {
+    pub fn has_access_to(&self, query_action: QueriesActions) -> bool {
         match self {
-            Roles::User(user) => user,
-            Roles::Admin(admin) => admin,
-            Roles::SuperAdmin(superAdmin) => superAdmin,
-            Roles::Employee(employee) => employee,
-            Roles::Manager(manager) => manager,
-            Roles::Director(director) => director,
+            Roles::User(user) => user.has_access_to(query_action),
+            Roles::Admin(admin) => admin.has_access_to(query_action),
+            Roles::SuperAdmin(super_admin) => super_admin.has_access_to(query_action),
+            Roles::Employee(employee) => employee.has_access_to(query_action),
+            Roles::Manager(manager) => manager.has_access_to(query_action),
+            Roles::Director(director) => director.has_access_to(query_action),
         }
     }
 

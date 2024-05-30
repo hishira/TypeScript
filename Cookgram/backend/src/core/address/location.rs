@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::core::valueObject::value_object::ValueObject;
 
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize, Copy)]
 pub struct Location {
     pub latitude: Option<f32>,
     pub longitude: Option<f32>,

@@ -19,8 +19,7 @@ use crate::{
         validators::dtovalidator::ValidateDtos,
     },
     core::{
-        event::userevent::UserEvent,
-        user::{self, user::User},
+        event::userevent::UserEvent, role::access::{Action, Queries, QueriesActions}, user::{self, user::User}
     },
     database::init::Database,
 };
@@ -70,7 +69,7 @@ impl UserRouter {
     {
         match claims.role {
             Some(role) => {
-                if !role.is_admin() {
+                if !role.has_access_to(QueriesActions::Access(Queries::User, Action::View)) {
                     return Err(AuthError::WrongCredentials);
                 }
                 let users = state.repo.find(params).await;
