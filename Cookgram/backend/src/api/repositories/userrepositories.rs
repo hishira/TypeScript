@@ -7,7 +7,9 @@ use crate::{
         },
         services::userservice::UserService,
     },
-    core::{event::event::{Event, EventType}, user::user::User},
+    core::{
+        address::address::Address, event::event::{Event, EventType}, user::user::User
+    },
 };
 use sqlx::{Pool, Postgres, Transaction};
 use std::ops::DerefMut;
@@ -36,10 +38,25 @@ impl UserRepositories {
             (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
         }
         let _ = transaction.commit().await;
-        EventRepository::create_later(self.pool.clone(), Event::new(None, Some(EventType::Create), entity.id.clone(), true));
+        EventRepository::create_later(
+            self.pool.clone(),
+            Event::new(None, Some(EventType::Create), entity.id.clone(), true),
+        );
         entity
     }
 
+    async fn create_user_address(&self, user: User, address: Address) -> User {
+        let mut address_query = self
+            .user_queries
+            .prepare_address_query(address.clone(), user.id.clone());
+        let result = address_query.build().execute(&self.pool).await;
+        match result {
+            Ok(_) => tracing::debug!("Address created"),
+            Err(error) => tracing::error!("error while address create: {}", error),
+        }
+        EventRepository::create_later(self.pool.clone(), Event::new(None, Some(EventType::Update),user.id.clone(),true));
+        User::create_base_on_user_and_address(user, address)
+    }
 }
 impl Repository<User, UserFilterOption> for UserRepositories {
     async fn create(&self, entity: User) -> User {
@@ -82,19 +99,22 @@ impl Repository<User, UserFilterOption> for UserRepositories {
             Err(error) => {
                 tracing::error!("error while user delete: {}", error);
                 entity
-            },
+            }
         }
     }
 
     async fn update(&self, update_entity: User) -> User {
-        let mut update_query = self.user_queries.update(update_entity.clone());
-        match update_query.build().execute(&self.pool).await {
-            Ok(_) => update_entity,
-            Err(error) => {
-                tracing::error!("Error while user update {}", error);
-                update_entity
-            },
-        }
+        // For now change for address createtion
+        let address = update_entity.address.clone();
+        self.create_user_address(update_entity, address.unwrap()).await
+        // let mut update_query = self.user_queries.update(update_entity.clone());
+        // match update_query.build().execute(&self.pool).await {
+        //     Ok(_) => update_entity,
+        //     Err(error) => {
+        //         tracing::error!("Error while user update {}", error);
+        //         update_entity
+        //     }
+        // }
     }
 }
 
@@ -111,4 +131,3 @@ pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User) {
         };
     });
 }
-

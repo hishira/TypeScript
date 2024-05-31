@@ -8,7 +8,7 @@ use crate::{
         dtos::userdto::userdto::UserFilterOption,
         queries::{actionquery::ActionQueryBuilder, query::Query},
     },
-    core::user::user::User,
+    core::{address::address::Address, user::user::User},
 };
 
 #[derive(Clone)]
@@ -27,6 +27,35 @@ impl UserQuery {
         }
     }
 
+    pub fn prepare_address_query(&self, address: Address, user_id: Uuid) -> QueryBuilder<Postgres> {
+        let address_id = Uuid::new_v4(); // Address is value object, not necessery id
+        let mut create_address_builder: QueryBuilder<Postgres> = QueryBuilder::new(
+            "WITH first_insert as ( INSERT INTO ADDRESS(id, house, door, city, country, lat, long, postal_code, fax, phone) ",
+        );
+
+        create_address_builder.push_values(vec![address], |mut b, address| {
+            b.push_bind(address_id)
+                .push_bind(address.house)
+                .push_bind(address.door)
+                .push_bind(address.city)
+                .push_bind(address.country)
+                .push_bind(address.location.latitude)
+                .push_bind(address.location.longitude)
+                .push_bind(address.postal_code)
+                .push_bind(address.fax)
+                .push_bind(address.phone);
+        });
+        create_address_builder
+            .push("returning id ) INSERT into ADDRESS_CONNECTION (entity_id, address_id) ");
+        create_address_builder.push_values(
+            std::iter::once((user_id, address_id)),
+            |mut b, (user_id, address_id)| {
+                b.push_bind(user_id).push_bind(address_id);
+            },
+        );
+
+        create_address_builder
+    }
     fn prepare_username(
         user_query: &mut QueryBuilder<Postgres>,
         mut count: i8,
@@ -87,7 +116,8 @@ impl Query<UserFilterOption> for UserQuery {
     }
 
     fn find_by_id(&self, id: uuid::Uuid) -> QueryBuilder<'static, Postgres> {
-        let mut query_by_id: QueryBuilder<Postgres> = QueryBuilder::new("SELECT id, username, email, role FROM users where id = ");
+        let mut query_by_id: QueryBuilder<Postgres> =
+            QueryBuilder::new("SELECT id, username, email, password, role FROM users where id = ");
         query_by_id.push_bind(id);
         query_by_id
     }
@@ -123,7 +153,8 @@ impl ActionQueryBuilder<User> for UserQuery {
     }
 
     fn delete(&self, entity: User) -> QueryBuilder<Postgres> {
-        let mut delete_query: QueryBuilder<Postgres> = QueryBuilder::new("DELETE FROM USERS WHERE id = ");
+        let mut delete_query: QueryBuilder<Postgres> =
+            QueryBuilder::new("DELETE FROM USERS WHERE id = ");
         delete_query.push_bind(entity.id);
         delete_query
     }
@@ -197,7 +228,7 @@ mod tests {
             email: "test@example.com".to_string(),
             meta: Meta::new(),
             role: Roles::user_role(),
-            address: None
+            address: None,
         };
 
         let mut create_query = validate_action_query(&user_query, test_user);

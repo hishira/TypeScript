@@ -8,7 +8,10 @@ use sqlx::{Pool, Postgres};
 use crate::{
     api::{
         appstate::appstate::AppState,
-        dtos::userdto::userdto::{CreateUserDto, DeleteUserDto, UserDtos, UserFilterOption},
+        dtos::{
+            addressdto::createaddressdto::CreateAddressDto,
+            userdto::userdto::{CreateUserDto, DeleteUserDto, UserDtos, UserFilterOption},
+        },
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
             eventrepository::EventRepository, repositories::Repository,
@@ -20,6 +23,7 @@ use crate::{
     },
     core::{
         event::userevent::UserEvent,
+        role::access::{Action, Queries, QueriesActions},
         user::{self, user::User},
     },
     database::init::Database,
@@ -60,6 +64,23 @@ impl UserRouter {
         Json(user)
     }
 
+    async fn add_user_address<T>(
+        State(state): State<AppState<T>>,
+        ValidateDtos(params): ValidateDtos<CreateAddressDto>,
+    ) -> Json<String>
+    where
+        T: Repository<User, UserFilterOption>,
+    {
+        let user = state.repo.find_by_id(params.user_id).await;
+        state
+            .repo
+            .update(User::create_base_on_user_and_address(
+                user,
+                CreateAddressDto::build_address_based_on_create_dto(params),
+            ))
+            .await;
+        Json("Ok".to_string())
+    }
     async fn user_find<T>(
         claims: Claims,
         State(state): State<AppState<T>>,
@@ -70,7 +91,7 @@ impl UserRouter {
     {
         match claims.role {
             Some(role) => {
-                if !role.is_admin() {
+                if !role.has_access_to(QueriesActions::Access(Queries::User, Action::View)) {
                     return Err(AuthError::WrongCredentials);
                 }
                 let users = state.repo.find(params).await;
@@ -101,6 +122,7 @@ impl ApplicationRouter for UserRouter {
             )
             .route("/protected", get(protected))
             .route("/test-protected", post(pp))
+            .route("/address-create", post(UserRouter::add_user_address))
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),

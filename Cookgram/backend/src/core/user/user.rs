@@ -71,6 +71,13 @@ impl User {
             None => Roles::User(UserRole::default()),
         }
     }
+
+    pub fn create_base_on_user_and_address(user: User, address: Address) -> User {
+        User {
+            address: Some(address),
+            ..user
+        }
+    }
 }
 
 #[cfg(test)]
