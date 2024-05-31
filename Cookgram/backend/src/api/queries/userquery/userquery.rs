@@ -30,7 +30,7 @@ impl UserQuery {
     pub fn prepare_address_query(&self, address: Address, user_id: Uuid) -> QueryBuilder<Postgres> {
         let address_id = Uuid::new_v4(); // Address is value object, not necessery id
         let mut create_address_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "WITH first_insert as ( INSERT INTO ADDRESS(id, house, door, city, country, lat, long, fax, phone) ",
+            "WITH first_insert as ( INSERT INTO ADDRESS(id, house, door, city, country, lat, long, postal_code, fax, phone) ",
         );
 
         create_address_builder.push_values(vec![address], |mut b, address| {
@@ -45,10 +45,15 @@ impl UserQuery {
                 .push_bind(address.fax)
                 .push_bind(address.phone);
         });
-        create_address_builder.push(") insert into ADDRESS_CONNECTION (entity_id, address_id) ");
-        create_address_builder.push_bind(user_id);
-        create_address_builder.push_bind(address_id);
-        
+        create_address_builder
+            .push("returning id ) INSERT into ADDRESS_CONNECTION (entity_id, address_id) ");
+        create_address_builder.push_values(
+            std::iter::once((user_id, address_id)),
+            |mut b, (user_id, address_id)| {
+                b.push_bind(user_id).push_bind(address_id);
+            },
+        );
+
         create_address_builder
     }
     fn prepare_username(
@@ -112,7 +117,7 @@ impl Query<UserFilterOption> for UserQuery {
 
     fn find_by_id(&self, id: uuid::Uuid) -> QueryBuilder<'static, Postgres> {
         let mut query_by_id: QueryBuilder<Postgres> =
-            QueryBuilder::new("SELECT id, username, email, role FROM users where id = ");
+            QueryBuilder::new("SELECT id, username, email, password, role FROM users where id = ");
         query_by_id.push_bind(id);
         query_by_id
     }
