@@ -85,7 +85,8 @@ mod tests {
 
         let validation_result = dto.validate();
         assert!(validation_result.is_err());
-        let errors = validation_result.unwrap_err().field_errors();
+        let binding = validation_result.unwrap_err();
+        let errors = binding.field_errors();
         assert!(errors.contains_key("address"));
     }
 
@@ -107,7 +108,8 @@ mod tests {
 
         let validation_result = dto.validate();
         assert!(validation_result.is_err());
-        let errors = validation_result.unwrap_err().field_errors();
+        let binding = validation_result.unwrap_err();
+        let errors = binding.field_errors();
         assert!(errors.contains_key("house"));
     }
 
@@ -129,7 +131,8 @@ mod tests {
 
         let validation_result = dto.validate();
         assert!(validation_result.is_err());
-        let errors = validation_result.unwrap_err().field_errors();
+        let binding = validation_result.unwrap_err();
+        let errors = binding.field_errors();
         assert!(errors.contains_key("city"));
     }
 
@@ -151,7 +154,8 @@ mod tests {
 
         let validation_result = dto.validate();
         assert!(validation_result.is_err());
-        let errors = validation_result.unwrap_err().field_errors();
+        let binding = validation_result.unwrap_err();
+        let errors = binding.field_errors();
         assert!(errors.contains_key("postal_code"));
     }
 
@@ -171,17 +175,30 @@ mod tests {
             phone: Some("098-765-4321".to_string()),
         };
 
-        let address = CreateAddressDto::build_address_based_on_create_dto(dto.clone());
+        let copy_dto = CreateAddressDto {
+            user_id: Uuid::new_v4(),
+            address: "123 Example Street".to_string(),
+            house: "A1".to_string(),
+            door: Some("3B".to_string()),
+            city: "Example City".to_string(),
+            country: "Example Country".to_string(),
+            latitude: Some(51.5074),
+            longitude: Some(-0.1278),
+            postal_code: "12345".to_string(),
+            fax: Some("123-456-7890".to_string()),
+            phone: Some("098-765-4321".to_string()),
+        };
+        let address = CreateAddressDto::build_address_based_on_create_dto(dto);
 
-        assert_eq!(address.address, dto.address);
-        assert_eq!(address.house, dto.house);
-        assert_eq!(address.door, dto.door);
-        assert_eq!(address.city, dto.city);
-        assert_eq!(address.country, dto.country);
-        assert_eq!(address.location.latitude, dto.latitude);
-        assert_eq!(address.location.longitude, dto.longitude);
-        assert_eq!(address.postal_code, dto.postal_code);
-        assert_eq!(address.fax, dto.fax);
-        assert_eq!(address.phone, dto.phone);
+        assert_eq!(address.address, copy_dto.address);
+        assert_eq!(address.house, copy_dto.house);
+        assert_eq!(address.door, copy_dto.door);
+        assert_eq!(address.city, copy_dto.city);
+        assert_eq!(address.country, copy_dto.country);
+        assert_eq!(address.location.latitude, copy_dto.latitude);
+        assert_eq!(address.location.longitude, copy_dto.longitude);
+        assert_eq!(address.postal_code, copy_dto.postal_code);
+        assert_eq!(address.fax, copy_dto.fax);
+        assert_eq!(address.phone, copy_dto.phone);
     }
 }
