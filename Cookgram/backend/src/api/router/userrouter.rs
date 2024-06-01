@@ -64,6 +64,27 @@ impl UserRouter {
         Json(user)
     }
 
+    async fn create_managed_users<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+        ValidateDtos(params): ValidateDtos<CreateUserDto>,
+    ) -> Result<Json<User>, AuthError>
+    where
+        T: Repository<User, UserFilterOption>,
+    {
+        if !claims
+            .role
+            .unwrap()
+            .has_access_to(QueriesActions::Access(Queries::User, Action::Management))
+        {
+            return Err(AuthError::WrongCredentials);
+        }
+        let user =
+            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker).await;
+
+        Ok(Json(user))
+    }
+
     async fn add_user_address<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,

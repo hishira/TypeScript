@@ -229,6 +229,7 @@ mod tests {
             meta: Meta::new(),
             role: Roles::user_role(),
             address: None,
+            managed_users: None,
         };
 
         let mut create_query = validate_action_query(&user_query, test_user);
@@ -281,6 +282,8 @@ mod tests {
             meta: Meta::new(),
             role: Roles::user_role(),
             address: None,
+            managed_users: None,
+
         };
 
         let _ = user_query.delete(test_user);

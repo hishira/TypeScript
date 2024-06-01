@@ -65,6 +65,7 @@ pub enum AuthError {
     InvalidToken,
     UserNotExists,
     BCryptError,
+    
 }
 pub struct AuthRouter {
     user_repo: UserRepositories,
@@ -167,7 +168,7 @@ impl ApplicationRouter for AuthRouter {
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
-                pass_worker: PasswordWorker::new(12, 4).unwrap(),
+                pass_worker: PasswordWorker::new(10, 4).unwrap(),
             })
     }
 }

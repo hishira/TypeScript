@@ -2,6 +2,8 @@ use sqlx::postgres::PgRow;
 use sqlx::Row;
 
 use crate::api::dtos::roledto::roledto::RoleDto;
+use crate::api::dtos::userdto::userdto::UserFilterOption;
+use crate::api::repositories::repositories::Repository;
 use crate::api::utils::password_worker::password_worker::PasswordWorker;
 use crate::core::role::role::{Roles};
 use crate::{
@@ -32,6 +34,10 @@ impl UserService {
         }
     }
 
+    pub async fn create_managed(user: User, repo: impl Repository<User, UserFilterOption>) -> User {
+        todo!()
+    }
+
     pub fn get_user_from_row(pg_row: PgRow) -> User {
         User {
             id: pg_row.get("id"),
@@ -41,6 +47,7 @@ impl UserService {
             meta: Meta::new(), //TODO: Inner join table to retrieve,
             role: UserService::retrive_role_from_row(&pg_row).unwrap(),
             address: None,
+            managed_users: None,
         }
     }
 
