@@ -1,11 +1,14 @@
-use sqlx::postgres::PgRow;
-use sqlx::Row;
+use std::future::Future;
+
+use sqlx::postgres::{PgQueryResult, PgRow};
+use sqlx::{Pool, Postgres, QueryBuilder, Row};
+use uuid::Uuid;
 
 use crate::api::dtos::roledto::roledto::RoleDto;
 use crate::api::dtos::userdto::userdto::UserFilterOption;
 use crate::api::repositories::repositories::Repository;
 use crate::api::utils::password_worker::password_worker::PasswordWorker;
-use crate::core::role::role::{Roles};
+use crate::core::role::role::Roles;
 use crate::{
     api::dtos::userdto::userdto::UserDtos,
     core::{meta::meta::Meta, user::user::User},
@@ -17,14 +20,9 @@ impl UserService {
     pub async fn get_user_from_dto(user_dto: UserDtos, pass_worker: &PasswordWorker) -> User {
         match user_dto {
             UserDtos::Create(user) => {
+                let role = user.role;
                 let hash = pass_worker.hash(user.password.clone()).await.unwrap();
-                User::new(
-                    None,
-                    user.username,
-                    hash,
-                    user.email,
-                    Some(Roles::user_role()),
-                ) //TODO: Fix role
+                User::new(None, user.username, hash, user.email, role) //TODO: Fix role
             }
             UserDtos::Update(user) => {
                 User::new(None, user.username, user.password, user.email, None)
@@ -32,6 +30,15 @@ impl UserService {
             }
             UserDtos::Delete(_) => todo!(),
         }
+    }
+
+    pub async fn create_user_connection(user_ids_touple: (Uuid, Uuid), pool: Pool<Postgres>) ->Result<PgQueryResult, sqlx::Error>  {
+        let mut create_user_connection: QueryBuilder<Postgres> =
+            QueryBuilder::new("INSERT INTO EMPLOYEE_CONNECTION (owner_id, user_id) ");
+        create_user_connection.push_values(std::iter::once(user_ids_touple), |mut b, touple| {
+            b.push_bind(touple.0).push_bind(touple.1);
+        });
+        return create_user_connection.build().execute(&pool).await;
     }
 
     pub async fn create_managed(user: User, repo: impl Repository<User, UserFilterOption>) -> User {

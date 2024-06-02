@@ -1,6 +1,8 @@
 use serde::Deserialize;
 use validator::{Validate, ValidationError};
 
+use crate::core::role::role::{Role, Roles};
+
 #[derive(Debug, Validate, Deserialize)]
 pub struct CreateUserDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
@@ -9,6 +11,7 @@ pub struct CreateUserDto {
     pub password: String,
     #[validate(email)]
     pub email: String,
+    pub role: Option<Roles>
 }
 
 #[derive(Debug, Validate, Deserialize)]
@@ -90,6 +93,7 @@ mod tests {
             username: "valid_username".to_string(),
             password: "valid_password".to_string(),
             email: "valid@example.com".to_string(),
+            role: Some(Roles::user_role())
         };
 
         // Validate the DTO
@@ -106,6 +110,8 @@ mod tests {
             username: "".to_string(),
             password: "short".to_string(),
             email: "invalid_email".to_string(), // Invalid email intentionally
+            role: Some(Roles::user_role())
+
         };
 
         // Validate the DTO

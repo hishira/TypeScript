@@ -1,8 +1,11 @@
+use std::error::Error;
 use std::fmt;
 use std::str::FromStr;
 
-use serde::de::Error;
 use serde::{Deserialize, Serialize};
+use sqlx::encode::IsNull;
+use sqlx::postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef};
+use sqlx::{Decode, Encode, Postgres, Type};
 
 use super::access::{Access, Action, Queries, QueriesActions, QueryAccess};
 use super::adminrole::AdminRole;
@@ -26,6 +29,42 @@ pub enum Roles {
     Manager(Manager),
     Director(Director),
 }
+
+impl Type<Postgres> for Roles {
+    fn type_info() -> PgTypeInfo {
+        PgTypeInfo::with_name("Role")
+    }
+}
+
+impl<'q> Encode<'q, Postgres> for Roles {
+    fn encode_by_ref(&self, buf: &mut PgArgumentBuffer) -> IsNull {
+        let value = match self {
+            Roles::User(_) => "User",
+            Roles::Admin(_) => "Admin",
+            Roles::SuperAdmin(_) => "SuperAdmin",
+            Roles::Employee(_) => "Employee",
+            Roles::Manager(_) => "Manager",
+            Roles::Director(_) => "Director",
+        };
+        Encode::<Postgres>::encode(value, buf)
+    }
+}
+
+impl<'r> Decode<'r, Postgres> for Roles {
+    fn decode(value: PgValueRef<'r>) -> Result<Self, Box<dyn Error + Send + Sync>> {
+        let s = <&str as Decode<Postgres>>::decode(value).unwrap();
+        match s {
+            "User" => Ok(Roles::user_role()),
+            "Admin" => Ok(Roles::admin_role()),
+            "SuperAdmin" => Ok(Roles::super_admin_role()),
+            "Employee" => Ok(Roles::employee_role()),
+            "Manager" => Ok(Roles::manager_role()),
+            "Director" => Ok(Roles::director_role()),
+            _ => Err(format!("Invalid role: {}", s).into()),
+        }
+    }
+}
+
 impl Roles {
     pub fn user_role() -> Self {
         Roles::User(UserRole::default())
@@ -152,7 +191,7 @@ impl<'de> Deserialize<'de> for Roles {
         match r_string {
             Ok(role_string) => match Roles::from_str(role_string.as_str()) {
                 Ok(role) => Ok(role),
-                Err(error) => Err(error).map_err(D::Error::custom),
+                Err(error) => Err(serde::de::Error::custom(error))
             },
             Err(error) => Err(error),
         }

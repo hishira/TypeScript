@@ -126,13 +126,14 @@ impl Query<UserFilterOption> for UserQuery {
 impl ActionQueryBuilder<User> for UserQuery {
     fn create(&self, entity: User) -> QueryBuilder<Postgres> {
         let mut create_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id) ");
+            QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id, role) ");
         create_builder.push_values(vec![entity], |mut b, user| {
             b.push_bind(user.id)
                 .push_bind(user.username)
                 .push_bind(user.password)
                 .push_bind(user.email)
-                .push_bind(user.meta.id);
+                .push_bind(user.meta.id)
+                .push_bind(user.role);
         });
         create_builder.push(" RETURNING id, username, password, email;");
         create_builder
