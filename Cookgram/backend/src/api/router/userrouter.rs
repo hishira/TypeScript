@@ -64,6 +64,37 @@ impl UserRouter {
         Json(user)
     }
 
+    async fn create_managed_users<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+        ValidateDtos(params): ValidateDtos<CreateUserDto>,
+    ) -> Result<Json<bool>, AuthError>
+    where
+        T: Repository<User, UserFilterOption>,
+    {
+        if !claims
+            .role
+            .unwrap()
+            .has_access_to(QueriesActions::Access(Queries::User, Action::Management))
+        {
+            return Err(AuthError::WrongCredentials);
+        }
+        let user =
+            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker).await;
+        let ids_touples = (claims.user_id.unwrap(), user.id);
+        state.repo.create(user).await;
+        //TODO: Check if we can move pool to other methods or move this to other method
+        let result = UserService::create_user_connection(ids_touples, state.event_repo.pool).await;
+        // Ok(Json(true))
+        match result {
+            Ok(_) => Ok(Json(true)),
+            Err(error) => {
+                tracing::error!("User cannot be added {}", error);
+                return Ok(Json(false));
+            }
+        }
+    }
+
     async fn add_user_address<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,
@@ -121,6 +152,7 @@ impl ApplicationRouter for UserRouter {
                 get(UserRouter::user_find).post(UserRouter::user_create),
             )
             .route("/protected", get(protected))
+            .route("/add-user", post(UserRouter::create_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
             .with_state(AppState {

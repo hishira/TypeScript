@@ -19,6 +19,7 @@ pub struct User {
     pub address: Option<Address>,
     pub meta: Meta,
     pub role: Roles,
+    pub managed_users: Option<Vec<User>>,
 }
 
 impl Entity for User {
@@ -45,6 +46,7 @@ impl User {
                 meta: Meta::new(),
                 role: user_role,
                 address: None,
+                managed_users: None,
             },
             None => Self {
                 id: User::generate_id(),
@@ -54,6 +56,7 @@ impl User {
                 meta: Meta::new(),
                 role: user_role,
                 address: None,
+                managed_users: None
             },
         }
     }
@@ -234,6 +237,7 @@ mod tests {
             },
             role: Roles::User(UserRole::default()),
             address: None,
+            managed_users: None,
         };
 
         // Serialize the user to JSON
