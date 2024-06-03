@@ -11,7 +11,7 @@ pub struct CreateUserDto {
     pub password: String,
     #[validate(email)]
     pub email: String,
-    pub role: Option<Roles>
+    pub role: Option<Roles>,
 }
 
 #[derive(Debug, Validate, Deserialize)]
@@ -22,6 +22,7 @@ pub struct UpdateUserDto {
     pub password: String,
     #[validate(email)]
     pub email: String,
+    pub role: Option<Roles>,
 }
 
 #[derive(Debug, Validate, Deserialize)]
@@ -93,7 +94,7 @@ mod tests {
             username: "valid_username".to_string(),
             password: "valid_password".to_string(),
             email: "valid@example.com".to_string(),
-            role: Some(Roles::user_role())
+            role: Some(Roles::user_role()),
         };
 
         // Validate the DTO
@@ -110,8 +111,7 @@ mod tests {
             username: "".to_string(),
             password: "short".to_string(),
             email: "invalid_email".to_string(), // Invalid email intentionally
-            role: Some(Roles::user_role())
-
+            role: Some(Roles::user_role()),
         };
 
         // Validate the DTO
@@ -128,6 +128,7 @@ mod tests {
             username: "valid_username".to_string(),
             password: "valid_password".to_string(),
             email: "valid@example.com".to_string(),
+            role: None,
         };
 
         let validation_errors = validate_dto(&valid_dto);
@@ -140,6 +141,7 @@ mod tests {
             username: "".to_string(),
             password: "short".to_string(),
             email: "invalid_email".to_string(),
+            role: None,
         };
 
         let validation_errors = validate_dto(&invalid_dto).unwrap();
