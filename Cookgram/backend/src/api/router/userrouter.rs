@@ -10,7 +10,9 @@ use crate::{
         appstate::appstate::AppState,
         dtos::{
             addressdto::createaddressdto::CreateAddressDto,
-            userdto::userdto::{CreateUserDto, DeleteUserDto, UserDtos, UserFilterOption},
+            userdto::userdto::{
+                CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
+            },
         },
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
@@ -59,7 +61,8 @@ impl UserRouter {
         T: Repository<User, UserFilterOption>,
     {
         let user_tmp =
-            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker).await;
+            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker, None)
+                .await;
         let user = state.repo.create(user_tmp).await;
         Json(user)
     }
@@ -80,7 +83,8 @@ impl UserRouter {
             return Err(AuthError::WrongCredentials);
         }
         let user =
-            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker).await;
+            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker, None)
+                .await;
         let ids_touples = (claims.user_id.unwrap(), user.id);
         state.repo.create(user).await;
         //TODO: Check if we can move pool to other methods or move this to other method
@@ -112,6 +116,32 @@ impl UserRouter {
             .await;
         Json("Ok".to_string())
     }
+
+    async fn update_user<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+        ValidateDtos(params): ValidateDtos<UpdateUserDto>,
+    ) -> Result<Json<User>, AuthError>
+    where
+        T: Repository<User, UserFilterOption>,
+    {
+        if !claims.role.unwrap().has_access_to(QueriesActions::Access(
+            Queries::User,
+            Action::SelfManagement,
+        )) {
+            return Err(AuthError::WrongCredentials);
+        }
+
+        let user = state.repo.find_by_id(claims.user_id.unwrap()).await;
+        let updated_user = UserService::get_user_from_dto(
+            UserDtos::Update(params),
+            &state.pass_worker,
+            Some(user),
+        )
+        .await;
+        return Ok(Json(updated_user));
+    }
+
     async fn user_find<T>(
         claims: Claims,
         State(state): State<AppState<T>>,
@@ -152,6 +182,7 @@ impl ApplicationRouter for UserRouter {
                 get(UserRouter::user_find).post(UserRouter::user_create),
             )
             .route("/protected", get(protected))
+            .route("/update-user", post(UserRouter::update_user))
             .route("/add-user", post(UserRouter::create_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))

@@ -147,6 +147,8 @@ impl ActionQueryBuilder<User> for UserQuery {
         update_query.push_bind(entity.email);
         update_query.push(" password = ");
         update_query.push_bind(entity.password);
+        update_query.push(" role = ");
+        update_query.push_bind(entity.role);
         update_query.push(" WHERE id = ");
         update_query.push_bind(entity.id);
 

@@ -5,7 +5,7 @@ use sqlx::{Pool, Postgres, QueryBuilder, Row};
 use uuid::Uuid;
 
 use crate::api::dtos::roledto::roledto::RoleDto;
-use crate::api::dtos::userdto::userdto::UserFilterOption;
+use crate::api::dtos::userdto::userdto::{UpdateUserDto, UserFilterOption};
 use crate::api::repositories::repositories::Repository;
 use crate::api::utils::password_worker::password_worker::PasswordWorker;
 use crate::core::role::role::Roles;
@@ -17,7 +17,11 @@ use crate::{
 pub struct UserService {}
 
 impl UserService {
-    pub async fn get_user_from_dto(user_dto: UserDtos, pass_worker: &PasswordWorker) -> User {
+    pub async fn get_user_from_dto(
+        user_dto: UserDtos,
+        pass_worker: &PasswordWorker,
+        user_to_edit: Option<User>,
+    ) -> User {
         match user_dto {
             UserDtos::Create(user) => {
                 let role = user.role;
@@ -25,14 +29,29 @@ impl UserService {
                 User::new(None, user.username, hash, user.email, role) //TODO: Fix role
             }
             UserDtos::Update(user) => {
-                User::new(None, user.username, user.password, user.email, None)
+                let user_from_db = user_to_edit.unwrap();
+                // User::new(None, user.username, user.password, user.email, None)
+                let hashed_password: String = match user.password {
+                    Some(password) => pass_worker.hash(password.clone()).await.unwrap(),
+                    None => user_from_db.password,
+                };
+                User::new(
+                    Some(user_from_db.id),
+                    user.username,
+                    hashed_password,
+                    user.email,
+                    Some(user.role.unwrap_or(user_from_db.role)),
+                )
                 // FOX role
             }
             UserDtos::Delete(_) => todo!(),
         }
     }
 
-    pub async fn create_user_connection(user_ids_touple: (Uuid, Uuid), pool: Pool<Postgres>) ->Result<PgQueryResult, sqlx::Error>  {
+    pub async fn create_user_connection(
+        user_ids_touple: (Uuid, Uuid),
+        pool: Pool<Postgres>,
+    ) -> Result<PgQueryResult, sqlx::Error> {
         let mut create_user_connection: QueryBuilder<Postgres> =
             QueryBuilder::new("INSERT INTO EMPLOYEE_CONNECTION (owner_id, user_id) ");
         create_user_connection.push_values(std::iter::once(user_ids_touple), |mut b, touple| {
