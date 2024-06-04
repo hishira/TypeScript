@@ -5,8 +5,10 @@ use crate::core::{
     address::address::Address,
     entity::Entity,
     meta::meta::Meta,
-    recipie::recipie::Recipie,
-    role::{role::{Role, Roles}, userrole::UserRole},
+    role::{
+        role::{Role, Roles},
+        userrole::UserRole,
+    },
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -56,7 +58,7 @@ impl User {
                 meta: Meta::new(),
                 role: user_role,
                 address: None,
-                managed_users: None
+                managed_users: None,
             },
         }
     }
@@ -169,10 +171,6 @@ mod tests {
 
     #[test]
     fn test_user_new_with_id_and_recipies() {
-        // Create some recipies for testing
-        let recipie1 = Recipie::new(None, "Recipie 1".to_string());
-        let recipie2 = Recipie::new(None, "Recipie 2".to_string());
-
         // Create a new user with a specific id and recipies
         let user_id = Uuid::new_v4();
         let user = User::new(
