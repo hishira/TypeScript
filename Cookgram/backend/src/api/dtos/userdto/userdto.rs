@@ -28,7 +28,8 @@ pub struct UpdateUserDto {
 #[derive(Debug, Validate, Deserialize)]
 pub struct DeleteUserDto {
     pub id: uuid::Uuid,
-    pub username: String,
+    pub username: Option<String>,
+    pub email: Option<String>,
 }
 #[derive(Debug, Validate, Deserialize)]
 #[validate(schema(function = "validatete_auth", skip_on_field_errors = true))]

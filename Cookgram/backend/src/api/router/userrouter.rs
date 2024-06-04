@@ -1,6 +1,6 @@
 use axum::{
     extract::State,
-    routing::{get, post},
+    routing::{delete, get, post},
     Error, Json, Router,
 };
 use sqlx::{Pool, Postgres};
@@ -129,7 +129,7 @@ impl UserRouter {
             Queries::User,
             Action::SelfManagement,
         )) {
-            return Err(AuthError::WrongCredentials);
+            return Err(AuthError::Unauthorized);
         }
 
         let user = state.repo.find_by_id(claims.user_id.unwrap()).await;
@@ -153,7 +153,7 @@ impl UserRouter {
         match claims.role {
             Some(role) => {
                 if !role.has_access_to(QueriesActions::Access(Queries::User, Action::View)) {
-                    return Err(AuthError::WrongCredentials);
+                    return Err(AuthError::Unauthorized);
                 }
                 let users = state.repo.find(params).await;
                 Ok(Json(users))
@@ -166,11 +166,20 @@ impl UserRouter {
         claims: Claims,
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<DeleteUserDto>,
-    ) -> Json<User>
+    ) -> Result<Json<User>, AuthError>
     where
         T: Repository<User, UserFilterOption>,
     {
-        todo!() //let user = state.repo.delete(None);
+        if (!claims
+            .role
+            .unwrap()
+            .has_access_to(QueriesActions::Access(Queries::User, Action::Management))) //todo: Fix
+        {
+            return Err(AuthError::Unauthorized);
+        }
+        let user = state.repo.find_by_id(params.id).await;
+        state.repo.delete(user.clone()).await;
+        return Ok(Json(user));
     }
 }
 
@@ -183,6 +192,7 @@ impl ApplicationRouter for UserRouter {
             )
             .route("/protected", get(protected))
             .route("/update-user", post(UserRouter::update_user))
+            .route("/delete-user", delete(UserRouter::user_delete))
             .route("/add-user", post(UserRouter::create_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
