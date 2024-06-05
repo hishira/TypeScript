@@ -16,6 +16,13 @@ CREATE TYPE Role as ENUM (
     'Director'
 );
 CREATE TYPE EventType as ENUM ('Create', 'Delete', 'Update');
+CREATE TYPE State as ENUM (
+    'Active',
+    'Suspend',
+    'Frozen',
+    'Retired',
+    'Deleted'
+);
 /* For now store in SQL database*/
 CREATE TABLE IF NOT EXISTS EVENTS (
     id uuid not null,
@@ -37,15 +44,19 @@ CREATE TABLE IF NOT EXISTS USERS (
     email VARCHAR(255) NOT NULL,
     meta_id uuid,
     role Role DEFAULT 'User',
+    current_state State DEFAULT 'Active',
+    previous_state State default NULL,
     PRIMARY KEY (id),
     UNIQUE(id),
     CONSTRAINT fk_meta FOREIGN KEY(meta_id) REFERENCES META(id) ON DELETE CASCADE
 );
-INSERT into META (id, create_date, edit_date) values (
+INSERT into META (id, create_date, edit_date)
+values (
         '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
         '2024-05-05 19:10:25-07',
         '2024-05-05 19:10:25-07'
-    ) RETURNING id;
+    )
+RETURNING id;
 insert into USERS (id, username, password, email, meta_id, role)
 values (
         'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',

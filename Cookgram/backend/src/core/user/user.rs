@@ -9,6 +9,7 @@ use crate::core::{
         role::{Role, Roles},
         userrole::UserRole,
     },
+    state::{entitystate::EntityState, state::State},
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -22,6 +23,7 @@ pub struct User {
     pub meta: Meta,
     pub role: Roles,
     pub managed_users: Option<Vec<User>>,
+    pub state: State,
 }
 
 impl Entity for User {
@@ -49,6 +51,10 @@ impl User {
                 role: user_role,
                 address: None,
                 managed_users: None,
+                state: State {
+                    current: EntityState::Active,
+                    previus: None,
+                },
             },
             None => Self {
                 id: User::generate_id(),
@@ -59,6 +65,10 @@ impl User {
                 role: user_role,
                 address: None,
                 managed_users: None,
+                state: State {
+                    current: EntityState::Active,
+                    previus: None,
+                },
             },
         }
     }
@@ -236,6 +246,10 @@ mod tests {
             role: Roles::User(UserRole::default()),
             address: None,
             managed_users: None,
+            state: State {
+                current: EntityState::Active,
+                previus: None,
+            },
         };
 
         // Serialize the user to JSON
