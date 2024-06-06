@@ -65,7 +65,7 @@ pub enum AuthError {
     InvalidToken,
     UserNotExists,
     BCryptError,
-    
+    Unauthorized,
 }
 pub struct AuthRouter {
     user_repo: UserRepositories,
@@ -182,6 +182,10 @@ impl IntoResponse for AuthError {
             AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
             AuthError::UserNotExists => (StatusCode::BAD_REQUEST, "User not Exists"),
             AuthError::BCryptError => (StatusCode::INTERNAL_SERVER_ERROR, "Server error occur"),
+            AuthError::Unauthorized => (
+                StatusCode::UNAUTHORIZED,
+                "User are not allowed to take action",
+            ),
         };
         let body = Json(json!({
             "error": error_message,
