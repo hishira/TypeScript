@@ -26,6 +26,8 @@ use crate::{
     core::{
         event::userevent::UserEvent,
         role::access::{Action, Queries, QueriesActions},
+        state::entitystate::EntityState,
+        state::state::State as CoreState,
         user::{self, user::User},
     },
     database::init::Database,
@@ -173,11 +175,16 @@ impl UserRouter {
         if (!claims
             .role
             .unwrap()
-            .has_access_to(QueriesActions::Access(Queries::User, Action::Management))) //todo: Fix
+            .has_access_to(QueriesActions::Access(Queries::User, Action::Management)))
+        //todo: Fix
         {
             return Err(AuthError::Unauthorized);
         }
-        let user = state.repo.find_by_id(params.id).await;
+        let mut user = state.repo.find_by_id(params.id).await;
+        user.state.update(CoreState {
+            current: EntityState::Deleted,
+            previus: Some(user.state.previus.clone().unwrap_or(EntityState::Active)),
+        });
         state.repo.delete(user.clone()).await;
         return Ok(Json(user));
     }

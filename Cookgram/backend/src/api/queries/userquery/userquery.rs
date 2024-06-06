@@ -117,7 +117,7 @@ impl Query<UserFilterOption> for UserQuery {
 
     fn find_by_id(&self, id: uuid::Uuid) -> QueryBuilder<'static, Postgres> {
         let mut query_by_id: QueryBuilder<Postgres> =
-            QueryBuilder::new("SELECT id, username, email, password, role FROM users where id = ");
+            QueryBuilder::new("SELECT id, username, email, password, role, current_state, previous_state  FROM users where id = ");
         query_by_id.push_bind(id);
         query_by_id
     }
@@ -157,7 +157,11 @@ impl ActionQueryBuilder<User> for UserQuery {
 
     fn delete(&self, entity: User) -> QueryBuilder<Postgres> {
         let mut delete_query: QueryBuilder<Postgres> =
-            QueryBuilder::new("DELETE FROM USERS WHERE id = ");
+            QueryBuilder::new("UPDATE USERS SET current_state = ");
+        delete_query.push_bind(entity.state.current);
+        delete_query.push(", previous_state = ");
+        delete_query.push_bind(entity.state.previus);
+        delete_query.push("WHERE id = ");
         delete_query.push_bind(entity.id);
         delete_query
     }
@@ -165,7 +169,11 @@ impl ActionQueryBuilder<User> for UserQuery {
 
 #[cfg(test)]
 mod tests {
-    use crate::core::{meta::meta::Meta, role::role::Roles};
+    use crate::core::{
+        meta::meta::Meta,
+        role::role::Roles,
+        state::{entitystate::EntityState, state::State},
+    };
 
     use super::*;
 
@@ -233,6 +241,10 @@ mod tests {
             role: Roles::user_role(),
             address: None,
             managed_users: None,
+            state: State {
+                current: EntityState::Active,
+                previus: None,
+            },
         };
 
         let mut create_query = validate_action_query(&user_query, test_user);
@@ -286,7 +298,10 @@ mod tests {
             role: Roles::user_role(),
             address: None,
             managed_users: None,
-
+            state: State {
+                current: EntityState::Active,
+                previus: None,
+            },
         };
 
         let _ = user_query.delete(test_user);

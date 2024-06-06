@@ -9,6 +9,8 @@ use crate::api::dtos::userdto::userdto::{UpdateUserDto, UserFilterOption};
 use crate::api::repositories::repositories::Repository;
 use crate::api::utils::password_worker::password_worker::PasswordWorker;
 use crate::core::role::role::Roles;
+use crate::core::state::entitystate::EntityState;
+use crate::core::state::state::State;
 use crate::{
     api::dtos::userdto::userdto::UserDtos,
     core::{meta::meta::Meta, user::user::User},
@@ -74,6 +76,10 @@ impl UserService {
             role: UserService::retrive_role_from_row(&pg_row).unwrap(),
             address: None,
             managed_users: None,
+            state: State {
+                current: pg_row.get("current_state"),
+                previus: pg_row.get("previous_state"),
+            },
         }
     }
 

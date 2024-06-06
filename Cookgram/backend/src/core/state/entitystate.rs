@@ -1,11 +1,10 @@
 use core::fmt;
 use std::str::FromStr;
+use std::error::Error;
 
 use serde::{Deserialize, Serialize};
 use sqlx::{
-    encode::IsNull,
-    postgres::{PgArgumentBuffer, PgTypeInfo},
-    Encode, Postgres, Type,
+    encode::IsNull, postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef}, Decode, Encode, Postgres, Type
 };
 
 #[derive(Debug, Clone, PartialEq)]
@@ -33,6 +32,20 @@ impl<'q> Encode<'q, Postgres> for EntityState {
             EntityState::Deleted => "Deleted",
         };
         Encode::<Postgres>::encode(value, buf)
+    }
+}
+
+impl<'r> Decode<'r, Postgres> for EntityState {
+    fn decode(value: PgValueRef<'r>) -> Result<Self, Box<dyn Error + Send + Sync>> {
+        let s = <&str as Decode<Postgres>>::decode(value).unwrap();
+        match s {
+            "Active" => Ok(EntityState::Active),
+            "Suspend" => Ok(EntityState::Suspend),
+            "Frozen" => Ok(EntityState::Frozen),
+            "Retired" => Ok(EntityState::Retired),
+            "Deleted" => Ok(EntityState::Deleted),
+            _ => Err(format!("Invalid state: {}", s).into()),
+        }
     }
 }
 
@@ -87,5 +100,58 @@ impl<'de> Deserialize<'de> for EntityState {
             },
             Err(error) => Err(error),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use sqlx::postgres::{PgArgumentBuffer, PgTypeInfo, Postgres};
+    use sqlx::Encode;
+    use serde_json::{json, Value};
+    use std::str::FromStr;
+
+    #[test]
+    fn test_from_str() {
+        assert_eq!(EntityState::from_str("Active"), Ok(EntityState::Active));
+        assert_eq!(EntityState::from_str("Suspend"), Ok(EntityState::Suspend));
+        assert_eq!(EntityState::from_str("Frozen"), Ok(EntityState::Frozen));
+        assert_eq!(EntityState::from_str("Retired"), Ok(EntityState::Retired));
+        assert_eq!(EntityState::from_str("Deleted"), Ok(EntityState::Deleted));
+        assert!(EntityState::from_str("Unknown").is_err());
+    }
+
+    #[test]
+    fn test_encode() {
+        let mut buffer = PgArgumentBuffer::default();
+        let state = EntityState::Active;
+        let is_null = state.encode_by_ref(&mut buffer);
+        let expected_encoded_value = "Active";
+        let encoded_value = std::str::from_utf8(&buffer).unwrap();
+        assert_eq!(encoded_value, expected_encoded_value);
+    }
+
+    #[test]
+    fn test_serialize() {
+        let state = EntityState::Active;
+        let serialized = serde_json::to_string(&state).unwrap();
+        assert_eq!(serialized, "\"Active\"");
+    }
+
+    #[test]
+    fn test_deserialize() {
+        let json_data = json!("Active");
+        let state: EntityState = serde_json::from_value(json_data).unwrap();
+        assert_eq!(state, EntityState::Active);
+
+        let json_data = json!("Unknown");
+        let state: Result<EntityState, _> = serde_json::from_value(json_data);
+        assert!(state.is_err());
+    }
+
+    #[test]
+    fn test_display() {
+        let error = ParseFromStringEntityStateError;
+        assert_eq!(format!("{}", error), "Problem with EntityState conversion");
     }
 }
