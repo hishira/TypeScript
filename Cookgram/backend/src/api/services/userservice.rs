@@ -32,7 +32,6 @@ impl UserService {
             }
             UserDtos::Update(user) => {
                 let user_from_db = user_to_edit.unwrap();
-                // User::new(None, user.username, user.password, user.email, None)
                 let hashed_password: String = match user.password {
                     Some(password) => pass_worker.hash(password.clone()).await.unwrap(),
                     None => user_from_db.password,

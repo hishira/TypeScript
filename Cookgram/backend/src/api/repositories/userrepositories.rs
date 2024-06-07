@@ -57,6 +57,20 @@ impl UserRepositories {
         EventRepository::create_later(self.pool.clone(), Event::new(None, Some(EventType::Update),user.id.clone(),true));
         User::create_base_on_user_and_address(user, address)
     }
+
+    async fn update_address(&self, update_entity: User) -> User {
+        // For now change for address createtion
+        let address = update_entity.address.clone();
+        self.create_user_address(update_entity, address.unwrap()).await
+        // let mut update_query = self.user_queries.update(update_entity.clone());
+        // match update_query.build().execute(&self.pool).await {
+        //     Ok(_) => update_entity,
+        //     Err(error) => {
+        //         tracing::error!("Error while user update {}", error);
+        //         update_entity
+        //     }
+        // }
+    }
 }
 impl Repository<User, UserFilterOption> for UserRepositories {
     async fn create(&self, entity: User) -> User {

@@ -1,14 +1,9 @@
-
-use api::router::{router::ApplicationRouter, userrouter::UserRouter};
-use axum::{
-    extract::MatchedPath,
-    http::{ Request},
-    Router,
-};
-use tokio::net::TcpListener;
-use tower_http::{ trace::TraceLayer};
-use tracing::{info_span};
 use crate::api::{logs::applicationlog::ApplicationLog, router::authrouter::AuthRouter};
+use api::router::{router::ApplicationRouter, userrouter::UserRouter};
+use axum::{extract::MatchedPath, http::Request, Router};
+use tokio::net::TcpListener;
+use tower_http::trace::TraceLayer;
+use tracing::info_span;
 
 mod api;
 mod core;

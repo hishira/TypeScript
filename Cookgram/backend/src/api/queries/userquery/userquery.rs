@@ -1,6 +1,5 @@
-use std::borrow::{Borrow, BorrowMut};
 
-use sqlx::{postgres::PgArguments, Execute, Postgres, QueryBuilder};
+use sqlx::{Execute, Postgres, QueryBuilder};
 use uuid::Uuid;
 
 use crate::{
