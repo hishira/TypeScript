@@ -8,11 +8,13 @@ use crate::{
         services::userservice::UserService,
     },
     core::{
-        address::address::Address, event::event::{Event, EventType}, user::user::User
+        address::address::Address,
+        event::event::{Event, EventType},
+        user::user::User,
     },
 };
 use sqlx::{Pool, Postgres, Transaction};
-use std::ops::DerefMut;
+use std::{borrow::Borrow, ops::DerefMut};
 
 use super::{eventrepository::EventRepository, repositories::Repository};
 
@@ -54,14 +56,18 @@ impl UserRepositories {
             Ok(_) => tracing::debug!("Address created"),
             Err(error) => tracing::error!("error while address create: {}", error),
         }
-        EventRepository::create_later(self.pool.clone(), Event::new(None, Some(EventType::Update),user.id.clone(),true));
+        EventRepository::create_later(
+            self.pool.clone(),
+            Event::new(None, Some(EventType::Update), user.id.clone(), true),
+        );
         User::create_base_on_user_and_address(user, address)
     }
 
     async fn update_address(&self, update_entity: User) -> User {
         // For now change for address createtion
         let address = update_entity.address.clone();
-        self.create_user_address(update_entity, address.unwrap()).await
+        self.create_user_address(update_entity, address.unwrap())
+            .await
         // let mut update_query = self.user_queries.update(update_entity.clone());
         // match update_query.build().execute(&self.pool).await {
         //     Ok(_) => update_entity,
@@ -119,8 +125,21 @@ impl Repository<User, UserFilterOption> for UserRepositories {
 
     async fn update(&self, update_entity: User) -> User {
         // For now change for address createtion
-        let address = update_entity.address.clone();
-        self.create_user_address(update_entity, address.unwrap()).await
+        let address_clone = update_entity.address.clone();
+        if let Some(address) = address_clone {
+            //let address = update_entity.address.clone();
+            return self.create_user_address(update_entity, address).await;
+        }
+        // let address = update_entity.address.clone();
+        // self.create_user_address(update_entity, address.unwrap())
+        //     .await
+        let mut update_query = self.user_queries.update(update_entity.clone());
+        let resp = update_query.build().execute(&self.pool).await;
+        match resp {
+            Ok(_) => tracing::debug!("User with id updated"),
+            Err(error) => tracing::error!("Problem with user create, {}", error),
+        }
+        return update_entity;
         // let mut update_query = self.user_queries.update(update_entity.clone());
         // match update_query.build().execute(&self.pool).await {
         //     Ok(_) => update_entity,

@@ -15,6 +15,7 @@ impl Default for UserRole {
         UserRole {
             access: vec![
                 QueriesActions::Access(Queries::User, Action::View),
+                QueriesActions::Access(Queries::User, Action::SelfManagement),
                 QueriesActions::Access(Queries::Address, Action::Management),
             ],
         }
@@ -39,7 +40,9 @@ mod tests {
         let user_role = UserRole::default();
 
         assert!(user_role.has_access_to(QueriesActions::Access(Queries::User, Action::View)));
-        assert!(user_role.has_access_to(QueriesActions::Access(Queries::Address, Action::Management)));
+        assert!(
+            user_role.has_access_to(QueriesActions::Access(Queries::Address, Action::Management))
+        );
 
         assert!(!user_role.has_access_to(QueriesActions::Access(Queries::User, Action::Management)));
         assert!(!user_role.has_access_to(QueriesActions::Access(Queries::Address, Action::View)));
@@ -61,13 +64,12 @@ mod tests {
 
     #[test]
     fn test_user_role_custom_access() {
-        let custom_access = vec![
-            QueriesActions::Access(Queries::User, Action::Management),
-        ];
-        let user_role = UserRole { access: custom_access.clone() };
+        let custom_access = vec![QueriesActions::Access(Queries::User, Action::Management)];
+        let user_role = UserRole {
+            access: custom_access.clone(),
+        };
 
         assert!(user_role.has_access_to(QueriesActions::Access(Queries::User, Action::Management)));
         assert!(!user_role.has_access_to(QueriesActions::Access(Queries::User, Action::View)));
     }
 }
-
