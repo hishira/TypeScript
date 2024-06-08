@@ -108,7 +108,7 @@ impl Query<UserFilterOption> for UserQuery {
 
     fn find(&self, option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut user_query: QueryBuilder<Postgres> =
-            QueryBuilder::new("SELECT id, username, email, password, role FROM users");
+            QueryBuilder::new("SELECT id, username, email, password, meta_id, role, current_state, previous_state  FROM users");
         let mut count: i8 = 0;
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
         user_query
@@ -116,7 +116,7 @@ impl Query<UserFilterOption> for UserQuery {
 
     fn find_by_id(&self, id: uuid::Uuid) -> QueryBuilder<'static, Postgres> {
         let mut query_by_id: QueryBuilder<Postgres> =
-            QueryBuilder::new("SELECT id, username, email, password, role, current_state, previous_state  FROM users where id = ");
+            QueryBuilder::new("SELECT id, username, email, password, meta_id, role, current_state, previous_state  FROM users where id = ");
         query_by_id.push_bind(id);
         query_by_id
     }
@@ -139,14 +139,13 @@ impl ActionQueryBuilder<User> for UserQuery {
     }
 
     fn update(&self, entity: User) -> QueryBuilder<Postgres> {
-        let mut update_query: QueryBuilder<Postgres> = QueryBuilder::new("UPDATE USERS SET");
-        update_query.push(" username = ");
+        let mut update_query: QueryBuilder<Postgres> = QueryBuilder::new("UPDATE USERS SET username = ");
         update_query.push_bind(entity.username);
-        update_query.push(" email = ");
+        update_query.push(", email = ");
         update_query.push_bind(entity.email);
-        update_query.push(" password = ");
+        update_query.push(", password = ");
         update_query.push_bind(entity.password);
-        update_query.push(" role = ");
+        update_query.push(", role = ");
         update_query.push_bind(entity.role);
         update_query.push(" WHERE id = ");
         update_query.push_bind(entity.id);

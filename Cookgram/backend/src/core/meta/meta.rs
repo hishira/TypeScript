@@ -8,16 +8,32 @@ use crate::core::entity::Entity;
 #[derive(PartialEq, Debug, Clone, Deserialize)]
 pub struct Meta {
     pub id: Uuid,
-    pub create_date: time::Date,
-    pub edit_date: time::Date,
+    pub create_date: OffsetDateTime,
+    pub edit_date: OffsetDateTime,
 }
 
 impl Meta {
     pub fn new() -> Self {
         Self {
             id: Meta::generate_id(),
-            create_date: OffsetDateTime::now_utc().date(),
-            edit_date: OffsetDateTime::now_utc().date(),
+            create_date: OffsetDateTime::now_utc(),
+            edit_date: OffsetDateTime::now_utc(),
+        }
+    }
+
+    pub fn based_on_edi_date(id: Uuid, edit_date: OffsetDateTime) -> Self {
+        Self {
+            id,
+            create_date: OffsetDateTime::now_utc(),
+            edit_date,
+        }
+    }
+    //TOOD: For only now, at this moment we only want simulated meta with current id
+    pub fn meta_based_on_id(id:Uuid) -> Self {
+        Self {
+            id,
+            create_date: OffsetDateTime::now_utc(),
+            edit_date: OffsetDateTime::now_utc(),
         }
     }
 }
@@ -35,7 +51,7 @@ impl Serialize for Meta {
     }
 }
 
-impl Entity for Meta{
+impl Entity for Meta {
     fn generate_id() -> Uuid {
         Uuid::new_v4()
     }
@@ -65,8 +81,8 @@ mod tests {
 
         let meta = Meta {
             id: Meta::generate_id(),
-            create_date: offset_date_time.date(),
-            edit_date: offset_date_time.date(),
+            create_date: OffsetDateTime::now_utc(),
+            edit_date: OffsetDateTime::now_utc(),
         };
 
         assert_eq!(meta.create_date.year(), 2024);
@@ -82,17 +98,23 @@ mod tests {
 
         let meta = Meta {
             id: Meta::generate_id(),
-            create_date: offset_date_time.date(),
-            edit_date: offset_date_time.date(),
+            create_date: OffsetDateTime::now_utc(),
+            edit_date: OffsetDateTime::now_utc(),
         };
 
-        assert_tokens(&meta,&[
-            Token::Struct { name: "Meta", len:2 },
-            Token::String("create_date"),
-            Token::String("2024-03-04"),
-            Token::String("edit_date"),
-            Token::String("2024-03-04"),
-            Token::StructEnd,
-        ],);
+        assert_tokens(
+            &meta,
+            &[
+                Token::Struct {
+                    name: "Meta",
+                    len: 2,
+                },
+                Token::String("create_date"),
+                Token::String("2024-03-04"),
+                Token::String("edit_date"),
+                Token::String("2024-03-04"),
+                Token::StructEnd,
+            ],
+        );
     }
 }

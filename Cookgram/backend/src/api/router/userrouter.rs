@@ -141,6 +141,7 @@ impl UserRouter {
             Some(user),
         )
         .await;
+        state.repo.update(updated_user.clone()).await;
         return Ok(Json(updated_user));
     }
 
