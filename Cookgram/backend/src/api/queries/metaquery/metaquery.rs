@@ -20,6 +20,7 @@ impl ActionQueryBuilder<Meta> for MetaQuery {
 
     fn update(&self, entity: Meta) -> sqlx::QueryBuilder<sqlx::Postgres> {
         let mut update_builder: QueryBuilder<Postgres> = QueryBuilder::new("UPDATE META SET edit_date = ");
+        println!("{:?}", entity);
         update_builder.push_bind(entity.edit_date);
         update_builder.push("where id = ");
         update_builder.push_bind(entity.id);

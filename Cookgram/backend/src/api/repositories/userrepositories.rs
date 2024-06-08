@@ -10,11 +10,13 @@ use crate::{
     core::{
         address::address::Address,
         event::event::{Event, EventType},
+        meta::meta::Meta,
         user::user::User,
     },
 };
 use sqlx::{Pool, Postgres, Transaction};
 use std::{borrow::Borrow, ops::DerefMut};
+use time::OffsetDateTime;
 
 use super::{eventrepository::EventRepository, repositories::Repository};
 
@@ -127,27 +129,16 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         // For now change for address createtion
         let address_clone = update_entity.address.clone();
         if let Some(address) = address_clone {
-            //let address = update_entity.address.clone();
             return self.create_user_address(update_entity, address).await;
         }
-        // let address = update_entity.address.clone();
-        // self.create_user_address(update_entity, address.unwrap())
-        //     .await
         let mut update_query = self.user_queries.update(update_entity.clone());
         let resp = update_query.build().execute(&self.pool).await;
         match resp {
             Ok(_) => tracing::debug!("User with id updated"),
             Err(error) => tracing::error!("Problem with user create, {}", error),
         }
+        meta_update(self.pool.clone(), update_entity.clone());
         return update_entity;
-        // let mut update_query = self.user_queries.update(update_entity.clone());
-        // match update_query.build().execute(&self.pool).await {
-        //     Ok(_) => update_entity,
-        //     Err(error) => {
-        //         tracing::error!("Error while user update {}", error);
-        //         update_entity
-        //     }
-        // }
     }
 }
 
@@ -160,6 +151,22 @@ pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User) {
             Ok(_) => tracing::debug!("Meta object created"),
             Err(error) => {
                 tracing::debug!("Meta object not created, {}", error);
+            }
+        };
+    });
+}
+
+pub fn meta_update(postgres_pool: Pool<Postgres>, entity: User) {
+    tokio::task::spawn(async move {
+        let mut meta_query = MetaQuery {}.update(Meta::based_on_edi_date(
+            entity.meta.id,
+            OffsetDateTime::now_utc(),
+        ));
+        let meta_query_result = meta_query.build().execute(&postgres_pool).await;
+        match meta_query_result {
+            Ok(_) => tracing::debug!("Meta object update"),
+            Err(error) => {
+                tracing::debug!("Meta object not update, {}", error);
             }
         };
     });

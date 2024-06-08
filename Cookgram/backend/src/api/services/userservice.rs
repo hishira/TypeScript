@@ -28,7 +28,7 @@ impl UserService {
             UserDtos::Create(user) => {
                 let role = user.role;
                 let hash = pass_worker.hash(user.password.clone()).await.unwrap();
-                User::new(None, user.username, hash, user.email, role) //TODO: Fix role
+                User::new(None, user.username, hash, user.email, role, None) //TODO: Fix role
             }
             UserDtos::Update(user) => {
                 let user_from_db = user_to_edit.unwrap();
@@ -42,6 +42,7 @@ impl UserService {
                     hashed_password,
                     user.email,
                     Some(user.role.unwrap_or(user_from_db.role)),
+                    Some(user_from_db.meta),
                 )
                 // FOX role
             }
@@ -71,7 +72,7 @@ impl UserService {
             username: pg_row.get("username"),
             password: pg_row.get("password"),
             email: pg_row.get("email"),
-            meta: Meta::new(), //TODO: Inner join table to retrieve,
+            meta: Meta::meta_based_on_id(pg_row.get("meta_id")), //Meta::new(), //TODO: Inner join table to retrieve,
             role: UserService::retrive_role_from_row(&pg_row).unwrap(),
             address: None,
             managed_users: None,

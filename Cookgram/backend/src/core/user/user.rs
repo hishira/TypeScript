@@ -39,6 +39,7 @@ impl User {
         password: String,
         email: String,
         role: Option<Roles>,
+        meta: Option<Meta>,
     ) -> Self {
         let user_role: Roles = User::prepare_proper_role(role);
         match id {
@@ -47,7 +48,7 @@ impl User {
                 username,
                 password,
                 email,
-                meta: Meta::new(),
+                meta: meta.unwrap_or(Meta::new()),
                 role: user_role,
                 address: None,
                 managed_users: None,
@@ -231,7 +232,7 @@ mod tests {
     #[test]
     fn test_user_serialization() {
         let id = uuid::Uuid::new_v4();
-        let date = OffsetDateTime::now_utc().date();
+        let date = OffsetDateTime::now_utc();
         // Create a sample user
         let user = User {
             id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
