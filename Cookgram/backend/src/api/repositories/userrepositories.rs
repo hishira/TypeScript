@@ -64,21 +64,6 @@ impl UserRepositories {
         );
         User::create_base_on_user_and_address(user, address)
     }
-
-    async fn update_address(&self, update_entity: User) -> User {
-        // For now change for address createtion
-        let address = update_entity.address.clone();
-        self.create_user_address(update_entity, address.unwrap())
-            .await
-        // let mut update_query = self.user_queries.update(update_entity.clone());
-        // match update_query.build().execute(&self.pool).await {
-        //     Ok(_) => update_entity,
-        //     Err(error) => {
-        //         tracing::error!("Error while user update {}", error);
-        //         update_entity
-        //     }
-        // }
-    }
 }
 impl Repository<User, UserFilterOption> for UserRepositories {
     async fn create(&self, entity: User) -> User {
@@ -117,7 +102,18 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         let mut delete_query = self.user_queries.delete(entity.clone());
         let delete_user_reponse = delete_query.build().execute(&self.pool).await;
         match delete_user_reponse {
-            Ok(_) => entity,
+            Ok(_) => {
+                EventRepository::create_later(
+                    self.pool.clone(),
+                    Event::new(
+                        None,
+                        Some(EventType::Delete),
+                        entity.id.clone(),
+                        true,
+                    ),
+                );
+                return entity;
+            }
             Err(error) => {
                 tracing::error!("error while user delete: {}", error);
                 entity
@@ -138,6 +134,15 @@ impl Repository<User, UserFilterOption> for UserRepositories {
             Err(error) => tracing::error!("Problem with user create, {}", error),
         }
         meta_update(self.pool.clone(), update_entity.clone());
+        EventRepository::create_later(
+            self.pool.clone(),
+            Event::new(
+                None,
+                Some(EventType::Update),
+                update_entity.id.clone(),
+                true,
+            ),
+        );
         return update_entity;
     }
 }
