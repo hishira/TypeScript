@@ -11,7 +11,7 @@ pub enum EventType {
 #[derive(Clone)]
 pub struct Event {
     pub id: uuid::Uuid,
-    pub create_date: time::Date,
+    pub create_date: time::OffsetDateTime,
     pub event_type: EventType,
     pub related_entity: uuid::Uuid,
     pub completed: bool,
@@ -41,7 +41,7 @@ impl Event {
         Self {
             id: current_id,
             event_type,
-            create_date: OffsetDateTime::now_utc().date(),
+            create_date: OffsetDateTime::now_utc(),
             related_entity: related_entity_id,
             completed,
         }

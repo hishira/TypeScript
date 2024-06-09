@@ -69,6 +69,8 @@ impl UserService {
     pub fn get_user_from_row(pg_row: PgRow) -> User {
         User {
             id: pg_row.get("id"),
+            first_name: None,
+            last_name: None,
             username: pg_row.get("username"),
             password: pg_row.get("password"),
             email: pg_row.get("email"),

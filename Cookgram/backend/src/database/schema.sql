@@ -42,6 +42,8 @@ Create TABLE IF NOT EXISTS META (
 CREATE TABLE IF NOT EXISTS USERS (
     id uuid NOT NULL,
     username VARCHAR(255) NOT NULL,
+    first_name varchar(255) DEFAULT NULL,
+    last_name varchar(255) DEFAULT null,
     password text NOT NULL,
     email VARCHAR(255) NOT NULL,
     meta_id uuid,

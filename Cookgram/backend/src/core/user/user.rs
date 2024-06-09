@@ -15,6 +15,8 @@ use crate::core::{
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct User {
     pub id: Uuid,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
     pub username: String,
     #[serde(skip_serializing)]
     pub password: String,
@@ -45,6 +47,8 @@ impl User {
         match id {
             Some(id) => Self {
                 id,
+                first_name: None,
+                last_name: None,
                 username,
                 password,
                 email,
@@ -59,6 +63,8 @@ impl User {
             },
             None => Self {
                 id: User::generate_id(),
+                first_name: None,
+                last_name: None,
                 username,
                 password,
                 email,
@@ -139,6 +145,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             Some(Roles::admin_role()),
+            None,
         );
 
         assert_ne!(user.id, Uuid::nil());
@@ -164,6 +171,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             Some(Roles::user_role()),
+            None,
         );
 
         // Check if the user has the correct id
@@ -189,6 +197,7 @@ mod tests {
             "test_user".to_string(),
             "password123".to_string(),
             "test@example.com".to_string(),
+            None,
             None,
         );
 
@@ -216,6 +225,7 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             None,
+            None,
         );
 
         // Check if the user has a UUID id
@@ -236,6 +246,8 @@ mod tests {
         // Create a sample user
         let user = User {
             id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
+            first_name: None,
+            last_name: None,
             username: String::from("test_user"),
             password: String::from("password123"),
             email: String::from("test@example.com"),

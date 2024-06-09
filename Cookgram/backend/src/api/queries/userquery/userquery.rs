@@ -232,6 +232,8 @@ mod tests {
 
         let test_user = User {
             id: Uuid::new_v4(),
+            first_name: None,
+            last_name: None,
             username: "test_user".to_string(),
             password: "password".to_string(),
             email: "test@example.com".to_string(),
@@ -289,6 +291,8 @@ mod tests {
 
         let test_user = User {
             id: Uuid::new_v4(),
+            first_name: None,
+            last_name: None,
             username: "test_user".to_string(),
             password: "password".to_string(),
             email: "test@example.com".to_string(),
