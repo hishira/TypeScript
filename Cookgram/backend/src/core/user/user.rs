@@ -24,7 +24,6 @@ pub struct User {
     pub address: Option<Address>,
     pub meta: Meta,
     pub role: Roles,
-    pub contract: Option<UserContract>,
     pub managed_users: Option<Vec<User>>,
     pub state: State,
 }

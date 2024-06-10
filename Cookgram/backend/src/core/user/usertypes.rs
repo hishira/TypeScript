@@ -2,6 +2,7 @@ use crate::core::usercontract::usercontract::UserContract;
 
 use super::user::User;
 
+// IF we need it? using composition?
 pub enum UserTypes {
     Employee(User),
     Manager(User),

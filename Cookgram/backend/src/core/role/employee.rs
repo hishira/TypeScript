@@ -15,6 +15,7 @@ impl Default for Employee {
             access: vec![
                 QueriesActions::Access(Queries::User, Action::View),
                 QueriesActions::Access(Queries::Address, Action::SelfManagement),
+                QueriesActions::Access(Queries::UserContracts, Action::SelfManagement),
             ],
         }
     }
@@ -38,9 +39,15 @@ mod tests {
         let employee = Employee::default();
 
         assert!(employee.has_access_to(QueriesActions::Access(Queries::User, Action::View)));
-        assert!(employee.has_access_to(QueriesActions::Access(Queries::Address, Action::SelfManagement)));
+        assert!(employee.has_access_to(QueriesActions::Access(
+            Queries::Address,
+            Action::SelfManagement
+        )));
 
-        assert!(!employee.has_access_to(QueriesActions::Access(Queries::User, Action::SelfManagement)));
+        assert!(!employee.has_access_to(QueriesActions::Access(
+            Queries::User,
+            Action::SelfManagement
+        )));
         assert!(!employee.has_access_to(QueriesActions::Access(Queries::Address, Action::View)));
     }
 
@@ -60,12 +67,18 @@ mod tests {
 
     #[test]
     fn test_employee_custom_access() {
-        let custom_access = vec![
-            QueriesActions::Access(Queries::User, Action::SelfManagement),
-        ];
-        let employee = Employee { access: custom_access.clone() };
+        let custom_access = vec![QueriesActions::Access(
+            Queries::User,
+            Action::SelfManagement,
+        )];
+        let employee = Employee {
+            access: custom_access.clone(),
+        };
 
-        assert!(employee.has_access_to(QueriesActions::Access(Queries::User, Action::SelfManagement)));
+        assert!(employee.has_access_to(QueriesActions::Access(
+            Queries::User,
+            Action::SelfManagement
+        )));
         assert!(!employee.has_access_to(QueriesActions::Access(Queries::User, Action::View)));
     }
 }

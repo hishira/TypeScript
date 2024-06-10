@@ -14,6 +14,7 @@ impl Default for Director {
             access: vec![
                 QueriesActions::Access(Queries::User, Action::View),
                 QueriesActions::Access(Queries::Address, Action::SelfManagement),
+                QueriesActions::Access(Queries::UserContracts, Action::Management),
             ],
         }
     }
