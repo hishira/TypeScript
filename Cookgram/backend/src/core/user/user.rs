@@ -9,7 +9,7 @@ use crate::core::{
         role::{Role, Roles},
         userrole::UserRole,
     },
-    state::{entitystate::EntityState, state::State},
+    state::{entitystate::EntityState, state::State}, usercontract::usercontract::UserContract,
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -24,6 +24,7 @@ pub struct User {
     pub address: Option<Address>,
     pub meta: Meta,
     pub role: Roles,
+    pub contract: Option<UserContract>,
     pub managed_users: Option<Vec<User>>,
     pub state: State,
 }
