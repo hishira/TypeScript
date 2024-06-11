@@ -6,3 +6,4 @@ pub mod event;
 pub mod address;
 pub mod valueObject;
 pub mod state;
+pub mod usercontract;

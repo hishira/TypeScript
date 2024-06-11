@@ -8,8 +8,11 @@ pub trait ActionAccess: Access{}
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
 pub enum Queries {
+    Meta,
     User,
     Address,
+    UserContracts,
+    Events,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]

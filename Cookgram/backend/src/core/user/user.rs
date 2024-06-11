@@ -9,7 +9,7 @@ use crate::core::{
         role::{Role, Roles},
         userrole::UserRole,
     },
-    state::{entitystate::EntityState, state::State},
+    state::{entitystate::EntityState, state::State}, usercontract::usercontract::UserContract,
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]

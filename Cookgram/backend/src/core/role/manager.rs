@@ -16,6 +16,7 @@ impl Default for Manager {
             access: vec![
                 QueriesActions::Access(Queries::User, Action::Management),
                 QueriesActions::Access(Queries::Address, Action::Management),
+                QueriesActions::Access(Queries::UserContracts, Action::Management),
             ],
         }
     }
