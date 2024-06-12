@@ -11,6 +11,7 @@ import {
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 type LoginFormGroup = {
   username: FormControl<string | null>;
   password: FormControl<string | null>;
@@ -36,7 +37,10 @@ export class LoginPageComponent {
       password: new FormControl<string | null>('', [Validators.required]),
     });
 
-  constructor(private readonly messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly router: Router
+  ) {}
   signIn(): void {
     if (!this.loginFormGroup.valid) {
       this.messageService.add({
@@ -46,6 +50,9 @@ export class LoginPageComponent {
         key: 'br',
         life: 2000,
       });
+
+      return;
     }
+    this.router.navigate(['/admin']);
   }
 }

@@ -14,6 +14,8 @@ body {
 
 html {
     font-size: 14px;
+    height: 100vh;
+    //overflow-y: hidden;
 }
 
 body {
@@ -21,15 +23,11 @@ body {
     font-weight: normal;
     background: var(--surface-ground);
     color: var(--text-color);
-    padding: 1rem;
+    //padding: 1rem;
+    margin: 0;
+    height: calc(100% );
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-.card {
-    background: var(--surface-card);
-    padding: 2rem;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-}
     
