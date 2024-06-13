@@ -1,0 +1,13 @@
+:host{
+    border: 2px solid red;
+    display: block;
+    height: 100%;
+    .menu-panel {
+        height: 100%;
+        width: 15%;
+        border: 2px solid blue;
+    }
+    // p-panelMenu {
+    //     display: block;
+    // }
+}
