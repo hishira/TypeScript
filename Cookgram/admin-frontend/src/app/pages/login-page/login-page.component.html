@@ -21,7 +21,7 @@
       pInputText
       class="w-full mb-1"
     />
-    <ng-container *ngIf="loginFormGroup.controls.username.hasError('required')">
+    <ng-container *ngIf="loginFormGroup.controls.username.hasError('required') && loginFormGroup.get('username')?.touched">
       <span class="p-error font-light text-sm font-bold p-0"
         >Field is required</span
       >

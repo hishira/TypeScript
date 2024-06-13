@@ -42,6 +42,8 @@ export class LoginPageComponent {
     private readonly router: Router
   ) {}
   signIn(): void {
+    this.loginFormGroup.markAllAsTouched();
+    this.loginFormGroup.updateValueAndValidity();
     if (!this.loginFormGroup.valid) {
       this.messageService.add({
         severity: 'error',

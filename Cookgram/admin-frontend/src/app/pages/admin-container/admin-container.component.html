@@ -1,1 +1,19 @@
-<router-outlet></router-outlet>
+<ng-container>
+  <app-admin-menubar />
+  <div class="menu-panel">
+    <p-panelMenu [model]="menuItems" class="w-full h-full md:w-20rem">
+      <ng-template pTemplate="item" let-item>
+        <ng-container>
+          <div
+            class="flex align-items-center cursor-pointer text-color px-3 py-2"
+          >
+            <i [class]="item.icon + ' text-primary'"></i>
+
+            <span class="ml-2 text-color">{{ item.label }}</span>
+          </div>
+        </ng-container>
+      </ng-template>
+    </p-panelMenu>
+  </div>
+  <router-outlet></router-outlet>
+</ng-container>
