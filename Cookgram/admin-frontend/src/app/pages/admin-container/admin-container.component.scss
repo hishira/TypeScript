@@ -1,13 +1,15 @@
 :host{
-    border: 2px solid red;
+    //border: 2px solid red;
     display: block;
     height: 100%;
+    overflow-y: hidden;
     .menu-panel {
         height: 100%;
         width: 15%;
-        border: 2px solid blue;
+    //    border: 2px solid blue;
     }
     // p-panelMenu {
     //     display: block;
     // }
+    
 }

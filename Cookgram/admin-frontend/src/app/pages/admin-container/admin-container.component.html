@@ -1,19 +1,21 @@
 <ng-container>
   <app-admin-menubar />
-  <div class="menu-panel">
-    <p-panelMenu [model]="menuItems" class="w-full h-full md:w-20rem">
-      <ng-template pTemplate="item" let-item>
-        <ng-container>
-          <div
-            class="flex align-items-center cursor-pointer text-color px-3 py-2"
-          >
-            <i [class]="item.icon + ' text-primary'"></i>
+  <div class="flex flex-row h-full gap-2">
+    <div class="menu-panel">
+      <p-panelMenu [model]="menuItems" class="w-full h-full md:w-20rem">
+        <ng-template pTemplate="item" let-item>
+          <ng-container>
+            <div pRipple 
+              class="flex align-items-center cursor-pointer text-color px-3 py-3"
+            >
+              <i [class]="item.icon + ' text-primary'"></i>
 
-            <span class="ml-2 text-color">{{ item.label }}</span>
-          </div>
-        </ng-container>
-      </ng-template>
-    </p-panelMenu>
+              <span class="ml-2 text-color">{{ item.label }}</span>
+            </div>
+          </ng-container>
+        </ng-template>
+      </p-panelMenu>
+    </div>
+    <router-outlet></router-outlet>
   </div>
-  <router-outlet></router-outlet>
 </ng-container>
