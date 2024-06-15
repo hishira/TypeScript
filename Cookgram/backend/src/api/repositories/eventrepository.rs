@@ -60,14 +60,5 @@ fn run_thread(mongo_db: Database, entity: Event) {
     tokio::task::spawn(async move {
         let event_collection = mongo_db.collection("Events");
         event_collection.insert_one(entity, None).await
-        // let mut creation_query = EventQuery {}.create(entity.clone());
-        // let event_response = creation_query.build().execute(&postgres_pool).await;
-        // match event_response {
-        //     Ok(_) => tracing::debug!(
-        //         "Event created for entity: {} created",
-        //         entity.related_entity
-        //     ),
-        //     Err(err) => tracing::error!("Error occur while event creating, {}", err),
-        // }
     });
 }
