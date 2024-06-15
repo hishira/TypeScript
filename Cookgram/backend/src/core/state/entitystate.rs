@@ -9,6 +9,7 @@ use sqlx::{
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityState {
+    Draft,
     Active,
     Suspend,
     Frozen,
@@ -25,6 +26,7 @@ impl Type<Postgres> for EntityState {
 impl<'q> Encode<'q, Postgres> for EntityState {
     fn encode_by_ref(&self, buf: &mut PgArgumentBuffer) -> IsNull {
         let value = match self {
+            EntityState::Draft => "Draft",
             EntityState::Active => "Active",
             EntityState::Suspend => "Suspend",
             EntityState::Frozen => "Frozen",
@@ -39,6 +41,7 @@ impl<'r> Decode<'r, Postgres> for EntityState {
     fn decode(value: PgValueRef<'r>) -> Result<Self, Box<dyn Error + Send + Sync>> {
         let s = <&str as Decode<Postgres>>::decode(value).unwrap();
         match s {
+            "Draft" => Ok(EntityState::Draft),
             "Active" => Ok(EntityState::Active),
             "Suspend" => Ok(EntityState::Suspend),
             "Frozen" => Ok(EntityState::Frozen),
@@ -63,6 +66,7 @@ impl FromStr for EntityState {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
+            "Draft" => Ok(EntityState::Draft),
             "Active" => Ok(EntityState::Active),
             "Suspend" => Ok(EntityState::Suspend),
             "Frozen" => Ok(EntityState::Frozen),
@@ -78,6 +82,7 @@ impl Serialize for EntityState {
         S: serde::Serializer,
     {
         match self {
+            EntityState::Draft => serializer.serialize_str("Draft"),
             EntityState::Active => serializer.serialize_str("Active"),
             EntityState::Suspend => serializer.serialize_str("Suspend"),
             EntityState::Frozen => serializer.serialize_str("Frozen"),
