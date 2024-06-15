@@ -1,3 +1,4 @@
+use mongodb::Database;
 use sqlx::{Pool, Postgres, QueryBuilder};
 
 use crate::{
@@ -16,8 +17,7 @@ pub struct EventRepository {
 pub struct EventFilterOption {}
 
 impl EventRepository {
-    pub fn create_later(pool: Pool<Postgres>, entity: Event) -> Event {
-        println!("Event to create");
+    pub fn create_later(pool: Database, entity: Event) -> Event {
         run_thread(pool.clone(), entity.clone());
 
         entity
@@ -56,16 +56,18 @@ impl Repository<Event, EventFilterOption> for EventRepository {
     }
 }
 
-fn run_thread(postgres_pool: Pool<Postgres>, entity: Event) {
+fn run_thread(mongo_db: Database, entity: Event) {
     tokio::task::spawn(async move {
-        let mut creation_query = EventQuery {}.create(entity.clone());
-        let event_response = creation_query.build().execute(&postgres_pool).await;
-        match event_response {
-            Ok(_) => tracing::debug!(
-                "Event created for entity: {} created",
-                entity.related_entity
-            ),
-            Err(err) => tracing::error!("Error occur while event creating, {}", err),
-        }
+        let event_collection = mongo_db.collection("Events");
+        event_collection.insert_one(entity, None).await
+        // let mut creation_query = EventQuery {}.create(entity.clone());
+        // let event_response = creation_query.build().execute(&postgres_pool).await;
+        // match event_response {
+        //     Ok(_) => tracing::debug!(
+        //         "Event created for entity: {} created",
+        //         entity.related_entity
+        //     ),
+        //     Err(err) => tracing::error!("Error occur while event creating, {}", err),
+        // }
     });
 }

@@ -1,14 +1,15 @@
+use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 
 use crate::core::entity::Entity;
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub enum EventType {
     Create,
     Delete,
     Update,
 }
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Event {
     pub id: uuid::Uuid,
     pub create_date: time::OffsetDateTime,

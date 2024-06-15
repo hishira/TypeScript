@@ -20,7 +20,8 @@ CREATE TYPE Role as ENUM (
 );
 CREATE TYPE EventType as ENUM ('Create', 'Delete', 'Update');
 CREATE TYPE State as ENUM (
-    'Draft' 'Active',
+    'Draft',
+    'Active',
     'Suspend',
     'Frozen',
     'Retired',
@@ -56,18 +57,19 @@ CREATE TABLE IF NOT EXISTS USERS (
     UNIQUE(id),
     CONSTRAINT fk_meta FOREIGN KEY(meta_id) REFERENCES META(id) ON DELETE CASCADE
 );
-CREATE table if not EXISTS USERS_CONTRACTS (
-    id uuid not NULL,
-    owner_id uuid not null,             -- np. director, manager
-    user_id uuid not null               -- np. employee
-    salary real DEFAULT null,
-    current_state State DEFAULT 'Draft',
-    previous_state State DEFAULT NULL,
-    contract_start_datetime TIMESTAMP not null DEFAULT NOW(),
-    contract_end_datetime TIMESTAMP not null DEFAULT now(),
-    CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES USERS(id) ON DELETE CASCADE,
-    CONSTRAINT fk_owner FOREIGN KEY(owner_id) REFERENCES USERS(id) ON DELETE CASCADE
-);
+-- CREATE table if not EXISTS USERS_CONTRACTS ( //Store in mongo db
+--     id uuid not NULL,
+--     owner_id uuid not null,
+--     -- np. director, manager
+--     user_id uuid not null -- np. employee
+--     salary real DEFAULT null,
+--     current_state State DEFAULT 'Draft',
+--     previous_state State DEFAULT NULL,
+--     contract_start_datetime TIMESTAMP not null DEFAULT NOW(),
+--     contract_end_datetime TIMESTAMP not null DEFAULT now(),
+--     CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES USERS(id) ON DELETE CASCADE,
+--     CONSTRAINT fk_owner FOREIGN KEY(owner_id) REFERENCES USERS(id) ON DELETE CASCADE
+-- );
 -- CREATE VIEW IF NOT EXISTS USERS_META AS SELECT id, username, email, meta
 INSERT into META (id, create_date, edit_date)
 values (

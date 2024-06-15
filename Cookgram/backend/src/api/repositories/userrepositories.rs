@@ -14,6 +14,7 @@ use crate::{
         user::user::User,
     },
 };
+use mongodb::Database;
 use sqlx::{Pool, Postgres, Transaction};
 use std::{borrow::Borrow, ops::DerefMut};
 use time::OffsetDateTime;
@@ -24,6 +25,7 @@ use super::{eventrepository::EventRepository, repositories::Repository};
 pub struct UserRepositories {
     pub pool: Pool<Postgres>,
     pub user_queries: UserQuery,
+    pub db_context: Database
 }
 impl UserRepositories {
     async fn create_user_using_transaction(
@@ -43,7 +45,7 @@ impl UserRepositories {
         }
         let _ = transaction.commit().await;
         EventRepository::create_later(
-            self.pool.clone(),
+            self.db_context.clone(),
             Event::new(None, Some(EventType::Create), entity.id.clone(), true),
         );
         entity
@@ -59,7 +61,7 @@ impl UserRepositories {
             Err(error) => tracing::error!("error while address create: {}", error),
         }
         EventRepository::create_later(
-            self.pool.clone(),
+            self.db_context.clone(),
             Event::new(None, Some(EventType::Update), user.id.clone(), true),
         );
         User::create_base_on_user_and_address(user, address)
@@ -104,7 +106,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         match delete_user_reponse {
             Ok(_) => {
                 EventRepository::create_later(
-                    self.pool.clone(),
+                    self.db_context.clone(),
                     Event::new(
                         None,
                         Some(EventType::Delete),
@@ -135,7 +137,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
         }
         meta_update(self.pool.clone(), update_entity.clone());
         EventRepository::create_later(
-            self.pool.clone(),
+            self.db_context.clone(),
             Event::new(
                 None,
                 Some(EventType::Update),

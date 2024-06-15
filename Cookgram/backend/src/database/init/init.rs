@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{process::exit, time::Duration};
 
 use mongodb::{options::ClientOptions, Client, Database as MongoDatabase};
 use sqlx::{postgres::PgPoolOptions, Executor, Pool, Postgres};
@@ -14,9 +14,22 @@ impl Database {
     pub async fn new() -> Self {
         let db_connection_string = dotenv::var("DATABASE_URL").unwrap();
         let psg_pool = Database::get_optional_pool(db_connection_string.clone()).await;
-        let mut mongo_db_client = ClientOptions::parse(dotenv::var("MONGO_URL").unwrap())
-            .await
-            .unwrap();
+        let mongo_string = match dotenv::var("MONGO_URL") {
+            Ok(mongo_db_string) => mongo_db_string,
+            Err(_) => {
+                tracing::error!("cannot retrive mongo db string");
+                exit(0)
+            },
+        };
+        let  mongo_db_client_res = ClientOptions::parse(mongo_string)
+            .await;
+        let mut mongo_db_client = match mongo_db_client_res {
+            Ok(mongo_client) =>mongo_client,
+            Err(error) => {
+                tracing::error!("Cannot connect to mongo db, {}", error);
+                exit(0);
+            },
+        };
         let mongo_client = Client::with_options(mongo_db_client).unwrap();
         let mongo_database_name = dotenv::var("MONGO_DATABASE_NAME").unwrap();
         Self {
@@ -39,7 +52,10 @@ impl Database {
                     Ok(r) => {
                         println!("{}", r.rows_affected())
                     }
-                    Err(error) => println!("{}", error.to_string()),
+                    Err(error) => {
+                        tracing::error!("Problem with init SQL database, {}", error);
+                        exit(0);
+                    }
                 };
             }
             None => println!("There are no pool defined"),
