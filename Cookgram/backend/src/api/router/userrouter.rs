@@ -186,7 +186,7 @@ impl UserRouter {
         let mut user = state.repo.find_by_id(params.id).await;
         user.state.update(CoreState {
             current: EntityState::Deleted,
-            previus: Some(user.state.previus.clone().unwrap_or(EntityState::Active)),
+            previous: Some(user.state.previous.clone().unwrap_or(EntityState::Active)),
         });
         state.repo.delete(user.clone()).await;
         return Ok(Json(user));

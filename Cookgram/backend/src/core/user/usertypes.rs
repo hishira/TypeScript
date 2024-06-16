@@ -1,4 +1,4 @@
-use crate::core::usercontract::usercontract::UserContract;
+use crate::core::usercontract::usercontract::Contract;
 
 use super::user::User;
 
@@ -10,7 +10,7 @@ pub enum UserTypes {
 }
 
 impl UserTypes {
-    pub fn get_active_contracts(&self) -> Vec<UserContract> {
+    pub fn get_active_contracts(&self) -> Vec<Contract> {
         match self {
             UserTypes::Employee(_) => panic!("User cannot have contracts"),
             UserTypes::Manager(_) => todo!(), // Should return contacts with user references
