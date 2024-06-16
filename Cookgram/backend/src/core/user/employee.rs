@@ -1,14 +1,14 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::core::{entity::Entity, usercontract::usercontract::UserContract};
+use crate::core::{entity::Entity, usercontract::usercontract::Contract};
 
 use super::user::User;
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Employee {
     pub user: User,
-    pub contract: Option<UserContract>,
+    pub contract: Option<Contract>,
 }
 
 impl Entity for Employee {

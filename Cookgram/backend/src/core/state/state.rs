@@ -3,14 +3,14 @@ use serde::{Deserialize, Serialize};
 use super::entitystate::EntityState;
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
-pub struct State {
-    pub current: EntityState,
-    pub previus: Option<EntityState>,
+pub struct State<T> {
+    pub current: T,
+    pub previous: Option<T>,
 }
 
-impl State {
-    pub fn update(&mut self, state: State) {
+impl<T> State<T> {
+    pub fn update(&mut self, state: State<T>) {
         self.current = state.current;
-        self.previus = state.previus;
+        self.previous = state.previous;
     }
 }

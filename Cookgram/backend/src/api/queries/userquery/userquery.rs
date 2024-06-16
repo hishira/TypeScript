@@ -108,7 +108,7 @@ impl Query<UserFilterOption> for UserQuery {
 
     fn find(&self, option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut user_query: QueryBuilder<Postgres> =
-            QueryBuilder::new("SELECT id, username, email, password, meta_id, role, current_state, previous_state  FROM users");
+            QueryBuilder::new("SELECT id, username, email, password, meta_id, role, current_state, previous_state FROM users join ADDRESS ON id = (select address_id from ADDRESS_CONNECTION where entity_id = id)");
         let mut count: i8 = 0;
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
         user_query
@@ -158,7 +158,7 @@ impl ActionQueryBuilder<User> for UserQuery {
             QueryBuilder::new("UPDATE USERS SET current_state = ");
         delete_query.push_bind(entity.state.current);
         delete_query.push(", previous_state = ");
-        delete_query.push_bind(entity.state.previus);
+        delete_query.push_bind(entity.state.previous);
         delete_query.push("WHERE id = ");
         delete_query.push_bind(entity.id);
         delete_query
@@ -243,7 +243,7 @@ mod tests {
             managed_users: None,
             state: State {
                 current: EntityState::Active,
-                previus: None,
+                previous: None,
             },
         };
 
@@ -302,7 +302,7 @@ mod tests {
             managed_users: None,
             state: State {
                 current: EntityState::Active,
-                previus: None,
+                previous: None,
             },
         };
 

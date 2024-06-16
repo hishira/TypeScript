@@ -9,7 +9,7 @@ use crate::core::{
         role::{Role, Roles},
         userrole::UserRole,
     },
-    state::{entitystate::EntityState, state::State}, usercontract::usercontract::UserContract,
+    state::{entitystate::EntityState, state::State}, usercontract::usercontract::Contract,
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -25,7 +25,7 @@ pub struct User {
     pub meta: Meta,
     pub role: Roles,
     pub managed_users: Option<Vec<User>>,
-    pub state: State,
+    pub state: State<EntityState>,
 }
 
 impl Entity for User {
@@ -58,7 +58,7 @@ impl User {
                 managed_users: None,
                 state: State {
                     current: EntityState::Active,
-                    previus: None,
+                    previous: None,
                 },
             },
             None => Self {
@@ -74,7 +74,7 @@ impl User {
                 managed_users: None,
                 state: State {
                     current: EntityState::Active,
-                    previus: None,
+                    previous: None,
                 },
             },
         }
@@ -261,7 +261,7 @@ mod tests {
             managed_users: None,
             state: State {
                 current: EntityState::Active,
-                previus: None,
+                previous: None,
             },
         };
 

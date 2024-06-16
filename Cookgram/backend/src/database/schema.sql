@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS EMPLOYEE_CONNECTION CASCADE;
 DROP TYPE IF EXISTS Role;
 DROP TYPE IF EXISTS State;
 DROP TYPE IF EXISTS EventType;
+DROP VIEW IF EXISTS ADDRESSUSERS;
 CREATE TYPE Role as ENUM (
     'User',
     'Admin',
@@ -57,20 +58,6 @@ CREATE TABLE IF NOT EXISTS USERS (
     UNIQUE(id),
     CONSTRAINT fk_meta FOREIGN KEY(meta_id) REFERENCES META(id) ON DELETE CASCADE
 );
--- CREATE table if not EXISTS USERS_CONTRACTS ( //Store in mongo db
---     id uuid not NULL,
---     owner_id uuid not null,
---     -- np. director, manager
---     user_id uuid not null -- np. employee
---     salary real DEFAULT null,
---     current_state State DEFAULT 'Draft',
---     previous_state State DEFAULT NULL,
---     contract_start_datetime TIMESTAMP not null DEFAULT NOW(),
---     contract_end_datetime TIMESTAMP not null DEFAULT now(),
---     CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES USERS(id) ON DELETE CASCADE,
---     CONSTRAINT fk_owner FOREIGN KEY(owner_id) REFERENCES USERS(id) ON DELETE CASCADE
--- );
--- CREATE VIEW IF NOT EXISTS USERS_META AS SELECT id, username, email, meta
 INSERT into META (id, create_date, edit_date)
 values (
         '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
@@ -87,6 +74,30 @@ values (
         '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
         'SuperAdmin'
     );
+CREATE view ADDRESSUSERS as (
+    select users.id,
+        users.username,
+        users.email,
+        users.first_name,
+        users.last_name,
+        users.role,
+        users.current_state,
+        users.previous_state,
+        addr.house,
+        addr.door,
+        addr.city,
+        addr.country,
+        addr.lat,
+        addr.long,
+        addr.fax,
+        addr.phone
+    from users
+        left outer join address as addr on addr.id in (
+            select address_id
+            from address_connection
+            where entity_id = users.id
+        )
+); 
 CREATE TABLE IF NOT EXISTS ADDRESS_CONNECTION (
     entity_id uuid not null,
     address_id uuid not null,

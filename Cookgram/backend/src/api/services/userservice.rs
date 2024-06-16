@@ -80,7 +80,7 @@ impl UserService {
             managed_users: None,
             state: State {
                 current: pg_row.get("current_state"),
-                previus: pg_row.get("previous_state"),
+                previous: pg_row.get("previous_state"),
             },
         }
     }
