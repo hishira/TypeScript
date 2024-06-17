@@ -8,3 +8,4 @@ pub mod valueObject;
 pub mod state;
 pub mod usercontract;
 pub mod ticket;
+pub mod company;
