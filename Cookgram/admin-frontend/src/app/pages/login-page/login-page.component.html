@@ -21,11 +21,7 @@
       pInputText
       class="w-full mb-1"
     />
-    <ng-container *ngIf="loginFormGroup.controls.username.hasError('required') && loginFormGroup.get('username')?.touched">
-      <span class="p-error font-light text-sm font-bold p-0"
-        >Field is required</span
-      >
-    </ng-container>
+    <app-errors [control]="loginFormGroup.controls.username"></app-errors>
     <label for="password1" class="block text-900 font-medium mb-2 mt-2"
       >Password</label
     >
@@ -35,10 +31,11 @@
       formControlName="password"
       placeholder="Password"
       pInputText
-      class="w-full mb-3"
+      class="w-full"
     />
+    <app-errors class="mb-2" [control]="loginFormGroup.controls.password"></app-errors>
 
-    <div class="flex align-items-center justify-content-between mb-6">
+    <div class="flex align-items-center justify-content-between mt-2 mb-6">
       <div class="flex align-items-center">
         <p-checkbox
           id="rememberme1"
