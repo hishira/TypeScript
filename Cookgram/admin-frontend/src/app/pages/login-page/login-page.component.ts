@@ -12,6 +12,7 @@ import {
 import { NgIf } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { ErrorsComponent } from '../../shared/errors/errors.component';
 type LoginFormGroup = {
   username: FormControl<string | null>;
   password: FormControl<string | null>;
@@ -26,6 +27,7 @@ type LoginFormGroup = {
     InputTextModule,
     ReactiveFormsModule,
     NgIf,
+    ErrorsComponent,
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',

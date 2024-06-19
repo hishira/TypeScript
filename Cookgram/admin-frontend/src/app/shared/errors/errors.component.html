@@ -1,0 +1,5 @@
+<ng-container *ngIf="errorsChange$ | async as errors">
+  <ng-container *ngFor="let error of errors">
+    <span class="p-error font-light text-sm font-bold p-0">{{ error }}</span>
+  </ng-container>
+</ng-container>
