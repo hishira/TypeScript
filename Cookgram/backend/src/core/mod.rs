@@ -10,3 +10,4 @@ pub mod usercontract;
 pub mod ticket;
 pub mod company;
 pub mod metaobject;
+pub mod notification;
