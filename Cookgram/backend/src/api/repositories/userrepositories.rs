@@ -44,7 +44,7 @@ impl UserRepositories {
         let _ = transaction.commit().await;
         EventRepository::create_later(
             self.db_context.clone(),
-            UserEvent::create_event(entity.id.clone()), //Event::new(None, Some(EventType::Create),, entity.id.clone(), true),
+            UserEvent::create_event(entity.id.clone()),
         );
         entity
     }

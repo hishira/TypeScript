@@ -1,10 +1,41 @@
+use std::any::Any;
+
 use serde::{Deserialize, Serialize};
 use time::serde::rfc3339;
 use time::OffsetDateTime;
 use uuid::Uuid;
 
-use crate::core::{entity::Entity, metaobject::metaobject::MetaObject, state::{entitystate::EntityState, state::State}};
+use crate::core::{
+    entity::Entity,
+    metaobject::metaobject::MetaObject,
+    state::{entitystate::EntityState, state::State},
+};
 
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub enum AdditionalFieldKey {
+    String,
+    Number,
+    Selection,
+    Boolean,
+    Location,
+    MultiSelection,
+}
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub enum AdditionalFieldValue {
+    Text(String),
+    Number(f32),
+    Selection(String),
+    Boolean(bool),
+    Location((f32, f32)),
+    MultiSelection(Vec<String>)
+}
+
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+pub struct AdditionalField {
+    pub key: AdditionalFieldKey,
+    pub value: AdditionalFieldValue,
+    pub description: Option<String>,
+}
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Contract {
     pub id: Uuid,
@@ -19,6 +50,7 @@ pub struct Contract {
     pub work_star_date: OffsetDateTime,
     pub meta: MetaObject,
     pub state: State<EntityState>,
+    pub additional_fields: Option<Vec<AdditionalField>>,
 }
 
 impl Entity for Contract {
@@ -32,8 +64,8 @@ mod tests {
 
     use super::*;
     use serde_json;
-    use uuid::Uuid;
     use time::macros::datetime;
+    use uuid::Uuid;
 
     #[test]
     fn test_serialization() {
@@ -59,6 +91,7 @@ mod tests {
             work_star_date: work_start,
             meta: MetaObject::new(),
             state,
+            additional_fields: None,
         };
 
         // Serializacja do JSON
