@@ -79,21 +79,13 @@ impl UserRouter {
     where
         T: Repository<User, UserFilterOption>,
     {
-        if !claims
-            .role
-            .unwrap()
-            .has_access_to(QueriesActions::Access(Queries::User, Action::Management))
-        {
-            return Err(AuthError::WrongCredentials);
-        }
+        ClaimsGuard::manage_user_guard(claims.clone())?;
         let user =
             UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker, None)
                 .await;
         let ids_touples = (claims.user_id.unwrap(), user.id);
         state.repo.create(user).await;
-        //TODO: Check if we can move pool to other methods or move this to other method
         let result = UserService::create_user_connection(ids_touples, state.event_repo.pool).await;
-        // Ok(Json(true))
         match result {
             Ok(_) => Ok(Json(true)),
             Err(error) => {
@@ -101,6 +93,19 @@ impl UserRouter {
                 return Ok(Json(false));
             }
         }
+    }
+
+    async fn get_managed_users<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+        Json(params): Json<UserFilterOption>,
+    ) -> Result<Json<Vec<User>>, AuthError>
+    where
+        T: Repository<User, UserFilterOption>,
+    {
+        ClaimsGuard::manage_user_guard(claims.clone())?;
+
+        return Ok(Json(state.repo.find(params).await));
     }
 
     async fn add_user_address<T>(

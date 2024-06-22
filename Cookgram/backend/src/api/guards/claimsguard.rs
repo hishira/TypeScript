@@ -36,4 +36,12 @@ impl ClaimsGuard {
         }
         Ok(true)
     }
+
+    pub fn manage_user_guard(claims: Claims) -> Result<bool, AuthError> {
+        let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
+        if !res_role.has_access_to(QueriesActions::Access(Queries::User, Action::Management)) {
+            return Err(AuthError::Unauthorized);
+        }
+        Ok(true)
+    }
 }

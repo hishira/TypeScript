@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use uuid::Uuid;
 use validator::{Validate, ValidationError};
 
 use crate::core::role::role::{Role, Roles};
@@ -12,6 +13,8 @@ pub struct CreateUserDto {
     #[validate(email)]
     pub email: String,
     pub role: Option<Roles>,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>
 }
 
 #[derive(Debug, Validate, Deserialize)]
@@ -52,6 +55,9 @@ trait Filter: Send + Sync {}
 #[derive(Clone, Deserialize)]
 pub struct UserFilterOption {
     pub username: Option<String>,
+    pub limit: Option<i16>,
+    pub offset: Option<i16>,
+    pub owner_id: Option<Uuid>,
 }
 
 pub fn validatete_auth(user_auth_dto: &UserAuthDto) -> Result<(), ValidationError> {
@@ -96,6 +102,8 @@ mod tests {
             password: "valid_password".to_string(),
             email: "valid@example.com".to_string(),
             role: Some(Roles::user_role()),
+            first_name: None,
+            last_name: None,
         };
 
         // Validate the DTO
@@ -113,6 +121,8 @@ mod tests {
             password: "short".to_string(),
             email: "invalid_email".to_string(), // Invalid email intentionally
             role: Some(Roles::user_role()),
+            first_name: None,
+            last_name: None,
         };
 
         // Validate the DTO
