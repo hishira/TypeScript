@@ -15,6 +15,7 @@ use crate::{
                 CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
             },
         },
+        guards::claimsguard::ClaimsGuard,
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
             eventrepository::EventRepository, repositories::Repository,
@@ -27,8 +28,7 @@ use crate::{
     core::{
         event::userevent::UserEvent,
         role::access::{Action, Queries, QueriesActions},
-        state::entitystate::EntityState,
-        state::state::State as CoreState,
+        state::{entitystate::EntityState, state::State as CoreState},
         user::{self, user::User},
     },
     database::init::Database,
@@ -129,13 +129,7 @@ impl UserRouter {
     where
         T: Repository<User, UserFilterOption>,
     {
-        if !claims.role.unwrap().has_access_to(QueriesActions::Access(
-            Queries::User,
-            Action::SelfManagement,
-        )) {
-            return Err(AuthError::Unauthorized);
-        }
-
+        ClaimsGuard::user_update_guard(claims.clone())?;
         let user = state.repo.find_by_id(claims.user_id.unwrap()).await;
         let updated_user = UserService::get_user_from_dto(
             UserDtos::Update(params),
@@ -155,16 +149,9 @@ impl UserRouter {
     where
         T: Repository<User, UserFilterOption>,
     {
-        match claims.role {
-            Some(role) => {
-                if !role.has_access_to(QueriesActions::Access(Queries::User, Action::View)) {
-                    return Err(AuthError::Unauthorized);
-                }
-                let users = state.repo.find(params).await;
-                Ok(Json(users))
-            }
-            None => Err(AuthError::MissingCredentials),
-        }
+        ClaimsGuard::role_guard_user_find(claims)?;
+        let users = state.repo.find(params).await;
+        Ok(Json(users))
     }
 
     async fn user_delete<T>(
@@ -175,14 +162,7 @@ impl UserRouter {
     where
         T: Repository<User, UserFilterOption>,
     {
-        if (!claims
-            .role
-            .unwrap()
-            .has_access_to(QueriesActions::Access(Queries::User, Action::Management)))
-        //todo: Fix
-        {
-            return Err(AuthError::Unauthorized);
-        }
+        ClaimsGuard::user_delete_guard(claims)?;
         let mut user = state.repo.find_by_id(params.id).await;
         user.state.update(CoreState {
             current: EntityState::Deleted,

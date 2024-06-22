@@ -60,6 +60,7 @@ impl UserRepositories {
             (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
         }
     }
+
     async fn create_user_address(&self, user: User, address: Address) -> User {
         let mut address_query = self
             .user_queries
@@ -116,7 +117,7 @@ impl Repository<User, UserFilterOption> for UserRepositories {
             Ok(_) => {
                 EventRepository::create_later(
                     self.db_context.clone(),
-                    UserEvent::delete_event(entity.id.clone())//Event::new(None, Some(EventType::Delete), entity.id.clone(), true),
+                    UserEvent::delete_event(entity.id.clone())
                 );
                 return entity;
             }

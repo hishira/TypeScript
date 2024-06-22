@@ -93,6 +93,16 @@ impl Notification {
             meta: MetaObject::new(),
         }
     }
+    pub fn new_gui_notificatin(title: String, content: Option<String>) -> Self {
+        Self {
+            id: Notification::generate_id(),
+            title,
+            content,
+            notification_type: NotificationType::GUI,
+            notification_state: NotificationState::default(),
+            meta: MetaObject::new(),
+        }
+    }
 
     pub fn active_notification(&mut self) {
         self.notification_state.update(State {

@@ -30,6 +30,7 @@ pub enum Roles {
     Director(Director),
 }
 
+// impl Try for Roles{}
 impl Type<Postgres> for Roles {
     fn type_info() -> PgTypeInfo {
         PgTypeInfo::with_name("Role")

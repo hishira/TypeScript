@@ -16,6 +16,12 @@ pub struct Company {
     pub address: Option<Address>,
     pub owner_id: Uuid,
     pub state: State<CompanyState>,
+    pub employees: Vec<Uuid>,
     pub meta: MetaObject,
-    pub employees: Vec<Uuid>
+}
+
+impl Company {
+    pub fn append_employeed(& mut self, user_id: Uuid) {
+        self.employees.push(user_id);
+    }
 }
