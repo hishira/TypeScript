@@ -110,11 +110,15 @@ impl Query<UserFilterOption> for UserQuery {
             QueryBuilder::new("SELECT * FROM ADDRESSUSERS");
         let mut count: i8 = 0;
         if let Some(owner_id) = option.owner_id {
-            user_query.push(" WHERE users.id in (select user_id from EMPLOYEE_CONNECTION where owner_id = ");
+            user_query
+                .push(" WHERE id in (select user_id from EMPLOYEE_CONNECTION where owner_id = ");
             user_query.push_bind(owner_id);
-            user_query.push(") ");
         }
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
+        user_query.push(") limit ");
+        user_query.push_bind(option.limit.unwrap_or(10));
+        user_query.push(" offset ");
+        user_query.push_bind(option.offset.unwrap_or(10));
         user_query
     }
 

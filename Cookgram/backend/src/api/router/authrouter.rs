@@ -123,7 +123,7 @@ impl AuthRouter {
     ) -> Result<Json<User>, AuthError> {
         todo!();
     }
-    
+
     async fn login<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
@@ -135,7 +135,8 @@ impl AuthRouter {
         let filter = UserFilterOption {
             username: Some(claims.user_info.clone()),
             limit: Some(10),
-            offset: Some(0)
+            offset: Some(0),
+            owner_id: None,
         };
         let users = state.repo.find(filter.clone()).await;
         if users.len() <= 0 {
