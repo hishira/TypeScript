@@ -4,6 +4,16 @@ use time::OffsetDateTime;
 use crate::core::entity::Entity;
 
 #[derive(Clone, Serialize, Deserialize)]
+pub enum EventEntity {
+    User,
+    Notification,
+    Ticket,
+    Company,
+    Address,
+    Contact,
+
+}
+#[derive(Clone, Serialize, Deserialize)]
 pub enum EventType {
     Create,
     Delete,
@@ -14,6 +24,7 @@ pub struct Event {
     pub id: uuid::Uuid,
     pub create_date: time::OffsetDateTime,
     pub event_type: EventType,
+    pub entity: EventEntity,
     pub related_entity: uuid::Uuid,
     pub completed: bool,
 }
@@ -28,6 +39,7 @@ impl Event {
     pub fn new(
         id: Option<uuid::Uuid>,
         event: Option<EventType>,
+        entity: EventEntity,
         related_entity_id: uuid::Uuid,
         completed: bool,
     ) -> Self {
@@ -45,6 +57,7 @@ impl Event {
             create_date: OffsetDateTime::now_utc(),
             related_entity: related_entity_id,
             completed,
+            entity
         }
     }
 }

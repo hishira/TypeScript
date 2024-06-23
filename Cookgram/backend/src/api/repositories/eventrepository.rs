@@ -24,7 +24,7 @@ impl EventRepository {
     }
 }
 
-impl Repository<Event, EventFilterOption> for EventRepository {
+impl Repository<Event, EventFilterOption, sqlx::Error> for EventRepository {
     async fn create(&self, entity: Event) -> Event {
         let mut creation_query = EventQuery {}.create(entity.clone());
         let event_response = creation_query.build().fetch_one(&self.pool).await;
@@ -39,7 +39,7 @@ impl Repository<Event, EventFilterOption> for EventRepository {
         entity
     }
 
-    async fn find(&self, option: EventFilterOption) -> Vec<Event> {
+    async fn find(&self, option: EventFilterOption) -> Result<Vec<Event>, sqlx::Error> {
         todo!()
     }
 

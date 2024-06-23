@@ -1,4 +1,3 @@
-
 use sqlx::{Execute, Postgres, QueryBuilder};
 use uuid::Uuid;
 
@@ -108,9 +107,19 @@ impl Query<UserFilterOption> for UserQuery {
 
     fn find(&self, option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut user_query: QueryBuilder<Postgres> =
-            QueryBuilder::new("SELECT id, username, email, password, meta_id, role, current_state, previous_state FROM users join ADDRESS ON id = (select address_id from ADDRESS_CONNECTION where entity_id = id)");
+            QueryBuilder::new("SELECT * FROM ADDRESSUSERS");
         let mut count: i8 = 0;
+        if let Some(owner_id) = option.owner_id {
+            user_query
+                .push(" WHERE id in (select user_id from EMPLOYEE_CONNECTION where owner_id = ");
+            user_query.push_bind(owner_id);
+            user_query.push(") ");
+        }
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
+        user_query.push(" limit ");
+        user_query.push_bind(option.limit.unwrap_or(10));
+        user_query.push(" offset ");
+        user_query.push_bind(option.offset.unwrap_or(0));
         user_query
     }
 
@@ -125,21 +134,24 @@ impl Query<UserFilterOption> for UserQuery {
 impl ActionQueryBuilder<User> for UserQuery {
     fn create(&self, entity: User) -> QueryBuilder<Postgres> {
         let mut create_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id, role) ");
+            QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id, role, first_name, last_name) ");
         create_builder.push_values(vec![entity], |mut b, user| {
             b.push_bind(user.id)
                 .push_bind(user.username)
                 .push_bind(user.password)
                 .push_bind(user.email)
                 .push_bind(user.meta.id)
-                .push_bind(user.role);
+                .push_bind(user.role)
+                .push_bind(user.first_name)
+                .push_bind(user.last_name);
         });
         create_builder.push(" RETURNING id, username, password, email;");
         create_builder
     }
 
     fn update(&self, entity: User) -> QueryBuilder<Postgres> {
-        let mut update_query: QueryBuilder<Postgres> = QueryBuilder::new("UPDATE USERS SET username = ");
+        let mut update_query: QueryBuilder<Postgres> =
+            QueryBuilder::new("UPDATE USERS SET username = ");
         update_query.push_bind(entity.username);
         update_query.push(", email = ");
         update_query.push_bind(entity.email);

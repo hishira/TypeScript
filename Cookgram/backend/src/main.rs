@@ -1,5 +1,5 @@
 use crate::api::{logs::applicationlog::ApplicationLog, router::authrouter::AuthRouter};
-use api::router::{router::ApplicationRouter, userrouter::UserRouter};
+use api::{router::{router::ApplicationRouter, userrouter::UserRouter}, utils::cors::CORS};
 use axum::{
     extract::{DefaultBodyLimit, MatchedPath},
     http::{
@@ -21,19 +21,11 @@ async fn main() {
     ApplicationLog::register_tracing();
     let database = database::init::Database::new().await;
     database.prepare_tables().await;
-    let cors_layer = CorsLayer::new()
-        .allow_headers([CONTENT_TYPE, AUTHORIZATION])
-        .allow_methods([
-            axum::http::Method::GET,
-            axum::http::Method::POST,
-            axum::http::Method::PUT,
-            axum::http::Method::DELETE,
-        ]);
     let app = Router::new()
         .nest("/test", UserRouter::new(&database).get_router())
         .nest("/testauth", AuthRouter::new(&database).get_router())
         .layer(DefaultBodyLimit::max(104857000))
-        .layer(cors_layer)
+        .layer(CORS::default())
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
                 let matched_path = request

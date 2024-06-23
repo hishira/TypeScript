@@ -74,6 +74,26 @@ values (
         '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
         'SuperAdmin'
     );
+
+CREATE TABLE IF NOT EXISTS ADDRESS_CONNECTION (
+    entity_id uuid not null,
+    address_id uuid not null,
+    UNIQUE(address_id)
+);
+CREATE TABLE IF NOT EXISTS ADDRESS (
+    id uuid NOT NULL,
+    house VARCHAR(255) NOT NULL,
+    door VARCHAR(255) DEFAULT NULL,
+    city VARCHAR(255) NOT NULL,
+    country VARCHAR(255) NOT NULL,
+    lat real DEFAULT null,
+    long real DEFAULT null,
+    postal_code TEXT DEFAULT NULL,
+    fax TEXT DEFAULT NULL,
+    phone TEXT DEFAULT NULL,
+    CONSTRAINT fk_address_connection FOREIGN KEY(id) REFERENCES ADDRESS_CONNECTION(address_id) ON DELETE CASCADE
+);
+
 CREATE view ADDRESSUSERS as (
     select users.id,
         users.username,
@@ -98,24 +118,8 @@ CREATE view ADDRESSUSERS as (
             where entity_id = users.id
         )
 ); 
-CREATE TABLE IF NOT EXISTS ADDRESS_CONNECTION (
-    entity_id uuid not null,
-    address_id uuid not null,
-    UNIQUE(address_id)
-);
-CREATE TABLE IF NOT EXISTS ADDRESS (
-    id uuid NOT NULL,
-    house VARCHAR(255) NOT NULL,
-    door VARCHAR(255) DEFAULT NULL,
-    city VARCHAR(255) NOT NULL,
-    country VARCHAR(255) NOT NULL,
-    lat real DEFAULT null,
-    long real DEFAULT null,
-    postal_code TEXT DEFAULT NULL,
-    fax TEXT DEFAULT NULL,
-    phone TEXT DEFAULT NULL,
-    CONSTRAINT fk_address_connection FOREIGN KEY(id) REFERENCES ADDRESS_CONNECTION(address_id) ON DELETE CASCADE
-);
+
+
 CREATE TABLE IF NOT EXISTS EMPLOYEE_CONNECTION (
     owner_id uuid not null,
     user_id uuid not null

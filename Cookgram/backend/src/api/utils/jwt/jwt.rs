@@ -11,7 +11,7 @@ use crate::{
     core::role::role::Roles,
 };
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
     pub user_id: Option<uuid::Uuid>,
     pub user_info: String,

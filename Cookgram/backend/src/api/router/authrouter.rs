@@ -1,5 +1,3 @@
-use std::borrow::Borrow;
-
 use axum::{
     extract::State,
     http::StatusCode,
@@ -7,8 +5,6 @@ use axum::{
     routing::post,
     Json, Router,
 };
-use bcrypt::verify;
-use dotenv::dotenv;
 use jsonwebtoken::{encode, DecodingKey, EncodingKey, Header};
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
@@ -20,6 +16,7 @@ use crate::{
     api::{
         appstate::appstate::AppState,
         dtos::userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
+        errors::errorbody::ErrorBody,
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
             eventrepository::EventRepository, repositories::Repository,
@@ -116,24 +113,36 @@ impl AuthRouter {
             },
         }
     }
+
     async fn register<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<UserRegisterDto>,
     ) -> Result<Json<User>, AuthError> {
         todo!();
     }
+
     async fn login<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
-    ) -> Result<Json<AuthBody>, AuthError>
+    ) -> Result<Json<ErrorBody<AuthBody>>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         let mut claims: Claims = AuthRouter::prepare_claims(&params);
         let filter = UserFilterOption {
             username: Some(claims.user_info.clone()),
+            limit: Some(10),
+            offset: Some(0),
+            owner_id: None,
         };
         let users = state.repo.find(filter.clone()).await;
+        let users = match users {
+            Ok(u) => u,
+            Err(error) => {
+                tracing::error!("Error occur, {}", error);
+                vec![]
+            }
+        };
         if users.len() <= 0 {
             return Result::Err(AuthError::UserNotExists);
         }
@@ -149,10 +158,10 @@ impl AuthRouter {
         {
             Ok(bcrypt_verify_respoonse) => {
                 if bcrypt_verify_respoonse {
-                    Ok(Json(AuthBody {
+                    Ok(Json(ErrorBody::Ok(AuthBody {
                         access_token: token.clone(),
                         refresh_token: token.clone(),
-                    }))
+                    })))
                 } else {
                     Result::Err(AuthError::WrongCredentials)
                 }

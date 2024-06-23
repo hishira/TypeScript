@@ -15,6 +15,7 @@ use crate::{
                 CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
             },
         },
+        guards::claimsguard::ClaimsGuard,
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
             eventrepository::EventRepository, repositories::Repository,
@@ -27,8 +28,7 @@ use crate::{
     core::{
         event::userevent::UserEvent,
         role::access::{Action, Queries, QueriesActions},
-        state::entitystate::EntityState,
-        state::state::State as CoreState,
+        state::{entitystate::EntityState, state::State as CoreState},
         user::{self, user::User},
     },
     database::init::Database,
@@ -62,7 +62,7 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Json<User>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         let user_tmp =
             UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker, None)
@@ -77,23 +77,15 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Result<Json<bool>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
-        if !claims
-            .role
-            .unwrap()
-            .has_access_to(QueriesActions::Access(Queries::User, Action::Management))
-        {
-            return Err(AuthError::WrongCredentials);
-        }
+        ClaimsGuard::manage_user_guard(claims.clone())?;
         let user =
             UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker, None)
                 .await;
         let ids_touples = (claims.user_id.unwrap(), user.id);
         state.repo.create(user).await;
-        //TODO: Check if we can move pool to other methods or move this to other method
         let result = UserService::create_user_connection(ids_touples, state.event_repo.pool).await;
-        // Ok(Json(true))
         match result {
             Ok(_) => Ok(Json(true)),
             Err(error) => {
@@ -103,12 +95,25 @@ impl UserRouter {
         }
     }
 
+    async fn get_managed_users<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+        Json(params): Json<UserFilterOption>,
+    ) -> Result<Json<Vec<User>>, AuthError>
+    where
+        T: Repository<User, UserFilterOption, sqlx::Error>,
+    {
+        ClaimsGuard::manage_user_guard(claims.clone())?;
+
+        return Ok(Json(state.repo.find(params).await.unwrap_or(vec![])));
+    }
+
     async fn add_user_address<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,
     ) -> Json<String>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         let user = state.repo.find_by_id(params.user_id).await;
         state
@@ -127,15 +132,9 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<UpdateUserDto>,
     ) -> Result<Json<User>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
-        if !claims.role.unwrap().has_access_to(QueriesActions::Access(
-            Queries::User,
-            Action::SelfManagement,
-        )) {
-            return Err(AuthError::Unauthorized);
-        }
-
+        ClaimsGuard::user_update_guard(claims.clone())?;
         let user = state.repo.find_by_id(claims.user_id.unwrap()).await;
         let updated_user = UserService::get_user_from_dto(
             UserDtos::Update(params),
@@ -153,18 +152,11 @@ impl UserRouter {
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<User>>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
-        match claims.role {
-            Some(role) => {
-                if !role.has_access_to(QueriesActions::Access(Queries::User, Action::View)) {
-                    return Err(AuthError::Unauthorized);
-                }
-                let users = state.repo.find(params).await;
-                Ok(Json(users))
-            }
-            None => Err(AuthError::MissingCredentials),
-        }
+        ClaimsGuard::role_guard_user_find(claims)?;
+        let users = state.repo.find(params).await.unwrap_or(vec![]);
+        Ok(Json(users))
     }
 
     async fn user_delete<T>(
@@ -173,16 +165,9 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<DeleteUserDto>,
     ) -> Result<Json<User>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
-        if (!claims
-            .role
-            .unwrap()
-            .has_access_to(QueriesActions::Access(Queries::User, Action::Management)))
-        //todo: Fix
-        {
-            return Err(AuthError::Unauthorized);
-        }
+        ClaimsGuard::user_delete_guard(claims)?;
         let mut user = state.repo.find_by_id(params.id).await;
         user.state.update(CoreState {
             current: EntityState::Deleted,
@@ -204,6 +189,7 @@ impl ApplicationRouter for UserRouter {
             .route("/update-user", post(UserRouter::update_user))
             .route("/delete-user", delete(UserRouter::user_delete))
             .route("/add-user", post(UserRouter::create_managed_users))
+            .route("/get-managed-users", get(UserRouter::get_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
             .with_state(AppState {
@@ -223,7 +209,7 @@ async fn pp<T>(
     ValidateDtos(params): ValidateDtos<CreateUserDto>,
 ) -> Result<String, AuthError>
 where
-    T: Repository<User, UserFilterOption>,
+    T: Repository<User, UserFilterOption, sqlx::Error>,
 {
     print!("{}", params.email);
     Ok(format!("OK"))

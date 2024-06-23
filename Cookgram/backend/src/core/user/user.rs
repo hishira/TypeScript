@@ -9,7 +9,8 @@ use crate::core::{
         role::{Role, Roles},
         userrole::UserRole,
     },
-    state::{entitystate::EntityState, state::State}, usercontract::usercontract::Contract,
+    state::{entitystate::EntityState, state::State},
+    usercontract::usercontract::Contract,
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -42,13 +43,15 @@ impl User {
         email: String,
         role: Option<Roles>,
         meta: Option<Meta>,
+        first_name: Option<String>,
+        last_name: Option<String>,
     ) -> Self {
         let user_role: Roles = User::prepare_proper_role(role);
         match id {
             Some(id) => Self {
                 id,
-                first_name: None,
-                last_name: None,
+                first_name,
+                last_name,
                 username,
                 password,
                 email,
@@ -63,8 +66,8 @@ impl User {
             },
             None => Self {
                 id: User::generate_id(),
-                first_name: None,
-                last_name: None,
+                first_name,
+                last_name,
                 username,
                 password,
                 email,
@@ -146,6 +149,8 @@ mod tests {
             "test@example.com".to_string(),
             Some(Roles::admin_role()),
             None,
+            None,
+            None,
         );
 
         assert_ne!(user.id, Uuid::nil());
@@ -171,6 +176,8 @@ mod tests {
             "password123".to_string(),
             "test@example.com".to_string(),
             Some(Roles::user_role()),
+            None,
+            None,
             None,
         );
 
@@ -199,6 +206,8 @@ mod tests {
             "test@example.com".to_string(),
             None,
             None,
+            None,
+            None,
         );
 
         // Check if the user has the correct id
@@ -224,6 +233,8 @@ mod tests {
             "test_user".to_string(),
             "password123".to_string(),
             "test@example.com".to_string(),
+            None,
+            None,
             None,
             None,
         );
