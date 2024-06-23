@@ -14,7 +14,7 @@ pub struct CreateUserDto {
     pub email: String,
     pub role: Option<Roles>,
     pub first_name: Option<String>,
-    pub last_name: Option<String>
+    pub last_name: Option<String>,
 }
 
 #[derive(Debug, Validate, Deserialize)]
@@ -26,6 +26,8 @@ pub struct UpdateUserDto {
     #[validate(email)]
     pub email: String,
     pub role: Option<Roles>,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
 }
 
 #[derive(Debug, Validate, Deserialize)]
@@ -140,6 +142,8 @@ mod tests {
             password: Some("valid_password".to_string()),
             email: "valid@example.com".to_string(),
             role: None,
+            first_name: None,
+            last_name: None,
         };
 
         let validation_errors = validate_dto(&valid_dto);
@@ -153,6 +157,8 @@ mod tests {
             password: Some("short".to_string()),
             email: "invalid_email".to_string(),
             role: None,
+            first_name: None,
+            last_name: None,
         };
 
         let validation_errors = validate_dto(&invalid_dto).unwrap();

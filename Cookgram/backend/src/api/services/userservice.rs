@@ -28,7 +28,16 @@ impl UserService {
             UserDtos::Create(user) => {
                 let role = user.role;
                 let hash = pass_worker.hash(user.password.clone()).await.unwrap();
-                User::new(None, user.username, hash, user.email, role, None) //TODO: Fix role
+                User::new(
+                    None,
+                    user.username,
+                    hash,
+                    user.email,
+                    role,
+                    None,
+                    user.first_name,
+                    user.last_name,
+                )
             }
             UserDtos::Update(user) => {
                 let user_from_db = user_to_edit.unwrap();
@@ -43,6 +52,8 @@ impl UserService {
                     user.email,
                     Some(user.role.unwrap_or(user_from_db.role)),
                     Some(user_from_db.meta),
+                    user.first_name,
+                    user.last_name,
                 )
                 // FOX role
             }
@@ -62,17 +73,25 @@ impl UserService {
         return create_user_connection.build().execute(&pool).await;
     }
 
-    pub async fn create_managed(user: User, repo: impl Repository<User, UserFilterOption>) -> User {
+    pub async fn create_managed(user: User, repo: impl Repository<User, UserFilterOption, sqlx::Error>) -> User {
         todo!()
     }
 
     pub fn get_user_from_row(pg_row: PgRow) -> User {
         User {
             id: pg_row.get("id"),
-            first_name: None,
-            last_name: None,
-            username: pg_row.try_get("username").unwrap_or("Not found ".to_string()),
-            password: pg_row.try_get("password").unwrap_or("Not found ".to_string()),
+            first_name: pg_row
+                .try_get("first_name")
+                .unwrap_or(Some("NULL".to_string())),
+            last_name: pg_row
+                .try_get("last_name")
+                .unwrap_or(Some("NULL".to_string())),
+            username: pg_row
+                .try_get("username")
+                .unwrap_or("Not found ".to_string()),
+            password: pg_row
+                .try_get("password")
+                .unwrap_or("Not found ".to_string()),
             email: pg_row.try_get("email").unwrap_or("Not found ".to_string()),
             meta: Meta::meta_based_on_id(pg_row.get("meta_id")), //Meta::new(), //TODO: Inner join table to retrieve,
             role: UserService::retrive_role_from_row(&pg_row).unwrap(),

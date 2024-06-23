@@ -62,7 +62,7 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Json<User>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         let user_tmp =
             UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker, None)
@@ -77,7 +77,7 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Result<Json<bool>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         ClaimsGuard::manage_user_guard(claims.clone())?;
         let user =
@@ -101,11 +101,11 @@ impl UserRouter {
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<User>>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
-        return Ok(Json(state.repo.find(params).await));
+        return Ok(Json(state.repo.find(params).await.unwrap_or(vec![])));
     }
 
     async fn add_user_address<T>(
@@ -113,7 +113,7 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,
     ) -> Json<String>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         let user = state.repo.find_by_id(params.user_id).await;
         state
@@ -132,7 +132,7 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<UpdateUserDto>,
     ) -> Result<Json<User>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         ClaimsGuard::user_update_guard(claims.clone())?;
         let user = state.repo.find_by_id(claims.user_id.unwrap()).await;
@@ -152,10 +152,10 @@ impl UserRouter {
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<User>>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         ClaimsGuard::role_guard_user_find(claims)?;
-        let users = state.repo.find(params).await;
+        let users = state.repo.find(params).await.unwrap_or(vec![]);
         Ok(Json(users))
     }
 
@@ -165,7 +165,7 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<DeleteUserDto>,
     ) -> Result<Json<User>, AuthError>
     where
-        T: Repository<User, UserFilterOption>,
+        T: Repository<User, UserFilterOption, sqlx::Error>,
     {
         ClaimsGuard::user_delete_guard(claims)?;
         let mut user = state.repo.find_by_id(params.id).await;
@@ -189,6 +189,7 @@ impl ApplicationRouter for UserRouter {
             .route("/update-user", post(UserRouter::update_user))
             .route("/delete-user", delete(UserRouter::user_delete))
             .route("/add-user", post(UserRouter::create_managed_users))
+            .route("/get-managed-users", get(UserRouter::get_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
             .with_state(AppState {
@@ -208,7 +209,7 @@ async fn pp<T>(
     ValidateDtos(params): ValidateDtos<CreateUserDto>,
 ) -> Result<String, AuthError>
 where
-    T: Repository<User, UserFilterOption>,
+    T: Repository<User, UserFilterOption, sqlx::Error>,
 {
     print!("{}", params.email);
     Ok(format!("OK"))

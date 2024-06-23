@@ -11,12 +11,12 @@ pub struct MetaRepository {
 
 #[derive(Clone)]
 pub struct MetaFilterOption {}
-impl Repository<Meta, MetaFilterOption> for MetaRepository {
+impl Repository<Meta, MetaFilterOption, sqlx::Error> for MetaRepository {
     async fn create(&self, entity: Meta) -> Meta {
         todo!()
     }
 
-    async fn find(&self, option: MetaFilterOption) -> Vec<Meta> {
+    async fn find(&self, option: MetaFilterOption) -> Result<Vec<Meta>, sqlx::Error> {
         todo!()
     }
 

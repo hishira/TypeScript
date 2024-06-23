@@ -77,7 +77,7 @@ impl UserRepositories {
         User::create_base_on_user_and_address(user, address)
     }
 }
-impl Repository<User, UserFilterOption> for UserRepositories {
+impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
     async fn create(&self, entity: User) -> User {
         let transaction_res = self.pool.begin().await;
         match transaction_res {
@@ -99,15 +99,14 @@ impl Repository<User, UserFilterOption> for UserRepositories {
             .unwrap()
     }
 
-    async fn find(&self, option: UserFilterOption) -> Vec<User> {
+    async fn find(&self, option: UserFilterOption) -> Result<Vec<User>, sqlx::Error> {
         let mut find_query = self.user_queries.find(option);
-        let response = find_query
+        let result = find_query
             .build()
             .map(UserService::get_user_from_row)
             .fetch_all(&self.pool)
-            .await
-            .unwrap();
-        response
+            .await;
+        result
     }
 
     async fn delete(&self, entity: User) -> User {

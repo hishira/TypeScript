@@ -113,12 +113,13 @@ impl Query<UserFilterOption> for UserQuery {
             user_query
                 .push(" WHERE id in (select user_id from EMPLOYEE_CONNECTION where owner_id = ");
             user_query.push_bind(owner_id);
+            user_query.push(") ");
         }
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
-        user_query.push(") limit ");
+        user_query.push(" limit ");
         user_query.push_bind(option.limit.unwrap_or(10));
         user_query.push(" offset ");
-        user_query.push_bind(option.offset.unwrap_or(10));
+        user_query.push_bind(option.offset.unwrap_or(0));
         user_query
     }
 
@@ -133,14 +134,16 @@ impl Query<UserFilterOption> for UserQuery {
 impl ActionQueryBuilder<User> for UserQuery {
     fn create(&self, entity: User) -> QueryBuilder<Postgres> {
         let mut create_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id, role) ");
+            QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id, role, first_name, last_name) ");
         create_builder.push_values(vec![entity], |mut b, user| {
             b.push_bind(user.id)
                 .push_bind(user.username)
                 .push_bind(user.password)
                 .push_bind(user.email)
                 .push_bind(user.meta.id)
-                .push_bind(user.role);
+                .push_bind(user.role)
+                .push_bind(user.first_name)
+                .push_bind(user.last_name);
         });
         create_builder.push(" RETURNING id, username, password, email;");
         create_builder
