@@ -105,7 +105,16 @@ impl UserRouter {
     {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
-        return Ok(Json(state.repo.find(params).await.unwrap_or(vec![])));
+        return Ok(Json(
+            state
+                .repo
+                .find(UserFilterOption {
+                    owner_id: claims.user_id,
+                    ..params
+                })
+                .await
+                .unwrap_or(vec![]),
+        ));
     }
 
     async fn add_user_address<T>(

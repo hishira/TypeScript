@@ -103,6 +103,8 @@ CREATE view ADDRESSUSERS as (
         users.role,
         users.current_state,
         users.previous_state,
+        users.password,
+        users.meta_id,
         addr.house,
         addr.door,
         addr.city,
