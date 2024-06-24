@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Signal, computed, input } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, map, of, startWith } from 'rxjs';
 
@@ -12,10 +12,6 @@ import { Observable, map, of, startWith } from 'rxjs';
 })
 export class ErrorsComponent implements OnInit {
   control = input.required<AbstractControl>();
-  // controlErrors: Signal<Observable<string[]>> = computed(()=>this.control().statusChanges.pipe(startWith(this.control().value), map((status)=>{
-  //   const errors = this.control().errors;
-  //   return errors && 'required' in errors ? ['Field is required']
-  // })));
   errorsChange$: Observable<string[]> = of([]);
   ngOnInit(): void {
     this.errorsChange$ = this.control().statusChanges.pipe(
