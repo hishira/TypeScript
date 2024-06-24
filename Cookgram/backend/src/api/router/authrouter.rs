@@ -147,10 +147,14 @@ impl AuthRouter {
             return Result::Err(AuthError::UserNotExists);
         }
         let user = users.get(0).unwrap();
+        println!("{}", user.email);
         claims.user_id = Some(user.id);
         claims.role = Some(user.role.clone());
         let token = encode(&Header::default(), &claims, &KEYS.encoding)
-            .map_err(|_| AuthError::TokenCreation)?;
+            .map_err(|e| {
+                tracing::error!("Error occur while token creation, {}", e);
+                return AuthError::TokenCreation;
+            })?;
         match state
             .pass_worker
             .verify(params.password, user.password.clone())
