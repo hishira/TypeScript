@@ -18,6 +18,7 @@ export class ErrorsComponent implements OnInit {
       startWith(this.control().value),
       map((status) => {
         if (!this.control().dirty) return [];
+        console.log(this.control().errors);
         const errors = this.control().errors;
         return errors && 'required' in errors ? ['Field is required'] : [];
       })

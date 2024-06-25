@@ -13,6 +13,7 @@ import { NgIf } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ErrorsComponent } from '../../shared/errors/errors.component';
+import { AuthenticationApiService } from '../../../api/authentication.api';
 type LoginFormGroup = {
   username: FormControl<string | null>;
   password: FormControl<string | null>;
@@ -29,22 +30,28 @@ type LoginFormGroup = {
     NgIf,
     ErrorsComponent,
   ],
+  providers: [AuthenticationApiService],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
   readonly loginFormGroup: FormGroup<LoginFormGroup> =
     new FormGroup<LoginFormGroup>({
-      username: new FormControl<string | null>('', [Validators.required]),
-      password: new FormControl<string | null>('', [Validators.required]),
+      username: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      password: new FormControl<string>('', [Validators.required]),
     });
 
   constructor(
     private readonly messageService: MessageService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly authenticationService: AuthenticationApiService
   ) {}
   signIn(): void {
     this.loginFormGroup.markAllAsTouched();
+    this.loginFormGroup.markAsDirty();
     this.loginFormGroup.updateValueAndValidity();
     if (!this.loginFormGroup.valid) {
       this.messageService.add({
@@ -57,6 +64,9 @@ export class LoginPageComponent {
 
       return;
     }
-    this.router.navigate(['/admin']);
+    this.authenticationService.login({
+      username: this.loginFormGroup.value.username ?? '',
+      password: this.loginFormGroup.value.password ?? '',
+    }).subscribe((r)=>{console.log(r)});
   }
 }

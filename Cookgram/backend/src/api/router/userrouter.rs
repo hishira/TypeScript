@@ -117,6 +117,17 @@ impl UserRouter {
         ));
     }
 
+    async fn get_current_user<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+    ) -> Result<Json<User>, AuthError>
+    where
+        T: Repository<User, UserFilterOption, sqlx::Error>,
+    {
+        ClaimsGuard::current_user_guard(&claims)?;
+        let user = state.repo.find_by_id(claims.user_id.unwrap()).await;
+        Ok(Json(user))
+    }
     async fn add_user_address<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,
@@ -198,6 +209,7 @@ impl ApplicationRouter for UserRouter {
             .route("/update-user", post(UserRouter::update_user))
             .route("/delete-user", delete(UserRouter::user_delete))
             .route("/add-user", post(UserRouter::create_managed_users))
+            .route("/current-user", get(UserRouter::get_current_user))
             .route("/get-managed-users", get(UserRouter::get_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))

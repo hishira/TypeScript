@@ -2,7 +2,7 @@ use axum::http::{
     header::{AUTHORIZATION, CONTENT_TYPE},
     HeaderName,
 };
-use tower_http::cors::CorsLayer;
+use tower_http::cors::{ Any, CorsLayer };
 
 pub struct CORS;
 
@@ -25,5 +25,7 @@ impl CORS {
                 axum::http::Method::PUT,
                 axum::http::Method::DELETE,
             ])
+            .allow_origin(Any)
+
     }
 }
