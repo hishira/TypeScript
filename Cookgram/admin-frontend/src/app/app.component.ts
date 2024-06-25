@@ -4,6 +4,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { HttpClient, HttpClientModule, provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',

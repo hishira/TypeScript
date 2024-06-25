@@ -124,7 +124,7 @@ impl AuthRouter {
     async fn login<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
-    ) -> Result<Json<ErrorBody<AuthBody>>, AuthError>
+    ) -> Result<Json<AuthBody>, AuthError>
     where
         T: Repository<User, UserFilterOption, sqlx::Error>,
     {
@@ -162,10 +162,10 @@ impl AuthRouter {
         {
             Ok(bcrypt_verify_respoonse) => {
                 if bcrypt_verify_respoonse {
-                    Ok(Json(ErrorBody::Ok(AuthBody {
+                    Ok(Json(AuthBody {
                         access_token: token.clone(),
                         refresh_token: token.clone(),
-                    })))
+                    }))
                 } else {
                     Result::Err(AuthError::WrongCredentials)
                 }
