@@ -27,19 +27,27 @@ impl ClaimsGuard {
     }
 
     pub fn user_update_guard(claims: Claims) -> Result<bool, AuthError> {
-        let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
-        if !res_role.has_access_to(QueriesActions::Access(
-            Queries::User,
-            Action::SelfManagement,
-        )) {
-            return Err(AuthError::Unauthorized);
-        }
-        Ok(true)
+        Self::self_management_guard(&claims)
     }
 
     pub fn manage_user_guard(claims: Claims) -> Result<bool, AuthError> {
         let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
         if !res_role.has_access_to(QueriesActions::Access(Queries::User, Action::Management)) {
+            return Err(AuthError::Unauthorized);
+        }
+        Ok(true)
+    }
+
+    pub fn current_user_guard(claims: &Claims) -> Result<bool, AuthError> {
+        Self::self_management_guard(&claims)
+    }
+
+    fn self_management_guard(claims: &Claims) -> Result<bool, AuthError> {
+        let res_role = claims.role.as_ref().ok_or(AuthError::MissingCredentials)?;
+        if !res_role.has_access_to(QueriesActions::Access(
+            Queries::User,
+            Action::SelfManagement,
+        )) {
             return Err(AuthError::Unauthorized);
         }
         Ok(true)

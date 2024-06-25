@@ -16,7 +16,6 @@ use crate::{
     api::{
         appstate::appstate::AppState,
         dtos::userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
-        errors::errorbody::ErrorBody,
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
             eventrepository::EventRepository, repositories::Repository,
