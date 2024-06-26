@@ -3,3 +3,4 @@ pub mod eventdto;
 pub mod roledto;
 pub mod addressdto;
 pub mod contractdto;
+pub mod comapnydto;
