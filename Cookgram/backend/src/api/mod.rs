@@ -9,3 +9,4 @@ pub mod services;
 pub mod logs;
 pub mod utils;
 pub mod guards;
+pub mod daos;
