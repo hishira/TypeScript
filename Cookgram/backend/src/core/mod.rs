@@ -11,3 +11,5 @@ pub mod ticket;
 pub mod company;
 pub mod metaobject;
 pub mod notification;
+pub mod shelter;
+pub mod animal;
