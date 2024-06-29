@@ -26,7 +26,7 @@ impl EventRepository {
 
 impl Repository<Event, EventFilterOption, sqlx::Error> for EventRepository {
     async fn create(&self, entity: Event) -> Event {
-        let mut creation_query = EventQuery {}.create(entity.clone());
+        let mut creation_query = EventQuery::create(entity.clone());
         let event_response = creation_query.build().fetch_one(&self.pool).await;
         match event_response {
             Ok(_) => tracing::debug!(

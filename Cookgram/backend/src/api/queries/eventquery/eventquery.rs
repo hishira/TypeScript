@@ -6,7 +6,7 @@ use crate::{api::{dtos::eventdto::eventdto::EventTypeDto, queries::actionquery::
 pub struct EventQuery {}
 
 impl ActionQueryBuilder<Event> for EventQuery {
-    fn create(&self, entity: Event) -> sqlx::QueryBuilder<sqlx::Postgres> {
+    fn create(entity: Event) -> sqlx::QueryBuilder<'static ,sqlx::Postgres> {
         let mut create_builder: QueryBuilder<Postgres> = QueryBuilder::new(
             "INSERT INTO EVENTS(id, created_date, event_type, related_entity, completed) ",
         );

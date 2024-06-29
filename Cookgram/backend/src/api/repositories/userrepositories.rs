@@ -1,11 +1,9 @@
 use crate::{
     api::{
-        dtos::userdto::userdto::UserFilterOption,
-        queries::{
+        daos::{dao::DAO, userdao::UserDAO}, dtos::userdto::userdto::UserFilterOption, queries::{
             actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
             userquery::userquery::UserQuery,
-        },
-        services::userservice::UserService,
+        }, services::userservice::UserService
     },
     core::{
         address::address::Address,
@@ -29,6 +27,7 @@ pub struct UserRepositories {
     pub pool: Pool<Postgres>,
     pub user_queries: UserQuery,
     pub db_context: Database,
+    pub user_dao: UserDAO,
 }
 impl UserRepositories {
     async fn create_user_using_transaction(
@@ -36,10 +35,9 @@ impl UserRepositories {
         mut transaction: Transaction<'static, Postgres>,
         entity: User,
     ) -> User {
-        let mut meta_query = MetaQuery {}.create(entity.meta.clone());
-        let mut create_query = self.user_queries.create(entity.clone());
+        let mut meta_query = MetaQuery::create(entity.meta.clone());
         let meta_response = meta_query.build().execute(transaction.deref_mut()).await;
-        let re = create_query.build().execute(transaction.deref_mut()).await;
+        let re = self.user_dao.create(entity.clone(), Some(transaction.deref_mut())).await;
         UserRepositories::user_create_errors_handler(re, meta_response);
         let _ = transaction.commit().await;
         EventRepository::create_later(
@@ -151,7 +149,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
 // Working example of spaming meta
 pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User) {
     tokio::task::spawn(async move {
-        let mut meta_query = MetaQuery {}.create(entity.meta.clone());
+        let mut meta_query = MetaQuery::create(entity.meta.clone());
         let meta_query_result = meta_query.build().fetch_one(&postgres_pool).await;
         match meta_query_result {
             Ok(_) => tracing::debug!("Meta object created"),
