@@ -88,7 +88,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
     }
 
     async fn find_by_id(&self, id: uuid::Uuid) -> User {
-        let mut find_by_id_query = self.user_queries.find_by_id(id);
+        let mut find_by_id_query = UserQuery::find_by_id(id);
         find_by_id_query
             .build()
             .map(UserService::get_user_from_row)
@@ -98,13 +98,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
     }
 
     async fn find(&self, option: UserFilterOption) -> Result<Vec<User>, sqlx::Error> {
-        let mut find_query = self.user_queries.find(option);
-        let result = find_query
-            .build()
-            .map(UserService::get_user_from_row)
-            .fetch_all(&self.pool)
-            .await;
-        result
+        self.user_dao.find(option).await
     }
 
     async fn delete(&self, entity: User) -> User {

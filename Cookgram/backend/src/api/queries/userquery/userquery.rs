@@ -105,10 +105,10 @@ impl Query<UserFilterOption> for UserQuery {
         user_query.build().sql().to_string()
     }
 
-    fn find(&self, option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
+    fn find(option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut user_query: QueryBuilder<Postgres> =
             QueryBuilder::new("SELECT * FROM ADDRESSUSERS");
-        let mut count: i8 = 0;
+        let count: i8 = 0;
         if let Some(owner_id) = option.owner_id {
             user_query
                 .push(" WHERE id in (select user_id from EMPLOYEE_CONNECTION where owner_id = ");
@@ -123,7 +123,7 @@ impl Query<UserFilterOption> for UserQuery {
         user_query
     }
 
-    fn find_by_id(&self, id: uuid::Uuid) -> QueryBuilder<'static, Postgres> {
+    fn find_by_id(id: uuid::Uuid) -> QueryBuilder<'static, Postgres> {
         let mut query_by_id: QueryBuilder<Postgres> =
             QueryBuilder::new("SELECT id, username, email, password, meta_id, role, current_state, previous_state  FROM users where id = ");
         query_by_id.push_bind(id);
