@@ -15,6 +15,7 @@ use validator::Validate;
 use crate::{
     api::{
         appstate::appstate::AppState,
+        daos::userdao::UserDAO,
         dtos::userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
@@ -76,6 +77,11 @@ impl AuthRouter {
                     .unwrap(),
                 user_queries: UserQuery::new(None, None, None),
                 db_context: database.get_mongo_database(),
+                user_dao: UserDAO {
+                    pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                        .unwrap(),
+                    db_context: database.get_mongo_database(),
+                },
             },
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
@@ -149,11 +155,10 @@ impl AuthRouter {
         println!("{}", user.email);
         claims.user_id = Some(user.id);
         claims.role = Some(user.role.clone());
-        let token = encode(&Header::default(), &claims, &KEYS.encoding)
-            .map_err(|e| {
-                tracing::error!("Error occur while token creation, {}", e);
-                return AuthError::TokenCreation;
-            })?;
+        let token = encode(&Header::default(), &claims, &KEYS.encoding).map_err(|e| {
+            tracing::error!("Error occur while token creation, {}", e);
+            return AuthError::TokenCreation;
+        })?;
         match state
             .pass_worker
             .verify(params.password, user.password.clone())

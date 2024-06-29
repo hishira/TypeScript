@@ -132,7 +132,7 @@ impl Query<UserFilterOption> for UserQuery {
 }
 
 impl ActionQueryBuilder<User> for UserQuery {
-    fn create(&self, entity: User) -> QueryBuilder<Postgres> {
+    fn create(entity: User) -> QueryBuilder<'static, Postgres> {
         let mut create_builder: QueryBuilder<Postgres> =
             QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id, role, first_name, last_name) ");
         create_builder.push_values(vec![entity], |mut b, user| {
@@ -187,8 +187,8 @@ mod tests {
 
     use super::*;
 
-    fn validate_action_query(user_query: &UserQuery, entity: User) -> QueryBuilder<Postgres> {
-        user_query.create(entity)
+    fn validate_action_query(user_query: &UserQuery, entity: User) -> QueryBuilder<'static, Postgres> {
+        UserQuery::create(entity)
     }
 
     // fn validate_update_action_query(user_query: &UserQuery, entity: User) -> String {

@@ -8,22 +8,15 @@ use sqlx::{Pool, Postgres};
 
 use crate::{
     api::{
-        appstate::appstate::AppState,
-        dtos::{
+        appstate::appstate::AppState, daos::userdao::UserDAO, dtos::{
             addressdto::createaddressdto::CreateAddressDto,
             userdto::userdto::{
                 CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
             },
-        },
-        guards::claimsguard::ClaimsGuard,
-        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
-        repositories::{
+        }, guards::claimsguard::ClaimsGuard, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
-        },
-        services::userservice::UserService,
-        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
-        validators::dtovalidator::ValidateDtos,
+        }, services::userservice::UserService, utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker}, validators::dtovalidator::ValidateDtos
     },
     core::{
         event::userevent::UserEvent,
@@ -49,6 +42,11 @@ impl UserRouter {
                     .unwrap(),
                 user_queries: UserQuery::new(None, None, None),
                 db_context: database.get_mongo_database(),
+                user_dao: UserDAO {
+                    pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                        .unwrap(),
+                    db_context: database.get_mongo_database(),
+                },
             },
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
