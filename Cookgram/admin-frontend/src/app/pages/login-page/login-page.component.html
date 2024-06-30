@@ -1,12 +1,6 @@
 <div class="p-4 w-full lg:w-6">
   <div class="text-center mb-5">
     <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
-    <span class="text-600 font-medium line-height-3"
-      >Don't have an account?</span
-    >
-    <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
-      >Create today!</a
-    >
   </div>
 
   <div [formGroup]="loginFormGroup">
@@ -33,17 +27,12 @@
       pInputText
       class="w-full"
     />
-    <app-errors class="mb-2" [control]="loginFormGroup.controls.password"></app-errors>
+    <app-errors
+      class="mb-2"
+      [control]="loginFormGroup.controls.password"
+    ></app-errors>
 
-    <div class="flex align-items-center justify-content-between mt-2 mb-6">
-      <div class="flex align-items-center">
-        <p-checkbox
-          id="rememberme1"
-          [binary]="true"
-          styleClass="mr-2"
-        ></p-checkbox>
-        <label for="rememberme1" class="text-900">Remember me</label>
-      </div>
+    <div class="flex align-items-center justify-content-end mt-2 mb-6">
       <a
         class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
         >Forgot password?</a

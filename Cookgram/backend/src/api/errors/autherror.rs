@@ -25,7 +25,7 @@ impl IntoResponse for AuthError {
             AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
             AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
-            AuthError::UserNotExists => (StatusCode::BAD_REQUEST, "User not Exists"),
+            AuthError::UserNotExists => (StatusCode::OK, "User with that credintionals not exists"),
             AuthError::BCryptError => (StatusCode::INTERNAL_SERVER_ERROR, "Server error occur"),
             AuthError::Unauthorized => (
                 StatusCode::UNAUTHORIZED,

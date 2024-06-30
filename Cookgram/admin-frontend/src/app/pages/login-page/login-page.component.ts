@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ErrorsComponent } from '../../shared/errors/errors.component';
 import { AuthenticationApiService } from '../../../api/authentication.api';
+import { ToastService } from '../../shared/services/toast.service';
 type LoginFormGroup = {
   username: FormControl<string | null>;
   password: FormControl<string | null>;
@@ -45,28 +46,27 @@ export class LoginPageComponent {
     });
 
   constructor(
-    private readonly messageService: MessageService,
     private readonly router: Router,
-    private readonly authenticationService: AuthenticationApiService
+    private readonly authenticationService: AuthenticationApiService,
+    private readonly toastService: ToastService
   ) {}
   signIn(): void {
     this.loginFormGroup.markAllAsTouched();
-    this.loginFormGroup.markAsDirty();
     this.loginFormGroup.updateValueAndValidity();
     if (!this.loginFormGroup.valid) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Errors occurs in form',
-        key: 'br',
-        life: 2000,
-      });
+      this.toastService.showError('Errors occurs in form');
 
       return;
     }
-    this.authenticationService.login({
-      username: this.loginFormGroup.value.username ?? '',
-      password: this.loginFormGroup.value.password ?? '',
-    }).subscribe((r)=>{console.log(r)});
+    this.authenticationService
+      .login({
+        username: this.loginFormGroup.value.username ?? '',
+        password: this.loginFormGroup.value.password ?? '',
+      })
+      .subscribe((r) => {
+        if (r && 'error' in r) {
+          this.toastService.showWarning('User not exists');
+        }
+      });
   }
 }
