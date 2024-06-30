@@ -14,16 +14,10 @@ use validator::Validate;
 
 use crate::{
     api::{
-        appstate::appstate::AppState,
-        daos::userdao::UserDAO,
-        dtos::userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
-        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
-        repositories::{
+        appstate::appstate::AppState, daos::userdao::UserDAO, dtos::userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto}, errors::autherror::AuthError, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
-        },
-        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
-        validators::dtovalidator::ValidateDtos,
+        }, utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker}, validators::dtovalidator::ValidateDtos
     },
     core::user::user::User,
     database::init::Database,
@@ -54,16 +48,6 @@ pub struct AuthBody {
     refresh_token: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-pub enum AuthError {
-    WrongCredentials,
-    MissingCredentials,
-    TokenCreation,
-    InvalidToken,
-    UserNotExists,
-    BCryptError,
-    Unauthorized,
-}
 pub struct AuthRouter {
     user_repo: UserRepositories,
     event_repo: EventRepository,
@@ -90,34 +74,6 @@ impl AuthRouter {
             },
         }
     }
-    fn prepare_claims(params: &UserAuthDto) -> Claims {
-        match (params.email.clone(), params.username.clone()) {
-            (None, None) => Claims {
-                user_id: None,
-                user_info: "TEst".to_string(),
-                exp: 2000000000, // May 2033
-                role: None,
-            },
-            (None, Some(username)) => Claims {
-                user_id: None,
-                user_info: username,
-                exp: 2000000000, // May 2033
-                role: None,
-            },
-            (Some(email), None) => Claims {
-                user_id: None,
-                user_info: email,
-                exp: 2000000000, // May 2033
-                role: None,
-            },
-            (Some(_), Some(username)) => Claims {
-                user_id: None,
-                user_info: username,
-                exp: 2000000000, // May 2033
-                role: None,
-            },
-        }
-    }
 
     async fn register<T>(
         State(state): State<AppState<T>>,
@@ -133,7 +89,7 @@ impl AuthRouter {
     where
         T: Repository<User, UserFilterOption, sqlx::Error>,
     {
-        let mut claims: Claims = AuthRouter::prepare_claims(&params);
+        let mut claims: Claims = Claims::new(&params);
         let filter = UserFilterOption {
             username: Some(claims.user_info.clone()),
             limit: Some(10),
@@ -191,23 +147,3 @@ impl ApplicationRouter for AuthRouter {
     }
 }
 
-impl IntoResponse for AuthError {
-    fn into_response(self) -> Response {
-        let (status, error_message) = match self {
-            AuthError::WrongCredentials => (StatusCode::UNAUTHORIZED, "Wrong credentials"),
-            AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
-            AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
-            AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
-            AuthError::UserNotExists => (StatusCode::BAD_REQUEST, "User not Exists"),
-            AuthError::BCryptError => (StatusCode::INTERNAL_SERVER_ERROR, "Server error occur"),
-            AuthError::Unauthorized => (
-                StatusCode::UNAUTHORIZED,
-                "User are not allowed to take action",
-            ),
-        };
-        let body = Json(json!({
-            "error": error_message,
-        }));
-        (status, body).into_response()
-    }
-}

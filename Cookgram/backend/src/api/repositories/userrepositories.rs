@@ -1,23 +1,20 @@
 use crate::{
     api::{
-        daos::{dao::DAO, userdao::UserDAO}, dtos::userdto::userdto::UserFilterOption, queries::{
+        daos::{dao::DAO, userdao::UserDAO},
+        dtos::userdto::userdto::UserFilterOption,
+        queries::{
             actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
             userquery::userquery::UserQuery,
-        }, services::userservice::UserService
+        },
+        services::userservice::UserService,
     },
     core::{
-        address::address::Address,
-        event::{
-            event::{Event, EventType},
-            userevent::UserEvent,
-        },
-        meta::meta::Meta,
-        user::user::User,
+        address::address::Address, event::userevent::UserEvent, meta::meta::Meta, user::user::User,
     },
 };
 use mongodb::Database;
 use sqlx::{postgres::PgQueryResult, Error, Pool, Postgres, Transaction};
-use std::{borrow::Borrow, ops::DerefMut};
+use std::ops::DerefMut;
 use time::OffsetDateTime;
 
 use super::{eventrepository::EventRepository, repositories::Repository};
@@ -37,7 +34,10 @@ impl UserRepositories {
     ) -> User {
         let mut meta_query = MetaQuery::create(entity.meta.clone());
         let meta_response = meta_query.build().execute(transaction.deref_mut()).await;
-        let re = self.user_dao.create(entity.clone(), Some(transaction.deref_mut())).await;
+        let re = self
+            .user_dao
+            .create(entity.clone(), Some(transaction.deref_mut()))
+            .await;
         UserRepositories::user_create_errors_handler(re, meta_response);
         let _ = transaction.commit().await;
         EventRepository::create_later(
@@ -70,7 +70,7 @@ impl UserRepositories {
         }
         EventRepository::create_later(
             self.db_context.clone(),
-            UserEvent::update_event(user.id.clone())// Event::new(None, Some(EventType::Update), user.id.clone(), true),
+            UserEvent::update_event(user.id.clone()),
         );
         User::create_base_on_user_and_address(user, address)
     }
@@ -108,7 +108,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
             Ok(_) => {
                 EventRepository::create_later(
                     self.db_context.clone(),
-                    UserEvent::delete_event(entity.id.clone())
+                    UserEvent::delete_event(entity.id.clone()),
                 );
                 return entity;
             }
@@ -134,7 +134,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
         meta_update(self.pool.clone(), update_entity.clone());
         EventRepository::create_later(
             self.db_context.clone(),
-            UserEvent::update_event(update_entity.id.clone())
+            UserEvent::update_event(update_entity.id.clone()),
         );
         return update_entity;
     }

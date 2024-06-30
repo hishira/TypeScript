@@ -1,5 +1,5 @@
 use crate::{
-    api::{router::authrouter::AuthError, utils::jwt::jwt::Claims},
+    api::{ errors::autherror::AuthError, utils::jwt::jwt::Claims},
     core::role::{
         access::{Action, Queries, QueriesActions},
         role::Roles,

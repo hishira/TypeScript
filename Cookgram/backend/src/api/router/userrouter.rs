@@ -1,9 +1,8 @@
 use axum::{
     extract::State,
     routing::{delete, get, post},
-    Error, Json, Router,
+    Json, Router,
 };
-use mongodb::Database as MongoDatabase;
 use sqlx::{Pool, Postgres};
 
 use crate::{
@@ -13,21 +12,19 @@ use crate::{
             userdto::userdto::{
                 CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
             },
-        }, guards::claimsguard::ClaimsGuard, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{
+        }, errors::autherror::AuthError, guards::claimsguard::ClaimsGuard, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
         }, services::userservice::UserService, utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker}, validators::dtovalidator::ValidateDtos
     },
     core::{
-        event::userevent::UserEvent,
-        role::access::{Action, Queries, QueriesActions},
         state::{entitystate::EntityState, state::State as CoreState},
-        user::{self, user::User},
+        user::user::User,
     },
     database::init::Database,
 };
 
-use super::{authrouter::AuthError, router::ApplicationRouter};
+use super::router::ApplicationRouter;
 
 pub struct UserRouter {
     user_repo: UserRepositories,
