@@ -4,7 +4,6 @@ use axum::{
     Json, Router,
 };
 use jsonwebtoken::{decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, TokenData, Validation};
-use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use sqlx::{Pool, Postgres};
 use validator::Validate;
@@ -87,10 +86,7 @@ impl AuthRouter {
     }
 
     async fn refresh_token(claims: Claims) -> Result<Json<AccessToken>, AuthError> {
-        let new_token = encode(&Header::default(), &claims, &KEYS.encoding).map_err(|e| {
-            tracing::error!("Error occur while token refresh, {}", e);
-            return AuthError::TokenCreation;
-        })?;
+        let new_token = Keys::encode(&claims)?;
         Ok(Json(AccessToken {
             access_token: new_token.clone(),
         }))

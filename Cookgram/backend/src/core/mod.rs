@@ -13,3 +13,4 @@ pub mod metaobject;
 pub mod notification;
 pub mod shelter;
 pub mod animal;
+pub mod session;
