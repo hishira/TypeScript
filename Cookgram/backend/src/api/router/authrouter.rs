@@ -82,6 +82,19 @@ impl AuthRouter {
         todo!();
     }
 
+    async fn refresh_token<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>) -> Result<Json> {
+        let new_token = encode(&Header::default(), &claims, &KEYS.encoding).map_err(|e| {
+             tracing::error!("Error occur while token refresh, {}", e);
+            return AuthError::TokenCreation;
+        })?;
+        // Ok(Json(AuthBody {
+        //     access_token: token.clone(),
+        // }))
+        !todo()
+    }
+
     async fn login<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,

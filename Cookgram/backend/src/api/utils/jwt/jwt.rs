@@ -23,7 +23,7 @@ pub struct Claims {
 
 impl Claims {
     fn prepare_exp() -> u64 {
-        get_current_timestamp() + 300000
+        get_current_timestamp() + 200 //+ 300000
     }
     pub fn new(params: &UserAuthDto) -> Self {
         match (params.email.clone(), params.username.clone()) {
