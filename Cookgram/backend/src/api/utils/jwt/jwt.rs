@@ -3,15 +3,15 @@ use axum_extra::{
     headers::{authorization::Bearer, Authorization},
     TypedHeader,
 };
-use jsonwebtoken::{decode, errors::ErrorKind, get_current_timestamp, Algorithm, Validation};
+use jsonwebtoken::{get_current_timestamp, Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    api::{
-        dtos::userdto::userdto::UserAuthDto, errors::autherror::AuthError, router::authrouter::KEYS,
-    },
+    api::{dtos::userdto::userdto::UserAuthDto, errors::autherror::AuthError},
     core::role::role::Roles,
 };
+
+use super::keys::Keys;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
@@ -23,7 +23,7 @@ pub struct Claims {
 
 impl Claims {
     fn prepare_exp() -> u64 {
-        get_current_timestamp() + 300000
+        get_current_timestamp() + 200 //+ 300000
     }
     pub fn new(params: &UserAuthDto) -> Self {
         match (params.email.clone(), params.username.clone()) {
@@ -70,13 +70,7 @@ where
             .extract::<TypedHeader<Authorization<Bearer>>>()
             .await
             .map_err(|_| AuthError::InvalidToken)?;
-        let token_data =
-            decode::<Claims>(bearer.token(), &KEYS.decoding, &validation).map_err(|error| {
-                match *error.kind() {
-                    ErrorKind::ExpiredSignature => AuthError::TokenExpire,
-                    _ => AuthError::InvalidToken,
-                }
-            })?;
+        let token_data = Keys::decode(bearer.token(), validation)?;
         Ok(token_data.claims)
     }
 }

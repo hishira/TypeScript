@@ -2,7 +2,7 @@ use serde::Deserialize;
 use uuid::Uuid;
 use validator::{Validate, ValidationError};
 
-use crate::core::role::role::{Role, Roles};
+use crate::{api::utils::jwt::jwt::Claims, core::role::role::{Role, Roles}};
 
 #[derive(Debug, Validate, Deserialize)]
 pub struct CreateUserDto {
@@ -60,6 +60,17 @@ pub struct UserFilterOption {
     pub limit: Option<i16>,
     pub offset: Option<i16>,
     pub owner_id: Option<Uuid>,
+}
+
+impl UserFilterOption {
+    pub fn from_claims(claims: Claims) -> Self {
+        Self {
+            username: Some(claims.user_info.clone()),
+            limit: Some(10),
+            offset: Some(0),
+            owner_id: None,
+        }
+    }
 }
 
 pub fn validatete_auth(user_auth_dto: &UserAuthDto) -> Result<(), ValidationError> {

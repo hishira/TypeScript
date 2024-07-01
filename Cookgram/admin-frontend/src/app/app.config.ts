@@ -5,7 +5,14 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { routes } from './app.routes';
 import { provideState, provideStore } from '@ngrx/store';
 import { jwtReducers } from '../store/jwt/reducers';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import { ServerErrorInterceptor } from './shared/interceptor/serverError.interceptor';
+import { MessageService } from 'primeng/api';
+import { ToastService } from './shared/services/toast.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +21,14 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore(),
     provideState({ name: 'jwt', reducer: jwtReducers }),
-    provideHttpClient()
+    provideHttpClient(withInterceptorsFromDi()),
+    MessageService,
+    ToastService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ServerErrorInterceptor,
+      multi: true,
+    },
+  
   ],
 };

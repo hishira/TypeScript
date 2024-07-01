@@ -17,7 +17,7 @@ const ErrorToastObject = (message: string): Message => ({
   ...DefaultObjectMessage,
 });
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ToastService {
   constructor(private readonly messageService: MessageService) {}
 
