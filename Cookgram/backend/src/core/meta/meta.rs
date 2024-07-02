@@ -28,13 +28,17 @@ impl Meta {
             edit_date,
         }
     }
-    //TOOD: For only now, at this moment we only want simulated meta with current id
+    
     pub fn meta_based_on_id(id:Uuid) -> Self {
         Self {
             id,
             create_date: OffsetDateTime::now_utc(),
             edit_date: OffsetDateTime::now_utc(),
         }
+    }
+
+    pub fn update_edit_date(&mut self) {
+        self.edit_date = OffsetDateTime::now_utc();
     }
 }
 

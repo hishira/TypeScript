@@ -252,7 +252,6 @@ mod tests {
             meta: Meta::new(),
             role: Roles::user_role(),
             address: None,
-            managed_users: None,
             state: State {
                 current: EntityState::Active,
                 previous: None,
@@ -266,35 +265,7 @@ mod tests {
             "INSERT INTO USERS(id, username, password, email) VALUES ($1, $2, $3, $4)"
         );
     }
-    // TODO: Check
-    // #[test]
-    // fn test_user_query_update() {
-    //     // Create a UserQuery
-    //     let user_query = UserQuery::new(None, None, None);
-
-    //     // Create a User entity for testing
-    //     let test_user = User {
-    //         id: Uuid::new_v4(),
-    //         username: "test_user".to_string(),
-    //         password: "password".to_string(),
-    //         email: "test@example.com".to_string(),
-    //         recipies: None,
-    //         meta: Meta::new(),
-    //     };
-
-    //     // Validate the built SQL query for updating
-    //     let update_query = validate_update_action_query(&user_query, test_user.clone());
-
-    //     // Assert that the built update query is correct
-    //     assert_eq!(
-    //         update_query,
-    //         format!(
-    //             "UPDATE USERS SET username = {}, email = {}, password = {} WHERE id = {}",
-    //             test_user.username, test_user.email, test_user.password, test_user.id
-    //         )
-    //     );
-    // }
-
+    
     #[test]
     #[should_panic]
 
@@ -311,7 +282,6 @@ mod tests {
             meta: Meta::new(),
             role: Roles::user_role(),
             address: None,
-            managed_users: None,
             state: State {
                 current: EntityState::Active,
                 previous: None,

@@ -1,15 +1,12 @@
-use std::future::Future;
-
 use sqlx::postgres::{PgQueryResult, PgRow};
 use sqlx::{Pool, Postgres, QueryBuilder, Row};
 use uuid::Uuid;
 
 use crate::api::dtos::roledto::roledto::RoleDto;
-use crate::api::dtos::userdto::userdto::{UpdateUserDto, UserFilterOption};
+use crate::api::dtos::userdto::userdto::UserFilterOption;
 use crate::api::repositories::repositories::Repository;
 use crate::api::utils::password_worker::password_worker::PasswordWorker;
 use crate::core::role::role::Roles;
-use crate::core::state::entitystate::EntityState;
 use crate::core::state::state::State;
 use crate::{
     api::dtos::userdto::userdto::UserDtos,
@@ -40,7 +37,8 @@ impl UserService {
                 )
             }
             UserDtos::Update(user) => {
-                let user_from_db = user_to_edit.unwrap();
+                let mut user_from_db = user_to_edit.unwrap();
+                user_from_db.meta.update_edit_date();
                 let hashed_password: String = match user.password {
                     Some(password) => pass_worker.hash(password.clone()).await.unwrap(),
                     None => user_from_db.password,
@@ -49,13 +47,12 @@ impl UserService {
                     Some(user_from_db.id),
                     user.username,
                     hashed_password,
-                    user.email,
+                    user.email.unwrap_or(user_from_db.email),
                     Some(user.role.unwrap_or(user_from_db.role)),
                     Some(user_from_db.meta),
-                    user.first_name,
-                    user.last_name,
+                    user.first_name.or(user_from_db.first_name),
+                    user.last_name.or(user_from_db.last_name),
                 )
-                // FOX role
             }
             UserDtos::Delete(_) => todo!(),
         }
@@ -73,7 +70,10 @@ impl UserService {
         return create_user_connection.build().execute(&pool).await;
     }
 
-    pub async fn create_managed(user: User, repo: impl Repository<User, UserFilterOption, sqlx::Error>) -> User {
+    pub async fn create_managed(
+        user: User,
+        repo: impl Repository<User, UserFilterOption, sqlx::Error>,
+    ) -> User {
         todo!()
     }
 
@@ -96,7 +96,6 @@ impl UserService {
             meta: Meta::meta_based_on_id(pg_row.get("meta_id")), //Meta::new(), //TODO: Inner join table to retrieve,
             role: UserService::retrive_role_from_row(&pg_row).unwrap(),
             address: None,
-            managed_users: None,
             state: State {
                 current: pg_row.get("current_state"),
                 previous: pg_row.get("previous_state"),

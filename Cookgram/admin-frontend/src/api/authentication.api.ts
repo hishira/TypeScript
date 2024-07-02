@@ -20,7 +20,7 @@ export class AuthenticationApiService extends BaseApi {
       .post<TokenResponse>(this.prepareLink('testauth/login'), loginPayload)
       .pipe(
         tap((loginResponse) => {
-          console.log(loginResponse);
+          if('error' in loginResponse) return;
           this.store.dispatch(JWTSetAction({ ...loginResponse }));
         }),
         catchError((error) => {
