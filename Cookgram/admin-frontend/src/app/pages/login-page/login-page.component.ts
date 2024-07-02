@@ -15,6 +15,10 @@ import { Router } from '@angular/router';
 import { ErrorsComponent } from '../../shared/errors/errors.component';
 import { AuthenticationApiService } from '../../../api/authentication.api';
 import { ToastService } from '../../shared/services/toast.service';
+import { Store } from '@ngrx/store';
+import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
+import { MainStore } from '../../../store/main.store';
+
 type LoginFormGroup = {
   username: FormControl<string | null>;
   password: FormControl<string | null>;
@@ -23,7 +27,7 @@ type LoginFormGroup = {
   selector: 'app-login-page',
   standalone: true,
   imports: [
-    CheckboxModule,
+  CheckboxModule,
     RippleModule,
     ButtonModule,
     InputTextModule,
@@ -48,7 +52,8 @@ export class LoginPageComponent {
   constructor(
     private readonly router: Router,
     private readonly authenticationService: AuthenticationApiService,
-    private readonly toastService: ToastService
+    private readonly toastService: ToastService,
+    private readonly store: Store<MainStore>,
   ) {}
   signIn(): void {
     this.loginFormGroup.markAllAsTouched();
@@ -66,6 +71,8 @@ export class LoginPageComponent {
       .subscribe((r) => {
         if (r && 'error' in r) {
           this.toastService.showWarning('User not exists');
+        } else {
+          this.store.select(GetAccessTokenSelectors).subscribe((a)=>console.log(a));
         }
       });
   }

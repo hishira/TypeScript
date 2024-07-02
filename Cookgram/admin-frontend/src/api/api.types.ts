@@ -6,4 +6,4 @@ export type LoginPayload = {
 export type TokenResponse = {
   accessToken: string;
   refreshToken: string;
-};
+} | {error: string};
