@@ -24,7 +24,7 @@ pub struct UpdateUserDto {
     #[validate(length(min = 6))]
     pub password: Option<String>,
     #[validate(email)]
-    pub email: String,
+    pub email: Option<String>,
     pub role: Option<Roles>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
@@ -151,7 +151,7 @@ mod tests {
         let valid_dto = UpdateUserDto {
             username: "valid_username".to_string(),
             password: Some("valid_password".to_string()),
-            email: "valid@example.com".to_string(),
+            email: Some("valid@example.com".to_string()),
             role: None,
             first_name: None,
             last_name: None,
@@ -166,7 +166,7 @@ mod tests {
         let invalid_dto = UpdateUserDto {
             username: "".to_string(),
             password: Some("short".to_string()),
-            email: "invalid_email".to_string(),
+            email: Some("invalid_email".to_string()),
             role: None,
             first_name: None,
             last_name: None,

@@ -25,7 +25,6 @@ pub struct User {
     pub address: Option<Address>,
     pub meta: Meta,
     pub role: Roles,
-    pub managed_users: Option<Vec<User>>,
     pub state: State<EntityState>,
 }
 
@@ -58,7 +57,6 @@ impl User {
                 meta: meta.unwrap_or(Meta::new()),
                 role: user_role,
                 address: None,
-                managed_users: None,
                 state: State {
                     current: EntityState::Active,
                     previous: None,
@@ -74,7 +72,6 @@ impl User {
                 meta: Meta::new(),
                 role: user_role,
                 address: None,
-                managed_users: None,
                 state: State {
                     current: EntityState::Active,
                     previous: None,
@@ -269,7 +266,6 @@ mod tests {
             },
             role: Roles::User(UserRole::default()),
             address: None,
-            managed_users: None,
             state: State {
                 current: EntityState::Active,
                 previous: None,
