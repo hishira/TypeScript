@@ -3,7 +3,9 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
-use jsonwebtoken::{decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, TokenData, Validation};
+use jsonwebtoken::{
+    decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, TokenData, Validation,
+};
 use serde::{Deserialize, Serialize};
 use sqlx::{Pool, Postgres};
 use validator::Validate;
@@ -12,14 +14,23 @@ use crate::{
     api::{
         appstate::appstate::AppState,
         daos::userdao::UserDAO,
-        dtos::userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
+        dtos::{
+            tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
+            userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
+        },
         errors::autherror::AuthError,
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
         },
-        utils::{jwt::{jwt::Claims, keys::{Keys, KEYS}}, password_worker::password_worker::PasswordWorker},
+        utils::{
+            jwt::{
+                jwt::Claims,
+                keys::{Keys, KEYS},
+            },
+            password_worker::password_worker::PasswordWorker,
+        },
         validators::dtovalidator::ValidateDtos,
     },
     core::user::user::User,
@@ -27,7 +38,6 @@ use crate::{
 };
 
 use super::router::ApplicationRouter;
-
 
 #[derive(Debug, Validate, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -43,12 +53,6 @@ impl AuthBody {
             refresh_token: token.clone(),
         }
     }
-}
-
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AccessToken {
-    access_token: String,
 }
 
 pub struct AuthRouter {
@@ -85,10 +89,15 @@ impl AuthRouter {
         todo!();
     }
 
-    async fn refresh_token(claims: Claims) -> Result<Json<AccessToken>, AuthError> {
-        let new_token = Keys::encode(&claims)?;
-        Ok(Json(AccessToken {
-            access_token: new_token.clone(),
+    async fn refresh_token(
+        ValidateDtos(params): ValidateDtos<RefreshTokenDto>,
+    ) -> Result<Json<AccessTokenDto>, AuthError> {
+        let mut refresh_token_validation = Validation::new(jsonwebtoken::Algorithm::HS256);
+        refresh_token_validation.set_required_spec_claims(&["exp"]);
+        let token_data = Keys::decode(&params.refresh_token, refresh_token_validation)?;
+        let new_token = Keys::encode(&token_data.claims)?;
+        Ok(Json(AccessTokenDto {
+            access_token: new_token,
         }))
     }
 
@@ -148,7 +157,7 @@ impl ApplicationRouter for AuthRouter {
     fn get_router(&self) -> axum::Router {
         Router::new()
             .route("/login", post(AuthRouter::login))
-            .route("/refresh-token", get(AuthRouter::refresh_token))
+            .route("/refresh-token", post(AuthRouter::refresh_token))
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
