@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { JWTGetAction, JWTSetAction } from './action';
+import { JWTGetAction, JWTSetAccessToken, JWTSetAction } from './action';
 
 export type JWTTokens = {
   accessToken: string;
@@ -17,5 +17,6 @@ export const jwtReducers = createReducer(
   on(JWTSetAction, (state, { accessToken, refreshToken }) => ({
     accessToken,
     refreshToken,
-  }))
+  })),
+  on(JWTSetAccessToken, (state, { accessToken }) => ({ ...state, accessToken }))
 );

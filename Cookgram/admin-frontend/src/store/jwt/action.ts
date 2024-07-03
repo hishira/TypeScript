@@ -7,3 +7,7 @@ type JwtLogin = {
 };
 export const JWTGetAction = createAction(JWT.GetToken);
 export const JWTSetAction = createAction(JWT.SetToken, props<JwtLogin>());
+export const JWTSetAccessToken = createAction(
+  JWT.SetAccessToken,
+  props<{ accessToken: string }>()
+);
