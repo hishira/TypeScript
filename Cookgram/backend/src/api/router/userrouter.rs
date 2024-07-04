@@ -108,7 +108,7 @@ impl UserRouter {
     where
         T: Repository<User, UserFilterOption, sqlx::Error>,
     {
-        todo!()
+        Result::Ok(Json(state.repo.find_by_id(id).await))
     }
     async fn get_managed_users<T>(
         claims: Claims,

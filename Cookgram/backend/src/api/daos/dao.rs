@@ -12,5 +12,7 @@ pub trait DAO<T: Entity, O> {
 
     async fn find(&self, option: O) -> Result<Vec<T>, sqlx::Error>;
 
-    async fn find_by_id(&self, id: Uuid) -> Result<PgQueryResult, sqlx::Error>;
+    async fn find_by_id(&self, id: Uuid) -> Result<T, sqlx::Error>;
+
+    async fn delete(&self, entity: T) -> Result<PgQueryResult, sqlx::Error>;
 }
