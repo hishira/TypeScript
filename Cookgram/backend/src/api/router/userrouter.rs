@@ -1,21 +1,31 @@
 use axum::{
-    extract::State,
+    extract::{Path, State},
     routing::{delete, get, post},
     Json, Router,
 };
 use sqlx::{Pool, Postgres};
+use uuid::Uuid;
 
 use crate::{
     api::{
-        appstate::appstate::AppState, daos::userdao::UserDAO, dtos::{
+        appstate::appstate::AppState,
+        daos::userdao::UserDAO,
+        dtos::{
             addressdto::createaddressdto::CreateAddressDto,
             userdto::userdto::{
                 CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
             },
-        }, errors::autherror::AuthError, guards::claimsguard::ClaimsGuard, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{
+        },
+        errors::autherror::AuthError,
+        guards::claimsguard::ClaimsGuard,
+        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
+        repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
-        }, services::userservice::UserService, utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker}, validators::dtovalidator::ValidateDtos
+        },
+        services::userservice::UserService,
+        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
+        validators::dtovalidator::ValidateDtos,
     },
     core::{
         state::{entitystate::EntityState, state::State as CoreState},
@@ -90,6 +100,16 @@ impl UserRouter {
         }
     }
 
+    async fn user_details<T>(
+        Path(id): Path<Uuid>,
+        claims: Claims,
+        State(state): State<AppState<T>>,
+    ) -> Result<Json<User>, AuthError>
+    where
+        T: Repository<User, UserFilterOption, sqlx::Error>,
+    {
+        todo!()
+    }
     async fn get_managed_users<T>(
         claims: Claims,
         State(state): State<AppState<T>>,
@@ -202,6 +222,7 @@ impl ApplicationRouter for UserRouter {
             )
             .route("/protected", get(protected))
             .route("/update-user", post(UserRouter::update_user))
+            .route("/user/:id", get(UserRouter::user_details))
             .route("/delete-user", delete(UserRouter::user_delete))
             .route("/add-user", post(UserRouter::create_managed_users))
             .route("/current-user", get(UserRouter::get_current_user))

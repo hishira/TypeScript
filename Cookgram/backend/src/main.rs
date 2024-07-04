@@ -1,5 +1,8 @@
 use crate::api::{logs::applicationlog::ApplicationLog, router::authrouter::AuthRouter};
-use api::{router::{router::ApplicationRouter, userrouter::UserRouter}, utils::cors::CORS};
+use api::{
+    router::{router::ApplicationRouter, userrouter::UserRouter},
+    utils::cors::CORS,
+};
 use axum::{
     extract::{DefaultBodyLimit, MatchedPath},
     http::{
@@ -8,7 +11,7 @@ use axum::{
     },
     Router,
 };
-use tokio::net::TcpListener;
+use tokio::{net::TcpListener, signal};
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing::info_span;
 
@@ -43,5 +46,23 @@ async fn main() {
         );
     let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown())
+        .await
+        .unwrap();
+}
+
+async fn shutdown() {
+    let ctrl_c_shutdown = async {
+        signal::ctrl_c()
+            .await
+            .expect("Failed to ctrl + c signal handler");
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+    tokio::select! {
+     _ = ctrl_c_shutdown => {},
+     _ = terminate => {}
+    }
 }
