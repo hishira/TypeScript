@@ -14,6 +14,7 @@ import { ServerErrorInterceptor } from './shared/interceptor/serverError.interce
 import { MessageService } from 'primeng/api';
 import { ToastService } from './shared/services/toast.service';
 import { RefreshInterceptor } from './shared/interceptor/refresh.interceptor';
+import { TokenInterceptor } from './shared/interceptor/token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,6 +34,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RefreshInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
       multi: true,
     },
   ],

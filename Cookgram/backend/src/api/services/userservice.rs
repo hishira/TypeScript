@@ -103,6 +103,8 @@ impl UserService {
         }
     }
 
+    
+
     fn retrive_role_from_row(pg_row: &PgRow) -> Result<Roles, sqlx::Error> {
         let role: Result<RoleDto, sqlx::Error> = pg_row.try_get("role");
         match role {

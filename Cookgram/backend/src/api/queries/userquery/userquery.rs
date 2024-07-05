@@ -149,7 +149,7 @@ impl ActionQueryBuilder<User> for UserQuery {
         create_builder
     }
 
-    fn update(&self, entity: User) -> QueryBuilder<Postgres> {
+    fn update(entity: User) -> QueryBuilder<'static, Postgres> {
         let mut update_query: QueryBuilder<Postgres> =
             QueryBuilder::new("UPDATE USERS SET username = ");
         update_query.push_bind(entity.username);
@@ -165,7 +165,7 @@ impl ActionQueryBuilder<User> for UserQuery {
         update_query
     }
 
-    fn delete(&self, entity: User) -> QueryBuilder<Postgres> {
+    fn delete(entity: User) -> QueryBuilder<'static, Postgres> {
         let mut delete_query: QueryBuilder<Postgres> =
             QueryBuilder::new("UPDATE USERS SET current_state = ");
         delete_query.push_bind(entity.state.current);
@@ -288,6 +288,6 @@ mod tests {
             },
         };
 
-        let _ = user_query.delete(test_user);
+        let _ = UserQuery::delete(test_user);
     }
 }

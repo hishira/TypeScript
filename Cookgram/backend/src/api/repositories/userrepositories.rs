@@ -88,13 +88,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
     }
 
     async fn find_by_id(&self, id: uuid::Uuid) -> User {
-        let mut find_by_id_query = UserQuery::find_by_id(id);
-        find_by_id_query
-            .build()
-            .map(UserService::get_user_from_row)
-            .fetch_one(&self.pool)
-            .await
-            .unwrap()
+        self.user_dao.find_by_id(id).await.unwrap()
     }
 
     async fn find(&self, option: UserFilterOption) -> Result<Vec<User>, sqlx::Error> {
@@ -102,13 +96,11 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
     }
 
     async fn delete(&self, entity: User) -> User {
-        let mut delete_query = self.user_queries.delete(entity.clone());
-        let delete_user_reponse = delete_query.build().execute(&self.pool).await;
-        match delete_user_reponse {
+        match self.user_dao.delete(entity.clone()).await {
             Ok(_) => {
                 EventRepository::create_later(
                     self.db_context.clone(),
-                    UserEvent::delete_event(entity.id.clone()),
+                    UserEvent::delete_event(entity.id),
                 );
                 return entity;
             }
@@ -125,7 +117,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
         if let Some(address) = address_clone {
             return self.create_user_address(update_entity, address).await;
         }
-        let mut update_query = self.user_queries.update(update_entity.clone());
+        let mut update_query = UserQuery::update(update_entity.clone());
         let resp = update_query.build().execute(&self.pool).await;
         match resp {
             Ok(_) => tracing::debug!("User with id updated"),
@@ -156,7 +148,7 @@ pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User) {
 
 pub fn meta_update(postgres_pool: Pool<Postgres>, entity: User) {
     tokio::task::spawn(async move {
-        let mut meta_query = MetaQuery {}.update(Meta::based_on_edi_date(
+        let mut meta_query = MetaQuery::update(Meta::based_on_edi_date(
             entity.meta.id,
             OffsetDateTime::now_utc(),
         ));

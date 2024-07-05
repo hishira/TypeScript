@@ -5,7 +5,7 @@ use crate::{api::queries::actionquery::ActionQueryBuilder, core::meta::meta::Met
 pub struct MetaQuery {}
 
 impl ActionQueryBuilder<Meta> for MetaQuery {
-    fn create(entity: Meta) -> sqlx::QueryBuilder<'static ,sqlx::Postgres> {
+    fn create(entity: Meta) -> sqlx::QueryBuilder<'static, sqlx::Postgres> {
         let mut create_builder: QueryBuilder<Postgres> =
             QueryBuilder::new("INSERT INTO META(id, create_date, edit_date) ");
         create_builder.push_values(vec![entity], |mut builder, meta| {
@@ -18,8 +18,9 @@ impl ActionQueryBuilder<Meta> for MetaQuery {
         create_builder
     }
 
-    fn update(&self, entity: Meta) -> sqlx::QueryBuilder<sqlx::Postgres> {
-        let mut update_builder: QueryBuilder<Postgres> = QueryBuilder::new("UPDATE META SET edit_date = ");
+    fn update(entity: Meta) -> sqlx::QueryBuilder<'static, sqlx::Postgres> {
+        let mut update_builder: QueryBuilder<Postgres> =
+            QueryBuilder::new("UPDATE META SET edit_date = ");
         println!("{:?}", entity);
         update_builder.push_bind(entity.edit_date);
         update_builder.push("where id = ");
@@ -27,7 +28,7 @@ impl ActionQueryBuilder<Meta> for MetaQuery {
         update_builder
     }
 
-    fn delete(&self, entity: Meta) -> QueryBuilder< Postgres>   {
+    fn delete(entity: Meta) -> QueryBuilder<'static, Postgres> {
         todo!()
     }
 }

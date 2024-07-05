@@ -107,6 +107,13 @@ impl Roles {
         }
     }
 
+    pub fn is_administration_role(&self) -> bool {
+        match self {
+            Roles::Admin(_) => true,
+            Roles::SuperAdmin(_)=>true,
+            _ => false
+        }
+    }
     pub fn is_admin(&self) -> bool {
         match self {
             Roles::Admin(_) => true,

@@ -1,21 +1,31 @@
 use axum::{
-    extract::State,
+    extract::{Path, State},
     routing::{delete, get, post},
     Json, Router,
 };
 use sqlx::{Pool, Postgres};
+use uuid::Uuid;
 
 use crate::{
     api::{
-        appstate::appstate::AppState, daos::userdao::UserDAO, dtos::{
+        appstate::appstate::AppState,
+        daos::userdao::UserDAO,
+        dtos::{
             addressdto::createaddressdto::CreateAddressDto,
             userdto::userdto::{
                 CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
             },
-        }, errors::autherror::AuthError, guards::claimsguard::ClaimsGuard, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{
+        },
+        errors::autherror::AuthError,
+        guards::claimsguard::ClaimsGuard,
+        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
+        repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
-        }, services::userservice::UserService, utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker}, validators::dtovalidator::ValidateDtos
+        },
+        services::userservice::UserService,
+        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
+        validators::dtovalidator::ValidateDtos,
     },
     core::{
         state::{entitystate::EntityState, state::State as CoreState},
@@ -90,6 +100,16 @@ impl UserRouter {
         }
     }
 
+    async fn user_details<T>(
+        Path(id): Path<Uuid>,
+        claims: Claims,
+        State(state): State<AppState<T>>,
+    ) -> Result<Json<User>, AuthError>
+    where
+        T: Repository<User, UserFilterOption, sqlx::Error>,
+    {
+        Result::Ok(Json(state.repo.find_by_id(id).await))
+    }
     async fn get_managed_users<T>(
         claims: Claims,
         State(state): State<AppState<T>>,
@@ -174,6 +194,42 @@ impl UserRouter {
         Ok(Json(users))
     }
 
+    async fn user_list<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+        Json(params): Json<UserFilterOption>,
+    ) -> Result<Json<Vec<User>>, AuthError>
+    where
+        T: Repository<User, UserFilterOption, sqlx::Error>,
+    {
+        ClaimsGuard::role_guard_user_find(claims.clone())?;
+        let is_admin = claims
+            .role
+            .ok_or(AuthError::MissingCredentials)?
+            .is_administration_role();
+        state
+            .repo
+            .find(
+                Some(params)
+                    .map(|params| {
+                        let owner_id = (!is_admin)
+                            .then(|| claims.user_id.ok_or(AuthError::MissingCredentials).unwrap());
+                        UserFilterOption {
+                            limit: params.limit,
+                            offset: params.offset,
+                            username: params.username,
+                            owner_id,
+                        }
+                    })
+                    .unwrap(),
+            )
+            .await
+            .map(|e| Json(e))
+            .map_err(|e| {
+                tracing::error!("Error occur {}", e);
+                return AuthError::UserNotExists;
+            })
+    }
     async fn user_delete<T>(
         claims: Claims,
         State(state): State<AppState<T>>,
@@ -202,12 +258,14 @@ impl ApplicationRouter for UserRouter {
             )
             .route("/protected", get(protected))
             .route("/update-user", post(UserRouter::update_user))
+            .route("/user/:id", get(UserRouter::user_details))
             .route("/delete-user", delete(UserRouter::user_delete))
             .route("/add-user", post(UserRouter::create_managed_users))
             .route("/current-user", get(UserRouter::get_current_user))
             .route("/get-managed-users", get(UserRouter::get_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
+            .route("/user-list", post(UserRouter::user_list))
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
