@@ -25,8 +25,8 @@ async fn main() {
     let database = database::init::Database::new().await;
     database.prepare_tables().await;
     let app = Router::new()
-        .nest("/test", UserRouter::new(&database).get_router())
-        .nest("/testauth", AuthRouter::new(&database).get_router())
+        .nest("/user", UserRouter::new(&database).get_router())
+        .nest("/auth", AuthRouter::new(&database).get_router())
         .layer(DefaultBodyLimit::max(104857000))
         .layer(CORS::default())
         .layer(

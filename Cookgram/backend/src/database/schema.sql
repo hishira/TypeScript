@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS USERS (
     role Role DEFAULT 'User',
     current_state State DEFAULT 'Draft',
     previous_state State DEFAULT NULL,
-    --contract_id uuid DEFAULT null,
+    contract_id uuid DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE(id),
     CONSTRAINT fk_meta FOREIGN KEY(meta_id) REFERENCES META(id) ON DELETE CASCADE

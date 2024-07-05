@@ -1,8 +1,8 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use validator::{Validate, ValidationError};
 
-use crate::{api::utils::jwt::jwt::Claims, core::role::role::{Role, Roles}};
+use crate::{api::utils::jwt::jwt::Claims, core::{role::role::{Role, Roles}, state::{entitystate::EntityState, state::State}}};
 
 #[derive(Debug, Validate, Deserialize)]
 pub struct CreateUserDto {
@@ -51,6 +51,17 @@ pub struct UserRegisterDto {
     pub email: String,
     #[validate(length(min = 6))]
     pub password: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct UserListDto {
+    pub id: Uuid,
+    pub username: String,
+    pub email: Option<String>,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
+    pub state: State<EntityState>,
+
 }
 trait Filter: Send + Sync {}
 

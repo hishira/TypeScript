@@ -194,6 +194,42 @@ impl UserRouter {
         Ok(Json(users))
     }
 
+    async fn user_list<T>(
+        claims: Claims,
+        State(state): State<AppState<T>>,
+        Json(params): Json<UserFilterOption>,
+    ) -> Result<Json<Vec<User>>, AuthError>
+    where
+        T: Repository<User, UserFilterOption, sqlx::Error>,
+    {
+        ClaimsGuard::role_guard_user_find(claims.clone())?;
+        let is_admin = claims
+            .role
+            .ok_or(AuthError::MissingCredentials)?
+            .is_administration_role();
+        state
+            .repo
+            .find(
+                Some(params)
+                    .map(|params| {
+                        let owner_id = (!is_admin)
+                            .then(|| claims.user_id.ok_or(AuthError::MissingCredentials).unwrap());
+                        UserFilterOption {
+                            limit: params.limit,
+                            offset: params.offset,
+                            username: params.username,
+                            owner_id,
+                        }
+                    })
+                    .unwrap(),
+            )
+            .await
+            .map(|e| Json(e))
+            .map_err(|e| {
+                tracing::error!("Error occur {}", e);
+                return AuthError::UserNotExists;
+            })
+    }
     async fn user_delete<T>(
         claims: Claims,
         State(state): State<AppState<T>>,
@@ -229,6 +265,7 @@ impl ApplicationRouter for UserRouter {
             .route("/get-managed-users", get(UserRouter::get_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
+            .route("/user-list", post(UserRouter::user_list))
             .with_state(AppState {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
