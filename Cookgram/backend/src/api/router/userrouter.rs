@@ -12,11 +12,14 @@ use crate::{
         daos::userdao::UserDAO,
         dtos::{
             addressdto::createaddressdto::CreateAddressDto,
-            userdto::userdto::{
-                CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
+            userdto::{
+                userdto::{
+                    CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
+                },
+                userlistdto::UserListDto,
             },
         },
-        errors::autherror::AuthError,
+        errors::{autherror::AuthError, responseerror::ResponseError},
         guards::claimsguard::ClaimsGuard,
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
@@ -191,34 +194,33 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, AuthError> {
-        ClaimsGuard::role_guard_user_find(claims.clone())?;
+    ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
+        ClaimsGuard::role_guard_user_find(claims.clone()).map_err(|e| ResponseError::AuthError(e))?;
         let is_admin = claims
             .role
-            .ok_or(AuthError::MissingCredentials)?
+            .ok_or(AuthError::MissingCredentials)
+            .map_err(|e|ResponseError::AuthError(e))?
             .is_administration_role();
+        let params = Some(params)
+            .map(|params| {
+                let owner_id = (!is_admin)
+                    .then(|| claims.user_id.ok_or(AuthError::MissingCredentials).unwrap());
+                UserFilterOption {
+                    limit: params.limit,
+                    offset: params.offset,
+                    username: params.username,
+                    owner_id,
+                }
+            })
+            .unwrap();
         state
-            .app_state
-            .repo
-            .find(
-                Some(params)
-                    .map(|params| {
-                        let owner_id = (!is_admin)
-                            .then(|| claims.user_id.ok_or(AuthError::MissingCredentials).unwrap());
-                        UserFilterOption {
-                            limit: params.limit,
-                            offset: params.offset,
-                            username: params.username,
-                            owner_id,
-                        }
-                    })
-                    .unwrap(),
-            )
+            .user_service
+            .get_users(params)
             .await
             .map(|e| Json(e))
             .map_err(|e| {
                 tracing::error!("Error occur {}", e);
-                return AuthError::UserNotExists;
+                e.into()
             })
     }
     async fn user_delete(
@@ -274,8 +276,7 @@ async fn pp(
     claims: Claims,
     State(state): State<UserState>,
     ValidateDtos(params): ValidateDtos<CreateUserDto>,
-) -> Result<String, AuthError>
-{
+) -> Result<String, AuthError> {
     print!("{}", params.email);
     Ok(format!("OK"))
 }

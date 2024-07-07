@@ -18,9 +18,9 @@ pub enum AuthError {
     TokenExpire,
 }
 
-impl IntoResponse for AuthError {
-    fn into_response(self) -> Response {
-        let (status, error_message) = match self {
+impl AuthError {
+    pub fn get_status_and_message(&self) -> (StatusCode, &str) {
+        match self {
             AuthError::WrongCredentials => (StatusCode::UNAUTHORIZED, "Wrong credentials"),
             AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
@@ -32,7 +32,12 @@ impl IntoResponse for AuthError {
                 "User are not allowed to take action",
             ),
             AuthError::TokenExpire => (StatusCode::UNAUTHORIZED, "You are unauthorized"),
-        };
+        }
+    }
+}
+impl IntoResponse for AuthError {
+    fn into_response(self) -> Response {
+        let (status, error_message) = self.get_status_and_message();
         let body = Json(json!({
             "error": error_message,
         }));
