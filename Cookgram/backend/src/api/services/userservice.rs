@@ -5,6 +5,7 @@ use uuid::Uuid;
 use crate::api::daos::userdao::UserDAO;
 use crate::api::dtos::roledto::roledto::RoleDto;
 use crate::api::dtos::userdto::userdto::UserFilterOption;
+use crate::api::dtos::userdto::userlistdto::UserListDto;
 use crate::api::repositories::repositories::Repository;
 use crate::api::utils::password_worker::password_worker::PasswordWorker;
 use crate::core::role::role::Roles;
@@ -16,15 +17,18 @@ use crate::{
 
 #[derive(Clone)]
 pub struct UserService {
-    pub user_dao: UserDAO
+    pub user_dao: UserDAO,
 }
 
 impl UserService {
     pub fn new(user_dao: UserDAO) -> Self {
-        Self {
-            user_dao,
-        }
+        Self { user_dao }
     }
+
+    pub async fn get_users(&self, params: UserFilterOption) -> Result<Vec<UserListDto>, sqlx::Error> {
+        self.user_dao.user_list(params).await
+    }
+
     pub async fn get_user_from_dto(
         user_dto: UserDtos,
         pass_worker: &PasswordWorker,
@@ -111,8 +115,6 @@ impl UserService {
             },
         }
     }
-
-    
 
     fn retrive_role_from_row(pg_row: &PgRow) -> Result<Roles, sqlx::Error> {
         let role: Result<RoleDto, sqlx::Error> = pg_row.try_get("role");

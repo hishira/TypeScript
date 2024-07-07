@@ -65,7 +65,7 @@ impl DAO<User, UserFilterOption> for UserDAO {
 }
 
 impl UserDAO {
-    async fn user_list(&self, params: UserFilterOption) -> Result<Vec<UserListDto>, sqlx::Error> {
+    pub async fn user_list(&self, params: UserFilterOption) -> Result<Vec<UserListDto>, sqlx::Error> {
         let mut find_query = UserQuery::find(params);
         let result = find_query.build().fetch_all(&self.pool).await?;
         Ok(result
