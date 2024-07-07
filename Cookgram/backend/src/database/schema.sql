@@ -74,7 +74,6 @@ values (
         '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
         'SuperAdmin'
     );
-
 CREATE TABLE IF NOT EXISTS ADDRESS_CONNECTION (
     entity_id uuid not null,
     address_id uuid not null,
@@ -93,7 +92,6 @@ CREATE TABLE IF NOT EXISTS ADDRESS (
     phone TEXT DEFAULT NULL,
     CONSTRAINT fk_address_connection FOREIGN KEY(id) REFERENCES ADDRESS_CONNECTION(address_id) ON DELETE CASCADE
 );
-
 CREATE view ADDRESSUSERS as (
     select users.id,
         users.username,
@@ -104,6 +102,9 @@ CREATE view ADDRESSUSERS as (
         users.current_state,
         users.previous_state,
         users.password,
+        users.contract_id,
+        meta.create_date,
+        meta.edit_date,
         users.meta_id,
         addr.house,
         addr.door,
@@ -114,14 +115,13 @@ CREATE view ADDRESSUSERS as (
         addr.fax,
         addr.phone
     from users
+        join meta on meta.id = users.meta_id
         left outer join address as addr on addr.id in (
             select address_id
             from address_connection
             where entity_id = users.id
         )
-); 
-
-
+);
 CREATE TABLE IF NOT EXISTS EMPLOYEE_CONNECTION (
     owner_id uuid not null,
     user_id uuid not null
