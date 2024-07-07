@@ -2,12 +2,12 @@ use async_trait::async_trait;
 use mongodb::Database;
 use sqlx::{
     postgres::{PgQueryResult, PgRow},
-    Executor, Pool, Postgres,
+    Executor, FromRow, Pool, Postgres,
 };
 
 use crate::{
     api::{
-        dtos::userdto::userdto::UserFilterOption,
+        dtos::userdto::{userdto::UserFilterOption, userlistdto::UserListDto},
         queries::{actionquery::ActionQueryBuilder, query::Query, userquery::userquery::UserQuery},
         services::userservice::UserService,
     },
@@ -64,4 +64,13 @@ impl DAO<User, UserFilterOption> for UserDAO {
     }
 }
 
-impl UserDAO {}
+impl UserDAO {
+    async fn user_list(&self, params: UserFilterOption) -> Result<Vec<UserListDto>, sqlx::Error> {
+        let mut find_query = UserQuery::find(params);
+        let result = find_query.build().fetch_all(&self.pool).await?;
+        Ok(result
+            .iter()
+            .map(|row| UserListDto::from_row(row).expect("Cannot cast from row to UserListDto"))
+            .collect())
+    }
+}

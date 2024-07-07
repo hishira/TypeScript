@@ -2,6 +2,7 @@ use sqlx::postgres::{PgQueryResult, PgRow};
 use sqlx::{Pool, Postgres, QueryBuilder, Row};
 use uuid::Uuid;
 
+use crate::api::daos::userdao::UserDAO;
 use crate::api::dtos::roledto::roledto::RoleDto;
 use crate::api::dtos::userdto::userdto::UserFilterOption;
 use crate::api::repositories::repositories::Repository;
@@ -13,9 +14,17 @@ use crate::{
     core::{meta::meta::Meta, user::user::User},
 };
 
-pub struct UserService {}
+#[derive(Clone)]
+pub struct UserService {
+    pub user_dao: UserDAO
+}
 
 impl UserService {
+    pub fn new(user_dao: UserDAO) -> Self {
+        Self {
+            user_dao,
+        }
+    }
     pub async fn get_user_from_dto(
         user_dto: UserDtos,
         pass_worker: &PasswordWorker,

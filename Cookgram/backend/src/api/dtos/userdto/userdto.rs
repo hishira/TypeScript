@@ -53,16 +53,7 @@ pub struct UserRegisterDto {
     pub password: String,
 }
 
-#[derive(Debug, Serialize)]
-pub struct UserListDto {
-    pub id: Uuid,
-    pub username: String,
-    pub email: Option<String>,
-    pub first_name: Option<String>,
-    pub last_name: Option<String>,
-    pub state: State<EntityState>,
 
-}
 trait Filter: Send + Sync {}
 
 #[derive(Clone, Deserialize)]

@@ -1,12 +1,15 @@
 use sqlx::{Postgres, QueryBuilder};
 
-use crate::{api::{dtos::eventdto::eventdto::EventTypeDto, queries::actionquery::ActionQueryBuilder}, core::event::event::Event};
+use crate::{
+    api::{dtos::eventdto::eventdto::EventTypeDto, queries::actionquery::ActionQueryBuilder},
+    core::event::event::Event,
+};
 
 #[derive(Clone)]
 pub struct EventQuery {}
 
 impl ActionQueryBuilder<Event> for EventQuery {
-    fn create(entity: Event) -> sqlx::QueryBuilder<'static ,sqlx::Postgres> {
+    fn create(entity: Event) -> sqlx::QueryBuilder<'static, sqlx::Postgres> {
         let mut create_builder: QueryBuilder<Postgres> = QueryBuilder::new(
             "INSERT INTO EVENTS(id, created_date, event_type, related_entity, completed) ",
         );
@@ -20,11 +23,11 @@ impl ActionQueryBuilder<Event> for EventQuery {
         create_builder
     }
 
-    fn update(&self, entity: Event) -> sqlx::QueryBuilder<sqlx::Postgres> {
+    fn update(entity: Event) -> sqlx::QueryBuilder<'static, sqlx::Postgres> {
         todo!()
     }
 
-    fn delete(&self, entity: Event) -> QueryBuilder< Postgres>  {
+    fn delete(entity: Event) -> QueryBuilder<'static, Postgres> {
         todo!()
     }
 }

@@ -8,7 +8,7 @@ use uuid::Uuid;
 
 use crate::{
     api::{
-        appstate::appstate::AppState,
+        appstate::{appstate::AppState, userstate::UserState},
         daos::userdao::UserDAO,
         dtos::{
             addressdto::createaddressdto::CreateAddressDto,
@@ -62,35 +62,36 @@ impl UserRouter {
             },
         }
     }
-    async fn user_create<T>(
-        State(state): State<AppState<T>>,
+    async fn user_create(
+        State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
-    ) -> Json<User>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
-        let user_tmp =
-            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker, None)
-                .await;
-        let user = state.repo.create(user_tmp).await;
+    ) -> Json<User> {
+        let user_tmp = UserService::get_user_from_dto(
+            UserDtos::Create(params),
+            &state.app_state.pass_worker,
+            None,
+        )
+        .await;
+        let user = state.app_state.repo.create(user_tmp).await;
         Json(user)
     }
 
-    async fn create_managed_users<T>(
+    async fn create_managed_users(
         claims: Claims,
-        State(state): State<AppState<T>>,
+        State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
-    ) -> Result<Json<bool>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
+    ) -> Result<Json<bool>, AuthError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
-        let user =
-            UserService::get_user_from_dto(UserDtos::Create(params), &state.pass_worker, None)
-                .await;
+        let user = UserService::get_user_from_dto(
+            UserDtos::Create(params),
+            &state.app_state.pass_worker,
+            None,
+        )
+        .await;
         let ids_touples = (claims.user_id.unwrap(), user.id);
-        state.repo.create(user).await;
-        let result = UserService::create_user_connection(ids_touples, state.event_repo.pool).await;
+        state.app_state.repo.create(user).await;
+        let result =
+            UserService::create_user_connection(ids_touples, state.app_state.event_repo.pool).await;
         match result {
             Ok(_) => Ok(Json(true)),
             Err(error) => {
@@ -100,28 +101,23 @@ impl UserRouter {
         }
     }
 
-    async fn user_details<T>(
+    async fn user_details(
         Path(id): Path<Uuid>,
         claims: Claims,
-        State(state): State<AppState<T>>,
-    ) -> Result<Json<User>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
-        Result::Ok(Json(state.repo.find_by_id(id).await))
+        State(state): State<UserState>,
+    ) -> Result<Json<User>, AuthError> {
+        Result::Ok(Json(state.app_state.repo.find_by_id(id).await))
     }
-    async fn get_managed_users<T>(
+    async fn get_managed_users(
         claims: Claims,
-        State(state): State<AppState<T>>,
+        State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
+    ) -> Result<Json<Vec<User>>, AuthError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
         return Ok(Json(
             state
+                .app_state
                 .repo
                 .find(UserFilterOption {
                     owner_id: claims.user_id,
@@ -132,26 +128,25 @@ impl UserRouter {
         ));
     }
 
-    async fn get_current_user<T>(
+    async fn get_current_user(
         claims: Claims,
-        State(state): State<AppState<T>>,
-    ) -> Result<Json<User>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
+        State(state): State<UserState>,
+    ) -> Result<Json<User>, AuthError> {
         ClaimsGuard::current_user_guard(&claims)?;
-        let user = state.repo.find_by_id(claims.user_id.unwrap()).await;
+        let user = state
+            .app_state
+            .repo
+            .find_by_id(claims.user_id.unwrap())
+            .await;
         Ok(Json(user))
     }
-    async fn add_user_address<T>(
-        State(state): State<AppState<T>>,
+    async fn add_user_address(
+        State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,
-    ) -> Json<String>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
-        let user = state.repo.find_by_id(params.user_id).await;
+    ) -> Json<String> {
+        let user = state.app_state.repo.find_by_id(params.user_id).await;
         state
+            .app_state
             .repo
             .update(User::create_base_on_user_and_address(
                 user,
@@ -161,53 +156,49 @@ impl UserRouter {
         Json("Ok".to_string())
     }
 
-    async fn update_user<T>(
+    async fn update_user(
         claims: Claims,
-        State(state): State<AppState<T>>,
+        State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<UpdateUserDto>,
-    ) -> Result<Json<User>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
+    ) -> Result<Json<User>, AuthError> {
         ClaimsGuard::user_update_guard(claims.clone())?;
-        let user = state.repo.find_by_id(claims.user_id.unwrap()).await;
+        let user = state
+            .app_state
+            .repo
+            .find_by_id(claims.user_id.unwrap())
+            .await;
         let updated_user = UserService::get_user_from_dto(
             UserDtos::Update(params),
-            &state.pass_worker,
+            &state.app_state.pass_worker,
             Some(user),
         )
         .await;
-        state.repo.update(updated_user.clone()).await;
+        state.app_state.repo.update(updated_user.clone()).await;
         return Ok(Json(updated_user));
     }
 
-    async fn user_find<T>(
+    async fn user_find(
         claims: Claims,
-        State(state): State<AppState<T>>,
+        State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
+    ) -> Result<Json<Vec<User>>, AuthError> {
         ClaimsGuard::role_guard_user_find(claims)?;
-        let users = state.repo.find(params).await.unwrap_or(vec![]);
+        let users = state.app_state.repo.find(params).await.unwrap_or(vec![]);
         Ok(Json(users))
     }
 
-    async fn user_list<T>(
+    async fn user_list(
         claims: Claims,
-        State(state): State<AppState<T>>,
+        State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
+    ) -> Result<Json<Vec<User>>, AuthError> {
         ClaimsGuard::role_guard_user_find(claims.clone())?;
         let is_admin = claims
             .role
             .ok_or(AuthError::MissingCredentials)?
             .is_administration_role();
         state
+            .app_state
             .repo
             .find(
                 Some(params)
@@ -230,27 +221,33 @@ impl UserRouter {
                 return AuthError::UserNotExists;
             })
     }
-    async fn user_delete<T>(
+    async fn user_delete(
         claims: Claims,
-        State(state): State<AppState<T>>,
+        State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<DeleteUserDto>,
-    ) -> Result<Json<User>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
-    {
+    ) -> Result<Json<User>, AuthError> {
         ClaimsGuard::user_delete_guard(claims)?;
-        let mut user = state.repo.find_by_id(params.id).await;
+        let mut user = state.app_state.repo.find_by_id(params.id).await;
         user.state.update(CoreState {
             current: EntityState::Deleted,
             previous: Some(user.state.previous.clone().unwrap_or(EntityState::Active)),
         });
-        state.repo.delete(user.clone()).await;
+        state.app_state.repo.delete(user.clone()).await;
         return Ok(Json(user));
     }
 }
 
 impl ApplicationRouter for UserRouter {
     fn get_router(&self) -> axum::Router {
+        let app_state: AppState<UserRepositories> = AppState {
+            repo: self.user_repo.clone(),
+            event_repo: self.event_repo.clone(),
+            pass_worker: PasswordWorker::new(10, 4).unwrap(),
+        };
+        let user_state: UserState = UserState {
+            app_state,
+            user_service: UserService::new(self.user_repo.user_dao.clone()),
+        };
         Router::new()
             .route(
                 "/users",
@@ -266,24 +263,18 @@ impl ApplicationRouter for UserRouter {
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
             .route("/user-list", post(UserRouter::user_list))
-            .with_state(AppState {
-                repo: self.user_repo.clone(),
-                event_repo: self.event_repo.clone(),
-                pass_worker: PasswordWorker::new(10, 4).unwrap(),
-            })
+            .with_state(user_state)
     }
 }
 
 async fn protected(claims: Claims) -> Result<String, AuthError> {
     Ok(format!("{}", claims.user_id.unwrap()))
 }
-async fn pp<T>(
+async fn pp(
     claims: Claims,
-    State(state): State<AppState<T>>,
+    State(state): State<UserState>,
     ValidateDtos(params): ValidateDtos<CreateUserDto>,
 ) -> Result<String, AuthError>
-where
-    T: Repository<User, UserFilterOption, sqlx::Error>,
 {
     print!("{}", params.email);
     Ok(format!("OK"))
