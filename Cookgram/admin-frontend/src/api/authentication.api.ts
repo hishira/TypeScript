@@ -8,6 +8,7 @@ import { JWTSetAction } from '../store/jwt/action';
 import { MainStore } from '../store/main.store';
 import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
 import { Router } from '@angular/router';
+import { SessionStorageService } from '../app/shared/services/sessionStorage.service';
 
 @Injectable()
 export class AuthenticationApiService extends BaseApi {
@@ -15,6 +16,7 @@ export class AuthenticationApiService extends BaseApi {
     private readonly httpService: HttpClient,
     private readonly store: Store<MainStore>,
     private readonly router: Router,
+    private readonly sessionStorage: SessionStorageService
   ) {
     super();
   }
@@ -25,6 +27,7 @@ export class AuthenticationApiService extends BaseApi {
       .pipe(
         tap((loginResponse) => {
           if ('error' in loginResponse) return;
+          this.sessionStorage.setItem('token', loginResponse);
           this.store.dispatch(JWTSetAction({ ...loginResponse }));
         }),
         catchError((error) => {
@@ -35,19 +38,20 @@ export class AuthenticationApiService extends BaseApi {
   }
 
   refreshToken(): Observable<AccessTokeResponse> {
-    return this.store
-      .select(GetRefreshTokenSelectors)
-      .pipe(
-        switchMap((token) =>{
-          if(token === undefined || token === null) {
-            this.router.navigate(['/login']);
-          }
-          return this.httpService.post<AccessTokeResponse>(
-            this.prepareLink('testauth/refresh-token'),
-            { refreshToken: token }
-          )
+    return this.store.select(GetRefreshTokenSelectors).pipe(
+      switchMap((token) => {
+        if (token === undefined || token === null) {
+          this.router.navigate(['/login']);
         }
-        )
-      );
+        return this.httpService.post<AccessTokeResponse>(
+          this.prepareLink('testauth/refresh-token'),
+          { refreshToken: token }
+        );
+      })
+    );
+  }
+
+  removeTokens(): void {
+    this.sessionStorage.removeItems('accessToken', 'tokens', 'refreshToken');
   }
 }
