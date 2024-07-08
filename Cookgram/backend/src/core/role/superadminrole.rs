@@ -7,10 +7,12 @@ pub struct SuperAdminRole {
     access: Vec<QueriesActions>,
 }
 
+//Thinkg of view, management
 impl Default for SuperAdminRole {
     fn default() -> Self {
         Self {
             access: vec![
+                QueriesActions::Access(Queries::User, Action::View),
                 QueriesActions::Access(Queries::User, Action::Management),
                 QueriesActions::Access(Queries::Address, Action::Management),
             ],

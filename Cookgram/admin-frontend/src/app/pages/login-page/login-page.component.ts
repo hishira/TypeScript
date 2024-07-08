@@ -27,7 +27,7 @@ type LoginFormGroup = {
   selector: 'app-login-page',
   standalone: true,
   imports: [
-  CheckboxModule,
+    CheckboxModule,
     RippleModule,
     ButtonModule,
     InputTextModule,
@@ -53,7 +53,7 @@ export class LoginPageComponent {
     private readonly router: Router,
     private readonly authenticationService: AuthenticationApiService,
     private readonly toastService: ToastService,
-    private readonly store: Store<MainStore>,
+    private readonly store: Store<MainStore>
   ) {}
   signIn(): void {
     this.loginFormGroup.markAllAsTouched();
@@ -72,7 +72,10 @@ export class LoginPageComponent {
         if (r && 'error' in r) {
           this.toastService.showWarning('User not exists');
         } else {
-          this.store.select(GetAccessTokenSelectors).subscribe((a)=>console.log(a));
+          this.store
+            .select(GetAccessTokenSelectors)
+            .subscribe((a) => console.log(a));
+          this.router.navigate(['/admin']);
         }
       });
   }

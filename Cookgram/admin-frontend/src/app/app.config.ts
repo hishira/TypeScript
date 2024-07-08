@@ -15,6 +15,7 @@ import { MessageService } from 'primeng/api';
 import { ToastService } from './shared/services/toast.service';
 import { RefreshInterceptor } from './shared/interceptor/refresh.interceptor';
 import { TokenInterceptor } from './shared/interceptor/token.interceptor';
+import { AuthenticationApiService } from '../api/authentication.api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: 'jwt', reducer: jwtReducers }),
     provideHttpClient(withInterceptorsFromDi()),
     MessageService,
+    AuthenticationApiService,
     ToastService,
     {
       provide: HTTP_INTERCEPTORS,
