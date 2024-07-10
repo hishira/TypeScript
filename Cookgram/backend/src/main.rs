@@ -17,6 +17,7 @@ use axum::{
     Router,
 };
 use metrics_exporter_prometheus::{Matcher, PrometheusBuilder, PrometheusHandle};
+use redis::{AsyncCommands, RedisError};
 use tokio::{net::TcpListener, signal};
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing::info_span;
@@ -27,6 +28,14 @@ mod database;
 
 #[tokio::main]
 async fn main() {
+    match fetch_an_integer().await {
+        Ok(ok) => {
+            println!("OK");
+        }
+        Err(err) => {
+            tracing::error!("{}", err);
+        }
+    };
     let (_main_service, _metrics_service) = tokio::join!(start_main_app(), start_metrics_server());
 }
 
@@ -54,13 +63,36 @@ fn metrics_app() -> Router {
 }
 async fn start_metrics_server() {
     let app = metrics_app();
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3001")
+    let listener = tokio::net::TcpListener::bind("192.168.1.27:3001")
         .await
         .unwrap();
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }
 
+async fn fetch_an_integer() -> redis::RedisResult<()> {
+    // connect to redis
+    let redis_connection_string = dotenv::var("REDIS_URL").unwrap();
+    let client = redis::Client::open(redis_connection_string).unwrap();
+    let mut con = client.get_multiplexed_async_connection().await?;
+
+    let _: () = con.set("key1", b"foo").await?;
+
+    // redis::cmd("SET")
+    //     .arg(&["key2", "bar"])
+    //     .execute(&mut con)
+    //     .await?;
+
+    let result: Result<String, RedisError> = redis::cmd("MGET")
+        .arg(&["key1"])
+        .query_async(&mut con)
+        .await;
+    match result {
+        Ok(ok) => println!("{}", ok),
+        Err(error) => tracing::error!("{}", error),
+    };
+    Ok(())
+}
 async fn start_main_app() {
     ApplicationLog::register_tracing();
     let database = database::init::Database::new().await;
