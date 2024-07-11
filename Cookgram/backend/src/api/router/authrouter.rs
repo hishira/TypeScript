@@ -34,7 +34,7 @@ use crate::{
         validators::dtovalidator::ValidateDtos,
     },
     core::user::user::User,
-    database::init::Database,
+    database::{init::Database, redis::redisdatabase::RedisDatabase},
 };
 
 use super::router::ApplicationRouter;
@@ -58,6 +58,7 @@ impl AuthBody {
 pub struct AuthRouter {
     user_repo: UserRepositories,
     event_repo: EventRepository,
+    redis: RedisDatabase,
 }
 
 impl AuthRouter {
@@ -79,6 +80,7 @@ impl AuthRouter {
                     .unwrap(),
                 event_query: EventQuery {},
             },
+            redis: database.redis
         }
     }
 
@@ -162,6 +164,7 @@ impl ApplicationRouter for AuthRouter {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
                 pass_worker: PasswordWorker::new(10, 4).unwrap(),
+                redis_database: self.redis,
             })
     }
 }

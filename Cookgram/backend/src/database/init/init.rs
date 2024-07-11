@@ -3,10 +3,13 @@ use std::{process::exit, time::Duration};
 use mongodb::{options::ClientOptions, Client, Database as MongoDatabase};
 use sqlx::{postgres::PgPoolOptions, Executor, Pool, Postgres};
 
+use crate::database::redis::redisdatabase::RedisDatabase;
+
 pub struct Database {
     url: String,
     pub pool: Option<Pool<Postgres>>,
     pub mongo_client: Client,
+    pub redis: RedisDatabase,
     mongo_database_name: String,
 }
 
@@ -32,11 +35,13 @@ impl Database {
         };
         let mongo_client = Client::with_options(mongo_db_client).unwrap();
         let mongo_database_name = dotenv::var("MONGO_DATABASE_NAME").unwrap();
+        let redis =  RedisDatabase::connect().await;
         Self {
             url: db_connection_string.to_string(),
             pool: psg_pool,
             mongo_client: mongo_client,
-            mongo_database_name
+            mongo_database_name,
+            redis
         }
     }
 

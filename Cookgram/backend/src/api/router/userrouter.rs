@@ -34,7 +34,7 @@ use crate::{
         state::{entitystate::EntityState, state::State as CoreState},
         user::user::User,
     },
-    database::init::Database,
+    database::{init::Database, redis::redisdatabase::RedisDatabase},
 };
 
 use super::router::ApplicationRouter;
@@ -42,6 +42,7 @@ use super::router::ApplicationRouter;
 pub struct UserRouter {
     user_repo: UserRepositories,
     event_repo: EventRepository,
+    redis: RedisDatabase,
 }
 
 impl UserRouter {
@@ -63,6 +64,7 @@ impl UserRouter {
                     .unwrap(),
                 event_query: EventQuery {},
             },
+            redis: database.redis,
         }
     }
     async fn user_create(
@@ -195,11 +197,12 @@ impl UserRouter {
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
-        ClaimsGuard::role_guard_user_find(claims.clone()).map_err(|e| ResponseError::AuthError(e))?;
+        ClaimsGuard::role_guard_user_find(claims.clone())
+            .map_err(|e| ResponseError::AuthError(e))?;
         let is_admin = claims
             .role
             .ok_or(AuthError::MissingCredentials)
-            .map_err(|e|ResponseError::AuthError(e))?
+            .map_err(|e| ResponseError::AuthError(e))?
             .is_administration_role();
         let params = Some(params)
             .map(|params| {
@@ -245,6 +248,7 @@ impl ApplicationRouter for UserRouter {
             repo: self.user_repo.clone(),
             event_repo: self.event_repo.clone(),
             pass_worker: PasswordWorker::new(10, 4).unwrap(),
+            redis_database: self.redis,
         };
         let user_state: UserState = UserState {
             app_state,

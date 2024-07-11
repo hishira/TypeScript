@@ -37,3 +37,5 @@ rayon = "1.10.0"
 crossbeam-channel = "0.5.12"
 mongodb = "2.8.2"
 redis = { version = "0.25.3", features = ["tokio-comp"] }
+bb8 = "0.7.1"
+bb8-redis = "0.14.0"
