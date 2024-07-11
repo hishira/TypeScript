@@ -1,19 +1,13 @@
-use crate::api::{logs::applicationlog::ApplicationLog, router::authrouter::AuthRouter};
+
 use api::{
-    router::{router::ApplicationRouter, userrouter::UserRouter},
-    utils::cors::CORS,
+    applicationserver::applicationserver::ApplicationServer,
+    metrics::metricsserver::MetricsServer,
+
 };
 use axum::{
-    extract::{DefaultBodyLimit, MatchedPath},
-    http::{
-        header::{AUTHORIZATION, CONTENT_TYPE},
-        Request,
-    },
-    Router,
+    http::header::{AUTHORIZATION, CONTENT_TYPE},
 };
-use tokio::{net::TcpListener, signal};
-use tower_http::{cors::CorsLayer, trace::TraceLayer};
-use tracing::info_span;
+use redis::{AsyncCommands, RedisError};
 
 mod api;
 mod core;
@@ -21,48 +15,40 @@ mod database;
 
 #[tokio::main]
 async fn main() {
-    ApplicationLog::register_tracing();
-    let database = database::init::Database::new().await;
-    database.prepare_tables().await;
-    let app = Router::new()
-        .nest("/user", UserRouter::new(&database).get_router())
-        .nest("/auth", AuthRouter::new(&database).get_router())
-        .layer(DefaultBodyLimit::max(104857000))
-        .layer(CORS::default())
-        .layer(
-            TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
-                let matched_path = request
-                    .extensions()
-                    .get::<MatchedPath>()
-                    .map(MatchedPath::as_str);
-
-                info_span!(
-                    "http_request",
-                    method = ?request.method(),
-                    matched_path,
-                    some_other_field = tracing::field::Empty,
-                )
-            }),
-        );
-    let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
-    tracing::debug!("listening on {}", listener.local_addr().unwrap());
-    axum::serve(listener, app)
-        .with_graceful_shutdown(shutdown())
-        .await
-        .unwrap();
-}
-
-async fn shutdown() {
-    let ctrl_c_shutdown = async {
-        signal::ctrl_c()
-            .await
-            .expect("Failed to ctrl + c signal handler");
+    match fetch_an_integer().await {
+        Ok(ok) => {
+            println!("OK");
+        }
+        Err(err) => {
+            tracing::error!("{}", err);
+        }
     };
-
-    #[cfg(not(unix))]
-    let terminate = std::future::pending::<()>();
-    tokio::select! {
-     _ = ctrl_c_shutdown => {},
-     _ = terminate => {}
-    }
+    let (_main_service, _metrics_service) = tokio::join!(
+        ApplicationServer::start_main_app(),
+        MetricsServer::start_metrics_server()
+    );
 }
+
+// async fn fetch_an_integer() -> redis::RedisResult<()> {
+//     // connect to redis
+//     let redis_connection_string = ;
+//     let client = redis::Client::open(redis_connection_string).unwrap();
+//     let mut con = client.get_multiplexed_async_connection().await?;
+
+//     let _: () = con.set("key1", b"foo").await?;
+
+//     // redis::cmd("SET")
+//     //     .arg(&["key2", "bar"])
+//     //     .execute(&mut con)
+//     //     .await?;
+
+//     let result: Result<String, RedisError> = redis::cmd("MGET")
+//         .arg(&["key1"])
+//         .query_async(&mut con)
+//         .await;
+//     match result {
+//         Ok(ok) => println!("{}", ok),
+//         Err(error) => tracing::error!("{}", error),
+//     };
+//     Ok(())
+// }

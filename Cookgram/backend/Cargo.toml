@@ -23,6 +23,8 @@ serde = {version = "1.0.197", features = ["derive"]}
 async-trait = "0.1.79"
 thiserror = "1.0.58"
 serde_test = "1.0.176"
+metrics = "0.22.3"
+metrics-exporter-prometheus = "0.14"
 tower-http = { version = "0.5.0", features = ["trace", "cors"] }
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
@@ -34,3 +36,6 @@ axum-extra = {version = "0.9.3", features = ["typed-header"] }
 rayon = "1.10.0"
 crossbeam-channel = "0.5.12"
 mongodb = "2.8.2"
+redis = { version = "0.25.3", features = ["tokio-comp"] }
+bb8 = "0.7.1"
+bb8-redis = "0.14.0"
