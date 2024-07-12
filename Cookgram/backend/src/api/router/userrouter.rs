@@ -64,7 +64,7 @@ impl UserRouter {
                     .unwrap(),
                 event_query: EventQuery {},
             },
-            redis: database.redis,
+            redis: database.redis.clone(),
         }
     }
     async fn user_create(
@@ -248,7 +248,7 @@ impl ApplicationRouter for UserRouter {
             repo: self.user_repo.clone(),
             event_repo: self.event_repo.clone(),
             pass_worker: PasswordWorker::new(10, 4).unwrap(),
-            redis_database: self.redis,
+            redis_database: self.redis.clone(),
         };
         let user_state: UserState = UserState {
             app_state,

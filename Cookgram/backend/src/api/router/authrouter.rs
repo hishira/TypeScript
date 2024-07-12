@@ -80,7 +80,7 @@ impl AuthRouter {
                     .unwrap(),
                 event_query: EventQuery {},
             },
-            redis: database.redis
+            redis: database.redis.clone()
         }
     }
 
@@ -164,7 +164,7 @@ impl ApplicationRouter for AuthRouter {
                 repo: self.user_repo.clone(),
                 event_repo: self.event_repo.clone(),
                 pass_worker: PasswordWorker::new(10, 4).unwrap(),
-                redis_database: self.redis,
+                redis_database: self.redis.clone(),
             })
     }
 }

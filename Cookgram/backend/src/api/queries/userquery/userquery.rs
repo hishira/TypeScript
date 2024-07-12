@@ -28,11 +28,12 @@ impl UserQuery {
     pub fn prepare_address_query(&self, address: Address, user_id: Uuid) -> QueryBuilder<Postgres> {
         let address_id = Uuid::new_v4(); // Address is value object, not necessery id
         let mut create_address_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "WITH first_insert as ( INSERT INTO ADDRESS(id, house, door, city, country, lat, long, postal_code, fax, phone) ",
+            "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code, fax, phone) ",
         );
 
         create_address_builder.push_values(vec![address], |mut b, address| {
             b.push_bind(address_id)
+                .push_bind(address.address)
                 .push_bind(address.house)
                 .push_bind(address.door)
                 .push_bind(address.city)

@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use sqlx::{postgres::PgRow, FromRow, Row};
 
 use crate::core::valueObject::value_object::ValueObject;
 
@@ -42,6 +43,25 @@ impl Address {
             fax,
             phone,
         }
+    }
+}
+
+impl<'r> FromRow<'r, PgRow> for Address {
+    fn from_row(row: &'r PgRow) -> Result<Self, sqlx::Error> {
+        Ok(Self {
+            address: row.try_get("address")?,
+            house: row.try_get("house")?,
+            city: row.try_get("city")?,
+            country: row.try_get("country")?,
+            location: Location {
+                latitude: row.try_get("lat")?,
+                longitude: row.try_get("long")?,
+            },
+            door: row.try_get("door")?,
+            postal_code: row.try_get("postal_code")?,
+            fax: row.try_get("fax")?,
+            phone: row.try_get("phone")?,
+        })
     }
 }
 #[cfg(test)]
