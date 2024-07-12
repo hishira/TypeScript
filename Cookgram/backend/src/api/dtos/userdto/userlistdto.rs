@@ -2,10 +2,10 @@ use serde::Serialize;
 use sqlx::{postgres::PgRow, FromRow, Row};
 use uuid::Uuid;
 
-use crate::core::{
+use crate::{api::dtos::addressdto::addressdto::AddressDto, core::{
     address::address::Address,
     state::{entitystate::EntityState, state::State},
-};
+}};
 
 #[derive(Debug, Serialize)]
 pub struct UserListDto {
@@ -16,14 +16,14 @@ pub struct UserListDto {
     pub last_name: Option<String>,
     pub state: State<EntityState>,
     pub contract_id: Option<Uuid>,
-    pub address: Option<Address>,
+    pub address: Option<AddressDto>,
 }
 
 impl UserListDto {
-    fn try_to_retrive_address<'r>(row: &'r PgRow) -> Result<Option<Address>, sqlx::Error> {
+    fn try_to_retrive_address<'r>(row: &'r PgRow) -> Result<Option<AddressDto>, sqlx::Error> {
         let city = row.try_column("city");
         match city {
-            Ok(_) => match Address::from_row(&row) {
+            Ok(_) => match AddressDto::from_row(&row) {
                 Ok(address) => Ok(Some(address)),
                 Err(error) => {
                     tracing::error!("Error {}", error);
