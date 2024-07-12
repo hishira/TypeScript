@@ -3,10 +3,10 @@
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="name" style="width: 25%">
-          Name <p-sortIcon field="name" />
+          Email <p-sortIcon field="name" />
         </th>
         <th pSortableColumn="country" style="width: 25%">
-          Country <p-sortIcon field="country.name" />
+          Username <p-sortIcon field="country.name" />
         </th>
         <th pSortableColumn="representative.name" style="width: 25%">
           Status <p-sortIcon field="status" />
@@ -15,9 +15,9 @@
     </ng-template>
     <ng-template pTemplate="body" let-customer>
       <tr>
-        <td>{{ customer.name }}</td>
-        <td>{{ customer.country }}</td>
-        <td>{{ customer.status }}</td>
+        <td>{{ customer.email }}</td>
+        <td>{{ customer.username }}</td>
+        <td>{{ customer.first_name }}</td>
       </tr>
     </ng-template>
   </p-table>

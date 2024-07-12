@@ -4,7 +4,22 @@ import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { UserApiSerivce } from '../../../../api/user.api';
-
+//TODO: Fix after fixing backend
+type UserAddressList = {
+  address: string | null;
+  city: string | null;
+  country: string | null;
+  phone: string | null;
+};
+export type UserList = {
+  username: string;
+  last_name: string | null;
+  id: string;
+  first_name: string | null;
+  email: string;
+  contract_id: string | null;
+  address: UserAddressList;
+};
 @Component({
   selector: 'app-users-list',
   standalone: true,
@@ -14,25 +29,11 @@ import { UserApiSerivce } from '../../../../api/user.api';
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent implements OnInit {
-  users = [
-    {
-      name: 'Jony doea',
-      country: 'Poland',
-      status: 'Active',
-    },
-    {
-      name: 'Jony doea',
-      country: 'Poland',
-      status: 'Active',
-    },
-    {
-      name: 'Jony doea',
-      country: 'Poland',
-      status: 'Active',
-    },
-  ];
+  users: UserList[] = [];
   constructor(private readonly userApi: UserApiSerivce) {}
   ngOnInit(): void {
-    this.userApi.userLists().subscribe((users) => console.log(users));
+    this.userApi
+      .userLists()
+      .subscribe((users: UserList[]) => this.users = users);
   }
 }
