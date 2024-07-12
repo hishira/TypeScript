@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS ADDRESS_CONNECTION (
 );
 CREATE TABLE IF NOT EXISTS ADDRESS (
     id uuid NOT NULL,
+    address VARCHAR(255) NOT NULL,
     house VARCHAR(255) NOT NULL,
     door VARCHAR(255) DEFAULT NULL,
     city VARCHAR(255) NOT NULL,
@@ -106,6 +107,7 @@ CREATE view ADDRESSUSERS as (
         meta.create_date,
         meta.edit_date,
         users.meta_id,
+        addr.address,
         addr.house,
         addr.door,
         addr.city,
