@@ -62,6 +62,7 @@ pub struct UserFilterOption {
     pub limit: Option<i16>,
     pub offset: Option<i16>,
     pub owner_id: Option<Uuid>,
+    pub with_admin: Option<bool>,
 }
 
 impl UserFilterOption {
@@ -71,6 +72,7 @@ impl UserFilterOption {
             limit: Some(10),
             offset: Some(0),
             owner_id: None,
+            with_admin: Some(true),
         }
     }
 }

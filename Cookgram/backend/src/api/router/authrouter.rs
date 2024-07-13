@@ -47,10 +47,10 @@ pub struct AuthBody {
 }
 
 impl AuthBody {
-    pub fn get_from_token(token: String) -> Self {
+    pub fn get_from_token(tokens: (String, String)) -> Self {
         Self {
-            access_token: token.clone(),
-            refresh_token: token.clone(),
+            access_token: tokens.0.clone(),
+            refresh_token: tokens.1.clone(),
         }
     }
 }
@@ -80,7 +80,7 @@ impl AuthRouter {
                     .unwrap(),
                 event_query: EventQuery {},
             },
-            redis: database.redis.clone()
+            redis: database.redis.clone(),
         }
     }
 
@@ -102,7 +102,12 @@ impl AuthRouter {
             access_token: new_token,
         }))
     }
-
+    fn fill_user_into_tokens(tokens: (&mut Claims, &mut Claims), user: User) {
+        tokens.0.user_id = Some(user.id);
+        tokens.0.role = Some(user.role.clone());
+        tokens.1.user_id = Some(user.id);
+        tokens.1.role = Some(user.role.clone());
+    }
     async fn login<T>(
         State(state): State<AppState<T>>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
@@ -110,8 +115,9 @@ impl AuthRouter {
     where
         T: Repository<User, UserFilterOption, sqlx::Error>,
     {
-        let mut claims: Claims = Claims::new(&params);
-        let filter = UserFilterOption::from_claims(claims.clone());
+        let mut access_claims: Claims = Claims::new(&params, None);
+        let mut refresh_claims: Claims = Claims::new(&params, Some(1000));
+        let filter = UserFilterOption::from_claims(access_claims.clone());
         let users = state.repo.find(filter.clone()).await;
         let users = match users {
             Ok(u) => u,
@@ -124,14 +130,14 @@ impl AuthRouter {
             return Result::Err(AuthError::UserNotExists);
         }
         let user = users.get(0).unwrap();
-        claims.user_id = Some(user.id);
-        claims.role = Some(user.role.clone());
-        let token = Keys::encode(&claims)?;
+        Self::fill_user_into_tokens((&mut access_claims, &mut refresh_claims), user.clone());
+        let access_token = Keys::encode(&access_claims)?;
+        let refresh_token = Keys::encode(&refresh_claims)?;
         return AuthRouter::password_match(
             &state.pass_worker,
             params.password,
             user.password.clone(),
-            token,
+            (access_token, refresh_token),
         )
         .await;
     }
@@ -140,12 +146,12 @@ impl AuthRouter {
         password_worker: &PasswordWorker,
         password: String,
         user_password: String,
-        token: String,
+        tokens: (String, String), //access_token, refresh_token
     ) -> Result<Json<AuthBody>, AuthError> {
         match password_worker.verify(password, user_password).await {
             Ok(verify_response) => {
                 if verify_response {
-                    return Ok(Json(AuthBody::get_from_token(token)));
+                    return Ok(Json(AuthBody::get_from_token(tokens)));
                 } else {
                     return Result::Err(AuthError::WrongCredentials);
                 }

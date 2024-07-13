@@ -22,33 +22,33 @@ pub struct Claims {
 }
 
 impl Claims {
-    fn prepare_exp() -> u64 {
-        get_current_timestamp() + 200 //+ 300000
+    fn prepare_exp(extended_time: Option<u64>) -> u64 {
+        get_current_timestamp() + 200 + extended_time.unwrap_or(0)
     }
-    pub fn new(params: &UserAuthDto) -> Self {
+    pub fn new(params: &UserAuthDto, extended_time: Option<u64>) -> Self {
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
                 user_id: None,
                 user_info: "TEst".to_string(),
-                exp: Self::prepare_exp(),
+                exp: Self::prepare_exp(extended_time),
                 role: None,
             },
             (None, Some(username)) => Self {
                 user_id: None,
                 user_info: username,
-                exp: Self::prepare_exp(),
+                exp: Self::prepare_exp(extended_time),
                 role: None,
             },
             (Some(email), None) => Self {
                 user_id: None,
                 user_info: email,
-                exp: Self::prepare_exp(),
+                exp: Self::prepare_exp(extended_time),
                 role: None,
             },
             (Some(_), Some(username)) => Self {
                 user_id: None,
                 user_info: username,
-                exp: Self::prepare_exp(),
+                exp: Self::prepare_exp(extended_time),
                 role: None,
             },
         }

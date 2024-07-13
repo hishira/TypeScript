@@ -117,6 +117,9 @@ impl Query<UserFilterOption> for UserQuery {
             user_query.push(") ");
         }
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
+        if !option.with_admin.unwrap_or(false) {
+            user_query.push(" AND role not in ('Admin', 'SuperAdmin') ");
+        }
         user_query.push(" limit ");
         user_query.push_bind(option.limit.unwrap_or(10));
         user_query.push(" offset ");
@@ -188,7 +191,10 @@ mod tests {
 
     use super::*;
 
-    fn validate_action_query(user_query: &UserQuery, entity: User) -> QueryBuilder<'static, Postgres> {
+    fn validate_action_query(
+        user_query: &UserQuery,
+        entity: User,
+    ) -> QueryBuilder<'static, Postgres> {
         UserQuery::create(entity)
     }
 
@@ -266,7 +272,7 @@ mod tests {
             "INSERT INTO USERS(id, username, password, email) VALUES ($1, $2, $3, $4)"
         );
     }
-    
+
     #[test]
     #[should_panic]
 
