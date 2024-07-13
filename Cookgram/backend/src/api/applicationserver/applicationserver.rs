@@ -62,7 +62,14 @@ impl ApplicationServer {
         }
     }
     pub async fn start_main_app() {
-        ApplicationLog::register_tracing();
+        match ApplicationLog::register_tracing() {
+            Ok(ok) => {
+                tracing::info!("Tracing successfull created");
+            },
+            Err(err) => {
+                tracing::error!("Error while cerating tracing, {}", err);
+            },
+        }
         let database = Self::prepare_database().await;
         let app = Self::create_router(&database);
         let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();

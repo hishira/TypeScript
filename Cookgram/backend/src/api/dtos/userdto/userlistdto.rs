@@ -2,12 +2,13 @@ use serde::Serialize;
 use sqlx::{postgres::PgRow, FromRow, Row};
 use uuid::Uuid;
 
-use crate::{api::dtos::addressdto::addressdto::AddressDto, core::{
-    address::address::Address,
-    state::{entitystate::EntityState, state::State},
-}};
+use crate::{
+    api::dtos::addressdto::addressdto::AddressDto,
+    core::state::{entitystate::EntityState, state::State},
+};
 
 #[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct UserListDto {
     pub id: Uuid,
     pub username: String,

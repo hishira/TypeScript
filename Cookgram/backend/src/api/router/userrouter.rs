@@ -198,7 +198,7 @@ impl UserRouter {
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims.clone())
-            .map_err(|e| ResponseError::AuthError(e))?;
+            .map_err(ResponseError::AuthError)?;
         let is_admin = claims
             .role
             .ok_or(AuthError::MissingCredentials)
@@ -213,6 +213,7 @@ impl UserRouter {
                     offset: params.offset,
                     username: params.username,
                     owner_id,
+                    with_admin: Some(false),
                 }
             })
             .unwrap();
@@ -220,7 +221,7 @@ impl UserRouter {
             .user_service
             .get_users(params)
             .await
-            .map(|e| Json(e))
+            .map(Json)
             .map_err(|e| {
                 tracing::error!("Error occur {}", e);
                 e.into()
