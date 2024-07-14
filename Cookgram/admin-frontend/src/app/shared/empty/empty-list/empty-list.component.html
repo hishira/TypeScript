@@ -1,0 +1,7 @@
+<div *ngIf="isEmpty(); else content" class="w-full h-25rem flex justify-content-center align-content-center">
+  <span class="font-bold text-5xl align-content-center">{{ text() }}</span>
+</div>
+
+<ng-template #content>
+    <ng-content></ng-content>
+</ng-template>
