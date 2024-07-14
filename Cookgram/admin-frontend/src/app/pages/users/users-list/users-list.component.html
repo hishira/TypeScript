@@ -2,10 +2,10 @@
   <ng-template pTemplate="header">
     <div class="flex justify-content-between align-content-center w-full">
       <span class="text-2xl align-content-center">User list</span>
-      <p-button class="" [rounded]="true">Create user</p-button>
+      <p-button (onClick)="createUser()" [rounded]="true">Create user</p-button>
     </div>
   </ng-template>
-  <app-empty-list [isEmpty]="users.length <= 0">
+  <app-empty-list [withRefreshButton]="true" [isEmpty]="users.length <= 0">
     <p-table [value]="users" [rows]="users.length" [paginator]="true">
       <ng-template pTemplate="header">
         <tr>
