@@ -109,16 +109,21 @@ impl Query<UserFilterOption> for UserQuery {
     fn find(option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut user_query: QueryBuilder<Postgres> =
             QueryBuilder::new("SELECT * FROM ADDRESSUSERS");
-        let count: i8 = 0;
+        let mut count: i8 = 0;
         if let Some(owner_id) = option.owner_id {
             user_query
                 .push(" WHERE id in (select user_id from EMPLOYEE_CONNECTION where owner_id = ");
             user_query.push_bind(owner_id);
             user_query.push(") ");
+            count += 1;
         }
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
         if !option.with_admin.unwrap_or(false) {
-            user_query.push(" AND role not in ('Admin', 'SuperAdmin') ");
+            if count > 0 {
+                user_query.push(" AND role not in ('Admin', 'SuperAdmin') ");
+            } else {
+                user_query.push(" where role not in ('Admin', 'SuperAdmin') ");
+            }
         }
         user_query.push(" limit ");
         user_query.push_bind(option.limit.unwrap_or(10));
