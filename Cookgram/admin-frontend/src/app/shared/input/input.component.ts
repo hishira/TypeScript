@@ -1,9 +1,12 @@
 import { Component, OnInit, Optional, Self, input } from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormControl,
   NgControl,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
 } from '@angular/forms';
 import { noop } from 'rxjs';
 import { NgIf } from '@angular/common';
@@ -15,7 +18,7 @@ import { ErrorsComponent } from '../errors/errors.component';
   standalone: true,
   imports: [ReactiveFormsModule, NgIf, InputTextModule, ErrorsComponent],
 })
-export class InputComponent implements ControlValueAccessor, OnInit {
+export class InputComponent implements ControlValueAccessor, OnInit, Validator {
   label = input<string>('');
   withErrors = input<boolean>(false);
   control = new FormControl<string | null>('');
@@ -24,6 +27,12 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   onTouch: () => void = noop;
   constructor(@Optional() @Self() private ngControl: NgControl) {
     this.ngControl && (this.ngControl.valueAccessor = this);
+  }
+  validate(control: AbstractControl<any, any>): ValidationErrors | null {
+    return this.control.errors;
+  }
+  registerOnValidatorChange?(fn: () => void): void {
+    //throw new Error('Method not implemented.');
   }
 
   ngOnInit(): void {
@@ -41,7 +50,5 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
-  setDisabledState?(isDisabled: boolean): void {
-    throw new Error('Method not implemented.');
-  }
+  setDisabledState?(isDisabled: boolean): void {}
 }

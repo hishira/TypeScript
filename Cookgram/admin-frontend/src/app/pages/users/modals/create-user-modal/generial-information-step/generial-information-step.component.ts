@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
-import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { InputComponent } from "../../../../../shared/input/input.component";
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
+import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
+import { InputComponent } from '../../../../../shared/input/input.component';
+import { GeneralInformationStepGroup } from '../create-user-model.types';
+
 @Component({
   selector: 'app-user-create-general-information-step',
   templateUrl: './generial-information-step.component.html',
   standalone: true,
   imports: [DialogComponent, ButtonModule, InputComponent, ReactiveFormsModule],
 })
-
-export class GeneralInformationStep {
+export class GeneralInformationStep extends AbstractStepDirective<GeneralInformationStepGroup> {
   firstNameControl = new FormControl<string>('');
 }
