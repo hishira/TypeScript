@@ -71,12 +71,7 @@ impl UserRouter {
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Json<User> {
-        let user_tmp = UserService::get_user_from_dto(
-            UserDtos::Create(params),
-            &state.app_state.pass_worker,
-            None,
-        )
-        .await;
+        let user_tmp = UserService::get_user_from_dto(UserDtos::Create(params), None).await;
         let user = state.app_state.repo.create(user_tmp).await;
         Json(user)
     }
@@ -87,12 +82,7 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Result<Json<bool>, AuthError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
-        let user = UserService::get_user_from_dto(
-            UserDtos::Create(params),
-            &state.app_state.pass_worker,
-            None,
-        )
-        .await;
+        let user = UserService::get_user_from_dto(UserDtos::Create(params), None).await;
         let ids_touples = (claims.user_id.unwrap(), user.id);
         state.app_state.repo.create(user).await;
         let result =
@@ -172,12 +162,8 @@ impl UserRouter {
             .repo
             .find_by_id(claims.user_id.unwrap())
             .await;
-        let updated_user = UserService::get_user_from_dto(
-            UserDtos::Update(params),
-            &state.app_state.pass_worker,
-            Some(user),
-        )
-        .await;
+        let updated_user =
+            UserService::get_user_from_dto(UserDtos::Update(params), Some(user)).await;
         state.app_state.repo.update(updated_user.clone()).await;
         return Ok(Json(updated_user));
     }
@@ -197,8 +183,7 @@ impl UserRouter {
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
-        ClaimsGuard::role_guard_user_find(claims.clone())
-            .map_err(ResponseError::AuthError)?;
+        ClaimsGuard::role_guard_user_find(claims.clone()).map_err(ResponseError::AuthError)?;
         let is_admin = claims
             .role
             .ok_or(AuthError::MissingCredentials)
@@ -248,7 +233,6 @@ impl ApplicationRouter for UserRouter {
         let app_state: AppState<UserRepositories> = AppState {
             repo: self.user_repo.clone(),
             event_repo: self.event_repo.clone(),
-            pass_worker: PasswordWorker::new(10, 4).unwrap(),
             redis_database: self.redis.clone(),
         };
         let user_state: UserState = UserState {

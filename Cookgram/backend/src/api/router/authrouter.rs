@@ -12,7 +12,7 @@ use validator::Validate;
 
 use crate::{
     api::{
-        appstate::appstate::AppState,
+        appstate::{appstate::AppState, authstate::AuthState},
         daos::userdao::UserDAO,
         dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
@@ -85,7 +85,7 @@ impl AuthRouter {
     }
 
     async fn register<T>(
-        State(state): State<AppState<T>>,
+        State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<UserRegisterDto>,
     ) -> Result<Json<User>, AuthError> {
         todo!();
@@ -108,17 +108,16 @@ impl AuthRouter {
         tokens.1.user_id = Some(user.id);
         tokens.1.role = Some(user.role.clone());
     }
-    async fn login<T>(
-        State(state): State<AppState<T>>,
+    async fn login(
+        State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
     ) -> Result<Json<AuthBody>, AuthError>
-    where
-        T: Repository<User, UserFilterOption, sqlx::Error>,
+
     {
         let mut access_claims: Claims = Claims::new(&params, None);
         let mut refresh_claims: Claims = Claims::new(&params, Some(1000));
         let filter = UserFilterOption::from_claims(access_claims.clone());
-        let users = state.repo.find(filter.clone()).await;
+        let users = state.app_state.repo.find(filter.clone()).await;
         let users = match users {
             Ok(u) => u,
             Err(error) => {
@@ -136,7 +135,7 @@ impl AuthRouter {
         return AuthRouter::password_match(
             &state.pass_worker,
             params.password,
-            user.password.clone(),
+            user.credentials.password.clone(),
             (access_token, refresh_token),
         )
         .await;
@@ -163,14 +162,17 @@ impl AuthRouter {
 
 impl ApplicationRouter for AuthRouter {
     fn get_router(&self) -> axum::Router {
+        let app_state = AppState {
+            repo: self.user_repo.clone(),
+            event_repo: self.event_repo.clone(),
+            redis_database: self.redis.clone(),
+        };
         Router::new()
             .route("/login", post(AuthRouter::login))
             .route("/refresh-token", post(AuthRouter::refresh_token))
-            .with_state(AppState {
-                repo: self.user_repo.clone(),
-                event_repo: self.event_repo.clone(),
+            .with_state(AuthState {
+                app_state,
                 pass_worker: PasswordWorker::new(10, 4).unwrap(),
-                redis_database: self.redis.clone(),
             })
     }
 }

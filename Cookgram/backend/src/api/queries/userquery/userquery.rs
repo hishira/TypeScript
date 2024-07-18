@@ -146,13 +146,13 @@ impl ActionQueryBuilder<User> for UserQuery {
             QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id, role, first_name, last_name) ");
         create_builder.push_values(vec![entity], |mut b, user| {
             b.push_bind(user.id)
-                .push_bind(user.username)
-                .push_bind(user.password)
-                .push_bind(user.email)
+                .push_bind(user.credentials.username)
+                .push_bind(user.credentials.password)
+                .push_bind(user.personal_information.email)
                 .push_bind(user.meta.id)
                 .push_bind(user.role)
-                .push_bind(user.first_name)
-                .push_bind(user.last_name);
+                .push_bind(user.personal_information.first_name)
+                .push_bind(user.personal_information.last_name);
         });
         create_builder.push(" RETURNING id, username, password, email;");
         create_builder
@@ -161,11 +161,11 @@ impl ActionQueryBuilder<User> for UserQuery {
     fn update(entity: User) -> QueryBuilder<'static, Postgres> {
         let mut update_query: QueryBuilder<Postgres> =
             QueryBuilder::new("UPDATE USERS SET username = ");
-        update_query.push_bind(entity.username);
+        update_query.push_bind(entity.credentials.username);
         update_query.push(", email = ");
-        update_query.push_bind(entity.email);
+        update_query.push_bind(entity.personal_information.email);
         update_query.push(", password = ");
-        update_query.push_bind(entity.password);
+        update_query.push_bind(entity.credentials.password);
         update_query.push(", role = ");
         update_query.push_bind(entity.role);
         update_query.push(" WHERE id = ");
@@ -188,10 +188,13 @@ impl ActionQueryBuilder<User> for UserQuery {
 
 #[cfg(test)]
 mod tests {
+    use time::OffsetDateTime;
+
     use crate::core::{
         meta::meta::Meta,
         role::role::Roles,
         state::{entitystate::EntityState, state::State},
+        user::{credentials::Credentials, personalinformation::PersonalInformation},
     };
 
     use super::*;
@@ -256,11 +259,16 @@ mod tests {
 
         let test_user = User {
             id: Uuid::new_v4(),
-            first_name: None,
-            last_name: None,
-            username: "test_user".to_string(),
-            password: "password".to_string(),
-            email: "test@example.com".to_string(),
+            personal_information: PersonalInformation {
+                first_name: None,
+                last_name: None,
+                brithday: OffsetDateTime::now_utc(),
+                email: Some("test@example.com".to_string())
+            },
+            credentials: Credentials {
+                username: "test_user".to_string(),
+                password: "password".to_string(),
+            },
             meta: Meta::new(),
             role: Roles::user_role(),
             address: None,
@@ -286,11 +294,16 @@ mod tests {
 
         let test_user = User {
             id: Uuid::new_v4(),
-            first_name: None,
-            last_name: None,
-            username: "test_user".to_string(),
-            password: "password".to_string(),
-            email: "test@example.com".to_string(),
+            personal_information: PersonalInformation {
+                first_name: None,
+                last_name: None,
+                brithday: OffsetDateTime::now_utc(),
+                email: Some("test@example.com".to_string())
+            },
+            credentials: Credentials {
+                username: "test_user".to_string(),
+                password: "password".to_string(),
+            },
             meta: Meta::new(),
             role: Roles::user_role(),
             address: None,
