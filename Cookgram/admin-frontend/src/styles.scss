@@ -31,4 +31,17 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+
+.ui-dialog {
+    max-height: 100%;
+}
+.ui-dialog .ui-dialog-content {
+    height: 100%;
+}
     
+.customModal {
+    max-height: 100%;
+}
+.customModal .ui-dialog-content {
+    height: 100%;
+}

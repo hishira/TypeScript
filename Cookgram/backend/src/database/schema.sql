@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS USERS (
     username VARCHAR(255) NOT NULL,
     first_name varchar(255) DEFAULT NULL,
     last_name varchar(255) DEFAULT null,
+    brithday TIMESTAMP DEFAULT NULL,
     password text NOT NULL,
     email VARCHAR(255) NOT NULL,
     meta_id uuid,
@@ -65,14 +66,15 @@ values (
         '2024-05-05 19:10:25-07'
     )
 RETURNING id;
-insert into USERS (id, username, password, email, meta_id, role)
+insert into USERS (id, username, password, email, meta_id, role, current_state)
 values (
         'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
         'admin',
         '$2y$10$17C2N8nNhQgGxFQAZenHs.u0Qa2DD0aeAe5wIXwWej9fihtFE1rQO',
         'admin@admin.com',
         '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
-        'SuperAdmin'
+        'SuperAdmin',
+        'Active'
     );
 CREATE TABLE IF NOT EXISTS ADDRESS_CONNECTION (
     entity_id uuid not null,
@@ -103,6 +105,7 @@ CREATE view ADDRESSUSERS as (
         users.current_state,
         users.previous_state,
         users.password,
+        users.brithday,
         users.contract_id,
         meta.create_date,
         meta.edit_date,

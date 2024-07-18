@@ -13,6 +13,5 @@ use crate::{
 pub struct AppState<T> {
     pub repo: T,
     pub event_repo: EventRepository,
-    pub pass_worker: PasswordWorker,
     pub redis_database: RedisDatabase,
 }

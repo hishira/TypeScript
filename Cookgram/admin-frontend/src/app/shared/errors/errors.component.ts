@@ -33,8 +33,13 @@ export class ErrorsComponent implements OnInit {
       startWith(this.control().value),
       map((status) => {
         if (!this.control().dirty) return [];
+        const errorsList = [];
+
         const errors = this.control().errors;
-        return errors && 'required' in errors ? ['Field is required'] : [];
+        errors && 'required' in errors && errorsList.push('Field is required');
+        errors && 'email' in errors && errorsList.push('Email is invalid');
+        console.log(errorsList)
+        return errorsList;
       })
     );
   }
@@ -43,8 +48,14 @@ export class ErrorsComponent implements OnInit {
       map((e) => {
         if (e instanceof TouchedChangeEvent) {
           this.control().markAsDirty();
+          const errorsList = [];
           const errors = this.control().errors;
-          return errors && 'required' in errors ? ['Field is required'] : [];
+
+          errors &&
+            'required' in errors &&
+            errorsList.push('Field is required');
+          errors && 'email' in errors && errorsList.push('Email is invalid');
+          return errorsList;
         }
         return [];
       })

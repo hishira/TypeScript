@@ -1,5 +1,6 @@
 use sqlx::postgres::{PgQueryResult, PgRow};
 use sqlx::{Pool, Postgres, QueryBuilder, Row};
+use time::OffsetDateTime;
 use uuid::Uuid;
 
 use crate::api::daos::userdao::UserDAO;
@@ -10,6 +11,8 @@ use crate::api::repositories::repositories::Repository;
 use crate::api::utils::password_worker::password_worker::PasswordWorker;
 use crate::core::role::role::Roles;
 use crate::core::state::state::State;
+use crate::core::user::credentials::Credentials;
+use crate::core::user::personalinformation::PersonalInformation;
 use crate::{
     api::dtos::userdto::userdto::UserDtos,
     core::{meta::meta::Meta, user::user::User},
@@ -25,46 +28,55 @@ impl UserService {
         Self { user_dao }
     }
 
-    pub async fn get_users(&self, params: UserFilterOption) -> Result<Vec<UserListDto>, sqlx::Error> {
+    pub async fn get_users(
+        &self,
+        params: UserFilterOption,
+    ) -> Result<Vec<UserListDto>, sqlx::Error> {
         self.user_dao.user_list(params).await
     }
 
-    pub async fn get_user_from_dto(
-        user_dto: UserDtos,
-        pass_worker: &PasswordWorker,
-        user_to_edit: Option<User>,
-    ) -> User {
+    pub async fn get_user_from_dto(user_dto: UserDtos, user_to_edit: Option<User>) -> User {
         match user_dto {
             UserDtos::Create(user) => {
                 let role = user.role;
-                let hash = pass_worker.hash(user.password.clone()).await.unwrap();
+                // let hash = pass_worker.hash(user.password.clone()).await.unwrap();
+                let credentials =
+                    Credentials::new_with_hashed_password(user.username, user.password).await;
+                let personal_information = PersonalInformation {
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    brithday: OffsetDateTime::now_utc(),//TODO: Fix
+                    email: Some(user.email),
+                };
                 User::new(
                     None,
-                    user.username,
-                    hash,
-                    user.email,
+                    personal_information,
+                    credentials,
                     role,
-                    None,
-                    user.first_name,
-                    user.last_name,
+                    None
                 )
             }
             UserDtos::Update(user) => {
                 let mut user_from_db = user_to_edit.unwrap();
                 user_from_db.meta.update_edit_date();
-                let hashed_password: String = match user.password {
-                    Some(password) => pass_worker.hash(password.clone()).await.unwrap(),
-                    None => user_from_db.password,
+                let new_credentials: Credentials = match user.password {
+                    Some(password) => {
+                        Credentials::new_with_hashed_password(user.username, password).await
+                    }
+                    None => Credentials::new(user.username, user_from_db.credentials.password),
+                };
+                let personal_information = PersonalInformation {
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    brithday: OffsetDateTime::now_utc(),//TODO: Fix
+                    email: user.email.or(user_from_db.personal_information.email)
                 };
                 User::new(
                     Some(user_from_db.id),
-                    user.username,
-                    hashed_password,
-                    user.email.unwrap_or(user_from_db.email),
+                    personal_information,
+                    new_credentials,
                     Some(user.role.unwrap_or(user_from_db.role)),
                     Some(user_from_db.meta),
-                    user.first_name.or(user_from_db.first_name),
-                    user.last_name.or(user_from_db.last_name),
                 )
             }
             UserDtos::Delete(_) => todo!(),
@@ -93,19 +105,26 @@ impl UserService {
     pub fn get_user_from_row(pg_row: PgRow) -> User {
         User {
             id: pg_row.get("id"),
-            first_name: pg_row
-                .try_get("first_name")
-                .unwrap_or(Some("NULL".to_string())),
-            last_name: pg_row
-                .try_get("last_name")
-                .unwrap_or(Some("NULL".to_string())),
-            username: pg_row
-                .try_get("username")
-                .unwrap_or("Not found ".to_string()),
-            password: pg_row
-                .try_get("password")
-                .unwrap_or("Not found ".to_string()),
-            email: pg_row.try_get("email").unwrap_or("Not found ".to_string()),
+            personal_information: PersonalInformation {
+                first_name: pg_row
+                    .try_get("first_name")
+                    .unwrap_or(Some("NULL".to_string())),
+                last_name: pg_row
+                    .try_get("last_name")
+                    .unwrap_or(Some("NULL".to_string())),
+                email: pg_row
+                    .try_get("email")
+                    .unwrap_or(Some("Not found ".to_string())),
+                brithday: OffsetDateTime::now_utc(),    // TODO: Fix
+            },
+            credentials: Credentials::new(
+                pg_row
+                    .try_get("username")
+                    .unwrap_or("Not found ".to_string()),
+                pg_row
+                    .try_get("password")
+                    .unwrap_or("Not found ".to_string()),
+            ),
             meta: Meta::meta_based_on_id(pg_row.get("meta_id")), //Meta::new(), //TODO: Inner join table to retrieve,
             role: UserService::retrive_role_from_row(&pg_row).unwrap(),
             address: None,

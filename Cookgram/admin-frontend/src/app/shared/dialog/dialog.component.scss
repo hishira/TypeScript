@@ -1,0 +1,28 @@
+:host {
+  .dialog-content {
+    width: 100%;
+    padding-inline: 15rem;
+    padding-block: 5rem;
+  }
+
+  &::ng-deep {
+    [back]{
+      margin-left: 0;
+      margin-right: auto;
+    }
+  }
+  .footer {
+    position: fixed;
+    z-index: 20000;
+    background-color: white;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 1rem;
+    width: 100%;
+    padding-inline: 4rem;
+    border-top: .5px solid lightgrey;
+  }
+}

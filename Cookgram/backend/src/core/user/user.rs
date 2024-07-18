@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use time::OffsetDateTime;
 use uuid::Uuid;
 
 use crate::core::{
@@ -13,15 +14,15 @@ use crate::core::{
     usercontract::usercontract::Contract,
 };
 
+use super::{credentials::Credentials, personalinformation::PersonalInformation};
+
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct User {
     pub id: Uuid,
-    pub first_name: Option<String>,
-    pub last_name: Option<String>,
-    pub username: String,
-    #[serde(skip_serializing)]
-    pub password: String,
-    pub email: String,
+    // pub first_name: Option<String>,
+    // pub last_name: Option<String>,
+    pub personal_information: PersonalInformation,
+    pub credentials: Credentials,
     pub address: Option<Address>,
     pub meta: Meta,
     pub role: Roles,
@@ -37,23 +38,17 @@ impl Entity for User {
 impl User {
     pub fn new(
         id: Option<Uuid>,
-        username: String,
-        password: String,
-        email: String,
+        personal_information: PersonalInformation,
+        credentials: Credentials,
         role: Option<Roles>,
         meta: Option<Meta>,
-        first_name: Option<String>,
-        last_name: Option<String>,
     ) -> Self {
         let user_role: Roles = User::prepare_proper_role(role);
         match id {
             Some(id) => Self {
                 id,
-                first_name,
-                last_name,
-                username,
-                password,
-                email,
+                personal_information,
+                credentials,
                 meta: meta.unwrap_or(Meta::new()),
                 role: user_role,
                 address: None,
@@ -64,11 +59,8 @@ impl User {
             },
             None => Self {
                 id: User::generate_id(),
-                first_name,
-                last_name,
-                username,
-                password,
-                email,
+                personal_information,
+                credentials,
                 meta: Meta::new(),
                 role: user_role,
                 address: None,
@@ -141,20 +133,22 @@ mod tests {
         // Create a new user
         let user = User::new(
             None,
-            "test_user".to_string(),
-            "password123".to_string(),
-            "test@example.com".to_string(),
+            PersonalInformation {
+                first_name: None,
+                last_name: None,
+                brithday: OffsetDateTime::now_utc(),
+                email: None,
+            },
+            Credentials::new("test_user".to_string(), "password123".to_string()),
             Some(Roles::admin_role()),
-            None,
-            None,
             None,
         );
 
         assert_ne!(user.id, Uuid::nil());
 
-        assert_eq!(user.username, "test_user");
+        assert_eq!(user.credentials.username, "test_user");
         //assert_eq!(user.password, "password123");
-        assert_eq!(user.email, "test@example.com");
+        assert_eq!(user.personal_information.email.unwrap(), "test@example.com");
         assert_eq!(user.role, Roles::admin_role());
         assert_eq!(user.meta.create_date.year(), 2024);
         assert_eq!(user.meta.edit_date, user.meta.create_date);
@@ -169,12 +163,14 @@ mod tests {
         let user_id = Uuid::new_v4();
         let user = User::new(
             Some(user_id),
-            "test_user".to_string(),
-            "password123".to_string(),
-            "test@example.com".to_string(),
+            PersonalInformation {
+                first_name: None,
+                last_name: None,
+                brithday: OffsetDateTime::now_utc(),
+                email: Some("test@example.com".to_string()),
+            },
+            Credentials::new("test_user".to_string(), "password123".to_string()),
             Some(Roles::user_role()),
-            None,
-            None,
             None,
         );
 
@@ -182,9 +178,9 @@ mod tests {
         assert_eq!(user.id, user_id);
 
         // Check if the username, password, and email are set correctly
-        assert_eq!(user.username, "test_user");
+        assert_eq!(user.credentials.username, "test_user");
         //assert_eq!(user.password, "password123"); TODO: fix after hash
-        assert_eq!(user.email, "test@example.com");
+        assert_eq!(user.personal_information.email.unwrap(), "test@example.com");
         assert_eq!(user.role, Roles::user_role());
 
         // Check if the meta field is initialized correctly
@@ -198,11 +194,13 @@ mod tests {
         let user_id = Uuid::new_v4();
         let user = User::new(
             Some(user_id),
-            "test_user".to_string(),
-            "password123".to_string(),
-            "test@example.com".to_string(),
-            None,
-            None,
+            PersonalInformation {
+                first_name: None,
+                last_name: None,
+                brithday: OffsetDateTime::now_utc(),
+                email: Some("test@example.com".to_string()),
+            },
+            Credentials::new("test_user".to_string(), "password123".to_string()),
             None,
             None,
         );
@@ -211,9 +209,9 @@ mod tests {
         assert_eq!(user.id, user_id);
 
         // Check if the username, password, and email are set correctly
-        assert_eq!(user.username, "test_user");
+        assert_eq!(user.credentials.username, "test_user");
         //assert_eq!(user.password, "password123");
-        assert_eq!(user.email, "test@example.com");
+        assert_eq!(user.personal_information.email.unwrap(), "test@example.com");
 
         // Check if the recipies are set correctly
 
@@ -227,11 +225,13 @@ mod tests {
         // Create a new user without a specific id and without recipies
         let user = User::new(
             None,
-            "test_user".to_string(),
-            "password123".to_string(),
-            "test@example.com".to_string(),
-            None,
-            None,
+            PersonalInformation {
+                first_name: None,
+                last_name: None,
+                brithday: OffsetDateTime::now_utc(),
+                email: Some("test@example.com".to_string()),
+            },
+            Credentials::new("test_user".to_string(), "password123".to_string()),
             None,
             None,
         );
@@ -240,9 +240,9 @@ mod tests {
         assert_ne!(user.id, Uuid::nil());
 
         // Check if the username, password, and email are set correctly
-        assert_eq!(user.username, "test_user");
+        assert_eq!(user.credentials.username, "test_user");
         //assert_eq!(user.password, "password123");
-        assert_eq!(user.email, "test@example.com");
+        assert_eq!(user.personal_information.email.unwrap(), "test@example.com");
 
         // Check if the meta field is initialized correctly
     }
@@ -254,11 +254,13 @@ mod tests {
         // Create a sample user
         let user = User {
             id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
-            first_name: None,
-            last_name: None,
-            username: String::from("test_user"),
-            password: String::from("password123"),
-            email: String::from("test@example.com"),
+            personal_information: PersonalInformation {
+                first_name: None,
+                last_name: None,
+                brithday: OffsetDateTime::now_utc(),
+                email: Some(String::from("test@example.com")),
+            },
+            credentials: Credentials::new("test_user".to_string(), "password123".to_string()),
             meta: Meta {
                 id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
                 create_date: date,
@@ -319,8 +321,8 @@ mod tests {
         let user: User = serde_json::from_str(&json).unwrap();
 
         // Ensure deserialization works as expected
-        assert_eq!(user.username, "test_user");
-        assert_eq!(user.email, "test@example.com");
+        assert_eq!(user.credentials.username, "test_user");
+        assert_eq!(user.personal_information.email.unwrap(), "test@example.com");
         // Add more assertions as needed...
     }
 }

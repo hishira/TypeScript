@@ -57,9 +57,9 @@ export class UsersListComponent implements OnInit {
     this.dialogService.open(CreateUserModalComponent, {
       header: 'Create user',
       width: '100%',
-      height: '100%',
-      maximizable: true,
-      
+      modal: true,
+      height:'100%',
+      styleClass:"customModal"
     });
   }
 }
