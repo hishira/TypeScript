@@ -26,6 +26,12 @@ impl From<AuthError> for ResponseError {
     }
 }
 
+impl From<PasswordWorkerError> for ResponseError {
+    fn from(value: PasswordWorkerError) -> Self {
+        ResponseError::PasswordWorkerErorr(value)
+    }
+}
+
 impl ResponseError {
     pub fn get_status_and_message(&self) -> (StatusCode, &str) {
         match self {
