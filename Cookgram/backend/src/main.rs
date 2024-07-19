@@ -1,8 +1,6 @@
 use api::{
     applicationserver::applicationserver::ApplicationServer, metrics::metricsserver::MetricsServer,
 };
-use axum::http::header::{AUTHORIZATION, CONTENT_TYPE};
-use redis::{AsyncCommands, RedisError};
 
 mod api;
 mod core;

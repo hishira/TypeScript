@@ -9,8 +9,13 @@ DROP TABLE IF EXISTS EVENTS cascade;
 DROP TABLE IF EXISTS EMPLOYEE_CONNECTION CASCADE;
 DROP TYPE IF EXISTS Role;
 DROP TYPE IF EXISTS State;
+DROP TYPE IF EXISTS Gender;
 DROP TYPE IF EXISTS EventType;
 DROP VIEW IF EXISTS ADDRESSUSERS;
+CREATE TYPE Gender as ENUM (
+    'Man',
+    'Woman'
+)
 CREATE TYPE Role as ENUM (
     'User',
     'Admin',
@@ -50,6 +55,7 @@ CREATE TABLE IF NOT EXISTS USERS (
     brithday TIMESTAMP DEFAULT NULL,
     password text NOT NULL,
     email VARCHAR(255) NOT NULL,
+    gender Gender DEFAULT NULL,
     meta_id uuid,
     role Role DEFAULT 'User',
     current_state State DEFAULT 'Draft',
@@ -107,6 +113,7 @@ CREATE view ADDRESSUSERS as (
         users.password,
         users.brithday,
         users.contract_id,
+        users.gender,
         meta.create_date,
         meta.edit_date,
         users.meta_id,

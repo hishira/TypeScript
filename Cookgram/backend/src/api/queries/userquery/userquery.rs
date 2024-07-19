@@ -263,7 +263,8 @@ mod tests {
                 first_name: None,
                 last_name: None,
                 brithday: OffsetDateTime::now_utc(),
-                email: Some("test@example.com".to_string())
+                email: Some("test@example.com".to_string()),
+                gender: None,
             },
             credentials: Credentials {
                 username: "test_user".to_string(),
@@ -298,7 +299,8 @@ mod tests {
                 first_name: None,
                 last_name: None,
                 brithday: OffsetDateTime::now_utc(),
-                email: Some("test@example.com".to_string())
+                email: Some("test@example.com".to_string()),
+                gender: None,
             },
             credentials: Credentials {
                 username: "test_user".to_string(),

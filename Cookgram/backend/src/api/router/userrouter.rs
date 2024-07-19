@@ -80,9 +80,9 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
-    ) -> Result<Json<bool>, AuthError> {
+    ) -> Result<Json<bool>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
-        let user = UserService::get_user_from_dto(UserDtos::Create(params), None).await;
+        let user = UserService::get_user_from_dto(UserDtos::Create(params), None).await?;
         let ids_touples = (claims.user_id.unwrap(), user.id);
         state.app_state.repo.create(user).await;
         let result =
