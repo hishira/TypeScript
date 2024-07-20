@@ -28,7 +28,7 @@ impl UserQuery {
     pub fn prepare_address_query(&self, address: Address, user_id: Uuid) -> QueryBuilder<Postgres> {
         let address_id = Uuid::new_v4(); // Address is value object, not necessery id
         let mut create_address_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code, fax, phone) ",
+            "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code ) ",
         );
 
         create_address_builder.push_values(vec![address], |mut b, address| {
@@ -40,9 +40,7 @@ impl UserQuery {
                 .push_bind(address.country)
                 .push_bind(address.location.latitude)
                 .push_bind(address.location.longitude)
-                .push_bind(address.postal_code)
-                .push_bind(address.fax)
-                .push_bind(address.phone);
+                .push_bind(address.postal_code);
         });
         create_address_builder
             .push("returning id ) INSERT into ADDRESS_CONNECTION (entity_id, address_id) ");
@@ -194,7 +192,7 @@ mod tests {
         meta::meta::Meta,
         role::role::Roles,
         state::{entitystate::EntityState, state::State},
-        user::{credentials::Credentials, personalinformation::PersonalInformation},
+        user::{contact::Contacts, credentials::Credentials, personalinformation::PersonalInformation},
     };
 
     use super::*;
@@ -263,7 +261,10 @@ mod tests {
                 first_name: None,
                 last_name: None,
                 brithday: OffsetDateTime::now_utc(),
-                email: Some("test@example.com".to_string())
+                email: Some("test@example.com".to_string()),
+                gender: None,
+                contacts: Some(Contacts::empty())
+
             },
             credentials: Credentials {
                 username: "test_user".to_string(),
@@ -298,7 +299,10 @@ mod tests {
                 first_name: None,
                 last_name: None,
                 brithday: OffsetDateTime::now_utc(),
-                email: Some("test@example.com".to_string())
+                email: Some("test@example.com".to_string()),
+                gender: None,
+                contacts: Some(Contacts::empty())
+
             },
             credentials: Credentials {
                 username: "test_user".to_string(),

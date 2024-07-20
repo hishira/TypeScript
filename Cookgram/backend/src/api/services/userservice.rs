@@ -8,9 +8,10 @@ use crate::api::dtos::roledto::roledto::RoleDto;
 use crate::api::dtos::userdto::userdto::UserFilterOption;
 use crate::api::dtos::userdto::userlistdto::UserListDto;
 use crate::api::repositories::repositories::Repository;
-use crate::api::utils::password_worker::password_worker::PasswordWorker;
+use crate::api::utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError};
 use crate::core::role::role::Roles;
 use crate::core::state::state::State;
+use crate::core::user::contact::Contacts;
 use crate::core::user::credentials::Credentials;
 use crate::core::user::personalinformation::PersonalInformation;
 use crate::{
@@ -35,49 +36,57 @@ impl UserService {
         self.user_dao.user_list(params).await
     }
 
-    pub async fn get_user_from_dto(user_dto: UserDtos, user_to_edit: Option<User>) -> User {
+    pub async fn get_user_from_dto(
+        user_dto: UserDtos,
+        user_to_edit: Option<User>,
+    ) -> Result<User, PasswordWorkerError> {
         match user_dto {
             UserDtos::Create(user) => {
                 let role = user.role;
                 // let hash = pass_worker.hash(user.password.clone()).await.unwrap();
                 let credentials =
-                    Credentials::new_with_hashed_password(user.username, user.password).await;
+                    Credentials::new_with_hashed_password(user.username, user.password).await?;
                 let personal_information = PersonalInformation {
                     first_name: user.first_name,
                     last_name: user.last_name,
-                    brithday: OffsetDateTime::now_utc(),//TODO: Fix
+                    brithday: OffsetDateTime::now_utc(), //TODO: Fix
                     email: Some(user.email),
+                    gender: None,
+                    contacts: Some(Contacts::empty())
                 };
-                User::new(
+                Ok(User::new(
                     None,
                     personal_information,
                     credentials,
                     role,
-                    None
-                )
+                    None,
+                ))
             }
             UserDtos::Update(user) => {
                 let mut user_from_db = user_to_edit.unwrap();
                 user_from_db.meta.update_edit_date();
                 let new_credentials: Credentials = match user.password {
                     Some(password) => {
-                        Credentials::new_with_hashed_password(user.username, password).await
+                        Credentials::new_with_hashed_password(user.username, password).await?
                     }
                     None => Credentials::new(user.username, user_from_db.credentials.password),
                 };
                 let personal_information = PersonalInformation {
                     first_name: user.first_name,
                     last_name: user.last_name,
-                    brithday: OffsetDateTime::now_utc(),//TODO: Fix
-                    email: user.email.or(user_from_db.personal_information.email)
+                    brithday: OffsetDateTime::now_utc(), //TODO: Fix
+                    email: user.email.or(user_from_db.personal_information.email),
+                    gender: None,
+                    contacts: Some(Contacts::empty())
+
                 };
-                User::new(
+                Ok(User::new(
                     Some(user_from_db.id),
                     personal_information,
                     new_credentials,
                     Some(user.role.unwrap_or(user_from_db.role)),
                     Some(user_from_db.meta),
-                )
+                ))
             }
             UserDtos::Delete(_) => todo!(),
         }
@@ -115,7 +124,10 @@ impl UserService {
                 email: pg_row
                     .try_get("email")
                     .unwrap_or(Some("Not found ".to_string())),
-                brithday: OffsetDateTime::now_utc(),    // TODO: Fix
+                brithday: OffsetDateTime::now_utc(), // TODO: Fix
+                gender: None,
+                contacts: Some(Contacts::empty())
+
             },
             credentials: Credentials::new(
                 pg_row

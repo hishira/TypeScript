@@ -70,19 +70,28 @@ impl UserRouter {
     async fn user_create(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
-    ) -> Json<User> {
+    ) -> Result<Json<User>, ResponseError> {
         let user_tmp = UserService::get_user_from_dto(UserDtos::Create(params), None).await;
-        let user = state.app_state.repo.create(user_tmp).await;
-        Json(user)
+        match user_tmp {
+            Ok(user) => {
+                let user = state.app_state.repo.create(user).await;
+                Ok(Json(user))
+            },
+            Err(error) => {
+                tracing::error!("Error occur while user creation: {}", error);
+                Err(ResponseError::from(error))
+            }
+        }
+        
     }
 
     async fn create_managed_users(
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
-    ) -> Result<Json<bool>, AuthError> {
+    ) -> Result<Json<bool>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
-        let user = UserService::get_user_from_dto(UserDtos::Create(params), None).await;
+        let user = UserService::get_user_from_dto(UserDtos::Create(params), None).await?;
         let ids_touples = (claims.user_id.unwrap(), user.id);
         state.app_state.repo.create(user).await;
         let result =
@@ -126,7 +135,7 @@ impl UserRouter {
     async fn get_current_user(
         claims: Claims,
         State(state): State<UserState>,
-    ) -> Result<Json<User>, AuthError> {
+    ) -> Result<Json<User>, ResponseError> {
         ClaimsGuard::current_user_guard(&claims)?;
         let user = state
             .app_state
@@ -155,7 +164,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<UpdateUserDto>,
-    ) -> Result<Json<User>, AuthError> {
+    ) -> Result<Json<User>, ResponseError> {
         ClaimsGuard::user_update_guard(claims.clone())?;
         let user = state
             .app_state
@@ -163,7 +172,7 @@ impl UserRouter {
             .find_by_id(claims.user_id.unwrap())
             .await;
         let updated_user =
-            UserService::get_user_from_dto(UserDtos::Update(params), Some(user)).await;
+            UserService::get_user_from_dto(UserDtos::Update(params), Some(user)).await?;
         state.app_state.repo.update(updated_user.clone()).await;
         return Ok(Json(updated_user));
     }
@@ -172,7 +181,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, AuthError> {
+    ) -> Result<Json<Vec<User>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims)?;
         let users = state.app_state.repo.find(params).await.unwrap_or(vec![]);
         Ok(Json(users))
@@ -216,7 +225,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<DeleteUserDto>,
-    ) -> Result<Json<User>, AuthError> {
+    ) -> Result<Json<User>, ResponseError> {
         ClaimsGuard::user_delete_guard(claims)?;
         let mut user = state.app_state.repo.find_by_id(params.id).await;
         user.state.update(CoreState {

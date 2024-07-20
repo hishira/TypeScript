@@ -21,8 +21,6 @@ pub struct ComapnyAddressDto {
     pub longitude: Option<f32>,
     #[validate(length(min = 1, message = "Postal code can not be empty"))]
     pub postal_code: String,
-    pub fax: Option<String>,
-    pub phone: Option<String>,
 }
 #[derive(Deserialize, Serialize)]
 pub struct CreateCompanyDto {
@@ -43,8 +41,6 @@ impl ComapnyAddressDto {
                 longitude: self.longitude,
             },
             self.postal_code.clone(),
-            self.fax.clone(),
-            self.phone.clone(),
         )
     }
 }

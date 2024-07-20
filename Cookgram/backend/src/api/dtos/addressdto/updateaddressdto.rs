@@ -15,8 +15,6 @@ pub struct UpdateAddressDto {
     pub latitude: Option<f32>,
     pub longitude: Option<f32>,
     pub postal_code: Option<String>,
-    pub fax: Option<String>,
-    pub phone: Option<String>,
 }
 
 
@@ -33,8 +31,6 @@ impl UpdateAddressDto {
                 longitude: update_dto.longitude.or(address.location.longitude),
             },
             update_dto.postal_code.unwrap_or(address.postal_code),
-            update_dto.fax.or(address.fax),
-            update_dto.phone.or(address.phone),
         )
     }
 }
@@ -57,8 +53,7 @@ mod tests {
                 longitude: Some(-74.0060),
             },
             "10001".to_string(),
-            Some("123-456-7890".to_string()),
-            Some("098-765-4321".to_string()),
+
         );
 
         let update_dto = UpdateAddressDto {
@@ -72,8 +67,7 @@ mod tests {
             latitude: Some(34.0522),
             longitude: Some(-118.2437),
             postal_code: Some("90001".to_string()),
-            fax: None,
-            phone: Some("555-123-4567".to_string()),
+
         };
 
         let updated_address = UpdateAddressDto::build_address_based_on_update_dto_and_address(update_dto, address);
@@ -86,7 +80,5 @@ mod tests {
         assert_eq!(updated_address.location.latitude, Some(34.0522));
         assert_eq!(updated_address.location.longitude, Some(-118.2437));
         assert_eq!(updated_address.postal_code, "90001");
-        assert_eq!(updated_address.fax, Some("123-456-7890".to_string())); // fax remains unchanged
-        assert_eq!(updated_address.phone, Some("555-123-4567".to_string()));
     }
 }
