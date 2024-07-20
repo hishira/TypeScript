@@ -14,8 +14,6 @@ pub struct Address {
     pub country: String,
     pub location: Location,
     pub postal_code: String,
-    pub fax: Option<String>,
-    pub phone: Option<String>,
 }
 
 impl ValueObject for Address {}
@@ -29,8 +27,6 @@ impl Address {
         country: String,
         location: Location,
         postal_code: String,
-        fax: Option<String>,
-        phone: Option<String>,
     ) -> Address {
         Address {
             address,
@@ -40,8 +36,6 @@ impl Address {
             country,
             location,
             postal_code,
-            fax,
-            phone,
         }
     }
 }
@@ -59,8 +53,6 @@ impl<'r> FromRow<'r, PgRow> for Address {
             },
             door: row.try_get("door")?,
             postal_code: row.try_get("postal_code")?,
-            fax: row.try_get("fax")?,
-            phone: row.try_get("phone")?,
         })
     }
 }
@@ -82,8 +74,6 @@ mod tests {
             country: String::from("Poland"),
             location,
             postal_code: String::from("00-001"),
-            fax: Some(String::from("123456789")),
-            phone: Some(String::from("987654321")),
         };
 
         assert_eq!(address.address, "123 Main St");
@@ -92,8 +82,6 @@ mod tests {
         assert_eq!(address.city, "Warsaw");
         assert_eq!(address.country, "Poland");
         assert_eq!(address.postal_code, "00-001");
-        assert_eq!(address.fax, Some(String::from("123456789")));
-        assert_eq!(address.phone, Some(String::from("987654321")));
         assert_eq!(address.location.latitude, Some(45.0));
         assert_eq!(address.location.longitude, Some(90.0));
     }
@@ -112,8 +100,7 @@ mod tests {
             country: String::from("Poland"),
             location,
             postal_code: String::from("00-001"),
-            fax: None,
-            phone: None,
+           
         };
 
         assert_eq!(address.address, "123 Main St");
@@ -122,8 +109,6 @@ mod tests {
         assert_eq!(address.city, "Warsaw");
         assert_eq!(address.country, "Poland");
         assert_eq!(address.postal_code, "00-001");
-        assert_eq!(address.fax, None);
-        assert_eq!(address.phone, None);
         assert_eq!(address.location.latitude, Some(45.0));
         assert_eq!(address.location.longitude, Some(90.0));
     }
@@ -142,8 +127,6 @@ mod tests {
             country: String::from("Poland"),
             location,
             postal_code: String::from("00-001"),
-            fax: Some(String::from("123456789")),
-            phone: Some(String::from("987654321")),
         };
 
         assert_eq!(address.address, "123 Main St");
@@ -152,8 +135,6 @@ mod tests {
         assert_eq!(address.city, "Warsaw");
         assert_eq!(address.country, "Poland");
         assert_eq!(address.postal_code, "00-001");
-        assert_eq!(address.fax, Some(String::from("123456789")));
-        assert_eq!(address.phone, Some(String::from("987654321")));
         assert_eq!(address.location.latitude, None);
         assert_eq!(address.location.longitude, None);
     }

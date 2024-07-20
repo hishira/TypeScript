@@ -19,8 +19,6 @@ use super::{credentials::Credentials, personalinformation::PersonalInformation};
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct User {
     pub id: Uuid,
-    // pub first_name: Option<String>,
-    // pub last_name: Option<String>,
     pub personal_information: PersonalInformation,
     pub credentials: Credentials,
     pub address: Option<Address>,
@@ -99,6 +97,8 @@ mod tests {
     use serde_json::json;
     use time::{Date, Month, OffsetDateTime};
 
+    use crate::core::user::contact::Contacts;
+
     use super::*;
 
     struct MockOffsetDateTime;
@@ -139,6 +139,7 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: None,
                 gender: None,
+                contacts: Some(Contacts::empty())
             },
             Credentials::new("test_user".to_string(), "password123".to_string()),
             Some(Roles::admin_role()),
@@ -170,6 +171,7 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
+                contacts: Some(Contacts::empty())
             },
             Credentials::new("test_user".to_string(), "password123".to_string()),
             Some(Roles::user_role()),
@@ -202,6 +204,7 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
+                contacts: Some(Contacts::empty())
             },
             Credentials::new("test_user".to_string(), "password123".to_string()),
             None,
@@ -234,6 +237,8 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
+                contacts: Some(Contacts::empty())
+
             },
             Credentials::new("test_user".to_string(), "password123".to_string()),
             None,
@@ -264,6 +269,8 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: Some(String::from("test@example.com")),
                 gender: None,
+                contacts: Some(Contacts::empty())
+
             },
             credentials: Credentials::new("test_user".to_string(), "password123".to_string()),
             meta: Meta {

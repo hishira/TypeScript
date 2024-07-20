@@ -12,11 +12,7 @@ DROP TYPE IF EXISTS State;
 DROP TYPE IF EXISTS Gender;
 DROP TYPE IF EXISTS EventType;
 DROP VIEW IF EXISTS ADDRESSUSERS;
-CREATE TYPE Gender as ENUM (
-    'Man',
-    'Woman'
-)
-CREATE TYPE Role as ENUM (
+CREATE TYPE Gender as ENUM ('Man', 'Woman') CREATE TYPE Role as ENUM (
     'User',
     'Admin',
     'SuperAdmin',
@@ -61,6 +57,8 @@ CREATE TABLE IF NOT EXISTS USERS (
     current_state State DEFAULT 'Draft',
     previous_state State DEFAULT NULL,
     contract_id uuid DEFAULT NULL,
+    fax TEXT DEFAULT NULL,
+    phone TEXT DEFAULT NULL,
     PRIMARY KEY (id),
     UNIQUE(id),
     CONSTRAINT fk_meta FOREIGN KEY(meta_id) REFERENCES META(id) ON DELETE CASCADE
@@ -72,7 +70,15 @@ values (
         '2024-05-05 19:10:25-07'
     )
 RETURNING id;
-insert into USERS (id, username, password, email, meta_id, role, current_state)
+insert into USERS (
+        id,
+        username,
+        password,
+        email,
+        meta_id,
+        role,
+        current_state
+    )
 values (
         'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
         'admin',
@@ -97,8 +103,6 @@ CREATE TABLE IF NOT EXISTS ADDRESS (
     lat real DEFAULT null,
     long real DEFAULT null,
     postal_code TEXT DEFAULT NULL,
-    fax TEXT DEFAULT NULL,
-    phone TEXT DEFAULT NULL,
     CONSTRAINT fk_address_connection FOREIGN KEY(id) REFERENCES ADDRESS_CONNECTION(address_id) ON DELETE CASCADE
 );
 CREATE view ADDRESSUSERS as (
@@ -114,6 +118,8 @@ CREATE view ADDRESSUSERS as (
         users.brithday,
         users.contract_id,
         users.gender,
+        users.phone,
+        users.fax,
         meta.create_date,
         meta.edit_date,
         users.meta_id,

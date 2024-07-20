@@ -19,8 +19,7 @@ pub struct CreateAddressDto {
     pub longitude: Option<f32>,
     #[validate(length(min = 1, message = "Postal code can not be empty"))]
     pub postal_code: String,
-    pub fax: Option<String>,
-    pub phone: Option<String>,
+
 }
 
 impl CreateAddressDto {
@@ -36,8 +35,7 @@ impl CreateAddressDto {
                 longitude: create_dto.longitude,
             },
             create_dto.postal_code,
-            create_dto.fax,
-            create_dto.phone,
+
         )
     }
 }
@@ -60,8 +58,6 @@ mod tests {
             latitude: Some(51.5074),
             longitude: Some(-0.1278),
             postal_code: "12345".to_string(),
-            fax: Some("123-456-7890".to_string()),
-            phone: Some("098-765-4321".to_string()),
         };
 
         assert!(dto.validate().is_ok());
@@ -79,8 +75,6 @@ mod tests {
             latitude: Some(51.5074),
             longitude: Some(-0.1278),
             postal_code: "12345".to_string(),
-            fax: Some("123-456-7890".to_string()),
-            phone: Some("098-765-4321".to_string()),
         };
 
         let validation_result = dto.validate();
@@ -102,8 +96,6 @@ mod tests {
             latitude: Some(51.5074),
             longitude: Some(-0.1278),
             postal_code: "12345".to_string(),
-            fax: Some("123-456-7890".to_string()),
-            phone: Some("098-765-4321".to_string()),
         };
 
         let validation_result = dto.validate();
@@ -125,8 +117,6 @@ mod tests {
             latitude: Some(51.5074),
             longitude: Some(-0.1278),
             postal_code: "12345".to_string(),
-            fax: Some("123-456-7890".to_string()),
-            phone: Some("098-765-4321".to_string()),
         };
 
         let validation_result = dto.validate();
@@ -148,8 +138,6 @@ mod tests {
             latitude: Some(51.5074),
             longitude: Some(-0.1278),
             postal_code: "".to_string(),
-            fax: Some("123-456-7890".to_string()),
-            phone: Some("098-765-4321".to_string()),
         };
 
         let validation_result = dto.validate();
@@ -171,8 +159,6 @@ mod tests {
             latitude: Some(51.5074),
             longitude: Some(-0.1278),
             postal_code: "12345".to_string(),
-            fax: Some("123-456-7890".to_string()),
-            phone: Some("098-765-4321".to_string()),
         };
 
         let copy_dto = CreateAddressDto {
@@ -185,8 +171,6 @@ mod tests {
             latitude: Some(51.5074),
             longitude: Some(-0.1278),
             postal_code: "12345".to_string(),
-            fax: Some("123-456-7890".to_string()),
-            phone: Some("098-765-4321".to_string()),
         };
         let address = CreateAddressDto::build_address_based_on_create_dto(dto);
 
@@ -198,7 +182,6 @@ mod tests {
         assert_eq!(address.location.latitude, copy_dto.latitude);
         assert_eq!(address.location.longitude, copy_dto.longitude);
         assert_eq!(address.postal_code, copy_dto.postal_code);
-        assert_eq!(address.fax, copy_dto.fax);
-        assert_eq!(address.phone, copy_dto.phone);
+
     }
 }

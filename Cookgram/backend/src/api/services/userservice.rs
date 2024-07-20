@@ -11,6 +11,7 @@ use crate::api::repositories::repositories::Repository;
 use crate::api::utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError};
 use crate::core::role::role::Roles;
 use crate::core::state::state::State;
+use crate::core::user::contact::Contacts;
 use crate::core::user::credentials::Credentials;
 use crate::core::user::personalinformation::PersonalInformation;
 use crate::{
@@ -51,6 +52,7 @@ impl UserService {
                     brithday: OffsetDateTime::now_utc(), //TODO: Fix
                     email: Some(user.email),
                     gender: None,
+                    contacts: Some(Contacts::empty())
                 };
                 Ok(User::new(
                     None,
@@ -75,6 +77,8 @@ impl UserService {
                     brithday: OffsetDateTime::now_utc(), //TODO: Fix
                     email: user.email.or(user_from_db.personal_information.email),
                     gender: None,
+                    contacts: Some(Contacts::empty())
+
                 };
                 Ok(User::new(
                     Some(user_from_db.id),
@@ -122,6 +126,8 @@ impl UserService {
                     .unwrap_or(Some("Not found ".to_string())),
                 brithday: OffsetDateTime::now_utc(), // TODO: Fix
                 gender: None,
+                contacts: Some(Contacts::empty())
+
             },
             credentials: Credentials::new(
                 pg_row

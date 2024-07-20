@@ -19,11 +19,16 @@ impl Credentials {
         password: String,
     ) -> Result<Self, PasswordWorkerError> {
         let pass_worker = PasswordWorker::new(10, 4)?;
-        // TODO: error handle
-        let hashed_password = pass_worker.hash(password).await?;
-        Ok(Self {
-            username,
-            password: hashed_password,
-        })
+        let hashed_password = pass_worker.hash(password).await;
+        match hashed_password {
+            Ok(password_hashed) => Ok(Self {
+                username,
+                password: password_hashed,
+            }),
+            Err(error) => {
+                tracing::error!("Error occure {}", error);
+                Err(error)
+            }
+        }
     }
 }

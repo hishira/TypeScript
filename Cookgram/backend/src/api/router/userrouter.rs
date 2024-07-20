@@ -135,7 +135,7 @@ impl UserRouter {
     async fn get_current_user(
         claims: Claims,
         State(state): State<UserState>,
-    ) -> Result<Json<User>, AuthError> {
+    ) -> Result<Json<User>, ResponseError> {
         ClaimsGuard::current_user_guard(&claims)?;
         let user = state
             .app_state
@@ -181,7 +181,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, AuthError> {
+    ) -> Result<Json<Vec<User>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims)?;
         let users = state.app_state.repo.find(params).await.unwrap_or(vec![]);
         Ok(Json(users))
@@ -225,7 +225,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<DeleteUserDto>,
-    ) -> Result<Json<User>, AuthError> {
+    ) -> Result<Json<User>, ResponseError> {
         ClaimsGuard::user_delete_guard(claims)?;
         let mut user = state.app_state.repo.find_by_id(params.id).await;
         user.state.update(CoreState {
