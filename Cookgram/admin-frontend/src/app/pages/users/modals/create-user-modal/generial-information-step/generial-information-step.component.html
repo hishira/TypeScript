@@ -1,7 +1,7 @@
 <app-dialog>
   <ng-container ngProjectAs="content">
     <div class="row-gap-0">
-      <div class="col-3 text-xl text-900">User general information</div>
+      <div class="col-3 text-xl text-900" i18n>User general information</div>
     </div>
     <div class="row-gap-0 mt-3" [formGroup]="form()">
       <div class="col-3">
@@ -18,7 +18,7 @@
         <app-input label="Email" formControlName="email" [withErrors]="true" />
       </div>
       <div class="col-3 gap-2 flex flex-column">
-        <label class="block text-900 font-medium" for="buttondisplay">
+        <label i18n class="block text-900 font-medium" for="buttondisplay">
           Birth day
         </label>
         <p-calendar
@@ -31,7 +31,7 @@
         />
       </div>
       <div class="col-3 gap-2 flex flex-column">
-        <label for="genderdropdown">Gender</label>
+        <label for="genderdropdown" i18n>Gender</label>
         <p-dropdown
         class="w-full"
           formControlName="gender"
