@@ -12,7 +12,10 @@ DROP TYPE IF EXISTS State;
 DROP TYPE IF EXISTS Gender;
 DROP TYPE IF EXISTS EventType;
 DROP VIEW IF EXISTS ADDRESSUSERS;
-CREATE TYPE Gender as ENUM ('Man', 'Woman') CREATE TYPE Role as ENUM (
+
+CREATE TYPE Gender as ENUM ('Man', 'Woman');
+
+CREATE TYPE Role as ENUM (
     'User',
     'Admin',
     'SuperAdmin',
@@ -129,9 +132,7 @@ CREATE view ADDRESSUSERS as (
         addr.city,
         addr.country,
         addr.lat,
-        addr.long,
-        addr.fax,
-        addr.phone
+        addr.long
     from users
         join meta on meta.id = users.meta_id
         left outer join address as addr on addr.id in (
