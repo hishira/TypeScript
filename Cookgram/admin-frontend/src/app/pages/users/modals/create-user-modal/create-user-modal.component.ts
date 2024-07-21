@@ -8,6 +8,7 @@ import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { FormGroup, FormControl } from '@angular/forms';
 import { GeneralInformationStepGroup } from './create-user-model.types';
+import { EmptyGeneralInformationGroup } from './create-user-modal.utils';
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
   selector: 'app-user-create-modal',
@@ -18,25 +19,7 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 })
 export class CreateUserModalComponent {
   constructor(private dialogRef: DynamicDialogRef) {}
-  generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
-    new FormGroup<GeneralInformationStepGroup>({
-      firstName: new FormControl<string>('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      secondName: new FormControl<string>('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      email: new FormControl<string>('', {
-        nonNullable: true,
-        validators: [Validators.email],
-      }),
-      birtbDate: new FormControl<string>('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-    });
+  generalInformationGroup: FormGroup<GeneralInformationStepGroup> = EmptyGeneralInformationGroup();
   steps: MenuItem[] = [
     {
       label: 'General information',

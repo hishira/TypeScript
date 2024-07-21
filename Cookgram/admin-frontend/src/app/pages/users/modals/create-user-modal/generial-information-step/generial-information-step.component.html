@@ -15,7 +15,30 @@
         <app-input label="Second name" formControlName="secondName" />
       </div>
       <div class="col-3">
-        <app-input label="Email" formControlName="email" [withErrors]="true"/>
+        <app-input label="Email" formControlName="email" [withErrors]="true" />
+      </div>
+      <div class="col-3 gap-2 flex flex-column">
+        <label class="block text-900 font-medium" for="buttondisplay">
+          Birth day
+        </label>
+        <p-calendar
+          placeholder="Birth day"
+          class="w-full max-w-full"
+          formControlName="birthDate"
+          [showIcon]="true"
+          [showOnFocus]="false"
+          inputId="buttondisplay"
+        />
+      </div>
+      <div class="col-3 gap-2 flex flex-column">
+        <label for="genderdropdown">Gender</label>
+        <p-dropdown
+        class="w-full"
+          formControlName="gender"
+          [options]="genders"
+          inputId="genderdropdown"
+        >
+        </p-dropdown>
       </div>
     </div>
   </ng-container>
