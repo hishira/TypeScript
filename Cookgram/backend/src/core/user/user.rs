@@ -14,11 +14,11 @@ use crate::core::{
     usercontract::usercontract::Contract,
 };
 
-use super::{credentials::Credentials, personalinformation::PersonalInformation};
+use super::{credentials::Credentials, personalinformation::PersonalInformation, userid::UserId};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct User {
-    pub id: Uuid,
+    pub id: UserId,
     pub personal_information: PersonalInformation,
     pub credentials: Credentials,
     pub address: Option<Address>,
@@ -29,7 +29,7 @@ pub struct User {
 
 impl Entity for User {
     fn generate_id() -> Uuid {
-        Uuid::new_v4()
+        UserId::generate_id().get_id()
     }
 }
 
@@ -44,7 +44,7 @@ impl User {
         let user_role: Roles = User::prepare_proper_role(role);
         match id {
             Some(id) => Self {
-                id,
+                UserId::from_id(id),
                 personal_information,
                 credentials,
                 meta: meta.unwrap_or(Meta::new()),

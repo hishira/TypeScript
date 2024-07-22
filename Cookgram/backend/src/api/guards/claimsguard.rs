@@ -1,5 +1,5 @@
 use crate::{
-    api::{ errors::autherror::AuthError, utils::jwt::jwt::Claims},
+    api::{errors::autherror::AuthError, utils::jwt::jwt::Claims},
     core::role::{
         access::{Action, Queries, QueriesActions},
         role::Roles,
@@ -9,12 +9,17 @@ use crate::{
 pub struct ClaimsGuard {}
 
 impl ClaimsGuard {
+    fn is_unauthorized_to_take_action() -> Result<bool, AuthError> {
+        tracing::info!("User are unauthorize to take action");
+        Err(AuthError::Unauthorized)
+    }
+    
     pub fn role_guard_user_find(claims: Claims) -> Result<bool, AuthError> {
         let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
         let role = res_role;
         println!("{:?}", role);
         if !role.has_access_to(QueriesActions::Access(Queries::User, Action::View)) {
-            return Err(AuthError::Unauthorized);
+            return Self::is_unauthorized_to_take_action();
         }
         Ok(true)
     }
@@ -22,7 +27,7 @@ impl ClaimsGuard {
     pub fn user_delete_guard(claims: Claims) -> Result<bool, AuthError> {
         let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
         if !res_role.has_access_to(QueriesActions::Access(Queries::User, Action::Management)) {
-            return Err(AuthError::Unauthorized);
+            return Self::is_unauthorized_to_take_action();
         }
         Ok(true)
     }
@@ -34,7 +39,7 @@ impl ClaimsGuard {
     pub fn manage_user_guard(claims: Claims) -> Result<bool, AuthError> {
         let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
         if !res_role.has_access_to(QueriesActions::Access(Queries::User, Action::Management)) {
-            return Err(AuthError::Unauthorized);
+            return Self::is_unauthorized_to_take_action();
         }
         Ok(true)
     }
@@ -49,7 +54,7 @@ impl ClaimsGuard {
             Queries::User,
             Action::SelfManagement,
         )) {
-            return Err(AuthError::Unauthorized);
+            return Self::is_unauthorized_to_take_action();
         }
         Ok(true)
     }
