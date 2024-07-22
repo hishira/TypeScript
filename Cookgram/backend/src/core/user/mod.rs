@@ -5,3 +5,5 @@ pub mod manager;
 pub mod credentials;
 pub mod personalinformation;
 pub mod contact;
+pub mod userid;
+pub mod availableLaguages;

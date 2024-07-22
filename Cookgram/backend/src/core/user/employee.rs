@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::core::{entity::Entity, usercontract::usercontract::Contract};
+use crate::core::{entity::{entity::IdGenerator, Entity}, usercontract::usercontract::Contract};
 
-use super::user::User;
+use super::{user::User, userid::UserId};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Employee {
@@ -12,7 +12,7 @@ pub struct Employee {
 }
 
 impl Entity for Employee {
-    fn generate_id() -> Uuid {
-        Uuid::new_v4()
+    fn generate_id() -> impl IdGenerator {
+        UserId::default()
     }
 }

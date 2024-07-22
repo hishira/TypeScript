@@ -6,10 +6,12 @@ use time::OffsetDateTime;
 use uuid::Uuid;
 
 use crate::core::{
-    entity::Entity,
+    entity::{entity::IdGenerator, Entity},
     metaobject::metaobject::MetaObject,
     state::{entitystate::EntityState, state::State},
 };
+
+use super::contractid::ContractId;
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub enum AdditionalFieldKey {
@@ -38,7 +40,7 @@ pub struct AdditionalField {
 }
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Contract {
-    pub id: Uuid,
+    pub id: ContractId,
     pub owner_id: Uuid,
     pub user_id: Uuid,
     pub salary: f32,
@@ -54,8 +56,8 @@ pub struct Contract {
 }
 
 impl Entity for Contract {
-    fn generate_id() -> Uuid {
-        Uuid::new_v4()
+    fn generate_id() -> impl IdGenerator {
+        ContractId::default()
     }
 }
 #[cfg(test)]
@@ -69,7 +71,7 @@ mod tests {
 
     #[test]
     fn test_serialization() {
-        let id = Uuid::new_v4();
+        let id = ContractId::generate_id();
         let owner_id = Uuid::new_v4();
         let user_id = Uuid::new_v4();
         let start = Some(datetime!(2024-01-01 00:00:00 +00:00));
@@ -100,7 +102,7 @@ mod tests {
         // Sprawdzenie, czy JSON zawiera prawidłowe dane
         let expected_json = format!(
             r#"{{"id":"{}","owner_id":"{}","user_id":"{}","salary":50000.0,"terms":"Standard employment contract","notes":"Initial agreement","contract_start_datetime":"2024-01-01T00:00:00Z","contract_end_datetime":"2024-12-31T23:59:59Z","work_star_date":"2024-06-01T08:00:00Z","state":{{"current":"Active","previous":"Suspend"}}}}"#,
-            id, owner_id, user_id
+            id.get_id(), owner_id, user_id
         );
         assert_eq!(json, expected_json);
     }
