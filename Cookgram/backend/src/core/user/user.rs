@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::core::{
     address::address::Address,
-    entity::Entity,
+    entity::{entity::IdGenerator, Entity},
     meta::meta::Meta,
     role::{
         role::{Role, Roles},
@@ -28,8 +28,8 @@ pub struct User {
 }
 
 impl Entity for User {
-    fn generate_id() -> Uuid {
-        UserId::generate_id().get_id()
+    fn generate_id() -> impl IdGenerator {
+        UserId::default()
     }
 }
 
@@ -44,7 +44,7 @@ impl User {
         let user_role: Roles = User::prepare_proper_role(role);
         match id {
             Some(id) => Self {
-                UserId::from_id(id),
+                id: UserId::from_id(id),
                 personal_information,
                 credentials,
                 meta: meta.unwrap_or(Meta::new()),
@@ -56,7 +56,7 @@ impl User {
                 },
             },
             None => Self {
-                id: User::generate_id(),
+                id: UserId::from_id(User::generate_id().get_id()),
                 personal_information,
                 credentials,
                 meta: Meta::new(),
@@ -114,14 +114,14 @@ mod tests {
     }
     #[test]
     fn generate_id_test() {
-        let id = User::generate_id();
+        let id = User::generate_id().get_id();
         assert!(id.to_string().len() > 10)
     }
 
     #[test]
     fn test_generate_id() {
-        let id1 = User::generate_id();
-        let id2 = User::generate_id();
+        let id1 = User::generate_id().get_id();
+        let id2 = User::generate_id().get_id();
 
         assert_ne!(id1, id2);
     }
@@ -139,14 +139,14 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: None,
                 gender: None,
-                contacts: Some(Contacts::empty())
+                contacts: Some(Contacts::empty()),
             },
             Credentials::new("test_user".to_string(), "password123".to_string()),
             Some(Roles::admin_role()),
             None,
         );
 
-        assert_ne!(user.id, Uuid::nil());
+        assert_ne!(user.id.get_id(), Uuid::nil());
 
         assert_eq!(user.credentials.username, "test_user");
         //assert_eq!(user.password, "password123");
@@ -171,7 +171,7 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
-                contacts: Some(Contacts::empty())
+                contacts: Some(Contacts::empty()),
             },
             Credentials::new("test_user".to_string(), "password123".to_string()),
             Some(Roles::user_role()),
@@ -179,7 +179,7 @@ mod tests {
         );
 
         // Check if the user has the correct id
-        assert_eq!(user.id, user_id);
+        assert_eq!(user.id.get_id(), user_id);
 
         // Check if the username, password, and email are set correctly
         assert_eq!(user.credentials.username, "test_user");
@@ -204,7 +204,7 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
-                contacts: Some(Contacts::empty())
+                contacts: Some(Contacts::empty()),
             },
             Credentials::new("test_user".to_string(), "password123".to_string()),
             None,
@@ -212,7 +212,7 @@ mod tests {
         );
 
         // Check if the user has the correct id
-        assert_eq!(user.id, user_id);
+        assert_eq!(user.id.get_id(), user_id);
 
         // Check if the username, password, and email are set correctly
         assert_eq!(user.credentials.username, "test_user");
@@ -237,8 +237,7 @@ mod tests {
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
-                contacts: Some(Contacts::empty())
-
+                contacts: Some(Contacts::empty()),
             },
             Credentials::new("test_user".to_string(), "password123".to_string()),
             None,
@@ -246,7 +245,7 @@ mod tests {
         );
 
         // Check if the user has a UUID id
-        assert_ne!(user.id, Uuid::nil());
+        assert_ne!(user.id.get_id(), Uuid::nil());
 
         // Check if the username, password, and email are set correctly
         assert_eq!(user.credentials.username, "test_user");
@@ -262,15 +261,16 @@ mod tests {
         let date = OffsetDateTime::now_utc();
         // Create a sample user
         let user = User {
-            id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
+            id: UserId::from_id(
+                uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
+            ),
             personal_information: PersonalInformation {
                 first_name: None,
                 last_name: None,
                 brithday: OffsetDateTime::now_utc(),
                 email: Some(String::from("test@example.com")),
                 gender: None,
-                contacts: Some(Contacts::empty())
-
+                contacts: Some(Contacts::empty()),
             },
             credentials: Credentials::new("test_user".to_string(), "password123".to_string()),
             meta: Meta {

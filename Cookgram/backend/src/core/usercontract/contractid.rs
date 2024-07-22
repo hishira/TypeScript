@@ -4,9 +4,9 @@ use uuid::Uuid;
 use crate::core::entity::entity::IdGenerator;
 
 #[derive(PartialEq, Debug, Clone, Deserialize)]
-pub struct UserId(Uuid);
+pub struct ContractId(Uuid);
 
-impl UserId {
+impl ContractId {
     pub fn default() -> Self {
         Self::generate_id()
     }
@@ -23,13 +23,13 @@ impl UserId {
     }
 }
 
-impl IdGenerator for UserId {
+impl IdGenerator for ContractId {
     fn get_id(&self) -> Uuid {
         self.get_id()
     }
 }
 
-impl Serialize for UserId {
+impl Serialize for ContractId {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
