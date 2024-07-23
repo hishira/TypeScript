@@ -92,7 +92,7 @@ impl UserRouter {
     ) -> Result<Json<bool>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
         let user = UserService::get_user_from_dto(UserDtos::Create(params), None).await?;
-        let ids_touples = (claims.user_id.unwrap(), user.id);
+        let ids_touples = (claims.user_id.unwrap(), user.id.get_id());
         state.app_state.repo.create(user).await;
         let result =
             UserService::create_user_connection(ids_touples, state.app_state.event_repo.pool).await;

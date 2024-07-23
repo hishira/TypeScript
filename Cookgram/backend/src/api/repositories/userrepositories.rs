@@ -42,7 +42,7 @@ impl UserRepositories {
         let _ = transaction.commit().await;
         EventRepository::create_later(
             self.db_context.clone(),
-            UserEvent::create_event(entity.id.clone()),
+            UserEvent::create_event(entity.id.get_id()),
         );
         entity
     }
@@ -62,7 +62,7 @@ impl UserRepositories {
     async fn create_user_address(&self, user: User, address: Address) -> User {
         let mut address_query = self
             .user_queries
-            .prepare_address_query(address.clone(), user.id.clone());
+            .prepare_address_query(address.clone(), user.id.clone().get_id());
         let result = address_query.build().execute(&self.pool).await;
         match result {
             Ok(_) => tracing::debug!("Address created"),
@@ -70,7 +70,7 @@ impl UserRepositories {
         }
         EventRepository::create_later(
             self.db_context.clone(),
-            UserEvent::update_event(user.id.clone()),
+            UserEvent::update_event(user.id.get_id()),
         );
         User::create_base_on_user_and_address(user, address)
     }
@@ -100,7 +100,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
             Ok(_) => {
                 EventRepository::create_later(
                     self.db_context.clone(),
-                    UserEvent::delete_event(entity.id),
+                    UserEvent::delete_event(entity.id.get_id()),
                 );
                 return entity;
             }
@@ -126,7 +126,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
         meta_update(self.pool.clone(), update_entity.clone());
         EventRepository::create_later(
             self.db_context.clone(),
-            UserEvent::update_event(update_entity.id.clone()),
+            UserEvent::update_event(update_entity.id.get_id()),
         );
         return update_entity;
     }
@@ -149,7 +149,7 @@ pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User) {
 pub fn meta_update(postgres_pool: Pool<Postgres>, entity: User) {
     tokio::task::spawn(async move {
         let mut meta_query = MetaQuery::update(Meta::based_on_edi_date(
-            entity.meta.id,
+            entity.meta.id.get_id(),
             OffsetDateTime::now_utc(),
         ));
         let meta_query_result = meta_query.build().execute(&postgres_pool).await;

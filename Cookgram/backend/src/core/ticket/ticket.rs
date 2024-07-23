@@ -2,7 +2,9 @@ use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 use uuid::Uuid;
 
-use crate::core::{entity::Entity, state::state::State};
+use crate::core::{entity::{entity::IdGenerator, Entity}, state::state::State};
+
+use super::ticketid::TicketId;
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub enum TicketState {
@@ -21,7 +23,7 @@ pub enum TicketType {
 }
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Ticket {
-    pub id: Uuid,
+    pub id: TicketId,
     pub owner_id: Uuid,
     pub sender_id: Uuid,
     pub title: String,
@@ -34,8 +36,8 @@ pub struct Ticket {
 }
 
 impl Entity for Ticket {
-    fn generate_id() -> Uuid {
-        uuid::Uuid::new_v4()
+    fn generate_id() -> impl IdGenerator {
+        TicketId::default()
     }
 }
 
@@ -68,7 +70,7 @@ mod tests {
         let initial_time = OffsetDateTime::now_utc();
 
         let mut ticket = Ticket {
-            id: Uuid::new_v4(),
+            id: TicketId::default(),
             owner_id: Uuid::new_v4(),
             sender_id: Uuid::new_v4(),
             title: String::from("Issue with account"),
@@ -95,7 +97,7 @@ mod tests {
         let initial_time = OffsetDateTime::now_utc();
 
         let mut ticket = Ticket {
-            id: Uuid::new_v4(),
+            id: TicketId::default(),
             owner_id: Uuid::new_v4(),
             sender_id: Uuid::new_v4(),
             title: String::from("Issue with account"),

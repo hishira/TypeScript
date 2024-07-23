@@ -10,7 +10,7 @@ impl ActionQueryBuilder<Meta> for MetaQuery {
             QueryBuilder::new("INSERT INTO META(id, create_date, edit_date) ");
         create_builder.push_values(vec![entity], |mut builder, meta| {
             builder
-                .push_bind(meta.id)
+                .push_bind(meta.id.get_id())
                 .push_bind(meta.create_date)
                 .push_bind(meta.edit_date);
         });
@@ -24,7 +24,7 @@ impl ActionQueryBuilder<Meta> for MetaQuery {
         println!("{:?}", entity);
         update_builder.push_bind(entity.edit_date);
         update_builder.push("where id = ");
-        update_builder.push_bind(entity.id);
+        update_builder.push_bind(entity.id.get_id());
         update_builder
     }
 

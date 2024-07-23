@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 
-use crate::core::entity::Entity;
+use crate::core::entity::{entity::IdGenerator, Entity};
+
+use super::eventId::EventId;
 
 #[derive(Clone, Serialize, Deserialize)]
 pub enum EventEntity {
@@ -21,7 +23,7 @@ pub enum EventType {
 }
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Event {
-    pub id: uuid::Uuid,
+    pub id: EventId,
     pub create_date: time::OffsetDateTime,
     pub event_type: EventType,
     pub entity: EventEntity,
@@ -30,8 +32,8 @@ pub struct Event {
 }
 
 impl Entity for Event{
-    fn generate_id() -> uuid::Uuid {
-        uuid::Uuid::new_v4()
+    fn generate_id() ->impl IdGenerator {
+        EventId::default()
     }
 }
 
@@ -45,14 +47,14 @@ impl Event {
     ) -> Self {
         let current_id = match id {
             Some(id) => id,
-            None => Event::generate_id(),
+            None => Event::generate_id().get_id(),
         };
         let event_type = match event {
             Some(event) => event,
             None => EventType::Create,
         };
         Self {
-            id: current_id,
+            id: EventId::from_id(current_id),
             event_type,
             create_date: OffsetDateTime::now_utc(),
             related_entity: related_entity_id,

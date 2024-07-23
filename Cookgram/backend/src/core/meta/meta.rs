@@ -3,11 +3,14 @@ use serde::{Deserialize, Serialize, Serializer};
 use time::OffsetDateTime;
 use uuid::Uuid;
 
+use crate::core::entity::entity::IdGenerator;
 use crate::core::entity::Entity;
+
+use super::metaid::MetaId;
 
 #[derive(PartialEq, Debug, Clone, Deserialize)]
 pub struct Meta {
-    pub id: Uuid,
+    pub id: MetaId,
     pub create_date: OffsetDateTime,
     pub edit_date: OffsetDateTime,
 }
@@ -15,7 +18,7 @@ pub struct Meta {
 impl Meta {
     pub fn new() -> Self {
         Self {
-            id: Meta::generate_id(),
+            id: MetaId::default(),
             create_date: OffsetDateTime::now_utc(),
             edit_date: OffsetDateTime::now_utc(),
         }
@@ -23,15 +26,15 @@ impl Meta {
 
     pub fn based_on_edi_date(id: Uuid, edit_date: OffsetDateTime) -> Self {
         Self {
-            id,
+            id: MetaId::from_id(id),
             create_date: OffsetDateTime::now_utc(),
             edit_date,
         }
     }
-    
-    pub fn meta_based_on_id(id:Uuid) -> Self {
+
+    pub fn meta_based_on_id(id: Uuid) -> Self {
         Self {
-            id,
+            id: MetaId::from_id(id),
             create_date: OffsetDateTime::now_utc(),
             edit_date: OffsetDateTime::now_utc(),
         }
@@ -56,8 +59,8 @@ impl Serialize for Meta {
 }
 
 impl Entity for Meta {
-    fn generate_id() -> Uuid {
-        Uuid::new_v4()
+    fn generate_id() -> impl IdGenerator {
+        MetaId::default()
     }
 }
 
@@ -83,8 +86,8 @@ mod tests {
     fn test_meta_new() {
         let offset_date_time = MockOffsetDateTime::now_utc();
 
-        let meta = Meta {
-            id: Meta::generate_id(),
+        let meta: Meta = Meta {
+            id: MetaId::default(),
             create_date: OffsetDateTime::now_utc(),
             edit_date: OffsetDateTime::now_utc(),
         };
@@ -101,7 +104,7 @@ mod tests {
         let offset_date_time = MockOffsetDateTime::now_utc();
 
         let meta = Meta {
-            id: Meta::generate_id(),
+            id: MetaId::default(),
             create_date: OffsetDateTime::now_utc(),
             edit_date: OffsetDateTime::now_utc(),
         };

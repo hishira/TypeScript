@@ -144,11 +144,11 @@ impl ActionQueryBuilder<User> for UserQuery {
         let mut create_builder: QueryBuilder<Postgres> =
             QueryBuilder::new("INSERT INTO USERS(id, username, password, email, meta_id, role, first_name, last_name) ");
         create_builder.push_values(vec![entity], |mut b, user| {
-            b.push_bind(user.id)
+            b.push_bind(user.id.get_id())
                 .push_bind(user.credentials.username)
                 .push_bind(user.credentials.password)
                 .push_bind(user.personal_information.email)
-                .push_bind(user.meta.id)
+                .push_bind(user.meta.id.get_id())
                 .push_bind(user.role)
                 .push_bind(user.personal_information.first_name)
                 .push_bind(user.personal_information.last_name);
@@ -168,7 +168,7 @@ impl ActionQueryBuilder<User> for UserQuery {
         update_query.push(", role = ");
         update_query.push_bind(entity.role);
         update_query.push(" WHERE id = ");
-        update_query.push_bind(entity.id);
+        update_query.push_bind(entity.id.get_id());
 
         update_query
     }
@@ -180,7 +180,7 @@ impl ActionQueryBuilder<User> for UserQuery {
         delete_query.push(", previous_state = ");
         delete_query.push_bind(entity.state.previous);
         delete_query.push("WHERE id = ");
-        delete_query.push_bind(entity.id);
+        delete_query.push_bind(entity.id.get_id());
         delete_query
     }
 }

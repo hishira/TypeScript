@@ -97,7 +97,7 @@ mod tests {
     use serde_json::json;
     use time::{Date, Month, OffsetDateTime};
 
-    use crate::core::user::contact::Contacts;
+    use crate::core::{meta::metaid::MetaId, user::contact::Contacts};
 
     use super::*;
 
@@ -274,7 +274,9 @@ mod tests {
             },
             credentials: Credentials::new("test_user".to_string(), "password123".to_string()),
             meta: Meta {
-                id: uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
+                id: MetaId::from_id(
+                    uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
+                ),
                 create_date: date,
                 edit_date: date,
             },

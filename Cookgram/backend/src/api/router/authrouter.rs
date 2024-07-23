@@ -102,18 +102,18 @@ impl AuthRouter {
             access_token: new_token,
         }))
     }
+
     fn fill_user_into_tokens(tokens: (&mut Claims, &mut Claims), user: User) {
-        tokens.0.user_id = Some(user.id);
+        tokens.0.user_id = Some(user.id.get_id());
         tokens.0.role = Some(user.role.clone());
-        tokens.1.user_id = Some(user.id);
+        tokens.1.user_id = Some(user.id.get_id());
         tokens.1.role = Some(user.role.clone());
     }
+
     async fn login(
         State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
-    ) -> Result<Json<AuthBody>, AuthError>
-
-    {
+    ) -> Result<Json<AuthBody>, AuthError> {
         let mut access_claims: Claims = Claims::new(&params, None);
         let mut refresh_claims: Claims = Claims::new(&params, Some(1000));
         let filter = UserFilterOption::from_claims(access_claims.clone());
