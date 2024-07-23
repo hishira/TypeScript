@@ -148,7 +148,7 @@ impl ActionQueryBuilder<User> for UserQuery {
                 .push_bind(user.credentials.username)
                 .push_bind(user.credentials.password)
                 .push_bind(user.personal_information.email)
-                .push_bind(user.meta.id)
+                .push_bind(user.meta.id.get_id())
                 .push_bind(user.role)
                 .push_bind(user.personal_information.first_name)
                 .push_bind(user.personal_information.last_name);

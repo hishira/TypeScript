@@ -14,7 +14,7 @@ impl ActionQueryBuilder<Event> for EventQuery {
             "INSERT INTO EVENTS(id, created_date, event_type, related_entity, completed) ",
         );
         create_builder.push_values(vec![entity], |mut b, event| {
-            b.push_bind(event.id)
+            b.push_bind(event.id.get_id())
                 .push_bind(event.create_date)
                 .push_bind(EventTypeDto::convert_from_event(event.event_type))
                 .push_bind(event.related_entity)

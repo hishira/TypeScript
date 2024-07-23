@@ -149,7 +149,7 @@ pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User) {
 pub fn meta_update(postgres_pool: Pool<Postgres>, entity: User) {
     tokio::task::spawn(async move {
         let mut meta_query = MetaQuery::update(Meta::based_on_edi_date(
-            entity.meta.id,
+            entity.meta.id.get_id(),
             OffsetDateTime::now_utc(),
         ));
         let meta_query_result = meta_query.build().execute(&postgres_pool).await;
