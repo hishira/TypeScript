@@ -1,6 +1,12 @@
-use crate::core::{entity::Entity, metaobject::metaobject::MetaObject, state::state::State};
+use crate::core::{
+    entity::{entity::IdGenerator, Entity},
+    metaobject::metaobject::MetaObject,
+    state::state::State,
+};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+
+use super::notificationid::NotificationId;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EmailValue(String);
@@ -38,7 +44,7 @@ impl NotificationState {
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Notification {
-    pub id: Uuid,
+    pub id: NotificationId,
     pub title: String,
     pub content: Option<String>,
     pub notification_type: NotificationType,
@@ -47,8 +53,8 @@ pub struct Notification {
 }
 
 impl Entity for Notification {
-    fn generate_id() -> Uuid {
-        Uuid::new_v4()
+    fn generate_id() -> impl IdGenerator {
+        NotificationId::default()
     }
 }
 
@@ -61,7 +67,7 @@ impl Notification {
         let current_type =
             notification_type.unwrap_or(NotificationType::Email(EmailValue("".to_string())));
         Self {
-            id: Notification::generate_id(),
+            id: NotificationId::default(),
             title,
             content,
             notification_type: current_type,
@@ -73,7 +79,7 @@ impl Notification {
     pub fn new_email_notification(title: String, content: Option<String>, email: String) -> Self {
         let notification_type = NotificationType::Email(EmailValue(email));
         Self {
-            id: Notification::generate_id(),
+            id: NotificationId::default(),
             title,
             content,
             notification_type,
@@ -85,7 +91,7 @@ impl Notification {
     pub fn new_sms_notification(title: String, content: Option<String>, phone: String) -> Self {
         let notification_type = NotificationType::Sms(PhoneNumber(phone));
         Self {
-            id: Notification::generate_id(),
+            id: NotificationId::default(),
             title,
             content,
             notification_type,
@@ -95,7 +101,7 @@ impl Notification {
     }
     pub fn new_gui_notificatin(title: String, content: Option<String>) -> Self {
         Self {
-            id: Notification::generate_id(),
+            id: NotificationId::default(),
             title,
             content,
             notification_type: NotificationType::GUI,

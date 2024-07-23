@@ -14,6 +14,7 @@ use crate::core::state::state::State;
 use crate::core::user::contact::Contacts;
 use crate::core::user::credentials::Credentials;
 use crate::core::user::personalinformation::PersonalInformation;
+use crate::core::user::userid::UserId;
 use crate::{
     api::dtos::userdto::userdto::UserDtos,
     core::{meta::meta::Meta, user::user::User},
@@ -52,7 +53,7 @@ impl UserService {
                     brithday: OffsetDateTime::now_utc(), //TODO: Fix
                     email: Some(user.email),
                     gender: None,
-                    contacts: Some(Contacts::empty())
+                    contacts: Some(Contacts::empty()),
                 };
                 Ok(User::new(
                     None,
@@ -77,11 +78,10 @@ impl UserService {
                     brithday: OffsetDateTime::now_utc(), //TODO: Fix
                     email: user.email.or(user_from_db.personal_information.email),
                     gender: None,
-                    contacts: Some(Contacts::empty())
-
+                    contacts: Some(Contacts::empty()),
                 };
                 Ok(User::new(
-                    Some(user_from_db.id),
+                    Some(user_from_db.id.get_id()),
                     personal_information,
                     new_credentials,
                     Some(user.role.unwrap_or(user_from_db.role)),
@@ -113,7 +113,7 @@ impl UserService {
 
     pub fn get_user_from_row(pg_row: PgRow) -> User {
         User {
-            id: pg_row.get("id"),
+            id: UserId::from_id(pg_row.get("id")),
             personal_information: PersonalInformation {
                 first_name: pg_row
                     .try_get("first_name")
@@ -126,8 +126,7 @@ impl UserService {
                     .unwrap_or(Some("Not found ".to_string())),
                 brithday: OffsetDateTime::now_utc(), // TODO: Fix
                 gender: None,
-                contacts: Some(Contacts::empty())
-
+                contacts: Some(Contacts::empty()),
             },
             credentials: Credentials::new(
                 pg_row
