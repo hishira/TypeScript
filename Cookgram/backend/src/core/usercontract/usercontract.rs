@@ -29,7 +29,7 @@ pub enum AdditionalFieldValue {
     Selection(String),
     Boolean(bool),
     Location((f32, f32)),
-    MultiSelection(Vec<String>)
+    MultiSelection(Vec<String>),
 }
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -62,6 +62,8 @@ impl Entity for Contract {
 }
 #[cfg(test)]
 mod tests {
+    use std::borrow::{Borrow, BorrowMut};
+
     use crate::core::state::entitystate::EntityState;
 
     use super::*;
@@ -82,7 +84,7 @@ mod tests {
             previous: Some(EntityState::Suspend),
         };
         let contract = Contract {
-            id,
+            id: id.clone(),
             owner_id,
             user_id,
             salary: 50000.0,
@@ -102,7 +104,9 @@ mod tests {
         // Sprawdzenie, czy JSON zawiera prawidłowe dane
         let expected_json = format!(
             r#"{{"id":"{}","owner_id":"{}","user_id":"{}","salary":50000.0,"terms":"Standard employment contract","notes":"Initial agreement","contract_start_datetime":"2024-01-01T00:00:00Z","contract_end_datetime":"2024-12-31T23:59:59Z","work_star_date":"2024-06-01T08:00:00Z","state":{{"current":"Active","previous":"Suspend"}}}}"#,
-            id.get_id(), owner_id, user_id
+            id.get_id(),
+            owner_id,
+            user_id
         );
         assert_eq!(json, expected_json);
     }

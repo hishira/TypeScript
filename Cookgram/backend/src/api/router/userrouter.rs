@@ -109,14 +109,15 @@ impl UserRouter {
         Path(id): Path<Uuid>,
         claims: Claims,
         State(state): State<UserState>,
-    ) -> Result<Json<User>, AuthError> {
+    ) -> Result<Json<User>, ResponseError> {
+        ClaimsGuard::manage_user_guard(claims.clone())?;
         Result::Ok(Json(state.app_state.repo.find_by_id(id).await))
     }
     async fn get_managed_users(
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, AuthError> {
+    ) -> Result<Json<Vec<User>>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
         return Ok(Json(
@@ -144,6 +145,7 @@ impl UserRouter {
             .await;
         Ok(Json(user))
     }
+    
     async fn add_user_address(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,
