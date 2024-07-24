@@ -27,7 +27,7 @@ use crate::{
             userrepositories::UserRepositories,
         },
         services::userservice::UserService,
-        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker},
+        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker, user::user_utils::UserUtils},
         validators::dtovalidator::ValidateDtos,
     },
     core::{
@@ -71,18 +71,7 @@ impl UserRouter {
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Result<Json<User>, ResponseError> {
-        let user_tmp = UserService::get_user_from_dto(UserDtos::Create(params), None).await;
-        match user_tmp {
-            Ok(user) => {
-                let user = state.app_state.repo.create(user).await;
-                Ok(Json(user))
-            },
-            Err(error) => {
-                tracing::error!("Error occur while user creation: {}", error);
-                Err(ResponseError::from(error))
-            }
-        }
-        
+        state.user_service.create_user(params).await
     }
 
     async fn create_managed_users(
@@ -91,18 +80,7 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Result<Json<bool>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
-        let user = UserService::get_user_from_dto(UserDtos::Create(params), None).await?;
-        let ids_touples = (claims.user_id.unwrap(), user.id.get_id());
-        state.app_state.repo.create(user).await;
-        let result =
-            UserService::create_user_connection(ids_touples, state.app_state.event_repo.pool).await;
-        match result {
-            Ok(_) => Ok(Json(true)),
-            Err(error) => {
-                tracing::error!("User cannot be added {}", error);
-                return Ok(Json(false));
-            }
-        }
+        state.user_service.create_managed_user(params, claims.user_id.unwrap()).await
     }
 
     async fn user_details(
@@ -145,7 +123,7 @@ impl UserRouter {
             .await;
         Ok(Json(user))
     }
-    
+
     async fn add_user_address(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,
@@ -174,7 +152,7 @@ impl UserRouter {
             .find_by_id(claims.user_id.unwrap())
             .await;
         let updated_user =
-            UserService::get_user_from_dto(UserDtos::Update(params), Some(user)).await?;
+            UserUtils::get_user_from_dto(UserDtos::Update(params), Some(user)).await?;
         state.app_state.repo.update(updated_user.clone()).await;
         return Ok(Json(updated_user));
     }
@@ -248,7 +226,7 @@ impl ApplicationRouter for UserRouter {
         };
         let user_state: UserState = UserState {
             app_state,
-            user_service: UserService::new(self.user_repo.user_dao.clone()),
+            user_service: UserService::new(self.user_repo.user_dao.clone(), self.user_repo.clone()),
         };
         Router::new()
             .route(
