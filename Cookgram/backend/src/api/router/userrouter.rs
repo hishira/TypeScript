@@ -27,7 +27,10 @@ use crate::{
             userrepositories::UserRepositories,
         },
         services::userservice::UserService,
-        utils::{jwt::jwt::Claims, password_worker::password_worker::PasswordWorker, user::user_utils::UserUtils},
+        utils::{
+            jwt::jwt::Claims, password_worker::password_worker::PasswordWorker,
+            user::user_utils::UserUtils,
+        },
         validators::dtovalidator::ValidateDtos,
     },
     core::{
@@ -80,7 +83,10 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
     ) -> Result<Json<bool>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
-        state.user_service.create_managed_user(params, claims.user_id.unwrap()).await
+        state
+            .user_service
+            .create_managed_user(params, claims.user_id.unwrap())
+            .await
     }
 
     async fn user_details(
@@ -98,17 +104,15 @@ impl UserRouter {
     ) -> Result<Json<Vec<User>>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
-        return Ok(Json(
+        Ok(Json(
             state
-                .app_state
-                .repo
-                .find(UserFilterOption {
+                .user_service
+                .get_managed_users(UserFilterOption {
                     owner_id: claims.user_id,
                     ..params
                 })
-                .await
-                .unwrap_or(vec![]),
-        ));
+                .await,
+        ))
     }
 
     async fn get_current_user(
@@ -116,27 +120,20 @@ impl UserRouter {
         State(state): State<UserState>,
     ) -> Result<Json<User>, ResponseError> {
         ClaimsGuard::current_user_guard(&claims)?;
-        let user = state
-            .app_state
-            .repo
-            .find_by_id(claims.user_id.unwrap())
-            .await;
-        Ok(Json(user))
+
+        Ok(Json(
+            state
+                .user_service
+                .get_current_user(claims.user_id.unwrap())
+                .await,
+        ))
     }
 
     async fn add_user_address(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateAddressDto>,
     ) -> Json<String> {
-        let user = state.app_state.repo.find_by_id(params.user_id).await;
-        state
-            .app_state
-            .repo
-            .update(User::create_base_on_user_and_address(
-                user,
-                CreateAddressDto::build_address_based_on_create_dto(params),
-            ))
-            .await;
+        state.user_service.add_user_address(params).await;
         Json("Ok".to_string())
     }
 
@@ -146,15 +143,12 @@ impl UserRouter {
         ValidateDtos(params): ValidateDtos<UpdateUserDto>,
     ) -> Result<Json<User>, ResponseError> {
         ClaimsGuard::user_update_guard(claims.clone())?;
-        let user = state
-            .app_state
-            .repo
-            .find_by_id(claims.user_id.unwrap())
-            .await;
-        let updated_user =
-            UserUtils::get_user_from_dto(UserDtos::Update(params), Some(user)).await?;
-        state.app_state.repo.update(updated_user.clone()).await;
-        return Ok(Json(updated_user));
+        return Ok(Json(
+            state
+                .user_service
+                .update_user(params, claims.user_id.unwrap())
+                .await,
+        ));
     }
 
     async fn user_find(
