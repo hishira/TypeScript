@@ -13,9 +13,7 @@ use crate::{
         dtos::{
             addressdto::createaddressdto::CreateAddressDto,
             userdto::{
-                userdto::{
-                    CreateUserDto, DeleteUserDto, UpdateUserDto, UserDtos, UserFilterOption,
-                },
+                userdto::{CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption},
                 userlistdto::UserListDto,
             },
         },
@@ -27,16 +25,10 @@ use crate::{
             userrepositories::UserRepositories,
         },
         services::userservice::UserService,
-        utils::{
-            jwt::jwt::Claims, password_worker::password_worker::PasswordWorker,
-            user::user_utils::UserUtils,
-        },
+        utils::jwt::jwt::Claims,
         validators::dtovalidator::ValidateDtos,
     },
-    core::{
-        state::{entitystate::EntityState, state::State as CoreState},
-        user::user::User,
-    },
+    core::user::user::User,
     database::{init::Database, redis::redisdatabase::RedisDatabase},
 };
 
@@ -167,47 +159,19 @@ impl UserRouter {
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims.clone()).map_err(ResponseError::AuthError)?;
-        let is_admin = claims
-            .role
-            .ok_or(AuthError::MissingCredentials)
-            .map_err(|e| ResponseError::AuthError(e))?
-            .is_administration_role();
-        let params = Some(params)
-            .map(|params| {
-                let owner_id = (!is_admin)
-                    .then(|| claims.user_id.ok_or(AuthError::MissingCredentials).unwrap());
-                UserFilterOption {
-                    limit: params.limit,
-                    offset: params.offset,
-                    username: params.username,
-                    owner_id,
-                    with_admin: Some(false),
-                }
-            })
-            .unwrap();
         state
             .user_service
-            .get_users(params)
+            .user_list(claims.user_id, claims.role, params)
             .await
-            .map(Json)
-            .map_err(|e| {
-                tracing::error!("Error occur {}", e);
-                e.into()
-            })
     }
+
     async fn user_delete(
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<DeleteUserDto>,
     ) -> Result<Json<User>, ResponseError> {
         ClaimsGuard::user_delete_guard(claims)?;
-        let mut user = state.app_state.repo.find_by_id(params.id).await;
-        user.state.update(CoreState {
-            current: EntityState::Deleted,
-            previous: Some(user.state.previous.clone().unwrap_or(EntityState::Active)),
-        });
-        state.app_state.repo.delete(user.clone()).await;
-        return Ok(Json(user));
+        state.user_service.user_delete(params).await
     }
 }
 

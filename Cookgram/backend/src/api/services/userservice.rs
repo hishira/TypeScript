@@ -1,29 +1,22 @@
 use axum::Json;
-use sqlx::postgres::{PgQueryResult, PgRow};
-use sqlx::{Pool, Postgres, QueryBuilder, Row};
-use time::OffsetDateTime;
 use uuid::Uuid;
 
 use crate::api::daos::userdao::UserDAO;
 use crate::api::dtos::addressdto::createaddressdto::CreateAddressDto;
-use crate::api::dtos::roledto::roledto::RoleDto;
-use crate::api::dtos::userdto::userdto::{CreateUserDto, UpdateUserDto, UserFilterOption};
+use crate::api::dtos::userdto::userdto::{
+    CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption,
+};
 use crate::api::dtos::userdto::userlistdto::UserListDto;
+use crate::api::errors::autherror::AuthError;
 use crate::api::errors::responseerror::ResponseError;
 use crate::api::repositories::repositories::Repository;
 use crate::api::repositories::userrepositories::UserRepositories;
-use crate::api::utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError};
 use crate::api::utils::user::user_utils::UserUtils;
 use crate::core::role::role::Roles;
+use crate::core::state::entitystate::EntityState;
 use crate::core::state::state::State;
-use crate::core::user::contact::Contacts;
-use crate::core::user::credentials::Credentials;
-use crate::core::user::personalinformation::PersonalInformation;
-use crate::core::user::userid::UserId;
-use crate::{
-    api::dtos::userdto::userdto::UserDtos,
-    core::{meta::meta::Meta, user::user::User},
-};
+
+use crate::{api::dtos::userdto::userdto::UserDtos, core::user::user::User};
 
 #[derive(Clone)]
 pub struct UserService {
@@ -44,13 +37,6 @@ impl UserService {
         params: UserFilterOption,
     ) -> Result<Vec<UserListDto>, sqlx::Error> {
         self.user_dao.user_list(params).await
-    }
-
-    pub async fn create_managed(
-        user: User,
-        repo: impl Repository<User, UserFilterOption, sqlx::Error>,
-    ) -> User {
-        todo!()
     }
 
     pub async fn create_user(&self, params: CreateUserDto) -> Result<Json<User>, ResponseError> {
@@ -114,7 +100,43 @@ impl UserService {
         Ok(self.user_repo.update(updated_user.clone()).await)
     }
 
-    pub async fn user_list()-> Result<Json<Vec<UserListDto>>, ResponseError> {
-        todo!()
+    pub async fn user_list(
+        &self,
+        user_id: Option<Uuid>,
+        user_role: Option<Roles>,
+        params: UserFilterOption,
+    ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
+        let is_admin = user_role
+            .ok_or(AuthError::MissingCredentials)
+            .map_err(|e| ResponseError::AuthError(e))?
+            .is_administration_role();
+        let params = Some(params)
+            .map(|params| {
+                let owner_id =
+                    (!is_admin).then(|| user_id.ok_or(AuthError::MissingCredentials).unwrap());
+                UserFilterOption {
+                    limit: params.limit,
+                    offset: params.offset,
+                    username: params.username,
+                    owner_id,
+                    with_admin: Some(false),
+                }
+            })
+            .unwrap();
+
+        self.get_users(params).await.map(Json).map_err(|e| {
+            tracing::error!("Error occur {}", e);
+            e.into()
+        })
+    }
+
+    pub async fn user_delete(&self, params: DeleteUserDto) -> Result<Json<User>, ResponseError> {
+        let mut user = self.user_repo.find_by_id(params.id).await;
+        user.state.update(State {
+            current: EntityState::Deleted,
+            previous: Some(user.state.previous.clone().unwrap_or(EntityState::Active)),
+        });
+        self.user_repo.delete(user.clone()).await;
+        return Ok(Json(user));
     }
 }
