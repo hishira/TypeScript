@@ -147,7 +147,7 @@ impl UserRouter {
             state
                 .user_service
                 .update_user(params, claims.user_id.unwrap())
-                .await,
+                .await?,
         ));
     }
 

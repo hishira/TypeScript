@@ -103,10 +103,18 @@ impl UserService {
             .await
     }
 
-    pub async fn update_user(&self, params: UpdateUserDto, user_id: Uuid) -> User {
+    pub async fn update_user(
+        &self,
+        params: UpdateUserDto,
+        user_id: Uuid,
+    ) -> Result<User, ResponseError> {
         let user = self.user_repo.find_by_id(user_id).await;
         let updated_user =
             UserUtils::get_user_from_dto(UserDtos::Update(params), Some(user)).await?;
-        self.user_repo.update(updated_user.clone()).await
+        Ok(self.user_repo.update(updated_user.clone()).await)
+    }
+
+    pub async fn user_list()-> Result<Json<Vec<UserListDto>>, ResponseError> {
+        todo!()
     }
 }
