@@ -12,26 +12,19 @@ use validator::Validate;
 
 use crate::{
     api::{
-        appstate::{appstate::AppState, authstate::AuthState},
-        daos::userdao::UserDAO,
-        dtos::{
+        appstate::{appstate::AppState, authstate::AuthState}, daos::userdao::UserDAO, dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
-        },
-        errors::autherror::AuthError,
-        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
-        repositories::{
+        }, errors::{autherror::AuthError, responseerror::ResponseError}, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
-        },
-        utils::{
+        }, services::authservice::AuthService, utils::{
             jwt::{
                 jwt::Claims,
                 keys::{Keys, KEYS},
             },
             password_worker::password_worker::PasswordWorker,
-        },
-        validators::dtovalidator::ValidateDtos,
+        }, validators::dtovalidator::ValidateDtos
     },
     core::user::user::User,
     database::{init::Database, redis::redisdatabase::RedisDatabase},
@@ -91,16 +84,11 @@ impl AuthRouter {
         todo!();
     }
 
-    async fn refresh_token(
+    async fn token_refresh(
+        State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<RefreshTokenDto>,
-    ) -> Result<Json<AccessTokenDto>, AuthError> {
-        let mut refresh_token_validation = Validation::new(jsonwebtoken::Algorithm::HS256);
-        refresh_token_validation.set_required_spec_claims(&["exp"]);
-        let token_data = Keys::decode(&params.refresh_token, refresh_token_validation)?;
-        let new_token = Keys::encode(&token_data.claims)?;
-        Ok(Json(AccessTokenDto {
-            access_token: new_token,
-        }))
+    ) -> Result<Json<AccessTokenDto>, ResponseError> {
+        state.auth_service.refresh_token(params).await
     }
 
     fn fill_user_into_tokens(tokens: (&mut Claims, &mut Claims), user: User) {
@@ -169,9 +157,12 @@ impl ApplicationRouter for AuthRouter {
         };
         Router::new()
             .route("/login", post(AuthRouter::login))
-            .route("/refresh-token", post(AuthRouter::refresh_token))
+            .route("/refresh-token", post(AuthRouter::token_refresh))
             .with_state(AuthState {
                 app_state,
+                auth_service: AuthService {
+                    user_repo: self.user_repo.clone(),
+                },
                 pass_worker: PasswordWorker::new(10, 4).unwrap(),
             })
     }

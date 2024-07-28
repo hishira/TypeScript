@@ -100,28 +100,36 @@ impl UserService {
         Ok(self.user_repo.update(updated_user.clone()).await)
     }
 
+    fn check_is_admin_role(user_role: Option<Roles>) -> Result<bool, ResponseError> {
+        Ok(user_role
+            .ok_or(AuthError::MissingCredentials)
+            .map_err(|e| ResponseError::AuthError(e))?
+            .is_administration_role())
+    }
+
+    fn map_merge_params_with_owner(
+        params: UserFilterOption,
+        is_admin: bool,
+        user_id: Option<Uuid>,
+    ) -> UserFilterOption {
+        let owner_id = (!is_admin).then(|| user_id.ok_or(AuthError::MissingCredentials).unwrap());
+        UserFilterOption {
+            limit: params.limit,
+            offset: params.offset,
+            username: params.username,
+            owner_id,
+            with_admin: Some(false),
+        }
+    }
     pub async fn user_list(
         &self,
         user_id: Option<Uuid>,
         user_role: Option<Roles>,
         params: UserFilterOption,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
-        let is_admin = user_role
-            .ok_or(AuthError::MissingCredentials)
-            .map_err(|e| ResponseError::AuthError(e))?
-            .is_administration_role();
+        let is_admin = Self::check_is_admin_role(user_role)?;
         let params = Some(params)
-            .map(|params| {
-                let owner_id =
-                    (!is_admin).then(|| user_id.ok_or(AuthError::MissingCredentials).unwrap());
-                UserFilterOption {
-                    limit: params.limit,
-                    offset: params.offset,
-                    username: params.username,
-                    owner_id,
-                    with_admin: Some(false),
-                }
-            })
+            .map(|params| Self::map_merge_params_with_owner(params, is_admin, user_id))
             .unwrap();
 
         self.get_users(params).await.map(Json).map_err(|e| {

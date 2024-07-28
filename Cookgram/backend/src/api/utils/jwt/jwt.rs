@@ -25,6 +25,19 @@ impl Claims {
     fn prepare_exp(extended_time: Option<u64>) -> u64 {
         get_current_timestamp() + 200 + extended_time.unwrap_or(0)
     }
+
+    pub fn get_token_validation() -> Validation {
+        let mut validation = Validation::new(jsonwebtoken::Algorithm::HS256);
+        validation.set_required_spec_claims(&["exp"]);
+        return validation;
+    }
+
+    pub fn refresh_token_expired_token(refresh_token: String) -> Result<String, AuthError> {
+        let refresh_token_validation: Validation = Self::get_token_validation();
+        let token_data = Keys::decode(&refresh_token, refresh_token_validation)?;
+        Ok(Keys::encode(&token_data.claims)?)
+    }
+
     pub fn new(params: &UserAuthDto, extended_time: Option<u64>) -> Self {
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
