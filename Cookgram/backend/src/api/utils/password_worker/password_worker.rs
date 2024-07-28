@@ -3,6 +3,8 @@ use rayon::ThreadPoolBuilder;
 use thiserror::Error;
 use tokio::sync::oneshot;
 
+use crate::api::errors::autherror::AuthError;
+
 /// Errors that can occur in the `PasswordWorker`.
 #[derive(Debug, Error)]
 pub enum PasswordWorkerError {
@@ -94,6 +96,20 @@ impl PasswordWorker {
         Ok(PasswordWorker { sender, cost })
     }
 
+    pub async fn password_match(&self, password: String, hashed_user_password: String) -> Result<bool, AuthError> {
+        match self.verify(password, hashed_user_password).await {
+            Ok(verify_response) => {
+                if verify_response {
+                    return Ok(true);
+                }
+                Result::Err(AuthError::WrongCredentials)
+            },
+            Err(error) => {
+                tracing::error!("Error occur while password matching {}", error);
+                Result::Err(AuthError::BCryptError)
+            },
+        }
+    } 
     /// Asynchronously hashes the given password using bcrypt.
     ///
     /// # Example

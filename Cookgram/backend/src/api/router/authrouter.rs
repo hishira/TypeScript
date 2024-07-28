@@ -12,19 +12,27 @@ use validator::Validate;
 
 use crate::{
     api::{
-        appstate::{appstate::AppState, authstate::AuthState}, daos::userdao::UserDAO, dtos::{
+        appstate::{appstate::AppState, authstate::AuthState},
+        daos::userdao::UserDAO,
+        dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
-        }, errors::{autherror::AuthError, responseerror::ResponseError}, queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery}, repositories::{
+        },
+        errors::{autherror::AuthError, responseerror::ResponseError},
+        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
+        repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
-        }, services::authservice::AuthService, utils::{
+        },
+        services::authservice::AuthService,
+        utils::{
             jwt::{
-                jwt::Claims,
+                jwt::{AccessToken, Claims, JwtTokens, RefreshToken},
                 keys::{Keys, KEYS},
             },
             password_worker::password_worker::PasswordWorker,
-        }, validators::dtovalidator::ValidateDtos
+        },
+        validators::dtovalidator::ValidateDtos,
     },
     core::user::user::User,
     database::{init::Database, redis::redisdatabase::RedisDatabase},
@@ -40,10 +48,10 @@ pub struct AuthBody {
 }
 
 impl AuthBody {
-    pub fn get_from_token(tokens: (String, String)) -> Self {
+    pub fn get_from_token(tokens: JwtTokens) -> Self {
         Self {
-            access_token: tokens.0.clone(),
-            refresh_token: tokens.1.clone(),
+            access_token: tokens.0.0.clone(),
+            refresh_token: tokens.0.0.clone(),
         }
     }
 }
@@ -124,7 +132,7 @@ impl AuthRouter {
             &state.pass_worker,
             params.password,
             user.credentials.password.clone(),
-            (access_token, refresh_token),
+            JwtTokens(AccessToken(access_token), RefreshToken(refresh_token)), // Constructor from string, string
         )
         .await;
     }
@@ -133,18 +141,22 @@ impl AuthRouter {
         password_worker: &PasswordWorker,
         password: String,
         user_password: String,
-        tokens: (String, String), //access_token, refresh_token
+        tokens: JwtTokens, //access_token, refresh_token
     ) -> Result<Json<AuthBody>, AuthError> {
-        match password_worker.verify(password, user_password).await {
-            Ok(verify_response) => {
-                if verify_response {
-                    return Ok(Json(AuthBody::get_from_token(tokens)));
-                } else {
-                    return Result::Err(AuthError::WrongCredentials);
-                }
-            }
-            Err(_) => Result::Err(AuthError::BCryptError),
-        }
+        password_worker
+            .password_match(password, user_password)
+            .await
+            .map(|_| Json(AuthBody::get_from_token(tokens)))
+        // match password_worker.verify(password, user_password).await {
+        //     Ok(verify_response) => {
+        //         if verify_response {
+        //             return Ok(Json(AuthBody::get_from_token(tokens)));
+        //         } else {
+        //             return Result::Err(AuthError::WrongCredentials);
+        //         }
+        //     }
+        //     Err(_) => Result::Err(AuthError::BCryptError),
+        // }
     }
 }
 

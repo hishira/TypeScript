@@ -13,6 +13,9 @@ use crate::{
 
 use super::keys::Keys;
 
+pub struct AccessToken(pub String);
+pub struct RefreshToken(pub String);
+pub struct JwtTokens(pub AccessToken,pub  RefreshToken);
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
     pub user_id: Option<uuid::Uuid>,
