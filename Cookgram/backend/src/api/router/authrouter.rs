@@ -18,15 +18,16 @@ use crate::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
         },
-        errors::autherror::AuthError,
+        errors::{autherror::AuthError, responseerror::ResponseError},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{
             eventrepository::EventRepository, repositories::Repository,
             userrepositories::UserRepositories,
         },
+        services::authservice::AuthService,
         utils::{
             jwt::{
-                jwt::Claims,
+                jwt::{AccessToken, Claims, JwtTokens, RefreshToken},
                 keys::{Keys, KEYS},
             },
             password_worker::password_worker::PasswordWorker,
@@ -47,10 +48,10 @@ pub struct AuthBody {
 }
 
 impl AuthBody {
-    pub fn get_from_token(tokens: (String, String)) -> Self {
+    pub fn get_from_token(tokens: JwtTokens) -> Self {
         Self {
-            access_token: tokens.0.clone(),
-            refresh_token: tokens.1.clone(),
+            access_token: tokens.0.0.clone(),
+            refresh_token: tokens.0.0.clone(),
         }
     }
 }
@@ -91,16 +92,11 @@ impl AuthRouter {
         todo!();
     }
 
-    async fn refresh_token(
+    async fn token_refresh(
+        State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<RefreshTokenDto>,
-    ) -> Result<Json<AccessTokenDto>, AuthError> {
-        let mut refresh_token_validation = Validation::new(jsonwebtoken::Algorithm::HS256);
-        refresh_token_validation.set_required_spec_claims(&["exp"]);
-        let token_data = Keys::decode(&params.refresh_token, refresh_token_validation)?;
-        let new_token = Keys::encode(&token_data.claims)?;
-        Ok(Json(AccessTokenDto {
-            access_token: new_token,
-        }))
+    ) -> Result<Json<AccessTokenDto>, ResponseError> {
+        state.auth_service.refresh_token(params).await
     }
 
     fn fill_user_into_tokens(tokens: (&mut Claims, &mut Claims), user: User) {
@@ -136,7 +132,7 @@ impl AuthRouter {
             &state.pass_worker,
             params.password,
             user.credentials.password.clone(),
-            (access_token, refresh_token),
+            JwtTokens(AccessToken(access_token), RefreshToken(refresh_token)), // Constructor from string, string
         )
         .await;
     }
@@ -145,18 +141,22 @@ impl AuthRouter {
         password_worker: &PasswordWorker,
         password: String,
         user_password: String,
-        tokens: (String, String), //access_token, refresh_token
+        tokens: JwtTokens, //access_token, refresh_token
     ) -> Result<Json<AuthBody>, AuthError> {
-        match password_worker.verify(password, user_password).await {
-            Ok(verify_response) => {
-                if verify_response {
-                    return Ok(Json(AuthBody::get_from_token(tokens)));
-                } else {
-                    return Result::Err(AuthError::WrongCredentials);
-                }
-            }
-            Err(_) => Result::Err(AuthError::BCryptError),
-        }
+        password_worker
+            .password_match(password, user_password)
+            .await
+            .map(|_| Json(AuthBody::get_from_token(tokens)))
+        // match password_worker.verify(password, user_password).await {
+        //     Ok(verify_response) => {
+        //         if verify_response {
+        //             return Ok(Json(AuthBody::get_from_token(tokens)));
+        //         } else {
+        //             return Result::Err(AuthError::WrongCredentials);
+        //         }
+        //     }
+        //     Err(_) => Result::Err(AuthError::BCryptError),
+        // }
     }
 }
 
@@ -169,9 +169,12 @@ impl ApplicationRouter for AuthRouter {
         };
         Router::new()
             .route("/login", post(AuthRouter::login))
-            .route("/refresh-token", post(AuthRouter::refresh_token))
+            .route("/refresh-token", post(AuthRouter::token_refresh))
             .with_state(AuthState {
                 app_state,
+                auth_service: AuthService {
+                    user_repo: self.user_repo.clone(),
+                },
                 pass_worker: PasswordWorker::new(10, 4).unwrap(),
             })
     }
