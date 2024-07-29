@@ -27,8 +27,9 @@ use crate::{
         services::authservice::AuthService,
         utils::{
             jwt::{
-                jwt::{AccessToken, Claims, JwtTokens, RefreshToken},
+                jwt::Claims,
                 keys::{Keys, KEYS},
+                tokens::{AccessToken, JwtTokens, RefreshToken},
             },
             password_worker::password_worker::PasswordWorker,
         },
@@ -50,8 +51,8 @@ pub struct AuthBody {
 impl AuthBody {
     pub fn get_from_token(tokens: JwtTokens) -> Self {
         Self {
-            access_token: tokens.0.0.clone(),
-            refresh_token: tokens.0.0.clone(),
+            access_token: tokens.0 .0.clone(),
+            refresh_token: tokens.0 .0.clone(),
         }
     }
 }
@@ -99,65 +100,13 @@ impl AuthRouter {
         state.auth_service.refresh_token(params).await
     }
 
-    fn fill_user_into_tokens(tokens: (&mut Claims, &mut Claims), user: User) {
-        tokens.0.user_id = Some(user.id.get_id());
-        tokens.0.role = Some(user.role.clone());
-        tokens.1.user_id = Some(user.id.get_id());
-        tokens.1.role = Some(user.role.clone());
-    }
-
     async fn login(
         State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
-    ) -> Result<Json<AuthBody>, AuthError> {
-        let mut access_claims: Claims = Claims::new(&params, None);
-        let mut refresh_claims: Claims = Claims::new(&params, Some(1000));
-        let filter = UserFilterOption::from_claims(access_claims.clone());
-        let users = state.app_state.repo.find(filter.clone()).await;
-        let users = match users {
-            Ok(u) => u,
-            Err(error) => {
-                tracing::error!("Error occur, {}", error);
-                vec![]
-            }
-        };
-        if users.len() <= 0 {
-            return Result::Err(AuthError::UserNotExists);
-        }
-        let user = users.get(0).unwrap();
-        Self::fill_user_into_tokens((&mut access_claims, &mut refresh_claims), user.clone());
-        let access_token = Keys::encode(&access_claims)?;
-        let refresh_token = Keys::encode(&refresh_claims)?;
-        return AuthRouter::password_match(
-            &state.pass_worker,
-            params.password,
-            user.credentials.password.clone(),
-            JwtTokens(AccessToken(access_token), RefreshToken(refresh_token)), // Constructor from string, string
-        )
-        .await;
+    ) -> Result<Json<AuthBody>, ResponseError> {
+        state.auth_service.generate_tokens_if_user_exists(params).await
     }
 
-    async fn password_match(
-        password_worker: &PasswordWorker,
-        password: String,
-        user_password: String,
-        tokens: JwtTokens, //access_token, refresh_token
-    ) -> Result<Json<AuthBody>, AuthError> {
-        password_worker
-            .password_match(password, user_password)
-            .await
-            .map(|_| Json(AuthBody::get_from_token(tokens)))
-        // match password_worker.verify(password, user_password).await {
-        //     Ok(verify_response) => {
-        //         if verify_response {
-        //             return Ok(Json(AuthBody::get_from_token(tokens)));
-        //         } else {
-        //             return Result::Err(AuthError::WrongCredentials);
-        //         }
-        //     }
-        //     Err(_) => Result::Err(AuthError::BCryptError),
-        // }
-    }
 }
 
 impl ApplicationRouter for AuthRouter {
@@ -174,8 +123,8 @@ impl ApplicationRouter for AuthRouter {
                 app_state,
                 auth_service: AuthService {
                     user_repo: self.user_repo.clone(),
+                    pass_worker: PasswordWorker::new(10, 4).unwrap(),
                 },
-                pass_worker: PasswordWorker::new(10, 4).unwrap(),
             })
     }
 }
