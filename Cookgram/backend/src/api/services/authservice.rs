@@ -82,10 +82,7 @@ impl AuthService {
         access_claims: &Claims,
         refresh_claims: &Claims,
     ) -> Result<JwtTokens, AuthError> {
-        Ok(JwtTokens(
-            AccessToken(Keys::encode(&access_claims)?),
-            RefreshToken(Keys::encode(&refresh_claims)?),
-        ))
+        JwtTokens::generete_from_claims(&access_claims, &refresh_claims)
     }
     fn get_access_refresh_cliaims(params: &UserAuthDto) -> (Claims, Claims) {
         (Claims::new(&params, None), Claims::new(&params, Some(1000)))
