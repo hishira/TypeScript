@@ -9,17 +9,26 @@ import { GeneralInformationStep } from './generial-information-step/generial-inf
 import { FormGroup, FormControl } from '@angular/forms';
 import { GeneralInformationStepGroup } from './create-user-model.types';
 import { EmptyGeneralInformationGroup } from './create-user-modal.utils';
+import { CommonModule } from '@angular/common';
+
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
   selector: 'app-user-create-modal',
   templateUrl: './create-user-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [StepsModule, DialogComponent, ButtonModule, GeneralInformationStep],
+  imports: [
+    StepsModule,
+    DialogComponent,
+    ButtonModule,
+    GeneralInformationStep,
+    CommonModule,
+  ],
 })
 export class CreateUserModalComponent {
   constructor(private dialogRef: DynamicDialogRef) {}
-  generalInformationGroup: FormGroup<GeneralInformationStepGroup> = EmptyGeneralInformationGroup();
+  generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
+    EmptyGeneralInformationGroup();
   steps: MenuItem[] = [
     {
       label: 'General information',

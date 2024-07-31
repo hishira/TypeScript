@@ -5,7 +5,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 export class AbstractStepDirective<
   T extends { [key: string]: AbstractControl }
 > {
-  protected form = input.required<FormGroup<T>>();
+  form = input.required<FormGroup<T>>();
   protected dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
 
   protected cancel(): void {

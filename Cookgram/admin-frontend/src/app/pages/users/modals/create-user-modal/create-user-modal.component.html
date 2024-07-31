@@ -1,4 +1,10 @@
 <ng-container>
   <p-steps [activeIndex]="activeIndex" [model]="steps"></p-steps>
-  <app-user-create-general-information-step [form]="generalInformationGroup" />
+  <ng-container [ngSwitch]="activeIndex">
+    <ng-container *ngSwitchCase="0">
+      <app-user-create-general-information-step
+        [form]="generalInformationGroup"
+      />
+    </ng-container>
+  </ng-container>
 </ng-container>
