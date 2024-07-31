@@ -9,13 +9,23 @@
           label="First name"
           formControlName="firstName"
           class="w-full"
+          [withErrors]="true"
         />
       </div>
       <div class="col-3">
-        <app-input label="Second name" formControlName="secondName" />
+        <app-input
+          [withErrors]="true"
+          label="Second name"
+          formControlName="secondName"
+        />
       </div>
       <div class="col-3">
-        <app-input label="Email" formControlName="email" [withErrors]="true" />
+        <app-input
+          [withErrors]="true"
+          label="Email"
+          formControlName="email"
+          [withErrors]="true"
+        />
       </div>
       <div class="col-3 gap-2 flex flex-column">
         <label i18n class="block text-900 font-medium" for="buttondisplay">
@@ -33,7 +43,7 @@
       <div class="col-3 gap-2 flex flex-column">
         <label for="genderdropdown" i18n>Gender</label>
         <p-dropdown
-        class="w-full"
+          class="w-full"
           formControlName="gender"
           [options]="genders"
           inputId="genderdropdown"
@@ -44,7 +54,7 @@
   </ng-container>
   <ng-container ngProjectAs="footer">
     <p-button label="Back" back [rounded]="true" />
-    <p-button label="Cancel" [rounded]="true" />
+    <p-button label="Cancel" (onClick)="cancel()" [rounded]="true" />
     <p-button label="Next" [rounded]="true" />
   </ng-container>
 </app-dialog>

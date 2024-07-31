@@ -25,30 +25,38 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
 
   onChange: (value: string | null) => void = noop;
   onTouch: () => void = noop;
+
   constructor(@Optional() @Self() private ngControl: NgControl) {
     this.ngControl && (this.ngControl.valueAccessor = this);
   }
-  validate(control: AbstractControl<any, any>): ValidationErrors | null {
+
+  validate(_: AbstractControl<any, any>): ValidationErrors | null {
     return this.control.errors;
   }
-  registerOnValidatorChange?(fn: () => void): void {
-    //throw new Error('Method not implemented.');
-  }
+
+  registerOnValidatorChange?(fn: () => void): void {}
 
   ngOnInit(): void {
+    this.inheritValidatorFromControl();
     this.control.valueChanges.subscribe((v) => this.onChange(v));
-    this.control.validator &&
-      this.control.addValidators(this.control.validator);
   }
+
   writeValue(obj: any): void {
     this.control.setValue(obj);
     this.control.updateValueAndValidity();
   }
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
+
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
   setDisabledState?(isDisabled: boolean): void {}
+
+  private inheritValidatorFromControl(): void {
+    this.ngControl?.control &&
+      this.control.addValidators(this.ngControl?.control?.validator ?? []);
+  }
 }

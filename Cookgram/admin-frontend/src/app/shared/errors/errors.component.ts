@@ -30,15 +30,15 @@ export class ErrorsComponent implements OnInit {
 
   private getStatusChangeObservable(): Observable<string[]> {
     return this.control().statusChanges.pipe(
-      startWith(this.control().value),
-      map((status) => {
+      startWith(this.control().status),
+      map((_) => {
         if (!this.control().dirty) return [];
         const errorsList = [];
 
         const errors = this.control().errors;
         errors && 'required' in errors && errorsList.push('Field is required');
         errors && 'email' in errors && errorsList.push('Email is invalid');
-        console.log(errorsList)
+        console.log(errorsList);
         return errorsList;
       })
     );
