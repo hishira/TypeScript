@@ -1,11 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, input } from '@angular/core';
-import {
-  AbstractControl,
-  ControlEvent,
-  TouchedChangeEvent,
-} from '@angular/forms';
+import { AbstractControl, TouchedChangeEvent } from '@angular/forms';
 import { Observable, combineLatest, map, of, startWith } from 'rxjs';
+import { ErrorsTypes } from './errors-types';
 
 @Component({
   selector: 'app-errors',
@@ -30,16 +27,11 @@ export class ErrorsComponent implements OnInit {
 
   private getStatusChangeObservable(): Observable<string[]> {
     return this.control().statusChanges.pipe(
-      startWith(this.control().value),
-      map((status) => {
+      startWith(this.control().status),
+      map((_) => {
         if (!this.control().dirty) return [];
-        const errorsList = [];
 
-        const errors = this.control().errors;
-        errors && 'required' in errors && errorsList.push('Field is required');
-        errors && 'email' in errors && errorsList.push('Email is invalid');
-        console.log(errorsList)
-        return errorsList;
+        return this.getCurrentListOfErrors();
       })
     );
   }
@@ -48,17 +40,24 @@ export class ErrorsComponent implements OnInit {
       map((e) => {
         if (e instanceof TouchedChangeEvent) {
           this.control().markAsDirty();
-          const errorsList = [];
-          const errors = this.control().errors;
 
-          errors &&
-            'required' in errors &&
-            errorsList.push('Field is required');
-          errors && 'email' in errors && errorsList.push('Email is invalid');
-          return errorsList;
+          return this.getCurrentListOfErrors();
         }
         return [];
       })
     );
+  }
+
+  private getCurrentListOfErrors(): string[] {
+    const errorsList = [];
+    const errors = this.control().errors;
+
+    errors &&
+      ErrorsTypes.Required in errors &&
+      errorsList.push('Field is required');
+    errors &&
+      ErrorsTypes.Email in errors &&
+      errorsList.push('Email is invalid');
+    return errorsList;
   }
 }
