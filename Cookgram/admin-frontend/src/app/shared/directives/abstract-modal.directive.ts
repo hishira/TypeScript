@@ -1,0 +1,7 @@
+import { Directive, inject } from '@angular/core';
+import { ModalService } from '../services/modal.service';
+
+@Directive({ providers: [ModalService] })
+export class AbstractModalDirective {
+  constructor(protected modalService: ModalService) {}
+}
