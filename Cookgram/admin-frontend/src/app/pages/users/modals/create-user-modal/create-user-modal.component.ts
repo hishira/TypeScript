@@ -46,12 +46,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   private readonly MAX_STEP: ActiveUserModalIndex = 3;
   constructor(private dialogRef: DynamicDialogRef, modalService: ModalService) {
     super(modalService);
-    this.modalService.nextStepChange.subscribe((_) => {
-      this.activeIndex =
-        this.activeIndex + 1 > 3
-          ? this.MAX_STEP
-          : ((this.activeIndex + 1) as ActiveUserModalIndex);
-    });
+    this.handleNextStepChange();
   }
 
   close() {
@@ -59,6 +54,11 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   private handleNextStepChange(): void {
-    
+    this.modalService.nextStepChange.subscribe((_) => {
+      this.activeIndex =
+        this.activeIndex + 1 > 3
+          ? this.MAX_STEP
+          : ((this.activeIndex + 1) as ActiveUserModalIndex);
+    });
   }
 }
