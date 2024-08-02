@@ -7,11 +7,19 @@ import { StepsModule } from 'primeng/steps';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { FormGroup, FormControl } from '@angular/forms';
-import { GeneralInformationStepGroup } from './create-user-model.types';
-import { EmptyGeneralInformationGroup } from './create-user-modal.utils';
+import {
+  AccessConfigurationStepGroup,
+  CreateModalGroup,
+  GeneralInformationStepGroup,
+} from './create-user-model.types';
+import {
+  EmptyCreateUserFormGroup,
+  EmptyGeneralInformationGroup,
+} from './create-user-modal.utils';
 import { CommonModule } from '@angular/common';
 import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
 import { ModalService } from '../../../../shared/services/modal.service';
+import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -26,12 +34,15 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
     ButtonModule,
     GeneralInformationStep,
     CommonModule,
+    AccessConfigurationStep,
   ],
 })
 export class CreateUserModalComponent extends AbstractModalDirective {
+  createUserGroup: FormGroup<CreateModalGroup> = EmptyCreateUserFormGroup();
   generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
-    EmptyGeneralInformationGroup();
-
+    this.createUserGroup.controls.generalInformation;
+  accessConfigurationGroup: FormGroup<AccessConfigurationStepGroup> =
+    this.createUserGroup.controls.accessConfiguration;
   steps: MenuItem[] = [
     {
       label: 'General information',
