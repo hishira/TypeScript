@@ -40,7 +40,7 @@ impl UserService {
     }
 
     pub async fn create_user(&self, params: CreateUserDto) -> Result<Json<User>, ResponseError> {
-        let user_tmp = UserUtils::get_user_from_dto(UserDtos::Create(params), None).await;
+        let user_tmp = UserUtils::get_from_dto(UserDtos::Create(params), None).await;
         match user_tmp {
             Ok(user) => {
                 let user = self.user_repo.create(user).await;
@@ -58,7 +58,7 @@ impl UserService {
         params: CreateUserDto,
         owner_id: Uuid,
     ) -> Result<Json<bool>, ResponseError> {
-        let user = UserUtils::get_user_from_dto(UserDtos::Create(params), None).await?;
+        let user = UserUtils::get_from_dto(UserDtos::Create(params), None).await?;
         let ids_touples = (owner_id, user.id.get_id());
         self.user_repo.create(user).await;
         let result = self.user_dao.create_user_connection(ids_touples).await;
@@ -96,7 +96,7 @@ impl UserService {
     ) -> Result<User, ResponseError> {
         let user = self.user_repo.find_by_id(user_id).await;
         let updated_user =
-            UserUtils::get_user_from_dto(UserDtos::Update(params), Some(user)).await?;
+            UserUtils::get_from_dto(UserDtos::Update(params), Some(user)).await?;
         Ok(self.user_repo.update(updated_user.clone()).await)
     }
 

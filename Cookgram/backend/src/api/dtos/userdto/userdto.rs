@@ -2,7 +2,13 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use validator::{Validate, ValidationError};
 
-use crate::{api::utils::jwt::jwt::Claims, core::{role::role::{Role, Roles}, state::{entitystate::EntityState, state::State}}};
+use crate::{
+    api::utils::jwt::jwt::Claims,
+    core::{
+        role::role::{Role, Roles},
+        state::{entitystate::EntityState, state::State},
+    },
+};
 
 #[derive(Debug, Validate, Deserialize)]
 pub struct CreateUserDto {
@@ -15,6 +21,7 @@ pub struct CreateUserDto {
     pub role: Option<Roles>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
+    pub password_is_temporary: Option<bool>,
 }
 
 #[derive(Debug, Validate, Deserialize)]
@@ -52,7 +59,6 @@ pub struct UserRegisterDto {
     #[validate(length(min = 6))]
     pub password: String,
 }
-
 
 trait Filter: Send + Sync {}
 
@@ -121,6 +127,7 @@ mod tests {
             role: Some(Roles::user_role()),
             first_name: None,
             last_name: None,
+            password_is_temporary: Some(false),
         };
 
         // Validate the DTO
@@ -140,6 +147,7 @@ mod tests {
             role: Some(Roles::user_role()),
             first_name: None,
             last_name: None,
+            password_is_temporary: Some(false),
         };
 
         // Validate the DTO

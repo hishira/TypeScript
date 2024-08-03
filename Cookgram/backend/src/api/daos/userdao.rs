@@ -45,7 +45,7 @@ impl DAO<User, UserFilterOption> for UserDAO {
         let mut find_query = UserQuery::find(option);
         find_query
             .build()
-            .map(UserUtils::get_user_from_row)
+            .map(UserUtils::get_from_row)
             .fetch_all(&self.pool)
             .await
     }
@@ -54,7 +54,7 @@ impl DAO<User, UserFilterOption> for UserDAO {
         let mut find_by_id_query = UserQuery::find_by_id(id);
         find_by_id_query
             .build()
-            .map(UserUtils::get_user_from_row)
+            .map(UserUtils::get_from_row)
             .fetch_one(&self.pool)
             .await
     }

@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS USERS (
     last_name varchar(255) DEFAULT null,
     brithday TIMESTAMP DEFAULT NULL,
     password text NOT NULL,
+    passowrd_is_temporary boolean DEFAULT FALSE,
     email VARCHAR(255) NOT NULL,
     gender Gender DEFAULT NULL,
     meta_id uuid,

@@ -141,7 +141,7 @@ mod tests {
                 gender: None,
                 contacts: Some(Contacts::empty()),
             },
-            Credentials::new("test_user".to_string(), "password123".to_string()),
+            Credentials::new("test_user".to_string(), "password123".to_string(), false),
             Some(Roles::admin_role()),
             None,
         );
@@ -173,7 +173,7 @@ mod tests {
                 gender: None,
                 contacts: Some(Contacts::empty()),
             },
-            Credentials::new("test_user".to_string(), "password123".to_string()),
+            Credentials::new("test_user".to_string(), "password123".to_string(), false),
             Some(Roles::user_role()),
             None,
         );
@@ -206,7 +206,7 @@ mod tests {
                 gender: None,
                 contacts: Some(Contacts::empty()),
             },
-            Credentials::new("test_user".to_string(), "password123".to_string()),
+            Credentials::new("test_user".to_string(), "password123".to_string(), false),
             None,
             None,
         );
@@ -239,7 +239,7 @@ mod tests {
                 gender: None,
                 contacts: Some(Contacts::empty()),
             },
-            Credentials::new("test_user".to_string(), "password123".to_string()),
+            Credentials::new("test_user".to_string(), "password123".to_string(), false),
             None,
             None,
         );
@@ -272,7 +272,11 @@ mod tests {
                 gender: None,
                 contacts: Some(Contacts::empty()),
             },
-            credentials: Credentials::new("test_user".to_string(), "password123".to_string()),
+            credentials: Credentials::new(
+                "test_user".to_string(),
+                "password123".to_string(),
+                false,
+            ),
             meta: Meta {
                 id: MetaId::from_id(
                     uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
