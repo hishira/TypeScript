@@ -6,6 +6,7 @@ import { InputComponent } from '../../../../../shared/input/input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-access-configuration-step',
@@ -16,7 +17,8 @@ import { TooltipModule } from 'primeng/tooltip';
     InputComponent,
     ReactiveFormsModule,
     InputSwitchModule,
-    TooltipModule
+    TooltipModule,
+    ButtonModule,
   ],
 })
 export class AccessConfigurationStep extends AbstractStepDirective<AccessConfigurationStepGroup> {}

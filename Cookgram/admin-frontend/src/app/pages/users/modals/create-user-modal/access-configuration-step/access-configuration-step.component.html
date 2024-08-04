@@ -6,6 +6,7 @@
     <div class="row-gap-0 mt-3" [formGroup]="form()">
       <div class="col-3">
         <app-input
+          i18n-label
           label="Username"
           formControlName="username"
           class="w-full"
@@ -15,6 +16,7 @@
 
       <div class="col-3">
         <app-input
+          i18n-label
           label="Password"
           formControlName="password"
           class="w-full"
@@ -23,6 +25,7 @@
       </div>
       <div class="col-3">
         <app-input
+          i18n-label
           label="Confirm password"
           formControlName="confirmPassword"
           class="w-full"
@@ -31,6 +34,7 @@
       </div>
       <div class="col-3">
         <app-input
+          i18n-label
           label="Password"
           formControlName="password"
           class="w-full"
@@ -39,8 +43,18 @@
       </div>
       <div class="col-3 flex align-items-center gap-2">
         <label for="switch1" i18n>Password is temporary</label>
-        <p-inputSwitch pTooltip="User will be asked to change password, after first log in"  inputId="switch1" formControlName="temporaryPassword" />
+        <p-inputSwitch
+          i18n-pTooltip
+          pTooltip="User will be asked to change password, after first log in"
+          inputId="switch1"
+          formControlName="temporaryPassword"
+        />
       </div>
     </div>
+  </ng-container>
+  <ng-container ngProjectAs="footer">
+    <p-button label="Back" back [rounded]="true" />
+    <p-button label="Cancel" (onClick)="cancel()" [rounded]="true" />
+    <p-button label="Next" [rounded]="true" (onClick)="next()" />
   </ng-container>
 </app-dialog>

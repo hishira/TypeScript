@@ -15,12 +15,24 @@
           <context context-type="sourcefile">src/app/pages/login-page/login-page.component.html</context>
           <context context-type="linenumber">8,9</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/access-configuration-step/access-configuration-step.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="1431416938026210429" datatype="html">
         <source>Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/login-page/login-page.component.html</context>
           <context context-type="linenumber">20,21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/access-configuration-step/access-configuration-step.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/access-configuration-step/access-configuration-step.component.html</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2727496946419791472" datatype="html">
@@ -30,6 +42,34 @@
           <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5628347703232694442" datatype="html">
+        <source>Access configuration</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/access-configuration-step/access-configuration-step.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3782563238994348625" datatype="html">
+        <source>Confirm password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/access-configuration-step/access-configuration-step.component.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2045280594093362329" datatype="html">
+        <source>Password is temporary</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/access-configuration-step/access-configuration-step.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5893686353688142174" datatype="html">
+        <source>User will be asked to change password, after first log in</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/access-configuration-step/access-configuration-step.component.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="412474631675377145" datatype="html">
         <source>User general information</source>
         <context-group purpose="location">
@@ -37,18 +77,32 @@
           <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5342432350421167093" datatype="html">
+        <source>First name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/generial-information-step/generial-information-step.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4768749765465246664" datatype="html">
+        <source>Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/generial-information-step/generial-information-step.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2594094616776865068" datatype="html">
         <source> Birth day </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/generial-information-step/generial-information-step.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3948439187870398089" datatype="html">
         <source>Gender</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/users/modals/create-user-modal/generial-information-step/generial-information-step.component.html</context>
-          <context context-type="linenumber">34,35</context>
+          <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
     </body>
