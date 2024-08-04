@@ -6,6 +6,7 @@
     <div class="row-gap-0 mt-3" [formGroup]="form()">
       <div class="col-3">
         <app-input
+          i18n-label
           label="First name"
           formControlName="firstName"
           class="w-full"
@@ -22,6 +23,7 @@
       <div class="col-3">
         <app-input
           [withErrors]="true"
+          i18n-label
           label="Email"
           formControlName="email"
           [withErrors]="true"
@@ -32,7 +34,6 @@
           Birth day
         </label>
         <p-calendar
-          placeholder="Birth day"
           class="w-full max-w-full"
           formControlName="birthDate"
           [showIcon]="true"
@@ -55,6 +56,6 @@
   <ng-container ngProjectAs="footer">
     <p-button label="Back" back [rounded]="true" />
     <p-button label="Cancel" (onClick)="cancel()" [rounded]="true" />
-    <p-button label="Next" [rounded]="true" (onClick)="next()"/>
+    <p-button label="Next" [rounded]="true" (onClick)="next()" />
   </ng-container>
 </app-dialog>
