@@ -43,5 +43,3 @@ export const EmptyAccessConfigurationGroup =
         DefaultNonNullabeOption
       ),
     });
-
-    const tt = '';
