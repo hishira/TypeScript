@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,9 +25,17 @@ import { EventHandler } from './input.utils';
   templateUrl: './input.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, InputTextModule, ErrorsComponent],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    InputTextModule,
+    ErrorsComponent,
+    CommonModule,
+  ],
 })
 export class InputComponent implements ControlValueAccessor, OnInit, Validator {
+  type = input<'text' | 'password'>('text');
+  labelClasses = input<string>('');
   label = input<string>('');
   withErrors = input<boolean>(false);
   control = new FormControl<string | null>('');

@@ -18,6 +18,7 @@ import { ToastService } from '../../shared/services/toast.service';
 import { Store } from '@ngrx/store';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
+import { InputComponent } from "../../shared/input/input.component";
 
 type LoginFormGroup = {
   username: FormControl<string | null>;
@@ -34,7 +35,8 @@ type LoginFormGroup = {
     ReactiveFormsModule,
     NgIf,
     ErrorsComponent,
-  ],
+    InputComponent
+],
   providers: [AuthenticationApiService],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
