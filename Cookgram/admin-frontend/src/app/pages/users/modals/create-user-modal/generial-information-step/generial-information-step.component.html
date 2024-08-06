@@ -20,15 +20,7 @@
           formControlName="secondName"
         />
       </div>
-      <div class="col-3">
-        <app-input
-          [withErrors]="true"
-          i18n-label
-          label="Email"
-          formControlName="email"
-          [withErrors]="true"
-        />
-      </div>
+     
       <div class="col-3 gap-2 flex flex-column">
         <label i18n class="block text-900 font-medium" for="buttondisplay">
           Birth day
@@ -42,7 +34,8 @@
         />
       </div>
       <div class="col-3 gap-2 flex flex-column">
-        <label for="genderdropdown" i18n>Gender</label>
+        <label for="genderdropdown" class="block text-900 font-medium" i18n
+          >Gender</label>
         <p-dropdown
           class="w-full"
           formControlName="gender"

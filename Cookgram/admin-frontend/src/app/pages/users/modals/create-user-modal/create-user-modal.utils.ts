@@ -27,7 +27,6 @@ export const EmptyGeneralInformationGroup =
     new FormGroup<GeneralInformationStepGroup>({
       firstName: new FormControl<string>('', DefaultNonNullabeOption),
       secondName: new FormControl<string>('', DefaultNonNullabeOption),
-      email: new FormControl<string>('', DefaultNonNullabeOption),
       birthDate: new FormControl<string>('', DefaultNonNullabeOption),
       gender: new FormControl<Gender | null>(null),
     });
@@ -36,6 +35,7 @@ export const EmptyAccessConfigurationGroup =
   (): FormGroup<AccessConfigurationStepGroup> =>
     new FormGroup<AccessConfigurationStepGroup>({
       username: new FormControl<string>('', DefaultNonNullabeOption),
+      email: new FormControl<string>('', DefaultNonNullabeOption),
       password: new FormControl<string>('', DefaultNonNullabeOption),
       confirmPassword: new FormControl<string>('', DefaultNonNullabeOption),
       temporaryPassword: new FormControl<boolean>(
