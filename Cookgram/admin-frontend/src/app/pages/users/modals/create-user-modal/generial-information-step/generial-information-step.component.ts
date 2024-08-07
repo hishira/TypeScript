@@ -32,11 +32,11 @@ export class GeneralInformationStep extends AbstractStepDirective<GeneralInforma
   genders: string[] = Object.values(Gender);
 
   override next(): void {
-    this.form().markAllAsTouched()
-    if (this.form().invalid) {
-      this.showFormHasErrors();
-      return;
-    }
-    this.next();
+    // this.form().markAllAsTouched()
+    // if (this.form().invalid) {
+    //   this.showFormHasErrors();
+    //   return;
+    // }
+    super.next();
   }
 }
