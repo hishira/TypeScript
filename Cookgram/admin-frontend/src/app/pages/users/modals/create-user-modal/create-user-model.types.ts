@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 export type CreateModalGroup = {
   generalInformation: FormGroup<GeneralInformationStepGroup>;
   accessConfiguration: FormGroup<AccessConfigurationStepGroup>;
+  address: FormGroup<AddressStepGroup>;
 };
 export type GeneralInformationStepGroup = {
   firstName: FormControl<string>;

@@ -9,6 +9,7 @@ import { GeneralInformationStep } from './generial-information-step/generial-inf
 import { FormGroup, FormControl } from '@angular/forms';
 import {
   AccessConfigurationStepGroup,
+  AddressStepGroup,
   CreateModalGroup,
   GeneralInformationStepGroup,
 } from './create-user-model.types';
@@ -20,6 +21,7 @@ import { CommonModule } from '@angular/common';
 import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
+import { AddressStepComponent } from './address-step/address-step.component';
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -35,6 +37,7 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
     GeneralInformationStep,
     CommonModule,
     AccessConfigurationStep,
+    AddressStepComponent,
   ],
 })
 export class CreateUserModalComponent extends AbstractModalDirective {
@@ -43,6 +46,8 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     this.createUserGroup.controls.generalInformation;
   accessConfigurationGroup: FormGroup<AccessConfigurationStepGroup> =
     this.createUserGroup.controls.accessConfiguration;
+  addressGroup: FormGroup<AddressStepGroup> =
+    this.createUserGroup.controls.address;
   steps: MenuItem[] = [
     {
       label: 'General information',
