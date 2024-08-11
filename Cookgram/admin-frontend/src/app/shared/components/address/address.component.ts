@@ -6,7 +6,6 @@ import {
   ControlValueAccessor,
 } from '@angular/forms';
 import { EmptyAddressStep } from '../../../pages/users/modals/create-user-modal/create-user-modal.utils';
-import { ErrorsComponent } from '../../errors/errors.component';
 import { InputComponent } from '../../input/input.component';
 import { noop } from 'rxjs';
 @Component({
