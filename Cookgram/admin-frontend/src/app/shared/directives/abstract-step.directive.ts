@@ -1,13 +1,17 @@
 import { Directive, inject, input } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
+
+type CheckType<T> = T extends { [key: string]: AbstractControl }
+  ? FormGroup<T>
+  : AbstractControl<T>;
 @Directive()
 export class AbstractStepDirective<
-  T extends { [key: string]: AbstractControl }
+  T extends { [key: string]: AbstractControl } | AbstractControl
 > {
-  form = input.required<FormGroup<T>>();
+  form = input.required<CheckType<T>>();
   protected dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
   protected modalService: ModalService = inject(ModalService);
   private messageService: ToastService = inject(ToastService);

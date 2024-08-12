@@ -3,7 +3,8 @@
     <div class="row-gap-0">
       <div class="col-3 text-xl text-900">Address configuration</div>
     </div>
-    <div class="row-gap-0 mt-3" [formGroup]="form()">
+    <ca-address></ca-address>
+    <!-- <div class="row-gap-0 mt-3" [formGroup]="form()">
       <div class="col-3">
         <app-input
           i18-label
@@ -50,7 +51,7 @@
           [withErrors]="true"
         />
       </div>
-    </div>
+    </div> -->
   </ng-container>
   <ng-container ngProjectAs="footer">
     <p-button label="Back" back [rounded]="true" />

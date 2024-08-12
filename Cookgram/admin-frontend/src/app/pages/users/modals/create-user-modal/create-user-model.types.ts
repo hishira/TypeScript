@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 export type CreateModalGroup = {
   generalInformation: FormGroup<GeneralInformationStepGroup>;
   accessConfiguration: FormGroup<AccessConfigurationStepGroup>;
-  address: FormGroup<AddressStepGroup>;
+  address: FormControl<AddressControl>;
 };
 export type GeneralInformationStepGroup = {
   firstName: FormControl<string>;
@@ -20,7 +20,7 @@ export type AccessConfigurationStepGroup = {
   temporaryPassword: FormControl<boolean>; // TODO: Check for backend implementation
 };
 
-export type AddressStepGroup = {
+export type AddressGroup = {
   address: FormControl<string>;
   house: FormControl<string>;
   door: FormControl<string | null>;
@@ -29,6 +29,14 @@ export type AddressStepGroup = {
   postalCode: FormControl<string>;
 };
 
+export type AddressControl = {
+  address: string;
+  house: string;
+  door: string | null;
+  city: string;
+  country: string;
+  postalCode: string;
+};
 export enum Gender {
   Men = 'Man',
   Woman = 'Woman',

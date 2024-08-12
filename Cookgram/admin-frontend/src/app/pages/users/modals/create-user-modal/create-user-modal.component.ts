@@ -1,27 +1,24 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { StepsModule } from 'primeng/steps';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
-import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
-import { FormGroup, FormControl } from '@angular/forms';
-import {
-  AccessConfigurationStepGroup,
-  AddressStepGroup,
-  CreateModalGroup,
-  GeneralInformationStepGroup,
-} from './create-user-model.types';
-import {
-  EmptyCreateUserFormGroup,
-  EmptyGeneralInformationGroup,
-} from './create-user-modal.utils';
-import { CommonModule } from '@angular/common';
 import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
 import { AddressStepComponent } from './address-step/address-step.component';
+import { EmptyCreateUserFormGroup } from './create-user-modal.utils';
+import {
+  AccessConfigurationStepGroup,
+  AddressControl,
+  AddressGroup,
+  CreateModalGroup,
+  GeneralInformationStepGroup,
+} from './create-user-model.types';
+import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -46,8 +43,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     this.createUserGroup.controls.generalInformation;
   accessConfigurationGroup: FormGroup<AccessConfigurationStepGroup> =
     this.createUserGroup.controls.accessConfiguration;
-  addressGroup: FormGroup<AddressStepGroup> =
-    this.createUserGroup.controls.address;
+  addressGroup: FormControl<AddressControl> = this.createUserGroup.controls.address;
   steps: MenuItem[] = [
     {
       label: 'General information',

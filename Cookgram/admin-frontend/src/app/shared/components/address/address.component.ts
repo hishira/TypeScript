@@ -4,6 +4,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { EmptyAddressStep } from '../../../pages/users/modals/create-user-modal/create-user-modal.utils';
 import { InputComponent } from '../../input/input.component';
@@ -14,6 +15,13 @@ import { noop } from 'rxjs';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ReactiveFormsModule, InputComponent],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: AddressCompoent,
+    },
+  ],
 })
 export class AddressCompoent implements ControlValueAccessor, OnInit {
   form: FormGroup = EmptyAddressStep();
