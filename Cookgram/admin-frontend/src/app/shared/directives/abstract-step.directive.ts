@@ -6,7 +6,7 @@ import { ToastService } from '../services/toast.service';
 
 type CheckType<T> = T extends { [key: string]: AbstractControl }
   ? FormGroup<T>
-  : AbstractControl<T>;
+  : T;
 @Directive()
 export class AbstractStepDirective<
   T extends { [key: string]: AbstractControl } | AbstractControl
