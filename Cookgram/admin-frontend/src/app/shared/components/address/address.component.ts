@@ -36,9 +36,9 @@ export class AddressCompoent implements ControlValueAccessor, OnInit {
     this.onChange = fn;
   }
   registerOnTouched(fn: any): void {
-    throw new Error('Method not implemented.');
+    //throw new Error('Method not implemented.');
   }
   setDisabledState?(isDisabled: boolean): void {
-    throw new Error('Method not implemented.');
+    //throw new Error('Method not implemented.');
   }
 }

@@ -59,6 +59,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   constructor(private dialogRef: DynamicDialogRef, modalService: ModalService) {
     super(modalService);
     this.handleNextStepChange();
+    this.addressGroup.valueChanges.subscribe(console.log)
   }
 
   close() {
