@@ -1,27 +1,25 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { StepsModule } from 'primeng/steps';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
-import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
-import { FormGroup, FormControl } from '@angular/forms';
-import {
-  AccessConfigurationStepGroup,
-  AddressStepGroup,
-  CreateModalGroup,
-  GeneralInformationStepGroup,
-} from './create-user-model.types';
-import {
-  EmptyCreateUserFormGroup,
-  EmptyGeneralInformationGroup,
-} from './create-user-modal.utils';
-import { CommonModule } from '@angular/common';
 import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
 import { AddressStepComponent } from './address-step/address-step.component';
+import { EmptyCreateUserFormGroup } from './create-user-modal.utils';
+import {
+  AccessConfigurationStepGroup,
+  AddressControl,
+  AddressGroup,
+  CreateModalGroup,
+  GeneralInformationStepGroup,
+} from './create-user-model.types';
+import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
+import { SummaryStepComponent } from "./summary-step/summary-step.component";
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -38,17 +36,20 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
     CommonModule,
     AccessConfigurationStep,
     AddressStepComponent,
-  ],
+    SummaryStepComponent
+],
 })
 export class CreateUserModalComponent extends AbstractModalDirective {
-  createUserGroup: FormGroup<CreateModalGroup> = EmptyCreateUserFormGroup();
-  generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
+  activeIndex: ActiveUserModalIndex = 0;
+  readonly createUserGroup: FormGroup<CreateModalGroup> =
+    EmptyCreateUserFormGroup();
+  readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
     this.createUserGroup.controls.generalInformation;
-  accessConfigurationGroup: FormGroup<AccessConfigurationStepGroup> =
+  readonly accessConfigurationGroup: FormGroup<AccessConfigurationStepGroup> =
     this.createUserGroup.controls.accessConfiguration;
-  addressGroup: FormGroup<AddressStepGroup> =
+  readonly addressGroup: FormControl<AddressControl> =
     this.createUserGroup.controls.address;
-  steps: MenuItem[] = [
+  readonly steps: MenuItem[] = [
     {
       label: 'General information',
     },
@@ -58,11 +59,11 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     { label: 'Address configuration' },
     { label: 'Summary' },
   ];
-  activeIndex: ActiveUserModalIndex = 0;
   private readonly MAX_STEP: ActiveUserModalIndex = 3;
   constructor(private dialogRef: DynamicDialogRef, modalService: ModalService) {
     super(modalService);
     this.handleNextStepChange();
+    this.addressGroup.valueChanges.subscribe(console.log);
   }
 
   close() {

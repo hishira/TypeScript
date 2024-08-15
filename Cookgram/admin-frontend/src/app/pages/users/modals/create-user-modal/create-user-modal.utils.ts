@@ -6,7 +6,8 @@ import {
 } from '@angular/forms';
 import {
   AccessConfigurationStepGroup,
-  AddressStepGroup,
+  AddressControl,
+  AddressGroup,
   CreateModalGroup,
   Gender,
   GeneralInformationStepGroup,
@@ -21,7 +22,7 @@ export const EmptyCreateUserFormGroup = (): FormGroup<CreateModalGroup> =>
   new FormGroup({
     generalInformation: EmptyGeneralInformationGroup(),
     accessConfiguration: EmptyAccessConfigurationGroup(),
-    address: EmptyAddressStep(),
+    address: EmptyAddressControl(),
   });
 
 export const EmptyGeneralInformationGroup =
@@ -46,8 +47,14 @@ export const EmptyAccessConfigurationGroup =
       ),
     });
 
-export const EmptyAddressStep = (): FormGroup<AddressStepGroup> =>
-  new FormGroup<AddressStepGroup>({
+export const EmptyAddressControl = (): FormControl<AddressControl> =>
+  new FormControl<AddressControl>(
+    null as unknown as AddressControl,
+    DefaultNonNullabeOption
+  );
+
+export const EmptyAddressStep = (): FormGroup<AddressGroup> =>
+  new FormGroup<AddressGroup>({
     address: new FormControl<string>('', DefaultNonNullabeOption),
     house: new FormControl<string>('', DefaultNonNullabeOption),
     door: new FormControl<string>(''),
