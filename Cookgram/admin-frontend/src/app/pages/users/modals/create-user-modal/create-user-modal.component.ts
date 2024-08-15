@@ -19,6 +19,7 @@ import {
   GeneralInformationStepGroup,
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
+import { SummaryStepComponent } from "./summary-step/summary-step.component";
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -35,16 +36,20 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
     CommonModule,
     AccessConfigurationStep,
     AddressStepComponent,
-  ],
+    SummaryStepComponent
+],
 })
 export class CreateUserModalComponent extends AbstractModalDirective {
-  createUserGroup: FormGroup<CreateModalGroup> = EmptyCreateUserFormGroup();
-  generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
+  activeIndex: ActiveUserModalIndex = 0;
+  readonly createUserGroup: FormGroup<CreateModalGroup> =
+    EmptyCreateUserFormGroup();
+  readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
     this.createUserGroup.controls.generalInformation;
-  accessConfigurationGroup: FormGroup<AccessConfigurationStepGroup> =
+  readonly accessConfigurationGroup: FormGroup<AccessConfigurationStepGroup> =
     this.createUserGroup.controls.accessConfiguration;
-  addressGroup: FormControl<AddressControl> = this.createUserGroup.controls.address;
-  steps: MenuItem[] = [
+  readonly addressGroup: FormControl<AddressControl> =
+    this.createUserGroup.controls.address;
+  readonly steps: MenuItem[] = [
     {
       label: 'General information',
     },
@@ -54,12 +59,11 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     { label: 'Address configuration' },
     { label: 'Summary' },
   ];
-  activeIndex: ActiveUserModalIndex = 0;
   private readonly MAX_STEP: ActiveUserModalIndex = 3;
   constructor(private dialogRef: DynamicDialogRef, modalService: ModalService) {
     super(modalService);
     this.handleNextStepChange();
-    this.addressGroup.valueChanges.subscribe(console.log)
+    this.addressGroup.valueChanges.subscribe(console.log);
   }
 
   close() {
