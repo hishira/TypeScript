@@ -15,7 +15,10 @@
       <app-address-step [form]="addressGroup"></app-address-step>
     </ng-container>
     <ng-container *ngSwitchCase="3">
-      <app-create-user-summary [form]="null"></app-create-user-summary>
+      <app-create-user-summary
+        [form]="null"
+        [generalFormValue]="GeneralInformationValue"
+      ></app-create-user-summary>
     </ng-container>
   </ng-container>
 </ng-container>

@@ -12,11 +12,9 @@ import {
   Gender,
   GeneralInformationStepGroup,
 } from './create-user-model.types';
+import { DefaultNonNullabeOption } from './create-user-modal.consts';
 
-const DefaultNonNullabeOption: FormControlOptions & { nonNullable: true } = {
-  nonNullable: true,
-  validators: [Validators.required],
-};
+
 
 export const EmptyCreateUserFormGroup = (): FormGroup<CreateModalGroup> =>
   new FormGroup({

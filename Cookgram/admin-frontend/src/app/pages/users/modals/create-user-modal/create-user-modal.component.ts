@@ -14,12 +14,13 @@ import { EmptyCreateUserFormGroup } from './create-user-modal.utils';
 import {
   AccessConfigurationStepGroup,
   AddressControl,
-  AddressGroup,
   CreateModalGroup,
   GeneralInformationStepGroup,
+  GeneralInformationValue,
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
-import { SummaryStepComponent } from "./summary-step/summary-step.component";
+import { SummaryStepComponent } from './summary-step/summary-step.component';
+import { CreateUserSteps } from './create-user-modal.consts';
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -36,8 +37,8 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
     CommonModule,
     AccessConfigurationStep,
     AddressStepComponent,
-    SummaryStepComponent
-],
+    SummaryStepComponent,
+  ],
 })
 export class CreateUserModalComponent extends AbstractModalDirective {
   activeIndex: ActiveUserModalIndex = 0;
@@ -49,23 +50,18 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     this.createUserGroup.controls.accessConfiguration;
   readonly addressGroup: FormControl<AddressControl> =
     this.createUserGroup.controls.address;
-  readonly steps: MenuItem[] = [
-    {
-      label: 'General information',
-    },
-    {
-      label: 'Authorization',
-    },
-    { label: 'Address configuration' },
-    { label: 'Summary' },
-  ];
+  readonly steps: MenuItem[] = CreateUserSteps;
   private readonly MAX_STEP: ActiveUserModalIndex = 3;
+  
   constructor(private dialogRef: DynamicDialogRef, modalService: ModalService) {
     super(modalService);
     this.handleNextStepChange();
     this.addressGroup.valueChanges.subscribe(console.log);
   }
 
+  get GeneralInformationValue(): GeneralInformationValue {
+    return this.generalInformationGroup.value as GeneralInformationValue;
+  }
   close() {
     this.dialogRef.close();
   }

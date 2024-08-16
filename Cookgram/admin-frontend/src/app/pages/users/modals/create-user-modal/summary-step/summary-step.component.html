@@ -1,13 +1,32 @@
 <app-dialog>
   <ng-container ngProjectAs="content">
     <div class="row-gap-0">
-      <div class="col-3 text-xl text-900">Summary</div>
+      <div class="col-3 text-xl text-900" i18n>Summary</div>
     </div>
-    <div class="row-gap-0">
-      <div class="col-3 text-lg text-900">General information</div>
+    <div class="row-gap-0 mt-2">
+      <div class="col-3 text-lg text-900" i18n>General information</div>
     </div>
-    <div>
-      <app-read-only [title]="'Test title'">Test</app-read-only>
+    <div class="flex gap-1">
+      <div class="col-3">
+        <app-read-only i18n-title title="First name">{{
+          generalFormValue().firstName
+        }}</app-read-only>
+      </div>
+      <div class="col-3">
+        <app-read-only i18n-title title="Second name">{{
+          generalFormValue().secondName
+        }}</app-read-only>
+      </div>
+      <div class="col-3">
+        <app-read-only i18n-title title="Birth date">{{
+          generalFormValue().birthDate
+        }}</app-read-only>
+      </div>
+      <div class="col-3">
+        <app-read-only i18n-title title="Gender">{{
+          generalFormValue().gender
+        }}</app-read-only>
+      </div>
     </div>
   </ng-container>
 </app-dialog>
