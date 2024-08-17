@@ -25,6 +25,8 @@ export type AccessConfigurationStepGroup = {
   temporaryPassword: FormControl<boolean>; // TODO: Check for backend implementation
 };
 
+export type AccessConfigurationValue = ExtractFormControl<AccessConfigurationStepGroup>
+
 export type AddressGroup = {
   address: FormControl<string>;
   house: FormControl<string>;

@@ -28,5 +28,28 @@
         }}</app-read-only>
       </div>
     </div>
+    <div class="row-gap-0 mt-2">
+      <div class="col-3 text-lg text-900" i18n>Access configuration</div>
+    </div>
+    <div class="flex gap-1">
+      <div class="col-3">
+        <app-read-only i18n-title title="Email">{{
+          accessConfigurationValue().email
+        }}</app-read-only>
+      </div>
+      <div class="col-3">
+        <app-read-only i18n-title title="Username">{{
+          accessConfigurationValue().username
+        }}</app-read-only>
+      </div>
+      <div class="col-3">
+        <app-read-only i18n-title title="Password">******</app-read-only>
+      </div>
+      <div class="col-3">
+        <app-read-only i18n-title title="Is password temporary">{{
+          accessConfigurationValue().temporaryPassword ? "Yes" : "No"
+        }}</app-read-only>
+      </div>
+    </div>
   </ng-container>
 </app-dialog>

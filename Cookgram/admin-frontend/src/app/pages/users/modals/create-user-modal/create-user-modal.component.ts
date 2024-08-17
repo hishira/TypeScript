@@ -13,6 +13,7 @@ import { AddressStepComponent } from './address-step/address-step.component';
 import { EmptyCreateUserFormGroup } from './create-user-modal.utils';
 import {
   AccessConfigurationStepGroup,
+  AccessConfigurationValue,
   AddressControl,
   CreateModalGroup,
   GeneralInformationStepGroup,
@@ -66,6 +67,9 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     this.dialogRef.close();
   }
 
+  get AccessConfigurationValue(): AccessConfigurationValue{
+    return this.accessConfigurationGroup.value as AccessConfigurationValue;
+  }
   private handleNextStepChange(): void {
     this.modalService.nextStepChange.subscribe((_) => {
       this.activeIndex =

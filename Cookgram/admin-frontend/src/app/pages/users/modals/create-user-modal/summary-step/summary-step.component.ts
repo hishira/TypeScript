@@ -4,7 +4,7 @@ import { Nullable } from 'primeng/ts-helpers';
 import { ReadoOnlyComponent } from '../../../../../shared/components/readonly-only/readonly-only.component';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
-import { GeneralInformationValue } from '../create-user-model.types';
+import { AccessConfigurationValue, GeneralInformationValue } from '../create-user-model.types';
 
 @Component({
   selector: 'app-create-user-summary',
@@ -15,4 +15,5 @@ import { GeneralInformationValue } from '../create-user-model.types';
 export class SummaryStepComponent extends AbstractStepDirective<Nullable> {
   generalFormValue: InputSignal<GeneralInformationValue> =
     input.required<GeneralInformationValue>();
+  accessConfigurationValue: InputSignal<AccessConfigurationValue> = input.required<AccessConfigurationValue>()
 }
