@@ -14,8 +14,8 @@ export type GeneralInformationStepGroup = {
   gender: FormControl<Gender | null>;
 };
 
-export type GeneralInformationValue = ExtractFormControl<GeneralInformationStepGroup>
-
+export type GeneralInformationValue =
+  ExtractFormControl<GeneralInformationStepGroup>;
 
 export type AccessConfigurationStepGroup = {
   username: FormControl<string>;
@@ -25,16 +25,8 @@ export type AccessConfigurationStepGroup = {
   temporaryPassword: FormControl<boolean>; // TODO: Check for backend implementation
 };
 
-export type AccessConfigurationValue = ExtractFormControl<AccessConfigurationStepGroup>
-
-export type AddressGroup = {
-  address: FormControl<string>;
-  house: FormControl<string>;
-  door: FormControl<string | null>;
-  city: FormControl<string>;
-  country: FormControl<string>;
-  postalCode: FormControl<string>;
-};
+export type AccessConfigurationValue =
+  ExtractFormControl<AccessConfigurationStepGroup>;
 
 export type AddressControl = {
   address: string;

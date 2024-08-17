@@ -22,6 +22,7 @@ import {
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
 import { CreateUserSteps } from './create-user-modal.consts';
+import { AddressValue } from '../../../../shared/components/address/types';
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -63,13 +64,19 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   get GeneralInformationValue(): GeneralInformationValue {
     return this.generalInformationGroup.value as GeneralInformationValue;
   }
+  
+  get AccessConfigurationValue(): AccessConfigurationValue{
+    return this.accessConfigurationGroup.value as AccessConfigurationValue;
+  }
+
+  get AddressValue(): AddressValue {
+    return this.addressGroup.value;;
+  }
+  
   close() {
     this.dialogRef.close();
   }
 
-  get AccessConfigurationValue(): AccessConfigurationValue{
-    return this.accessConfigurationGroup.value as AccessConfigurationValue;
-  }
   private handleNextStepChange(): void {
     this.modalService.nextStepChange.subscribe((_) => {
       this.activeIndex =

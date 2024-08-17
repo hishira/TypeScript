@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
-import { AddressControl, AddressGroup } from '../create-user-model.types';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { InputComponent } from '../../../../../shared/input/input.component';
 import { AddressCompoent } from '../../../../../shared/components/address/address.component';
+import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
+import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
+import { InputComponent } from '../../../../../shared/input/input.component';
+import { AddressControl } from '../create-user-model.types';
 @Component({
   selector: 'app-address-step',
   templateUrl: './address-step.component.html',

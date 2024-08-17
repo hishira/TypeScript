@@ -6,9 +6,9 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { EmptyAddressStep } from '../../../pages/users/modals/create-user-modal/create-user-modal.utils';
 import { InputComponent } from '../../input/input.component';
 import { noop } from 'rxjs';
+import { EmptyAddressStep } from './address.utils';
 @Component({
   selector: 'ca-address',
   templateUrl: './address.component.html',
