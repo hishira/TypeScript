@@ -1,7 +1,7 @@
 <app-dialog>
   <ng-container ngProjectAs="content">
     <div class="row-gap-0">
-      <div class="col-3 text-xl text-900" i18n>Access configuration</div>
+      <div class="col-3 text-xl text-900 font-bold" i18n>Access configuration</div>
     </div>
     <div class="row-gap-0 mt-3" [formGroup]="form()">
       <div class="col-3">
@@ -54,8 +54,8 @@
     </div>
   </ng-container>
   <ng-container ngProjectAs="footer">
-    <p-button label="Back" back [rounded]="true" />
-    <p-button label="Cancel" (onClick)="cancel()" [rounded]="true" />
-    <p-button label="Next" [rounded]="true" (onClick)="next()" />
+    <p-button i18n-label label="Back" back [rounded]="true"  (onClick)="back()" />
+    <p-button i18n-label label="Cancel" (onClick)="cancel()" [rounded]="true" />
+    <p-button i18n-label label="Next" [rounded]="true" (onClick)="next()" />
   </ng-container>
 </app-dialog>

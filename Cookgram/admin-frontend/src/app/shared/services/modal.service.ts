@@ -3,5 +3,6 @@ import { Subject } from "rxjs";
 
 @Injectable()
 export class ModalService{
-    nextStepChange: Subject<void> = new Subject();
+    nextStepChange: Subject<void> = new Subject<void>();
+    backStepChange: Subject<void> =new Subject<void>()
 }
