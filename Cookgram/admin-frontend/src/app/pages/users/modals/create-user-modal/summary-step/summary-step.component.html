@@ -88,5 +88,10 @@
         }}</app-read-only>
       </div>
     </div>
+    <ng-container ngProjectAs="footer">
+      <p-button i18n-label label="Back" back [rounded]="true" (onClick)="back()" />
+      <p-button i18n-label label="Cancel" (onClick)="cancel()" [rounded]="true" />
+      <p-button i18n-label label="Next" [rounded]="true" (onClick)="create()" />
+    </ng-container>
   </ng-container>
 </app-dialog>

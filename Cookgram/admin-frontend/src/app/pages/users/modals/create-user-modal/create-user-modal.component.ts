@@ -47,7 +47,6 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Destroyer()
 export class CreateUserModalComponent extends AbstractModalDirective {
   activeIndex: ActiveUserModalIndex = 0;
-  private readonly subscription = new Subscription();
   readonly createUserGroup: FormGroup<CreateModalGroup> =
     EmptyCreateUserFormGroup();
   readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
@@ -57,6 +56,8 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   readonly addressGroup: FormControl<AddressControl> =
     this.createUserGroup.controls.address;
   readonly steps: MenuItem[] = CreateUserSteps;
+
+  private readonly subscription = new Subscription();
   private readonly MAX_STEP: ActiveUserModalIndex = 3;
 
   constructor(private dialogRef: DynamicDialogRef, modalService: ModalService) {
@@ -77,6 +78,10 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     return this.addressGroup.value;
   }
 
+  create() {
+    throw new Error('Method not implemented.');
+  }
+
   close() {
     this.dialogRef.close();
   }
@@ -93,7 +98,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   private handleBackStepChange(): void {
-    this.subscription?.add(
+    this.subscription.add(
       this.modalService.backStepChange.subscribe((_) => {
         this.activeIndex =
           this.activeIndex - 1 <= 0
