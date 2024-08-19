@@ -5,6 +5,7 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { StepsModule } from 'primeng/steps';
+import { Subscription } from 'rxjs';
 import { AddressValue } from '../../../../shared/components/address/types';
 import { Destroyer } from '../../../../shared/decorators/destroy';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
@@ -46,6 +47,7 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Destroyer()
 export class CreateUserModalComponent extends AbstractModalDirective {
   activeIndex: ActiveUserModalIndex = 0;
+  private readonly subscription = new Subscription();
   readonly createUserGroup: FormGroup<CreateModalGroup> =
     EmptyCreateUserFormGroup();
   readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
@@ -80,7 +82,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   private handleNextStepChange(): void {
-    (this as any)?.subscription?.add(
+    this.subscription.add(
       this.modalService.nextStepChange.subscribe((_) => {
         this.activeIndex =
           this.activeIndex + 1 > 3
@@ -91,7 +93,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   private handleBackStepChange(): void {
-    (this as any)?.subscription?.add(
+    this.subscription?.add(
       this.modalService.backStepChange.subscribe((_) => {
         this.activeIndex =
           this.activeIndex - 1 <= 0

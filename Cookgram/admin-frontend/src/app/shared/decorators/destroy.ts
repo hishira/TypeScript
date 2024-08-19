@@ -21,16 +21,20 @@ export function Destroyer<T extends { new (...args: any[]): {} }>(): (
   constryctor: T
 ) => DestroyerType<T> {
   return function (constructor: T): DestroyerType<T> {
-    (constructor as any).subscription = new Subscription();
     const orig = constructor.prototype.ngOnDestroy;
     constructor.prototype.ngOnDestroy = function () {
-      for (let prop of Object.keys(this)) {
-        if (typeof this[prop]?.unsubscribe === 'function') {
-          this[prop].unsubscribe();
-        }
-      }
+      console.log('ngOnDestroy')
+      checkProprsWithUnsubscribeOption.bind(this)();
       orig?.apply();
     };
     return constructor as DestroyerType<T>;
   };
+}
+
+function checkProprsWithUnsubscribeOption(this: any): void {
+  for (let prop of Object.keys(this)) {
+    if (typeof this[prop]?.unsubscribe === 'function') {
+      this[prop].unsubscribe();
+    }
+  }
 }
