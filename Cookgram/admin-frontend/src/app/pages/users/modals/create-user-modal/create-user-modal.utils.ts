@@ -7,6 +7,7 @@ import {
   Gender,
   GeneralInformationStepGroup,
 } from './create-user-model.types';
+import { CreateUserObject } from '../../../../../api/types/user.types';
 
 export const EmptyCreateUserFormGroup = (): FormGroup<CreateModalGroup> =>
   new FormGroup({
@@ -42,3 +43,7 @@ export const EmptyAddressControl = (): FormControl<AddressControl> =>
     null as unknown as AddressControl,
     DefaultNonNullabeOption
   );
+
+export const PrepareCreateUserObject = (): CreateUserObject => ({
+
+})
