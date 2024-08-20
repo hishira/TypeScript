@@ -11,7 +11,6 @@ pub struct CreateContractDto {
     pub customer_id: Uuid,
     pub salary: Option<f32>,
     #[serde(rename = "contractStartTime")]
-    
     pub contract_start_time: OffsetDateTime,
     #[serde(rename = "contractEndTime")]
     pub contract_end_time: Option<OffsetDateTime>,

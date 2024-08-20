@@ -5,7 +5,7 @@ use crate::core::address::{address::Address, location::Location};
 
 #[derive(Debug, Validate, Deserialize)]
 pub struct CreateAddressDto {
-    pub user_id: uuid::Uuid,
+    //pub user_id: uuid::Uuid,
     #[validate(length(min = 1, message = "Address can not be empty"))]
     pub address: String,
     #[validate(length(min = 1, message = "House can not be empty"))]
@@ -19,7 +19,12 @@ pub struct CreateAddressDto {
     pub longitude: Option<f32>,
     #[validate(length(min = 1, message = "Postal code can not be empty"))]
     pub postal_code: String,
+}
 
+#[derive(Debug, Validate, Deserialize)]
+pub struct CreateUserAddressDto {
+    pub user_id: uuid::Uuid,
+    pub address: CreateAddressDto,
 }
 
 impl CreateAddressDto {
