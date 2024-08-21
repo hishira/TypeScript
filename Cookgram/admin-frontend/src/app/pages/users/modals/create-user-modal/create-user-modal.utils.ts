@@ -1,22 +1,13 @@
-import {
-  FormControl,
-  FormControlOptions,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import { DefaultNonNullabeOption } from '../../../../shared/consts/form.consts';
 import {
   AccessConfigurationStepGroup,
   AddressControl,
-  AddressGroup,
   CreateModalGroup,
   Gender,
   GeneralInformationStepGroup,
 } from './create-user-model.types';
-
-const DefaultNonNullabeOption: FormControlOptions & { nonNullable: true } = {
-  nonNullable: true,
-  validators: [Validators.required],
-};
+import { CreateUserObject } from '../../../../../api/types/user.types';
 
 export const EmptyCreateUserFormGroup = (): FormGroup<CreateModalGroup> =>
   new FormGroup({
@@ -53,12 +44,7 @@ export const EmptyAddressControl = (): FormControl<AddressControl> =>
     DefaultNonNullabeOption
   );
 
-export const EmptyAddressStep = (): FormGroup<AddressGroup> =>
-  new FormGroup<AddressGroup>({
-    address: new FormControl<string>('', DefaultNonNullabeOption),
-    house: new FormControl<string>('', DefaultNonNullabeOption),
-    door: new FormControl<string>(''),
-    city: new FormControl<string>('', DefaultNonNullabeOption),
-    country: new FormControl<string>('', DefaultNonNullabeOption),
-    postalCode: new FormControl<string>('', DefaultNonNullabeOption),
-  });
+//TODO
+// export const PrepareCreateUserObject = (): CreateUserObject => ({
+
+// })

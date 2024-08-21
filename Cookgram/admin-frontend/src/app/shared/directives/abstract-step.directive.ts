@@ -25,7 +25,12 @@ export class AbstractStepDirective<
     this.dialogRef.close();
   }
 
+  protected back(){
+    this.modalService.backStepChange.next();
+  }
+
   protected next() {
     this.modalService.nextStepChange.next();
   }
+  
 }

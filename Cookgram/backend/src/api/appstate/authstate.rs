@@ -6,5 +6,4 @@ use super::appstate::AppState;
 pub struct AuthState {
     pub app_state: AppState<UserRepositories>,
     pub auth_service: AuthService,
-    // pub pass_worker: PasswordWorker
 }

@@ -1,16 +1,18 @@
-use serde::{Deserialize, Serialize};
+use crate::api::dtos::addressdto::createaddressdto::CreateAddressDto;
+
+use serde::{Deserialize};
 use uuid::Uuid;
 use validator::{Validate, ValidationError};
 
 use crate::{
     api::utils::jwt::jwt::Claims,
     core::{
-        role::role::{Role, Roles},
-        state::{entitystate::EntityState, state::State},
+        role::role::{Roles},
     },
 };
 
 #[derive(Debug, Validate, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateUserDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
     pub username: String,
@@ -22,6 +24,7 @@ pub struct CreateUserDto {
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     pub password_is_temporary: Option<bool>,
+    pub address: Option<CreateAddressDto>
 }
 
 #[derive(Debug, Validate, Deserialize)]
@@ -128,6 +131,7 @@ mod tests {
             first_name: None,
             last_name: None,
             password_is_temporary: Some(false),
+            address: None,
         };
 
         // Validate the DTO
@@ -148,6 +152,7 @@ mod tests {
             first_name: None,
             last_name: None,
             password_is_temporary: Some(false),
+            address: None,
         };
 
         // Validate the DTO

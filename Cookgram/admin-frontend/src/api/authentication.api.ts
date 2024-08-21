@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseApi } from './base.api';
 import { HttpClient } from '@angular/common/http';
-import { AccessTokeResponse, LoginPayload, TokenResponse } from './api.types';
+import { AccessTokeResponse, LoginPayload, TokenResponse } from './types/api.types';
 import { Store } from '@ngrx/store';
 import { Observable, catchError, of, tap, switchMap } from 'rxjs';
 import { JWTSetAction } from '../store/jwt/action';
