@@ -1,6 +1,6 @@
 use crate::{
     api::{
-        dtos::{roledto::roledto::RoleDto, userdto::userdto::UserDtos},
+        dtos::{addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto, userdto::userdto::UserDtos},
         utils::password_worker::password_worker::PasswordWorkerError,
     },
     core::{
@@ -48,6 +48,7 @@ impl UserUtils {
                     credentials,
                     role,
                     None,
+                    user.address.map(CreateAddressDto::build_address_based_on_create_dto)
                 ))
             }
             UserDtos::Update(user) => {
@@ -76,6 +77,7 @@ impl UserUtils {
                     new_credentials,
                     Some(user.role.unwrap_or(user_from_db.role)),
                     Some(user_from_db.meta),
+                    None,
                 ))
             }
             UserDtos::Delete(_) => todo!(),

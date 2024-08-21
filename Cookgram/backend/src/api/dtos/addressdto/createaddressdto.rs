@@ -54,7 +54,6 @@ mod tests {
     #[test]
     fn test_create_address_dto_valid() {
         let dto = CreateAddressDto {
-            user_id: Uuid::new_v4(),
             address: "123 Example Street".to_string(),
             house: "A1".to_string(),
             door: Some("3B".to_string()),
@@ -71,7 +70,6 @@ mod tests {
     #[test]
     fn test_create_address_dto_invalid_empty_address() {
         let dto = CreateAddressDto {
-            user_id: Uuid::new_v4(),
             address: "".to_string(),
             house: "A1".to_string(),
             door: Some("3B".to_string()),
@@ -92,7 +90,6 @@ mod tests {
     #[test]
     fn test_create_address_dto_invalid_empty_house() {
         let dto = CreateAddressDto {
-            user_id: Uuid::new_v4(),
             address: "123 Example Street".to_string(),
             house: "".to_string(),
             door: Some("3B".to_string()),
@@ -113,7 +110,6 @@ mod tests {
     #[test]
     fn test_create_address_dto_invalid_empty_city() {
         let dto = CreateAddressDto {
-            user_id: Uuid::new_v4(),
             address: "123 Example Street".to_string(),
             house: "A1".to_string(),
             door: Some("3B".to_string()),
@@ -134,7 +130,6 @@ mod tests {
     #[test]
     fn test_create_address_dto_invalid_empty_postal_code() {
         let dto = CreateAddressDto {
-            user_id: Uuid::new_v4(),
             address: "123 Example Street".to_string(),
             house: "A1".to_string(),
             door: Some("3B".to_string()),
@@ -155,7 +150,6 @@ mod tests {
     #[test]
     fn test_build_address_based_on_create_dto() {
         let dto = CreateAddressDto {
-            user_id: Uuid::new_v4(),
             address: "123 Example Street".to_string(),
             house: "A1".to_string(),
             door: Some("3B".to_string()),
@@ -167,7 +161,6 @@ mod tests {
         };
 
         let copy_dto = CreateAddressDto {
-            user_id: Uuid::new_v4(),
             address: "123 Example Street".to_string(),
             house: "A1".to_string(),
             door: Some("3B".to_string()),

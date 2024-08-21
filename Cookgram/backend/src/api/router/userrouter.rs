@@ -11,7 +11,7 @@ use crate::{
         appstate::{appstate::AppState, userstate::UserState},
         daos::userdao::UserDAO,
         dtos::{
-            addressdto::createaddressdto::CreateAddressDto,
+            addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto},
             userdto::{
                 userdto::{CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption},
                 userlistdto::UserListDto,
@@ -123,7 +123,7 @@ impl UserRouter {
 
     async fn add_user_address(
         State(state): State<UserState>,
-        ValidateDtos(params): ValidateDtos<CreateAddressDto>,
+        ValidateDtos(params): ValidateDtos<CreateUserAddressDto>,
     ) -> Json<String> {
         state.user_service.add_user_address(params).await;
         Json("Ok".to_string())
