@@ -38,6 +38,9 @@ impl UserRepositories {
             .user_dao
             .create(entity.clone(), Some(transaction.deref_mut()))
             .await;
+        if(entity.address.is_some()) {
+            let address_resp = self.create_user_address(entity.clone(), entity.clone().address.unwrap()).await;
+        }
         UserRepositories::user_create_errors_handler(re, meta_response);
         let _ = transaction.commit().await;
         EventRepository::create_later(

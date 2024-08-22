@@ -14,9 +14,9 @@ pub struct AddressDAO {
 }
 
 pub struct AddressFilterOption{}
-#[async_trait]
-impl DAO<Address, AddressFilterOption> for AddressDAO {
-    async fn create<'a,E >(&self, entity: Address, executor: Option<E>) -> Result<PgQueryResult, sqlx::Error>  {
-        let mut create_query = AddressQue
-    }
-}
+// #[async_trait]
+// impl DAO<Address, AddressFilterOption> for AddressDAO {
+//     async fn create<'a,E >(&self, entity: Address, executor: Option<E>) -> Result<PgQueryResult, sqlx::Error>  {
+//         let mut create_query = AddressQue
+//     }
+// }
