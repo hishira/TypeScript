@@ -1,6 +1,6 @@
 use crate::{
     api::{
-        daos::{dao::DAO, userdao::UserDAO},
+        daos::{dao::DAO, useraddressdao::UserAddressDAO, userdao::UserDAO},
         dtos::userdto::userdto::UserFilterOption,
         queries::{
             actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
@@ -25,6 +25,7 @@ pub struct UserRepositories {
     pub user_queries: UserQuery,
     pub db_context: Database,
     pub user_dao: UserDAO,
+    pub user_address_dao: UserAddressDAO
 }
 impl UserRepositories {
     async fn create_user_using_transaction(
@@ -63,10 +64,11 @@ impl UserRepositories {
     }
 
     async fn create_user_address(&self, user: User, address: Address) -> User {
-        let mut address_query = self
-            .user_queries
-            .prepare_address_query(address.clone(), user.id.clone().get_id());
-        let result = address_query.build().execute(&self.pool).await;
+        // let mut address_query = self
+        //     .user_queries
+        //     .prepare_address_query(address.clone(), user.id.clone().get_id());
+        // let result = address_query.build().execute(&self.pool).await;
+        let result = self.user_address_dao.create(address.clone(), user.id.get_id(), Some(&self.pool)).await;
         match result {
             Ok(_) => tracing::debug!("Address created"),
             Err(error) => tracing::error!("error while address create: {}", error),

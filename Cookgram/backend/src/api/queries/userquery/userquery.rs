@@ -17,9 +17,6 @@ pub struct UserQuery {
 }
 
 impl UserQuery {
-    const START_ADDRESS_QUERY: &str = "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code ) ";
-    const RETURN_AND_ADDRESS_CONNECTION: &str =
-        "returning id ) INSERT into ADDRESS_CONNECTION (entity_id, address_id) ";
     const QUERY_FIND_BY_ID:&str = "SELECT id, username, email, password, meta_id, role, current_state, previous_state  FROM users where id = ";
     pub fn new(id: Option<Uuid>, user_name: Option<String>, email: Option<String>) -> Self {
         UserQuery {
@@ -29,32 +26,6 @@ impl UserQuery {
         }
     }
 
-    pub fn prepare_address_query(&self, address: Address, user_id: Uuid) -> QueryBuilder<Postgres> {
-        let address_id = Uuid::new_v4(); // Address is value object, not necessery id
-        let mut create_address_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new(Self::START_ADDRESS_QUERY);
-
-        create_address_builder.push_values(vec![address], |mut b, address| {
-            b.push_bind(address_id)
-                .push_bind(address.address)
-                .push_bind(address.house)
-                .push_bind(address.door)
-                .push_bind(address.city)
-                .push_bind(address.country)
-                .push_bind(address.location.latitude)
-                .push_bind(address.location.longitude)
-                .push_bind(address.postal_code);
-        });
-        create_address_builder.push(Self::RETURN_AND_ADDRESS_CONNECTION);
-        create_address_builder.push_values(
-            std::iter::once((user_id, address_id)),
-            |mut b, (user_id, address_id)| {
-                b.push_bind(user_id).push_bind(address_id);
-            },
-        );
-
-        create_address_builder
-    }
     fn prepare_username(
         user_query: &mut QueryBuilder<Postgres>,
         mut count: i8,
