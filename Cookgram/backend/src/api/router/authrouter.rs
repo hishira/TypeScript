@@ -13,7 +13,7 @@ use validator::Validate;
 use crate::{
     api::{
         appstate::{appstate::AppState, authstate::AuthState},
-        daos::userdao::UserDAO,
+        daos::{useraddressdao::UserAddressDAO, userdao::UserDAO},
         dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
@@ -76,6 +76,11 @@ impl AuthRouter {
                         .unwrap(),
                     db_context: database.get_mongo_database(),
                 },
+                user_address_dao: UserAddressDAO{
+                    db_context: database.get_mongo_database(),
+                    pool:<std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                    .unwrap(),
+                }
             },
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)

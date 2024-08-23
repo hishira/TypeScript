@@ -25,7 +25,7 @@ pub struct UserRepositories {
     pub user_queries: UserQuery,
     pub db_context: Database,
     pub user_dao: UserDAO,
-    pub user_address_dao: UserAddressDAO
+    pub user_address_dao: UserAddressDAO,
 }
 impl UserRepositories {
     async fn create_user_using_transaction(
@@ -39,10 +39,17 @@ impl UserRepositories {
             .user_dao
             .create(entity.clone(), Some(transaction.deref_mut()))
             .await;
-        if(entity.address.is_some()) {
-            let address_resp = self.create_user_address(entity.clone(), entity.clone().address.unwrap()).await;
+        let address_resp:Option<Result<PgQueryResult, Error>>;
+        if (entity.address.is_some()) {
+            address_resp = Some(self.user_address_dao.create(
+                entity.clone().address.unwrap(),
+                entity.clone().id.get_id(),
+                Some(transaction.deref_mut())
+            ).await);
+        } else {
+            address_resp = None;
         }
-        UserRepositories::user_create_errors_handler(re, meta_response);
+        UserRepositories::user_create_errors_handler(re, meta_response, address_resp);
         let _ = transaction.commit().await;
         EventRepository::create_later(
             self.db_context.clone(),
@@ -54,6 +61,7 @@ impl UserRepositories {
     fn user_create_errors_handler(
         re: Result<PgQueryResult, Error>,
         meta_response: Result<PgQueryResult, Error>,
+        address_resp:Option<Result<PgQueryResult, Error>>
     ) {
         match (re, meta_response) {
             (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
@@ -61,14 +69,22 @@ impl UserRepositories {
             (Err(_), Ok(_)) => tracing::debug!("User not created, meta created"),
             (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
         }
+        match address_resp {
+            Some(resp) => {
+                match resp  {
+                    Ok(_) => tracing::debug!("User address created"),
+                    Err(error) =>tracing::error!("Error occur while saving user address {}", error),
+                }
+            },
+            None => {},
+        }
     }
 
     async fn create_user_address(&self, user: User, address: Address) -> User {
-        // let mut address_query = self
-        //     .user_queries
-        //     .prepare_address_query(address.clone(), user.id.clone().get_id());
-        // let result = address_query.build().execute(&self.pool).await;
-        let result = self.user_address_dao.create(address.clone(), user.id.get_id(), Some(&self.pool)).await;
+        let result = self
+            .user_address_dao
+            .create(address.clone(), user.id.get_id(), Some(&self.pool))
+            .await;
         match result {
             Ok(_) => tracing::debug!("Address created"),
             Err(error) => tracing::error!("error while address create: {}", error),
