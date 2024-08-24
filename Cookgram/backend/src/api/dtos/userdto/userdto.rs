@@ -2,21 +2,30 @@ use serde::Deserialize;
 use uuid::Uuid;
 use validator::{Validate, ValidationError};
 
-use crate::{api::{dtos::addressdto::createaddressdto::CreateAddressDto, utils::jwt::jwt::Claims}, core::role::role::Roles};
+use crate::{
+    api::{dtos::addressdto::createaddressdto::CreateAddressDto, utils::jwt::jwt::Claims},
+    core::role::role::Roles,
+};
 
 #[derive(Debug, Validate, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CreateUserDto {
+pub struct UserCreditionalDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
     pub username: String,
     #[validate(length(min = 6, message = "Passoword length must have exceed 6"))]
     pub password: String,
+    pub password_is_temporary: Option<bool>,
+}
+
+#[derive(Debug, Validate, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateUserDto {
+    pub creditionals: UserCreditionalDto,
     #[validate(email)]
     pub email: String,
     pub role: Option<Roles>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
-    pub password_is_temporary: Option<bool>,
     pub address: Option<CreateAddressDto>,
 }
 
