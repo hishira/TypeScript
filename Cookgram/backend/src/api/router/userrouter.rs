@@ -9,9 +9,9 @@ use uuid::Uuid;
 use crate::{
     api::{
         appstate::{appstate::AppState, userstate::UserState},
-        daos::userdao::UserDAO,
+        daos::{useraddressdao::UserAddressDAO, userdao::UserDAO},
         dtos::{
-            addressdto::createaddressdto::CreateAddressDto,
+            addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto},
             userdto::{
                 userdto::{CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption},
                 userlistdto::UserListDto,
@@ -53,6 +53,11 @@ impl UserRouter {
                         .unwrap(),
                     db_context: database.get_mongo_database(),
                 },
+                user_address_dao: UserAddressDAO{
+                    db_context: database.get_mongo_database(),
+                    pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                    .unwrap(),
+                }
             },
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
@@ -123,7 +128,7 @@ impl UserRouter {
 
     async fn add_user_address(
         State(state): State<UserState>,
-        ValidateDtos(params): ValidateDtos<CreateAddressDto>,
+        ValidateDtos(params): ValidateDtos<CreateUserAddressDto>,
     ) -> Json<String> {
         state.user_service.add_user_address(params).await;
         Json("Ok".to_string())

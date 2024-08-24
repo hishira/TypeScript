@@ -40,6 +40,7 @@ impl User {
         credentials: Credentials,
         role: Option<Roles>,
         meta: Option<Meta>,
+        address: Option<Address>,
     ) -> Self {
         let user_role: Roles = User::prepare_proper_role(role);
         match id {
@@ -49,7 +50,7 @@ impl User {
                 credentials,
                 meta: meta.unwrap_or(Meta::new()),
                 role: user_role,
-                address: None,
+                address: address,
                 state: State {
                     current: EntityState::Active,
                     previous: None,
@@ -61,7 +62,7 @@ impl User {
                 credentials,
                 meta: Meta::new(),
                 role: user_role,
-                address: None,
+                address: address,
                 state: State {
                     current: EntityState::Active,
                     previous: None,
@@ -144,6 +145,7 @@ mod tests {
             Credentials::new("test_user".to_string(), "password123".to_string(), false),
             Some(Roles::admin_role()),
             None,
+            None,
         );
 
         assert_ne!(user.id.get_id(), Uuid::nil());
@@ -175,6 +177,7 @@ mod tests {
             },
             Credentials::new("test_user".to_string(), "password123".to_string(), false),
             Some(Roles::user_role()),
+            None,
             None,
         );
 
@@ -209,6 +212,7 @@ mod tests {
             Credentials::new("test_user".to_string(), "password123".to_string(), false),
             None,
             None,
+            None,
         );
 
         // Check if the user has the correct id
@@ -240,6 +244,7 @@ mod tests {
                 contacts: Some(Contacts::empty()),
             },
             Credentials::new("test_user".to_string(), "password123".to_string(), false),
+            None,
             None,
             None,
         );

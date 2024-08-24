@@ -2,7 +2,7 @@ use axum::Json;
 use uuid::Uuid;
 
 use crate::api::daos::userdao::UserDAO;
-use crate::api::dtos::addressdto::createaddressdto::CreateAddressDto;
+use crate::api::dtos::addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto};
 use crate::api::dtos::userdto::userdto::{
     CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption,
 };
@@ -79,12 +79,12 @@ impl UserService {
         self.user_repo.find_by_id(user_id).await
     }
 
-    pub async fn add_user_address(&self, params: CreateAddressDto) -> User {
+    pub async fn add_user_address(&self, params: CreateUserAddressDto) -> User {
         let user = self.user_repo.find_by_id(params.user_id).await;
         self.user_repo
             .update(User::create_base_on_user_and_address(
                 user,
-                CreateAddressDto::build_address_based_on_create_dto(params),
+                CreateAddressDto::build_address_based_on_create_dto(params.address),
             ))
             .await
     }
