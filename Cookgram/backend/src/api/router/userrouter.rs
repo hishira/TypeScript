@@ -1,9 +1,12 @@
+use std::ops::Deref;
+
 use axum::{
     extract::{Path, State},
     routing::{delete, get, post},
     Json, Router,
 };
 use sqlx::{Pool, Postgres};
+use tokio::sync::mpsc::Sender;
 use uuid::Uuid;
 
 use crate::{
@@ -11,7 +14,7 @@ use crate::{
         appstate::{appstate::AppState, userstate::UserState},
         daos::{useraddressdao::UserAddressDAO, userdao::UserDAO},
         dtos::{
-            addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto},
+            addressdto::createaddressdto::CreateUserAddressDto,
             userdto::{
                 userdto::{CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption},
                 userlistdto::UserListDto,
@@ -28,7 +31,7 @@ use crate::{
         utils::jwt::jwt::Claims,
         validators::dtovalidator::ValidateDtos,
     },
-    core::user::user::User,
+    core::{event::eventTask::EventTask, user::user::User},
     database::{init::Database, redis::redisdatabase::RedisDatabase},
 };
 
@@ -38,10 +41,11 @@ pub struct UserRouter {
     user_repo: UserRepositories,
     event_repo: EventRepository,
     redis: RedisDatabase,
+    send: Sender<EventTask>,
 }
 
 impl UserRouter {
-    pub fn new(database: &Database) -> Self {
+    pub fn new(database: &Database, send: &Sender<EventTask>) -> Self {
         Self {
             user_repo: UserRepositories {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
@@ -53,11 +57,11 @@ impl UserRouter {
                         .unwrap(),
                     db_context: database.get_mongo_database(),
                 },
-                user_address_dao: UserAddressDAO{
+                user_address_dao: UserAddressDAO {
                     db_context: database.get_mongo_database(),
                     pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
-                    .unwrap(),
-                }
+                        .unwrap(),
+                },
             },
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
@@ -65,6 +69,7 @@ impl UserRouter {
                 event_query: EventQuery {},
             },
             redis: database.redis.clone(),
+            send: send.clone(),
         }
     }
     async fn user_create(
@@ -178,6 +183,11 @@ impl UserRouter {
         ClaimsGuard::user_delete_guard(claims)?;
         state.user_service.user_delete(params).await
     }
+
+    async fn event_test(State(state): State<UserState>) -> Result<Json<bool>, ResponseError> {
+        state.send.send(EventTask("Ok".to_string())).await;
+        return Ok(Json(true));
+    }
 }
 
 impl ApplicationRouter for UserRouter {
@@ -190,6 +200,7 @@ impl ApplicationRouter for UserRouter {
         let user_state: UserState = UserState {
             app_state,
             user_service: UserService::new(self.user_repo.user_dao.clone(), self.user_repo.clone()),
+            send: self.send.clone(),
         };
         Router::new()
             .route(
@@ -206,6 +217,7 @@ impl ApplicationRouter for UserRouter {
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
             .route("/user-list", post(UserRouter::user_list))
+            .route("/test-event", get(UserRouter::event_test))
             .with_state(user_state)
     }
 }

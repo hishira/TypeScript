@@ -2,7 +2,7 @@ use axum::{
     extract::{DefaultBodyLimit, MatchedPath, Request},
     middleware, Router,
 };
-use tokio::{net::TcpListener, signal};
+use tokio::{net::TcpListener, signal, sync::mpsc};
 use tower_http::trace::TraceLayer;
 use tracing::info_span;
 
@@ -11,17 +11,26 @@ use crate::{
         logs::applicationlog::ApplicationLog,
         metrics::metricsserver::MetricsServer,
         router::{authrouter::AuthRouter, router::ApplicationRouter, userrouter::UserRouter},
+        services::eventservice::EventService,
         utils::cors::CORS,
     },
+    core::event::eventTask::EventTask,
     database::{self, init::Database},
 };
 
 pub struct ApplicationServer {}
 
 impl ApplicationServer {
-    fn create_router(database: &Database) -> Router {
+    async fn create_router(database: &Database) -> Router {
+        let (tx,  rx) = mpsc::channel::<EventTask>(64);
+        EventService { event_reciver: rx }.run_loop().await;
+        // tokio::spawn(async move {
+        //     while let Some(task) = rx.recv().await {
+        //         println!("{}", task.0);
+        //     }
+        // });
         Router::new()
-            .nest("/user", UserRouter::new(&database).get_router())
+            .nest("/user", UserRouter::new(&database, &tx).get_router())
             .nest("/auth", AuthRouter::new(&database).get_router())
             .route_layer(middleware::from_fn(MetricsServer::track_metrics))
             .layer(DefaultBodyLimit::max(104857000))
@@ -65,13 +74,13 @@ impl ApplicationServer {
         match ApplicationLog::register_tracing() {
             Ok(ok) => {
                 tracing::info!("Tracing successfull created");
-            },
+            }
             Err(err) => {
                 tracing::error!("Error while cerating tracing, {}", err);
-            },
+            }
         }
         let database = Self::prepare_database().await;
-        let app = Self::create_router(&database);
+        let app = Self::create_router(&database).await;
         let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
         tracing::debug!("listening on {}", listener.local_addr().unwrap());
         axum::serve(listener, app)

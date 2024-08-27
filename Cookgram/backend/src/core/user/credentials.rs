@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::api::utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError};
+use crate::api::{
+    dtos::userdto::userdto::UserCreditionalDto,
+    utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError},
+};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Credentials {
@@ -37,5 +40,16 @@ impl Credentials {
                 Err(error)
             }
         }
+    }
+
+    pub async fn new_with_hashed_password_using_creditional_dto(
+        creditional_dto: UserCreditionalDto,
+    ) -> Result<Self, PasswordWorkerError> {
+        Self::new_with_hashed_password(
+            creditional_dto.username,
+            creditional_dto.password,
+            creditional_dto.password_is_temporary.unwrap_or(false),
+        )
+        .await
     }
 }

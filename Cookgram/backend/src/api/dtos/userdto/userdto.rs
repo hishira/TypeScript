@@ -2,21 +2,30 @@ use serde::Deserialize;
 use uuid::Uuid;
 use validator::{Validate, ValidationError};
 
-use crate::{api::{dtos::addressdto::createaddressdto::CreateAddressDto, utils::jwt::jwt::Claims}, core::role::role::Roles};
+use crate::{
+    api::{dtos::addressdto::createaddressdto::CreateAddressDto, utils::jwt::jwt::Claims},
+    core::role::role::Roles,
+};
 
 #[derive(Debug, Validate, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CreateUserDto {
+pub struct UserCreditionalDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
     pub username: String,
     #[validate(length(min = 6, message = "Passoword length must have exceed 6"))]
     pub password: String,
+    pub password_is_temporary: Option<bool>,
+}
+
+#[derive(Debug, Validate, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateUserDto {
+    pub creditionals: UserCreditionalDto,
     #[validate(email)]
     pub email: String,
     pub role: Option<Roles>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
-    pub password_is_temporary: Option<bool>,
     pub address: Option<CreateAddressDto>,
 }
 
@@ -117,13 +126,16 @@ mod tests {
     fn test_create_user_dto_validation_success() {
         // Create a valid CreateUserDto
         let valid_dto = CreateUserDto {
-            username: "valid_username".to_string(),
-            password: "valid_password".to_string(),
+            creditionals: UserCreditionalDto {
+                username: "valid_username".to_string(),
+                password: "valid_password".to_string(),
+                password_is_temporary: Some(false),
+
+            },
             email: "valid@example.com".to_string(),
             role: Some(Roles::user_role()),
             first_name: None,
             last_name: None,
-            password_is_temporary: Some(false),
             address: None,
         };
 
@@ -138,13 +150,16 @@ mod tests {
     fn test_create_user_dto_validation_failure() {
         // Create an invalid CreateUserDto with empty username and short password
         let invalid_dto = CreateUserDto {
-            username: "".to_string(),
-            password: "short".to_string(),
+            creditionals: UserCreditionalDto {
+                username: "".to_string(),
+                password: "short".to_string(),
+                password_is_temporary: Some(false),
+
+            },            
             email: "invalid_email".to_string(), // Invalid email intentionally
             role: Some(Roles::user_role()),
             first_name: None,
             last_name: None,
-            password_is_temporary: Some(false),
             address: None,
         };
 
