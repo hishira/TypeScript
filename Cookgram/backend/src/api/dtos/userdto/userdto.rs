@@ -126,13 +126,16 @@ mod tests {
     fn test_create_user_dto_validation_success() {
         // Create a valid CreateUserDto
         let valid_dto = CreateUserDto {
-            username: "valid_username".to_string(),
-            password: "valid_password".to_string(),
+            creditionals: UserCreditionalDto {
+                username: "valid_username".to_string(),
+                password: "valid_password".to_string(),
+                password_is_temporary: Some(false),
+
+            },
             email: "valid@example.com".to_string(),
             role: Some(Roles::user_role()),
             first_name: None,
             last_name: None,
-            password_is_temporary: Some(false),
             address: None,
         };
 
@@ -147,13 +150,16 @@ mod tests {
     fn test_create_user_dto_validation_failure() {
         // Create an invalid CreateUserDto with empty username and short password
         let invalid_dto = CreateUserDto {
-            username: "".to_string(),
-            password: "short".to_string(),
+            creditionals: UserCreditionalDto {
+                username: "".to_string(),
+                password: "short".to_string(),
+                password_is_temporary: Some(false),
+
+            },            
             email: "invalid_email".to_string(), // Invalid email intentionally
             role: Some(Roles::user_role()),
             first_name: None,
             last_name: None,
-            password_is_temporary: Some(false),
             address: None,
         };
 

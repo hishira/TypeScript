@@ -1,6 +1,9 @@
 use crate::{
     api::{
-        dtos::{addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto, userdto::userdto::UserDtos},
+        dtos::{
+            addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto,
+            userdto::userdto::UserDtos,
+        },
         utils::password_worker::password_worker::PasswordWorkerError,
     },
     core::{
@@ -28,12 +31,7 @@ impl UserUtils {
             UserDtos::Create(user) => {
                 let role = user.role;
                 // let hash = pass_worker.hash(user.password.clone()).await.unwrap();
-                let credentials = Credentials::new_with_hashed_password(
-                    user.username,
-                    user.password,
-                    user.password_is_temporary.unwrap_or(false),
-                )
-                .await?;
+                let credentials = Credentials::new_with_hashed_password_using_creditional_dto(user.creditionals).await?;
                 let personal_information = PersonalInformation {
                     first_name: user.first_name,
                     last_name: user.last_name,
@@ -48,7 +46,8 @@ impl UserUtils {
                     credentials,
                     role,
                     None,
-                    user.address.map(CreateAddressDto::build_address_based_on_create_dto)
+                    user.address
+                        .map(CreateAddressDto::build_address_based_on_create_dto),
                 ))
             }
             UserDtos::Update(user) => {
