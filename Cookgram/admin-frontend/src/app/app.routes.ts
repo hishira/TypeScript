@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { AdminContainerComponent } from './pages/admin-container/admin-container.component';
+import { ContextResolver } from './shared/resolvers/context.resolver';
 
 export const routes: Routes = [
   {
@@ -10,6 +11,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminContainerComponent,
+    resolve: [ContextResolver],
     children: [
       {
         path: 'users',

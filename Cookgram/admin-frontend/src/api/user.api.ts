@@ -9,7 +9,7 @@ export class UserApiSerivce extends BaseApi {
   constructor(private readonly httpService: HttpClient) {
     super();
   }
-  
+
   userLists(): Observable<UserList[]> {
     return this.httpService.post<UserList[]>(
       this.prepareLink('user/user-list'),
@@ -17,7 +17,8 @@ export class UserApiSerivce extends BaseApi {
     );
   }
 
-  createUser(user:CreateUserObject) {
-    
+  currentUserInfo(): Observable<any> {
+    return this.httpService.get<any>(this.prepareLink('user/current-user'));
   }
+  createUser(user: CreateUserObject): void {}
 }
