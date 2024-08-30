@@ -1,4 +1,5 @@
 use axum::Json;
+use uuid::Uuid;
 
 use crate::{
     api::{
@@ -37,16 +38,16 @@ impl AuthService {
         &self,
         params: UserAuthDto,
     ) -> Result<Json<AuthBody>, ResponseError> {
-        let access_refresh_cliaims = Self::get_access_refresh_cliaims(&params);
-        let user = self.find_user_for_login(&access_refresh_cliaims.0).await?;
+        let user = self.find_user_for_login(params.clone().username.unwrap()).await?;
+        let access_refresh_cliaims = Self::get_access_refresh_cliaims(&params, user.id.get_id());
         let tokens = Self::generate_tokens(&access_refresh_cliaims.0, &access_refresh_cliaims.1)?;
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
             .await
             .map_err(|e| ResponseError::from(e))
     }
 
-    async fn find_user_for_login(&self, access_claims: &Claims) -> Result<User, AuthError> {
-        let filter = UserFilterOption::from_claims(access_claims.clone());
+    async fn find_user_for_login(&self, username: String) -> Result<User, AuthError> {
+        let filter = UserFilterOption::from_only_usernamr(username);
         let users = self.user_repo.find(filter.clone()).await;
         let users = match users {
             Ok(u) => u,
@@ -80,7 +81,7 @@ impl AuthService {
     ) -> Result<JwtTokens, AuthError> {
         JwtTokens::generete_from_claims(&access_claims, &refresh_claims)
     }
-    fn get_access_refresh_cliaims(params: &UserAuthDto) -> (Claims, Claims) {
-        (Claims::new(&params, None), Claims::new(&params, Some(1000)))
+    fn get_access_refresh_cliaims(params: &UserAuthDto, user_id: Uuid) -> (Claims, Claims) {
+        (Claims::new(&params, None, Some(user_id)), Claims::new(&params, Some(1000), Some(user_id)))
     }
 }

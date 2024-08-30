@@ -39,28 +39,28 @@ impl Claims {
         Ok(Keys::encode(&token_data.claims)?)
     }
 
-    pub fn new(params: &UserAuthDto, extended_time: Option<u64>) -> Self {
+    pub fn new(params: &UserAuthDto, extended_time: Option<u64>, user_id: Option<uuid::Uuid>) -> Self {
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
-                user_id: None,
+                user_id: user_id,
                 user_info: "TEst".to_string(),
                 exp: Self::prepare_exp(extended_time),
                 role: None,
             },
             (None, Some(username)) => Self {
-                user_id: None,
+                user_id: user_id,
                 user_info: username,
                 exp: Self::prepare_exp(extended_time),
                 role: None,
             },
             (Some(email), None) => Self {
-                user_id: None,
+                user_id: user_id,
                 user_info: email,
                 exp: Self::prepare_exp(extended_time),
                 role: None,
             },
             (Some(_), Some(username)) => Self {
-                user_id: None,
+                user_id: user_id,
                 user_info: username,
                 exp: Self::prepare_exp(extended_time),
                 role: None,

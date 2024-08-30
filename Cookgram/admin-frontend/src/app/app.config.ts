@@ -16,6 +16,7 @@ import { ToastService } from './shared/services/toast.service';
 import { RefreshInterceptor } from './shared/interceptor/refresh.interceptor';
 import { TokenInterceptor } from './shared/interceptor/token.interceptor';
 import { AuthenticationApiService } from '../api/authentication.api';
+import { UserApiSerivce } from '../api/user.api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +28,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     MessageService,
     AuthenticationApiService,
+    UserApiSerivce,
     ToastService,
     {
       provide: HTTP_INTERCEPTORS,

@@ -121,7 +121,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
     ) -> Result<Json<User>, ResponseError> {
-        ClaimsGuard::current_user_guard(&claims)?;
+        //ClaimsGuard::current_user_guard(&claims)?;
 
         Ok(Json(
             state
