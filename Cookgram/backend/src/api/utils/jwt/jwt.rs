@@ -16,7 +16,7 @@ use super::keys::Keys;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
-    pub user_id: Option<uuid::Uuid>,
+    pub user_id: uuid::Uuid,
     pub user_info: String,
     pub role: Option<Roles>,
     pub exp: u64,
@@ -39,7 +39,7 @@ impl Claims {
         Ok(Keys::encode(&token_data.claims)?)
     }
 
-    pub fn new(params: &UserAuthDto, extended_time: Option<u64>, user_id: Option<uuid::Uuid>) -> Self {
+    pub fn new(params: &UserAuthDto, extended_time: Option<u64>, user_id: uuid::Uuid) -> Self {
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
                 user_id: user_id,
