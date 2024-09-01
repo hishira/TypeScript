@@ -38,7 +38,9 @@ impl AuthService {
         &self,
         params: UserAuthDto,
     ) -> Result<Json<AuthBody>, ResponseError> {
-        let user = self.find_user_for_login(params.clone().username.unwrap()).await?;
+        let user = self
+            .find_user_for_login(params.clone().username.unwrap())
+            .await?;
         let access_refresh_cliaims = Self::get_access_refresh_cliaims(&params, user.id.get_id());
         let tokens = Self::generate_tokens(&access_refresh_cliaims.0, &access_refresh_cliaims.1)?;
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
@@ -82,6 +84,9 @@ impl AuthService {
         JwtTokens::generete_from_claims(&access_claims, &refresh_claims)
     }
     fn get_access_refresh_cliaims(params: &UserAuthDto, user_id: Uuid) -> (Claims, Claims) {
-        (Claims::new(&params, None, Some(user_id)), Claims::new(&params, Some(1000), Some(user_id)))
+        (
+            Claims::new(&params, None, user_id),
+            Claims::new(&params, Some(1000), user_id),
+        )
     }
 }
