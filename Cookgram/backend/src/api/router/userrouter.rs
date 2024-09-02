@@ -172,7 +172,7 @@ impl UserRouter {
         // TODO: Check if we must use Some
         state
             .user_service
-            .user_list(Some(claims.user_id), claims.role, params)
+            .user_list(claims.user_id, claims.role, params)
             .await
     }
 
