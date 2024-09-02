@@ -39,7 +39,7 @@ export class RefreshInterceptor implements HttpInterceptor {
       catchError((httpError: HttpErrorResponse) => {
         if (
           httpError.status === this.UNAUTHORIYECODE &&
-          !req.url.includes('refresh-token')
+          (!req.url.includes('refresh-token') || !req.url.includes('login'))
         ) {
           return this.handleRefreshing(req, next);
         } else {

@@ -43,6 +43,7 @@ impl AuthService {
             .await?;
         let access_refresh_cliaims = Self::get_access_refresh_cliaims(&params, user.id.get_id());
         let tokens = Self::generate_tokens(&access_refresh_cliaims.0, &access_refresh_cliaims.1)?;
+        //TODO: If error is NOT_FOUND return user not found like somethind
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
             .await
             .map_err(|e| ResponseError::from(e))

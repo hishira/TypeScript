@@ -110,9 +110,9 @@ impl UserService {
     fn map_merge_params_with_owner(
         params: UserFilterOption,
         is_admin: bool,
-        user_id: Option<Uuid>,
+        user_id: Uuid,
     ) -> UserFilterOption {
-        let owner_id = (!is_admin).then(|| user_id.ok_or(AuthError::MissingCredentials).unwrap());
+        let owner_id = (!is_admin).then(|| user_id);
         UserFilterOption {
             limit: params.limit,
             offset: params.offset,
@@ -123,7 +123,7 @@ impl UserService {
     }
     pub async fn user_list(
         &self,
-        user_id: Option<Uuid>,
+        user_id: Uuid,
         user_role: Option<Roles>,
         params: UserFilterOption,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {

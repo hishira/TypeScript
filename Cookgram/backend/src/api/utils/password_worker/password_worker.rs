@@ -102,7 +102,9 @@ impl PasswordWorker {
                 if verify_response {
                     return Ok(true);
                 }
-                Result::Err(AuthError::WrongCredentials)
+                tracing::debug!("Passwords not match");
+                return Ok(false);
+                //Result::Err(AuthError::WrongCredentials)
             },
             Err(error) => {
                 tracing::error!("Error occur while password matching {}", error);

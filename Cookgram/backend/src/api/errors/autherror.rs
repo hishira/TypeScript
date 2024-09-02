@@ -21,7 +21,7 @@ pub enum AuthError {
 impl AuthError {
     pub fn get_status_and_message(&self) -> (StatusCode, &str) {
         match self {
-            AuthError::WrongCredentials => (StatusCode::UNAUTHORIZED, "Wrong credentials"),
+            AuthError::WrongCredentials => (StatusCode::NOT_FOUND, "Wrong credentials"),
             AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
             AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
