@@ -7,6 +7,6 @@ import {
 import { UserApiSerivce } from '../../../api/user.api';
 import { tap } from 'rxjs';
 export const ContextResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
+  _: ActivatedRouteSnapshot,
+  __: RouterStateSnapshot
 ) => inject(UserApiSerivce).currentUserInfo().pipe(tap(console.log));

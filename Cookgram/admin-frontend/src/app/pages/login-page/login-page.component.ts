@@ -18,7 +18,7 @@ import { ToastService } from '../../shared/services/toast.service';
 import { Store } from '@ngrx/store';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
-import { InputComponent } from "../../shared/input/input.component";
+import { InputComponent } from '../../shared/input/input.component';
 
 type LoginFormGroup = {
   username: FormControl<string | null>;
@@ -35,8 +35,8 @@ type LoginFormGroup = {
     ReactiveFormsModule,
     NgIf,
     ErrorsComponent,
-    InputComponent
-],
+    InputComponent,
+  ],
   providers: [AuthenticationApiService],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
@@ -71,7 +71,9 @@ export class LoginPageComponent {
         password: this.loginFormGroup.value.password ?? '',
       })
       .subscribe((r) => {
-        if (r && 'error' in r) {
+        
+        //TODO: Quick fix
+        if (r === null || (r && 'error' in r)) {
           this.toastService.showWarning('User not exists');
         } else {
           this.store

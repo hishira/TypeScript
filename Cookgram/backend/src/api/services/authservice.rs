@@ -75,7 +75,10 @@ impl AuthService {
         self.pass_worker
             .password_match(password, hashed_user_password)
             .await
-            .map(|_| Json(AuthBody::get_from_token(tokens)))
+            .map(|_| {
+                    return Json(AuthBody::get_from_token(tokens));
+                
+            })
     }
 
     fn generate_tokens(
