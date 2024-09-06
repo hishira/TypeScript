@@ -17,6 +17,7 @@ import { RefreshInterceptor } from './shared/interceptor/refresh.interceptor';
 import { TokenInterceptor } from './shared/interceptor/token.interceptor';
 import { AuthenticationApiService } from '../api/authentication.api';
 import { UserApiSerivce } from '../api/user.api';
+import { currentUserReducers } from '../store/currentUser/reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore(),
     provideState({ name: 'jwt', reducer: jwtReducers }),
+    provideState({ name: 'currentUser', reducer: currentUserReducers }),
     provideHttpClient(withInterceptorsFromDi()),
     MessageService,
     AuthenticationApiService,
