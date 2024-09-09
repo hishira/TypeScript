@@ -14,6 +14,7 @@ import { ErrorsTypes } from './errors-types';
 export class ErrorsComponent implements OnInit {
   control = input.required<AbstractControl>();
   errorsChange$: Observable<string[]> = of([]);
+  
   ngOnInit(): void {
     this.errorsChange$ = combineLatest([
       this.getEventObservable(),

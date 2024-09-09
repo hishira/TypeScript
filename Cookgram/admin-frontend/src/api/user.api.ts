@@ -21,5 +21,6 @@ export class UserApiSerivce extends BaseApi {
   currentUserInfo(): Observable<any> {
     return this.httpService.get<any>(this.prepareLink('user/current-user'));
   }
+
   createUser(user: CreateUserObject): void {}
 }

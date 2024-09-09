@@ -20,7 +20,7 @@ export class EmptyListComponent {
   withRefreshButton = input<boolean>(false);
   refreshEmit = output<void>();
 
-  refreshData() {
+  refreshData(): void {
     this.refreshEmit.emit();
   }
 }
