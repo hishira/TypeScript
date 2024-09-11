@@ -14,7 +14,7 @@ import { ErrorsTypes } from './errors-types';
 export class ErrorsComponent implements OnInit {
   control = input.required<AbstractControl>();
   errorsChange$: Observable<string[]> = of([]);
-  
+
   ngOnInit(): void {
     this.errorsChange$ = combineLatest([
       this.getEventObservable(),
@@ -44,6 +44,7 @@ export class ErrorsComponent implements OnInit {
 
           return this.getCurrentListOfErrors();
         }
+
         return [];
       })
     );
@@ -59,6 +60,7 @@ export class ErrorsComponent implements OnInit {
     errors &&
       ErrorsTypes.Email in errors &&
       errorsList.push('Email is invalid');
+
     return errorsList;
   }
 }
