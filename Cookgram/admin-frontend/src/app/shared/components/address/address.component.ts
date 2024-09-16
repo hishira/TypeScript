@@ -25,16 +25,22 @@ import { EmptyAddressStep } from './address.utils';
 })
 export class AddressCompoent implements ControlValueAccessor, OnInit {
   form: FormGroup = EmptyAddressStep();
+
   onChange: (v: any) => void = noop;
+
   ngOnInit(): void {
     this.form.valueChanges.subscribe((a) => this.onChange(a));
   }
+
   writeValue(obj: any): void {
     if (obj) this.form.setValue(obj);
   }
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
+
   registerOnTouched(fn: any): void {}
+
   setDisabledState?(isDisabled: boolean): void {}
 }
