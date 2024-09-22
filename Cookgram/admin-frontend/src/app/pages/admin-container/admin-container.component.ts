@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { AdminMenubarComponent } from './admin-menubar/admin-menubar.component';
 import { RippleModule } from 'primeng/ripple';
+import { MenuItems } from './admin-container.consts';
 
 @Component({
   selector: 'app-admin-container',
@@ -16,25 +17,6 @@ export class AdminContainerComponent implements OnInit {
   menuItems: MenuItem[] = [];
 
   ngOnInit(): void {
-    this.menuItems = [
-      {
-        label: 'Users',
-        icon: 'pi pi-user',
-        items: [
-          {
-            label: 'List',
-          },
-        ],
-      },
-      {
-        label: 'Contracts',
-        icon: 'pi pi-user',
-        items: [
-          {
-            label: 'List',
-          },
-        ],
-      },
-    ];
+    this.menuItems = MenuItems;
   }
 }
