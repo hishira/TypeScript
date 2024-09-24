@@ -19,6 +19,7 @@ import {
 import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
 import { AuthenticationApiService } from '../../../api/authentication.api';
+import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
@@ -37,9 +38,10 @@ export class RefreshInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((httpError: HttpErrorResponse) => {
+        const url = req.url;
         if (
           httpError.status === this.UNAUTHORIYECODE &&
-          (!req.url.includes('refresh-token') || !req.url.includes('login'))
+          ForbiddenRefreshUrlString.every((furl) => !url.includes(furl))
         ) {
           return this.handleRefreshing(req, next);
         } else {
@@ -66,7 +68,7 @@ export class RefreshInterceptor implements HttpInterceptor {
       this.tokenSubject.next(null);
       return this.authenticationService.refreshToken().pipe(
         switchMap((token) => {
-          if ('error' in token) throw new Error('Cannot refresh token');
+          if ('error' in token) throw RefreshTokenError;
 
           this.isRefreshing = false;
           this.tokenSubject.next(token.accessToken);
