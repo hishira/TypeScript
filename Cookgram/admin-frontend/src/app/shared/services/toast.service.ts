@@ -1,21 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MessageService, Message } from 'primeng/api';
-const DefaultObjectMessage: Partial<Message> = {
-  key: 'br',
-  life: 2000,
-};
-const WaringToastObject = (message: string): Message => ({
-  severity: 'warn',
-  summary: 'Warning',
-  detail: message,
-  ...DefaultObjectMessage,
-});
-const ErrorToastObject = (message: string): Message => ({
-  severity: 'error',
-  summary: 'Error',
-  detail: message,
-  ...DefaultObjectMessage,
-});
+import { MessageService } from 'primeng/api';
+import { ErrorToastObject, WaringToastObject } from './consts';
 
 @Injectable()
 export class ToastService {
