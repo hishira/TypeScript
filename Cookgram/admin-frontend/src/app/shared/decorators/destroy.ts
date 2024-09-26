@@ -23,7 +23,6 @@ export function Destroyer<T extends { new (...args: any[]): {} }>(): (
   return function (constructor: T): DestroyerType<T> {
     const orig = constructor.prototype.ngOnDestroy;
     constructor.prototype.ngOnDestroy = function () {
-      console.log('ngOnDestroy')
       checkProprsWithUnsubscribeOption.bind(this)();
       orig?.apply();
     };
