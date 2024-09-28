@@ -19,6 +19,7 @@ import { Store } from '@ngrx/store';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
 import { InputComponent } from '../../shared/input/input.component';
+import { TokenResponse } from '../../../api/types/api.types';
 
 type LoginFormGroup = {
   username: FormControl<string | null>;
@@ -77,8 +78,8 @@ export class LoginPageComponent {
       });
   }
 
-  private handleLoginResponse(response): void {
-    if (r === null || (r && 'error' in r)) {
+  private handleLoginResponse(response: TokenResponse | null): void {
+    if (response === null || (response && 'error' in response)) {
       this.toastService.showWarning('User not exists');
     } else {
       this.store
