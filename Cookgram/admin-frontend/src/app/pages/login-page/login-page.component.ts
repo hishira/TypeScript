@@ -73,14 +73,18 @@ export class LoginPageComponent {
       .subscribe((r) => {
         
         //TODO: Quick fix
-        if (r === null || (r && 'error' in r)) {
-          this.toastService.showWarning('User not exists');
-        } else {
-          this.store
-            .select(GetAccessTokenSelectors)
-            .subscribe((a) => console.log(a));
-          this.router.navigate(['/admin']);
-        }
+       this.handleLoginResponse(r);
       });
+  }
+
+  private handleLoginResponse(response): void {
+    if (r === null || (r && 'error' in r)) {
+      this.toastService.showWarning('User not exists');
+    } else {
+      this.store
+        .select(GetAccessTokenSelectors)
+        .subscribe((a) => console.log(a));
+      this.router.navigate(['/admin']);
+    }
   }
 }
