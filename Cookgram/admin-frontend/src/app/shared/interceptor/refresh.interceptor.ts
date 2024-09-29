@@ -25,13 +25,15 @@ import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 export class RefreshInterceptor implements HttpInterceptor {
   readonly UNAUTHORIYECODE = 401;
   private isRefreshing: boolean = false;
-  private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<
+  private readonly  tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<
     string | null
   >(null);
+
   constructor(
     private readonly store: Store<MainStore>,
     private readonly authenticationService: AuthenticationApiService
   ) {}
+
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -51,14 +53,16 @@ export class RefreshInterceptor implements HttpInterceptor {
     );
   }
 
-  private addSetToken(req: HttpRequest<any>, token: string) {
+  private addSetToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
     this.store.dispatch(JWTSetAccessToken({ accessToken: token }));
+    
     return req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
       },
     });
   }
+  
   private handleRefreshing(
     req: HttpRequest<any>,
     next: HttpHandler

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { BaseApi } from './base.api';
 import { Injectable } from '@angular/core';
-import { UserList } from '../app/pages/users/users-list/users-list.component';
 import { Observable } from 'rxjs';
 import { CreateUserObject } from './types/user.types';
+import { UserList } from '../app/pages/users/users-list/types';
 
 @Injectable()
 export class UserApiSerivce extends BaseApi {

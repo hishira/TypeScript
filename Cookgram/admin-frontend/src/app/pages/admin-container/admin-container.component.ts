@@ -13,10 +13,6 @@ import { MenuItems } from './admin-container.consts';
   templateUrl: './admin-container.component.html',
   styleUrl: './admin-container.component.scss',
 })
-export class AdminContainerComponent implements OnInit {
-  menuItems: MenuItem[] = [];
-
-  ngOnInit(): void {
-    this.menuItems = MenuItems;
-  }
+export class AdminContainerComponent {
+  menuItems: MenuItem[] = MenuItems;
 }
