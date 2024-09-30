@@ -7,9 +7,9 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService } from 'primeng/dynamicdialog';
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
-import { UserAddressList, UserList } from './types';
+import { UserList } from './types';
 //TODO: Fix after fixing backend
 
 @Component({
@@ -30,15 +30,18 @@ import { UserAddressList, UserList } from './types';
 })
 export class UsersListComponent implements OnInit {
   users: UserList[] = [];
+
   constructor(
     private readonly userApi: UserApiSerivce,
     private dialogService: DialogService
   ) {}
+
   ngOnInit(): void {
     this.userApi
       .userLists()
       .subscribe((users: UserList[]) => (this.users = users));
   }
+
   createUser() {
     this.dialogService.open(CreateUserModalComponent, {
       header: 'Create user',
