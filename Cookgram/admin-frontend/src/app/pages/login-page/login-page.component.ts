@@ -58,6 +58,7 @@ export class LoginPageComponent {
     private readonly toastService: ToastService,
     private readonly store: Store<MainStore>
   ) {}
+
   signIn(): void {
     this.loginFormGroup.markAllAsTouched();
     this.loginFormGroup.updateValueAndValidity();
@@ -71,11 +72,7 @@ export class LoginPageComponent {
         username: this.loginFormGroup.value.username ?? '',
         password: this.loginFormGroup.value.password ?? '',
       })
-      .subscribe((r) => {
-        
-        //TODO: Quick fix
-       this.handleLoginResponse(r);
-      });
+      .subscribe((r) => this.handleLoginResponse(r));
   }
 
   private handleLoginResponse(response: TokenResponse | null): void {
