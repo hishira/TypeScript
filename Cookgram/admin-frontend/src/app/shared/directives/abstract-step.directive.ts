@@ -14,7 +14,7 @@ type Controlable =  { [key: string]: AbstractControl } | AbstractControl | Nulla
 export class AbstractStepDirective<
   T extends Controlable
 > {
-  protected form = input.required<CheckType<T>>();
+  form = input.required<CheckType<T>>();
 
   protected dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
   protected modalService: ModalService = inject(ModalService);

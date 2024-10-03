@@ -76,7 +76,8 @@ export class LoginPageComponent {
   }
 
   private handleLoginResponse(response: TokenResponse | null): void {
-    if (response === null || (response && 'error' in response)) {
+    const userExists = this.chckIfUserExistsBasedOnResponse(response);
+    if (userExists) {
       this.toastService.showWarning('User not exists');
     } else {
       this.store
@@ -84,5 +85,15 @@ export class LoginPageComponent {
         .subscribe((a) => console.log(a));
       this.router.navigate(['/admin']);
     }
+  }
+
+  private chckIfUserExistsBasedOnResponse(
+    response: TokenResponse | null
+  ): boolean {
+    return (
+      response === null ||
+      (response && 'error' in response) ||
+      (response.accessToken === '' && response.refreshToken === '')
+    );
   }
 }
