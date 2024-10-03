@@ -75,9 +75,11 @@ impl AuthService {
         self.pass_worker
             .password_match(password, hashed_user_password)
             .await
-            .map(|_| {
+            .map(|response| {
+                if response {
                     return Json(AuthBody::get_from_token(tokens));
-                
+                }
+                Json(AuthBody::empty())
             })
     }
 

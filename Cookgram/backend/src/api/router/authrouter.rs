@@ -55,6 +55,13 @@ impl AuthBody {
             refresh_token: tokens.0 .0.clone(),
         }
     }
+
+    pub fn empty() -> Self {
+        Self {
+            access_token: "".to_string(),
+            refresh_token: "".to_string(),
+        }
+    }
 }
 
 pub struct AuthRouter {
@@ -76,11 +83,11 @@ impl AuthRouter {
                         .unwrap(),
                     db_context: database.get_mongo_database(),
                 },
-                user_address_dao: UserAddressDAO{
+                user_address_dao: UserAddressDAO {
                     db_context: database.get_mongo_database(),
-                    pool:<std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
-                    .unwrap(),
-                }
+                    pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                        .unwrap(),
+                },
             },
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
@@ -109,9 +116,11 @@ impl AuthRouter {
         State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
     ) -> Result<Json<AuthBody>, ResponseError> {
-        state.auth_service.generate_tokens_if_user_exists(params).await
+        state
+            .auth_service
+            .generate_tokens_if_user_exists(params)
+            .await
     }
-
 }
 
 impl ApplicationRouter for AuthRouter {
