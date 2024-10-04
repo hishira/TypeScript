@@ -25,9 +25,8 @@ import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 export class RefreshInterceptor implements HttpInterceptor {
   readonly UNAUTHORIYECODE = 401;
   private isRefreshing: boolean = false;
-  private readonly  tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<
-    string | null
-  >(null);
+  private readonly tokenSubject: BehaviorSubject<string | null> =
+    new BehaviorSubject<string | null>(null);
 
   constructor(
     private readonly store: Store<MainStore>,
@@ -41,10 +40,11 @@ export class RefreshInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((httpError: HttpErrorResponse) => {
         const url = req.url;
-        if (
-          httpError.status === this.UNAUTHORIYECODE &&
-          ForbiddenRefreshUrlString.every((furl) => !url.includes(furl))
-        ) {
+        console.log('REFRESH interceptop: ', url);
+        if (ForbiddenRefreshUrlString.some((furl) => url.includes(furl))) {
+          throw Error(httpError.message);
+        }
+        if (httpError.status === this.UNAUTHORIYECODE) {
           return this.handleRefreshing(req, next);
         } else {
           throw Error(httpError.message);
@@ -55,14 +55,14 @@ export class RefreshInterceptor implements HttpInterceptor {
 
   private addSetToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
     this.store.dispatch(JWTSetAccessToken({ accessToken: token }));
-    
+
     return req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
       },
     });
   }
-  
+
   private handleRefreshing(
     req: HttpRequest<any>,
     next: HttpHandler

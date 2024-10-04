@@ -17,6 +17,10 @@ export class TokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const url = req.url;
+    console.log('TOKEN interceptop: ', url);
+    if (url.includes('login') || url.includes('refresh-token'))
+      return next.handle(req.clone());
     return this.store.select(GetAccessTokenSelectors).pipe(
       switchMap((accessToken) => {
         return next.handle(

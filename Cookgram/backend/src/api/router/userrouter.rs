@@ -168,7 +168,7 @@ impl UserRouter {
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
-        ClaimsGuard::role_guard_user_find(claims.clone()).map_err(ResponseError::AuthError)?;
+        ClaimsGuard::role_guard_user_find(claims.clone())?;
         // TODO: Check if we must use Some
         state
             .user_service

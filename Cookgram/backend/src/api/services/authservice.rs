@@ -72,7 +72,8 @@ impl AuthService {
         hashed_user_password: String,
         tokens: JwtTokens,
     ) -> Result<Json<AuthBody>, AuthError> {
-        self.pass_worker
+        let pass_worker = PasswordWorker::new(10, 4).unwrap();
+        pass_worker
             .password_match(password, hashed_user_password)
             .await
             .map(|response| {
