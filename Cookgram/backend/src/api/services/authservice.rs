@@ -41,7 +41,7 @@ impl AuthService {
         let user = self
             .find_user_for_login(params.clone().username.unwrap())
             .await?;
-        let access_refresh_cliaims = Self::get_access_refresh_cliaims(&params, user.id.get_id());
+        let access_refresh_cliaims = Self::get_access_refresh_cliaims(&params, user.clone());
         let tokens = Self::generate_tokens(&access_refresh_cliaims.0, &access_refresh_cliaims.1)?;
         //TODO: If error is NOT_FOUND return user not found like somethind
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
@@ -76,12 +76,7 @@ impl AuthService {
         pass_worker
             .password_match(password, hashed_user_password)
             .await
-            .map(|response| {
-                if response {
-                    return Json(AuthBody::get_from_token(tokens));
-                }
-                Json(AuthBody::empty())
-            })
+            .map(|_| Json(AuthBody::get_from_token(tokens)))
     }
 
     fn generate_tokens(
@@ -90,10 +85,10 @@ impl AuthService {
     ) -> Result<JwtTokens, AuthError> {
         JwtTokens::generete_from_claims(&access_claims, &refresh_claims)
     }
-    fn get_access_refresh_cliaims(params: &UserAuthDto, user_id: Uuid) -> (Claims, Claims) {
+    fn get_access_refresh_cliaims(params: &UserAuthDto, user: User) -> (Claims, Claims) {
         (
-            Claims::new(&params, None, user_id),
-            Claims::new(&params, Some(1000), user_id),
+            Claims::new(&params, None, user.clone()),
+            Claims::new(&params, Some(1000), user.clone()),
         )
     }
 }
