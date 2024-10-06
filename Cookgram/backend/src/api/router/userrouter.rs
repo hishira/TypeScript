@@ -124,10 +124,7 @@ impl UserRouter {
         //ClaimsGuard::current_user_guard(&claims)?;
 
         Ok(Json(
-            state
-                .user_service
-                .get_current_user(claims.user_id)
-                .await,
+            state.user_service.get_current_user(claims.user_id).await,
         ))
     }
 

@@ -95,8 +95,7 @@ impl UserService {
         user_id: Uuid,
     ) -> Result<User, ResponseError> {
         let user = self.user_repo.find_by_id(user_id).await;
-        let updated_user =
-            UserUtils::get_from_dto(UserDtos::Update(params), Some(user)).await?;
+        let updated_user = UserUtils::get_from_dto(UserDtos::Update(params), Some(user)).await?;
         Ok(self.user_repo.update(updated_user.clone()).await)
     }
 

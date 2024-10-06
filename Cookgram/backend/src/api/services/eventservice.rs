@@ -2,11 +2,11 @@ use tokio::sync::mpsc::Receiver;
 
 use crate::core::event::eventTask::EventTask;
 
-pub struct EventService{
-    pub event_reciver: Receiver<EventTask>
+pub struct EventService {
+    pub event_reciver: Receiver<EventTask>,
 }
 
-impl EventService{
+impl EventService {
     pub async fn run_loop(self) {
         tokio::spawn(async move {
             let mut event_reciver = self.event_reciver;

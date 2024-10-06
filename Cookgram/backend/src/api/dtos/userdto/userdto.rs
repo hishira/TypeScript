@@ -140,7 +140,6 @@ mod tests {
                 username: "valid_username".to_string(),
                 password: "valid_password".to_string(),
                 password_is_temporary: Some(false),
-
             },
             email: "valid@example.com".to_string(),
             role: Some(Roles::user_role()),
@@ -164,8 +163,7 @@ mod tests {
                 username: "".to_string(),
                 password: "short".to_string(),
                 password_is_temporary: Some(false),
-
-            },            
+            },
             email: "invalid_email".to_string(), // Invalid email intentionally
             role: Some(Roles::user_role()),
             first_name: None,

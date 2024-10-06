@@ -13,7 +13,6 @@ use crate::{
 
 use super::keys::Keys;
 
-
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
     pub user_id: uuid::Uuid,
