@@ -1,0 +1,9 @@
+:host {
+    p-dropdown{
+        display: block;
+        width: 100%;
+        & div {
+            width: 100% !important;
+        }
+    }
+}
