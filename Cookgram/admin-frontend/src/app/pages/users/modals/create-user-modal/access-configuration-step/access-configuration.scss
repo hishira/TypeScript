@@ -1,9 +1,10 @@
-:host {
+:host  ::ng-deep {
     p-dropdown{
         display: block;
         width: 100%;
-        & div {
+        & > div {
             width: 100% !important;
         }
     }
+ 
 }
