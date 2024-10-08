@@ -23,7 +23,7 @@ pub struct Claims {
 
 impl Claims {
     fn prepare_exp(extended_time: Option<u64>) -> u64 {
-        get_current_timestamp() + 200 + extended_time.unwrap_or(0)
+        500 + extended_time.unwrap_or_default()
     }
 
     pub fn get_token_validation() -> Validation {
@@ -38,30 +38,31 @@ impl Claims {
         Ok(Keys::encode(&token_data.claims)?)
     }
 
-    pub fn new(params: &UserAuthDto, extended_time: Option<u64>, user: User) -> Self {
+    pub fn new(timestamp: u64, params: &UserAuthDto, extended_time: Option<u64>, user: User) -> Self {
+        let exp = timestamp + Self::prepare_exp(extended_time);
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
                 user_id: user.id.get_id(),
                 user_info: "TEst".to_string(),
-                exp: Self::prepare_exp(extended_time),
+                exp,
                 role: Some(user.role),
             },
             (None, Some(username)) => Self {
                 user_id: user.id.get_id(),
                 user_info: username,
-                exp: Self::prepare_exp(extended_time),
+                exp,
                 role: Some(user.role),
             },
             (Some(email), None) => Self {
                 user_id: user.id.get_id(),
                 user_info: email,
-                exp: Self::prepare_exp(extended_time),
+                exp,
                 role: Some(user.role),
             },
             (Some(_), Some(username)) => Self {
                 user_id: user.id.get_id(),
                 user_info: username,
-                exp: Self::prepare_exp(extended_time),
+                exp,
                 role: Some(user.role),
             },
         }

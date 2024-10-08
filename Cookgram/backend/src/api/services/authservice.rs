@@ -1,4 +1,5 @@
 use axum::Json;
+use jsonwebtoken::get_current_timestamp;
 use uuid::Uuid;
 
 use crate::{
@@ -41,8 +42,8 @@ impl AuthService {
         let user = self
             .find_user_for_login(params.clone().username.unwrap())
             .await?;
-        let access_refresh_cliaims = Self::get_access_refresh_cliaims(&params, user.clone());
-        let tokens = Self::generate_tokens(&access_refresh_cliaims.0, &access_refresh_cliaims.1)?;
+        let (access_token, refresh_token) = Self::get_access_refresh_cliaims(&params, user.clone());
+        let tokens = Self::generate_tokens(&access_token, &refresh_token)?;
         //TODO: If error is NOT_FOUND return user not found like somethind
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
             .await
@@ -87,8 +88,8 @@ impl AuthService {
     }
     fn get_access_refresh_cliaims(params: &UserAuthDto, user: User) -> (Claims, Claims) {
         (
-            Claims::new(&params, None, user.clone()),
-            Claims::new(&params, Some(1000), user.clone()),
+            Claims::new(get_current_timestamp(), &params, None, user.clone()),
+            Claims::new(get_current_timestamp(), &params, Some(10000), user.clone()),
         )
     }
 }
