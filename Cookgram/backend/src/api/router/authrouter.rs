@@ -51,8 +51,8 @@ pub struct AuthBody {
 impl AuthBody {
     pub fn get_from_token(tokens: JwtTokens) -> Self {
         Self {
-            access_token: tokens.0 .0.clone(),
-            refresh_token: tokens.0 .0.clone(),
+            access_token: tokens.0.0.clone(),
+            refresh_token: tokens.1.0.clone(),
         }
     }
 

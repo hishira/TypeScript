@@ -38,8 +38,16 @@ impl Claims {
         Ok(Keys::encode(&token_data.claims)?)
     }
 
-    pub fn new(timestamp: u64, params: &UserAuthDto, extended_time: Option<u64>, user: User) -> Self {
-        let exp = timestamp + Self::prepare_exp(extended_time);
+    pub fn refresh_token(params: &UserAuthDto, user: User, exp: u64) -> Self {
+        Self::new(&params, user, exp)
+    }
+
+    pub fn access_token(params: &UserAuthDto, user: User, exp: u64) -> Self {
+        Self::new(&params, user, exp)
+    }
+    
+    pub fn new(params: &UserAuthDto, user: User, exp: u64) -> Self {
+        //let exp = timestamp + Self::prepare_exp(extended_time);
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
                 user_id: user.id.get_id(),

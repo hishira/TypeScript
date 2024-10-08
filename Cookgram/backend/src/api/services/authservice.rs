@@ -43,6 +43,7 @@ impl AuthService {
             .find_user_for_login(params.clone().username.unwrap())
             .await?;
         let (access_token, refresh_token) = Self::get_access_refresh_cliaims(&params, user.clone());
+        println!("{}, {}", access_token.exp, refresh_token.exp);
         let tokens = Self::generate_tokens(&access_token, &refresh_token)?;
         //TODO: If error is NOT_FOUND return user not found like somethind
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
@@ -86,10 +87,12 @@ impl AuthService {
     ) -> Result<JwtTokens, AuthError> {
         JwtTokens::generete_from_claims(&access_claims, &refresh_claims)
     }
+
     fn get_access_refresh_cliaims(params: &UserAuthDto, user: User) -> (Claims, Claims) {
+        let time_stamp = get_current_timestamp();
         (
-            Claims::new(get_current_timestamp(), &params, None, user.clone()),
-            Claims::new(get_current_timestamp(), &params, Some(10000), user.clone()),
+            Claims::access_token(&params, user.clone(), time_stamp), //laims::new(get_current_timestamp(), &params, None, user.clone()),
+            Claims::refresh_token(&params, user.clone(), 10000 + time_stamp),
         )
     }
 }
