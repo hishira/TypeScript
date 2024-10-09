@@ -7,25 +7,11 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService } from 'primeng/dynamicdialog';
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
-
+import { UserList } from './types';
 //TODO: Fix after fixing backend
-type UserAddressList = {
-  address: string | null;
-  city: string | null;
-  country: string | null;
-  phone: string | null;
-};
-export type UserList = {
-  username: string;
-  last_name: string | null;
-  id: string;
-  first_name: string | null;
-  email: string;
-  contract_id: string | null;
-  address: UserAddressList;
-};
+
 @Component({
   selector: 'app-users-list',
   standalone: true,
@@ -44,22 +30,25 @@ export type UserList = {
 })
 export class UsersListComponent implements OnInit {
   users: UserList[] = [];
+
   constructor(
     private readonly userApi: UserApiSerivce,
     private dialogService: DialogService
   ) {}
+
   ngOnInit(): void {
     this.userApi
       .userLists()
       .subscribe((users: UserList[]) => (this.users = users));
   }
+
   createUser() {
     this.dialogService.open(CreateUserModalComponent, {
       header: 'Create user',
       width: '100%',
       modal: true,
-      height:'100%',
-      styleClass:"customModal"
+      height: '100%',
+      styleClass: 'customModal',
     });
   }
 }

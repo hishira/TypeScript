@@ -92,6 +92,24 @@ values (
         'SuperAdmin',
         'Active'
     );
+values (
+        'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
+        'manager',
+        '$2y$10$17C2N8nNhQgGxFQAZenHs.u0Qa2DD0aeAe5wIXwWej9fihtFE1rQO',
+        'manager@example.com',
+        '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
+        'Manager',
+        'Active'
+    );
+values (
+        'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
+        'director',
+        '$2y$10$17C2N8nNhQgGxFQAZenHs.u0Qa2DD0aeAe5wIXwWej9fihtFE1rQO',
+        'director@example.com',
+        '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
+        'Director',
+        'Active'
+    );
 CREATE TABLE IF NOT EXISTS ADDRESS_CONNECTION (
     entity_id uuid not null,
     address_id uuid not null,

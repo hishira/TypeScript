@@ -19,28 +19,32 @@ import {
 import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
 import { AuthenticationApiService } from '../../../api/authentication.api';
+import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
   readonly UNAUTHORIYECODE = 401;
   private isRefreshing: boolean = false;
-  private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<
-    string | null
-  >(null);
+  private readonly tokenSubject: BehaviorSubject<string | null> =
+    new BehaviorSubject<string | null>(null);
+
   constructor(
     private readonly store: Store<MainStore>,
     private readonly authenticationService: AuthenticationApiService
   ) {}
+
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((httpError: HttpErrorResponse) => {
-        if (
-          httpError.status === this.UNAUTHORIYECODE &&
-          !req.url.includes('refresh-token')
-        ) {
+        const url = req.url;
+        console.log('REFRESH interceptop: ', url);
+        if (ForbiddenRefreshUrlString.some((furl) => url.includes(furl))) {
+          throw Error(httpError.message);
+        }
+        if (httpError.status === this.UNAUTHORIYECODE) {
           return this.handleRefreshing(req, next);
         } else {
           throw Error(httpError.message);
@@ -49,14 +53,16 @@ export class RefreshInterceptor implements HttpInterceptor {
     );
   }
 
-  private addSetToken(req: HttpRequest<any>, token: string) {
+  private addSetToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
     this.store.dispatch(JWTSetAccessToken({ accessToken: token }));
+
     return req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
       },
     });
   }
+
   private handleRefreshing(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -66,7 +72,7 @@ export class RefreshInterceptor implements HttpInterceptor {
       this.tokenSubject.next(null);
       return this.authenticationService.refreshToken().pipe(
         switchMap((token) => {
-          if ('error' in token) throw new Error('Cannot refresh token');
+          if ('error' in token) throw RefreshTokenError;
 
           this.isRefreshing = false;
           this.tokenSubject.next(token.accessToken);

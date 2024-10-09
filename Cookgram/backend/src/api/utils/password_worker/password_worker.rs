@@ -96,20 +96,25 @@ impl PasswordWorker {
         Ok(PasswordWorker { sender, cost })
     }
 
-    pub async fn password_match(&self, password: String, hashed_user_password: String) -> Result<bool, AuthError> {
+    pub async fn password_match(
+        &self,
+        password: String,
+        hashed_user_password: String,
+    ) -> Result<bool, AuthError> {
         match self.verify(password, hashed_user_password).await {
             Ok(verify_response) => {
                 if verify_response {
                     return Ok(true);
                 }
-                Result::Err(AuthError::WrongCredentials)
-            },
+                tracing::debug!("Passwords not match");
+                Result::Err(AuthError::WrongPasswordOrLogin)
+            }
             Err(error) => {
                 tracing::error!("Error occur while password matching {}", error);
                 Result::Err(AuthError::BCryptError)
-            },
+            }
         }
-    } 
+    }
     /// Asynchronously hashes the given password using bcrypt.
     ///
     /// # Example

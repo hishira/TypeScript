@@ -8,13 +8,17 @@ import { Nullable } from 'primeng/ts-helpers';
 type CheckType<T> = T extends { [key: string]: AbstractControl }
   ? FormGroup<T>
   : T;
+
+type Controlable =  { [key: string]: AbstractControl } | AbstractControl | Nullable
 @Directive()
 export class AbstractStepDirective<
-  T extends { [key: string]: AbstractControl } | AbstractControl | Nullable
+  T extends Controlable
 > {
   form = input.required<CheckType<T>>();
+
   protected dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
   protected modalService: ModalService = inject(ModalService);
+
   private messageService: ToastService = inject(ToastService);
 
   protected showFormHasErrors(): void {
@@ -25,12 +29,11 @@ export class AbstractStepDirective<
     this.dialogRef.close();
   }
 
-  protected back(){
+  protected back(): void {
     this.modalService.backStepChange.next();
   }
 
-  protected next() {
+  protected next(): void {
     this.modalService.nextStepChange.next();
   }
-  
 }

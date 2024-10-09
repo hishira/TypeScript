@@ -1,4 +1,6 @@
 use axum::Json;
+use jsonwebtoken::get_current_timestamp;
+use uuid::Uuid;
 
 use crate::{
     api::{
@@ -37,16 +39,20 @@ impl AuthService {
         &self,
         params: UserAuthDto,
     ) -> Result<Json<AuthBody>, ResponseError> {
-        let access_refresh_cliaims = Self::get_access_refresh_cliaims(&params);
-        let user = self.find_user_for_login(&access_refresh_cliaims.0).await?;
-        let tokens = Self::generate_tokens(&access_refresh_cliaims.0, &access_refresh_cliaims.1)?;
+        let user = self
+            .find_user_for_login(params.clone().username.unwrap())
+            .await?;
+        let (access_token, refresh_token) = Self::get_access_refresh_cliaims(&params, user.clone());
+        println!("{}, {}", access_token.exp, refresh_token.exp);
+        let tokens = Self::generate_tokens(&access_token, &refresh_token)?;
+        //TODO: If error is NOT_FOUND return user not found like somethind
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
             .await
             .map_err(|e| ResponseError::from(e))
     }
 
-    async fn find_user_for_login(&self, access_claims: &Claims) -> Result<User, AuthError> {
-        let filter = UserFilterOption::from_claims(access_claims.clone());
+    async fn find_user_for_login(&self, username: String) -> Result<User, AuthError> {
+        let filter = UserFilterOption::from_only_usernamr(username);
         let users = self.user_repo.find(filter.clone()).await;
         let users = match users {
             Ok(u) => u,
@@ -68,7 +74,8 @@ impl AuthService {
         hashed_user_password: String,
         tokens: JwtTokens,
     ) -> Result<Json<AuthBody>, AuthError> {
-        self.pass_worker
+        let pass_worker = PasswordWorker::new(10, 4).unwrap();
+        pass_worker
             .password_match(password, hashed_user_password)
             .await
             .map(|_| Json(AuthBody::get_from_token(tokens)))
@@ -80,7 +87,12 @@ impl AuthService {
     ) -> Result<JwtTokens, AuthError> {
         JwtTokens::generete_from_claims(&access_claims, &refresh_claims)
     }
-    fn get_access_refresh_cliaims(params: &UserAuthDto) -> (Claims, Claims) {
-        (Claims::new(&params, None), Claims::new(&params, Some(1000)))
+
+    fn get_access_refresh_cliaims(params: &UserAuthDto, user: User) -> (Claims, Claims) {
+        let time_stamp = get_current_timestamp();
+        (
+            Claims::access_token(&params, user.clone(), time_stamp), //laims::new(get_current_timestamp(), &params, None, user.clone()),
+            Claims::refresh_token(&params, user.clone(), 10000 + time_stamp),
+        )
     }
 }

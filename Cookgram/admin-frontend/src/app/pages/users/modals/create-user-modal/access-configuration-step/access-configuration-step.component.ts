@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-access-configuration-step',
@@ -19,6 +20,17 @@ import { ButtonModule } from 'primeng/button';
     InputSwitchModule,
     TooltipModule,
     ButtonModule,
+    DropdownModule,
   ],
+  styleUrl: './access-configuration.scss'
 })
-export class AccessConfigurationStep extends AbstractStepDirective<AccessConfigurationStepGroup> {}
+export class AccessConfigurationStep extends AbstractStepDirective<AccessConfigurationStepGroup> {
+  readonly roles = [
+    'User',
+    'Employee',
+    'Manager',
+    'Director',
+    'Admin',
+    'SuperAdmin',
+  ];
+}

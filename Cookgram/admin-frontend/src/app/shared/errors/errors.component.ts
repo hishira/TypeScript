@@ -3,6 +3,7 @@ import { Component, OnInit, input } from '@angular/core';
 import { AbstractControl, TouchedChangeEvent } from '@angular/forms';
 import { Observable, combineLatest, map, of, startWith } from 'rxjs';
 import { ErrorsTypes } from './errors-types';
+import { EMAIL_ERROR, REQUIRED_ERROR } from './consts';
 
 @Component({
   selector: 'app-errors',
@@ -14,6 +15,7 @@ import { ErrorsTypes } from './errors-types';
 export class ErrorsComponent implements OnInit {
   control = input.required<AbstractControl>();
   errorsChange$: Observable<string[]> = of([]);
+
   ngOnInit(): void {
     this.errorsChange$ = combineLatest([
       this.getEventObservable(),
@@ -43,6 +45,7 @@ export class ErrorsComponent implements OnInit {
 
           return this.getCurrentListOfErrors();
         }
+
         return [];
       })
     );
@@ -52,12 +55,9 @@ export class ErrorsComponent implements OnInit {
     const errorsList = [];
     const errors = this.control().errors;
 
-    errors &&
-      ErrorsTypes.Required in errors &&
-      errorsList.push('Field is required');
-    errors &&
-      ErrorsTypes.Email in errors &&
-      errorsList.push('Email is invalid');
+    errors && ErrorsTypes.Required in errors && errorsList.push(REQUIRED_ERROR);
+    errors && ErrorsTypes.Email in errors && errorsList.push(EMAIL_ERROR);
+
     return errorsList;
   }
 }

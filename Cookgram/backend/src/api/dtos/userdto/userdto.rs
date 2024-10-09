@@ -48,7 +48,7 @@ pub struct DeleteUserDto {
     pub username: Option<String>,
     pub email: Option<String>,
 }
-#[derive(Debug, Validate, Deserialize)]
+#[derive(Debug, Validate, Deserialize, Clone)]
 #[validate(schema(function = "validatete_auth", skip_on_field_errors = true))]
 pub struct UserAuthDto {
     pub username: Option<String>,
@@ -80,6 +80,16 @@ impl UserFilterOption {
     pub fn from_claims(claims: Claims) -> Self {
         Self {
             username: Some(claims.user_info.clone()),
+            limit: Some(10),
+            offset: Some(0),
+            owner_id: None,
+            with_admin: Some(true),
+        }
+    }
+
+    pub fn from_only_usernamr(username: String) -> Self {
+        Self {
+            username: Some(username),
             limit: Some(10),
             offset: Some(0),
             owner_id: None,
@@ -130,7 +140,6 @@ mod tests {
                 username: "valid_username".to_string(),
                 password: "valid_password".to_string(),
                 password_is_temporary: Some(false),
-
             },
             email: "valid@example.com".to_string(),
             role: Some(Roles::user_role()),
@@ -154,8 +163,7 @@ mod tests {
                 username: "".to_string(),
                 password: "short".to_string(),
                 password_is_temporary: Some(false),
-
-            },            
+            },
             email: "invalid_email".to_string(), // Invalid email intentionally
             role: Some(Roles::user_role()),
             first_name: None,

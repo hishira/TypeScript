@@ -18,7 +18,8 @@ import { ToastService } from '../../shared/services/toast.service';
 import { Store } from '@ngrx/store';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
-import { InputComponent } from "../../shared/input/input.component";
+import { InputComponent } from '../../shared/input/input.component';
+import { TokenResponse } from '../../../api/types/api.types';
 
 type LoginFormGroup = {
   username: FormControl<string | null>;
@@ -35,8 +36,8 @@ type LoginFormGroup = {
     ReactiveFormsModule,
     NgIf,
     ErrorsComponent,
-    InputComponent
-],
+    InputComponent,
+  ],
   providers: [AuthenticationApiService],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
@@ -57,6 +58,7 @@ export class LoginPageComponent {
     private readonly toastService: ToastService,
     private readonly store: Store<MainStore>
   ) {}
+
   signIn(): void {
     this.loginFormGroup.markAllAsTouched();
     this.loginFormGroup.updateValueAndValidity();
@@ -70,15 +72,28 @@ export class LoginPageComponent {
         username: this.loginFormGroup.value.username ?? '',
         password: this.loginFormGroup.value.password ?? '',
       })
-      .subscribe((r) => {
-        if (r && 'error' in r) {
-          this.toastService.showWarning('User not exists');
-        } else {
-          this.store
-            .select(GetAccessTokenSelectors)
-            .subscribe((a) => console.log(a));
-          this.router.navigate(['/admin']);
-        }
-      });
+      .subscribe((r) => this.handleLoginResponse(r));
+  }
+
+  private handleLoginResponse(response: TokenResponse | null): void {
+    const userExists = this.chckIfUserExistsBasedOnResponse(response);
+    if (userExists) {
+      this.toastService.showWarning('User not exists');
+    } else {
+      this.store
+        .select(GetAccessTokenSelectors)
+        .subscribe((a) => console.log(a));
+      this.router.navigate(['/admin']);
+    }
+  }
+
+  private chckIfUserExistsBasedOnResponse(
+    response: TokenResponse | null
+  ): boolean {
+    return (
+      response === null ||
+      (response && 'error' in response) ||
+      (response.accessToken === '' && response.refreshToken === '')
+    );
   }
 }

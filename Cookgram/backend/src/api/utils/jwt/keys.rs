@@ -1,4 +1,6 @@
-use jsonwebtoken::{decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, TokenData, Validation};
+use jsonwebtoken::{
+    decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, TokenData, Validation,
+};
 use once_cell::sync::Lazy;
 
 use crate::api::errors::autherror::AuthError;

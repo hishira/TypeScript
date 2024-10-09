@@ -87,7 +87,7 @@ impl UserRouter {
         ClaimsGuard::manage_user_guard(claims.clone())?;
         state
             .user_service
-            .create_managed_user(params, claims.user_id.unwrap())
+            .create_managed_user(params, claims.user_id)
             .await
     }
 
@@ -110,7 +110,7 @@ impl UserRouter {
             state
                 .user_service
                 .get_managed_users(UserFilterOption {
-                    owner_id: claims.user_id,
+                    owner_id: Some(claims.user_id),
                     ..params
                 })
                 .await,
@@ -121,13 +121,10 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
     ) -> Result<Json<User>, ResponseError> {
-        ClaimsGuard::current_user_guard(&claims)?;
+        //ClaimsGuard::current_user_guard(&claims)?;
 
         Ok(Json(
-            state
-                .user_service
-                .get_current_user(claims.user_id.unwrap())
-                .await,
+            state.user_service.get_current_user(claims.user_id).await,
         ))
     }
 
@@ -148,7 +145,7 @@ impl UserRouter {
         return Ok(Json(
             state
                 .user_service
-                .update_user(params, claims.user_id.unwrap())
+                .update_user(params, claims.user_id)
                 .await?,
         ));
     }
@@ -168,7 +165,8 @@ impl UserRouter {
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
-        ClaimsGuard::role_guard_user_find(claims.clone()).map_err(ResponseError::AuthError)?;
+        ClaimsGuard::role_guard_user_find(claims.clone())?;
+        // TODO: Check if we must use Some
         state
             .user_service
             .user_list(claims.user_id, claims.role, params)
@@ -223,7 +221,7 @@ impl ApplicationRouter for UserRouter {
 }
 
 async fn protected(claims: Claims) -> Result<String, AuthError> {
-    Ok(format!("{}", claims.user_id.unwrap()))
+    Ok(format!("{}", claims.user_id))
 }
 async fn pp(
     claims: Claims,

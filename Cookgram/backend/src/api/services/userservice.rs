@@ -95,8 +95,7 @@ impl UserService {
         user_id: Uuid,
     ) -> Result<User, ResponseError> {
         let user = self.user_repo.find_by_id(user_id).await;
-        let updated_user =
-            UserUtils::get_from_dto(UserDtos::Update(params), Some(user)).await?;
+        let updated_user = UserUtils::get_from_dto(UserDtos::Update(params), Some(user)).await?;
         Ok(self.user_repo.update(updated_user.clone()).await)
     }
 
@@ -110,9 +109,9 @@ impl UserService {
     fn map_merge_params_with_owner(
         params: UserFilterOption,
         is_admin: bool,
-        user_id: Option<Uuid>,
+        user_id: Uuid,
     ) -> UserFilterOption {
-        let owner_id = (!is_admin).then(|| user_id.ok_or(AuthError::MissingCredentials).unwrap());
+        let owner_id = (!is_admin).then(|| user_id);
         UserFilterOption {
             limit: params.limit,
             offset: params.offset,
@@ -123,7 +122,7 @@ impl UserService {
     }
     pub async fn user_list(
         &self,
-        user_id: Option<Uuid>,
+        user_id: Uuid,
         user_role: Option<Roles>,
         params: UserFilterOption,
     ) -> Result<Json<Vec<UserListDto>>, ResponseError> {

@@ -6,7 +6,7 @@
   }
 
   &::ng-deep {
-    [back]{
+    [back] {
       margin-left: 0;
       margin-right: auto;
     }
@@ -23,6 +23,6 @@
     padding: 1rem;
     width: 100%;
     padding-inline: 4rem;
-    border-top: .5px solid lightgrey;
+    border-top: 0.5px solid lightgrey;
   }
 }

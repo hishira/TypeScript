@@ -30,8 +30,9 @@ impl UserUtils {
         match user_dto {
             UserDtos::Create(user) => {
                 let role = user.role;
-                // let hash = pass_worker.hash(user.password.clone()).await.unwrap();
-                let credentials = Credentials::new_with_hashed_password_using_creditional_dto(user.creditionals).await?;
+                let credentials =
+                    Credentials::new_with_hashed_password_using_creditional_dto(user.creditionals)
+                        .await?;
                 let personal_information = PersonalInformation {
                     first_name: user.first_name,
                     last_name: user.last_name,
