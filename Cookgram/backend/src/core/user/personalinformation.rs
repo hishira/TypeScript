@@ -9,6 +9,7 @@ pub enum Gender {
     Woman,
 }
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PersonalInformation {
     pub first_name: Option<String>,
     pub last_name: Option<String>,

@@ -6,6 +6,7 @@ use crate::api::{
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Credentials {
     pub username: String,
     #[serde(skip_serializing)]

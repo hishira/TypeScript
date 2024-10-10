@@ -17,6 +17,7 @@ use crate::core::{
 use super::{credentials::Credentials, personalinformation::PersonalInformation, userid::UserId};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct User {
     pub id: UserId,
     pub personal_information: PersonalInformation,
