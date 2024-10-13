@@ -3,9 +3,8 @@ use uuid::Uuid;
 
 use crate::api::daos::userdao::UserDAO;
 use crate::api::dtos::addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto};
-use crate::api::dtos::userdto::userdto::{
-    CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption,
-};
+use crate::api::dtos::userdto::operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto};
+use crate::api::dtos::userdto::userdto::UserFilterOption;
 use crate::api::dtos::userdto::userlistdto::UserListDto;
 use crate::api::errors::autherror::AuthError;
 use crate::api::errors::responseerror::ResponseError;

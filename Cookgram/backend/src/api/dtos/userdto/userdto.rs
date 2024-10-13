@@ -1,68 +1,46 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use validator::{Validate, ValidationError};
 
 use crate::{
-    api::{dtos::addressdto::createaddressdto::CreateAddressDto, utils::jwt::jwt::Claims},
-    core::role::role::Roles,
+    api::utils::jwt::jwt::Claims,
+    core::{
+        address::address::Address,
+        meta::meta::Meta,
+        role::role::Roles,
+        state::{entitystate::EntityState, state::State},
+        user::{personalinformation::PersonalInformation, user::User},
+    },
 };
 
-#[derive(Debug, Validate, Deserialize)]
+use super::{
+    credentialsdto::CredentialsDTO,
+    operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
+};
+
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct UserCreditionalDto {
-    #[validate(length(min = 1, message = "Can not be empty"))]
-    pub username: String,
-    #[validate(length(min = 6, message = "Passoword length must have exceed 6"))]
-    pub password: String,
-    pub password_is_temporary: Option<bool>,
+pub struct UserDTO {
+    pub id: Uuid,
+    pub personal_information: PersonalInformation,
+    pub credentials: CredentialsDTO,
+    pub address: Option<Address>,
+    pub meta: Meta,
+    pub roles: Roles,
+    pub state: State<EntityState>,
 }
 
-#[derive(Debug, Validate, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct CreateUserDto {
-    pub creditionals: UserCreditionalDto,
-    #[validate(email)]
-    pub email: String,
-    pub role: Option<Roles>,
-    pub first_name: Option<String>,
-    pub last_name: Option<String>,
-    pub address: Option<CreateAddressDto>,
-}
-
-#[derive(Debug, Validate, Deserialize)]
-pub struct UpdateUserDto {
-    #[validate(length(min = 1))]
-    pub username: String,
-    #[validate(length(min = 6))]
-    pub password: Option<String>,
-    #[validate(email)]
-    pub email: Option<String>,
-    pub role: Option<Roles>,
-    pub first_name: Option<String>,
-    pub last_name: Option<String>,
-}
-
-#[derive(Debug, Validate, Deserialize)]
-pub struct DeleteUserDto {
-    pub id: uuid::Uuid,
-    pub username: Option<String>,
-    pub email: Option<String>,
-}
-#[derive(Debug, Validate, Deserialize, Clone)]
-#[validate(schema(function = "validatete_auth", skip_on_field_errors = true))]
-pub struct UserAuthDto {
-    pub username: Option<String>,
-    pub email: Option<String>,
-    pub password: String,
-}
-
-#[derive(Debug, Validate, Deserialize)]
-pub struct UserRegisterDto {
-    pub username: String,
-    #[validate(email)]
-    pub email: String,
-    #[validate(length(min = 6))]
-    pub password: String,
+impl UserDTO {
+    pub fn from_user(user: User) -> Self {
+        Self {
+            id: user.id.get_id(),
+            address: user.address,
+            credentials: CredentialsDTO::from_credentials(user.credentials),
+            meta: user.meta,
+            personal_information: user.personal_information,
+            roles: user.role,
+            state: user.state,
+        }
+    }
 }
 
 trait Filter: Send + Sync {}
@@ -98,15 +76,6 @@ impl UserFilterOption {
     }
 }
 
-pub fn validatete_auth(user_auth_dto: &UserAuthDto) -> Result<(), ValidationError> {
-    match (user_auth_dto.username.clone(), user_auth_dto.email.clone()) {
-        (None, None) => Err(ValidationError::new("Username or email should be giver")),
-        (None, Some(_)) => Ok(()),
-        (Some(_), None) => Ok(()),
-        (Some(_), Some(_)) => Ok(()),
-    }
-}
-
 pub enum UserDtos {
     Create(CreateUserDto),
     Update(UpdateUserDto),
@@ -119,7 +88,11 @@ pub struct UserParamsDto {
 }
 #[cfg(test)]
 mod tests {
-    use validator::ValidationErrors;
+    use validator::{Validate, ValidationErrors};
+
+    use crate::{
+        api::dtos::userdto::operationuserdto::UserCreditionalDto, core::role::role::Roles,
+    };
 
     use super::*;
 

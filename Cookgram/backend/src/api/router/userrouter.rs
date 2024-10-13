@@ -15,10 +15,7 @@ use crate::{
         daos::{useraddressdao::UserAddressDAO, userdao::UserDAO},
         dtos::{
             addressdto::createaddressdto::CreateUserAddressDto,
-            userdto::{
-                userdto::{CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption},
-                userlistdto::UserListDto,
-            },
+            userdto::{operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto}, userdto::{UserDTO, UserFilterOption}, userlistdto::UserListDto},
         },
         errors::{autherror::AuthError, responseerror::ResponseError},
         guards::claimsguard::ClaimsGuard,
@@ -120,11 +117,11 @@ impl UserRouter {
     async fn get_current_user(
         claims: Claims,
         State(state): State<UserState>,
-    ) -> Result<Json<User>, ResponseError> {
-        //ClaimsGuard::current_user_guard(&claims)?;
+    ) -> Result<Json<UserDTO>, ResponseError> {
+        ClaimsGuard::current_user_guard(&claims)?;
 
         Ok(Json(
-            state.user_service.get_current_user(claims.user_id).await,
+            UserDTO::from_user(state.user_service.get_current_user(claims.user_id).await),
         ))
     }
 

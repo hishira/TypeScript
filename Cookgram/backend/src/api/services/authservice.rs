@@ -6,7 +6,7 @@ use crate::{
     api::{
         dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
-            userdto::userdto::{UserAuthDto, UserFilterOption},
+            userdto::{operationuserdto::UserAuthDto, userdto::UserFilterOption},
         },
         errors::{autherror::AuthError, responseerror::ResponseError},
         repositories::{repositories::Repository, userrepositories::UserRepositories},

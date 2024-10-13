@@ -1,8 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::api::{
-    dtos::userdto::userdto::UserCreditionalDto,
-    utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError},
+    dtos::userdto::operationuserdto::UserCreditionalDto, utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError}
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
