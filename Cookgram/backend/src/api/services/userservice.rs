@@ -38,7 +38,7 @@ impl UserService {
         params: UserFilterOption,
     ) -> Result<Vec<UserDTO>, sqlx::Error> {
         self.user_dao.user_list(params).await.map(|result|{
-            result.iter().map(|user|UserDTO::from_user(user.clone())).collect()
+            result.iter().map(|user|UserDTO::from_user(user.to_owned())).collect()
         })
     }
 

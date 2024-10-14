@@ -154,7 +154,7 @@ impl UserRouter {
     ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims)?;
         let users = state.app_state.repo.find(params).await.unwrap_or(vec![]);
-        Ok(Json(UserDTO::from_user(users)))
+        Ok(Json(users.iter().map(|user| UserDTO::from_user(user.to_owned())).collect() ))
     }
 
     async fn user_list(
