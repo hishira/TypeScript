@@ -151,17 +151,17 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, ResponseError> {
+    ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims)?;
         let users = state.app_state.repo.find(params).await.unwrap_or(vec![]);
-        Ok(Json(users))
+        Ok(Json(UserDTO::from_user(users)))
     }
 
     async fn user_list(
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
+    ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims.clone())?;
         // TODO: Check if we must use Some
         state

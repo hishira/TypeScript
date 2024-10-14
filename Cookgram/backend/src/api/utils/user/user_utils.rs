@@ -107,6 +107,29 @@ impl UserUtils {
         }
     }
 
+    pub fn get_from_row_ref(pg_row: &PgRow) -> User {
+        User {
+            id: UserId::from_id(pg_row.get("id")),
+            personal_information: Self::prepare_personal_information(&pg_row),
+            credentials: Credentials::new(
+                pg_row
+                    .try_get("username")
+                    .unwrap_or("Not found ".to_string()),
+                pg_row
+                    .try_get("password")
+                    .unwrap_or("Not found ".to_string()),
+                pg_row.try_get("passowrd_is_temporary").unwrap_or(false),
+            ),
+            meta: Meta::meta_based_on_id(pg_row.get("meta_id")), //Meta::new(), //TODO: Inner join table to retrieve,
+            role: Self::retrive_role_from_row(&pg_row).unwrap(),
+            address: None,
+            state: State {
+                current: pg_row.get("current_state"),
+                previous: pg_row.get("previous_state"),
+            },
+        }
+    }
+
     fn prepare_personal_information(pg_row: &PgRow) -> PersonalInformation {
         PersonalInformation {
             first_name: pg_row

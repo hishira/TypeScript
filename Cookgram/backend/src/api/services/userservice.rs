@@ -1,10 +1,12 @@
+use std::ops::Deref;
+
 use axum::Json;
 use uuid::Uuid;
 
 use crate::api::daos::userdao::UserDAO;
 use crate::api::dtos::addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto};
 use crate::api::dtos::userdto::operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto};
-use crate::api::dtos::userdto::userdto::UserFilterOption;
+use crate::api::dtos::userdto::userdto::{UserDTO, UserFilterOption};
 use crate::api::dtos::userdto::userlistdto::UserListDto;
 use crate::api::errors::autherror::AuthError;
 use crate::api::errors::responseerror::ResponseError;
@@ -34,8 +36,10 @@ impl UserService {
     pub async fn get_users(
         &self,
         params: UserFilterOption,
-    ) -> Result<Vec<UserListDto>, sqlx::Error> {
-        self.user_dao.user_list(params).await
+    ) -> Result<Vec<UserDTO>, sqlx::Error> {
+        self.user_dao.user_list(params).await.map(|result|{
+            result.iter().map(|user|UserDTO::from_user(user.clone())).collect()
+        })
     }
 
     pub async fn create_user(&self, params: CreateUserDto) -> Result<Json<User>, ResponseError> {
@@ -124,7 +128,7 @@ impl UserService {
         user_id: Uuid,
         user_role: Option<Roles>,
         params: UserFilterOption,
-    ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
+    ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         let is_admin = Self::check_is_admin_role(user_role)?;
         let params = Some(params)
             .map(|params| Self::map_merge_params_with_owner(params, is_admin, user_id))
