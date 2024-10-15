@@ -1,6 +1,5 @@
 use axum::Json;
 use jsonwebtoken::get_current_timestamp;
-use uuid::Uuid;
 
 use crate::{
     api::{
@@ -91,7 +90,7 @@ impl AuthService {
     fn get_access_refresh_cliaims(params: &UserAuthDto, user: User) -> (Claims, Claims) {
         let time_stamp = get_current_timestamp();
         (
-            Claims::access_token(&params, user.clone(), time_stamp), //laims::new(get_current_timestamp(), &params, None, user.clone()),
+            Claims::access_token(&params, user.clone(), time_stamp),
             Claims::refresh_token(&params, user.clone(), 10000 + time_stamp),
         )
     }

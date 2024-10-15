@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use axum::Json;
 use uuid::Uuid;
 
@@ -7,7 +5,6 @@ use crate::api::daos::userdao::UserDAO;
 use crate::api::dtos::addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto};
 use crate::api::dtos::userdto::operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto};
 use crate::api::dtos::userdto::userdto::{UserDTO, UserFilterOption};
-use crate::api::dtos::userdto::userlistdto::UserListDto;
 use crate::api::errors::autherror::AuthError;
 use crate::api::errors::responseerror::ResponseError;
 use crate::api::repositories::repositories::Repository;
@@ -33,12 +30,12 @@ impl UserService {
         }
     }
 
-    pub async fn get_users(
-        &self,
-        params: UserFilterOption,
-    ) -> Result<Vec<UserDTO>, sqlx::Error> {
-        self.user_dao.user_list(params).await.map(|result|{
-            result.iter().map(|user|UserDTO::from_user(user.to_owned())).collect()
+    pub async fn get_users(&self, params: UserFilterOption) -> Result<Vec<UserDTO>, sqlx::Error> {
+        self.user_dao.user_list(params).await.map(|result| {
+            result
+                .iter()
+                .map(|user| UserDTO::from_user(user.to_owned()))
+                .collect()
         })
     }
 
