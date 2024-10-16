@@ -130,7 +130,6 @@ mod tests {
     fn test_encode() {
         let mut buffer = PgArgumentBuffer::default();
         let state = EntityState::Active;
-        let is_null = state.encode_by_ref(&mut buffer);
         let expected_encoded_value = "Active";
         let encoded_value = std::str::from_utf8(&buffer).unwrap();
         assert_eq!(encoded_value, expected_encoded_value);

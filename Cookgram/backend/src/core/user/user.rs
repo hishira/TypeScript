@@ -1,17 +1,12 @@
 use serde::{Deserialize, Serialize};
-use time::OffsetDateTime;
 use uuid::Uuid;
 
 use crate::core::{
     address::address::Address,
     entity::{entity::IdGenerator, Entity},
     meta::meta::Meta,
-    role::{
-        role::{Role, Roles},
-        userrole::UserRole,
-    },
+    role::{role::Roles, userrole::UserRole},
     state::{entitystate::EntityState, state::State},
-    usercontract::usercontract::Contract,
 };
 
 use super::{credentials::Credentials, personalinformation::PersonalInformation, userid::UserId};
