@@ -62,7 +62,6 @@ impl Entity for Contract {
 }
 #[cfg(test)]
 mod tests {
-    use std::borrow::{Borrow, BorrowMut};
 
     use crate::core::state::entitystate::EntityState;
 
