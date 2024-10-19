@@ -1,5 +1,5 @@
 import { FormControl, FormArray, FormGroup } from '@angular/forms';
-import { ObjectState, Role } from './enums';
+import { State, Role } from './enums';
 
 export type ExtractFormControl<T> = {
   [K in keyof T]: T[K] extends FormControl<infer U>
@@ -44,10 +44,12 @@ export type PersonalInformation = {
   gender: Gender;
   lastName: string;
 };
-export type State = {
-  current: ObjectState;
-  previous: ObjectState;
+
+export type EntityState = {
+  current: State;
+  previous: State;
 };
+
 export type ContextUser = {
   address: null;
   credentials: Credentials;

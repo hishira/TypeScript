@@ -12,7 +12,7 @@ export enum Gender {
   Woman = 'Woman',
 }
 
-export enum ObjectState {
+export enum State {
   Draft = 'Draft',
   Active = 'Active',
   Suspend = 'Suspend',
