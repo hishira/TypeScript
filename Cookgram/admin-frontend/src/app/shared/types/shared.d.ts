@@ -59,3 +59,20 @@ export type ContextUser = {
   role: Role;
   state: State;
 };
+
+export type Optional<T> = T | undefined | null;
+
+export type Location = {
+  latitude: Optional<number>;
+  longitude: Optional<number>;
+};
+
+export type Address = {
+  address: string;
+  house: string;
+  door: Optional<string>;
+  city: string;
+  country: string;
+  location: Location;
+  postalCode: string;
+};
