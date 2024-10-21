@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { StorageItem } from '../types/shared';
 
 @Injectable({ providedIn: 'root' })
 export class SessionStorageService {
@@ -21,6 +22,12 @@ export class SessionStorageService {
 
   setItem<T>(itemName: string, item: T): void {
     this.session.setItem(itemName, JSON.stringify(item));
+  }
+
+  setItems(items: StorageItem<any>[]): void {
+    items.forEach(({ itemName, item }) =>
+      this.session.setItem(itemName, JSON.stringify(item))
+    );
   }
 
   clearSession(): void {

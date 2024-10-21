@@ -51,7 +51,7 @@ export type EntityState = {
 };
 
 export type ContextUser = {
-  address: null;
+  address: Address;
   credentials: Credentials;
   id: string;
   meta: Meta;
@@ -75,4 +75,9 @@ export type Address = {
   country: string;
   location: Location;
   postalCode: string;
+};
+
+export type StorageItem<T> = {
+  itemName: string;
+  item: T;
 };
