@@ -39,12 +39,12 @@ impl UserService {
         })
     }
 
-    pub async fn create_user(&self, params: CreateUserDto) -> Result<Json<User>, ResponseError> {
+    pub async fn create_user(&self, params: CreateUserDto) -> Result<Json<UserDTO>, ResponseError> {
         let user_tmp = UserUtils::get_from_dto(UserDtos::Create(params), None).await;
         match user_tmp {
             Ok(user) => {
                 let user = self.user_repo.create(user).await;
-                Ok(Json(user))
+                Ok(Json(UserDTO::from_user(user)))
             }
             Err(error) => {
                 tracing::error!("Error occur while user creation: {}", error);
@@ -93,10 +93,10 @@ impl UserService {
         &self,
         params: UpdateUserDto,
         user_id: Uuid,
-    ) -> Result<User, ResponseError> {
+    ) -> Result<UserDTO, ResponseError> {
         let user = self.user_repo.find_by_id(user_id).await;
         let updated_user = UserUtils::get_from_dto(UserDtos::Update(params), Some(user)).await?;
-        Ok(self.user_repo.update(updated_user.clone()).await)
+        Ok(UserDTO::from_user(self.user_repo.update(updated_user.clone()).await))
     }
 
     fn check_is_admin_role(user_role: Option<Roles>) -> Result<bool, ResponseError> {
@@ -137,13 +137,13 @@ impl UserService {
         })
     }
 
-    pub async fn user_delete(&self, params: DeleteUserDto) -> Result<Json<User>, ResponseError> {
+    pub async fn user_delete(&self, params: DeleteUserDto) -> Result<Json<UserDTO>, ResponseError> {
         let mut user = self.user_repo.find_by_id(params.id).await;
         user.state.update(State {
             current: EntityState::Deleted,
             previous: Some(user.state.previous.clone().unwrap_or(EntityState::Active)),
         });
         self.user_repo.delete(user.clone()).await;
-        return Ok(Json(user));
+        return Ok(Json(UserDTO::from_user(user)));
     }
 }

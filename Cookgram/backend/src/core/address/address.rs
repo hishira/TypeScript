@@ -6,6 +6,7 @@ use crate::core::valueObject::value_object::ValueObject;
 use super::location::Location;
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Address {
     pub address: String,
     pub house: String,
