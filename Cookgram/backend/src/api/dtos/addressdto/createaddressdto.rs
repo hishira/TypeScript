@@ -4,6 +4,7 @@ use validator::Validate;
 use crate::core::address::{address::Address, location::Location};
 
 #[derive(Debug, Validate, Deserialize)]
+#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct CreateAddressDto {
     //pub user_id: uuid::Uuid,
     #[validate(length(min = 1, message = "Address can not be empty"))]

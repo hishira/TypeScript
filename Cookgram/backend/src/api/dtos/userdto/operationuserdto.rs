@@ -4,7 +4,7 @@ use validator::{Validate, ValidationError};
 use crate::{api::dtos::addressdto::createaddressdto::CreateAddressDto, core::role::role::Roles};
 
 #[derive(Debug, Validate, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct UserCreditionalDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
     pub username: String,
