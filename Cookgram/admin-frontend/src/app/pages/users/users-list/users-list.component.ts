@@ -33,7 +33,7 @@ export class UsersListComponent implements OnInit {
 
   constructor(
     private readonly userApi: UserApiSerivce,
-    private dialogService: DialogService
+    private readonly dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
