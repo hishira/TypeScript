@@ -19,21 +19,29 @@ pub enum AuthError {
     WrongPasswordOrLogin,
 }
 
+const NOT_FOUND: (StatusCode, &str) = (StatusCode::NOT_FOUND, "Wrong credentials");
+const WRONG_PASSWORD_OR_LOGIN: (StatusCode, &str) = (StatusCode::OK, "Wrong login or password");
+const MISSING_CREDENTIALS: (StatusCode, &str) = (StatusCode::BAD_REQUEST, "Missing credentials");
+const TOKEN_CREATION: (StatusCode, &str) =
+    (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error");
+const INVALID_TOKEN: (StatusCode, &str) = (StatusCode::BAD_REQUEST, "Invalid token");
+const USER_NOT_EXISTS: (StatusCode, &str) =
+    (StatusCode::OK, "User with that credintionals not exists");
+const BCRYPT_ERROR: (StatusCode, &str) = (StatusCode::INTERNAL_SERVER_ERROR, "Server error occur");
+const UNAUTHORIZED: (StatusCode, &str) = (StatusCode::UNAUTHORIZED, "You are unauthorized");
+const TOKEN_EXPIRE: (StatusCode, &str) = (StatusCode::UNAUTHORIZED, "You are unauthorized");
 impl AuthError {
     pub fn get_status_and_message(&self) -> (StatusCode, &str) {
         match self {
-            AuthError::WrongCredentials => (StatusCode::NOT_FOUND, "Wrong credentials"),
-            AuthError::WrongPasswordOrLogin => (StatusCode::OK, "Wrong login or password"),
-            AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
-            AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
-            AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
-            AuthError::UserNotExists => (StatusCode::OK, "User with that credintionals not exists"),
-            AuthError::BCryptError => (StatusCode::INTERNAL_SERVER_ERROR, "Server error occur"),
-            AuthError::Unauthorized => (
-                StatusCode::UNAUTHORIZED,
-                "User are not allowed to take action",
-            ),
-            AuthError::TokenExpire => (StatusCode::UNAUTHORIZED, "You are unauthorized"),
+            AuthError::WrongCredentials => NOT_FOUND,
+            AuthError::WrongPasswordOrLogin => WRONG_PASSWORD_OR_LOGIN,
+            AuthError::MissingCredentials => MISSING_CREDENTIALS,
+            AuthError::TokenCreation => TOKEN_CREATION,
+            AuthError::InvalidToken => INVALID_TOKEN,
+            AuthError::UserNotExists => USER_NOT_EXISTS,
+            AuthError::BCryptError => BCRYPT_ERROR,
+            AuthError::Unauthorized => UNAUTHORIZED,
+            AuthError::TokenExpire => TOKEN_EXPIRE,
         }
     }
 }

@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { SessionStorageService } from './shared/services/sessionStorage.service';
+import {
+  SessionItemName,
+  SessionStorageService,
+} from './shared/services/sessionStorage.service';
 import { Store } from '@ngrx/store';
 import { MainStore } from '../store/main.store';
 import { JWTSetAction } from '../store/jwt/action';
@@ -20,9 +23,11 @@ export class AppComponent {
     private readonly store: Store<MainStore>
   ) {
     try {
-      if (this.sessionStorage.getItem('token')) {
+      if (this.sessionStorage.getItem(SessionItemName.Token)) {
         this.store.dispatch(
-          JWTSetAction({ ...this.sessionStorage.getItem('token') })
+          JWTSetAction({
+            ...this.sessionStorage.getItem(SessionItemName.Token),
+          })
         );
       }
     } catch (_) {}

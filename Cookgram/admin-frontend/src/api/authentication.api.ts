@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BaseApi } from './base.api';
 import { HttpClient } from '@angular/common/http';
-import { AccessTokeResponse, LoginPayload, TokenResponse } from './types/api.types';
+import {
+  AccessTokeResponse,
+  LoginPayload,
+  TokenResponse,
+} from './types/api.types';
 import { Store } from '@ngrx/store';
 import { Observable, catchError, of, tap, switchMap } from 'rxjs';
 import { JWTSetAction } from '../store/jwt/action';
 import { MainStore } from '../store/main.store';
 import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
 import { Router } from '@angular/router';
-import { SessionStorageService } from '../app/shared/services/sessionStorage.service';
+import {
+  SessionItemName,
+  SessionStorageService,
+} from '../app/shared/services/sessionStorage.service';
 
 @Injectable()
 export class AuthenticationApiService extends BaseApi {
@@ -27,7 +34,7 @@ export class AuthenticationApiService extends BaseApi {
       .pipe(
         tap((loginResponse) => {
           if ('error' in loginResponse) return;
-          this.sessionStorage.setItem('token', loginResponse);
+          this.sessionStorage.setItem(SessionItemName.Token, loginResponse);
           this.store.dispatch(JWTSetAction({ ...loginResponse }));
         }),
         catchError((error) => {
@@ -52,6 +59,10 @@ export class AuthenticationApiService extends BaseApi {
   }
 
   removeTokens(): void {
-    this.sessionStorage.removeItems('accessToken', 'tokens', 'refreshToken');
+    this.sessionStorage.removeItems(
+      SessionItemName.AccessToken,
+      SessionItemName.Tokens,
+      SessionItemName.RefreshToken
+    );
   }
 }

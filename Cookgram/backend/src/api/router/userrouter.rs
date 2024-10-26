@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use axum::{
     extract::{Path, State},
     routing::{delete, get, post},
@@ -16,7 +14,8 @@ use crate::{
         dtos::{
             addressdto::createaddressdto::CreateUserAddressDto,
             userdto::{
-                userdto::{CreateUserDto, DeleteUserDto, UpdateUserDto, UserFilterOption},
+                operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
+                userdto::{UserDTO, UserFilterOption},
                 userlistdto::UserListDto,
             },
         },
@@ -75,7 +74,7 @@ impl UserRouter {
     async fn user_create(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
-    ) -> Result<Json<User>, ResponseError> {
+    ) -> Result<Json<UserDTO>, ResponseError> {
         state.user_service.create_user(params).await
     }
 
@@ -95,15 +94,18 @@ impl UserRouter {
         Path(id): Path<Uuid>,
         claims: Claims,
         State(state): State<UserState>,
-    ) -> Result<Json<User>, ResponseError> {
+    ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
-        Result::Ok(Json(state.app_state.repo.find_by_id(id).await))
+
+        Result::Ok(Json(UserDTO::from_user(
+            state.app_state.repo.find_by_id(id).await
+        )))
     }
     async fn get_managed_users(
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, ResponseError> {
+    ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
         Ok(Json(
@@ -113,19 +115,22 @@ impl UserRouter {
                     owner_id: Some(claims.user_id),
                     ..params
                 })
-                .await,
+                .await
+                .iter()
+                .map(|user| UserDTO::from_user(user.to_owned()))
+                .collect(),
         ))
     }
 
     async fn get_current_user(
         claims: Claims,
         State(state): State<UserState>,
-    ) -> Result<Json<User>, ResponseError> {
-        //ClaimsGuard::current_user_guard(&claims)?;
+    ) -> Result<Json<UserDTO>, ResponseError> {
+        ClaimsGuard::current_user_guard(&claims)?;
 
-        Ok(Json(
+        Ok(Json(UserDTO::from_user(
             state.user_service.get_current_user(claims.user_id).await,
-        ))
+        )))
     }
 
     async fn add_user_address(
@@ -140,7 +145,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<UpdateUserDto>,
-    ) -> Result<Json<User>, ResponseError> {
+    ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::user_update_guard(claims.clone())?;
         return Ok(Json(
             state
@@ -154,17 +159,22 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<User>>, ResponseError> {
+    ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims)?;
         let users = state.app_state.repo.find(params).await.unwrap_or(vec![]);
-        Ok(Json(users))
+        Ok(Json(
+            users
+                .iter()
+                .map(|user| UserDTO::from_user(user.to_owned()))
+                .collect(),
+        ))
     }
 
     async fn user_list(
         claims: Claims,
         State(state): State<UserState>,
         Json(params): Json<UserFilterOption>,
-    ) -> Result<Json<Vec<UserListDto>>, ResponseError> {
+    ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims.clone())?;
         // TODO: Check if we must use Some
         state
@@ -177,7 +187,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<DeleteUserDto>,
-    ) -> Result<Json<User>, ResponseError> {
+    ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::user_delete_guard(claims)?;
         state.user_service.user_delete(params).await
     }

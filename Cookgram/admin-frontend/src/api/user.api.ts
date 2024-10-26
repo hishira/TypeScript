@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreateUserObject } from './types/user.types';
 import { UserList } from '../app/pages/users/users-list/types';
+import { ContextUser } from '../app/shared/types/shared';
 
 @Injectable()
 export class UserApiSerivce extends BaseApi {
@@ -18,8 +19,8 @@ export class UserApiSerivce extends BaseApi {
     );
   }
 
-  currentUserInfo(): Observable<any> {
-    return this.httpService.get<any>(this.prepareLink('user/current-user'));
+  currentUserInfo(): Observable<ContextUser> {
+    return this.httpService.get<ContextUser>(this.prepareLink('user/current-user'));
   }
 
   createUser(user: CreateUserObject): void {}

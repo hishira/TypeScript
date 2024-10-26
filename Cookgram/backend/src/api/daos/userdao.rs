@@ -66,12 +66,12 @@ impl DAO<User, UserFilterOption> for UserDAO {
 }
 
 impl UserDAO {
-    pub async fn user_list(&self, params: UserFilterOption) -> Result<Vec<UserListDto>, sqlx::Error> {
+    pub async fn user_list(&self, params: UserFilterOption) -> Result<Vec<User>, sqlx::Error> {
         let mut find_query = UserQuery::find(params);
         let result = find_query.build().fetch_all(&self.pool).await?;
         Ok(result
             .iter()
-            .map(|row| UserListDto::from_row(row).expect("Cannot cast from row to UserListDto"))
+            .map(UserUtils::get_from_row_ref)
             .collect())
     }
 

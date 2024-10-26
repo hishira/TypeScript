@@ -16,9 +16,9 @@ import {
   take,
   throwError,
 } from 'rxjs';
+import { AuthenticationApiService } from '../../../api/authentication.api';
 import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
-import { AuthenticationApiService } from '../../../api/authentication.api';
 import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 
 @Injectable()
@@ -40,7 +40,6 @@ export class RefreshInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((httpError: HttpErrorResponse) => {
         const url = req.url;
-        console.log('REFRESH interceptop: ', url);
         if (ForbiddenRefreshUrlString.some((furl) => url.includes(furl))) {
           throw Error(httpError.message);
         }

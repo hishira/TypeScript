@@ -6,7 +6,7 @@ use crate::{
         dtos::userdto::userdto::UserFilterOption,
         queries::{actionquery::ActionQueryBuilder, query::Query},
     },
-    core::{address::address::Address, user::user::User},
+    core::user::user::User,
 };
 
 #[derive(Clone)]

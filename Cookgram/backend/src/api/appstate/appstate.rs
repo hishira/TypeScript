@@ -1,11 +1,5 @@
-use std::marker;
-
 use crate::{
-    api::{
-        repositories::{eventrepository::EventRepository, repositories::Repository},
-        utils::password_worker::password_worker::PasswordWorker,
-    },
-    core::entity::Entity,
+    api::repositories::eventrepository::EventRepository,
     database::redis::redisdatabase::RedisDatabase,
 };
 

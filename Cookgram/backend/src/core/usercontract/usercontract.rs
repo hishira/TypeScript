@@ -1,5 +1,3 @@
-use std::any::Any;
-
 use serde::{Deserialize, Serialize};
 use time::serde::rfc3339;
 use time::OffsetDateTime;
@@ -62,7 +60,6 @@ impl Entity for Contract {
 }
 #[cfg(test)]
 mod tests {
-    use std::borrow::{Borrow, BorrowMut};
 
     use crate::core::state::entitystate::EntityState;
 

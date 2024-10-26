@@ -48,23 +48,26 @@
           />
         </div>
       </div>
+
       <div class="grid">
+        <div class="col-3">
+          <div class="w-full flex flex-column gap-2">
+            <label for="role" i18n class="block text-900 font-medium">
+              Role
+            </label>
+            <p-dropdown inputId="role" [options]="roles"></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="grid mt-2">
         <div class="col-3 flex align-items-center gap-2">
-          <label for="switch1" i18n>Password is temporary</label>
+          <label for="switch1" i18n>Password will be temporary</label>
           <p-inputSwitch
             i18n-pTooltip
             pTooltip="User will be asked to change password, after first log in"
             inputId="switch1"
             formControlName="temporaryPassword"
           />
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-3">
-          <p-dropdown
-            placeholder="Role"
-            [options]="roles"
-          ></p-dropdown>
         </div>
       </div>
     </ng-container>

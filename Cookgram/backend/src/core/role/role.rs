@@ -7,7 +7,7 @@ use sqlx::encode::IsNull;
 use sqlx::postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef};
 use sqlx::{Decode, Encode, Postgres, Type};
 
-use super::access::{Access, Action, Queries, QueriesActions, QueryAccess};
+use super::access::{Access, QueriesActions};
 use super::adminrole::AdminRole;
 use super::director::Director;
 use super::employee::Employee;

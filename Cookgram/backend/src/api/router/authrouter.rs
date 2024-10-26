@@ -1,11 +1,5 @@
-use axum::{
-    extract::State,
-    routing::{get, post},
-    Json, Router,
-};
-use jsonwebtoken::{
-    decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, TokenData, Validation,
-};
+use axum::{extract::State, routing::post, Json, Router};
+
 use serde::{Deserialize, Serialize};
 use sqlx::{Pool, Postgres};
 use validator::Validate;
@@ -14,25 +8,12 @@ use crate::{
     api::{
         appstate::{appstate::AppState, authstate::AuthState},
         daos::{useraddressdao::UserAddressDAO, userdao::UserDAO},
-        dtos::{
-            tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
-            userdto::userdto::{UserAuthDto, UserFilterOption, UserRegisterDto},
-        },
+        dtos::{tokendto::tokendto::{AccessTokenDto, RefreshTokenDto}, userdto::operationuserdto::{UserAuthDto, UserRegisterDto}},
         errors::{autherror::AuthError, responseerror::ResponseError},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
-        repositories::{
-            eventrepository::EventRepository, repositories::Repository,
-            userrepositories::UserRepositories,
-        },
+        repositories::{eventrepository::EventRepository, userrepositories::UserRepositories},
         services::authservice::AuthService,
-        utils::{
-            jwt::{
-                jwt::Claims,
-                keys::{Keys, KEYS},
-                tokens::{AccessToken, JwtTokens, RefreshToken},
-            },
-            password_worker::password_worker::PasswordWorker,
-        },
+        utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},
         validators::dtovalidator::ValidateDtos,
     },
     core::user::user::User,
@@ -51,8 +32,8 @@ pub struct AuthBody {
 impl AuthBody {
     pub fn get_from_token(tokens: JwtTokens) -> Self {
         Self {
-            access_token: tokens.0.0.clone(),
-            refresh_token: tokens.1.0.clone(),
+            access_token: tokens.0 .0.clone(),
+            refresh_token: tokens.1 .0.clone(),
         }
     }
 

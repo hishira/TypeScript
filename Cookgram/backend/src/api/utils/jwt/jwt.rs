@@ -3,11 +3,11 @@ use axum_extra::{
     headers::{authorization::Bearer, Authorization},
     TypedHeader,
 };
-use jsonwebtoken::{get_current_timestamp, Algorithm, Validation};
+use jsonwebtoken::{ Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    api::{dtos::userdto::userdto::UserAuthDto, errors::autherror::AuthError},
+    api::{ dtos::userdto::operationuserdto::UserAuthDto, errors::autherror::AuthError},
     core::{role::role::Roles, user::user::User},
 };
 

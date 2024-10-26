@@ -9,6 +9,7 @@ use crate::core::entity::Entity;
 use super::metaid::MetaId;
 
 #[derive(PartialEq, Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Meta {
     pub id: MetaId,
     pub create_date: OffsetDateTime,

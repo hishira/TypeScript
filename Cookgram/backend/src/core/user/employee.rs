@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 use crate::core::{entity::{entity::IdGenerator, Entity}, usercontract::usercontract::Contract};
 
