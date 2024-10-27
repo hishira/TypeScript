@@ -56,7 +56,7 @@ export type ContextUser = {
   id: string;
   meta: Meta;
   personalInformation: PersonalInformation;
-  role: Role;
+  roles: Role;
   state: State;
 };
 

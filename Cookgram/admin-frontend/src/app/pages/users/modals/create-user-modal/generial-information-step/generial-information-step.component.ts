@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
+import { ErrorsComponent } from '../../../../../shared/errors/errors.component';
 import { InputComponent } from '../../../../../shared/input/input.component';
 import {
   Gender,
   GeneralInformationStepGroup,
 } from '../create-user-model.types';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { ErrorsComponent } from '../../../../../shared/errors/errors.component';
 
 @Component({
   selector: 'app-user-create-general-information-step',

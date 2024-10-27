@@ -1,13 +1,19 @@
-import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
 import { Component } from '@angular/core';
-import { AccessConfigurationStepGroup } from '../create-user-model.types';
-import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
-import { InputComponent } from '../../../../../shared/input/input.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { TooltipModule } from 'primeng/tooltip';
+import { Store } from '@ngrx/store';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { TooltipModule } from 'primeng/tooltip';
+import { MainStore } from '../../../../../../store/main.store';
+import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
+import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
+import { InputComponent } from '../../../../../shared/input/input.component';
+import { AccessConfigurationStepGroup } from '../create-user-model.types';
+import { CurrentUserSelector } from '../../../../../../store/currentUser/selectors';
+import { Observable, map } from 'rxjs';
+import { Role } from '../../../../../shared/types/enums';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-access-configuration-step',
@@ -21,16 +27,33 @@ import { DropdownModule } from 'primeng/dropdown';
     TooltipModule,
     ButtonModule,
     DropdownModule,
+    AsyncPipe
   ],
-  styleUrl: './access-configuration.scss'
+  styleUrl: './access-configuration.scss',
 })
 export class AccessConfigurationStep extends AbstractStepDirective<AccessConfigurationStepGroup> {
-  readonly roles = [
-    'User',
-    'Employee',
-    'Manager',
-    'Director',
-    'Admin',
-    'SuperAdmin',
-  ];
+  readonly roles: Observable<string[]> = this.prepareRoles();
+
+  constructor(private readonly store: Store<MainStore>) {
+    super();
+  }
+
+  private prepareRoles(): Observable<string[]> {
+    return this.store.select(CurrentUserSelector).pipe(
+      map((currentUser) => {
+        console.log(currentUser)
+        if (currentUser.roles === Role.SuperAdmin) {
+          return [
+            'User',
+            'Employee',
+            'Manager',
+            'Director',
+            'Admin',
+            'SuperAdmin',
+          ];
+        }
+        return [];
+      })
+    );
+  }
 }
