@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StorageItem } from '../types/shared';
-export enum SessionItemName {
-  Token = 'token',
-  Tokens  = 'tokens',
-  AccessToken = 'accessToken',
-  RefreshToken = 'refreshToken',
+import { SessionItemName } from '../types/enums';
 
-}
 @Injectable({ providedIn: 'root' })
 export class SessionStorageService {
   private readonly session: Storage = sessionStorage;

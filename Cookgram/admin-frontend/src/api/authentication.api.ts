@@ -13,9 +13,9 @@ import { MainStore } from '../store/main.store';
 import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
 import { Router } from '@angular/router';
 import {
-  SessionItemName,
   SessionStorageService,
 } from '../app/shared/services/sessionStorage.service';
+import { SessionItemName } from '../app/shared/types/enums';
 
 @Injectable()
 export class AuthenticationApiService extends BaseApi {

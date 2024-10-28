@@ -3,9 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import {
-  SessionItemName,
   SessionStorageService,
 } from './shared/services/sessionStorage.service';
+import { SessionItemName } from './shared/types/enums';
 import { Store } from '@ngrx/store';
 import { MainStore } from '../store/main.store';
 import { JWTSetAction } from '../store/jwt/action';
