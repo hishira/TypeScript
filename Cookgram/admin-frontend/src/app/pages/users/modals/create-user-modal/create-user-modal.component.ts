@@ -25,6 +25,8 @@ import {
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
+import { CreateUserObject } from '../../../../../api/types/user.types';
+import { Role } from '../../../../shared/types/enums';
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -86,6 +88,22 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     this.dialogRef.close();
   }
 
+  private prepareCreateUserObject(): CreateUserObject {
+    const value = this.createUserGroup.value;
+
+    return {
+      firstName: value.generalInformation?.firstName,
+      lastName: value.generalInformation?.secondName,
+      credentials: {
+        password: value.accessConfiguration?.password,
+        passwordIsTemporary: value.accessConfiguration?.temporaryPassword,
+        username: value.accessConfiguration?.username,
+      },
+      email: value.accessConfiguration?.email,
+      role: Role.Admin,
+      address: value.address,
+    };
+  }
   private handleNextStepChange(): void {
     this.subscription.add(
       this.modalService.nextStepChange.subscribe((_) => {

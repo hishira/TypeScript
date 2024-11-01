@@ -1,14 +1,14 @@
 import { Role } from "../../app/shared/types/enums";
 
+export type Nullable<T> = T | undefined | null; 
+export type Partially<T> =  T extends Object ? Partially<T> : Partial<T>;
 export type CreateUserObject = {
-    username: string;
-    password: string;
-    email: string;
-    role: Role;
-    firstName: string;
-    lastName: string;
-    credentials: UserCredentials;
-    address?: UserAddress;
+    email: Nullable<string>;
+    role: Nullable<Role>;
+    firstName: Nullable<string>;
+    lastName: Nullable<string>;
+    credentials: Nullable<Partially<UserCredentials>>;
+    address?: Nullable<UserAddress>;
 };
 
 type UserAddress = {
