@@ -7,11 +7,11 @@ export type CreateUserObject = {
     role: Nullable<Role>;
     firstName: Nullable<string>;
     lastName: Nullable<string>;
-    credentials: Nullable<Partially<UserCredentials>>;
+    credentials: Partial<UserCredentials>;
     address?: Nullable<UserAddress>;
 };
 
-type UserAddress = {
+export type UserAddress = {
     address: string;
     house: string;
     door?: string;
@@ -21,7 +21,7 @@ type UserAddress = {
     longitude: number;
     postalCode: string;
 }
-type UserCredentials = {
+export type UserCredentials = {
     username: string;
     password: string;
     passwordIsTemporary: boolean;

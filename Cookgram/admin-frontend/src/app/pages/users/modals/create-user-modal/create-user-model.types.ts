@@ -35,6 +35,8 @@ export type AddressControl = {
   city: string;
   country: string;
   postalCode: string;
+  latitude?: number;
+  longitude?: number;
 };
 export enum Gender {
   Men = 'Man',

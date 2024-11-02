@@ -25,8 +25,13 @@ import {
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
-import { CreateUserObject } from '../../../../../api/types/user.types';
+import {
+  CreateUserObject,
+  UserAddress,
+  UserCredentials,
+} from '../../../../../api/types/user.types';
 import { Role } from '../../../../shared/types/enums';
+import { UserApiSerivce } from '../../../../../api/user.api';
 
 type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
@@ -62,7 +67,11 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   private readonly subscription = new Subscription();
   private readonly MAX_STEP: ActiveUserModalIndex = 3;
 
-  constructor(private dialogRef: DynamicDialogRef, modalService: ModalService) {
+  constructor(
+    private readonly dialogRef: DynamicDialogRef,
+    override readonly modalService: ModalService,
+    private readonly userApi: UserApiSerivce
+  ) {
     super(modalService);
     this.handleNextStepChange();
     this.handleBackStepChange();
@@ -81,7 +90,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   create() {
-    throw new Error('Method not implemented.');
+    this.userApi.createUser(this.prepareCreateUserObject());
   }
 
   close() {
@@ -94,14 +103,20 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     return {
       firstName: value.generalInformation?.firstName,
       lastName: value.generalInformation?.secondName,
-      credentials: {
-        password: value.accessConfiguration?.password,
-        passwordIsTemporary: value.accessConfiguration?.temporaryPassword,
-        username: value.accessConfiguration?.username,
-      },
+      credentials: this.prepareCredentials(),
       email: value.accessConfiguration?.email,
       role: Role.Admin,
-      address: value.address,
+      address: value.address as UserAddress,
+    };
+  }
+
+  private prepareCredentials(): Partial<UserCredentials> {
+    const value = this.createUserGroup.value;
+
+    return {
+      password: value.accessConfiguration?.password,
+      passwordIsTemporary: value.accessConfiguration?.temporaryPassword,
+      username: value.accessConfiguration?.username,
     };
   }
   private handleNextStepChange(): void {
