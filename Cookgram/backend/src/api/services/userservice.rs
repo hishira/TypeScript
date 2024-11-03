@@ -57,16 +57,16 @@ impl UserService {
         &self,
         params: CreateUserDto,
         owner_id: Uuid,
-    ) -> Result<Json<bool>, ResponseError> {
+    ) -> Result<Json<UserDTO>, ResponseError> {
         let user = UserUtils::get_from_dto(UserDtos::Create(params), None).await?;
         let ids_touples = (owner_id, user.id.get_id());
-        self.user_repo.create(user).await;
+        self.user_repo.create(user.clone()).await;
         let result = self.user_dao.create_user_connection(ids_touples).await;
         match result {
-            Ok(_) => Ok(Json(true)),
+            Ok(_) => Ok(Json(UserDTO::from_user(user))),
             Err(error) => {
                 tracing::error!("User cannot be added {}", error);
-                return Ok(Json(false));
+                return Err(ResponseError::DatabaseError("Cannot create user".to_string()));
             }
         }
     }

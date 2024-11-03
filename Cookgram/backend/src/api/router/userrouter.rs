@@ -82,7 +82,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
-    ) -> Result<Json<bool>, ResponseError> {
+    ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
         state
             .user_service
