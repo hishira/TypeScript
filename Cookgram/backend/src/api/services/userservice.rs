@@ -66,7 +66,9 @@ impl UserService {
             Ok(_) => Ok(Json(UserDTO::from_user(user))),
             Err(error) => {
                 tracing::error!("User cannot be added {}", error);
-                return Err(ResponseError::DatabaseError("Cannot create user".to_string()));
+                return Err(ResponseError::DatabaseError(
+                    "Cannot create user".to_string(),
+                ));
             }
         }
     }
@@ -79,14 +81,16 @@ impl UserService {
         self.user_repo.find_by_id(user_id).await
     }
 
-    pub async fn add_user_address(&self, params: CreateUserAddressDto) -> User {
+    pub async fn add_user_address(&self, params: CreateUserAddressDto) -> UserDTO {
         let user = self.user_repo.find_by_id(params.user_id).await;
-        self.user_repo
-            .update(User::create_base_on_user_and_address(
-                user,
-                CreateAddressDto::build_address_based_on_create_dto(params.address),
-            ))
-            .await
+        UserDTO::from_user(
+            self.user_repo
+                .update(User::create_base_on_user_and_address(
+                    user,
+                    CreateAddressDto::build_address_based_on_create_dto(params.address),
+                ))
+                .await,
+        )
     }
 
     pub async fn update_user(
@@ -96,7 +100,9 @@ impl UserService {
     ) -> Result<UserDTO, ResponseError> {
         let user = self.user_repo.find_by_id(user_id).await;
         let updated_user = UserUtils::get_from_dto(UserDtos::Update(params), Some(user)).await?;
-        Ok(UserDTO::from_user(self.user_repo.update(updated_user.clone()).await))
+        Ok(UserDTO::from_user(
+            self.user_repo.update(updated_user.clone()).await,
+        ))
     }
 
     fn check_is_admin_role(user_role: Option<Roles>) -> Result<bool, ResponseError> {

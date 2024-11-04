@@ -98,7 +98,7 @@ impl UserRouter {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
         Result::Ok(Json(UserDTO::from_user(
-            state.app_state.repo.find_by_id(id).await
+            state.app_state.repo.find_by_id(id).await,
         )))
     }
     async fn get_managed_users(
@@ -136,9 +136,8 @@ impl UserRouter {
     async fn add_user_address(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserAddressDto>,
-    ) -> Json<String> {
-        state.user_service.add_user_address(params).await;
-        Json("Ok".to_string())
+    ) -> Result<Json<UserDTO>, ResponseError> {
+        Ok(Json(state.user_service.add_user_address(params).await))
     }
 
     async fn update_user(
