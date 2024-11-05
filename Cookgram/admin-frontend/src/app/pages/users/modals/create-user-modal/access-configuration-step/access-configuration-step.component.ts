@@ -14,6 +14,7 @@ import { CurrentUserSelector } from '../../../../../../store/currentUser/selecto
 import { Observable, map } from 'rxjs';
 import { Role } from '../../../../../shared/types/enums';
 import { AsyncPipe } from '@angular/common';
+import { PrepareRoles } from './access-configuration-step.utils';
 
 @Component({
   selector: 'app-access-configuration-step',
@@ -27,33 +28,20 @@ import { AsyncPipe } from '@angular/common';
     TooltipModule,
     ButtonModule,
     DropdownModule,
-    AsyncPipe
+    AsyncPipe,
   ],
   styleUrl: './access-configuration.scss',
 })
 export class AccessConfigurationStep extends AbstractStepDirective<AccessConfigurationStepGroup> {
-  readonly roles: Observable<string[]> = this.prepareRoles();
+  readonly roles: Observable<Role[]> = this.prepareRoles();
 
   constructor(private readonly store: Store<MainStore>) {
     super();
   }
 
-  private prepareRoles(): Observable<string[]> {
-    return this.store.select(CurrentUserSelector).pipe(
-      map((currentUser) => {
-        console.log(currentUser)
-        if (currentUser.roles === Role.SuperAdmin) {
-          return [
-            'User',
-            'Employee',
-            'Manager',
-            'Director',
-            'Admin',
-            'SuperAdmin',
-          ];
-        }
-        return [];
-      })
-    );
+  private prepareRoles(): Observable<Role[]> {
+    return this.store
+      .select(CurrentUserSelector)
+      .pipe(map((currentUser) => PrepareRoles(currentUser.roles)));
   }
 }
