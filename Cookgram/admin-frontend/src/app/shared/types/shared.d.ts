@@ -81,3 +81,7 @@ export type StorageItem<T> = {
   itemName: string;
   item: T;
 };
+
+export type RoleMap = {
+  [key in Role]: Role[];
+};

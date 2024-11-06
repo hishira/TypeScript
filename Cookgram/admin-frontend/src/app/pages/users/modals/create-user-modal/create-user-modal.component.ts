@@ -6,6 +6,12 @@ import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { StepsModule } from 'primeng/steps';
 import { Subscription } from 'rxjs';
+import {
+  CreateUserObject,
+  UserAddress,
+  UserCredentials,
+} from '../../../../../api/types/user.types';
+import { UserApiSerivce } from '../../../../../api/user.api';
 import { AddressValue } from '../../../../shared/components/address/types';
 import { Destroyer } from '../../../../shared/decorators/destroy';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
@@ -18,6 +24,7 @@ import { EmptyCreateUserFormGroup } from './create-user-modal.utils';
 import {
   AccessConfigurationStepGroup,
   AccessConfigurationValue,
+  ActiveUserModalIndex,
   AddressControl,
   CreateModalGroup,
   GeneralInformationStepGroup,
@@ -25,15 +32,7 @@ import {
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
-import {
-  CreateUserObject,
-  UserAddress,
-  UserCredentials,
-} from '../../../../../api/types/user.types';
-import { Role } from '../../../../shared/types/enums';
-import { UserApiSerivce } from '../../../../../api/user.api';
 
-type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
   selector: 'app-user-create-modal',
   templateUrl: './create-user-modal.component.html',
@@ -54,6 +53,7 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Destroyer()
 export class CreateUserModalComponent extends AbstractModalDirective {
   activeIndex: ActiveUserModalIndex = 0;
+
   readonly createUserGroup: FormGroup<CreateModalGroup> =
     EmptyCreateUserFormGroup();
   readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
@@ -105,7 +105,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
       lastName: value.generalInformation?.secondName,
       credentials: this.prepareCredentials(),
       email: value.accessConfiguration?.email,
-      role: Role.Admin,
+      role: value.accessConfiguration?.role,
       address: value.address as UserAddress,
     };
   }
