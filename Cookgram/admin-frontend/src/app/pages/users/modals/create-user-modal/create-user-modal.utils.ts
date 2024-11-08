@@ -1,5 +1,6 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { DefaultNonNullabeOption } from '../../../../shared/consts/form.consts';
+import { Role } from '../../../../shared/types/enums';
 import {
   AccessConfigurationStepGroup,
   AddressControl,
@@ -7,7 +8,6 @@ import {
   Gender,
   GeneralInformationStepGroup,
 } from './create-user-model.types';
-import { CreateUserObject } from '../../../../../api/types/user.types';
 
 export const EmptyCreateUserFormGroup = (): FormGroup<CreateModalGroup> =>
   new FormGroup({
@@ -36,6 +36,7 @@ export const EmptyAccessConfigurationGroup =
         false,
         DefaultNonNullabeOption
       ),
+      role: new FormControl<Role>(Role.User, DefaultNonNullabeOption),
     });
 
 export const EmptyAddressControl = (): FormControl<AddressControl> =>
