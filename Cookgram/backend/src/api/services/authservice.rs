@@ -9,7 +9,7 @@ use crate::{
         },
         errors::{autherror::AuthError, responseerror::ResponseError},
         repositories::{repositories::Repository, userrepositories::UserRepositories},
-        router::authrouter::AuthBody,
+        router::authrouter::AuthDTO,
         utils::{
             jwt::{jwt::Claims, tokens::JwtTokens},
             password_worker::password_worker::PasswordWorker,
@@ -37,13 +37,13 @@ impl AuthService {
     pub async fn generate_tokens_if_user_exists(
         &self,
         params: UserAuthDto,
-    ) -> Result<Json<AuthBody>, ResponseError> {
+    ) -> Result<Json<AuthDTO>, ResponseError> {
         let user = self
             .find_user_for_login(params.clone().username.unwrap())
             .await?;
         let (access_token, refresh_token) = Self::get_access_refresh_cliaims(&params, user.clone());
-        println!("{}, {}", access_token.exp, refresh_token.exp);
         let tokens = Self::generate_tokens(&access_token, &refresh_token)?;
+        tracing::info!("Token for user {} generate", user.id.get_id());
         //TODO: If error is NOT_FOUND return user not found like somethind
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
             .await
@@ -72,12 +72,12 @@ impl AuthService {
         password: String,
         hashed_user_password: String,
         tokens: JwtTokens,
-    ) -> Result<Json<AuthBody>, AuthError> {
+    ) -> Result<Json<AuthDTO>, AuthError> {
         let pass_worker = PasswordWorker::new(10, 4).unwrap();
         pass_worker
             .password_match(password, hashed_user_password)
             .await
-            .map(|_| Json(AuthBody::get_from_token(tokens)))
+            .map(|_| Json(AuthDTO::get_from_token(tokens)))
     }
 
     fn generate_tokens(

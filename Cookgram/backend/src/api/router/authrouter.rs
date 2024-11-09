@@ -8,7 +8,10 @@ use crate::{
     api::{
         appstate::{appstate::AppState, authstate::AuthState},
         daos::{useraddressdao::UserAddressDAO, userdao::UserDAO},
-        dtos::{tokendto::tokendto::{AccessTokenDto, RefreshTokenDto}, userdto::operationuserdto::{UserAuthDto, UserRegisterDto}},
+        dtos::{
+            tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
+            userdto::operationuserdto::{UserAuthDto, UserRegisterDto},
+        },
         errors::{autherror::AuthError, responseerror::ResponseError},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
         repositories::{eventrepository::EventRepository, userrepositories::UserRepositories},
@@ -24,23 +27,16 @@ use super::router::ApplicationRouter;
 
 #[derive(Debug, Validate, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct AuthBody {
+pub struct AuthDTO {
     access_token: String,
     refresh_token: String,
 }
 
-impl AuthBody {
+impl AuthDTO {
     pub fn get_from_token(tokens: JwtTokens) -> Self {
         Self {
             access_token: tokens.0 .0.clone(),
             refresh_token: tokens.1 .0.clone(),
-        }
-    }
-
-    pub fn empty() -> Self {
-        Self {
-            access_token: "".to_string(),
-            refresh_token: "".to_string(),
         }
     }
 }
@@ -96,7 +92,7 @@ impl AuthRouter {
     async fn login(
         State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<UserAuthDto>,
-    ) -> Result<Json<AuthBody>, ResponseError> {
+    ) -> Result<Json<AuthDTO>, ResponseError> {
         state
             .auth_service
             .generate_tokens_if_user_exists(params)
