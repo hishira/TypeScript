@@ -86,7 +86,7 @@ impl AuthRouter {
         State(state): State<AuthState>,
         ValidateDtos(params): ValidateDtos<RefreshTokenDto>,
     ) -> Result<Json<AccessTokenDto>, ResponseError> {
-        state.auth_service.refresh_token(params).await
+        state.auth_service.get_refresh_token(params).await
     }
 
     async fn login(

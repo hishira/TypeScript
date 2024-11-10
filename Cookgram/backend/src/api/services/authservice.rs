@@ -6,14 +6,10 @@ use crate::{
         dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::{operationuserdto::UserAuthDto, userdto::UserFilterOption},
-        },
-        errors::{autherror::AuthError, responseerror::ResponseError},
-        repositories::{repositories::Repository, userrepositories::UserRepositories},
-        router::authrouter::AuthDTO,
-        utils::{
+        }, errors::{autherror::AuthError, responseerror::ResponseError}, repositories::{repositories::Repository, userrepositories::UserRepositories}, router::authrouter::AuthDTO, services::tokenservice::TokenService, utils::{
             jwt::{jwt::Claims, tokens::JwtTokens},
             password_worker::password_worker::PasswordWorker,
-        },
+        }
     },
     core::user::user::User,
 };
@@ -25,13 +21,11 @@ pub struct AuthService {
 }
 
 impl AuthService {
-    pub async fn refresh_token(
+    pub async fn get_refresh_token(
         &self,
         params: RefreshTokenDto,
     ) -> Result<Json<AccessTokenDto>, ResponseError> {
-        Ok(Json(AccessTokenDto {
-            access_token: Claims::refresh_token_expired_token(params.refresh_token)?,
-        }))
+        TokenService::refresh_token(params).await
     }
 
     pub async fn generate_tokens_if_user_exists(
@@ -41,8 +35,8 @@ impl AuthService {
         let user = self
             .find_user_for_login(params.clone().username.unwrap())
             .await?;
-        let (access_token, refresh_token) = Self::get_access_refresh_cliaims(&params, user.clone());
-        let tokens = Self::generate_tokens(&access_token, &refresh_token)?;
+        let (access_token, refresh_token) = TokenService::get_access_refresh_cliaims(&params, user.clone());
+        let tokens = TokenService::generate_tokens(&access_token, &refresh_token)?;
         tracing::info!("Token for user {} generate", user.id.get_id());
         //TODO: If error is NOT_FOUND return user not found like somethind
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
@@ -80,18 +74,4 @@ impl AuthService {
             .map(|_| Json(AuthDTO::get_from_token(tokens)))
     }
 
-    fn generate_tokens(
-        access_claims: &Claims,
-        refresh_claims: &Claims,
-    ) -> Result<JwtTokens, AuthError> {
-        JwtTokens::generete_from_claims(&access_claims, &refresh_claims)
-    }
-
-    fn get_access_refresh_cliaims(params: &UserAuthDto, user: User) -> (Claims, Claims) {
-        let time_stamp = get_current_timestamp();
-        (
-            Claims::access_token(&params, user.clone(), time_stamp),
-            Claims::refresh_token(&params, user.clone(), 10000 + time_stamp),
-        )
-    }
 }
