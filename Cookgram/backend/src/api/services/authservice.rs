@@ -54,10 +54,10 @@ impl AuthService {
         let filter = UserFilterOption::from_only_usernamr(username);
         let users = self.user_repo.find(filter.clone()).await;
         let users = match users {
-            Ok(u) => u,
+            Ok(users) => users,
             Err(error) => {
                 tracing::error!("Error occur, {}", error);
-                vec![]
+                Err(AuthError::UserNotExists)?
             }
         };
         if users.len() <= 0 {
