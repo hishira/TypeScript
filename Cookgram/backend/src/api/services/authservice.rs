@@ -71,7 +71,7 @@ impl AuthService {
         pass_worker
             .password_match(password, hashed_user_password)
             .await
-            .map(|_| Json(AuthDTO::get_from_token(tokens)))
+            .map(|_| Json(TokenService::prepare_auth_from_token(tokens)))
     }
 
 }

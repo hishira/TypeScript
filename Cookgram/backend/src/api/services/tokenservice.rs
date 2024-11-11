@@ -3,8 +3,12 @@ use jsonwebtoken::get_current_timestamp;
 
 use crate::{
     api::{
-        dtos::{tokendto::tokendto::{AccessTokenDto, RefreshTokenDto}, userdto::operationuserdto::UserAuthDto},
+        dtos::{
+            tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
+            userdto::operationuserdto::UserAuthDto,
+        },
         errors::{autherror::AuthError, responseerror::ResponseError},
+        router::authrouter::AuthDTO,
         utils::jwt::{jwt::Claims, tokens::JwtTokens},
     },
     core::user::user::User,
@@ -33,5 +37,12 @@ impl TokenService {
         Ok(Json(AccessTokenDto {
             access_token: Claims::refresh_token_expired_token(params.refresh_token)?,
         }))
+    }
+
+    pub fn prepare_auth_from_token(tokens: JwtTokens) -> AuthDTO {
+        AuthDTO {
+            access_token: tokens.0 .0.clone(),
+            refresh_token: tokens.1 .0.clone(),
+        }
     }
 }

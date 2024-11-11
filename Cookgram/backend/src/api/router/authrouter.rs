@@ -28,19 +28,9 @@ use super::router::ApplicationRouter;
 #[derive(Debug, Validate, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AuthDTO {
-    access_token: String,
-    refresh_token: String,
+    pub access_token: String,
+    pub refresh_token: String,
 }
-
-impl AuthDTO {
-    pub fn get_from_token(tokens: JwtTokens) -> Self {
-        Self {
-            access_token: tokens.0 .0.clone(),
-            refresh_token: tokens.1 .0.clone(),
-        }
-    }
-}
-
 pub struct AuthRouter {
     user_repo: UserRepositories,
     event_repo: EventRepository,
