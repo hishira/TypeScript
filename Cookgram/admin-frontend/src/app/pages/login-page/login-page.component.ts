@@ -1,30 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { CheckboxModule } from 'primeng/checkbox';
-import { RippleModule } from 'primeng/ripple';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
+import { NgIf } from '@angular/common';
+import { Component } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { ErrorsComponent } from '../../shared/errors/errors.component';
-import { AuthenticationApiService } from '../../../api/authentication.api';
-import { ToastService } from '../../shared/services/toast.service';
 import { Store } from '@ngrx/store';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { RippleModule } from 'primeng/ripple';
+import { AuthenticationApiService } from '../../../api/authentication.api';
+import { TokenResponse } from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
+import { ErrorsComponent } from '../../shared/errors/errors.component';
 import { InputComponent } from '../../shared/input/input.component';
-import { TokenResponse } from '../../../api/types/api.types';
+import { ToastService } from '../../shared/services/toast.service';
+import { LoginFormGroup } from './types';
 
-type LoginFormGroup = {
-  username: FormControl<string | null>;
-  password: FormControl<string | null>;
-};
 @Component({
   selector: 'app-login-page',
   standalone: true,

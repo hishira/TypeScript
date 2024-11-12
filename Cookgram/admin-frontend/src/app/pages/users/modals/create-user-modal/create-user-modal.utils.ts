@@ -44,8 +44,3 @@ export const EmptyAddressControl = (): FormControl<AddressControl> =>
     null as unknown as AddressControl,
     DefaultNonNullabeOption
   );
-
-//TODO
-// export const PrepareCreateUserObject = (): CreateUserObject => ({
-
-// })
