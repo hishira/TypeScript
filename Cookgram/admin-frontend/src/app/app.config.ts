@@ -1,23 +1,23 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
-import { routes } from './app.routes';
-import { provideState, provideStore } from '@ngrx/store';
-import { jwtReducers } from '../store/jwt/reducers';
 import {
-  HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { ServerErrorInterceptor } from './shared/interceptor/serverError.interceptor';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideRouter } from '@angular/router';
+import { provideState, provideStore } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
-import { ToastService } from './shared/services/toast.service';
-import { RefreshInterceptor } from './shared/interceptor/refresh.interceptor';
-import { TokenInterceptor } from './shared/interceptor/token.interceptor';
 import { AuthenticationApiService } from '../api/authentication.api';
 import { UserApiSerivce } from '../api/user.api';
 import { currentUserReducers } from '../store/currentUser/reducers';
+import { jwtReducers } from '../store/jwt/reducers';
+import { routes } from './app.routes';
+import {
+  RefreshInterceptorProvider,
+  SerivceErrorProvider,
+  TokenInterceptorProvider,
+} from './shared/app.providers';
+import { ToastService } from './shared/services/toast.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,20 +32,8 @@ export const appConfig: ApplicationConfig = {
     AuthenticationApiService,
     UserApiSerivce,
     ToastService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ServerErrorInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: RefreshInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true,
-    },
+    SerivceErrorProvider,
+    RefreshInterceptorProvider,
+    TokenInterceptorProvider,
   ],
 };
