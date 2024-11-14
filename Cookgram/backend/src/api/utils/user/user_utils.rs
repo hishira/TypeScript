@@ -34,8 +34,8 @@ impl UserUtils {
                     Credentials::new_with_hashed_password_using_creditional_dto(user.creditionals)
                         .await?;
                 let personal_information = PersonalInformation {
-                    first_name: user.first_name,
-                    last_name: user.last_name,
+                    first_name: user.personal_information.first_name,
+                    last_name: user.personal_information.last_name,
                     brithday: OffsetDateTime::now_utc(), //TODO: Fix
                     email: Some(user.email),
                     gender: None,
@@ -63,11 +63,11 @@ impl UserUtils {
                         Credentials::new(user.username, user_from_db.credentials.password, false)
                     }
                 };
-                let personal_information = PersonalInformation {
-                    first_name: user.first_name,
-                    last_name: user.last_name,
+                let personal_information: PersonalInformation = PersonalInformation {
+                    first_name: user.personal_information.first_name,
+                    last_name: user.personal_information.last_name,
                     brithday: OffsetDateTime::now_utc(), //TODO: Fix
-                    email: user.email.or(user_from_db.personal_information.email),
+                    email: user.personal_information.email.or(user_from_db.personal_information.email),
                     gender: None,
                     contacts: Some(Contacts::empty()),
                 };
@@ -134,10 +134,10 @@ impl UserUtils {
         PersonalInformation {
             first_name: pg_row
                 .try_get("first_name")
-                .unwrap_or(Some("NULL".to_string())),
+                .unwrap_or("NULL".to_string()),
             last_name: pg_row
                 .try_get("last_name")
-                .unwrap_or(Some("NULL".to_string())),
+                .unwrap_or("NULL".to_string()),
             email: pg_row
                 .try_get("email")
                 .unwrap_or(Some("Not found ".to_string())),

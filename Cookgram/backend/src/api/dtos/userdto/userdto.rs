@@ -88,10 +88,22 @@ pub struct UserParamsDto {
 }
 #[cfg(test)]
 mod tests {
+    use time::OffsetDateTime;
     use validator::{Validate, ValidationErrors};
 
+    const EMPTY_PERSONAL_INFORMATION: PersolanInformationDTO = PersolanInformationDTO {
+        first_name: "Test".to_owned(),
+        brithday: OffsetDateTime::now_utc(),
+        contacts: None,
+        email: None,
+        gender: Gender::Man,
+        last_name: "Test".to_owned(),
+    };
     use crate::{
-        api::dtos::userdto::operationuserdto::UserCreditionalDto, core::role::role::Roles,
+        api::dtos::userdto::{
+            operationuserdto::UserCreditionalDto, personalinformationdto::PersolanInformationDTO,
+        },
+        core::{role::role::Roles, user::personalinformation::Gender},
     };
 
     use super::*;
@@ -116,8 +128,7 @@ mod tests {
             },
             email: "valid@example.com".to_string(),
             role: Some(Roles::user_role()),
-            first_name: None,
-            last_name: None,
+            personal_information: EMPTY_PERSONAL_INFORMATION,
             address: None,
         };
 
@@ -139,8 +150,7 @@ mod tests {
             },
             email: "invalid_email".to_string(), // Invalid email intentionally
             role: Some(Roles::user_role()),
-            first_name: None,
-            last_name: None,
+            personal_information: EMPTY_PERSONAL_INFORMATION,
             address: None,
         };
 
@@ -157,10 +167,8 @@ mod tests {
         let valid_dto = UpdateUserDto {
             username: "valid_username".to_string(),
             password: Some("valid_password".to_string()),
-            email: Some("valid@example.com".to_string()),
             role: None,
-            first_name: None,
-            last_name: None,
+            personal_information: EMPTY_PERSONAL_INFORMATION,
         };
 
         let validation_errors = validate_dto(&valid_dto);
@@ -172,10 +180,8 @@ mod tests {
         let invalid_dto = UpdateUserDto {
             username: "".to_string(),
             password: Some("short".to_string()),
-            email: Some("invalid_email".to_string()),
             role: None,
-            first_name: None,
-            last_name: None,
+            personal_information: EMPTY_PERSONAL_INFORMATION,
         };
 
         let validation_errors = validate_dto(&invalid_dto).unwrap();

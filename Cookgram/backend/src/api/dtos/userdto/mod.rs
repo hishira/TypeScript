@@ -3,3 +3,4 @@ pub mod userlistdto;
 pub mod operationuserdto;
 pub mod credentialsdto;
 pub mod personalinformationdto;
+pub mod contactdto;

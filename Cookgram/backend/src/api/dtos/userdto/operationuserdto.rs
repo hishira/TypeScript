@@ -3,6 +3,8 @@ use validator::{Validate, ValidationError};
 
 use crate::{api::dtos::addressdto::createaddressdto::CreateAddressDto, core::role::role::Roles};
 
+use super::personalinformationdto::PersolanInformationDTO;
+
 #[derive(Debug, Validate, Deserialize)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct UserCreditionalDto {
@@ -20,8 +22,7 @@ pub struct CreateUserDto {
     #[validate(email)]
     pub email: String,
     pub role: Option<Roles>,
-    pub first_name: Option<String>,
-    pub last_name: Option<String>,
+    pub personal_information: PersolanInformationDTO,
     pub address: Option<CreateAddressDto>,
 }
 
@@ -31,11 +32,9 @@ pub struct UpdateUserDto {
     pub username: String,
     #[validate(length(min = 6))]
     pub password: Option<String>,
-    #[validate(email)]
-    pub email: Option<String>,
     pub role: Option<Roles>,
-    pub first_name: Option<String>,
-    pub last_name: Option<String>,
+    pub personal_information: PersolanInformationDTO,
+
 }
 
 #[derive(Debug, Validate, Deserialize)]
