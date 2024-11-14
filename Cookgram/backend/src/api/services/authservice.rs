@@ -38,7 +38,6 @@ impl AuthService {
         let (access_token, refresh_token) = TokenService::get_access_refresh_cliaims(&params, user.clone());
         let tokens = TokenService::generate_tokens(&access_token, &refresh_token)?;
         tracing::info!("Token for user {} generate", user.id.get_id());
-        //TODO: If error is NOT_FOUND return user not found like somethind
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
             .await
             .map_err(|e| ResponseError::from(e))

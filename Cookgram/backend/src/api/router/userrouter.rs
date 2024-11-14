@@ -175,7 +175,6 @@ impl UserRouter {
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims.clone())?;
-        // TODO: Check if we must use Some
         state
             .user_service
             .user_list(claims.user_id, claims.role, params)
