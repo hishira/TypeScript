@@ -5,7 +5,7 @@ use crate::{api::dtos::addressdto::createaddressdto::CreateAddressDto, core::rol
 
 use super::personalinformationdto::PersolanInformationDTO;
 
-#[derive(Debug, Validate, Deserialize)]
+#[derive(Debug, Validate, Deserialize, Clone, Copy)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct UserCreditionalDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
@@ -15,14 +15,14 @@ pub struct UserCreditionalDto {
     pub password_is_temporary: Option<bool>,
 }
 
-#[derive(Debug, Validate, Deserialize)]
+#[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserDto {
-    pub creditionals: UserCreditionalDto,
     #[validate(email)]
     pub email: String,
     pub role: Option<Roles>,
     pub personal_information: PersolanInformationDTO,
+    pub creditionals: UserCreditionalDto,
     pub address: Option<CreateAddressDto>,
 }
 
