@@ -51,33 +51,38 @@ impl UserUtils {
     ) -> Result<User, PasswordWorkerError> {
         let mut user_from_db = user_to_edit.unwrap();
         user_from_db.meta.update_edit_date();
-        let new_credentials: Credentials = match user.password {
-            Some(password) => {
-                Credentials::new_with_hashed_password(user.username, password, false).await?
-            }
-            None => Credentials::new(user.username, user_from_db.credentials.password, false),
+        let new_credentials: Credentials = Self::prepare_credentials(&user, &user_from_db).await?;
+        let current_role = user.role.clone().unwrap_or(user_from_db.role);
+        let update_email = user
+        .personal_information.clone()
+        .email
+        .or(user_from_db.personal_information.email);
+        
+        let prepare_update_dto: UpdateUserDto = UpdateUserDto {
+            email: Some(update_email),
+            ..user
         };
-        let personal_information: PersonalInformation = PersonalInformation {
-            first_name: user.personal_information.first_name,
-            last_name: user.personal_information.last_name,
-            brithday: user.personal_information.brithday,
-            email: user
-                .personal_information
-                .email
-                .or(user_from_db.personal_information.email),
-            gender: None,
-            contacts: Some(Contacts::empty()),
-        };
+       
+       
+        let personal_information: PersonalInformation = PersonalInformation::create_based_on_user_dto(UserDtos::Update(prepare_update_dto));
         Ok(User::new(
             Some(user_from_db.id.get_id()),
             personal_information,
             new_credentials,
-            Some(user.role.unwrap_or(user_from_db.role)),
+            Some(current_role),
             Some(user_from_db.meta),
             None,
         ))
     }
 
+    async fn prepare_credentials(user: &UpdateUserDto, user_from_db: &User) -> Result<Credentials, PasswordWorkerError> {
+        match user.password.borrow() {
+            Some(password) => {
+                Credentials::new_with_hashed_password(user.username.clone(), password.clone(), false).await
+            }
+            None => Ok(Credentials::new(user.username.clone(), user_from_db.credentials.password.clone(), false)),
+        }
+    }
     pub async fn get_from_dto(
         user_dto: UserDtos,
         user_to_edit: Option<User>,

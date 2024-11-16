@@ -168,6 +168,7 @@ mod tests {
             username: "valid_username".to_string(),
             password: Some("valid_password".to_string()),
             role: None,
+            email: None,
             personal_information: EMPTY_PERSONAL_INFORMATION,
         };
 
@@ -181,6 +182,7 @@ mod tests {
             username: "".to_string(),
             password: Some("short".to_string()),
             role: None,
+            email: None,
             personal_information: EMPTY_PERSONAL_INFORMATION,
         };
 

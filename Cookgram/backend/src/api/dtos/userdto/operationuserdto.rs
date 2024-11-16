@@ -34,6 +34,7 @@ pub struct UpdateUserDto {
     pub password: Option<String>,
     pub role: Option<Roles>,
     pub personal_information: PersolanInformationDTO,
+    pub(crate) email: Option<Option<String>>,
 
 }
 

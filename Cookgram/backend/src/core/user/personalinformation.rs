@@ -28,9 +28,9 @@ pub struct PersonalInformation {
 }
 
 impl PersonalInformation {
-    pub fn create_based_on_user_dto(user_dto: UserDtos) -> PersonalInformation {
+    pub fn create_based_on_user_dto(user_dto: UserDtos) -> Self {
         match user_dto {
-            UserDtos::Create(create_user_dto) => PersonalInformation {
+            UserDtos::Create(create_user_dto) => Self {
                 first_name: create_user_dto.personal_information.first_name,
                 last_name: create_user_dto.personal_information.last_name,
                 brithday: create_user_dto.personal_information.brithday,
@@ -38,7 +38,14 @@ impl PersonalInformation {
                 gender: None,
                 contacts: Some(Contacts::empty()),
             },
-            UserDtos::Update(update_user_dto) => todo!(),
+            UserDtos::Update(update_user_dto) => Self {
+                first_name: update_user_dto.personal_information.first_name,
+                last_name: update_user_dto.personal_information.last_name,
+                brithday: update_user_dto.personal_information.brithday,
+                email: update_user_dto.email.unwrap(),
+                gender: None,
+                contacts: Some(Contacts::empty()),
+            },
             UserDtos::Delete(delete_user_dto) => todo!(),
         }
     }
