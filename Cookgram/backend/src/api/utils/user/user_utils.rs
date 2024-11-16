@@ -1,8 +1,10 @@
+use std::any;
+
 use crate::{
     api::{
         dtos::{
             addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto,
-            userdto::userdto::UserDtos,
+            userdto::{operationuserdto::CreateUserDto, userdto::UserDtos},
         },
         utils::password_worker::password_worker::PasswordWorkerError,
     },
@@ -16,40 +18,42 @@ use crate::{
         },
     },
 };
-use sqlx::postgres::PgRow;
+use sqlx::{postgres::PgRow, Error};
 use sqlx::Row;
 use time::OffsetDateTime;
 
 pub struct UserUtils {}
 
 impl UserUtils {
+    async fn create_user_handle(user: CreateUserDto) -> Result<User, PasswordWorkerError> {
+        let role = user.role;
+        let credentials =
+            Credentials::new_with_hashed_password_using_creditional_dto(user.creditionals).await?;
+        let personal_information = PersonalInformation {
+            first_name: user.personal_information.first_name,
+            last_name: user.personal_information.last_name,
+            brithday: user.personal_information.brithday,
+            email: Some(user.email),
+            gender: None,
+            contacts: Some(Contacts::empty()),
+        };
+        Ok(User::new(
+            None,
+            personal_information,
+            credentials,
+            role,
+            None,
+            user.address
+                .map(CreateAddressDto::build_address_based_on_create_dto),
+        ))
+    }
     pub async fn get_from_dto(
         user_dto: UserDtos,
         user_to_edit: Option<User>,
     ) -> Result<User, PasswordWorkerError> {
         match user_dto {
             UserDtos::Create(user) => {
-                let role = user.role;
-                let credentials =
-                    Credentials::new_with_hashed_password_using_creditional_dto(user.creditionals)
-                        .await?;
-                let personal_information = PersonalInformation {
-                    first_name: user.personal_information.first_name,
-                    last_name: user.personal_information.last_name,
-                    brithday: OffsetDateTime::now_utc(), //TODO: Fix
-                    email: Some(user.email),
-                    gender: None,
-                    contacts: Some(Contacts::empty()),
-                };
-                Ok(User::new(
-                    None,
-                    personal_information,
-                    credentials,
-                    role,
-                    None,
-                    user.address
-                        .map(CreateAddressDto::build_address_based_on_create_dto),
-                ))
+               Self::create_user_handle(user).await
             }
             UserDtos::Update(user) => {
                 let mut user_from_db = user_to_edit.unwrap();
@@ -66,8 +70,11 @@ impl UserUtils {
                 let personal_information: PersonalInformation = PersonalInformation {
                     first_name: user.personal_information.first_name,
                     last_name: user.personal_information.last_name,
-                    brithday: OffsetDateTime::now_utc(), //TODO: Fix
-                    email: user.personal_information.email.or(user_from_db.personal_information.email),
+                    brithday: user.personal_information.brithday,
+                    email: user
+                        .personal_information
+                        .email
+                        .or(user_from_db.personal_information.email),
                     gender: None,
                     contacts: Some(Contacts::empty()),
                 };
@@ -132,12 +139,8 @@ impl UserUtils {
 
     fn prepare_personal_information(pg_row: &PgRow) -> PersonalInformation {
         PersonalInformation {
-            first_name: pg_row
-                .try_get("first_name")
-                .unwrap_or("NULL".to_string()),
-            last_name: pg_row
-                .try_get("last_name")
-                .unwrap_or("NULL".to_string()),
+            first_name: pg_row.try_get("first_name").unwrap_or("NULL".to_string()),
+            last_name: pg_row.try_get("last_name").unwrap_or("NULL".to_string()),
             email: pg_row
                 .try_get("email")
                 .unwrap_or(Some("Not found ".to_string())),
