@@ -5,7 +5,7 @@ use crate::{api::dtos::addressdto::createaddressdto::CreateAddressDto, core::rol
 
 use super::personalinformationdto::PersolanInformationDTO;
 
-#[derive(Debug, Validate, Deserialize, Clone, Copy)]
+#[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct UserCreditionalDto {
     #[validate(length(min = 1, message = "Can not be empty"))]

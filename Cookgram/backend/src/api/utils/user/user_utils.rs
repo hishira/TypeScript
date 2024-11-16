@@ -30,10 +30,10 @@ pub struct UserUtils {}
 
 impl UserUtils {
     async fn create_user_handle(user: CreateUserDto) -> Result<User, PasswordWorkerError> {
+        let personal_information =PersonalInformation::create_based_on_user_dto(UserDtos::Create(user.clone()));
         let role = user.role;
         let credentials =
             Credentials::new_with_hashed_password_using_creditional_dto(user.creditionals).await?;
-        let personal_information =PersonalInformation::create_based_on_user_dto(UserDtos::Create(user));
         Ok(User::new(
             None,
             personal_information,
