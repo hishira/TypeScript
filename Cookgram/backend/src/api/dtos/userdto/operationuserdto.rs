@@ -18,8 +18,6 @@ pub struct UserCreditionalDto {
 #[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserDto {
-    #[validate(email)]
-    pub email: String,
     pub role: Option<Roles>,
     pub personal_information: PersolanInformationDTO,
     pub creditionals: UserCreditionalDto,
@@ -28,14 +26,10 @@ pub struct CreateUserDto {
 
 #[derive(Debug, Validate, Deserialize)]
 pub struct UpdateUserDto {
-    #[validate(length(min = 1))]
-    pub username: String,
-    #[validate(length(min = 6))]
-    pub password: Option<String>,
     pub role: Option<Roles>,
     pub personal_information: PersolanInformationDTO,
-    pub(crate) email: Option<Option<String>>,
-
+    pub creditionals: UserCreditionalDto,
+    pub address: Option<CreateAddressDto>,
 }
 
 #[derive(Debug, Validate, Deserialize)]

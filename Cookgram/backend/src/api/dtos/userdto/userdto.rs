@@ -99,6 +99,11 @@ mod tests {
         gender: Gender::Man,
         last_name: "Test".to_owned(),
     };
+    const EMPTY_CREDENTIONALS: UserCreditionalDto = UserCreditionalDto {
+       password: "test".to_owned(),
+       password_is_temporary: Some(true),
+       username: "test".to_owned()
+    };
     use crate::{
         api::dtos::userdto::{
             operationuserdto::UserCreditionalDto, personalinformationdto::PersolanInformationDTO,
@@ -126,7 +131,6 @@ mod tests {
                 password: "valid_password".to_string(),
                 password_is_temporary: Some(false),
             },
-            email: "valid@example.com".to_string(),
             role: Some(Roles::user_role()),
             personal_information: EMPTY_PERSONAL_INFORMATION,
             address: None,
@@ -148,7 +152,6 @@ mod tests {
                 password: "short".to_string(),
                 password_is_temporary: Some(false),
             },
-            email: "invalid_email".to_string(), // Invalid email intentionally
             role: Some(Roles::user_role()),
             personal_information: EMPTY_PERSONAL_INFORMATION,
             address: None,
@@ -165,11 +168,11 @@ mod tests {
     #[test]
     fn test_update_user_dto_validation_success() {
         let valid_dto = UpdateUserDto {
-            username: "valid_username".to_string(),
-            password: Some("valid_password".to_string()),
             role: None,
-            email: None,
             personal_information: EMPTY_PERSONAL_INFORMATION,
+            creditionals: EMPTY_CREDENTIONALS,
+            address: None
+
         };
 
         let validation_errors = validate_dto(&valid_dto);
@@ -179,11 +182,10 @@ mod tests {
     #[test]
     fn test_update_user_dto_validation_failure() {
         let invalid_dto = UpdateUserDto {
-            username: "".to_string(),
-            password: Some("short".to_string()),
             role: None,
-            email: None,
             personal_information: EMPTY_PERSONAL_INFORMATION,
+            creditionals: EMPTY_CREDENTIONALS,
+            address: None
         };
 
         let validation_errors = validate_dto(&invalid_dto).unwrap();
