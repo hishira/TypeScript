@@ -86,7 +86,7 @@ pub enum UserDtos {
 pub struct UserParamsDto {
     id: Option<uuid::Uuid>,
 }
-// TODO: Fix
+// TODO: Fix tests
 // #[cfg(test)]
 // mod tests {
 //     use time::OffsetDateTime;
