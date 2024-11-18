@@ -6,8 +6,7 @@ use crate::{
             addressdto::createaddressdto::CreateAddressDto,
             roledto::roledto::RoleDto,
             userdto::{
-                operationuserdto::{CreateUserDto, UpdateUserDto},
-                userdto::UserDtos,
+                operationuserdto::{CreateUserDto, UpdateUserDto}, personalinformationdto::PersolanInformationDTO, userdto::UserDtos
             },
         },
         utils::password_worker::password_worker::PasswordWorkerError,
@@ -57,9 +56,12 @@ impl UserUtils {
         .personal_information.clone()
         .email
         .or(user_from_db.personal_information.email);
-        
+        let personal_info = PersolanInformationDTO {
+            email: update_email,
+            ..user.personal_information.clone()
+        };
         let prepare_update_dto: UpdateUserDto = UpdateUserDto {
-            email: Some(update_email),
+            personal_information: personal_info,
             ..user
         };
        
@@ -76,11 +78,11 @@ impl UserUtils {
     }
 
     async fn prepare_credentials(user: &UpdateUserDto, user_from_db: &User) -> Result<Credentials, PasswordWorkerError> {
-        match user.password.borrow() {
-            Some(password) => {
-                Credentials::new_with_hashed_password(user.username.clone(), password.clone(), false).await
+        match user.creditionals.password.clone() {
+            password => {
+                Credentials::new_with_hashed_password(user.creditionals.username.clone(), password.clone(), false).await
             }
-            None => Ok(Credentials::new(user.username.clone(), user_from_db.credentials.password.clone(), false)),
+            _ => Ok(Credentials::new(user.creditionals.username.clone(), user_from_db.credentials.password.clone(), false)),
         }
     }
     pub async fn get_from_dto(

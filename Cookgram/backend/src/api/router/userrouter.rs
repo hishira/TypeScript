@@ -236,6 +236,6 @@ async fn pp(
     State(state): State<UserState>,
     ValidateDtos(params): ValidateDtos<CreateUserDto>,
 ) -> Result<String, AuthError> {
-    print!("{}", params.email);
+    print!("{}", params.personal_information.email.unwrap());
     Ok(format!("OK"))
 }

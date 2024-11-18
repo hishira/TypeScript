@@ -131,8 +131,8 @@ mod tests {
         let user = User::new(
             None,
             PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: None,
                 gender: None,
@@ -164,8 +164,8 @@ mod tests {
         let user = User::new(
             Some(user_id),
             PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
@@ -198,8 +198,8 @@ mod tests {
         let user = User::new(
             Some(user_id),
             PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
@@ -232,8 +232,8 @@ mod tests {
         let user = User::new(
             None,
             PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
@@ -266,8 +266,8 @@ mod tests {
                 uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
             ),
             personal_information: PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: Some(String::from("test@example.com")),
                 gender: None,
