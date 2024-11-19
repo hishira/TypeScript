@@ -38,7 +38,7 @@ impl User {
         meta: Option<Meta>,
         address: Option<Address>,
     ) -> Self {
-        let user_role: Roles = User::prepare_proper_role(role);
+        let user_role: Roles = Roles::prepare_proper_role(role);
         match id {
             Some(id) => Self {
                 id: UserId::from_id(id),
@@ -64,20 +64,6 @@ impl User {
                     previous: None,
                 },
             },
-        }
-    }
-
-    fn prepare_proper_role(role: Option<Roles>) -> Roles {
-        match role {
-            Some(r) => match r {
-                Roles::User(_) => Roles::user_role(),
-                Roles::Admin(_) => Roles::admin_role(),
-                Roles::SuperAdmin(_) => Roles::super_admin_role(),
-                Roles::Employee(_) => Roles::employee_role(),
-                Roles::Manager(_) => Roles::manager_role(),
-                Roles::Director(_) => Roles::director_role(),
-            },
-            None => Roles::User(UserRole::default()),
         }
     }
 
