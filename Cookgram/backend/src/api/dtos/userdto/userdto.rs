@@ -29,17 +29,15 @@ pub struct UserDTO {
     pub state: State<EntityState>,
 }
 
-impl UserDTO {
-    pub fn from_user(user: User) -> Self {
-        Self {
-            id: user.id.get_id(),
-            address: user.address,
-            credentials: CredentialsDTO::from_credentials(user.credentials),
-            meta: user.meta,
-            personal_information: user.personal_information,
-            roles: user.role,
-            state: user.state,
-        }
+pub fn from_user_to_user_dto(user: User)->UserDTO {
+    UserDTO {
+        id: user.id.get_id(),
+        address: user.address,
+        credentials: CredentialsDTO::from_credentials(user.credentials),
+        meta: user.meta,
+        personal_information: user.personal_information,
+        roles: user.role,
+        state: user.state,
     }
 }
 
@@ -55,15 +53,6 @@ pub struct UserFilterOption {
 }
 
 impl UserFilterOption {
-    pub fn from_claims(claims: Claims) -> Self {
-        Self {
-            username: Some(claims.user_info.clone()),
-            limit: Some(10),
-            offset: Some(0),
-            owner_id: None,
-            with_admin: Some(true),
-        }
-    }
 
     pub fn from_only_usernamr(username: String) -> Self {
         Self {

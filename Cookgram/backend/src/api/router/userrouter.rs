@@ -15,7 +15,7 @@ use crate::{
             addressdto::createaddressdto::CreateUserAddressDto,
             userdto::{
                 operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
-                userdto::{UserDTO, UserFilterOption},
+                userdto::{from_user_to_user_dto, UserDTO, UserFilterOption},
                 userlistdto::UserListDto,
             },
         },
@@ -97,7 +97,7 @@ impl UserRouter {
     ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
-        Result::Ok(Json(UserDTO::from_user(
+        Result::Ok(Json(from_user_to_user_dto(
             state.app_state.repo.find_by_id(id).await,
         )))
     }
@@ -117,7 +117,7 @@ impl UserRouter {
                 })
                 .await
                 .iter()
-                .map(|user| UserDTO::from_user(user.to_owned()))
+                .map(|user| from_user_to_user_dto(user.to_owned()))
                 .collect(),
         ))
     }
@@ -128,7 +128,7 @@ impl UserRouter {
     ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::current_user_guard(&claims)?;
 
-        Ok(Json(UserDTO::from_user(
+        Ok(Json(from_user_to_user_dto(
             state.user_service.get_current_user(claims.user_id).await,
         )))
     }
@@ -164,7 +164,7 @@ impl UserRouter {
         Ok(Json(
             users
                 .iter()
-                .map(|user| UserDTO::from_user(user.to_owned()))
+                .map(|user| from_user_to_user_dto(user.to_owned()))
                 .collect(),
         ))
     }

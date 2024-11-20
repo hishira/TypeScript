@@ -4,7 +4,7 @@ use uuid::Uuid;
 use crate::api::daos::userdao::UserDAO;
 use crate::api::dtos::addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto};
 use crate::api::dtos::userdto::operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto};
-use crate::api::dtos::userdto::userdto::{UserDTO, UserFilterOption};
+use crate::api::dtos::userdto::userdto::{from_user_to_user_dto, UserDTO, UserFilterOption};
 use crate::api::errors::autherror::AuthError;
 use crate::api::errors::responseerror::ResponseError;
 use crate::api::repositories::repositories::Repository;
@@ -34,7 +34,7 @@ impl UserService {
         self.user_dao.user_list(params).await.map(|result| {
             result
                 .iter()
-                .map(|user| UserDTO::from_user(user.to_owned()))
+                .map(|user| from_user_to_user_dto(user.to_owned()))
                 .collect()
         })
     }
@@ -44,7 +44,7 @@ impl UserService {
         match user_tmp {
             Ok(user) => {
                 let user = self.user_repo.create(user).await;
-                Ok(Json(UserDTO::from_user(user)))
+                Ok(Json(from_user_to_user_dto(user)))
             }
             Err(error) => {
                 tracing::error!("Error occur while user creation: {}", error);
@@ -63,7 +63,7 @@ impl UserService {
         self.user_repo.create(user.clone()).await;
         let result = self.user_dao.create_user_connection(ids_touples).await;
         match result {
-            Ok(_) => Ok(Json(UserDTO::from_user(user))),
+            Ok(_) => Ok(Json(from_user_to_user_dto(user))),
             Err(error) => {
                 tracing::error!("User cannot be added {}", error);
                 return Err(ResponseError::DatabaseError(
@@ -83,7 +83,7 @@ impl UserService {
 
     pub async fn add_user_address(&self, params: CreateUserAddressDto) -> UserDTO {
         let user = self.user_repo.find_by_id(params.user_id).await;
-        UserDTO::from_user(
+        from_user_to_user_dto(
             self.user_repo
                 .update(User::create_base_on_user_and_address(
                     user,
@@ -100,7 +100,7 @@ impl UserService {
     ) -> Result<UserDTO, ResponseError> {
         let user = self.user_repo.find_by_id(user_id).await;
         let updated_user = UserUtils::get_from_dto(UserDtos::Update(params), Some(user)).await?;
-        Ok(UserDTO::from_user(
+        Ok(from_user_to_user_dto(
             self.user_repo.update(updated_user.clone()).await,
         ))
     }
@@ -150,6 +150,6 @@ impl UserService {
             previous: Some(user.state.previous.clone().unwrap_or(EntityState::Active)),
         });
         self.user_repo.delete(user.clone()).await;
-        return Ok(Json(UserDTO::from_user(user)));
+        return Ok(Json(from_user_to_user_dto(user)));
     }
 }
