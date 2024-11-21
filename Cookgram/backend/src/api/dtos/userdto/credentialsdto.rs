@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::core::user::credentials::Credentials;
+use crate::core::user::credentials::{Credentials};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -10,11 +10,10 @@ pub struct CredentialsDTO {
     pub password_is_temporary: bool,
 }
 
-impl CredentialsDTO {
-    pub fn from_credentials(credentials: Credentials) -> Self {
-        Self {
-            username: credentials.username,
-            password_is_temporary: credentials.password_is_temporary,
-        }
+
+pub fn get_credentials_dto_from_credentials(credentials: Credentials) -> CredentialsDTO {
+    CredentialsDTO {
+        username: credentials.username,
+        password_is_temporary: credentials.password_is_temporary,
     }
 }

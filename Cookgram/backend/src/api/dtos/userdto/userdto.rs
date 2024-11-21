@@ -13,7 +13,7 @@ use crate::{
 };
 
 use super::{
-    credentialsdto::CredentialsDTO,
+    credentialsdto::{get_credentials_dto_from_credentials, CredentialsDTO},
     operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
 };
 
@@ -33,7 +33,7 @@ pub fn from_user_to_user_dto(user: User)->UserDTO {
     UserDTO {
         id: user.id.get_id(),
         address: user.address,
-        credentials: CredentialsDTO::from_credentials(user.credentials),
+        credentials: get_credentials_dto_from_credentials(user.credentials),
         meta: user.meta,
         personal_information: user.personal_information,
         roles: user.role,
