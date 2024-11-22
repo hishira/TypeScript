@@ -2,7 +2,7 @@ use axum::Json;
 use uuid::Uuid;
 
 use crate::api::daos::userdao::UserDAO;
-use crate::api::dtos::addressdto::createaddressdto::{CreateAddressDto, CreateUserAddressDto};
+use crate::api::dtos::addressdto::createaddressdto::{build_address_based_on_create_dto, CreateAddressDto, CreateUserAddressDto};
 use crate::api::dtos::userdto::operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto};
 use crate::api::dtos::userdto::userdto::{from_user_to_user_dto, UserDTO, UserFilterOption};
 use crate::api::errors::autherror::AuthError;
@@ -87,7 +87,7 @@ impl UserService {
             self.user_repo
                 .update(User::create_base_on_user_and_address(
                     user,
-                    CreateAddressDto::build_address_based_on_create_dto(params.address),
+                    build_address_based_on_create_dto(params.address),
                 ))
                 .await,
         )

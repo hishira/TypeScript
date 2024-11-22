@@ -17,24 +17,20 @@ pub struct UpdateAddressDto {
     pub postal_code: Option<String>,
 }
 
-
-impl UpdateAddressDto {
-    pub fn build_address_based_on_update_dto_and_address(update_dto: UpdateAddressDto, address: Address) -> Address {
-        Address::new(
-            update_dto.address.unwrap_or(address.address),
-            update_dto.house.unwrap_or(address.house),
-            update_dto.door.or(address.door),
-            update_dto.city.unwrap_or(address.city),
-            update_dto.country.unwrap_or(address.country),
-            Location {
-                latitude: update_dto.latitude.or(address.location.latitude),
-                longitude: update_dto.longitude.or(address.location.longitude),
-            },
-            update_dto.postal_code.unwrap_or(address.postal_code),
-        )
-    }
+pub fn build_address_based_on_update_dto_and_address(update_dto: UpdateAddressDto, address: Address) -> Address {
+    Address::new(
+        update_dto.address.unwrap_or(address.address),
+        update_dto.house.unwrap_or(address.house),
+        update_dto.door.or(address.door),
+        update_dto.city.unwrap_or(address.city),
+        update_dto.country.unwrap_or(address.country),
+        Location {
+            latitude: update_dto.latitude.or(address.location.latitude),
+            longitude: update_dto.longitude.or(address.location.longitude),
+        },
+        update_dto.postal_code.unwrap_or(address.postal_code),
+    )
 }
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -70,7 +66,7 @@ mod tests {
 
         };
 
-        let updated_address = UpdateAddressDto::build_address_based_on_update_dto_and_address(update_dto, address);
+        let updated_address = build_address_based_on_update_dto_and_address(update_dto, address);
 
         assert_eq!(updated_address.address, "456 Elm St");
         assert_eq!(updated_address.house, "20");

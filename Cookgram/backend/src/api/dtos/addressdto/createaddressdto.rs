@@ -28,24 +28,22 @@ pub struct CreateUserAddressDto {
     pub address: CreateAddressDto,
 }
 
-impl CreateAddressDto {
-    pub fn build_address_based_on_create_dto(create_dto: CreateAddressDto) -> Address {
-        Address::new(
-            create_dto.address,
-            create_dto.house,
-            create_dto.door,
-            create_dto.city,
-            create_dto.country,
-            Location {
-                latitude: create_dto.latitude,
-                longitude: create_dto.longitude,
-            },
-            create_dto.postal_code,
 
-        )
-    }
+pub fn build_address_based_on_create_dto(create_dto: CreateAddressDto) -> Address {
+    Address::new(
+        create_dto.address,
+        create_dto.house,
+        create_dto.door,
+        create_dto.city,
+        create_dto.country,
+        Location {
+            latitude: create_dto.latitude,
+            longitude: create_dto.longitude,
+        },
+        create_dto.postal_code,
+
+    )
 }
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -171,7 +169,7 @@ mod tests {
             longitude: Some(-0.1278),
             postal_code: "12345".to_string(),
         };
-        let address = CreateAddressDto::build_address_based_on_create_dto(dto);
+        let address = build_address_based_on_create_dto(dto);
 
         assert_eq!(address.address, copy_dto.address);
         assert_eq!(address.house, copy_dto.house);

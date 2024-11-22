@@ -3,7 +3,7 @@ use std::{any, borrow::Borrow};
 use crate::{
     api::{
         dtos::{
-            addressdto::createaddressdto::CreateAddressDto,
+            addressdto::createaddressdto::{build_address_based_on_create_dto, CreateAddressDto},
             roledto::roledto::RoleDto,
             userdto::{
                 operationuserdto::{CreateUserDto, UpdateUserDto}, personalinformationdto::PersolanInformationDTO, userdto::UserDtos
@@ -40,7 +40,7 @@ impl UserUtils {
             role,
             None,
             user.address
-                .map(CreateAddressDto::build_address_based_on_create_dto),
+                .map(build_address_based_on_create_dto),
         ))
     }
 
