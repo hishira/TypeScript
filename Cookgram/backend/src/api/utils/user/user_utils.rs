@@ -4,7 +4,7 @@ use crate::{
     api::{
         dtos::{
             addressdto::createaddressdto::{build_address_based_on_create_dto, CreateAddressDto},
-            roledto::roledto::RoleDto,
+            roledto::roledto::{map_to_roles, RoleDto},
             userdto::{
                 operationuserdto::{CreateUserDto, UpdateUserDto}, personalinformationdto::PersolanInformationDTO, userdto::UserDtos
             },
@@ -142,13 +142,10 @@ impl UserUtils {
         }
     }
 
-    // fn prepare_personal_information(pg_row: &PgRow) -> PersonalInformation {
-       
-    // }
     fn retrive_role_from_row(pg_row: &PgRow) -> Result<Roles, sqlx::Error> {
         let role: Result<RoleDto, sqlx::Error> = pg_row.try_get("role");
         match role {
-            Ok(res) => Ok(res.map_to_roles()),
+            Ok(res) => Ok(map_to_roles(res)),
             Err(error) => {
                 tracing::error!("Not recognized roles");
                 Err(error)

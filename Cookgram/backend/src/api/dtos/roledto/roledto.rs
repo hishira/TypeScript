@@ -8,16 +8,14 @@ pub enum RoleDto {
     SuperAdmin,
 }
 
-impl RoleDto {
-    pub fn map_to_roles(self) -> Roles {
-        RoleDto::get_role(self)
-    }
-    
-    pub fn get_role(dto_role: RoleDto) -> Roles {
-        match dto_role {
-            RoleDto::User => Roles::user_role(),
-            RoleDto::Admin => Roles::admin_role(),
-            RoleDto::SuperAdmin => Roles::super_admin_role(),
-        }
+pub fn map_to_roles(role: RoleDto) -> Roles {
+    get_role(role)
+}
+
+pub fn get_role(dto_role: RoleDto) -> Roles {
+    match dto_role {
+        RoleDto::User => Roles::user_role(),
+        RoleDto::Admin => Roles::admin_role(),
+        RoleDto::SuperAdmin => Roles::super_admin_role(),
     }
 }
