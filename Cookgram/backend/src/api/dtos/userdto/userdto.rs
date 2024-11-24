@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{
-    api::utils::jwt::jwt::Claims,
     core::{
         address::address::Address,
         meta::meta::Meta,

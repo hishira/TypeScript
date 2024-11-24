@@ -30,6 +30,7 @@ const USER_NOT_EXISTS: (StatusCode, &str) =
 const BCRYPT_ERROR: (StatusCode, &str) = (StatusCode::INTERNAL_SERVER_ERROR, "Server error occur");
 const UNAUTHORIZED: (StatusCode, &str) = (StatusCode::UNAUTHORIZED, "You are unauthorized");
 const TOKEN_EXPIRE: (StatusCode, &str) = (StatusCode::UNAUTHORIZED, "You are unauthorized");
+
 impl AuthError {
     pub fn get_status_and_message(&self) -> (StatusCode, &str) {
         match self {
