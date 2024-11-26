@@ -46,7 +46,7 @@ impl PersonalInformation {
                 gender: None,
                 contacts: Some(Contacts::empty()),
             },
-            UserDtos::Delete(delete_user_dto) => todo!(),
+            UserDtos::Delete(_) => todo!(),
         }
     }
 
