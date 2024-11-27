@@ -11,6 +11,7 @@ import {
   Gender,
   GeneralInformationStepGroup,
 } from '../create-user-model.types';
+import { RequiredDot } from "../../../../../shared/required-dot/required-dot.componen";
 
 @Component({
   selector: 'app-user-create-general-information-step',
@@ -26,7 +27,8 @@ import {
     CalendarModule,
     DropdownModule,
     ErrorsComponent,
-  ],
+    RequiredDot
+],
 })
 export class GeneralInformationStep extends AbstractStepDirective<GeneralInformationStepGroup> {
   readonly genders: string[] = Object.values(Gender);

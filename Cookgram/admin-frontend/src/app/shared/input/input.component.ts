@@ -15,11 +15,13 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
   Validator,
+  Validators,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { noop } from 'rxjs';
 import { ErrorsComponent } from '../errors/errors.component';
 import { EventHandler } from './input.utils';
+import { RequiredDot } from "../required-dot/required-dot.componen";
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
@@ -31,10 +33,12 @@ import { EventHandler } from './input.utils';
     InputTextModule,
     ErrorsComponent,
     CommonModule,
-  ],
+    RequiredDot
+],
 })
 export class InputComponent implements ControlValueAccessor, OnInit, Validator {
   type = input<'text' | 'password'>('text');
+  required = input<boolean>(false);
   labelClasses = input<string>('');
   label = input<string>('');
   withErrors = input<boolean>(false);
@@ -79,5 +83,8 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
   private inheritValidatorFromControl(): void {
     this.ngControl?.control &&
       this.control.addValidators(this.ngControl?.control?.validator ?? []);
+    if (this.required()) {
+      this.control.addValidators([Validators.required]);
+    }
   }
 }

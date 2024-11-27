@@ -13,7 +13,7 @@ DROP TYPE IF EXISTS Gender;
 DROP TYPE IF EXISTS EventType;
 DROP VIEW IF EXISTS ADDRESSUSERS;
 
-CREATE TYPE Gender as ENUM ('Man', 'Woman', "None");
+CREATE TYPE Gender as ENUM ('Man', 'Woman', 'None');
 
 CREATE TYPE Role as ENUM (
     'User',
