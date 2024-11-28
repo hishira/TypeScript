@@ -1,6 +1,7 @@
-import { DefaultNonNullabeOption } from "../../consts/form.consts";
-import { AddressGroup } from "./types";
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import { DefaultNonNullabeOption } from '../../consts/form.consts';
+import {  AddressFields, AddressGroup, AddressRequiredMap } from './types';
+
 
 export const EmptyAddressStep = (): FormGroup<AddressGroup> =>
   new FormGroup<AddressGroup>({
@@ -11,3 +12,12 @@ export const EmptyAddressStep = (): FormGroup<AddressGroup> =>
     country: new FormControl<string>('', DefaultNonNullabeOption),
     postalCode: new FormControl<string>('', DefaultNonNullabeOption),
   });
+
+export const EmptyAddressRequiredMap: AddressRequiredMap = {
+  [AddressFields.Address]: false,
+  [AddressFields.House]: false,
+  [AddressFields.Door]: false,
+  [AddressFields.PostalCode]: false,
+  [AddressFields.City]: false,
+  [AddressFields.Country]: false,
+};

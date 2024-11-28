@@ -5,7 +5,10 @@
         Address configuration
       </div>
     </div>
-    <ca-address [formControl]="form()"></ca-address>
+    <ca-address
+      [formControl]="form()"
+      [addressRequiredMap]="addressMap"
+    ></ca-address>
   </ng-container>
   <ng-container ngProjectAs="footer">
     <p-button

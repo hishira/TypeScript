@@ -1,14 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
-  ReactiveFormsModule,
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  input,
+} from '@angular/core';
+import {
   ControlValueAccessor,
+  FormGroup,
   NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import { InputComponent } from '../../input/input.component';
 import { noop } from 'rxjs';
-import { EmptyAddressStep } from './address.utils';
+import { InputComponent } from '../../input/input.component';
+import { EmptyAddressRequiredMap, EmptyAddressStep } from './address.utils';
+import { AddressRequiredMap } from './types';
+
 @Component({
   selector: 'ca-address',
   templateUrl: './address.component.html',
@@ -24,6 +31,7 @@ import { EmptyAddressStep } from './address.utils';
   ],
 })
 export class AddressCompoent implements ControlValueAccessor, OnInit {
+  addressRequiredMap = input<AddressRequiredMap>(EmptyAddressRequiredMap);
   form: FormGroup = EmptyAddressStep();
 
   onChange: (v: any) => void = noop;
