@@ -62,6 +62,8 @@ export type ContextUser = {
 
 export type Optional<T> = T | undefined | null;
 
+export type Nullable<T> = T | undefined | null; 
+
 export type Location = {
   latitude: Optional<number>;
   longitude: Optional<number>;

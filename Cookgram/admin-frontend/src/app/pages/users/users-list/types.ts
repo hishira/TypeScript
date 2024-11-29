@@ -4,6 +4,7 @@ export type UserAddressList = {
   country: string | null;
   phone: string | null;
 };
+
 export type UserList = {
   username: string;
   last_name: string | null;

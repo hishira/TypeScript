@@ -44,7 +44,7 @@ export class AddressCompoent implements ControlValueAccessor, OnInit {
     if (obj) this.form.setValue(obj);
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (v: any) => void): void {
     this.onChange = fn;
   }
 

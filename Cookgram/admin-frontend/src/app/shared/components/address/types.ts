@@ -1,10 +1,10 @@
 import { FormControl } from '@angular/forms';
-import { ExtractFormControl } from '../../types/shared';
+import { ExtractFormControl, Optional } from '../../types/shared';
 
 export type AddressGroup = {
   address: FormControl<string>;
   house: FormControl<string>;
-  door: FormControl<string | null>;
+  door: FormControl<Optional<string>>;
   city: FormControl<string>;
   country: FormControl<string>;
   postalCode: FormControl<string>;

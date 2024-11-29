@@ -38,7 +38,6 @@
         label="City"
         formControlName="city"
         [required]="addressRequiredMap().City"
-        [required]="addressRequiredMap().Address"
         [withErrors]="true"
       />
     </div>
@@ -47,7 +46,6 @@
         i18-label
         label="Country"
         [required]="addressRequiredMap().Country"
-        [required]="addressRequiredMap().Address"
         formControlName="country"
         class="w-full"
         [withErrors]="true"
