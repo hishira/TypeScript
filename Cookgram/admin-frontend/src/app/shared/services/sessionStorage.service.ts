@@ -8,7 +8,7 @@ export class SessionStorageService {
 
   getItem<T>(itemName: SessionItemName): T {
     const item = this.session.getItem(itemName);
-    if (item === null)
+    if (item === null || item === undefined)
       throw new Error(`Item ${itemName} not exists in session storage`);
     return JSON.parse(item);
   }

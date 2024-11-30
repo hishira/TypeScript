@@ -18,7 +18,7 @@ export const RefreshInterceptorProvider: Providers = {
 };
 
 export const TokenInterceptorProvider: Providers = {
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
-    multi: true,
-  };
+  provide: HTTP_INTERCEPTORS,
+  useClass: TokenInterceptor,
+  multi: true,
+};

@@ -1,7 +1,6 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, AbstractControl } from '@angular/forms';
 import { DefaultNonNullabeOption } from '../../consts/form.consts';
-import {  AddressFields, AddressGroup, AddressRequiredMap } from './types';
-
+import { AddressFields, AddressGroup, AddressRequiredMap } from './types';
 
 export const EmptyAddressStep = (): FormGroup<AddressGroup> =>
   new FormGroup<AddressGroup>({
@@ -21,3 +20,8 @@ export const EmptyAddressRequiredMap: AddressRequiredMap = {
   [AddressFields.City]: false,
   [AddressFields.Country]: false,
 };
+
+export const isLikeAbstractControl = (
+  controlLike: any
+): controlLike is AbstractControl =>
+  'value' in controlLike && 'markAllAsTouched' in controlLike;

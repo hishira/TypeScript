@@ -1,5 +1,6 @@
 import { Directive, inject, input } from '@angular/core';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { isLikeAbstractControl } from '../components/address/address.utils';
 import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
 import { CheckType, Controlable } from './types';
@@ -8,10 +9,10 @@ import { CheckType, Controlable } from './types';
 export class AbstractStepDirective<T extends Controlable> {
   form = input.required<CheckType<T>>();
 
-  protected dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
-  protected modalService: ModalService = inject(ModalService);
+  protected readonly dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
+  protected readonly modalService: ModalService = inject(ModalService);
 
-  private messageService: ToastService = inject(ToastService);
+  private readonly messageService: ToastService = inject(ToastService);
 
   protected showFormHasErrors(): void {
     this.messageService.showError('Errors occurs in forms');
@@ -26,6 +27,17 @@ export class AbstractStepDirective<T extends Controlable> {
   }
 
   protected next(): void {
+    this.validate();
     this.modalService.nextStepChange.next();
+  }
+
+  protected validate(): void {
+    const control = this.form();
+    if (isLikeAbstractControl(control)) {
+      control?.markAllAsTouched();
+      this.showFormHasErrors();
+
+      return;
+    }
   }
 }
