@@ -48,7 +48,11 @@ export class AddressCompoent implements ControlValueAccessor, OnInit {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {}
+  registerOnTouched(fn: any): void {
+    /* TODO document why this method 'registerOnTouched' is empty */
+  }
 
-  setDisabledState?(isDisabled: boolean): void {}
+  setDisabledState?(isDisabled: boolean): void {
+    /* TODO document why this method 'setDisabledState' is empty */
+  }
 }

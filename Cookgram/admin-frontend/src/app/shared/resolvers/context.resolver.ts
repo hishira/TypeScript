@@ -19,7 +19,6 @@ export const ContextResolver: ResolveFn<any> = (
     .currentUserInfo()
     .pipe(
       tap((currentUser) => {
-        console.log(currentUser);
         mainStore.dispatch(SetCurrentUserAction(currentUser));
       })
     );
