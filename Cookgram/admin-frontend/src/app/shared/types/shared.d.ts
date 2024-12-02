@@ -1,5 +1,6 @@
-import { FormControl, FormArray, FormGroup } from '@angular/forms';
-import { State, Role } from './enums';
+import { EnvironmentProviders, Provider } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { Role, State } from './enums';
 
 export type ExtractFormControl<T> = {
   [K in keyof T]: T[K] extends FormControl<infer U>
@@ -62,7 +63,7 @@ export type ContextUser = {
 
 export type Optional<T> = T | undefined | null;
 
-export type Nullable<T> = T | undefined | null; 
+export type Nullable<T> = T | undefined | null;
 
 export type Location = {
   latitude: Optional<number>;
@@ -87,3 +88,5 @@ export type StorageItem<T> = {
 export type RoleMap = {
   [key in Role]: Role[];
 };
+
+export type Providers = Provider | EnvironmentProviders;
