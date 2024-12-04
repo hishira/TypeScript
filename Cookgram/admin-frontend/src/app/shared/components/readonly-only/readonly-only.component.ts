@@ -1,10 +1,10 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   input,
   InputSignal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-read-only',
@@ -14,5 +14,5 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
 })
 export class ReadoOnlyComponent {
-  title: InputSignal<string | undefined> = input<string>();
+  readonly title: InputSignal<string | undefined> = input<string>();
 }

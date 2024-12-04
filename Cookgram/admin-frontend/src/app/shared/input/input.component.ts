@@ -20,8 +20,8 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { noop } from 'rxjs';
 import { ErrorsComponent } from '../errors/errors.component';
+import { RequiredDot } from '../required-dot/required-dot.componen';
 import { EventHandler } from './input.utils';
-import { RequiredDot } from "../required-dot/required-dot.componen";
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
@@ -33,21 +33,22 @@ import { RequiredDot } from "../required-dot/required-dot.componen";
     InputTextModule,
     ErrorsComponent,
     CommonModule,
-    RequiredDot
-],
+    RequiredDot,
+  ],
 })
 export class InputComponent implements ControlValueAccessor, OnInit, Validator {
-  type = input<'text' | 'password'>('text');
-  required = input<boolean>(false);
-  labelClasses = input<string>('');
-  label = input<string>('');
-  withErrors = input<boolean>(false);
-  control = new FormControl<string | null>('');
+  readonly type = input<'text' | 'password'>('text');
+  readonly required = input<boolean>(false);
+  readonly labelClasses = input<string>('');
+  readonly label = input<string>('');
+  readonly withErrors = input<boolean>(false);
+
+  readonly control = new FormControl<string | null>('');
 
   onChange: (value: string | null) => void = noop;
   onTouch: () => void = noop;
 
-  constructor(@Optional() @Self() private ngControl: NgControl) {
+  constructor(@Optional() @Self() private readonly ngControl: NgControl) {
     this.ngControl && (this.ngControl.valueAccessor = this);
   }
 
