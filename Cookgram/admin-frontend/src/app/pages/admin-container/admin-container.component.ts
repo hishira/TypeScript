@@ -14,5 +14,5 @@ import { MenuItems } from './admin-container.consts';
   styleUrl: './admin-container.component.scss',
 })
 export class AdminContainerComponent {
-  menuItems: MenuItem[] = MenuItems;
+  readonly menuItems: MenuItem[] = MenuItems;
 }

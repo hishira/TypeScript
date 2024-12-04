@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { PrimeTemplate } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { DialogService } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
-import { DialogService } from 'primeng/dynamicdialog';
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
 import { UserList } from './types';
 //TODO: Fix after fixing backend
@@ -29,7 +29,7 @@ import { UserList } from './types';
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent implements OnInit {
-  users: UserList[] = [];
+  readonly users: UserList[] = [];
 
   constructor(
     private readonly userApi: UserApiSerivce,
@@ -39,7 +39,7 @@ export class UsersListComponent implements OnInit {
   ngOnInit(): void {
     this.userApi
       .userLists()
-      .subscribe((users: UserList[]) => (this.users = users));
+      .subscribe((users: UserList[]) => this.users.push(...users));
   }
 
   createUser() {
