@@ -5,13 +5,12 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
-import { ErrorsComponent } from '../../../../../shared/errors/errors.component';
 import { InputComponent } from '../../../../../shared/input/input.component';
+import { RequiredDot } from '../../../../../shared/required-dot/required-dot.componen';
 import {
   Gender,
   GeneralInformationStepGroup,
 } from '../create-user-model.types';
-import { RequiredDot } from "../../../../../shared/required-dot/required-dot.componen";
 
 @Component({
   selector: 'app-user-create-general-information-step',
@@ -26,20 +25,13 @@ import { RequiredDot } from "../../../../../shared/required-dot/required-dot.com
     ReactiveFormsModule,
     CalendarModule,
     DropdownModule,
-    ErrorsComponent,
-    RequiredDot
-],
+    RequiredDot,
+  ],
 })
 export class GeneralInformationStep extends AbstractStepDirective<GeneralInformationStepGroup> {
   readonly genders: string[] = Object.values(Gender);
 
   override next(): void {
-    // this.form().markAllAsTouched()
-    // if (this.form().invalid) {
-    //   this.showFormHasErrors();
-    //   return;
-    // }
     super.next();
   }
-  
 }

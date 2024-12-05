@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   FormControl,
@@ -12,11 +11,11 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
+import { take } from 'rxjs';
 import { AuthenticationApiService } from '../../../api/authentication.api';
-import { TokenResponse } from '../../../api/types/api.types';
+import { LoginPayload, TokenResponse } from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
-import { ErrorsComponent } from '../../shared/errors/errors.component';
 import { InputComponent } from '../../shared/input/input.component';
 import { ToastService } from '../../shared/services/toast.service';
 import { LoginFormGroup } from './types';
@@ -30,8 +29,6 @@ import { LoginFormGroup } from './types';
     ButtonModule,
     InputTextModule,
     ReactiveFormsModule,
-    NgIf,
-    ErrorsComponent,
     InputComponent,
   ],
   providers: [AuthenticationApiService],
@@ -48,6 +45,13 @@ export class LoginPageComponent {
       password: new FormControl<string>('', [Validators.required]),
     });
 
+  get loginPayload(): LoginPayload {
+    return {
+      username: this.loginFormGroup.value.username ?? '',
+      password: this.loginFormGroup.value.password ?? '',
+    };
+  }
+
   constructor(
     private readonly router: Router,
     private readonly authenticationService: AuthenticationApiService,
@@ -56,29 +60,30 @@ export class LoginPageComponent {
   ) {}
 
   signIn(): void {
+    if (!this.validateForm()) return;
+    this.authenticationService
+      .login(this.loginPayload)
+      .subscribe((r) => this.handleLoginResponse(r));
+  }
+
+  private validateForm(): boolean {
     this.loginFormGroup.markAllAsTouched();
     this.loginFormGroup.updateValueAndValidity();
     if (!this.loginFormGroup.valid) {
       this.toastService.showError('Errors occurs in form');
 
-      return;
+      return false;
     }
-    this.authenticationService
-      .login({
-        username: this.loginFormGroup.value.username ?? '',
-        password: this.loginFormGroup.value.password ?? '',
-      })
-      .subscribe((r) => this.handleLoginResponse(r));
+
+    return true;
   }
 
   private handleLoginResponse(response: TokenResponse | null): void {
-    const userExists = this.chckIfUserExistsBasedOnResponse(response);
-    if (userExists) {
+    const userNotExists = this.chckIfUserExistsBasedOnResponse(response);
+    if (userNotExists) {
       this.toastService.showWarning('User not exists');
     } else {
-      this.store
-        .select(GetAccessTokenSelectors)
-        .subscribe((a) => console.log(a));
+      this.store.select(GetAccessTokenSelectors).pipe(take(1)).subscribe();
       this.router.navigate(['/admin']);
     }
   }

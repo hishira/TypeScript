@@ -36,8 +36,6 @@ export class AbstractStepDirective<T extends Controlable> {
     if (isLikeAbstractControl(control)) {
       control?.markAllAsTouched();
       this.showFormHasErrors();
-
-      return;
     }
   }
 }
