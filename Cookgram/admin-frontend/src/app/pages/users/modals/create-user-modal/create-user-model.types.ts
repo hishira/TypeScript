@@ -24,7 +24,7 @@ export type AccessConfigurationStepGroup = {
   email: FormControl<string>;
   role: FormControl<Role>;
   confirmPassword: FormControl<string>;
-  temporaryPassword: FormControl<boolean>; // TODO: Check for backend implementation
+  temporaryPassword: FormControl<boolean>;
 };
 
 export type AccessConfigurationValue =

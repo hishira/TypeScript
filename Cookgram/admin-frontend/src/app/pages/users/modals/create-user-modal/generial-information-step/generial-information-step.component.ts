@@ -30,8 +30,4 @@ import {
 })
 export class GeneralInformationStep extends AbstractStepDirective<GeneralInformationStepGroup> {
   readonly genders: string[] = Object.values(Gender);
-
-  override next(): void {
-    super.next();
-  }
 }
