@@ -77,6 +77,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     this.handleBackStepChange();
     this.addressGroup.valueChanges.subscribe(console.log);
   }
+
   get GeneralInformationValue(): GeneralInformationValue {
     return this.generalInformationGroup.value as GeneralInformationValue;
   }

@@ -33,13 +33,13 @@ import { PrepareRoles } from './access-configuration-step.utils';
   styleUrl: './access-configuration.scss',
 })
 export class AccessConfigurationStep extends AbstractStepDirective<AccessConfigurationStepGroup> {
-  readonly roles: Observable<Role[]> = this.prepareProperRoles();
+  readonly roles: Observable<readonly Role[]> = this.prepareProperRoles();
 
   constructor(private readonly store: Store<MainStore>) {
     super();
   }
 
-  private prepareProperRoles(): Observable<Role[]> {
+  private prepareProperRoles(): Observable<readonly Role[]> {
     return this.store
       .select(CurrentUserSelector)
       .pipe(map((currentUser) => PrepareRoles(currentUser.roles)));

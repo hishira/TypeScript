@@ -1,13 +1,13 @@
 import { Role } from '../../../../../shared/types/enums';
 import { RoleMap } from '../../../../../shared/types/shared';
 
-const EmptyRoles: Role[] = [];
+const EmptyRoles: readonly Role[] = [];
 
-const ManagerRoles = [Role.Employee];
+const ManagerRoles: readonly Role[] = [Role.Employee];
 
-const DirectorRoles = [Role.Employee, Role.Manager];
+const DirectorRoles: readonly Role[] = [Role.Employee, Role.Manager];
 
-const AdminRoles = [Role.User, Role.Employee, Role.Manager, Role.Director];
+const AdminRoles: readonly Role[] = [Role.User, Role.Employee, Role.Manager, Role.Director];
 
 const SuperAdminRoles = [
   Role.User,
@@ -26,5 +26,5 @@ const RoleMapper: RoleMap = {
   [Role.SuperAdmin]: SuperAdminRoles,
 };
 
-export const PrepareRoles = (currentRole: Role): Role[] =>
+export const PrepareRoles = (currentRole: Role): readonly Role[] =>
   RoleMapper[currentRole];
