@@ -1,6 +1,7 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { DefaultNonNullabeOption } from '../../../../shared/consts/form.consts';
 import { Role } from '../../../../shared/types/enums';
+import { Optional } from '../../../../shared/types/shared';
 import {
   AccessConfigurationStepGroup,
   AddressControl,
@@ -22,7 +23,7 @@ export const EmptyGeneralInformationGroup =
       firstName: new FormControl<string>('', DefaultNonNullabeOption),
       secondName: new FormControl<string>('', DefaultNonNullabeOption),
       birthDate: new FormControl<string>('', DefaultNonNullabeOption),
-      gender: new FormControl<Gender | null>(null),
+      gender: new FormControl<Optional<Gender>>(null),
     });
 
 export const EmptyAccessConfigurationGroup =

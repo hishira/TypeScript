@@ -18,6 +18,7 @@ import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
 import { InputComponent } from '../../shared/input/input.component';
 import { ToastService } from '../../shared/services/toast.service';
+import { Optional } from '../../shared/types/shared';
 import { LoginFormGroup } from './types';
 
 @Component({
@@ -78,7 +79,7 @@ export class LoginPageComponent {
     return true;
   }
 
-  private handleLoginResponse(response: TokenResponse | null): void {
+  private handleLoginResponse(response: Optional<TokenResponse>): void {
     const userNotExists = this.chckIfUserExistsBasedOnResponse(response);
     if (userNotExists) {
       this.toastService.showWarning('User not exists');
@@ -89,10 +90,11 @@ export class LoginPageComponent {
   }
 
   private chckIfUserExistsBasedOnResponse(
-    response: TokenResponse | null
+    response: Optional<TokenResponse>
   ): boolean {
     return (
       response === null ||
+      response === undefined ||
       (response && 'error' in response) ||
       (response.accessToken === '' && response.refreshToken === '')
     );

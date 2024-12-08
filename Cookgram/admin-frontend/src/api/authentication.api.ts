@@ -1,21 +1,20 @@
-import { Injectable } from '@angular/core';
-import { BaseApi } from './base.api';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, catchError, of, switchMap, tap } from 'rxjs';
+import { SessionStorageService } from '../app/shared/services/sessionStorage.service';
+import { SessionItemName } from '../app/shared/types/enums';
+import { Optional } from '../app/shared/types/shared';
+import { JWTSetAction } from '../store/jwt/action';
+import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
+import { MainStore } from '../store/main.store';
+import { BaseApi } from './base.api';
 import {
   AccessTokeResponse,
   LoginPayload,
   TokenResponse,
 } from './types/api.types';
-import { Store } from '@ngrx/store';
-import { Observable, catchError, of, tap, switchMap } from 'rxjs';
-import { JWTSetAction } from '../store/jwt/action';
-import { MainStore } from '../store/main.store';
-import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
-import { Router } from '@angular/router';
-import {
-  SessionStorageService,
-} from '../app/shared/services/sessionStorage.service';
-import { SessionItemName } from '../app/shared/types/enums';
 
 @Injectable()
 export class AuthenticationApiService extends BaseApi {
@@ -28,7 +27,7 @@ export class AuthenticationApiService extends BaseApi {
     super();
   }
 
-  login(loginPayload: LoginPayload): Observable<TokenResponse | null> {
+  login(loginPayload: LoginPayload): Observable<Optional<TokenResponse>> {
     return this.httpService
       .post<TokenResponse>(this.prepareLink('auth/login'), loginPayload)
       .pipe(

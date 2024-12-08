@@ -1,16 +1,18 @@
+import { Optional } from '../../../shared/types/shared';
+
 export type UserAddressList = {
-  address: string | null;
-  city: string | null;
-  country: string | null;
-  phone: string | null;
+  address: Optional<string>;
+  city: Optional<string>;
+  country: Optional<string>;
+  phone: Optional<string>;
 };
 
 export type UserList = {
   username: string;
-  last_name: string | null;
+  last_name: Optional<string>;
   id: string;
-  first_name: string | null;
+  first_name: Optional<string>;
   email: string;
-  contract_id: string | null;
+  contract_id: Optional<string>;
   address: UserAddressList;
 };

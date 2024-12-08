@@ -21,6 +21,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { noop } from 'rxjs';
 import { ErrorsComponent } from '../errors/errors.component';
 import { RequiredDot } from '../required-dot/required-dot.componen';
+import { Nullable } from '../types/shared';
 import { EventHandler } from './input.utils';
 @Component({
   selector: 'app-input',
@@ -43,16 +44,16 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
   readonly label = input<string>('');
   readonly withErrors = input<boolean>(false);
 
-  readonly control = new FormControl<string | null>('');
+  readonly control = new FormControl<Nullable<string>>('');
 
-  onChange: (value: string | null) => void = noop;
+  onChange: (value: Nullable<string>) => void = noop;
   onTouch: () => void = noop;
 
   constructor(@Optional() @Self() private readonly ngControl: NgControl) {
     this.ngControl && (this.ngControl.valueAccessor = this);
   }
 
-  validate(_: AbstractControl<any, any>): ValidationErrors | null {
+  validate(_: AbstractControl<any, any>): Nullable<ValidationErrors> {
     return this.control.errors;
   }
 

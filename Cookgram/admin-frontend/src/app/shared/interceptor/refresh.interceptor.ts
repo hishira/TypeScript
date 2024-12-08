@@ -19,14 +19,15 @@ import {
 import { AuthenticationApiService } from '../../../api/authentication.api';
 import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
+import { Nullable } from '../types/shared';
 import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
   readonly UNAUTHORIYECODE = 401;
   private isRefreshing: boolean = false;
-  private readonly tokenSubject: BehaviorSubject<string | null> =
-    new BehaviorSubject<string | null>(null);
+  private readonly tokenSubject: BehaviorSubject<Nullable<string>> =
+    new BehaviorSubject<Nullable<string>>(null);
 
   constructor(
     private readonly store: Store<MainStore>,

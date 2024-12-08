@@ -61,9 +61,9 @@ export type ContextUser = {
   state: State;
 };
 
-export type Optional<T> = T | undefined | null;
+export type Nullable<T> = T | null;
 
-export type Nullable<T> = T | undefined | null;
+export type Optional<T> = Nullable<T> | undefined;
 
 export type Location = {
   latitude: Optional<number>;
@@ -86,7 +86,7 @@ export type StorageItem<T> = {
 };
 
 export type RoleMap = {
-  [key in readonly  Role]: readonly Role[];
+  [key in readonly Role]: readonly Role[];
 };
 
 export type Providers = Provider | EnvironmentProviders;
