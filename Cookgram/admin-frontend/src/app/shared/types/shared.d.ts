@@ -86,7 +86,7 @@ export type StorageItem<T> = {
 };
 
 export type RoleMap = {
-  [key in readonly Role]: readonly Role[];
+  [key in readonly Role]: Role[];
 };
 
 export type Providers = Provider | EnvironmentProviders;

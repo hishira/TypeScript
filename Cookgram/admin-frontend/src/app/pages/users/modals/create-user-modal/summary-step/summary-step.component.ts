@@ -18,14 +18,15 @@ import {
   imports: [CommonModule, DialogComponent, ReadoOnlyComponent, ButtonModule],
 })
 export class SummaryStepComponent extends AbstractStepDirective<Nullable> {
-  generalFormValue: InputSignal<GeneralInformationValue> =
+  readonly generalFormValue: InputSignal<GeneralInformationValue> =
     input.required<GeneralInformationValue>();
-  accessConfigurationValue: InputSignal<AccessConfigurationValue> =
+  readonly accessConfigurationValue: InputSignal<AccessConfigurationValue> =
     input.required<AccessConfigurationValue>();
-  addressValue: InputSignal<AddressValue> = input.required<AddressValue>();
-  createEvent = output<void>();
+  readonly addressValue: InputSignal<AddressValue> =
+    input.required<AddressValue>();
+  readonly createEvent = output<void>();
 
-  create() {
+  create(): void {
     this.createEvent.emit();
   }
 }

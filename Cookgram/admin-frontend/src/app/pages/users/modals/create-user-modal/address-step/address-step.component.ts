@@ -6,7 +6,6 @@ import { EmptyAddressRequiredMap } from '../../../../../shared/components/addres
 import { AddressRequiredMap } from '../../../../../shared/components/address/types';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
-import { InputComponent } from '../../../../../shared/input/input.component';
 import { AddressControl } from '../create-user-model.types';
 @Component({
   selector: 'app-address-step',
@@ -16,7 +15,6 @@ import { AddressControl } from '../create-user-model.types';
     DialogComponent,
     ButtonModule,
     ReactiveFormsModule,
-    InputComponent,
     AddressCompoent,
   ],
 })
