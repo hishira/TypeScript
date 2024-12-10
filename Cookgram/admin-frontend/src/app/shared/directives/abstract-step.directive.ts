@@ -7,7 +7,7 @@ import { CheckType, Controlable } from './types';
 
 @Directive()
 export class AbstractStepDirective<T extends Controlable> {
-  form = input.required<CheckType<T>>();
+  readonly form = input.required<CheckType<T>>();
 
   protected readonly dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
   protected readonly modalService: ModalService = inject(ModalService);

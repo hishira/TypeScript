@@ -14,7 +14,6 @@ import {
 import { UserApiSerivce } from '../../../../../api/user.api';
 import { AddressValue } from '../../../../shared/components/address/types';
 import { Destroyer } from '../../../../shared/decorators/destroy';
-import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
@@ -41,7 +40,6 @@ import { SummaryStepComponent } from './summary-step/summary-step.component';
   providers: [ModalService],
   imports: [
     StepsModule,
-    DialogComponent,
     ButtonModule,
     GeneralInformationStep,
     CommonModule,
@@ -102,11 +100,11 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     const value = this.createUserGroup.value;
 
     return {
-      firstName: value.generalInformation?.firstName,
-      lastName: value.generalInformation?.secondName,
+      firstName: value.generalInformation?.firstName ?? null,
+      lastName: value.generalInformation?.secondName ?? null,
       credentials: this.prepareCredentials(),
-      email: value.accessConfiguration?.email,
-      role: value.accessConfiguration?.role,
+      email: value.accessConfiguration?.email ?? null,
+      role: value.accessConfiguration?.role ?? null,
       address: value.address as UserAddress,
     };
   }
