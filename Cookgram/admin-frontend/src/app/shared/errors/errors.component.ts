@@ -13,7 +13,7 @@ import { EMAIL_ERROR, REQUIRED_ERROR } from './consts';
   styleUrl: './errors.component.scss',
 })
 export class ErrorsComponent implements OnInit {
-  control = input.required<AbstractControl>();
+  readonly control = input.required<AbstractControl>();
   errorsChange$: Observable<string[]> = of([]);
 
   ngOnInit(): void {

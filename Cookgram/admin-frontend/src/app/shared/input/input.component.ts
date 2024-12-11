@@ -43,7 +43,6 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
   readonly labelClasses = input<string>('');
   readonly label = input<string>('');
   readonly withErrors = input<boolean>(false);
-
   readonly control = new FormControl<Nullable<string>>('');
 
   onChange: (value: Nullable<string>) => void = noop;
