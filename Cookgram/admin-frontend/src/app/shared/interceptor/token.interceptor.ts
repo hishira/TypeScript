@@ -12,15 +12,20 @@ import { MainStore } from '../../../store/main.store';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+  static readonly urlNotForRefreshToken: string[] = ['login', 'refresh-token'];
   constructor(private readonly store: Store<MainStore>) {}
 
   intercept(
-    req: HttpRequest<any>,
+    req: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     const url = req.url;
-    if (url.includes('login') || url.includes('refresh-token'))
+    if (
+      TokenInterceptor.urlNotForRefreshToken.some((furl) => url.includes(furl))
+    ) {
       return next.handle(req.clone());
+    }
+
     return this.store.select(GetAccessTokenSelectors).pipe(
       switchMap((accessToken) => {
         return next.handle(
