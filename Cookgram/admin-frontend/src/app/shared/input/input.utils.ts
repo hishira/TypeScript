@@ -20,6 +20,6 @@ const GetEventHandler: <T extends ControlEvent>(
     : DefaultChangeHandler;
 
 export const EventHandler = (
-  event: ControlEvent<any>,
+  event: ControlEvent<unknown>,
   control: AbstractControl
 ): void => GetEventHandler(event)(event, control);

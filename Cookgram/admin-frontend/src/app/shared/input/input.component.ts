@@ -52,7 +52,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
     this.ngControl && (this.ngControl.valueAccessor = this);
   }
 
-  validate(_: AbstractControl<any, any>): Nullable<ValidationErrors> {
+  validate(_: AbstractControl<unknown, unknown>): Nullable<ValidationErrors> {
     return this.control.errors;
   }
 
@@ -66,16 +66,16 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
     this.control.valueChanges.subscribe((v) => this.onChange(v));
   }
 
-  writeValue(obj: any): void {
+  writeValue(obj: Nullable<string>): void {
     this.control.setValue(obj);
     this.control.updateValueAndValidity();
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: Nullable<string>) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
   }
 

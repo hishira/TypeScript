@@ -25,7 +25,7 @@ export class SessionStorageService {
     this.session.setItem(itemName, JSON.stringify(item));
   }
 
-  setItems(items: StorageItem<any>[]): void {
+  setItems(items: StorageItem<unknown>[]): void {
     items.forEach(({ itemName, item }) =>
       this.session.setItem(itemName, JSON.stringify(item))
     );

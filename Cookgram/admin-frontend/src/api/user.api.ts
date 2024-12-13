@@ -23,7 +23,7 @@ export class UserApiSerivce extends BaseApi {
     return this.httpService.get<ContextUser>(this.prepareLink('user/current-user'));
   }
 
-  createUser(user: CreateUserObject): Observable<any> {
-    return this.httpService.post<any>(this.prepareLink("user/add-user"), user);
+  createUser(user: CreateUserObject): Observable<unknown> {
+    return this.httpService.post<unknown>(this.prepareLink("user/add-user"), user);
   }
 }

@@ -35,21 +35,21 @@ export class AddressCompoent implements ControlValueAccessor, OnInit {
   
   readonly form: FormGroup = EmptyAddressStep();
 
-  onChange: (v: any) => void = noop;
+  onChange: (v: unknown) => void = noop;
 
   ngOnInit(): void {
     this.form.valueChanges.subscribe((a) => this.onChange(a));
   }
 
-  writeValue(obj: any): void {
+  writeValue(obj: unknown): void {
     if (obj) this.form.setValue(obj);
   }
 
-  registerOnChange(fn: (v: any) => void): void {
+  registerOnChange(fn: (v: unknown) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: unknown): void {
     /* TODO document why this method 'registerOnTouched' is empty */
   }
 
