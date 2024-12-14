@@ -22,6 +22,6 @@ export const EmptyAddressRequiredMap: AddressRequiredMap = {
 };
 
 export const isLikeAbstractControl = (
-  controlLike: any
+  controlLike: unknown
 ): controlLike is AbstractControl =>
-  'value' in controlLike && 'markAllAsTouched' in controlLike;
+  controlLike instanceof Object && 'value' in controlLike && 'markAllAsTouched' in controlLike;

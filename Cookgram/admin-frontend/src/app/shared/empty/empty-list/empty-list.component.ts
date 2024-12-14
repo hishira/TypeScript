@@ -15,7 +15,7 @@ import { ButtonModule } from 'primeng/button';
   imports: [NgIf, ButtonModule],
 })
 export class EmptyListComponent {
-  refreshEmit = output<void>();
+  readonly refreshEmit = output<void>();
 
   readonly text = input<string>('There are no data to show');
   readonly isEmpty = input<boolean>(false);

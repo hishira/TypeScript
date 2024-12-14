@@ -10,6 +10,10 @@ export type EventHandlerFunction<T extends ControlEvent> = (
   control: AbstractControl
 ) => void;
 
+export enum InputTypes {
+  Text = 'text',
+  Password = 'password'
+}
 const GetEventHandler: <T extends ControlEvent>(
   event: T
 ) => EventHandlerFunction<T> = <T extends ControlEvent>(
