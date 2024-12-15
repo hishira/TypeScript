@@ -3,5 +3,5 @@ import { ModalService } from '../services/modal.service';
 
 @Directive({ providers: [ModalService] })
 export class AbstractModalDirective {
-  constructor(protected modalService: ModalService) {}
+  constructor(protected readonly modalService: ModalService) {}
 }

@@ -26,6 +26,13 @@ export class TokenInterceptor implements HttpInterceptor {
       return next.handle(req.clone());
     }
 
+    return this.getAccessTokenAndSetToRequest(req, next);
+  }
+
+  private getAccessTokenAndSetToRequest(
+    req: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     return this.store.select(GetAccessTokenSelectors).pipe(
       switchMap((accessToken) => {
         return next.handle(
