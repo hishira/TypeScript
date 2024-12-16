@@ -83,10 +83,11 @@ export class LoginPageComponent {
     const userNotExists = this.chckIfUserExistsBasedOnResponse(response);
     if (userNotExists) {
       this.toastService.showWarning('User not exists');
-    } else {
-      this.store.select(GetAccessTokenSelectors).pipe(take(1)).subscribe();
-      this.router.navigate(['/admin']);
+
+      return;
     }
+    this.store.select(GetAccessTokenSelectors).pipe(take(1)).subscribe();
+    this.router.navigate(['/admin']);
   }
 
   private chckIfUserExistsBasedOnResponse(

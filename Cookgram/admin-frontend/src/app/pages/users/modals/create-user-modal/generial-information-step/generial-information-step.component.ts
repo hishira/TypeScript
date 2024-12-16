@@ -7,10 +7,8 @@ import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
 import { InputComponent } from '../../../../../shared/input/input.component';
 import { RequiredDot } from '../../../../../shared/required-dot/required-dot.componen';
-import {
-  Gender,
-  GeneralInformationStepGroup,
-} from '../create-user-model.types';
+import { PossibleGenders } from '../create-user-modal.utils';
+import { GeneralInformationStepGroup } from '../create-user-model.types';
 
 @Component({
   selector: 'app-user-create-general-information-step',
@@ -29,5 +27,5 @@ import {
   ],
 })
 export class GeneralInformationStep extends AbstractStepDirective<GeneralInformationStepGroup> {
-  readonly genders: string[] = Object.values(Gender);
+  readonly genders: string[] = PossibleGenders();
 }
