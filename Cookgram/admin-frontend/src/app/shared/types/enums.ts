@@ -21,6 +21,7 @@ export enum State {
   Retired = 'Retired',
   Deleted = 'Deleted',
 }
+
 export enum SessionItemName {
   Token = 'token',
   Tokens = 'tokens',

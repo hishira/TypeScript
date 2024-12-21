@@ -4,9 +4,10 @@ import { isLikeAbstractControl } from '../components/address/address.utils';
 import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
 import { CheckType, Controlable } from './types';
+import { Nullable } from 'primeng/ts-helpers';
 
 @Directive()
-export class AbstractStepDirective<T extends Controlable> {
+export class AbstractStepDirective<T extends Controlable = Nullable> {
   protected readonly form = input.required<CheckType<T>>();
   protected readonly dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
   protected readonly modalService: ModalService = inject(ModalService);

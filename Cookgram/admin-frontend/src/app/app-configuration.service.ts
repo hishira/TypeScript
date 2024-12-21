@@ -10,6 +10,7 @@ export class AppConfigurationService {
     private readonly sessionStorage: SessionStorageService,
     private readonly store: Store<MainStore>
   ) {}
+
   prepareJwtToken(): void {
     try {
       if (this.sessionStorage.getItem(SessionItemName.Token)) {

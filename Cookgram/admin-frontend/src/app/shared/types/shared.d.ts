@@ -26,11 +26,13 @@ export type Credentials = {
   username: string;
   passwordIsTemporary: boolean;
 };
+
 export type Meta = {
   id: string;
   createDate: string;
   editDate: string;
 };
+
 type UserContact = {
   email: string;
   phone: string;
