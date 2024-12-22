@@ -73,7 +73,6 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     super(modalService);
     this.handleNextStepChange();
     this.handleBackStepChange();
-    this.addressGroup.valueChanges.subscribe(console.log);
   }
 
   get GeneralInformationValue(): GeneralInformationValue {
@@ -118,6 +117,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
       username: value.accessConfiguration?.username,
     };
   }
+
   private handleNextStepChange(): void {
     this.subscription.add(
       this.modalService.nextStepChange.subscribe((_) => {

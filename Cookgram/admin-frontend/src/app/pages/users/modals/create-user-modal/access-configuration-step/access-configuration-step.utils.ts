@@ -1,19 +1,16 @@
 import { Role } from '../../../../../shared/types/enums';
 import { RoleMap } from '../../../../../shared/types/shared';
 
-const EmptyRoles:  Role[] = [];
+const EmptyRoles: Role[] = [];
 
-const ManagerRoles:  Role[] = [Role.Employee];
+const ManagerRoles: Role[] = [Role.Employee];
 
-const DirectorRoles:  Role[] = [Role.Employee, Role.Manager];
+const DirectorRoles: Role[] = [...ManagerRoles, Role.Manager];
 
-const AdminRoles:  Role[] = [Role.User, Role.Employee, Role.Manager, Role.Director];
+const AdminRoles: Role[] = [...DirectorRoles, Role.User, Role.Director];
 
 const SuperAdminRoles: Role[] = [
-  Role.User,
-  Role.Employee,
-  Role.Manager,
-  Role.Director,
+  ...AdminRoles,
   Role.Admin,
 ];
 

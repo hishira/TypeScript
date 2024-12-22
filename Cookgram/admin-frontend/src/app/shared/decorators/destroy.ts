@@ -17,7 +17,7 @@ type DestroyerType<T extends new (...args: unknown[]) => {}> = T & {
   subscription: Subscription;
 };
 
-export function Destroyer<T extends new (...args: unknown[]) => {}>(): (
+export function Destroyer<T extends new (...args: any[]) => {}>(): (
   constryctor: T
 ) => DestroyerType<T> {
   return function (constructor: T): DestroyerType<T> {
