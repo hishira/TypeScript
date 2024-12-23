@@ -22,7 +22,7 @@ import { noop } from 'rxjs';
 import { ErrorsComponent } from '../errors/errors.component';
 import { RequiredDot } from '../required-dot/required-dot.componen';
 import { Nullable } from '../types/shared';
-import { EventHandler, InputTypes } from './input.utils';
+import { EventHandler, InputStringTypes, InputTypes } from './input.utils';
 
 @Component({
   selector: 'app-input',
@@ -39,7 +39,7 @@ import { EventHandler, InputTypes } from './input.utils';
   ],
 })
 export class InputComponent implements ControlValueAccessor, OnInit, Validator {
-  readonly type = input<InputTypes>(InputTypes.Text);
+  readonly type = input<InputTypes | InputStringTypes>(InputTypes.Text);
   readonly required = input<boolean>(false);
   readonly labelClasses = input<string>('');
   readonly label = input<string>('');

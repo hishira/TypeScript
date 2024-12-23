@@ -13,7 +13,10 @@ export type EventHandlerFunction<T extends ControlEvent> = (
 export enum InputTypes {
   Text = 'text',
   Password = 'password'
-}
+};
+
+export type InputStringTypes = 'text' | 'password';
+
 const GetEventHandler: <T extends ControlEvent>(
   event: T
 ) => EventHandlerFunction<T> = <T extends ControlEvent>(

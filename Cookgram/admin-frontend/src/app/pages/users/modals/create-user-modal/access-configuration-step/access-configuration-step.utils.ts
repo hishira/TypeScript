@@ -9,10 +9,9 @@ const DirectorRoles: Role[] = [...ManagerRoles, Role.Manager];
 
 const AdminRoles: Role[] = [...DirectorRoles, Role.User, Role.Director];
 
-const SuperAdminRoles: Role[] = [
-  ...AdminRoles,
-  Role.Admin,
-];
+const SuperAdminRoles: Role[] = [...AdminRoles, Role.Admin];
+
+const AllRoles: Role[] = [...SuperAdminRoles, Role.SuperAdmin];
 
 const RoleMapper: RoleMap = {
   [Role.User]: EmptyRoles,
