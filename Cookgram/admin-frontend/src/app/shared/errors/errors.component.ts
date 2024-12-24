@@ -14,6 +14,7 @@ import { EMAIL_ERROR, REQUIRED_ERROR } from './consts';
 })
 export class ErrorsComponent implements OnInit {
   readonly control = input.required<AbstractControl>();
+
   errorsChange$: Observable<string[]> = of([]);
 
   ngOnInit(): void {

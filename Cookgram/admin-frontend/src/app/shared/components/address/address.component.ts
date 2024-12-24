@@ -26,11 +26,11 @@ import { AddressRequiredMap } from './types';
     {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
-      useExisting: AddressCompoent,
+      useExisting: AddressComponent,
     },
   ],
 })
-export class AddressCompoent implements ControlValueAccessor, OnInit {
+export class AddressComponent implements ControlValueAccessor, OnInit {
   readonly addressRequiredMap = input<AddressRequiredMap>(EmptyAddressRequiredMap);
   
   readonly form: FormGroup = EmptyAddressStep();

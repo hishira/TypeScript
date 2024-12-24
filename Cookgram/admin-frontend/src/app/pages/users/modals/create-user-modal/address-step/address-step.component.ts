@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { AddressCompoent } from '../../../../../shared/components/address/address.component';
+import { AddressComponent } from '../../../../../shared/components/address/address.component';
 import { EmptyAddressRequiredMap } from '../../../../../shared/components/address/address.utils';
 import { AddressRequiredMap } from '../../../../../shared/components/address/types';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
@@ -15,7 +15,7 @@ import { AddressControl } from '../create-user-model.types';
     DialogComponent,
     ButtonModule,
     ReactiveFormsModule,
-    AddressCompoent,
+    AddressComponent,
   ],
 })
 export class AddressStepComponent extends AbstractStepDirective<
