@@ -9,10 +9,10 @@ export type UserAddressList = {
 
 export type UserList = {
   username: string;
-  last_name: Optional<string>;
+  lastName: Optional<string>;
   id: string;
-  first_name: Optional<string>;
+  firstName: Optional<string>;
   email: string;
-  contract_id: Optional<string>;
+  contractId: Optional<string>;
   address: UserAddressList;
 };

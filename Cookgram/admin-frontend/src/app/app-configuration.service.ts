@@ -16,7 +16,9 @@ export class AppConfigurationService {
       if (this.sessionStorage.getItem(SessionItemName.Token)) {
         this.saveTokenInStore();
       }
-    } catch (_) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private saveTokenInStore(): void {

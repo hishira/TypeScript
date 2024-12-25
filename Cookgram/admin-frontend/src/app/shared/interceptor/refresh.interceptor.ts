@@ -56,7 +56,10 @@ export class RefreshInterceptor implements HttpInterceptor {
     );
   }
 
-  private addSetToken(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
+  private addSetToken(
+    req: HttpRequest<unknown>,
+    token: string
+  ): HttpRequest<unknown> {
     this.store.dispatch(JWTSetAccessToken({ accessToken: token }));
 
     return req.clone({
@@ -71,26 +74,43 @@ export class RefreshInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      this.tokenSubject.next(null);
-      return this.authenticationService
-        .refreshToken()
-        .pipe(this.handleRefreshToken(req, next));
+      return this.refreshToken(req, next);
     } else {
-      return this.tokenSubject.pipe(
-        filter((token) => token !== null),
-        take(1),
-        switchMap((jwt) => {
-          return next.handle(this.addSetToken(req, jwt ?? ''));
-        })
-      );
+      return this.setTokenFromStore(req, next);
     }
+  }
+
+  private refreshToken(
+    req: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    this.isRefreshing = true;
+    this.tokenSubject.next(null);
+    return this.authenticationService
+      .refreshToken()
+      .pipe(this.handleRefreshToken(req, next));
+  }
+
+  private setTokenFromStore(
+    req: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    return this.tokenSubject.pipe(
+      filter((token) => token !== null),
+      take(1),
+      switchMap((jwt) => {
+        return next.handle(this.addSetToken(req, jwt ?? ''));
+      })
+    );
   }
 
   private handleRefreshToken(
     req: HttpRequest<unknown>,
     next: HttpHandler
-  ): UnaryFunction<Observable<AccessTokeResponse>, Observable<HttpEvent<unknown>>> {
+  ): UnaryFunction<
+    Observable<AccessTokeResponse>,
+    Observable<HttpEvent<unknown>>
+  > {
     return pipe(
       switchMap((token: AccessTokeResponse) => {
         if ('error' in token) throw RefreshTokenError;
