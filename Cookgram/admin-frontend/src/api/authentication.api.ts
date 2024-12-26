@@ -31,11 +31,7 @@ export class AuthenticationApiService extends BaseApi {
     return this.httpService
       .post<TokenResponse>(this.prepareLink('auth/login'), loginPayload)
       .pipe(
-        tap((loginResponse) => {
-          if ('error' in loginResponse) return;
-          this.sessionStorage.setItem(SessionItemName.Token, loginResponse);
-          this.store.dispatch(JWTSetAction({ ...loginResponse }));
-        }),
+        tap((loginResponse) => this.handleTokens(loginResponse)),
         catchError((error) => {
           console.error(error);
           return of(null);
@@ -63,5 +59,11 @@ export class AuthenticationApiService extends BaseApi {
       SessionItemName.Tokens,
       SessionItemName.RefreshToken
     );
+  }
+
+  private handleTokens(loginResponse: TokenResponse): void {
+    if ('error' in loginResponse) return;
+    this.sessionStorage.setItem(SessionItemName.Token, loginResponse);
+    this.store.dispatch(JWTSetAction({ ...loginResponse }));
   }
 }

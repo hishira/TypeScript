@@ -5,7 +5,6 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { StepsModule } from 'primeng/steps';
-import { Subscription } from 'rxjs';
 import {
   CreateUserObject,
   UserAddress,
@@ -23,11 +22,10 @@ import { EmptyCreateUserFormGroup } from './create-user-modal.utils';
 import {
   AccessConfigurationStepGroup,
   AccessConfigurationValue,
-  ActiveUserModalIndex,
   AddressControl,
   CreateModalGroup,
   GeneralInformationStepGroup,
-  GeneralInformationValue,
+  GeneralInformationValue
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
@@ -50,8 +48,6 @@ import { SummaryStepComponent } from './summary-step/summary-step.component';
 })
 @Destroyer()
 export class CreateUserModalComponent extends AbstractModalDirective {
-  activeIndex: ActiveUserModalIndex = 0;
-
   readonly createUserGroup: FormGroup<CreateModalGroup> =
     EmptyCreateUserFormGroup();
   readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
@@ -62,17 +58,12 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     this.createUserGroup.controls.address;
   readonly steps: MenuItem[] = CreateUserSteps;
 
-  private readonly subscription = new Subscription();
-  private readonly MAX_STEP: ActiveUserModalIndex = 3;
-
   constructor(
     private readonly dialogRef: DynamicDialogRef,
     override readonly modalService: ModalService,
     private readonly userApi: UserApiSerivce
   ) {
-    super(modalService);
-    this.handleNextStepChange();
-    this.handleBackStepChange();
+    super(3);
   }
 
   get GeneralInformationValue(): GeneralInformationValue {
@@ -116,27 +107,5 @@ export class CreateUserModalComponent extends AbstractModalDirective {
       passwordIsTemporary: value.accessConfiguration?.temporaryPassword,
       username: value.accessConfiguration?.username,
     };
-  }
-
-  private handleNextStepChange(): void {
-    this.subscription.add(
-      this.modalService.nextStepChange.subscribe((_) => {
-        this.activeIndex =
-          this.activeIndex + 1 > 3
-            ? this.MAX_STEP
-            : ((this.activeIndex + 1) as ActiveUserModalIndex);
-      })
-    );
-  }
-
-  private handleBackStepChange(): void {
-    this.subscription.add(
-      this.modalService.backStepChange.subscribe((_) => {
-        this.activeIndex =
-          this.activeIndex - 1 <= 0
-            ? 0
-            : ((this.activeIndex - 1) as ActiveUserModalIndex);
-      })
-    );
   }
 }
