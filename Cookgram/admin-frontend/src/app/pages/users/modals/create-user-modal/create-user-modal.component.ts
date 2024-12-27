@@ -25,7 +25,7 @@ import {
   AddressControl,
   CreateModalGroup,
   GeneralInformationStepGroup,
-  GeneralInformationValue
+  GeneralInformationValue,
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
@@ -87,25 +87,26 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   private prepareCreateUserObject(): CreateUserObject {
-    const value = this.createUserGroup.value;
+    const { generalInformation, accessConfiguration, address } =
+      this.createUserGroup.value;
 
     return {
-      firstName: value.generalInformation?.firstName ?? null,
-      lastName: value.generalInformation?.secondName ?? null,
+      firstName: generalInformation?.firstName ?? null,
+      lastName: generalInformation?.secondName ?? null,
       credentials: this.prepareCredentials(),
-      email: value.accessConfiguration?.email ?? null,
-      role: value.accessConfiguration?.role ?? null,
-      address: value.address as UserAddress,
+      email: accessConfiguration?.email ?? null,
+      role: accessConfiguration?.role ?? null,
+      address: address as UserAddress,
     };
   }
 
   private prepareCredentials(): Partial<UserCredentials> {
-    const value = this.createUserGroup.value;
+    const { accessConfiguration } = this.createUserGroup.value;
 
     return {
-      password: value.accessConfiguration?.password,
-      passwordIsTemporary: value.accessConfiguration?.temporaryPassword,
-      username: value.accessConfiguration?.username,
+      password: accessConfiguration?.password,
+      passwordIsTemporary: accessConfiguration?.temporaryPassword,
+      username: accessConfiguration?.username,
     };
   }
 }

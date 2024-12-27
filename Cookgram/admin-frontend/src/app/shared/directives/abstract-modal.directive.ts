@@ -1,10 +1,11 @@
 import { Directive, OnDestroy, inject } from '@angular/core';
-import { ModalService } from '../services/modal.service';
 import { Subscription } from 'rxjs';
+import { ModalService } from '../services/modal.service';
 
 @Directive({ providers: [ModalService] })
 export class AbstractModalDirective implements OnDestroy {
   activeIndex: number = 0;
+
   protected max_step: number = -100;
   protected min_step: number = 0;
   protected readonly modalService: ModalService = inject(ModalService);
@@ -22,6 +23,7 @@ export class AbstractModalDirective implements OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
+
   private handleNextStepChange(): void {
     this.subscription.add(
       this.modalService.nextStepChange.subscribe((_) =>
