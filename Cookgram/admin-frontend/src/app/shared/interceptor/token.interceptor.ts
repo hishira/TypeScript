@@ -12,7 +12,7 @@ import { MainStore } from '../../../store/main.store';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  static readonly urlNotForRefreshToken: string[] = ['login', 'refresh-token'];
+  static readonly urlNotForRefreshToken: readonly string[] = ['login', 'refresh-token'];
   constructor(private readonly store: Store<MainStore>) {}
 
   intercept(
