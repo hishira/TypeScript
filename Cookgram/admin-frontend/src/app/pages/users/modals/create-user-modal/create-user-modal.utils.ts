@@ -7,6 +7,7 @@ import {
   AddressControl,
   CreateModalGroup,
   Gender,
+  GenderName,
   GeneralInformationStepGroup,
 } from './create-user-model.types';
 
@@ -46,4 +47,4 @@ export const EmptyAddressControl = (): FormControl<AddressControl> =>
     DefaultNonNullabeOption
   );
 
-  export const PossibleGenders = (): ('Man' | 'Woman')[] => Object.values(Gender)
+  export const PossibleGenders = (): GenderName[] => Object.values(Gender) as unknown as GenderName[]

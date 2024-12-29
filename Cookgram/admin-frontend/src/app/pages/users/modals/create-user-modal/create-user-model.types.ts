@@ -40,10 +40,11 @@ export type AddressControl = {
   latitude?: number;
   longitude?: number;
 };
-
 export enum Gender {
   Men = 'Man',
   Woman = 'Woman',
 }
+
+export type GenderName = keyof typeof Gender;
 
 export type ActiveUserModalIndex = 0 | 1 | 2 | 3;
