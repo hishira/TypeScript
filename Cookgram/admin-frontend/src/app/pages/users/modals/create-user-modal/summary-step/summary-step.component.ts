@@ -23,6 +23,7 @@ export class SummaryStepComponent extends AbstractStepDirective {
     input.required<AccessConfigurationValue>();
   readonly addressValue: InputSignal<AddressValue> =
     input.required<AddressValue>();
+
   readonly createEvent = output<void>();
 
   create(): void {
