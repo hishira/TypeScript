@@ -6,6 +6,7 @@ import { Observable, catchError, of, switchMap, tap } from 'rxjs';
 import { SessionStorageService } from '../app/shared/services/sessionStorage.service';
 import { SessionItemName } from '../app/shared/types/enums';
 import { Optional } from '../app/shared/types/shared';
+import { isNill } from '../app/shared/utils';
 import { JWTSetAction } from '../store/jwt/action';
 import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
 import { MainStore } from '../store/main.store';
@@ -42,7 +43,7 @@ export class AuthenticationApiService extends BaseApi {
   refreshToken(): Observable<AccessTokeResponse> {
     return this.store.select(GetRefreshTokenSelectors).pipe(
       switchMap((token) => {
-        if (token === undefined || token === null) {
+        if (isNill(token)) {
           this.router.navigate(['/login']);
         }
         return this.httpService.post<AccessTokeResponse>(

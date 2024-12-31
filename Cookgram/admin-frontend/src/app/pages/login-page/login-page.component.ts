@@ -19,6 +19,7 @@ import { MainStore } from '../../../store/main.store';
 import { InputComponent } from '../../shared/input/input.component';
 import { ToastService } from '../../shared/services/toast.service';
 import { Optional } from '../../shared/types/shared';
+import { isNill } from '../../shared/utils';
 import { LoginFormGroup } from './types';
 
 @Component({
@@ -94,8 +95,7 @@ export class LoginPageComponent {
     response: Optional<TokenResponse>
   ): boolean {
     return (
-      response === null ||
-      response === undefined ||
+      isNill(response) ||
       (response && 'error' in response) ||
       (response.accessToken === '' && response.refreshToken === '')
     );

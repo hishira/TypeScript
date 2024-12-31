@@ -47,4 +47,5 @@ export const EmptyAddressControl = (): FormControl<AddressControl> =>
     DefaultNonNullabeOption
   );
 
-  export const PossibleGenders = (): GenderName[] => Object.values(Gender) as unknown as GenderName[]
+export const PossibleGenders = (): GenderName[] =>
+  Object.values(Gender) as unknown as GenderName[];
