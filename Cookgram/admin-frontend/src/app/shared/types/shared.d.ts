@@ -1,5 +1,6 @@
-import { FormControl, FormArray, FormGroup } from '@angular/forms';
-import { State, Role } from './enums';
+import { EnvironmentProviders, Provider } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { Role, State } from './enums';
 
 export type ExtractFormControl<T> = {
   [K in keyof T]: T[K] extends FormControl<infer U>
@@ -25,11 +26,13 @@ export type Credentials = {
   username: string;
   passwordIsTemporary: boolean;
 };
+
 export type Meta = {
   id: string;
   createDate: string;
   editDate: string;
 };
+
 type UserContact = {
   email: string;
   phone: string;
@@ -56,11 +59,13 @@ export type ContextUser = {
   id: string;
   meta: Meta;
   personalInformation: PersonalInformation;
-  role: Role;
+  roles: Role;
   state: State;
 };
 
-export type Optional<T> = T | undefined | null;
+export type Nullable<T> = T | null;
+
+export type Optional<T> = Nullable<T> | undefined;
 
 export type Location = {
   latitude: Optional<number>;
@@ -81,3 +86,9 @@ export type StorageItem<T> = {
   itemName: string;
   item: T;
 };
+
+export type RoleMap = {
+  [key in readonly Role]: Role[];
+};
+
+export type Providers = Provider | EnvironmentProviders;

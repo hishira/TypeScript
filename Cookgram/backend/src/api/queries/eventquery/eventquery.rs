@@ -1,7 +1,7 @@
 use sqlx::{Postgres, QueryBuilder};
 
 use crate::{
-    api::{dtos::eventdto::eventdto::EventTypeDto, queries::actionquery::ActionQueryBuilder},
+    api::{dtos::eventdto::eventdto::convert_from_event, queries::actionquery::ActionQueryBuilder},
     core::event::event::Event,
 };
 
@@ -16,7 +16,7 @@ impl ActionQueryBuilder<Event> for EventQuery {
         create_builder.push_values(vec![entity], |mut b, event| {
             b.push_bind(event.id.get_id())
                 .push_bind(event.create_date)
-                .push_bind(EventTypeDto::convert_from_event(event.event_type))
+                .push_bind(convert_from_event(event.event_type))
                 .push_bind(event.related_entity)
                 .push_bind(event.completed);
         });

@@ -100,6 +100,20 @@ impl Roles {
         }
     }
 
+    pub fn prepare_proper_role(role: Option<Roles>) -> Self {
+        match role {
+            Some(r) => match r {
+                Roles::User(_) => Roles::user_role(),
+                Roles::Admin(_) => Roles::admin_role(),
+                Roles::SuperAdmin(_) => Roles::super_admin_role(),
+                Roles::Employee(_) => Roles::employee_role(),
+                Roles::Manager(_) => Roles::manager_role(),
+                Roles::Director(_) => Roles::director_role(),
+            },
+            None => Roles::User(UserRole::default()),
+        }
+    }
+
     pub fn is_user(&self) -> bool {
         match self {
             Roles::User(_) => true,

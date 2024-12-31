@@ -1,16 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
 import { InputComponent } from '../../../../../shared/input/input.component';
-import {
-  Gender,
-  GeneralInformationStepGroup,
-} from '../create-user-model.types';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { ErrorsComponent } from '../../../../../shared/errors/errors.component';
+import { RequiredDot } from '../../../../../shared/required-dot/required-dot.componen';
+import { PossibleGenders } from '../create-user-modal.utils';
+import { GeneralInformationStepGroup } from '../create-user-model.types';
 
 @Component({
   selector: 'app-user-create-general-information-step',
@@ -25,19 +23,9 @@ import { ErrorsComponent } from '../../../../../shared/errors/errors.component';
     ReactiveFormsModule,
     CalendarModule,
     DropdownModule,
-    ErrorsComponent,
+    RequiredDot,
   ],
 })
 export class GeneralInformationStep extends AbstractStepDirective<GeneralInformationStepGroup> {
-  readonly genders: string[] = Object.values(Gender);
-
-  override next(): void {
-    // this.form().markAllAsTouched()
-    // if (this.form().invalid) {
-    //   this.showFormHasErrors();
-    //   return;
-    // }
-    super.next();
-  }
-  
+  readonly genders: string[] = PossibleGenders();
 }

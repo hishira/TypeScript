@@ -20,19 +20,17 @@ pub struct UserListDto {
     pub address: Option<AddressDto>,
 }
 
-impl UserListDto {
-    fn try_to_retrive_address<'r>(row: &'r PgRow) -> Result<Option<AddressDto>, sqlx::Error> {
-        let city = row.try_column("city");
-        match city {
-            Ok(_) => match AddressDto::from_row(&row) {
-                Ok(address) => Ok(Some(address)),
-                Err(error) => {
-                    tracing::error!("Error {}", error);
-                    Ok(None)
-                }
-            },
-            Err(_) => Ok(None),
-        }
+pub fn try_to_retrive_address_from_row<'r>(row: &'r PgRow) -> Result<Option<AddressDto>, sqlx::Error> {
+    let city = row.try_column("city");
+    match city {
+        Ok(_) => match AddressDto::from_row(&row) {
+            Ok(address) => Ok(Some(address)),
+            Err(error) => {
+                tracing::error!("Error {}", error);
+                Ok(None)
+            }
+        },
+        Err(_) => Ok(None),
     }
 }
 impl<'r> FromRow<'r, PgRow> for UserListDto {
@@ -48,7 +46,7 @@ impl<'r> FromRow<'r, PgRow> for UserListDto {
                 previous: row.try_get("previous_state")?,
             },
             contract_id: row.try_get("contract_id")?,
-            address: Self::try_to_retrive_address(row)?,
+            address: try_to_retrive_address_from_row(row)?,
         })
     }
 }

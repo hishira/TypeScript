@@ -1,9 +1,6 @@
 use crate::{
     api::{errors::autherror::AuthError, utils::jwt::jwt::Claims},
-    core::role::{
-        access::{Action, Queries, QueriesActions},
-        role::Roles,
-    },
+    core::role::access::{Action, Queries, QueriesActions},
 };
 
 pub struct ClaimsGuard {}
@@ -13,11 +10,10 @@ impl ClaimsGuard {
         tracing::info!("User are unauthorize to take action");
         Err(AuthError::Unauthorized)
     }
-    
+
     pub fn role_guard_user_find(claims: Claims) -> Result<bool, AuthError> {
         let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
         let role = res_role;
-        println!("{:?}", role);
         if !role.has_access_to(QueriesActions::Access(Queries::User, Action::View)) {
             return Self::is_unauthorized_to_take_action();
         }

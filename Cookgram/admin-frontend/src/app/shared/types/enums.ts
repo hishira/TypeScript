@@ -10,6 +10,7 @@ export enum Role {
 export enum Gender {
   Man = 'Man',
   Woman = 'Woman',
+  None = 'None',
 }
 
 export enum State {
@@ -19,4 +20,11 @@ export enum State {
   Frozen = 'Frozen',
   Retired = 'Retired',
   Deleted = 'Deleted',
+}
+
+export enum SessionItemName {
+  Token = 'token',
+  Tokens = 'tokens',
+  AccessToken = 'accessToken',
+  RefreshToken = 'refreshToken',
 }

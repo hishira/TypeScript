@@ -42,7 +42,7 @@ impl ResponseError {
             ResponseError::CustomError(string_value) => {
                 (StatusCode::UNPROCESSABLE_ENTITY, string_value.as_str())
             }
-            ResponseError::PasswordWorkerErorr(error) => {
+            ResponseError::PasswordWorkerErorr(_) => {
                 (StatusCode::INTERNAL_SERVER_ERROR, "Server problem")
             }
         }

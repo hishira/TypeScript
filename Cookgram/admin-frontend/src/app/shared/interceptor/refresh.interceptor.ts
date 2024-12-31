@@ -10,23 +10,27 @@ import { Store } from '@ngrx/store';
 import {
   BehaviorSubject,
   Observable,
+  UnaryFunction,
   catchError,
   filter,
+  pipe,
   switchMap,
   take,
   throwError,
 } from 'rxjs';
 import { AuthenticationApiService } from '../../../api/authentication.api';
+import { AccessTokeResponse } from '../../../api/types/api.types';
 import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
+import { Nullable } from '../types/shared';
 import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
   readonly UNAUTHORIYECODE = 401;
   private isRefreshing: boolean = false;
-  private readonly tokenSubject: BehaviorSubject<string | null> =
-    new BehaviorSubject<string | null>(null);
+  private readonly tokenSubject: BehaviorSubject<Nullable<string>> =
+    new BehaviorSubject<Nullable<string>>(null);
 
   constructor(
     private readonly store: Store<MainStore>,
@@ -34,9 +38,9 @@ export class RefreshInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(
-    req: HttpRequest<any>,
+    req: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     return next.handle(req).pipe(
       catchError((httpError: HttpErrorResponse) => {
         const url = req.url;
@@ -52,7 +56,10 @@ export class RefreshInterceptor implements HttpInterceptor {
     );
   }
 
-  private addSetToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
+  private addSetToken(
+    req: HttpRequest<unknown>,
+    token: string
+  ): HttpRequest<unknown> {
     this.store.dispatch(JWTSetAccessToken({ accessToken: token }));
 
     return req.clone({
@@ -63,33 +70,59 @@ export class RefreshInterceptor implements HttpInterceptor {
   }
 
   private handleRefreshing(
-    req: HttpRequest<any>,
+    req: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      this.tokenSubject.next(null);
-      return this.authenticationService.refreshToken().pipe(
-        switchMap((token) => {
-          if ('error' in token) throw RefreshTokenError;
-
-          this.isRefreshing = false;
-          this.tokenSubject.next(token.accessToken);
-          return next.handle(this.addSetToken(req, token.accessToken));
-        }),
-        catchError((error) => {
-          this.isRefreshing = false;
-          return throwError(() => error);
-        })
-      );
+      return this.refreshToken(req, next);
     } else {
-      return this.tokenSubject.pipe(
-        filter((token) => token !== null),
-        take(1),
-        switchMap((jwt) => {
-          return next.handle(this.addSetToken(req, jwt ?? ''));
-        })
-      );
+      return this.setTokenFromStore(req, next);
     }
+  }
+
+  private refreshToken(
+    req: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    this.isRefreshing = true;
+    this.tokenSubject.next(null);
+    return this.authenticationService
+      .refreshToken()
+      .pipe(this.handleRefreshToken(req, next));
+  }
+
+  private setTokenFromStore(
+    req: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    return this.tokenSubject.pipe(
+      filter((token) => token !== null),
+      take(1),
+      switchMap((jwt) => {
+        return next.handle(this.addSetToken(req, jwt ?? ''));
+      })
+    );
+  }
+
+  private handleRefreshToken(
+    req: HttpRequest<unknown>,
+    next: HttpHandler
+  ): UnaryFunction<
+    Observable<AccessTokeResponse>,
+    Observable<HttpEvent<unknown>>
+  > {
+    return pipe(
+      switchMap((token: AccessTokeResponse) => {
+        if ('error' in token) throw RefreshTokenError;
+
+        this.isRefreshing = false;
+        this.tokenSubject.next(token.accessToken);
+        return next.handle(this.addSetToken(req, token.accessToken));
+      }),
+      catchError((error) => {
+        this.isRefreshing = false;
+        return throwError(() => error);
+      })
+    );
   }
 }

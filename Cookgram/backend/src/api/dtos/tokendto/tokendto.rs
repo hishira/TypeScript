@@ -12,3 +12,4 @@ pub struct RefreshTokenDto {
 pub struct AccessTokenDto {
     pub access_token: String,
 }
+

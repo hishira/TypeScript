@@ -22,10 +22,6 @@ pub struct Claims {
 }
 
 impl Claims {
-    fn prepare_exp(extended_time: Option<u64>) -> u64 {
-        500 + extended_time.unwrap_or_default()
-    }
-
     pub fn get_token_validation() -> Validation {
         let mut validation = Validation::new(jsonwebtoken::Algorithm::HS256);
         validation.set_required_spec_claims(&["exp"]);
@@ -47,7 +43,6 @@ impl Claims {
     }
     
     pub fn new(params: &UserAuthDto, user: User, exp: u64) -> Self {
-        //let exp = timestamp + Self::prepare_exp(extended_time);
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
                 user_id: user.id.get_id(),

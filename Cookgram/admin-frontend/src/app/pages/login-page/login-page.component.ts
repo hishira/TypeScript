@@ -1,30 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { CheckboxModule } from 'primeng/checkbox';
-import { RippleModule } from 'primeng/ripple';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
+import { Component } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { ErrorsComponent } from '../../shared/errors/errors.component';
-import { AuthenticationApiService } from '../../../api/authentication.api';
-import { ToastService } from '../../shared/services/toast.service';
 import { Store } from '@ngrx/store';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { RippleModule } from 'primeng/ripple';
+import { take } from 'rxjs';
+import { AuthenticationApiService } from '../../../api/authentication.api';
+import { LoginPayload, TokenResponse } from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
 import { InputComponent } from '../../shared/input/input.component';
-import { TokenResponse } from '../../../api/types/api.types';
+import { ToastService } from '../../shared/services/toast.service';
+import { Optional } from '../../shared/types/shared';
+import { isNill } from '../../shared/utils';
+import { LoginFormGroup } from './types';
 
-type LoginFormGroup = {
-  username: FormControl<string | null>;
-  password: FormControl<string | null>;
-};
 @Component({
   selector: 'app-login-page',
   standalone: true,
@@ -34,8 +31,6 @@ type LoginFormGroup = {
     ButtonModule,
     InputTextModule,
     ReactiveFormsModule,
-    NgIf,
-    ErrorsComponent,
     InputComponent,
   ],
   providers: [AuthenticationApiService],
@@ -52,6 +47,13 @@ export class LoginPageComponent {
       password: new FormControl<string>('', [Validators.required]),
     });
 
+  get loginPayload(): LoginPayload {
+    return {
+      username: this.loginFormGroup.value.username ?? '',
+      password: this.loginFormGroup.value.password ?? '',
+    };
+  }
+
   constructor(
     private readonly router: Router,
     private readonly authenticationService: AuthenticationApiService,
@@ -60,38 +62,40 @@ export class LoginPageComponent {
   ) {}
 
   signIn(): void {
+    if (!this.validateForm()) return;
+    this.authenticationService
+      .login(this.loginPayload)
+      .subscribe((r) => this.handleLoginResponse(r));
+  }
+
+  private validateForm(): boolean {
     this.loginFormGroup.markAllAsTouched();
     this.loginFormGroup.updateValueAndValidity();
     if (!this.loginFormGroup.valid) {
       this.toastService.showError('Errors occurs in form');
 
-      return;
+      return false;
     }
-    this.authenticationService
-      .login({
-        username: this.loginFormGroup.value.username ?? '',
-        password: this.loginFormGroup.value.password ?? '',
-      })
-      .subscribe((r) => this.handleLoginResponse(r));
+
+    return true;
   }
 
-  private handleLoginResponse(response: TokenResponse | null): void {
-    const userExists = this.chckIfUserExistsBasedOnResponse(response);
-    if (userExists) {
+  private handleLoginResponse(response: Optional<TokenResponse>): void {
+    const userNotExists = this.chckIfUserExistsBasedOnResponse(response);
+    if (userNotExists) {
       this.toastService.showWarning('User not exists');
-    } else {
-      this.store
-        .select(GetAccessTokenSelectors)
-        .subscribe((a) => console.log(a));
-      this.router.navigate(['/admin']);
+
+      return;
     }
+    this.store.select(GetAccessTokenSelectors).pipe(take(1)).subscribe();
+    this.router.navigate(['/admin']);
   }
 
   private chckIfUserExistsBasedOnResponse(
-    response: TokenResponse | null
+    response: Optional<TokenResponse>
   ): boolean {
     return (
-      response === null ||
+      isNill(response) ||
       (response && 'error' in response) ||
       (response.accessToken === '' && response.refreshToken === '')
     );

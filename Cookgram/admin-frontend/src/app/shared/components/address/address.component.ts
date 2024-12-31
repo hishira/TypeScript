@@ -1,14 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
-  ReactiveFormsModule,
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  input,
+} from '@angular/core';
+import {
   ControlValueAccessor,
+  FormGroup,
   NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import { InputComponent } from '../../input/input.component';
 import { noop } from 'rxjs';
-import { EmptyAddressStep } from './address.utils';
+import { InputComponent } from '../../input/input.component';
+import { EmptyAddressRequiredMap, EmptyAddressStep } from './address.utils';
+import { AddressRequiredMap } from './types';
+
 @Component({
   selector: 'ca-address',
   templateUrl: './address.component.html',
@@ -19,28 +26,34 @@ import { EmptyAddressStep } from './address.utils';
     {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
-      useExisting: AddressCompoent,
+      useExisting: AddressComponent,
     },
   ],
 })
-export class AddressCompoent implements ControlValueAccessor, OnInit {
-  form: FormGroup = EmptyAddressStep();
+export class AddressComponent implements ControlValueAccessor, OnInit {
+  readonly addressRequiredMap = input<AddressRequiredMap>(EmptyAddressRequiredMap);
+  
+  readonly form: FormGroup = EmptyAddressStep();
 
-  onChange: (v: any) => void = noop;
+  onChange: (v: unknown) => void = noop;
 
   ngOnInit(): void {
     this.form.valueChanges.subscribe((a) => this.onChange(a));
   }
 
-  writeValue(obj: any): void {
+  writeValue(obj: unknown): void {
     if (obj) this.form.setValue(obj);
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (v: unknown) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {}
+  registerOnTouched(fn: unknown): void {
+    /* TODO document why this method 'registerOnTouched' is empty */
+  }
 
-  setDisabledState?(isDisabled: boolean): void {}
+  setDisabledState?(isDisabled: boolean): void {
+    /* TODO document why this method 'setDisabledState' is empty */
+  }
 }

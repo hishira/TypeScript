@@ -15,7 +15,7 @@ use crate::{
             addressdto::createaddressdto::CreateUserAddressDto,
             userdto::{
                 operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
-                userdto::{UserDTO, UserFilterOption},
+                userdto::{from_user_to_user_dto, UserDTO, UserFilterOption},
                 userlistdto::UserListDto,
             },
         },
@@ -82,7 +82,7 @@ impl UserRouter {
         claims: Claims,
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
-    ) -> Result<Json<bool>, ResponseError> {
+    ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
         state
             .user_service
@@ -97,8 +97,8 @@ impl UserRouter {
     ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::manage_user_guard(claims.clone())?;
 
-        Result::Ok(Json(UserDTO::from_user(
-            state.app_state.repo.find_by_id(id).await
+        Result::Ok(Json(from_user_to_user_dto(
+            state.app_state.repo.find_by_id(id).await,
         )))
     }
     async fn get_managed_users(
@@ -117,7 +117,7 @@ impl UserRouter {
                 })
                 .await
                 .iter()
-                .map(|user| UserDTO::from_user(user.to_owned()))
+                .map(|user| from_user_to_user_dto(user.to_owned()))
                 .collect(),
         ))
     }
@@ -128,7 +128,7 @@ impl UserRouter {
     ) -> Result<Json<UserDTO>, ResponseError> {
         ClaimsGuard::current_user_guard(&claims)?;
 
-        Ok(Json(UserDTO::from_user(
+        Ok(Json(from_user_to_user_dto(
             state.user_service.get_current_user(claims.user_id).await,
         )))
     }
@@ -136,9 +136,8 @@ impl UserRouter {
     async fn add_user_address(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserAddressDto>,
-    ) -> Json<String> {
-        state.user_service.add_user_address(params).await;
-        Json("Ok".to_string())
+    ) -> Result<Json<UserDTO>, ResponseError> {
+        Ok(Json(state.user_service.add_user_address(params).await))
     }
 
     async fn update_user(
@@ -165,7 +164,7 @@ impl UserRouter {
         Ok(Json(
             users
                 .iter()
-                .map(|user| UserDTO::from_user(user.to_owned()))
+                .map(|user| from_user_to_user_dto(user.to_owned()))
                 .collect(),
         ))
     }
@@ -176,7 +175,6 @@ impl UserRouter {
         Json(params): Json<UserFilterOption>,
     ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
         ClaimsGuard::role_guard_user_find(claims.clone())?;
-        // TODO: Check if we must use Some
         state
             .user_service
             .user_list(claims.user_id, claims.role, params)
@@ -238,6 +236,6 @@ async fn pp(
     State(state): State<UserState>,
     ValidateDtos(params): ValidateDtos<CreateUserDto>,
 ) -> Result<String, AuthError> {
-    print!("{}", params.email);
+    print!("{}", params.personal_information.email.unwrap());
     Ok(format!("OK"))
 }

@@ -1,19 +1,14 @@
 import { Injectable } from '@angular/core';
 import { StorageItem } from '../types/shared';
-export enum SessionItemName {
-  Token = 'token',
-  Tokens  = 'tokens',
-  AccessToken = 'accessToken',
-  RefreshToken = 'refreshToken',
+import { SessionItemName } from '../types/enums';
 
-}
 @Injectable({ providedIn: 'root' })
 export class SessionStorageService {
   private readonly session: Storage = sessionStorage;
 
   getItem<T>(itemName: SessionItemName): T {
     const item = this.session.getItem(itemName);
-    if (item === null)
+    if (item === null || item === undefined)
       throw new Error(`Item ${itemName} not exists in session storage`);
     return JSON.parse(item);
   }
@@ -30,7 +25,7 @@ export class SessionStorageService {
     this.session.setItem(itemName, JSON.stringify(item));
   }
 
-  setItems(items: StorageItem<any>[]): void {
+  setItems(items: StorageItem<unknown>[]): void {
     items.forEach(({ itemName, item }) =>
       this.session.setItem(itemName, JSON.stringify(item))
     );

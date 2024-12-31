@@ -1,5 +1,6 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { ExtractFormControl } from '../../../../shared/types/shared';
+import { Role } from '../../../../shared/types/enums';
+import { ExtractFormControl, Nullable, Optional } from '../../../../shared/types/shared';
 
 export type CreateModalGroup = {
   generalInformation: FormGroup<GeneralInformationStepGroup>;
@@ -11,7 +12,7 @@ export type GeneralInformationStepGroup = {
   firstName: FormControl<string>;
   secondName: FormControl<string>;
   birthDate: FormControl<string>;
-  gender: FormControl<Gender | null>;
+  gender: FormControl<Optional<Gender>>;
 };
 
 export type GeneralInformationValue =
@@ -21,8 +22,9 @@ export type AccessConfigurationStepGroup = {
   username: FormControl<string>;
   password: FormControl<string>;
   email: FormControl<string>;
+  role: FormControl<Role>;
   confirmPassword: FormControl<string>;
-  temporaryPassword: FormControl<boolean>; // TODO: Check for backend implementation
+  temporaryPassword: FormControl<boolean>;
 };
 
 export type AccessConfigurationValue =
@@ -31,12 +33,18 @@ export type AccessConfigurationValue =
 export type AddressControl = {
   address: string;
   house: string;
-  door: string | null;
+  door: Nullable<string>;
   city: string;
   country: string;
   postalCode: string;
+  latitude?: number;
+  longitude?: number;
 };
 export enum Gender {
   Men = 'Man',
   Woman = 'Woman',
 }
+
+export type GenderName = keyof typeof Gender;
+
+export type ActiveUserModalIndex = 0 | 1 | 2 | 3;

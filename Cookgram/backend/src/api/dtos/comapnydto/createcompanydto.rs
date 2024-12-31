@@ -28,19 +28,17 @@ pub struct CreateCompanyDto {
     pub address: ComapnyAddressDto,
 }
 
-impl ComapnyAddressDto {
-    pub fn convert_to_address(&self) -> Address {
-        Address::new(
-            self.address.clone(),
-            self.house.clone(),
-            self.door.clone(),
-            self.city.clone(),
-            self.country.clone(),
-            Location {
-                latitude: self.latitude,
-                longitude: self.longitude,
-            },
-            self.postal_code.clone(),
-        )
-    }
+pub fn convert_to_address(create_company_dto: ComapnyAddressDto) -> Address {
+    Address::new(
+        create_company_dto.address.clone(),
+        create_company_dto.house.clone(),
+        create_company_dto.door.clone(),
+        create_company_dto.city.clone(),
+        create_company_dto.country.clone(),
+        Location {
+            latitude: create_company_dto.latitude,
+            longitude: create_company_dto.longitude,
+        },
+        create_company_dto.postal_code.clone(),
+    )
 }

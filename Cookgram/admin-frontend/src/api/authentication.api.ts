@@ -1,21 +1,21 @@
-import { Injectable } from '@angular/core';
-import { BaseApi } from './base.api';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, catchError, of, switchMap, tap } from 'rxjs';
+import { SessionStorageService } from '../app/shared/services/sessionStorage.service';
+import { SessionItemName } from '../app/shared/types/enums';
+import { Optional } from '../app/shared/types/shared';
+import { isNill } from '../app/shared/utils';
+import { JWTSetAction } from '../store/jwt/action';
+import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
+import { MainStore } from '../store/main.store';
+import { BaseApi } from './base.api';
 import {
   AccessTokeResponse,
   LoginPayload,
   TokenResponse,
 } from './types/api.types';
-import { Store } from '@ngrx/store';
-import { Observable, catchError, of, tap, switchMap } from 'rxjs';
-import { JWTSetAction } from '../store/jwt/action';
-import { MainStore } from '../store/main.store';
-import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
-import { Router } from '@angular/router';
-import {
-  SessionItemName,
-  SessionStorageService,
-} from '../app/shared/services/sessionStorage.service';
 
 @Injectable()
 export class AuthenticationApiService extends BaseApi {
@@ -28,15 +28,11 @@ export class AuthenticationApiService extends BaseApi {
     super();
   }
 
-  login(loginPayload: LoginPayload): Observable<TokenResponse | null> {
+  login(loginPayload: LoginPayload): Observable<Optional<TokenResponse>> {
     return this.httpService
       .post<TokenResponse>(this.prepareLink('auth/login'), loginPayload)
       .pipe(
-        tap((loginResponse) => {
-          if ('error' in loginResponse) return;
-          this.sessionStorage.setItem(SessionItemName.Token, loginResponse);
-          this.store.dispatch(JWTSetAction({ ...loginResponse }));
-        }),
+        tap((loginResponse) => this.handleTokens(loginResponse)),
         catchError((error) => {
           console.error(error);
           return of(null);
@@ -47,7 +43,7 @@ export class AuthenticationApiService extends BaseApi {
   refreshToken(): Observable<AccessTokeResponse> {
     return this.store.select(GetRefreshTokenSelectors).pipe(
       switchMap((token) => {
-        if (token === undefined || token === null) {
+        if (isNill(token)) {
           this.router.navigate(['/login']);
         }
         return this.httpService.post<AccessTokeResponse>(
@@ -64,5 +60,11 @@ export class AuthenticationApiService extends BaseApi {
       SessionItemName.Tokens,
       SessionItemName.RefreshToken
     );
+  }
+
+  private handleTokens(loginResponse: TokenResponse): void {
+    if ('error' in loginResponse) return;
+    this.sessionStorage.setItem(SessionItemName.Token, loginResponse);
+    this.store.dispatch(JWTSetAction({ ...loginResponse }));
   }
 }

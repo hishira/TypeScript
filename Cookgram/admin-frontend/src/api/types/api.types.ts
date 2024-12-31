@@ -1,7 +1,8 @@
-export type BackendResponse<T> = T | {error: string} 
+export type BackendResponse<T> = T | { error: string };
+
 export type LoginPayload = {
-  username: string;
-  password: string;
+  readonly username: string;
+  readonly password: string;
 };
 
 export type TokenResponse = BackendResponse<{
@@ -10,5 +11,5 @@ export type TokenResponse = BackendResponse<{
 }>;
 
 export type AccessTokeResponse = BackendResponse<{
-  accessToken: string,
-}>
+  accessToken: string;
+}>;

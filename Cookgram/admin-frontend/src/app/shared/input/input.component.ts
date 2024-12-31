@@ -15,11 +15,15 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
   Validator,
+  Validators,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { noop } from 'rxjs';
 import { ErrorsComponent } from '../errors/errors.component';
-import { EventHandler } from './input.utils';
+import { RequiredDot } from '../required-dot/required-dot.componen';
+import { Nullable } from '../types/shared';
+import { EventHandler, InputStringTypes, InputTypes } from './input.utils';
+
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
@@ -31,23 +35,25 @@ import { EventHandler } from './input.utils';
     InputTextModule,
     ErrorsComponent,
     CommonModule,
+    RequiredDot,
   ],
 })
 export class InputComponent implements ControlValueAccessor, OnInit, Validator {
-  type = input<'text' | 'password'>('text');
-  labelClasses = input<string>('');
-  label = input<string>('');
-  withErrors = input<boolean>(false);
-  control = new FormControl<string | null>('');
+  readonly type = input<InputTypes | InputStringTypes>(InputTypes.Text);
+  readonly required = input<boolean>(false);
+  readonly labelClasses = input<string>('');
+  readonly label = input<string>('');
+  readonly withErrors = input<boolean>(false);
+  readonly control = new FormControl<Nullable<string>>('');
 
-  onChange: (value: string | null) => void = noop;
+  onChange: (value: Nullable<string>) => void = noop;
   onTouch: () => void = noop;
 
-  constructor(@Optional() @Self() private ngControl: NgControl) {
+  constructor(@Optional() @Self() private readonly ngControl: NgControl) {
     this.ngControl && (this.ngControl.valueAccessor = this);
   }
 
-  validate(_: AbstractControl<any, any>): ValidationErrors | null {
+  validate(_: AbstractControl<unknown, unknown>): Nullable<ValidationErrors> {
     return this.control.errors;
   }
 
@@ -61,16 +67,16 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
     this.control.valueChanges.subscribe((v) => this.onChange(v));
   }
 
-  writeValue(obj: any): void {
+  writeValue(obj: Nullable<string>): void {
     this.control.setValue(obj);
     this.control.updateValueAndValidity();
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: Nullable<string>) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
   }
 
@@ -79,5 +85,8 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
   private inheritValidatorFromControl(): void {
     this.ngControl?.control &&
       this.control.addValidators(this.ngControl?.control?.validator ?? []);
+    if (this.required()) {
+      this.control.addValidators([Validators.required]);
+    }
   }
 }

@@ -38,7 +38,7 @@ impl User {
         meta: Option<Meta>,
         address: Option<Address>,
     ) -> Self {
-        let user_role: Roles = User::prepare_proper_role(role);
+        let user_role: Roles = Roles::prepare_proper_role(role);
         match id {
             Some(id) => Self {
                 id: UserId::from_id(id),
@@ -64,20 +64,6 @@ impl User {
                     previous: None,
                 },
             },
-        }
-    }
-
-    fn prepare_proper_role(role: Option<Roles>) -> Roles {
-        match role {
-            Some(r) => match r {
-                Roles::User(_) => Roles::user_role(),
-                Roles::Admin(_) => Roles::admin_role(),
-                Roles::SuperAdmin(_) => Roles::super_admin_role(),
-                Roles::Employee(_) => Roles::employee_role(),
-                Roles::Manager(_) => Roles::manager_role(),
-                Roles::Director(_) => Roles::director_role(),
-            },
-            None => Roles::User(UserRole::default()),
         }
     }
 
@@ -131,8 +117,8 @@ mod tests {
         let user = User::new(
             None,
             PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: None,
                 gender: None,
@@ -164,8 +150,8 @@ mod tests {
         let user = User::new(
             Some(user_id),
             PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
@@ -198,8 +184,8 @@ mod tests {
         let user = User::new(
             Some(user_id),
             PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
@@ -232,8 +218,8 @@ mod tests {
         let user = User::new(
             None,
             PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: Some("test@example.com".to_string()),
                 gender: None,
@@ -266,8 +252,8 @@ mod tests {
                 uuid::Uuid::parse_str("d6fcdff0-0c94-42a8-8dd1-8d354c742046").unwrap(),
             ),
             personal_information: PersonalInformation {
-                first_name: None,
-                last_name: None,
+                first_name: "Test".to_owned(),
+                last_name: "Test".to_owned(),
                 brithday: OffsetDateTime::now_utc(),
                 email: Some(String::from("test@example.com")),
                 gender: None,

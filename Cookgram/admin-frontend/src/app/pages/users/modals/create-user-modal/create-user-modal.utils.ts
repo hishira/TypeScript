@@ -1,13 +1,15 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { DefaultNonNullabeOption } from '../../../../shared/consts/form.consts';
+import { Role } from '../../../../shared/types/enums';
+import { Optional } from '../../../../shared/types/shared';
 import {
   AccessConfigurationStepGroup,
   AddressControl,
   CreateModalGroup,
   Gender,
+  GenderName,
   GeneralInformationStepGroup,
 } from './create-user-model.types';
-import { CreateUserObject } from '../../../../../api/types/user.types';
 
 export const EmptyCreateUserFormGroup = (): FormGroup<CreateModalGroup> =>
   new FormGroup({
@@ -22,7 +24,7 @@ export const EmptyGeneralInformationGroup =
       firstName: new FormControl<string>('', DefaultNonNullabeOption),
       secondName: new FormControl<string>('', DefaultNonNullabeOption),
       birthDate: new FormControl<string>('', DefaultNonNullabeOption),
-      gender: new FormControl<Gender | null>(null),
+      gender: new FormControl<Optional<Gender>>(null),
     });
 
 export const EmptyAccessConfigurationGroup =
@@ -36,6 +38,7 @@ export const EmptyAccessConfigurationGroup =
         false,
         DefaultNonNullabeOption
       ),
+      role: new FormControl<Role>(Role.User, DefaultNonNullabeOption),
     });
 
 export const EmptyAddressControl = (): FormControl<AddressControl> =>
@@ -44,7 +47,5 @@ export const EmptyAddressControl = (): FormControl<AddressControl> =>
     DefaultNonNullabeOption
   );
 
-//TODO
-// export const PrepareCreateUserObject = (): CreateUserObject => ({
-
-// })
+export const PossibleGenders = (): GenderName[] =>
+  Object.values(Gender) as unknown as GenderName[];

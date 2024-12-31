@@ -8,12 +8,10 @@ pub enum EventTypeDto {
     Update,
 }
 
-impl EventTypeDto {
-    pub fn convert_from_event(event: EventType) -> Self {
-        match event {
-            EventType::Create => EventTypeDto::Create,
-            EventType::Delete => EventTypeDto::Delete,
-            EventType::Update => EventTypeDto::Update,
-        }
+pub fn convert_from_event(event: EventType) -> EventTypeDto {
+    match event {
+        EventType::Create => EventTypeDto::Create,
+        EventType::Delete => EventTypeDto::Delete,
+        EventType::Update => EventTypeDto::Update,
     }
 }

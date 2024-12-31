@@ -3,7 +3,9 @@ use validator::{Validate, ValidationError};
 
 use crate::{api::dtos::addressdto::createaddressdto::CreateAddressDto, core::role::role::Roles};
 
-#[derive(Debug, Validate, Deserialize)]
+use super::personalinformationdto::PersolanInformationDTO;
+
+#[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct UserCreditionalDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
@@ -13,29 +15,21 @@ pub struct UserCreditionalDto {
     pub password_is_temporary: Option<bool>,
 }
 
-#[derive(Debug, Validate, Deserialize)]
+#[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserDto {
-    pub creditionals: UserCreditionalDto,
-    #[validate(email)]
-    pub email: String,
     pub role: Option<Roles>,
-    pub first_name: Option<String>,
-    pub last_name: Option<String>,
+    pub personal_information: PersolanInformationDTO,
+    pub creditionals: UserCreditionalDto,
     pub address: Option<CreateAddressDto>,
 }
 
 #[derive(Debug, Validate, Deserialize)]
 pub struct UpdateUserDto {
-    #[validate(length(min = 1))]
-    pub username: String,
-    #[validate(length(min = 6))]
-    pub password: Option<String>,
-    #[validate(email)]
-    pub email: Option<String>,
     pub role: Option<Roles>,
-    pub first_name: Option<String>,
-    pub last_name: Option<String>,
+    pub personal_information: PersolanInformationDTO,
+    pub creditionals: UserCreditionalDto,
+    pub address: Option<CreateAddressDto>,
 }
 
 #[derive(Debug, Validate, Deserialize)]

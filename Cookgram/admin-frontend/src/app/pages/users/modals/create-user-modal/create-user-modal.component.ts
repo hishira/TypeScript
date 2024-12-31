@@ -5,10 +5,14 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { StepsModule } from 'primeng/steps';
-import { Subscription } from 'rxjs';
+import {
+  CreateUserObject,
+  UserAddress,
+  UserCredentials,
+} from '../../../../../api/types/user.types';
+import { UserApiSerivce } from '../../../../../api/user.api';
 import { AddressValue } from '../../../../shared/components/address/types';
 import { Destroyer } from '../../../../shared/decorators/destroy';
-import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
@@ -26,7 +30,6 @@ import {
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
 
-type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 @Component({
   selector: 'app-user-create-modal',
   templateUrl: './create-user-modal.component.html',
@@ -35,7 +38,6 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
   providers: [ModalService],
   imports: [
     StepsModule,
-    DialogComponent,
     ButtonModule,
     GeneralInformationStep,
     CommonModule,
@@ -46,7 +48,6 @@ type ActiveUserModalIndex = 0 | 1 | 2 | 3;
 })
 @Destroyer()
 export class CreateUserModalComponent extends AbstractModalDirective {
-  activeIndex: ActiveUserModalIndex = 0;
   readonly createUserGroup: FormGroup<CreateModalGroup> =
     EmptyCreateUserFormGroup();
   readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
@@ -57,15 +58,14 @@ export class CreateUserModalComponent extends AbstractModalDirective {
     this.createUserGroup.controls.address;
   readonly steps: MenuItem[] = CreateUserSteps;
 
-  private readonly subscription = new Subscription();
-  private readonly MAX_STEP: ActiveUserModalIndex = 3;
-
-  constructor(private dialogRef: DynamicDialogRef, modalService: ModalService) {
-    super(modalService);
-    this.handleNextStepChange();
-    this.handleBackStepChange();
-    this.addressGroup.valueChanges.subscribe(console.log);
+  constructor(
+    private readonly dialogRef: DynamicDialogRef,
+    override readonly modalService: ModalService,
+    private readonly userApi: UserApiSerivce
+  ) {
+    super(3);
   }
+
   get GeneralInformationValue(): GeneralInformationValue {
     return this.generalInformationGroup.value as GeneralInformationValue;
   }
@@ -79,32 +79,34 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   create() {
-    throw new Error('Method not implemented.');
+    this.userApi.createUser(this.prepareCreateUserObject());
   }
 
   close() {
     this.dialogRef.close();
   }
 
-  private handleNextStepChange(): void {
-    this.subscription.add(
-      this.modalService.nextStepChange.subscribe((_) => {
-        this.activeIndex =
-          this.activeIndex + 1 > 3
-            ? this.MAX_STEP
-            : ((this.activeIndex + 1) as ActiveUserModalIndex);
-      })
-    );
+  private prepareCreateUserObject(): CreateUserObject {
+    const { generalInformation, accessConfiguration, address } =
+      this.createUserGroup.value;
+
+    return {
+      firstName: generalInformation?.firstName ?? null,
+      lastName: generalInformation?.secondName ?? null,
+      credentials: this.prepareCredentials(),
+      email: accessConfiguration?.email ?? null,
+      role: accessConfiguration?.role ?? null,
+      address: address as UserAddress,
+    };
   }
 
-  private handleBackStepChange(): void {
-    this.subscription.add(
-      this.modalService.backStepChange.subscribe((_) => {
-        this.activeIndex =
-          this.activeIndex - 1 <= 0
-            ? 0
-            : ((this.activeIndex - 1) as ActiveUserModalIndex);
-      })
-    );
+  private prepareCredentials(): Partial<UserCredentials> {
+    const { accessConfiguration } = this.createUserGroup.value;
+
+    return {
+      password: accessConfiguration?.password,
+      passwordIsTemporary: accessConfiguration?.temporaryPassword,
+      username: accessConfiguration?.username,
+    };
   }
 }

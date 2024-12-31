@@ -1,11 +1,24 @@
 import { MenuItem } from 'primeng/api';
+
+const GeneralInformation: MenuItem = {
+  label: 'General information',
+};
+
+const Authorization: MenuItem = {
+  label: 'Authorization',
+};
+
+const AddressConfiguration: MenuItem = {
+  label: 'Address configuration',
+};
+
+const Summary: MenuItem = {
+  label: 'Summary',
+};
+
 export const CreateUserSteps: MenuItem[] = [
-  {
-    label: 'General information',
-  },
-  {
-    label: 'Authorization',
-  },
-  { label: 'Address configuration' },
-  { label: 'Summary' },
+  GeneralInformation,
+  Authorization,
+  AddressConfiguration,
+  Summary,
 ];

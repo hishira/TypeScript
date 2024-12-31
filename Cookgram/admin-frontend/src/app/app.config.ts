@@ -1,23 +1,15 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
-import { routes } from './app.routes';
-import { provideState, provideStore } from '@ngrx/store';
-import { jwtReducers } from '../store/jwt/reducers';
 import {
-  HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { ServerErrorInterceptor } from './shared/interceptor/serverError.interceptor';
-import { MessageService } from 'primeng/api';
-import { ToastService } from './shared/services/toast.service';
-import { RefreshInterceptor } from './shared/interceptor/refresh.interceptor';
-import { TokenInterceptor } from './shared/interceptor/token.interceptor';
-import { AuthenticationApiService } from '../api/authentication.api';
-import { UserApiSerivce } from '../api/user.api';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideRouter } from '@angular/router';
+import { provideState, provideStore } from '@ngrx/store';
 import { currentUserReducers } from '../store/currentUser/reducers';
+import { jwtReducers } from '../store/jwt/reducers';
+import { Http_Interceptors, ServiceProviders } from './app.providers';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,24 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: 'jwt', reducer: jwtReducers }),
     provideState({ name: 'currentUser', reducer: currentUserReducers }),
     provideHttpClient(withInterceptorsFromDi()),
-    MessageService,
-    AuthenticationApiService,
-    UserApiSerivce,
-    ToastService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ServerErrorInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: RefreshInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true,
-    },
+    ...ServiceProviders,
+    ...Http_Interceptors,
   ],
 };

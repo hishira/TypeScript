@@ -12,16 +12,18 @@ export class UserApiSerivce extends BaseApi {
     super();
   }
 
-  userLists(): Observable<UserList[]> {
+  userLists(): Observable<Readonly<UserList>[]> {
     return this.httpService.post<UserList[]>(
       this.prepareLink('user/user-list'),
       {}
     );
   }
 
-  currentUserInfo(): Observable<ContextUser> {
+  currentUserInfo(): Observable<Readonly<ContextUser>> {
     return this.httpService.get<ContextUser>(this.prepareLink('user/current-user'));
   }
 
-  createUser(user: CreateUserObject): void {}
+  createUser(user: CreateUserObject): Observable<unknown> {
+    return this.httpService.post<unknown>(this.prepareLink("user/add-user"), user);
+  }
 }
