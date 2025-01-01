@@ -24,6 +24,7 @@ import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
 import { Nullable } from '../types/shared';
 import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
+import { isNill } from '../utils';
 
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
@@ -96,7 +97,7 @@ export class RefreshInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     return this.tokenSubject.pipe(
-      filter((token) => token !== null),
+      filter((token) => !isNill(token)),
       take(1),
       switchMap((jwt) => {
         return next.handle(this.addSetToken(req, jwt ?? ''));

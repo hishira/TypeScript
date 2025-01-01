@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { StorageItem } from '../types/shared';
 import { SessionItemName } from '../types/enums';
+import { StorageItem } from '../types/shared';
+import { isNill } from '../utils';
 
 @Injectable({ providedIn: 'root' })
 export class SessionStorageService {
@@ -8,7 +9,7 @@ export class SessionStorageService {
 
   getItem<T>(itemName: SessionItemName): T {
     const item = this.session.getItem(itemName);
-    if (item === null || item === undefined)
+    if (isNill(item))
       throw new Error(`Item ${itemName} not exists in session storage`);
     return JSON.parse(item);
   }

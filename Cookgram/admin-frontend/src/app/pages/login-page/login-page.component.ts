@@ -13,13 +13,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { take } from 'rxjs';
 import { AuthenticationApiService } from '../../../api/authentication.api';
-import { LoginPayload, TokenResponse } from '../../../api/types/api.types';
+import { ErrorResponse, LoginPayload, TokenResponse, Tokens } from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
 import { InputComponent } from '../../shared/input/input.component';
 import { ToastService } from '../../shared/services/toast.service';
 import { Optional } from '../../shared/types/shared';
-import { isNill } from '../../shared/utils';
+import { hasProperty, isEmptyString, isNill } from '../../shared/utils';
 import { LoginFormGroup } from './types';
 
 @Component({
@@ -96,8 +96,9 @@ export class LoginPageComponent {
   ): boolean {
     return (
       isNill(response) ||
-      (response && 'error' in response) ||
-      (response.accessToken === '' && response.refreshToken === '')
+      hasProperty<ErrorResponse>('error', response as any) ||
+      (hasProperty<Tokens | ErrorResponse>('accessToken', response) && 
+        isEmptyString(response.accessToken) && isEmptyString(response.refreshToken))
     );
   }
 }
