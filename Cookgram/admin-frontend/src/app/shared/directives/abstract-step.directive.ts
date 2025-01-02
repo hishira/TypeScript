@@ -5,9 +5,11 @@ import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
 import { CheckType, Controlable } from './types';
 import { Nullable } from 'primeng/ts-helpers';
+import { hasProperty } from '../utils';
+import { AbstractControl } from '@angular/forms';
 
 @Directive()
-export class AbstractStepDirective<T extends Controlable = Nullable> {
+export class AbstractStepDirective<T extends Controlable = null> {
   protected readonly form = input.required<CheckType<T>>();
   protected readonly dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
   protected readonly modalService: ModalService = inject(ModalService);
@@ -33,8 +35,8 @@ export class AbstractStepDirective<T extends Controlable = Nullable> {
 
   protected validate(): void {
     const control = this.form();
-    if (!isLikeAbstractControl(control)) return;
-    control?.markAllAsTouched();
+    if (!hasProperty<AbstractControl>('markAllAsTouched', control)) return;
+    control.markAllAsTouched();
     this.showFormHasErrors();
   }
 }

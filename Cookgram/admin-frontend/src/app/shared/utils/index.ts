@@ -4,10 +4,9 @@ export const isNill: (value: unknown) => value is null | undefined = (
 
 export const hasProperty = <T extends Object>(
   propertyName: string,
-  object: T
+  object: T | any
 ): object is T & { [propertyName: string]: any } => {
   return propertyName in object;
 };
-
 
 export const isEmptyString = (value: string): boolean => value === '';

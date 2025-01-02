@@ -57,7 +57,9 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
     return this.control.errors;
   }
 
-  registerOnValidatorChange?(fn: () => void): void {}
+  registerOnValidatorChange?(fn: () => void): void {
+    /* TODO document why this method 'registerOnValidatorChange' is empty */
+  }
 
   ngOnInit(): void {
     this.inheritValidatorFromControl();
