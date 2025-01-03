@@ -1,54 +1,54 @@
 <div class="row-gap-0 mt-3" [formGroup]="form">
-    <div class="col-3">
-      <app-input
-        i18-label
-        [required]="addressRequiredMap().Address"
-        label="Address"
-        formControlName="address"
-        class="w-full"
-        [withErrors]="true"
-      />
-    </div>
-    <div class="col-3 flex gap-2">
-      <app-input
-        i18-label
-        label="House"
-        [required]="addressRequiredMap().House"
-        formControlName="house"
-        [withErrors]="true"
-      />
-      <app-input
-        i18-label
-        label="Door"
-        [required]="addressRequiredMap().Door"
-        formControlName="door"
-        [withErrors]="true"
-      />
-    </div>
-    <div class="col-3 flex gap-2">
-      <app-input
-        i18-label
-        label="Postal code"
-        [required]="addressRequiredMap().PostalCode"
-        formControlName="postalCode"
-        [withErrors]="true"
-      />
-      <app-input
-        i18-label
-        label="City"
-        formControlName="city"
-        [required]="addressRequiredMap().City"
-        [withErrors]="true"
-      />
-    </div>
-    <div class="col-3">
-      <app-input
-        i18-label
-        label="Country"
-        [required]="addressRequiredMap().Country"
-        formControlName="country"
-        class="w-full"
-        [withErrors]="true"
-      />
-    </div>
+  <div class="col-3">
+    <app-input
+      i18-label
+      [required]="addressRequiredMap().Address"
+      label="Address"
+      formControlName="address"
+      class="w-full"
+      [withErrors]="true"
+    />
   </div>
+  <div class="col-3 flex gap-2">
+    <app-input
+      i18-label
+      label="House"
+      [required]="addressRequiredMap().House"
+      formControlName="house"
+      [withErrors]="true"
+    />
+    <app-input
+      i18-label
+      label="Door"
+      [required]="addressRequiredMap().Door"
+      formControlName="door"
+      [withErrors]="true"
+    />
+  </div>
+  <div class="col-3 flex gap-2">
+    <app-input
+      i18-label
+      label="Postal code"
+      [required]="addressRequiredMap().PostalCode"
+      formControlName="postalCode"
+      [withErrors]="true"
+    />
+    <app-input
+      i18-label
+      label="City"
+      formControlName="city"
+      [required]="addressRequiredMap().City"
+      [withErrors]="true"
+    />
+  </div>
+  <div class="col-3">
+    <app-input
+      i18-label
+      label="Country"
+      [required]="addressRequiredMap().Country"
+      formControlName="country"
+      class="w-full"
+      [withErrors]="true"
+    />
+  </div>
+</div>
