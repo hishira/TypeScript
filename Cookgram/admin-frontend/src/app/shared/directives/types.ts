@@ -7,5 +7,4 @@ export type CheckType<T> = T extends { [key: string]: AbstractControl }
 export type Controlable =
   | { [key: string]: AbstractControl }
   | AbstractControl
-  | null
-  
+  | null;

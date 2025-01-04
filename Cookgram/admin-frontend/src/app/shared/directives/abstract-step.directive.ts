@@ -1,12 +1,10 @@
 import { Directive, inject, input } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { isLikeAbstractControl } from '../components/address/address.utils';
 import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
-import { CheckType, Controlable } from './types';
-import { Nullable } from 'primeng/ts-helpers';
 import { hasProperty } from '../utils';
-import { AbstractControl } from '@angular/forms';
+import { CheckType, Controlable } from './types';
 
 @Directive()
 export class AbstractStepDirective<T extends Controlable = null> {
