@@ -13,7 +13,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { take } from 'rxjs';
 import { AuthenticationApiService } from '../../../api/authentication.api';
-import { ErrorResponse, LoginPayload, TokenResponse, Tokens } from '../../../api/types/api.types';
+import {
+  ErrorResponse,
+  LoginPayload,
+  TokenResponse,
+  Tokens,
+} from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
 import { InputComponent } from '../../shared/input/input.component';
@@ -97,8 +102,9 @@ export class LoginPageComponent {
     return (
       isNill(response) ||
       hasProperty<ErrorResponse>('error', response as any) ||
-      (hasProperty<Tokens | ErrorResponse>('accessToken', response) && 
-        isEmptyString(response.accessToken) && isEmptyString(response.refreshToken))
+      (hasProperty<Tokens | ErrorResponse>('accessToken', response) &&
+        isEmptyString(response.accessToken) &&
+        isEmptyString(response.refreshToken))
     );
   }
 }
