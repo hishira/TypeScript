@@ -31,8 +31,10 @@ import { AddressRequiredMap } from './types';
   ],
 })
 export class AddressComponent implements ControlValueAccessor, OnInit {
-  readonly addressRequiredMap = input<AddressRequiredMap>(EmptyAddressRequiredMap);
-  
+  readonly addressRequiredMap = input<AddressRequiredMap>(
+    EmptyAddressRequiredMap
+  );
+
   readonly form: FormGroup = EmptyAddressStep();
 
   onChange: (v: unknown) => void = noop;

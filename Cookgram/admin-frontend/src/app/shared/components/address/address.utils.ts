@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { DefaultNonNullabeOption } from '../../consts/form.consts';
 import { AddressFields, AddressGroup, AddressRequiredMap } from './types';
 
