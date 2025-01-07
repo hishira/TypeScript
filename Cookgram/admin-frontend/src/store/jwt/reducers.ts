@@ -14,7 +14,7 @@ export const InitialJwtTokenState: JWTTokens = {
 export const jwtReducers = createReducer(
   InitialJwtTokenState,
   on(JWTGetAction, (state) => ({ ...state })),
-  on(JWTSetAction, (state, { accessToken, refreshToken }) => ({
+  on(JWTSetAction, (_, { accessToken, refreshToken }) => ({
     accessToken,
     refreshToken,
   })),
