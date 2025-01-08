@@ -23,8 +23,8 @@ import { AccessTokeResponse } from '../../../api/types/api.types';
 import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
 import { Nullable } from '../types/shared';
-import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 import { isNill } from '../utils';
+import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
