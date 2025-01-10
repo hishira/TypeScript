@@ -12,8 +12,8 @@ export type EventHandlerFunction<T extends ControlEvent> = (
 
 export enum InputTypes {
   Text = 'text',
-  Password = 'password'
-};
+  Password = 'password',
+}
 
 export type InputStringTypes = 'text' | 'password';
 

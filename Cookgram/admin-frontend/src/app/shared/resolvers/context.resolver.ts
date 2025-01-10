@@ -13,7 +13,7 @@ export const ContextResolver: ResolveFn<unknown> = (
   _: ActivatedRouteSnapshot,
   __: RouterStateSnapshot
 ) => {
-  const mainStore = inject(Store<MainStore>);
+  const mainStore: Store<MainStore> = inject(Store<MainStore>);
 
   return inject(UserApiSerivce)
     .currentUserInfo()

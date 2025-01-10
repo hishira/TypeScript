@@ -1,9 +1,9 @@
-import { EventHandlerFunction } from '../input.utils';
 import {
-  TouchedChangeEvent,
   AbstractControl,
   ControlEvent,
+  TouchedChangeEvent,
 } from '@angular/forms';
+import { EventHandlerFunction } from '../input.utils';
 
 export const TouchChangeEventControl: EventHandlerFunction<
   TouchedChangeEvent
