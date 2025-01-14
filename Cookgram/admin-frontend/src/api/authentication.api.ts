@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -20,7 +19,6 @@ import {
 @Injectable()
 export class AuthenticationApiService extends BaseApi {
   constructor(
-    private readonly httpService: HttpClient,
     private readonly store: Store<MainStore>,
     private readonly router: Router,
     private readonly sessionStorage: SessionStorageService
@@ -35,6 +33,7 @@ export class AuthenticationApiService extends BaseApi {
         tap((loginResponse) => this.handleTokens(loginResponse)),
         catchError((error) => {
           console.error(error);
+
           return of(null);
         })
       );

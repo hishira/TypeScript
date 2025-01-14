@@ -8,7 +8,7 @@ import { ContextUser } from '../app/shared/types/shared';
 
 @Injectable()
 export class UserApiSerivce extends BaseApi {
-  constructor(private readonly httpService: HttpClient) {
+  constructor() {
     super();
   }
 
