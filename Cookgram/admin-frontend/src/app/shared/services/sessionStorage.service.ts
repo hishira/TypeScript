@@ -11,6 +11,7 @@ export class SessionStorageService {
     const item = this.session.getItem(itemName);
     if (isNill(item))
       throw new Error(`Item ${itemName} not exists in session storage`);
+
     return JSON.parse(item);
   }
 
