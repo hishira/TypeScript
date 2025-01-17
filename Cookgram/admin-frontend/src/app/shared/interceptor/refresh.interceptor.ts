@@ -29,7 +29,9 @@ import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
   readonly UNAUTHORIYECODE = 401;
+
   private isRefreshing: boolean = false;
+
   private readonly tokenSubject: BehaviorSubject<Nullable<string>> =
     new BehaviorSubject<Nullable<string>>(null);
 

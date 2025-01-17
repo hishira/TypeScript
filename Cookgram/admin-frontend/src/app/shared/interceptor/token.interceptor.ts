@@ -16,6 +16,7 @@ export class TokenInterceptor implements HttpInterceptor {
     'login',
     'refresh-token',
   ];
+
   constructor(private readonly store: Store<MainStore>) {}
 
   intercept(
