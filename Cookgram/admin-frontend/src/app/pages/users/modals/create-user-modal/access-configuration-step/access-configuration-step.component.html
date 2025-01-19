@@ -8,48 +8,22 @@
     <ng-container [formGroup]="form()">
       <div class="grid mt-3">
         <div class="col-3">
-          <app-input
-            i18n-label
-            label="Username"
-            [required]="true"
-            formControlName="username"
-            class="w-full"
-            [withErrors]="true"
-          />
+          <app-input i18n-label label="Username" [required]="true" formControlName="username" class="w-full"
+            [withErrors]="true" />
         </div>
         <div class="col-3">
-          <app-input
-            [withErrors]="true"
-            [required]="true"
-            i18n-label
-            label="Email"
-            formControlName="email"
-            [withErrors]="true"
-          />
+          <app-input [withErrors]="true" [required]="true" i18n-label label="Email" formControlName="email"
+            [withErrors]="true" />
         </div>
       </div>
       <div class="grid">
         <div class="col-3">
-          <app-input
-            i18n-label
-            [required]="true"
-            type="password"
-            label="Password"
-            formControlName="password"
-            class="w-full"
-            [withErrors]="true"
-          />
+          <app-input i18n-label [required]="true" type="password" label="Password" formControlName="password"
+            class="w-full" [withErrors]="true" />
         </div>
         <div class="col-3">
-          <app-input
-            i18n-label
-            type="password"
-            [required]="true"
-            label="Confirm password"
-            formControlName="confirmPassword"
-            class="w-full"
-            [withErrors]="true"
-          />
+          <app-input i18n-label type="password" [required]="true" label="Confirm password"
+            formControlName="confirmPassword" class="w-full" [withErrors]="true" />
         </div>
       </div>
 
@@ -59,35 +33,21 @@
             <label for="role" i18n class="block text-900 font-medium">
               Role
             </label>
-            <p-dropdown
-              inputId="role"
-              [options]="(roles | async) ?? []"
-              formControlName="role"
-            ></p-dropdown>
+            <p-dropdown inputId="role" [options]="(roles | async) ?? []" formControlName="role"></p-dropdown>
           </div>
         </div>
       </div>
       <div class="grid mt-2">
         <div class="col-3 flex align-items-center gap-2">
           <label for="switch1" i18n>Password will be temporary</label>
-          <p-inputSwitch
-            i18n-pTooltip
-            pTooltip="User will be asked to change password, after first log in"
-            inputId="switch1"
-            formControlName="temporaryPassword"
-          />
+          <p-inputSwitch i18n-pTooltip pTooltip="User will be asked to change password, after first log in"
+            inputId="switch1" formControlName="temporaryPassword" />
         </div>
       </div>
     </ng-container>
   </ng-container>
   <ng-container ngProjectAs="footer">
-    <p-button
-      i18n-label
-      label="Back"
-      back
-      [rounded]="true"
-      (onClick)="back()"
-    />
+    <p-button i18n-label label="Back" back [rounded]="true" (onClick)="back()" />
     <p-button i18n-label label="Cancel" (onClick)="cancel()" [rounded]="true" />
     <p-button i18n-label label="Next" [rounded]="true" (onClick)="next()" />
   </ng-container>

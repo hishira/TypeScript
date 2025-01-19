@@ -5,19 +5,10 @@
         Address configuration
       </div>
     </div>
-    <ca-address
-      [formControl]="form()"
-      [addressRequiredMap]="addressMap"
-    ></ca-address>
+    <ca-address [formControl]="form()" [addressRequiredMap]="addressMap"></ca-address>
   </ng-container>
   <ng-container ngProjectAs="footer">
-    <p-button
-      i18n-label
-      label="Back"
-      back
-      [rounded]="true"
-      (onClick)="back()"
-    />
+    <p-button i18n-label label="Back" back [rounded]="true" (onClick)="back()" />
     <p-button i18n-label label="Cancel" (onClick)="cancel()" [rounded]="true" />
     <p-button i18n-label label="Next" [rounded]="true" (onClick)="next()" />
   </ng-container>
