@@ -6,8 +6,7 @@
       label="Address"
       formControlName="address"
       class="w-full"
-      [withErrors]="true"
-    />
+      [withErrors]="true"/>
   </div>
   <div class="col-3 flex gap-2">
     <app-input
@@ -15,15 +14,13 @@
       label="House"
       [required]="addressRequiredMap().House"
       formControlName="house"
-      [withErrors]="true"
-    />
+      [withErrors]="true"/>
     <app-input
       i18-label
       label="Door"
       [required]="addressRequiredMap().Door"
       formControlName="door"
-      [withErrors]="true"
-    />
+      [withErrors]="true"/>
   </div>
   <div class="col-3 flex gap-2">
     <app-input
@@ -31,15 +28,13 @@
       label="Postal code"
       [required]="addressRequiredMap().PostalCode"
       formControlName="postalCode"
-      [withErrors]="true"
-    />
+      [withErrors]="true"/>
     <app-input
       i18-label
       label="City"
       formControlName="city"
       [required]="addressRequiredMap().City"
-      [withErrors]="true"
-    />
+      [withErrors]="true" />
   </div>
   <div class="col-3">
     <app-input
@@ -48,7 +43,6 @@
       [required]="addressRequiredMap().Country"
       formControlName="country"
       class="w-full"
-      [withErrors]="true"
-    />
+      [withErrors]="true"/>
   </div>
 </div>
