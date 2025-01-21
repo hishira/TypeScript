@@ -2,17 +2,22 @@
   <p-steps [activeIndex]="activeIndex" [model]="steps"></p-steps>
   <ng-container [ngSwitch]="activeIndex">
     <ng-container *ngSwitchCase="0">
-      <app-user-create-general-information-step [form]="generalInformationGroup" />
+      <app-user-create-general-information-step
+        [form]="generalInformationGroup" />
     </ng-container>
     <ng-container *ngSwitchCase="1">
-      <app-access-configuration-step [form]="accessConfigurationGroup"></app-access-configuration-step>
+      <app-access-configuration-step
+        [form]="accessConfigurationGroup"></app-access-configuration-step>
     </ng-container>
     <ng-container *ngSwitchCase="2">
       <app-address-step [form]="addressGroup"></app-address-step>
     </ng-container>
     <ng-container *ngSwitchCase="3">
-      <app-create-user-summary [form]="null" [generalFormValue]="GeneralInformationValue"
-        [accessConfigurationValue]="AccessConfigurationValue" [addressValue]="AddressValue"
+      <app-create-user-summary
+        [form]="null"
+        [generalFormValue]="GeneralInformationValue"
+        [accessConfigurationValue]="AccessConfigurationValue"
+        [addressValue]="AddressValue"
         (createEvent)="create()"></app-create-user-summary>
     </ng-container>
   </ng-container>
