@@ -10,7 +10,6 @@ import { UserApiSerivce } from '../../../../api/user.api';
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
 import { UserList } from './types';
-//TODO: Fix after fixing backend
 
 @Component({
   selector: 'app-users-list',
