@@ -16,7 +16,7 @@ export type GeneralInformationStepGroup = {
   firstName: FormControl<string>;
   secondName: FormControl<string>;
   birthDate: FormControl<string>;
-  gender: FormControl<Optional<Gender>>;
+  gender: FormControl<Gender>;
 };
 
 export type GeneralInformationValue =

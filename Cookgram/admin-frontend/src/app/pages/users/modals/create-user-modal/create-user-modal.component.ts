@@ -7,6 +7,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { StepsModule } from 'primeng/steps';
 import {
   CreateUserObject,
+  PersonalInformation,
   UserAddress,
   UserCredentials,
 } from '../../../../../api/types/user.types';
@@ -15,6 +16,7 @@ import { AddressValue } from '../../../../shared/components/address/types';
 import { Destroyer } from '../../../../shared/decorators/destroy';
 import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
 import { ModalService } from '../../../../shared/services/modal.service';
+import { ExtractFormControl } from '../../../../shared/types/shared';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
 import { AddressStepComponent } from './address-step/address-step.component';
 import { CreateUserSteps } from './create-user-modal.consts';
@@ -29,6 +31,7 @@ import {
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
+import { Gender } from '../../../../shared/types/enums';
 
 @Component({
   selector: 'app-user-create-modal',
@@ -87,19 +90,26 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   private prepareCreateUserObject(): CreateUserObject {
-    const { generalInformation, accessConfiguration, address } =
+    const {  address } =
       this.createUserGroup.value;
 
     return {
-      firstName: generalInformation?.firstName ?? null,
-      lastName: generalInformation?.secondName ?? null,
       credentials: this.prepareCredentials(),
-      email: accessConfiguration?.email ?? null,
-      role: accessConfiguration?.role ?? null,
+      personalInformation: this.preparePersonalInformation(this.createUserGroup.value as ExtractFormControl<CreateModalGroup>), // TODO: Check
       address: address as UserAddress,
     };
   }
 
+  private preparePersonalInformation(formValue: ExtractFormControl<CreateModalGroup>): PersonalInformation {
+    return {
+      firstName: formValue.generalInformation.firstName,
+      lastName: formValue.generalInformation.secondName,
+      brithday: formValue.generalInformation.birthDate,
+      gender: formValue.generalInformation.gender as unknown as Gender,
+      contacts: {},
+      email: formValue.accessConfiguration.email,
+    }
+  }
   private prepareCredentials(): Partial<UserCredentials> {
     const { accessConfiguration } = this.createUserGroup.value;
 

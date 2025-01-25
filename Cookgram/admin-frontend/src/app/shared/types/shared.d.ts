@@ -5,21 +5,21 @@ import { Role, State } from './enums';
 export type ExtractFormControl<T> = {
   [K in keyof T]: T[K] extends FormControl<infer U>
     ? U
-    : T[K] extends FormControl<infer U> | undefined
-    ? U | undefined
+    : T[K] extends FormControl<infer U> 
+    ? U 
     : T[K] extends FormArray<FormControl<infer U>>
     ? Array<U>
-    : T[K] extends FormArray<FormControl<infer U>> | undefined
-    ? Array<U> | undefined
+    : T[K] extends FormArray<FormControl<infer U>> 
+    ? Array<U> 
     : T[K] extends FormArray<FormGroup<infer U>>
-    ? Array<Partial<ExtractFormControl<U>>>
-    : T[K] extends FormArray<FormGroup<infer U>> | undefined
-    ? Array<Partial<ExtractFormControl<U>>> | undefined
+    ? Array<ExtractFormControl<U>>
+    : T[K] extends FormArray<FormGroup<infer U>> 
+    ? Array<ExtractFormControl<U>> 
     : T[K] extends FormGroup<infer U>
-    ? Partial<ExtractFormControl<U>>
-    : T[K] extends FormGroup<infer U> | undefined
-    ? Partial<ExtractFormControl<U>> | undefined
-    : T[K];
+    ? ExtractFormControl<U>
+    : T[K] extends FormGroup<infer U>
+    ? ExtractFormControl<U> 
+    : T[K] | undefined;
 };
 
 export type Credentials = {
