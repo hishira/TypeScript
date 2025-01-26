@@ -26,6 +26,7 @@ import { ToastService } from '../../shared/services/toast.service';
 import { Optional } from '../../shared/types/shared';
 import { hasProperty, isEmptyString, isNill } from '../../shared/utils';
 import { LoginFormGroup } from './types';
+import { chckIfUserExistsBasedOnResponse } from './utils';
 
 @Component({
   selector: 'app-login-page',
@@ -86,7 +87,7 @@ export class LoginPageComponent {
   }
 
   private handleLoginResponse(response: Optional<TokenResponse>): void {
-    const userNotExists = this.chckIfUserExistsBasedOnResponse(response);
+    const userNotExists = chckIfUserExistsBasedOnResponse(response);
     if (userNotExists) {
       this.toastService.showWarning('User not exists');
 
@@ -96,15 +97,5 @@ export class LoginPageComponent {
     this.router.navigate(['/admin']);
   }
 
-  private chckIfUserExistsBasedOnResponse(
-    response: Optional<TokenResponse>
-  ): boolean {
-    return (
-      isNill(response) ||
-      hasProperty<ErrorResponse>('error', response as any) ||
-      (hasProperty<Tokens | ErrorResponse>('accessToken', response) &&
-        isEmptyString(response.accessToken) &&
-        isEmptyString(response.refreshToken))
-    );
-  }
+
 }

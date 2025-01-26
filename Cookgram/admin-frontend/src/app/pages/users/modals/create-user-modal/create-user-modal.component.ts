@@ -32,6 +32,7 @@ import {
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
 import { Gender } from '../../../../shared/types/enums';
+import { preparePersonalInformation } from './utils';
 
 @Component({
   selector: 'app-user-create-modal',
@@ -95,21 +96,11 @@ export class CreateUserModalComponent extends AbstractModalDirective {
 
     return {
       credentials: this.prepareCredentials(),
-      personalInformation: this.preparePersonalInformation(this.createUserGroup.value as ExtractFormControl<CreateModalGroup>), // TODO: Check
+      personalInformation: preparePersonalInformation(this.createUserGroup.value as ExtractFormControl<CreateModalGroup>), // TODO: Check
       address: address as UserAddress,
     };
   }
 
-  private preparePersonalInformation(formValue: ExtractFormControl<CreateModalGroup>): PersonalInformation {
-    return {
-      firstName: formValue.generalInformation.firstName,
-      lastName: formValue.generalInformation.secondName,
-      brithday: formValue.generalInformation.birthDate,
-      gender: formValue.generalInformation.gender as unknown as Gender,
-      contacts: {},
-      email: formValue.accessConfiguration.email,
-    }
-  }
   private prepareCredentials(): Partial<UserCredentials> {
     const { accessConfiguration } = this.createUserGroup.value;
 
