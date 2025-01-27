@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import {
-  FormControl,
   FormGroup,
-  ReactiveFormsModule,
-  Validators,
+  ReactiveFormsModule
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -14,19 +12,16 @@ import { RippleModule } from 'primeng/ripple';
 import { take } from 'rxjs';
 import { AuthenticationApiService } from '../../../api/authentication.api';
 import {
-  ErrorResponse,
   LoginPayload,
-  TokenResponse,
-  Tokens,
+  TokenResponse
 } from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
 import { InputComponent } from '../../shared/input/input.component';
 import { ToastService } from '../../shared/services/toast.service';
 import { Optional } from '../../shared/types/shared';
-import { hasProperty, isEmptyString, isNill } from '../../shared/utils';
 import { LoginFormGroup } from './types';
-import { chckIfUserExistsBasedOnResponse } from './utils';
+import { EmptyLoginForm, chckIfUserExistsBasedOnResponse } from './utils';
 
 @Component({
   selector: 'app-login-page',
@@ -44,14 +39,7 @@ import { chckIfUserExistsBasedOnResponse } from './utils';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
-  readonly loginFormGroup: FormGroup<LoginFormGroup> =
-    new FormGroup<LoginFormGroup>({
-      username: new FormControl<string>('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      password: new FormControl<string>('', [Validators.required]),
-    });
+  readonly loginFormGroup: FormGroup<LoginFormGroup> = EmptyLoginForm();
 
   get loginPayload(): LoginPayload {
     return {
@@ -96,6 +84,4 @@ export class LoginPageComponent {
     this.store.select(GetAccessTokenSelectors).pipe(take(1)).subscribe();
     this.router.navigate(['/admin']);
   }
-
-
 }
