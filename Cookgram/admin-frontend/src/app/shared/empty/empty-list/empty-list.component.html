@@ -1,7 +1,6 @@
 <div
   *ngIf="isEmpty(); else content"
-  class="w-full h-25rem flex justify-content-center gap-4 flex-column align-content-center"
->
+  class="w-full h-25rem flex justify-content-center gap-4 flex-column align-content-center">
   <span class="font-bold text-5xl align-self-center text-black-alpha-60">{{
     text()
   }}</span>
@@ -11,8 +10,7 @@
       label="Refresh"
       class="align-self-center"
       size="large"
-      [rounded]="true"
-    ></p-button>
+      [rounded]="true"></p-button>
   </ng-container>
 </div>
 

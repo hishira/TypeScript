@@ -13,7 +13,7 @@ export class AbstractModalDirective implements OnDestroy {
   protected readonly MAXIMUX_STEP = 1;
   constructor(max_step: number) {
     this.max_step = max_step;
-    if (this.max_step < 0) {
+    if (this.max_step < this.min_step) {
       throw new Error('Step must be greater than 0');
     }
     this.handleNextStepChange();

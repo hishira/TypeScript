@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, input } from '@angular/core';
 import { AbstractControl, TouchedChangeEvent } from '@angular/forms';
 import { Observable, combineLatest, map, of, startWith } from 'rxjs';
-import { ErrorsTypes } from './errors-types';
 import { EMAIL_ERROR, REQUIRED_ERROR } from './consts';
+import { ErrorsTypes } from './errors-types';
 
 @Component({
   selector: 'app-errors',
@@ -41,13 +41,9 @@ export class ErrorsComponent implements OnInit {
   private getEventObservable(): Observable<string[]> {
     return this.control().events.pipe(
       map((e) => {
-        if (e instanceof TouchedChangeEvent) {
-          this.control().markAsDirty();
-
-          return this.getCurrentListOfErrors();
-        }
-
-        return [];
+        if (!(e instanceof TouchedChangeEvent)) return [];
+        this.control().markAsDirty();
+        return this.getCurrentListOfErrors();
       })
     );
   }
