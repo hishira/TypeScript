@@ -20,7 +20,7 @@ import { AddressControl } from '../create-user-model.types';
 })
 export class AddressStepComponent extends AbstractStepDirective<
   FormControl<AddressControl>
-> {
+> {teszt
   readonly addressMap: AddressRequiredMap = {
     ...EmptyAddressRequiredMap,
     Address: true,
