@@ -13,6 +13,7 @@ import {
 } from '@angular/forms';
 import { noop } from 'rxjs';
 import { InputComponent } from '../../input/input.component';
+import { BaseComponent } from '../base-component/base-component';
 import { EmptyAddressRequiredMap, EmptyAddressStep } from './address.utils';
 import { AddressRequiredMap } from './types';
 
@@ -30,7 +31,10 @@ import { AddressRequiredMap } from './types';
     },
   ],
 })
-export class AddressComponent implements ControlValueAccessor, OnInit {
+export class AddressComponent
+  extends BaseComponent
+  implements ControlValueAccessor, OnInit
+{
   readonly addressRequiredMap = input<AddressRequiredMap>(
     EmptyAddressRequiredMap
   );
@@ -40,7 +44,9 @@ export class AddressComponent implements ControlValueAccessor, OnInit {
   onChange: (v: unknown) => void = noop;
 
   ngOnInit(): void {
-    this.form.valueChanges.subscribe((a) => this.onChange(a));
+    this.subscription.add(
+      this.form.valueChanges.subscribe((a) => this.onChange(a))
+    );
   }
 
   writeValue(obj: unknown): void {

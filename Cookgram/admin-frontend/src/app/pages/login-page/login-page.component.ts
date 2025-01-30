@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  FormGroup,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ButtonModule } from 'primeng/button';
@@ -11,12 +8,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { take } from 'rxjs';
 import { AuthenticationApiService } from '../../../api/authentication.api';
-import {
-  LoginPayload,
-  TokenResponse
-} from '../../../api/types/api.types';
+import { LoginPayload, TokenResponse } from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
+import { BaseComponent } from '../../shared/components/base-component/base-component';
 import { InputComponent } from '../../shared/input/input.component';
 import { ToastService } from '../../shared/services/toast.service';
 import { Optional } from '../../shared/types/shared';
@@ -38,7 +33,7 @@ import { EmptyLoginForm, chckIfUserExistsBasedOnResponse } from './utils';
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })
-export class LoginPageComponent {
+export class LoginPageComponent extends BaseComponent {
   readonly loginFormGroup: FormGroup<LoginFormGroup> = EmptyLoginForm();
 
   get loginPayload(): LoginPayload {
@@ -53,13 +48,17 @@ export class LoginPageComponent {
     private readonly authenticationService: AuthenticationApiService,
     private readonly toastService: ToastService,
     private readonly store: Store<MainStore>
-  ) {}
+  ) {
+    super();
+  }
 
   signIn(): void {
     if (!this.validateForm()) return;
-    this.authenticationService
-      .login(this.loginPayload)
-      .subscribe((r) => this.handleLoginResponse(r));
+    this.subscription.add(
+      this.authenticationService
+        .login(this.loginPayload)
+        .subscribe((r) => this.handleLoginResponse(r))
+    );
   }
 
   private validateForm(): boolean {
@@ -81,7 +80,9 @@ export class LoginPageComponent {
 
       return;
     }
-    this.store.select(GetAccessTokenSelectors).pipe(take(1)).subscribe();
+    this.subscription.add(
+      this.store.select(GetAccessTokenSelectors).pipe(take(1)).subscribe()
+    );
     this.router.navigate(['/admin']);
   }
 }
