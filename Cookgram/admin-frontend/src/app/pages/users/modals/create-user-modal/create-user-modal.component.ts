@@ -61,6 +61,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   readonly addressGroup: FormControl<AddressControl> =
     this.createUserGroup.controls.address;
   readonly steps: MenuItem[] = CreateUserSteps;
+  readonly CreateUserSteps = CreateUserSteps;
 
   constructor(
     private readonly dialogRef: DynamicDialogRef,

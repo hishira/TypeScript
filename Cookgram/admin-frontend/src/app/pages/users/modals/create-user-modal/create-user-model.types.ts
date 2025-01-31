@@ -44,9 +44,17 @@ export type AddressControl = {
   latitude?: number;
   longitude?: number;
 };
+
 export enum Gender {
   Men = 'Man',
   Woman = 'Woman',
+}
+
+export enum CreateUserSteps {
+  GeneralInformation = 0,
+  AccessConfiguration = 1,
+  Address = 2,
+  Summary = 3,
 }
 
 export type GenderName = keyof typeof Gender;
