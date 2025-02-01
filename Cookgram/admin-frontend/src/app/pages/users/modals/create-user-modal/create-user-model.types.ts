@@ -50,7 +50,7 @@ export enum Gender {
   Woman = 'Woman',
 }
 
-export enum CreateUserSteps {
+export enum CreateUserStepsStrategy {
   GeneralInformation = 0,
   AccessConfiguration = 1,
   Address = 2,

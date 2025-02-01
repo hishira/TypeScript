@@ -7,9 +7,8 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { StepsModule } from 'primeng/steps';
 import {
   CreateUserObject,
-  PersonalInformation,
   UserAddress,
-  UserCredentials,
+  UserCredentials
 } from '../../../../../api/types/user.types';
 import { UserApiSerivce } from '../../../../../api/user.api';
 import { AddressValue } from '../../../../shared/components/address/types';
@@ -26,12 +25,12 @@ import {
   AccessConfigurationValue,
   AddressControl,
   CreateModalGroup,
+  CreateUserStepsStrategy,
   GeneralInformationStepGroup,
   GeneralInformationValue,
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
-import { Gender } from '../../../../shared/types/enums';
 import { preparePersonalInformation } from './utils';
 
 @Component({
@@ -61,7 +60,7 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   readonly addressGroup: FormControl<AddressControl> =
     this.createUserGroup.controls.address;
   readonly steps: MenuItem[] = CreateUserSteps;
-  readonly CreateUserSteps = CreateUserSteps;
+  readonly CreateUserStepsStrategy = CreateUserStepsStrategy;
 
   constructor(
     private readonly dialogRef: DynamicDialogRef,
