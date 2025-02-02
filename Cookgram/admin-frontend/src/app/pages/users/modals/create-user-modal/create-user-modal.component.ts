@@ -13,7 +13,7 @@ import {
 import { UserApiSerivce } from '../../../../../api/user.api';
 import { AddressValue } from '../../../../shared/components/address/types';
 import { Destroyer } from '../../../../shared/decorators/destroy';
-import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
+import { AbstractModalComponent } from '../../../../shared/directives/abstract-modal.component';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { ExtractFormControl } from '../../../../shared/types/shared';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
@@ -50,7 +50,7 @@ import { preparePersonalInformation } from './utils';
   ],
 })
 @Destroyer()
-export class CreateUserModalComponent extends AbstractModalDirective {
+export class CreateUserModalComponent extends AbstractModalComponent {
   readonly createUserGroup: FormGroup<CreateModalGroup> =
     EmptyCreateUserFormGroup();
   readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =

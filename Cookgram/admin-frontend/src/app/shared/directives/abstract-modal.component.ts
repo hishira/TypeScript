@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { ModalService } from '../services/modal.service';
 
 @Directive({ providers: [ModalService] })
-export class AbstractModalDirective implements OnDestroy {
+export class AbstractModalComponent implements OnDestroy {
   activeIndex: number = 0;
 
   protected readonly max_step: number = -100;

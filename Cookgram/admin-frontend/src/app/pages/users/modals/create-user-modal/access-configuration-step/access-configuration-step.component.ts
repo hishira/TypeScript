@@ -10,7 +10,7 @@ import { Observable, map } from 'rxjs';
 import { CurrentUserSelector } from '../../../../../../store/currentUser/selectors';
 import { MainStore } from '../../../../../../store/main.store';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
-import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
+import { AbstractStepComponent } from '../../../../../shared/directives/abstract-step.component';
 import { InputComponent } from '../../../../../shared/input/input.component';
 import { Role } from '../../../../../shared/types/enums';
 import { AccessConfigurationStepGroup } from '../create-user-model.types';
@@ -32,7 +32,7 @@ import { PrepareRoles } from './access-configuration-step.utils';
   ],
   styleUrl: './access-configuration.scss',
 })
-export class AccessConfigurationStep extends AbstractStepDirective<AccessConfigurationStepGroup> {
+export class AccessConfigurationStep extends AbstractStepComponent<AccessConfigurationStepGroup> {
   roles: Observable<Role[]> = this.prepareProperRoles();
 
   constructor(private readonly store: Store<MainStore>) {
