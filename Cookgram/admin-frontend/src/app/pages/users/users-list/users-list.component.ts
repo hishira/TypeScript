@@ -10,6 +10,7 @@ import { UserApiSerivce } from '../../../../api/user.api';
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
 import { UserList } from './types';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-users-list',
@@ -28,7 +29,7 @@ import { UserList } from './types';
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent implements OnInit {
-  readonly users: UserList[] = [];
+  users$!: Observable<UserList[]>;
 
   constructor(
     private readonly userApi: UserApiSerivce,
@@ -36,9 +37,7 @@ export class UsersListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userApi
-      .userLists()
-      .subscribe((users: UserList[]) => this.users.push(...users));
+    this.users$ = this.userApi.userLists();
   }
 
   createUser() {

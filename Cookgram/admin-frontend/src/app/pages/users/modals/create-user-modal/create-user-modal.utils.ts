@@ -1,5 +1,5 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { DefaultNonNullabeOption } from '../../../../shared/consts/form.consts';
+import { DefaultNonNullabeOption, NonNullable } from '../../../../shared/consts/form.consts';
 import { Role } from '../../../../shared/types/enums';
 import {
   AccessConfigurationStepGroup,
@@ -23,7 +23,7 @@ export const EmptyGeneralInformationGroup =
       firstName: new FormControl<string>('', DefaultNonNullabeOption),
       secondName: new FormControl<string>('', DefaultNonNullabeOption),
       birthDate: new FormControl<string>('', DefaultNonNullabeOption),
-      gender: new FormControl<Gender>(Gender.Men, { nonNullable: true }),
+      gender: new FormControl<Gender>(Gender.Men, NonNullable),
     });
 
 export const EmptyAccessConfigurationGroup =

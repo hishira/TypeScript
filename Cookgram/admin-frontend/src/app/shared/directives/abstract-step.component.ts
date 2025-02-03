@@ -1,13 +1,16 @@
 import { Directive, inject, input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { BaseComponent } from '../components/base-component/base-component';
 import { ModalService } from '../services/modal.service';
 import { ToastService } from '../services/toast.service';
 import { hasProperty } from '../utils';
 import { CheckType, Controlable } from './types';
 
 @Directive()
-export class AbstractStepComponent<T extends Controlable = null> {
+export class AbstractStepComponent<
+  T extends Controlable = null
+> extends BaseComponent {
   readonly form = input.required<CheckType<T>>();
   protected readonly dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
   protected readonly modalService: ModalService = inject(ModalService);

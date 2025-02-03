@@ -8,7 +8,7 @@ import { StepsModule } from 'primeng/steps';
 import {
   CreateUserObject,
   UserAddress,
-  UserCredentials
+  UserCredentials,
 } from '../../../../../api/types/user.types';
 import { UserApiSerivce } from '../../../../../api/user.api';
 import { AddressValue } from '../../../../shared/components/address/types';
@@ -49,7 +49,6 @@ import { preparePersonalInformation } from './utils';
     SummaryStepComponent,
   ],
 })
-@Destroyer()
 export class CreateUserModalComponent extends AbstractModalComponent {
   readonly createUserGroup: FormGroup<CreateModalGroup> =
     EmptyCreateUserFormGroup();
@@ -83,7 +82,9 @@ export class CreateUserModalComponent extends AbstractModalComponent {
   }
 
   create() {
-    this.userApi.createUser(this.prepareCreateUserObject());
+    this.subscription.add(
+      this.userApi.createUser(this.prepareCreateUserObject()).subscribe()
+    );
   }
 
   close() {
@@ -91,12 +92,13 @@ export class CreateUserModalComponent extends AbstractModalComponent {
   }
 
   private prepareCreateUserObject(): CreateUserObject {
-    const {  address } =
-      this.createUserGroup.value;
+    const { address } = this.createUserGroup.value;
 
     return {
       credentials: this.prepareCredentials(),
-      personalInformation: preparePersonalInformation(this.createUserGroup.value as ExtractFormControl<CreateModalGroup>), // TODO: Check
+      personalInformation: preparePersonalInformation(
+        this.createUserGroup.value as ExtractFormControl<CreateModalGroup>
+      ), // TODO: Check
       address: address as UserAddress,
     };
   }
