@@ -38,7 +38,6 @@ export class AddressComponent
   readonly addressRequiredMap = input<AddressRequiredMap>(
     EmptyAddressRequiredMap
   );
-
   readonly form: FormGroup = EmptyAddressStep();
 
   onChange: (v: unknown) => void = noop;

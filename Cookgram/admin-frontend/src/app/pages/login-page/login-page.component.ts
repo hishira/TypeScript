@@ -64,13 +64,10 @@ export class LoginPageComponent extends BaseComponent {
   private validateForm(): boolean {
     this.loginFormGroup.markAllAsTouched();
     this.loginFormGroup.updateValueAndValidity();
-    if (!this.loginFormGroup.valid) {
-      this.toastService.showError('Errors occurs in form');
+    if (this.loginFormGroup.valid) return true;
+    this.toastService.showError('Errors occurs in form');
 
-      return false;
-    }
-
-    return true;
+    return false;
   }
 
   private handleLoginResponse(response: Optional<TokenResponse>): void {
