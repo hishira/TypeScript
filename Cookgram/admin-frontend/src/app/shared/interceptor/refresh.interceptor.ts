@@ -78,9 +78,8 @@ export class RefreshInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
       return this.refreshToken(req, next);
-    } else {
-      return this.setTokenFromStore(req, next);
     }
+    return this.setTokenFromStore(req, next);
   }
 
   private refreshToken(

@@ -98,7 +98,7 @@ export class CreateUserModalComponent extends AbstractModalComponent {
       credentials: this.prepareCredentials(),
       personalInformation: preparePersonalInformation(
         this.createUserGroup.value as ExtractFormControl<CreateModalGroup>
-      ), // TODO: Check
+      ),
       address: address as UserAddress,
     };
   }
