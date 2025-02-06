@@ -38,7 +38,6 @@ import { preparePersonalInformation } from './utils';
   templateUrl: './create-user-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  providers: [ModalService],
   imports: [
     StepsModule,
     ButtonModule,
@@ -63,7 +62,6 @@ export class CreateUserModalComponent extends AbstractModalComponent {
 
   constructor(
     private readonly dialogRef: DynamicDialogRef,
-    override readonly modalService: ModalService,
     private readonly userApi: UserApiSerivce
   ) {
     super(3);

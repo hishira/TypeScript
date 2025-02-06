@@ -5,5 +5,5 @@ export const InitialCurrentUserState = {};
 export const currentUserReducers = createReducer(
   InitialCurrentUserState,
   on(GetCurrentUserAction, (state) =>  state ),
-  on(SetCurrentUserAction, (state, user) => user)
+  on(SetCurrentUserAction, (_, user) => user)
 );
