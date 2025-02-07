@@ -16,4 +16,3 @@ import {
 export class ReadoOnlyComponent {
   readonly title: InputSignal<string | undefined> = input<string>();
 }
-asd
