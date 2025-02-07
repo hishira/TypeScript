@@ -3,7 +3,7 @@ import { BaseComponent } from '../components/base-component/base-component';
 import { ModalService } from '../services/modal.service';
 
 @Directive({ providers: [ModalService] })
-export class AbstractModalComponent extends BaseComponent implements OnDestroy {
+export class AbstractModalComponent extends BaseComponent {
   activeIndex: number = 0;
 
   protected readonly max_step: number = -100;
