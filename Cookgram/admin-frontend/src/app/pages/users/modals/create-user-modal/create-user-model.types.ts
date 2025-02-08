@@ -2,8 +2,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Role } from '../../../../shared/types/enums';
 import {
   ExtractFormControl,
-  Nullable,
-  Optional,
+  Nullable
 } from '../../../../shared/types/shared';
 
 export type CreateModalGroup = {
