@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
-  input,
+  input
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -33,7 +32,7 @@ import { AddressRequiredMap } from './types';
 })
 export class AddressComponent
   extends BaseComponent
-  implements ControlValueAccessor, OnInit
+  implements ControlValueAccessor
 {
   readonly addressRequiredMap = input<AddressRequiredMap>(
     EmptyAddressRequiredMap
@@ -42,7 +41,7 @@ export class AddressComponent
 
   onChange: (v: unknown) => void = noop;
 
-  ngOnInit(): void {
+  override initialize(): void {
     this.subscription.add(
       this.form.valueChanges.subscribe((a) => this.onChange(a))
     );

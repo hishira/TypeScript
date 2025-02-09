@@ -4,6 +4,7 @@ import { AbstractControl, TouchedChangeEvent } from '@angular/forms';
 import { Observable, combineLatest, map, of, startWith } from 'rxjs';
 import { EMAIL_ERROR, REQUIRED_ERROR } from './consts';
 import { ErrorsTypes } from './errors-types';
+import { BaseComponent } from '../components/base-component/base-component';
 
 @Component({
   selector: 'app-errors',
@@ -12,12 +13,12 @@ import { ErrorsTypes } from './errors-types';
   templateUrl: './errors.component.html',
   styleUrl: './errors.component.scss',
 })
-export class ErrorsComponent implements OnInit {
+export class ErrorsComponent extends BaseComponent {
   readonly control = input.required<AbstractControl>();
 
   errorsChange$: Observable<string[]> = of([]);
 
-  ngOnInit(): void {
+  override initialize(): void {
     this.errorsChange$ = combineLatest([
       this.getEventObservable(),
       this.getStatusChangeObservable(),

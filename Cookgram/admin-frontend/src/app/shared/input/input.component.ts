@@ -2,10 +2,9 @@ import { CommonModule, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   Optional,
   Self,
-  input,
+  input
 } from '@angular/core';
 import {
   AbstractControl,
@@ -23,7 +22,8 @@ import { BaseComponent } from '../components/base-component/base-component';
 import { ErrorsComponent } from '../errors/errors.component';
 import { RequiredDot } from '../required-dot/required-dot.componen';
 import { Nullable } from '../types/shared';
-import { EventHandler, InputStringTypes, InputTypes } from './input.utils';
+import { EventHandler } from './input.utils';
+import { InputStringTypes, InputTypes } from './types';
 
 @Component({
   selector: 'app-input',
@@ -41,7 +41,7 @@ import { EventHandler, InputStringTypes, InputTypes } from './input.utils';
 })
 export class InputComponent
   extends BaseComponent
-  implements ControlValueAccessor, OnInit, Validator
+  implements ControlValueAccessor, Validator
 {
   readonly type = input<InputTypes | InputStringTypes>(InputTypes.Text);
   readonly required = input<boolean>(false);
@@ -66,7 +66,7 @@ export class InputComponent
     /* TODO document why this method 'registerOnValidatorChange' is empty */
   }
 
-  ngOnInit(): void {
+  override initialize(): void {
     this.inheritValidatorFromControl();
     this.subscription.add(
       this.ngControl.control?.events?.subscribe((event) =>
