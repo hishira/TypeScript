@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { AbstractControl, TouchedChangeEvent } from '@angular/forms';
 import { Observable, combineLatest, map, of, startWith } from 'rxjs';
+import { BaseComponent } from '../components/base-component/base-component';
 import { EMAIL_ERROR, REQUIRED_ERROR } from './consts';
 import { ErrorsTypes } from './errors-types';
-import { BaseComponent } from '../components/base-component/base-component';
 
 @Component({
   selector: 'app-errors',
