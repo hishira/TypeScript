@@ -1,4 +1,4 @@
-import { Directive, OnDestroy, inject } from '@angular/core';
+import { Directive, inject } from '@angular/core';
 import { BaseComponent } from '../components/base-component/base-component';
 import { ModalService } from '../services/modal.service';
 
@@ -10,6 +10,7 @@ export class AbstractModalComponent extends BaseComponent {
   protected readonly min_step: number = 0;
   protected readonly modalService: ModalService = inject(ModalService);
   protected readonly MAXIMUX_STEP = 1;
+
   constructor(max_step: number) {
     super();
     this.max_step = max_step;

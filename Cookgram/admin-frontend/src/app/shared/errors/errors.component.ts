@@ -39,6 +39,7 @@ export class ErrorsComponent extends BaseComponent {
       })
     );
   }
+
   private getEventObservable(): Observable<string[]> {
     return this.control().events.pipe(
       map((e) => {
