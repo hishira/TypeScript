@@ -15,6 +15,7 @@ import {
   LoginPayload,
   TokenResponse,
 } from './types/api.types';
+import { AuthenticationLinks } from './consts/authentication.consts';
 
 @Injectable()
 export class AuthenticationApiService extends BaseApi {
@@ -28,7 +29,10 @@ export class AuthenticationApiService extends BaseApi {
 
   login(loginPayload: LoginPayload): Observable<Optional<TokenResponse>> {
     return this.httpService
-      .post<TokenResponse>(this.prepareLink('auth/login'), loginPayload)
+      .post<TokenResponse>(
+        this.prepareLink(AuthenticationLinks.Login),
+        loginPayload
+      )
       .pipe(
         tap((loginResponse) => this.handleTokens(loginResponse)),
         catchError((error) => {

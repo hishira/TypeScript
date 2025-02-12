@@ -5,6 +5,7 @@ export enum Role {
   Employee = 'Employee',
   Manager = 'Manager',
   Director = 'Director',
+  All = 'All'
 }
 
 export enum Gender {
