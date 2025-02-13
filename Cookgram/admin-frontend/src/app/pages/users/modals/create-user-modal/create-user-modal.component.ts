@@ -13,8 +13,9 @@ import {
 import { UserApiSerivce } from '../../../../../api/user.api';
 import { AddressValue } from '../../../../shared/components/address/types';
 import { Destroyer } from '../../../../shared/decorators/destroy';
-import { AbstractModalDirective } from '../../../../shared/directives/abstract-modal.directive';
+import { AbstractModalComponent } from '../../../../shared/directives/abstract-modal.component';
 import { ModalService } from '../../../../shared/services/modal.service';
+import { ExtractFormControl } from '../../../../shared/types/shared';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
 import { AddressStepComponent } from './address-step/address-step.component';
 import { CreateUserSteps } from './create-user-modal.consts';
@@ -24,18 +25,19 @@ import {
   AccessConfigurationValue,
   AddressControl,
   CreateModalGroup,
+  CreateUserStepsStrategy,
   GeneralInformationStepGroup,
   GeneralInformationValue,
 } from './create-user-model.types';
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
+import { preparePersonalInformation } from './utils';
 
 @Component({
   selector: 'app-user-create-modal',
   templateUrl: './create-user-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  providers: [ModalService],
   imports: [
     StepsModule,
     ButtonModule,
@@ -46,8 +48,7 @@ import { SummaryStepComponent } from './summary-step/summary-step.component';
     SummaryStepComponent,
   ],
 })
-@Destroyer()
-export class CreateUserModalComponent extends AbstractModalDirective {
+export class CreateUserModalComponent extends AbstractModalComponent {
   readonly createUserGroup: FormGroup<CreateModalGroup> =
     EmptyCreateUserFormGroup();
   readonly generalInformationGroup: FormGroup<GeneralInformationStepGroup> =
@@ -57,10 +58,10 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   readonly addressGroup: FormControl<AddressControl> =
     this.createUserGroup.controls.address;
   readonly steps: MenuItem[] = CreateUserSteps;
+  readonly CreateUserStepsStrategy = CreateUserStepsStrategy;
 
   constructor(
     private readonly dialogRef: DynamicDialogRef,
-    override readonly modalService: ModalService,
     private readonly userApi: UserApiSerivce
   ) {
     super(3);
@@ -79,7 +80,9 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   create() {
-    this.userApi.createUser(this.prepareCreateUserObject());
+    this.subscription.add(
+      this.userApi.createUser(this.prepareCreateUserObject()).subscribe()
+    );
   }
 
   close() {
@@ -87,15 +90,13 @@ export class CreateUserModalComponent extends AbstractModalDirective {
   }
 
   private prepareCreateUserObject(): CreateUserObject {
-    const { generalInformation, accessConfiguration, address } =
-      this.createUserGroup.value;
+    const { address } = this.createUserGroup.value;
 
     return {
-      firstName: generalInformation?.firstName ?? null,
-      lastName: generalInformation?.secondName ?? null,
       credentials: this.prepareCredentials(),
-      email: accessConfiguration?.email ?? null,
-      role: accessConfiguration?.role ?? null,
+      personalInformation: preparePersonalInformation(
+        this.createUserGroup.value as ExtractFormControl<CreateModalGroup>
+      ),
       address: address as UserAddress,
     };
   }

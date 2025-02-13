@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
-  input,
+  input
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -13,6 +12,7 @@ import {
 } from '@angular/forms';
 import { noop } from 'rxjs';
 import { InputComponent } from '../../input/input.component';
+import { BaseComponent } from '../base-component/base-component';
 import { EmptyAddressRequiredMap, EmptyAddressStep } from './address.utils';
 import { AddressRequiredMap } from './types';
 
@@ -30,15 +30,21 @@ import { AddressRequiredMap } from './types';
     },
   ],
 })
-export class AddressComponent implements ControlValueAccessor, OnInit {
-  readonly addressRequiredMap = input<AddressRequiredMap>(EmptyAddressRequiredMap);
-  
+export class AddressComponent
+  extends BaseComponent
+  implements ControlValueAccessor
+{
+  readonly addressRequiredMap = input<AddressRequiredMap>(
+    EmptyAddressRequiredMap
+  );
   readonly form: FormGroup = EmptyAddressStep();
 
   onChange: (v: unknown) => void = noop;
 
-  ngOnInit(): void {
-    this.form.valueChanges.subscribe((a) => this.onChange(a));
+  override initialize(): void {
+    this.subscription.add(
+      this.form.valueChanges.subscribe((a) => this.onChange(a))
+    );
   }
 
   writeValue(obj: unknown): void {

@@ -5,6 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss',
   standalone: true,
-  imports: [],
 })
 export class DialogComponent {}

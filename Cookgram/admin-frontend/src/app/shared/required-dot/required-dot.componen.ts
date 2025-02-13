@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-required-dot',
-    template: '<span class="text-red-500">*</span>',
-    standalone: true,
+  selector: 'app-required-dot',
+  template: '<span class="text-red-500">*</span>',
+  standalone: true,
 })
-export class RequiredDot{}
+export class RequiredDot {}

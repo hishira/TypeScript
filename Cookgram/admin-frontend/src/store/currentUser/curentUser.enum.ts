@@ -1,4 +1,4 @@
 export enum CurrentUser {
-    GetCurrentUser = 'Get Current User',
-    SetCurrentUser = 'Set Current User',
+  GetCurrentUser = 'Get Current User',
+  SetCurrentUser = 'Set Current User',
 }

@@ -5,7 +5,10 @@
       <p-button (onClick)="createUser()" [rounded]="true">Create user</p-button>
     </div>
   </ng-template>
-  <app-empty-list [withRefreshButton]="true" [isEmpty]="users.length <= 0">
+  <app-empty-list
+    *ngIf="users$ | async as users"
+    [withRefreshButton]="true"
+    [isEmpty]="users.length <= 0">
     <p-table [value]="users" [rows]="users.length" [paginator]="true">
       <ng-template pTemplate="header">
         <tr>

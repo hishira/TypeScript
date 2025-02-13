@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { AddressValue } from '../../../../../shared/components/address/types';
 import { ReadoOnlyComponent } from '../../../../../shared/components/readonly-only/readonly-only.component';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
-import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
+import { AbstractStepComponent } from '../../../../../shared/directives/abstract-step.component';
 import {
   AccessConfigurationValue,
   GeneralInformationValue,
@@ -16,7 +16,7 @@ import {
   standalone: true,
   imports: [CommonModule, DialogComponent, ReadoOnlyComponent, ButtonModule],
 })
-export class SummaryStepComponent extends AbstractStepDirective {
+export class SummaryStepComponent extends AbstractStepComponent {
   readonly generalFormValue: InputSignal<GeneralInformationValue> =
     input.required<GeneralInformationValue>();
   readonly accessConfigurationValue: InputSignal<AccessConfigurationValue> =
@@ -25,7 +25,7 @@ export class SummaryStepComponent extends AbstractStepDirective {
     input.required<AddressValue>();
 
   readonly createEvent = output<void>();
-
+  
   create(): void {
     this.createEvent.emit();
   }

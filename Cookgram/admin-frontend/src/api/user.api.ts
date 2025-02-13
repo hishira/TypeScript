@@ -1,29 +1,34 @@
-import { HttpClient } from '@angular/common/http';
-import { BaseApi } from './base.api';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateUserObject } from './types/user.types';
 import { UserList } from '../app/pages/users/users-list/types';
 import { ContextUser } from '../app/shared/types/shared';
+import { BaseApi } from './base.api';
+import { CreateUserObject } from './types/user.types';
+import { UserLinks } from './consts/user.consts';
 
 @Injectable()
 export class UserApiSerivce extends BaseApi {
-  constructor(private readonly httpService: HttpClient) {
+  constructor() {
     super();
   }
 
   userLists(): Observable<Readonly<UserList>[]> {
     return this.httpService.post<UserList[]>(
-      this.prepareLink('user/user-list'),
+      this.prepareLink(UserLinks.List),
       {}
-    );
+    );asd
   }
 
   currentUserInfo(): Observable<Readonly<ContextUser>> {
-    return this.httpService.get<ContextUser>(this.prepareLink('user/current-user'));
+    return this.httpService.get<ContextUser>(
+      this.prepareLink(UserLinks.Current)
+    );
   }
 
   createUser(user: CreateUserObject): Observable<unknown> {
-    return this.httpService.post<unknown>(this.prepareLink("user/add-user"), user);
+    return this.httpService.post<unknown>(
+      this.prepareLink(UserLinks.Create),
+      user
+    );
   }
 }

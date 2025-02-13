@@ -23,12 +23,15 @@ import { AccessTokeResponse } from '../../../api/types/api.types';
 import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
 import { Nullable } from '../types/shared';
+import { isNill } from '../utils';
 import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
   readonly UNAUTHORIYECODE = 401;
+
   private isRefreshing: boolean = false;
+
   private readonly tokenSubject: BehaviorSubject<Nullable<string>> =
     new BehaviorSubject<Nullable<string>>(null);
 
@@ -75,9 +78,8 @@ export class RefreshInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
       return this.refreshToken(req, next);
-    } else {
-      return this.setTokenFromStore(req, next);
     }
+    return this.setTokenFromStore(req, next);
   }
 
   private refreshToken(
@@ -96,7 +98,7 @@ export class RefreshInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     return this.tokenSubject.pipe(
-      filter((token) => token !== null),
+      filter((token) => !isNill(token)),
       take(1),
       switchMap((jwt) => {
         return next.handle(this.addSetToken(req, jwt ?? ''));

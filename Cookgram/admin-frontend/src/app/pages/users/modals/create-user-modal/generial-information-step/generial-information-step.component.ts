@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
-import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
+import { AbstractStepComponent } from '../../../../../shared/directives/abstract-step.component';
 import { InputComponent } from '../../../../../shared/input/input.component';
 import { RequiredDot } from '../../../../../shared/required-dot/required-dot.componen';
 import { PossibleGenders } from '../create-user-modal.utils';
@@ -26,6 +26,6 @@ import { GeneralInformationStepGroup } from '../create-user-model.types';
     RequiredDot,
   ],
 })
-export class GeneralInformationStep extends AbstractStepDirective<GeneralInformationStepGroup> {
+export class GeneralInformationStep extends AbstractStepComponent<GeneralInformationStepGroup> {
   readonly genders: string[] = PossibleGenders();
 }

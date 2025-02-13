@@ -21,4 +21,4 @@ export enum AddressFields {
 
 export type AddressValue = ExtractFormControl<AddressGroup>;
 
-export type AddressRequiredMap = { [key in AddressFields]: boolean };
+export type AddressRequiredMap = { [ key in AddressFields ]: boolean };

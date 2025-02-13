@@ -4,18 +4,9 @@ import {
   IsTouchEvent,
   TouchChangeEventControl,
 } from './events-handlers/touch-events.handler';
+import { EventHandlerFunction } from './types';
 
-export type EventHandlerFunction<T extends ControlEvent> = (
-  event: T,
-  control: AbstractControl
-) => void;
 
-export enum InputTypes {
-  Text = 'text',
-  Password = 'password'
-};
-
-export type InputStringTypes = 'text' | 'password';
 
 const GetEventHandler: <T extends ControlEvent>(
   event: T

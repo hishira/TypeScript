@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -16,11 +15,11 @@ import {
   LoginPayload,
   TokenResponse,
 } from './types/api.types';
+import { AuthenticationLinks } from './consts/authentication.consts';
 
 @Injectable()
 export class AuthenticationApiService extends BaseApi {
   constructor(
-    private readonly httpService: HttpClient,
     private readonly store: Store<MainStore>,
     private readonly router: Router,
     private readonly sessionStorage: SessionStorageService
@@ -30,11 +29,15 @@ export class AuthenticationApiService extends BaseApi {
 
   login(loginPayload: LoginPayload): Observable<Optional<TokenResponse>> {
     return this.httpService
-      .post<TokenResponse>(this.prepareLink('auth/login'), loginPayload)
+      .post<TokenResponse>(
+        this.prepareLink(AuthenticationLinks.Login),
+        loginPayload
+      )
       .pipe(
         tap((loginResponse) => this.handleTokens(loginResponse)),
         catchError((error) => {
           console.error(error);
+
           return of(null);
         })
       );
@@ -47,7 +50,7 @@ export class AuthenticationApiService extends BaseApi {
           this.router.navigate(['/login']);
         }
         return this.httpService.post<AccessTokeResponse>(
-          this.prepareLink('auth/refresh-token'),
+          this.prepareLink(AuthenticationLinks.RefreshToken),
           { refreshToken: token }
         );
       })

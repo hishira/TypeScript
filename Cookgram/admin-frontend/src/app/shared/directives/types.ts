@@ -1,5 +1,4 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { Nullable } from '../types/shared';
 
 export type CheckType<T> = T extends { [key: string]: AbstractControl }
   ? FormGroup<T>
@@ -8,4 +7,4 @@ export type CheckType<T> = T extends { [key: string]: AbstractControl }
 export type Controlable =
   | { [key: string]: AbstractControl }
   | AbstractControl
-  | Nullable<unknown>;
+  | null;

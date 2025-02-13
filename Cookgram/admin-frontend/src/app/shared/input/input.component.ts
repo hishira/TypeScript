@@ -2,10 +2,9 @@ import { CommonModule, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   Optional,
   Self,
-  input,
+  input
 } from '@angular/core';
 import {
   AbstractControl,
@@ -19,10 +18,12 @@ import {
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { noop } from 'rxjs';
+import { BaseComponent } from '../components/base-component/base-component';
 import { ErrorsComponent } from '../errors/errors.component';
 import { RequiredDot } from '../required-dot/required-dot.componen';
 import { Nullable } from '../types/shared';
-import { EventHandler, InputStringTypes, InputTypes } from './input.utils';
+import { EventHandler } from './input.utils';
+import { InputStringTypes, InputTypes } from './types';
 
 @Component({
   selector: 'app-input',
@@ -38,7 +39,10 @@ import { EventHandler, InputStringTypes, InputTypes } from './input.utils';
     RequiredDot,
   ],
 })
-export class InputComponent implements ControlValueAccessor, OnInit, Validator {
+export class InputComponent
+  extends BaseComponent
+  implements ControlValueAccessor, Validator
+{
   readonly type = input<InputTypes | InputStringTypes>(InputTypes.Text);
   readonly required = input<boolean>(false);
   readonly labelClasses = input<string>('');
@@ -50,6 +54,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
   onTouch: () => void = noop;
 
   constructor(@Optional() @Self() private readonly ngControl: NgControl) {
+    super();
     this.ngControl && (this.ngControl.valueAccessor = this);
   }
 
@@ -57,14 +62,20 @@ export class InputComponent implements ControlValueAccessor, OnInit, Validator {
     return this.control.errors;
   }
 
-  registerOnValidatorChange?(fn: () => void): void {}
+  registerOnValidatorChange?(fn: () => void): void {
+    /* TODO document why this method 'registerOnValidatorChange' is empty */
+  }
 
-  ngOnInit(): void {
+  override initialize(): void {
     this.inheritValidatorFromControl();
-    this.ngControl.control?.events?.subscribe((event) =>
-      EventHandler(event, this.control)
+    this.subscription.add(
+      this.ngControl.control?.events?.subscribe((event) =>
+        EventHandler(event, this.control)
+      )
     );
-    this.control.valueChanges.subscribe((v) => this.onChange(v));
+    this.subscription.add(
+      this.control.valueChanges.subscribe((v) => this.onChange(v))
+    );
   }
 
   writeValue(obj: Nullable<string>): void {

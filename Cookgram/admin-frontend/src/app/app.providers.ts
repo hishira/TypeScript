@@ -17,6 +17,7 @@ export const ServiceProviders: Providers[] = [
   UserApiSerivce,
   ToastService,
 ];
+
 export const Http_Interceptors: Providers[] = [
   SerivceErrorProvider,
   RefreshInterceptorProvider,

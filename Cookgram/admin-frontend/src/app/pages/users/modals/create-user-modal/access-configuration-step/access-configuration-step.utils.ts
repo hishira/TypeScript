@@ -20,6 +20,7 @@ const RoleMapper: RoleMap = {
   [Role.Director]: DirectorRoles,
   [Role.Admin]: AdminRoles,
   [Role.SuperAdmin]: SuperAdminRoles,
+  [Role.All]: AllRoles,
 };
 
 export const PrepareRoles = (currentRole: Role): Role[] =>

@@ -5,7 +5,7 @@ import { AddressComponent } from '../../../../../shared/components/address/addre
 import { EmptyAddressRequiredMap } from '../../../../../shared/components/address/address.utils';
 import { AddressRequiredMap } from '../../../../../shared/components/address/types';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
-import { AbstractStepDirective } from '../../../../../shared/directives/abstract-step.directive';
+import { AbstractStepComponent } from '../../../../../shared/directives/abstract-step.component';
 import { AddressControl } from '../create-user-model.types';
 @Component({
   selector: 'app-address-step',
@@ -18,7 +18,7 @@ import { AddressControl } from '../create-user-model.types';
     AddressComponent,
   ],
 })
-export class AddressStepComponent extends AbstractStepDirective<
+export class AddressStepComponent extends AbstractStepComponent<
   FormControl<AddressControl>
 > {
   readonly addressMap: AddressRequiredMap = {
