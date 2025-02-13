@@ -1,3 +1,4 @@
 export enum AuthenticationLinks {
-    Login = 'auth/login'
+    Login = 'auth/login',
+    RefreshToken = 'auth/refresh-token'
 }

@@ -50,7 +50,7 @@ export class AuthenticationApiService extends BaseApi {
           this.router.navigate(['/login']);
         }
         return this.httpService.post<AccessTokeResponse>(
-          this.prepareLink('auth/refresh-token'),
+          this.prepareLink(AuthenticationLinks.RefreshToken),
           { refreshToken: token }
         );
       })

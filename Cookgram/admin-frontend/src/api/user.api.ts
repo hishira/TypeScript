@@ -16,7 +16,7 @@ export class UserApiSerivce extends BaseApi {
     return this.httpService.post<UserList[]>(
       this.prepareLink(UserLinks.List),
       {}
-    );
+    );asd
   }
 
   currentUserInfo(): Observable<Readonly<ContextUser>> {
