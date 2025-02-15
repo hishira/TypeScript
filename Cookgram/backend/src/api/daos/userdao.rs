@@ -2,15 +2,15 @@ use async_trait::async_trait;
 use mongodb::Database;
 use sqlx::{
     postgres::{PgQueryResult, PgRow},
-    Executor, FromRow, Pool, Postgres, QueryBuilder,
+    Executor, Pool, Postgres, QueryBuilder,
 };
 use uuid::Uuid;
 
 use crate::{
     api::{
-        dtos::userdto::{userdto::UserFilterOption, userlistdto::UserListDto},
+        dtos::userdto::userdto::UserFilterOption,
         queries::{actionquery::ActionQueryBuilder, query::Query, userquery::userquery::UserQuery},
-        services::userservice::UserService, utils::user::user_utils::UserUtils,
+        utils::user::user_utils::UserUtils,
     },
     core::user::user::User,
 };
@@ -69,10 +69,7 @@ impl UserDAO {
     pub async fn user_list(&self, params: UserFilterOption) -> Result<Vec<User>, sqlx::Error> {
         let mut find_query = UserQuery::find(params);
         let result = find_query.build().fetch_all(&self.pool).await?;
-        Ok(result
-            .iter()
-            .map(UserUtils::get_from_row_ref)
-            .collect())
+        Ok(result.iter().map(UserUtils::get_from_row_ref).collect())
     }
 
     pub async fn create_user_connection(
