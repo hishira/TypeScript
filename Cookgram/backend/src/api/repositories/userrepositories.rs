@@ -1,6 +1,6 @@
 use crate::{
     api::{
-        daos::{dao::DAO, useraddressdao::UserAddressDAO, userdao::UserDAO},
+        daos::{authenticationdao::AuthenticationDAO, dao::DAO, useraddressdao::UserAddressDAO, userdao::UserDAO},
         dtos::userdto::userdto::UserFilterOption,
         queries::{
             actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery,
@@ -25,6 +25,7 @@ pub struct UserRepositories {
     pub db_context: Database,
     pub user_dao: UserDAO,
     pub user_address_dao: UserAddressDAO,
+
 }
 impl UserRepositories {
     async fn create_user_using_transaction(

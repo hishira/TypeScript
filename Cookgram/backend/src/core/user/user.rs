@@ -5,7 +5,7 @@ use crate::core::{
     address::address::Address,
     entity::{entity::IdGenerator, Entity},
     meta::meta::Meta,
-    role::{role::Roles, userrole::UserRole},
+    role::role::Roles,
     state::{entitystate::EntityState, state::State},
 };
 
@@ -80,7 +80,7 @@ mod tests {
     use serde_json::json;
     use time::{Date, Month, OffsetDateTime};
 
-    use crate::core::{meta::metaid::MetaId, user::contact::Contacts};
+    use crate::core::{meta::metaid::MetaId, role::userrole::UserRole, user::contact::Contacts};
 
     use super::*;
 
