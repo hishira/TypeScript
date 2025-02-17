@@ -48,4 +48,14 @@ impl Authentication {
             password_is_temporary: auth.password_is_temporary.unwrap_or(false),
         }
     }
+
+    pub fn from_credentials(user_id: UserId, credentials: Credentials) -> Self {
+        Self {
+            user_id,
+            password: credentials.password,
+            password_is_temporary: Some(credentials.password_is_temporary),
+            username: credentials.username,
+
+        }
+    }
 }

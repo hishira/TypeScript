@@ -16,7 +16,6 @@ use crate::{
             userdto::{
                 operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
                 userdto::{from_user_to_user_dto, UserDTO, UserFilterOption},
-                userlistdto::UserListDto,
             },
         },
         errors::{autherror::AuthError, responseerror::ResponseError},
@@ -30,7 +29,7 @@ use crate::{
         utils::jwt::jwt::Claims,
         validators::dtovalidator::ValidateDtos,
     },
-    core::{event::eventTask::EventTask, user::user::User},
+    core::event::eventTask::EventTask,
     database::{init::Database, redis::redisdatabase::RedisDatabase},
 };
 

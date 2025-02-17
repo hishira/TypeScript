@@ -39,6 +39,7 @@ impl UserRepositories {
             .user_dao
             .create(entity.clone(), Some(transaction.deref_mut()))
             .await;
+        
         let address_resp: Option<Result<PgQueryResult, Error>>;
         if (entity.address.is_some()) {
             address_resp = Some(
