@@ -4,14 +4,15 @@ use crate::{
     api::{
         dtos::userdto::credentialsdto::CredentialsFilterOption,
         queries::{
-            actionquery::ActionQueryBuilder, userquery::authenticationquery::AuthenticationQuery,
+            actionquery::ActionQueryBuilder, query::Query, userquery::authenticationquery::AuthenticationQuery
         },
     },
     core::user::{authentication::Authentication, credentials::Credentials},
 };
 use async_trait::async_trait;
 
-use super::dao::{SmallDAO, DAO};
+use super::dao::DAO;
+
 
 #[derive(Clone)]
 pub struct AuthenticationDAO {
@@ -41,7 +42,8 @@ impl DAO<Authentication, CredentialsFilterOption> for AuthenticationDAO {
         &self,
         option: CredentialsFilterOption,
     ) -> Result<Vec<Authentication>, sqlx::Error> {
-        todo!();
+        let mut find_query = AuthenticationQuery::find(option);
+        Ok(vec![])
     }
 
     async fn find_by_id(&self, id: uuid::Uuid) -> Result<Authentication, sqlx::Error> {

@@ -39,6 +39,7 @@ impl DAO<User, UserFilterOption> for UserDAO {
     where
         E: Executor<'a, Database = Postgres> + Send,
     {
+        //TODO: Check if can be refactor
         let mut create_user_query = UserQuery::create(entity.clone());
         let auth: Authentication =
             Authentication::from_credentials(entity.id.clone(), entity.credentials);
@@ -94,7 +95,6 @@ impl UserDAO {
         let result = find_query.build().fetch_all(&self.pool).await?;
         Ok(result.iter().map(UserUtils::get_from_row_ref).collect())
     }
-
 
     pub async fn create_user_connection(
         &self,

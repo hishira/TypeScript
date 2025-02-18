@@ -1,15 +1,16 @@
 use axum::Json;
-use jsonwebtoken::get_current_timestamp;
 
 use crate::{
     api::{
         dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::{operationuserdto::UserAuthDto, userdto::UserFilterOption},
-        }, errors::{autherror::AuthError, responseerror::ResponseError}, repositories::{repositories::Repository, userrepositories::UserRepositories}, router::authrouter::AuthDTO, services::tokenservice::TokenService, utils::{
-            jwt::{jwt::Claims, tokens::JwtTokens},
-            password_worker::password_worker::PasswordWorker,
-        }
+        },
+        errors::{autherror::AuthError, responseerror::ResponseError},
+        repositories::{repositories::Repository, userrepositories::UserRepositories},
+        router::authrouter::AuthDTO,
+        services::tokenservice::TokenService,
+        utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},
     },
     core::user::user::User,
 };
@@ -35,7 +36,8 @@ impl AuthService {
         let user = self
             .find_user_for_login(params.clone().username.unwrap())
             .await?;
-        let (access_token, refresh_token) = TokenService::get_access_refresh_cliaims(&params, user.clone());
+        let (access_token, refresh_token) =
+            TokenService::get_access_refresh_cliaims(&params, user.clone());
         let tokens = TokenService::generate_tokens(&access_token, &refresh_token)?;
         tracing::info!("Token for user {} generate", user.id.get_id());
         self.get_tokens_if_passwords_match(params.password, user.credentials.password, tokens)
@@ -72,5 +74,4 @@ impl AuthService {
             .await
             .map(|_| Json(TokenService::prepare_auth_from_token(tokens)))
     }
-
 }

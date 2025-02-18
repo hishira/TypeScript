@@ -13,9 +13,9 @@ pub struct CredentialsDTO {
 
 #[derive(Clone, Deserialize)]
 pub struct CredentialsFilterOption {
-    pub username: String,
-    pub password: String,
-    pub password_is_temporary: bool,
+    pub username: Option<String>,
+    pub password: Option<String>,
+    pub password_is_temporary: Option<bool>,
 }
 
 pub fn get_credentials_dto_from_credentials(credentials: Credentials) -> CredentialsDTO {
