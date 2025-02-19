@@ -187,6 +187,7 @@ create view USERLOGIN as (
     users.fax,
     auth.username,
     auth.password,
+    auth.passowrd_is_temporary,
     meta.create_date,
     meta.edit_date,
     users.meta_id,

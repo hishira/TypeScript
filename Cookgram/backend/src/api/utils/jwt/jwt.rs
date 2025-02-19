@@ -3,11 +3,11 @@ use axum_extra::{
     headers::{authorization::Bearer, Authorization},
     TypedHeader,
 };
-use jsonwebtoken::{ Algorithm, Validation};
+use jsonwebtoken::{Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    api::{ dtos::userdto::operationuserdto::UserAuthDto, errors::autherror::AuthError},
+    api::{dtos::userdto::operationuserdto::UserAuthDto, errors::autherror::AuthError},
     core::{role::role::Roles, user::user::User},
 };
 
@@ -41,12 +41,12 @@ impl Claims {
     pub fn access_token(params: &UserAuthDto, user: User, exp: u64) -> Self {
         Self::new(&params, user, exp)
     }
-    
+
     pub fn new(params: &UserAuthDto, user: User, exp: u64) -> Self {
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
                 user_id: user.id.get_id(),
-                user_info: "TEst".to_string(),
+                user_info: "Test".to_string(),
                 exp,
                 role: Some(user.role),
             },
