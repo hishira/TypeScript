@@ -55,7 +55,12 @@ impl DAO<Authentication, CredentialsFilterOption> for AuthenticationDAO {
     }
 
     async fn find_by_id(&self, id: uuid::Uuid) -> Result<Authentication, sqlx::Error> {
-        todo!()
+        let mut find_query = AuthenticationQuery::find_by_id(id);
+        find_query
+            .build()
+            .map(get_authentication_from_row)
+            .fetch_one(&self.pool)
+            .await
     }
 
     async fn delete(&self, entity: Authentication) -> Result<PgQueryResult, sqlx::Error> {

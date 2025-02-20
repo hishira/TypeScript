@@ -7,14 +7,19 @@ use validator::Validate;
 use crate::{
     api::{
         appstate::{appstate::AppState, authstate::AuthState},
-        daos::{useraddressdao::UserAddressDAO, userdao::UserDAO},
+        daos::{
+            authenticationdao::AuthenticationDAO, useraddressdao::UserAddressDAO, userdao::UserDAO,
+        },
         dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::operationuserdto::{UserAuthDto, UserRegisterDto},
         },
         errors::{autherror::AuthError, responseerror::ResponseError},
         queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
-        repositories::{eventrepository::EventRepository, userrepositories::UserRepositories},
+        repositories::{
+            authenticationrepository::AuthenticationRepository, eventrepository::EventRepository,
+            userrepositories::UserRepositories,
+        },
         services::authservice::AuthService,
         utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},
         validators::dtovalidator::ValidateDtos,
@@ -33,6 +38,7 @@ pub struct AuthDTO {
 }
 pub struct AuthRouter {
     user_repo: UserRepositories,
+    auth_repo: AuthenticationRepository,
     event_repo: EventRepository,
     redis: RedisDatabase,
 }
@@ -60,6 +66,14 @@ impl AuthRouter {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
                     .unwrap(),
                 event_query: EventQuery {},
+            },
+            auth_repo: AuthenticationRepository {
+                db: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool).unwrap(),
+                db_context: database.get_mongo_database(),
+                auth_dao: AuthenticationDAO {
+                    pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
+                        .unwrap(),
+                },
             },
             redis: database.redis.clone(),
         }

@@ -25,7 +25,7 @@ impl Repository<Authentication, CredentialsFilterOption, sqlx::Error> for Authen
     }
 
     async fn find_by_id(&self, id: uuid::Uuid) -> Authentication {
-        todo!()
+        self.auth_dao.find_by_id(id).await.unwrap()
     }
 
     async fn delete(&self, option: Authentication) -> Authentication {

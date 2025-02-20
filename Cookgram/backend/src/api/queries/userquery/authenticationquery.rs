@@ -80,6 +80,10 @@ impl Query<CredentialsFilterOption> for AuthenticationQuery {
     }
 
     fn find_by_id(id: uuid::Uuid) -> QueryBuilder<'static, Postgres> {
-        todo!()
+        // Find only by user_id, table not has id
+        let mut find_query: QueryBuilder<'static, Postgres> =
+            QueryBuilder::new("SELECT * FROM USERLOGIN WHERE id =  ");
+        find_query.push_bind(id);
+        find_query
     }
 }

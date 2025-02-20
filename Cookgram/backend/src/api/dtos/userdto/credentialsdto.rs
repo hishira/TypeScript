@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::core::user::credentials::{Credentials};
+use crate::core::user::credentials::Credentials;
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -9,7 +9,6 @@ pub struct CredentialsDTO {
     #[serde(skip_serializing)]
     pub password_is_temporary: bool,
 }
-
 
 #[derive(Clone, Deserialize)]
 pub struct CredentialsFilterOption {
