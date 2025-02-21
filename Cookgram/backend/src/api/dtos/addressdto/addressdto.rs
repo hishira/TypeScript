@@ -3,7 +3,7 @@ use sqlx::{postgres::PgRow, FromRow, Row};
 
 use crate::core::address::location::Location;
 
-#[derive(Debug, Serialize)]
+#[derive(PartialEq, Debug, Clone, Serialize)]
 pub struct AddressDto {
     pub address: Option<String>,
     pub house: String,
