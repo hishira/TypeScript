@@ -4,6 +4,7 @@ use crate::{
     api::dtos::addressdto::addressdto::AddressDto,
     core::{
         address::address::Address,
+        entity::Entity,
         meta::meta::Meta,
         state::{entitystate::EntityState, state::State},
         user::{
@@ -14,8 +15,7 @@ use crate::{
 
 use super::{credentialsdto::CredentialsDTO, personalinformationdto::PersolanInformationDTO};
 
-
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AuthenticationUserDto {
     pub id: UserId,
@@ -24,4 +24,10 @@ pub struct AuthenticationUserDto {
     pub address: Option<AddressDto>,
     pub meta: Meta,
     pub state: State<EntityState>,
+}
+
+impl Entity for AuthenticationUserDto {
+    fn generate_id() -> impl crate::core::entity::entity::IdGenerator {
+        UserId::default()
+    }
 }

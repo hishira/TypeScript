@@ -118,6 +118,7 @@ impl ApplicationRouter for AuthRouter {
                 app_state,
                 auth_service: AuthService {
                     user_repo: self.user_repo.clone(),
+                    auth_repo: self.auth_repo.clone(),
                     pass_worker: PasswordWorker::new(10, 4).unwrap(),
                 },
             })

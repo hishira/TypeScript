@@ -1,6 +1,6 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(PartialEq, Debug, Clone, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Deserialize, Serialize)]
 pub struct ContactDTO {
     pub email: Option<String>,
     pub phone: Option<String>,

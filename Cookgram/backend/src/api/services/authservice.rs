@@ -7,7 +7,7 @@ use crate::{
             userdto::{operationuserdto::UserAuthDto, userdto::UserFilterOption},
         },
         errors::{autherror::AuthError, responseerror::ResponseError},
-        repositories::{repositories::Repository, userrepositories::UserRepositories},
+        repositories::{authenticationrepository::AuthenticationRepository, repositories::Repository, userrepositories::UserRepositories},
         router::authrouter::AuthDTO,
         services::tokenservice::TokenService,
         utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},
@@ -18,6 +18,7 @@ use crate::{
 #[derive(Clone)]
 pub struct AuthService {
     pub user_repo: UserRepositories,
+    pub auth_repo: AuthenticationRepository,
     pub pass_worker: PasswordWorker,
 }
 

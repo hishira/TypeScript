@@ -132,7 +132,7 @@ impl UserUtils {
                     .unwrap_or("Not found ".to_string()),
                 pg_row.try_get("passowrd_is_temporary").unwrap_or(false),
             ),
-            meta: Meta::meta_based_on_id(pg_row.get("meta_id")), //Meta::new(), //TODO: Inner join table to retrieve,
+            meta: Meta::meta_based_on_id(pg_row.get("meta_id")),
             role: Self::retrive_role_from_row(&pg_row).unwrap(),
             address: None,
             state: State {

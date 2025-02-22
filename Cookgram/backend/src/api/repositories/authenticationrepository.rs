@@ -1,7 +1,7 @@
 use mongodb::Database;
 use sqlx::{Pool, Postgres};
 
-use crate::{api::{daos::{authenticationdao::AuthenticationDAO, dao::DAO}, dtos::userdto::{credentialsdto::CredentialsFilterOption, userdto::UserFilterOption}}, core::user::{authentication::Authentication, user::User}};
+use crate::{api::{daos::{authenticationdao::AuthenticationDAO, dao::DAO}, dtos::userdto::{authenticationuserdto::AuthenticationUserDto, credentialsdto::CredentialsFilterOption, userdto::UserFilterOption}}, core::user::{authentication::Authentication, user::User}};
 
 use super::repositories::Repository;
 
@@ -15,24 +15,24 @@ pub struct AuthenticationRepository{
 
 impl AuthenticationRepository {}
 
-impl Repository<Authentication, CredentialsFilterOption, sqlx::Error> for AuthenticationRepository {
-    async fn create(&self, entity: Authentication) -> Authentication {
+impl Repository<AuthenticationUserDto, CredentialsFilterOption, sqlx::Error> for AuthenticationRepository {
+    async fn create(&self, entity: AuthenticationUserDto) -> AuthenticationUserDto {
         todo!()
     }
 
-    async fn find(&self, option: CredentialsFilterOption) -> Result<Vec<Authentication>, sqlx::Error> {
-        self.auth_dao.find(option).await
-    }
-
-    async fn find_by_id(&self, id: uuid::Uuid) -> Authentication {
-        self.auth_dao.find_by_id(id).await.unwrap()
-    }
-
-    async fn delete(&self, option: Authentication) -> Authentication {
+    async fn find(&self, option: CredentialsFilterOption) -> Result<Vec<AuthenticationUserDto>, sqlx::Error> {
         todo!()
     }
 
-    async fn update(&self, update_entity: Authentication) -> Authentication {
+    async fn find_by_id(&self, id: uuid::Uuid) -> AuthenticationUserDto {
+        todo!()
+    }
+
+    async fn delete(&self, option: AuthenticationUserDto) -> AuthenticationUserDto {
+        todo!()
+    }
+
+    async fn update(&self, update_entity: AuthenticationUserDto) -> AuthenticationUserDto {
         todo!()
     }
 }
