@@ -1,23 +1,25 @@
 use axum::Json;
 
-use crate::{
-    api::{
-        dtos::{
-            tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
-            userdto::{operationuserdto::UserAuthDto, userdto::UserFilterOption},
+use crate::api::{
+    dtos::{
+        tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
+        userdto::{
+            authenticationuserdto::AuthenticationUserDto, credentialsdto::CredentialsFilterOption,
+            operationuserdto::UserAuthDto, userdto::UserFilterOption,
         },
-        errors::{autherror::AuthError, responseerror::ResponseError},
-        repositories::{authenticationrepository::AuthenticationRepository, repositories::Repository, userrepositories::UserRepositories},
-        router::authrouter::AuthDTO,
-        services::tokenservice::TokenService,
-        utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},
     },
-    core::user::user::User,
+    errors::{autherror::AuthError, responseerror::ResponseError},
+    repositories::{
+        authenticationrepository::AuthenticationRepository, repositories::Repository,
+        userrepositories::UserRepositories,
+    },
+    router::authrouter::AuthDTO,
+    services::tokenservice::TokenService,
+    utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},
 };
 
 #[derive(Clone)]
 pub struct AuthService {
-    pub user_repo: UserRepositories,
     pub auth_repo: AuthenticationRepository,
     pub pass_worker: PasswordWorker,
 }
@@ -46,9 +48,12 @@ impl AuthService {
             .map_err(|e| ResponseError::from(e))
     }
 
-    async fn find_user_for_login(&self, username: String) -> Result<User, AuthError> {
-        let filter = UserFilterOption::from_only_usernamr(username);
-        let users = self.user_repo.find(filter.clone()).await;
+    async fn find_user_for_login(
+        &self,
+        username: String,
+    ) -> Result<AuthenticationUserDto, AuthError> {
+        let filter = CredentialsFilterOption::from_usernam(username);
+        let users = self.auth_repo.find(filter).await;
         let users = match users {
             Ok(users) => users,
             Err(error) => {

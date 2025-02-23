@@ -1,10 +1,8 @@
+use super::contactdto::ContactDTO;
+use crate::core::user::personalinformation::Gender;
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 use validator::Validate;
-
-use crate::core::user::personalinformation::Gender;
-
-use super::contactdto::ContactDTO;
 
 #[derive(PartialEq, Debug, Clone, Deserialize, Validate, Serialize)]
 #[serde(rename_all = "camelCase")]

@@ -1,17 +1,14 @@
 use axum::Json;
 use jsonwebtoken::get_current_timestamp;
 
-use crate::{
-    api::{
-        dtos::{
-            tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
-            userdto::operationuserdto::UserAuthDto,
-        },
-        errors::{autherror::AuthError, responseerror::ResponseError},
-        router::authrouter::AuthDTO,
-        utils::jwt::{jwt::Claims, tokens::JwtTokens},
+use crate::api::{
+    dtos::{
+        tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
+        userdto::{authenticationuserdto::AuthenticationUserDto, operationuserdto::UserAuthDto},
     },
-    core::user::user::User,
+    errors::{autherror::AuthError, responseerror::ResponseError},
+    router::authrouter::AuthDTO,
+    utils::jwt::{jwt::Claims, tokens::JwtTokens},
 };
 
 pub struct TokenService {}
@@ -24,7 +21,10 @@ impl TokenService {
         JwtTokens::generete_from_claims(&access_claims, &refresh_claims)
     }
 
-    pub fn get_access_refresh_cliaims(params: &UserAuthDto, user: User) -> (Claims, Claims) {
+    pub fn get_access_refresh_cliaims(
+        params: &UserAuthDto,
+        user: AuthenticationUserDto,
+    ) -> (Claims, Claims) {
         let time_stamp = get_current_timestamp();
         (
             Claims::access_token(&params, user.clone(), time_stamp),

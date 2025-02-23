@@ -19,6 +19,16 @@ pub struct CredentialsFilterOption {
     pub password_is_temporary: Option<bool>,
 }
 
+impl CredentialsFilterOption {
+    pub fn from_usernam(username: String) -> Self {
+        Self {
+            username: Some(username),
+            password: None,
+            password_is_temporary: None,
+        }
+    }
+}
+
 pub fn get_credentials_dto_from_credentials(credentials: Credentials) -> CredentialsDTO {
     CredentialsDTO {
         username: credentials.username,

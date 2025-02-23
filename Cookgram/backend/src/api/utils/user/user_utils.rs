@@ -142,7 +142,7 @@ impl UserUtils {
         }
     }
 
-    fn retrive_role_from_row(pg_row: &PgRow) -> Result<Roles, sqlx::Error> {
+    pub fn retrive_role_from_row(pg_row: &PgRow) -> Result<Roles, sqlx::Error> {
         let role: Result<RoleDto, sqlx::Error> = pg_row.try_get("role");
         match role {
             Ok(res) => Ok(map_to_roles(res)),

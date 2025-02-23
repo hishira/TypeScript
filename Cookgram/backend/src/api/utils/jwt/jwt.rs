@@ -7,7 +7,7 @@ use jsonwebtoken::{Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    api::{dtos::userdto::operationuserdto::UserAuthDto, errors::autherror::AuthError},
+    api::{dtos::userdto::{authenticationuserdto::AuthenticationUserDto, operationuserdto::UserAuthDto}, errors::autherror::AuthError},
     core::{role::role::Roles, user::user::User},
 };
 
@@ -34,15 +34,15 @@ impl Claims {
         Ok(Keys::encode(&token_data.claims)?)
     }
 
-    pub fn refresh_token(params: &UserAuthDto, user: User, exp: u64) -> Self {
+    pub fn refresh_token(params: &UserAuthDto, user: AuthenticationUserDto, exp: u64) -> Self {
         Self::new(&params, user, exp)
     }
 
-    pub fn access_token(params: &UserAuthDto, user: User, exp: u64) -> Self {
+    pub fn access_token(params: &UserAuthDto, user: AuthenticationUserDto, exp: u64) -> Self {
         Self::new(&params, user, exp)
     }
 
-    pub fn new(params: &UserAuthDto, user: User, exp: u64) -> Self {
+    pub fn new(params: &UserAuthDto, user: AuthenticationUserDto, exp: u64) -> Self {
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
                 user_id: user.id.get_id(),

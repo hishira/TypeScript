@@ -21,7 +21,7 @@ impl Repository<AuthenticationUserDto, CredentialsFilterOption, sqlx::Error> for
     }
 
     async fn find(&self, option: CredentialsFilterOption) -> Result<Vec<AuthenticationUserDto>, sqlx::Error> {
-        todo!()
+        self.auth_dao.find(option).await
     }
 
     async fn find_by_id(&self, id: uuid::Uuid) -> AuthenticationUserDto {

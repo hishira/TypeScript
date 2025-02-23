@@ -6,6 +6,7 @@ use crate::{
         address::address::Address,
         entity::Entity,
         meta::meta::Meta,
+        role::role::{Role, Roles},
         state::{entitystate::EntityState, state::State},
         user::{
             credentials::Credentials, personalinformation::PersonalInformation, userid::UserId,
@@ -23,6 +24,7 @@ pub struct AuthenticationUserDto {
     pub credentials: CredentialsDTO,
     pub address: Option<AddressDto>,
     pub meta: Meta,
+    pub role: Roles,
     pub state: State<EntityState>,
 }
 

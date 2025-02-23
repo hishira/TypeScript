@@ -37,7 +37,6 @@ pub struct AuthDTO {
     pub refresh_token: String,
 }
 pub struct AuthRouter {
-    user_repo: UserRepositories,
     auth_repo: AuthenticationRepository,
     event_repo: EventRepository,
     redis: RedisDatabase,
@@ -46,22 +45,6 @@ pub struct AuthRouter {
 impl AuthRouter {
     pub fn new(database: &Database) -> Self {
         Self {
-            user_repo: UserRepositories {
-                pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
-                    .unwrap(),
-                user_queries: UserQuery::new(None, None, None),
-                db_context: database.get_mongo_database(),
-                user_dao: UserDAO {
-                    pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
-                        .unwrap(),
-                    db_context: database.get_mongo_database(),
-                },
-                user_address_dao: UserAddressDAO {
-                    db_context: database.get_mongo_database(),
-                    pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
-                        .unwrap(),
-                },
-            },
             event_repo: EventRepository {
                 pool: <std::option::Option<Pool<Postgres>> as Clone>::clone(&database.pool)
                     .unwrap(),
@@ -107,7 +90,7 @@ impl AuthRouter {
 impl ApplicationRouter for AuthRouter {
     fn get_router(&self) -> axum::Router {
         let app_state = AppState {
-            repo: self.user_repo.clone(),
+            repo: self.auth_repo.clone(),
             event_repo: self.event_repo.clone(),
             redis_database: self.redis.clone(),
         };
@@ -117,7 +100,6 @@ impl ApplicationRouter for AuthRouter {
             .with_state(AuthState {
                 app_state,
                 auth_service: AuthService {
-                    user_repo: self.user_repo.clone(),
                     auth_repo: self.auth_repo.clone(),
                     pass_worker: PasswordWorker::new(10, 4).unwrap(),
                 },
