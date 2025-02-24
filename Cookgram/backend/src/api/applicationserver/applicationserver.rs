@@ -72,7 +72,7 @@ impl ApplicationServer {
     }
     pub async fn start_main_app() {
         match ApplicationLog::register_tracing() {
-            Ok(ok) => {
+            Ok(_) => {
                 tracing::info!("Tracing successfull created");
             }
             Err(err) => {

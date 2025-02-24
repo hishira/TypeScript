@@ -19,10 +19,7 @@ use crate::{
     core::{
         meta::{meta::Meta, metaid::MetaId},
         state::{entitystate::EntityState, state::State},
-        user::{
-            authentication::Authentication, credentials::Credentials, personalinformation::Gender,
-            userid::UserId,
-        },
+        user::{authentication::Authentication, personalinformation::Gender, userid::UserId},
     },
 };
 use async_trait::async_trait;
@@ -78,12 +75,13 @@ impl DAO<AuthenticationUserDto, CredentialsFilterOption> for AuthenticationDAO {
             .await
     }
 
-    async fn delete(&self, entity: AuthenticationUserDto) -> Result<PgQueryResult, sqlx::Error> {
+    async fn delete(&self, _entity: AuthenticationUserDto) -> Result<PgQueryResult, sqlx::Error> {
         todo!()
     }
 }
 
 fn get_authentication_from_row(row: PgRow) -> Result<AuthenticationUserDto, sqlx::Error> {
+    let gender: Gender = row.try_get("gender")?; 
     Ok(AuthenticationUserDto {
         id: UserId::from_id(row.try_get("id")?),
         personal_information: PersolanInformationDTO {
@@ -91,25 +89,22 @@ fn get_authentication_from_row(row: PgRow) -> Result<AuthenticationUserDto, sqlx
             last_name: row.try_get("last_name")?,
             brithday: row.try_get("brithday")?,
             email: row.try_get("email").ok(),
-            gender: match row.try_get::<String, _>("gender")?.as_str() {
-                "Man" => Gender::Man,
-                "Woman" => Gender::Woman,
-                _ => Gender::None,
-            },
+            gender,
+            // gender: match row.try_get::<String, _>("gender")?.as_str() {
+            //     "Man" => Gender::Man,
+            //     "Woman" => Gender::Woman,
+            //     _ => Gender::None,
+            // },
             contacts: None,
         },
         role: UserUtils::retrive_role_from_row(&row)?,
         credentials: CredentialsDTO {
             username: row.try_get("username")?,
             password: row.try_get("password")?,
-            password_is_temporary: row.try_get("password_is_temporary")?,
+            password_is_temporary: true,
         },
         address: None, // Można dodać mapping, jeśli dane są dostępne
-        meta: Meta {
-            id: MetaId::from_id(row.try_get("meta_id")?),
-            create_date: row.try_get("create_date")?,
-            edit_date: row.try_get("edit_date")?,
-        },
+        meta: Meta::new(),
         state: State {
             current: EntityState::Active,
             previous: None,

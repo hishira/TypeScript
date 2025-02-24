@@ -4,7 +4,6 @@ use crate::core::{
     state::state::State,
 };
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 use super::notificationid::NotificationId;
 

@@ -54,11 +54,11 @@ CREATE TABLE IF NOT EXISTS AUTHENTICATION (
 );
 CREATE TABLE IF NOT EXISTS USERS (
     id uuid NOT NULL,
-    first_name varchar(255) DEFAULT NULL,
-    last_name varchar(255) DEFAULT null,
-    brithday TIMESTAMP DEFAULT NULL,
+    first_name varchar(255) DEFAULT '',
+    last_name varchar(255) DEFAULT '',
+    brithday TIMESTAMPTZ DEFAULT now(),
     email VARCHAR(255) NOT NULL,
-    gender Gender DEFAULT NULL,
+    gender Gender DEFAULT 'None',
     meta_id uuid,
     role Role DEFAULT 'User',
     current_state State DEFAULT 'Draft',
@@ -75,8 +75,17 @@ values (
         '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
         '2024-05-05 19:10:25-07',
         '2024-05-05 19:10:25-07'
-    )
-RETURNING id;
+    ),
+    (
+        '63c23f3e-1179-4190-8deb-c4bae7f5c0c0',
+        '2024-05-05 19:10:25-07',
+        '2024-05-05 19:10:25-07'
+    ),
+    (
+        '63c23f3c-1179-4190-8deb-c4bae7f5c0c0',
+        '2024-05-05 19:10:25-07',
+        '2024-05-05 19:10:25-07'
+    );
 insert into USERS (
         id,
         email,
@@ -90,18 +99,18 @@ values (
         '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
         'SuperAdmin',
         'Active'
-    );
-values (
-        'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
+    ),
+    (
+        'd410c8d2-cf55-47cb-b8c1-cb2d95d82846',
         'manager@example.com',
-        '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
+        '63c23f3e-1179-4190-8deb-c4bae7f5c0c0',
         'Manager',
         'Active'
-    );
-values (
-        'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
+    ),
+    (
+        'd410c8d3-cf55-47cb-b8c1-cb2d95d82846',
         'director@example.com',
-        '63c23f3f-1179-4190-8deb-c4bae7f5c0c0',
+        '63c23f3c-1179-4190-8deb-c4bae7f5c0c0',
         'Director',
         'Active'
     );
@@ -110,14 +119,14 @@ values (
         'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
         'admin',
         '$2y$10$17C2N8nNhQgGxFQAZenHs.u0Qa2DD0aeAe5wIXwWej9fihtFE1rQO'
-    );
-values (
-        'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
+    ),
+    (
+        'd410c8d2-cf55-47cb-b8c1-cb2d95d82846',
         'manager',
         '$2y$10$17C2N8nNhQgGxFQAZenHs.u0Qa2DD0aeAe5wIXwWej9fihtFE1rQO'
-    );
-values (
-        'd410c8d1-cf55-47cb-b8c1-cb2d95d82846',
+    ),
+    (
+        'd410c8d3-cf55-47cb-b8c1-cb2d95d82846',
         'director',
         '$2y$10$17C2N8nNhQgGxFQAZenHs.u0Qa2DD0aeAe5wIXwWej9fihtFE1rQO'
     );
@@ -173,27 +182,27 @@ CREATE view ADDRESSUSERS as (
         )
 );
 create view USERLOGIN as (
-    users.id,
-    users.email,
-    users.first_name,
-    users.last_name,
-    users.role,
-    users.current_state,
-    users.previous_state,
-    users.brithday,
-    users.contract_id,
-    users.gender,
-    users.phone,
-    users.fax,
-    auth.username,
-    auth.password,
-    auth.passowrd_is_temporary,
-    meta.create_date,
-    meta.edit_date,
-    users.meta_id,
+    select users.id,
+        users.email,
+        users.first_name,
+        users.last_name,
+        users.role,
+        users.current_state,
+        users.previous_state,
+        users.brithday,
+        users.contract_id,
+        users.gender,
+        users.phone,
+        users.fax,
+        auth.username,
+        auth.password,
+        auth.passowrd_is_temporary,
+        meta.create_date,
+        meta.edit_date,
+        users.meta_id
     from users
-    join meta on meta.id = users.meta_id
-    join authentication as auth on auth.user_id = users.id
+        join meta on meta.id = users.meta_id
+        join authentication as auth on auth.user_id = users.id
 );
 CREATE TABLE IF NOT EXISTS EMPLOYEE_CONNECTION (
     owner_id uuid not null,

@@ -78,7 +78,7 @@ impl User {
 #[cfg(test)]
 mod tests {
     use serde_json::json;
-    use time::{Date, Month, OffsetDateTime};
+    use time::{Date, OffsetDateTime};
 
     use crate::core::{meta::metaid::MetaId, role::userrole::UserRole, user::contact::Contacts};
 
@@ -244,7 +244,6 @@ mod tests {
 
     #[test]
     fn test_user_serialization() {
-        let id = uuid::Uuid::new_v4();
         let date = OffsetDateTime::now_utc();
         // Create a sample user
         let user = User {

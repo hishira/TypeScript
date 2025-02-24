@@ -7,7 +7,6 @@ use uuid::Uuid;
 
 use crate::core::address::address::Address;
 
-use super::dao::DAO;
 
 #[derive(Clone)]
 pub struct UserAddressDAO {
@@ -15,7 +14,6 @@ pub struct UserAddressDAO {
     pub db_context: Database,
 }
 
-pub struct AddressFilterOption {}
 
 impl UserAddressDAO {
     const START_ADDRESS_QUERY: &str = "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code ) ";

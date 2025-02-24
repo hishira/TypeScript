@@ -2,10 +2,7 @@ use std::ops::DerefMut;
 
 use async_trait::async_trait;
 use mongodb::Database;
-use sqlx::{
-    postgres::{PgQueryResult, PgRow},
-    Acquire, Executor, Pool, Postgres, QueryBuilder, Transaction,
-};
+use sqlx::{postgres::PgQueryResult, Acquire, Executor, Pool, Postgres, QueryBuilder, Transaction};
 use uuid::Uuid;
 
 use crate::{
