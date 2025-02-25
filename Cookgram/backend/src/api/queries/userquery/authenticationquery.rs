@@ -30,11 +30,11 @@ impl ActionQueryBuilder<Authentication> for AuthenticationQuery {
         create_builder
     }
 
-    fn update(entity: Authentication) -> QueryBuilder<'static, Postgres> {
+    fn update(_: Authentication) -> QueryBuilder<'static, Postgres> {
         todo!()
     }
 
-    fn delete(entity: Authentication) -> QueryBuilder<'static, Postgres> {
+    fn delete(_entity: Authentication) -> QueryBuilder<'static, Postgres> {
         todo!()
     }
 }
@@ -46,7 +46,7 @@ impl Query<CredentialsFilterOption> for AuthenticationQuery {
 
     fn find(option: CredentialsFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut find_query: QueryBuilder<'static, Postgres> =
-            QueryBuilder::new("SELECT * FROM USERLOGIN");
+            QueryBuilder::new("SELECT * FROM USERLOGIN WHERE current_state = 'Active'");
         match (
             option.username,
             option.password,
@@ -56,22 +56,22 @@ impl Query<CredentialsFilterOption> for AuthenticationQuery {
             (None, Some(_), None) => todo!(),
             (None, Some(_), Some(_)) => todo!(),
             (Some(username), None, None) => {
-                find_query.push(" WHERE username = ");
+                find_query.push(" AND username = ");
                 find_query.push_bind(username);
                 find_query
             }
             (Some(username), None, Some(_)) => {
-                find_query.push(" WHERE username = ");
+                find_query.push(" AND username = ");
                 find_query.push_bind(username);
                 find_query
             }
             (Some(username), Some(_), None) => {
-                find_query.push(" WHERE username = ");
+                find_query.push(" AND username = ");
                 find_query.push_bind(username);
                 find_query
             }
             (Some(username), Some(_), Some(_)) => {
-                find_query.push(" WHERE username = ");
+                find_query.push(" AND username = ");
                 find_query.push_bind(username);
                 find_query
             }

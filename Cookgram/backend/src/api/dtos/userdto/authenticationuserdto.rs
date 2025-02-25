@@ -1,29 +1,19 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::{
-    api::dtos::addressdto::addressdto::AddressDto,
-    core::{
-        address::address::Address,
-        entity::Entity,
-        meta::meta::Meta,
-        role::role::{Role, Roles},
-        state::{entitystate::EntityState, state::State},
-        user::{
-            credentials::Credentials, personalinformation::PersonalInformation, userid::UserId,
-        },
-    },
+use crate::core::{
+    entity::Entity,
+    role::role::Roles,
+    state::{entitystate::EntityState, state::State},
+    user::userid::UserId,
 };
 
-use super::{credentialsdto::CredentialsDTO, personalinformationdto::PersolanInformationDTO};
+use super::credentialsdto::CredentialsDTO;
 
 #[derive(PartialEq, Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AuthenticationUserDto {
     pub id: UserId,
-    pub personal_information: PersolanInformationDTO,
     pub credentials: CredentialsDTO,
-    pub address: Option<AddressDto>,
-    pub meta: Meta,
     pub role: Roles,
     pub state: State<EntityState>,
 }
