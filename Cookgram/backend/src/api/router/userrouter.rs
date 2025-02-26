@@ -115,8 +115,8 @@ impl UserRouter {
                     ..params
                 })
                 .await
-                .iter()
-                .map(|user| from_user_to_user_dto(user.to_owned()))
+                .into_iter()
+                .map(from_user_to_user_dto)
                 .collect(),
         ))
     }

@@ -16,7 +16,7 @@ pub struct AuthenticationRepository{
 impl AuthenticationRepository {}
 
 impl Repository<AuthenticationUserDto, CredentialsFilterOption, sqlx::Error> for AuthenticationRepository {
-    async fn create(&self, entity: AuthenticationUserDto) -> AuthenticationUserDto {
+    async fn create(&self, _entity: AuthenticationUserDto) -> AuthenticationUserDto {
         todo!()
     }
 
@@ -24,15 +24,15 @@ impl Repository<AuthenticationUserDto, CredentialsFilterOption, sqlx::Error> for
         self.auth_dao.find(option).await
     }
 
-    async fn find_by_id(&self, id: uuid::Uuid) -> AuthenticationUserDto {
+    async fn find_by_id(&self, _id: uuid::Uuid) -> AuthenticationUserDto {
         todo!()
     }
 
-    async fn delete(&self, option: AuthenticationUserDto) -> AuthenticationUserDto {
+    async fn delete(&self, _option: AuthenticationUserDto) -> AuthenticationUserDto {
         todo!()
     }
 
-    async fn update(&self, update_entity: AuthenticationUserDto) -> AuthenticationUserDto {
+    async fn update(&self, _update_entity: AuthenticationUserDto) -> AuthenticationUserDto {
         todo!()
     }
 }
