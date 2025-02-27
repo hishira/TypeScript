@@ -1,4 +1,3 @@
-use serde::ser::SerializeStruct;
 use serde::{Deserialize, Serialize, Serializer};
 use time::OffsetDateTime;
 use uuid::Uuid;
@@ -8,11 +7,13 @@ use crate::core::entity::Entity;
 
 use super::metaid::MetaId;
 
-#[derive(PartialEq, Debug, Clone, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Meta {
     pub id: MetaId,
+    #[serde(with = "time::serde::rfc3339")]
     pub create_date: OffsetDateTime,
+    #[serde(with = "time::serde::rfc3339")]
     pub edit_date: OffsetDateTime,
 }
 
@@ -46,18 +47,6 @@ impl Meta {
     }
 }
 
-impl Serialize for Meta {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let mut state = serializer.serialize_struct("Meta", 2)?;
-        state.serialize_field("create_date", &self.create_date.to_string());
-        state.serialize_field("edit_date", &self.create_date.to_string());
-
-        state.end()
-    }
-}
 
 impl Entity for Meta {
     fn generate_id() -> impl IdGenerator {

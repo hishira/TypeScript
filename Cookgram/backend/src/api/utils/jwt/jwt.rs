@@ -7,8 +7,13 @@ use jsonwebtoken::{Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    api::{dtos::userdto::{authenticationuserdto::AuthenticationUserDto, operationuserdto::UserAuthDto}, errors::autherror::AuthError},
-    core::{role::role::Roles, user::user::User},
+    api::{
+        dtos::userdto::{
+            authenticationuserdto::AuthenticationUserDto, operationuserdto::UserAuthDto,
+        },
+        errors::autherror::AuthError,
+    },
+    core::role::role::Roles,
 };
 
 use super::keys::Keys;
