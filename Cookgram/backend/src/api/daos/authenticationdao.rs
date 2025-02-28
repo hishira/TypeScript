@@ -1,8 +1,4 @@
-use sqlx::{
-    postgres::{PgQueryResult, PgRow},
-    Executor, Pool, Postgres,
-};
-
+use super::dao::DAO;
 use crate::{
     api::{
         dtos::userdto::{
@@ -22,8 +18,10 @@ use crate::{
 };
 use async_trait::async_trait;
 use sqlx::Row;
-
-use super::dao::DAO;
+use sqlx::{
+    postgres::{PgQueryResult, PgRow},
+    Executor, Pool, Postgres,
+};
 
 #[derive(Clone)]
 pub struct AuthenticationDAO {

@@ -1,8 +1,7 @@
-use sqlx::{postgres::PgQueryResult, Executor, Postgres};
-use uuid::Uuid;
-
 use crate::core::entity::Entity;
 use async_trait::async_trait;
+use sqlx::{postgres::PgQueryResult, Executor, Postgres};
+use uuid::Uuid;
 
 #[async_trait]
 pub trait DAO<T: Entity, O> {
