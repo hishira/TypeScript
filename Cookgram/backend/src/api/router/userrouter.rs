@@ -70,6 +70,7 @@ impl UserRouter {
             send: send.clone(),
         }
     }
+    
     async fn user_create(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
