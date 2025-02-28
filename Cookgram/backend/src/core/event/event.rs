@@ -15,12 +15,14 @@ pub enum EventEntity {
     Contact,
 
 }
+
 #[derive(Clone, Serialize, Deserialize)]
 pub enum EventType {
     Create,
     Delete,
     Update,
 }
+
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Event {
     pub id: EventId,
