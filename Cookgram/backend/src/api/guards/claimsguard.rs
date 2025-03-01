@@ -1,5 +1,5 @@
 use crate::{
-    api::{errors::autherror::AuthError, utils::jwt::jwt::Claims},
+    api::{dtos::roledto::roledto::map_to_roles, errors::autherror::AuthError, utils::jwt::jwt::Claims},
     core::role::access::{Action, Queries, QueriesActions},
 };
 
@@ -12,7 +12,7 @@ impl ClaimsGuard {
     }
 
     pub fn role_guard_user_find(claims: Claims) -> Result<bool, AuthError> {
-        let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
+        let res_role = claims.role.map(map_to_roles).ok_or(AuthError::MissingCredentials)?;
         let role = res_role;
         if !role.has_access_to(QueriesActions::Access(Queries::User, Action::View)) {
             return Self::is_unauthorized_to_take_action();
@@ -21,7 +21,7 @@ impl ClaimsGuard {
     }
 
     pub fn user_delete_guard(claims: Claims) -> Result<bool, AuthError> {
-        let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
+        let res_role = claims.role.map(map_to_roles).ok_or(AuthError::MissingCredentials)?;
         if !res_role.has_access_to(QueriesActions::Access(Queries::User, Action::Management)) {
             return Self::is_unauthorized_to_take_action();
         }
@@ -33,7 +33,7 @@ impl ClaimsGuard {
     }
 
     pub fn manage_user_guard(claims: Claims) -> Result<bool, AuthError> {
-        let res_role = claims.role.ok_or(AuthError::MissingCredentials)?;
+        let res_role = claims.role.map(map_to_roles).ok_or(AuthError::MissingCredentials)?;
         if !res_role.has_access_to(QueriesActions::Access(Queries::User, Action::Management)) {
             return Self::is_unauthorized_to_take_action();
         }
@@ -45,7 +45,8 @@ impl ClaimsGuard {
     }
 
     fn self_management_guard(claims: &Claims) -> Result<bool, AuthError> {
-        let res_role = claims.role.as_ref().ok_or(AuthError::MissingCredentials)?;
+        let binding = claims.role.clone().map(map_to_roles);
+        let res_role = binding.as_ref().ok_or(AuthError::MissingCredentials)?;
         if !res_role.has_access_to(QueriesActions::Access(
             Queries::User,
             Action::SelfManagement,

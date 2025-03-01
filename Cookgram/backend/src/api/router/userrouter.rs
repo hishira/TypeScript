@@ -191,7 +191,7 @@ impl UserRouter {
     }
 
     async fn event_test(State(state): State<UserState>) -> Result<Json<bool>, ResponseError> {
-        state.send.send(EventTask("Ok".to_string())).await;
+        let _ = state.send.send(EventTask("Ok".to_string())).await;
         return Ok(Json(true));
     }
 }

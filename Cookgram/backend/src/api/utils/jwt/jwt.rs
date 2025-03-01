@@ -6,15 +6,14 @@ use axum_extra::{
 use jsonwebtoken::{Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
-use crate::{
+use crate::
     api::{
-        dtos::userdto::{
+        dtos::{roledto::roledto::RoleDto, userdto::{
             authenticationuserdto::AuthenticationUserDto, operationuserdto::UserAuthDto,
-        },
+        }},
         errors::autherror::AuthError,
-    },
-    core::role::role::Roles,
-};
+    }
+;
 
 use super::keys::Keys;
 
@@ -22,7 +21,7 @@ use super::keys::Keys;
 pub struct Claims {
     pub user_id: uuid::Uuid,
     pub user_info: String,
-    pub role: Option<Roles>,
+    pub role: Option<RoleDto>,
     pub exp: u64,
 }
 

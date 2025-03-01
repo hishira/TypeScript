@@ -172,52 +172,52 @@ impl fmt::Display for ParseFromStringRoleError {
         // ...
     }
 }
-impl FromStr for Roles {
-    type Err = ParseFromStringRoleError;
+// impl FromStr for Roles {
+//     type Err = ParseFromStringRoleError;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "User" => Ok(Roles::user_role()),
-            "Admin" => Ok(Roles::admin_role()),
-            "SuperAdmin" => Ok(Roles::super_admin_role()),
-            "Employee" => Ok(Roles::employee_role()),
-            "Manager" => Ok(Roles::manager_role()),
-            "Director" => Ok(Roles::director_role()),
-            _ => Err(ParseFromStringRoleError),
-        }
-    }
-}
-impl Serialize for Roles {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        match self {
-            Roles::User(_) => serializer.serialize_str("User"),
-            Roles::Admin(_) => serializer.serialize_str("Admin"),
-            Roles::SuperAdmin(_) => serializer.serialize_str("SuperAdmin"),
-            Roles::Employee(_) => serializer.serialize_str("Employee"),
-            Roles::Manager(_) => serializer.serialize_str("Manager"),
-            Roles::Director(_) => serializer.serialize_str("Director"),
-        }
-    }
-}
+//     fn from_str(s: &str) -> Result<Self, Self::Err> {
+//         match s {
+//             "User" => Ok(Roles::user_role()),
+//             "Admin" => Ok(Roles::admin_role()),
+//             "SuperAdmin" => Ok(Roles::super_admin_role()),
+//             "Employee" => Ok(Roles::employee_role()),
+//             "Manager" => Ok(Roles::manager_role()),
+//             "Director" => Ok(Roles::director_role()),
+//             _ => Err(ParseFromStringRoleError),
+//         }
+//     }
+// }
+// impl Serialize for Roles {
+//     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+//     where
+//         S: serde::Serializer,
+//     {
+//         match self {
+//             Roles::User(_) => serializer.serialize_str("User"),
+//             Roles::Admin(_) => serializer.serialize_str("Admin"),
+//             Roles::SuperAdmin(_) => serializer.serialize_str("SuperAdmin"),
+//             Roles::Employee(_) => serializer.serialize_str("Employee"),
+//             Roles::Manager(_) => serializer.serialize_str("Manager"),
+//             Roles::Director(_) => serializer.serialize_str("Director"),
+//         }
+//     }
+// }
 
-impl<'de> Deserialize<'de> for Roles {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let r_string = String::deserialize(deserializer);
-        match r_string {
-            Ok(role_string) => match Roles::from_str(role_string.as_str()) {
-                Ok(role) => Ok(role),
-                Err(error) => Err(serde::de::Error::custom(error))
-            },
-            Err(error) => Err(error),
-        }
-    }
-}
+// impl<'de> Deserialize<'de> for Roles {
+//     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+//     where
+//         D: serde::Deserializer<'de>,
+//     {
+//         let r_string = String::deserialize(deserializer);
+//         match r_string {
+//             Ok(role_string) => match Roles::from_str(role_string.as_str()) {
+//                 Ok(role) => Ok(role),
+//                 Err(error) => Err(serde::de::Error::custom(error))
+//             },
+//             Err(error) => Err(error),
+//         }
+//     }
+// }
 
 #[cfg(test)]
 mod tests {

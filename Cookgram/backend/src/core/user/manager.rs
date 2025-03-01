@@ -1,10 +1,9 @@
-use serde::{Deserialize, Serialize};
 
 use crate::core::usercontract::usercontract::Contract;
 
 use super::{employee::Employee, user::User};
 
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct Manager {
     pub user: User,
     pub contract: Option<Contract>,

@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use validator::{Validate, ValidationError};
 
-use crate::{api::dtos::addressdto::createaddressdto::CreateAddressDto, core::role::role::Roles};
+use crate::{api::dtos::{addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto}, core::role::role::Roles};
 
 use super::personalinformationdto::PersolanInformationDTO;
 
@@ -18,15 +18,15 @@ pub struct UserCreditionalDto {
 #[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserDto {
-    pub role: Option<Roles>,
+    pub role: Option<RoleDto>,
     pub personal_information: PersolanInformationDTO,
     pub creditionals: UserCreditionalDto,
     pub address: Option<CreateAddressDto>,
 }
 
-#[derive(Debug, Validate, Deserialize)]
+#[derive(Debug, Validate, Deserialize, Clone)]
 pub struct UpdateUserDto {
-    pub role: Option<Roles>,
+    pub role: Option<RoleDto>,
     pub personal_information: PersolanInformationDTO,
     pub creditionals: UserCreditionalDto,
     pub address: Option<CreateAddressDto>,

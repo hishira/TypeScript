@@ -4,7 +4,7 @@ use crate::core::{entity::{entity::IdGenerator, Entity}, usercontract::usercontr
 
 use super::{user::User, userid::UserId};
 
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct Employee {
     pub user: User,
     pub contract: Option<Contract>,

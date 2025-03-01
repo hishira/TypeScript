@@ -1,11 +1,10 @@
 use serde::Serialize;
 
-use crate::core::{
+use crate::{api::dtos::roledto::roledto::RoleDto, core::{
     entity::Entity,
-    role::role::Roles,
     state::{entitystate::EntityState, state::State},
     user::userid::UserId,
-};
+}};
 
 use super::credentialsdto::CredentialsDTO;
 
@@ -14,7 +13,7 @@ use super::credentialsdto::CredentialsDTO;
 pub struct AuthenticationUserDto {
     pub id: UserId,
     pub credentials: CredentialsDTO,
-    pub role: Roles,
+    pub role: RoleDto,
     pub state: State<EntityState>,
 }
 
