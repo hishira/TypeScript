@@ -5,19 +5,19 @@ use crate::{api::dtos::roledto::roledto::{map_roles_to_role_dto, RoleDto}, core:
         address::address::Address,
         meta::meta::Meta,
         state::{entitystate::EntityState, state::State},
-        user::{personalinformation::PersonalInformation, user::User},
+        user::user::User,
     }};
 
 use super::{
     credentialsdto::{get_credentials_dto_from_credentials, CredentialsDTO},
-    operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
+    operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto}, personalinformationdto::{from_personal_info_to_dto, PersolanInformationDTO},
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserDTO {
     pub id: Uuid,
-    pub personal_information: PersonalInformation,
+    pub personal_information: PersolanInformationDTO,
     pub credentials: CredentialsDTO,
     pub address: Option<Address>,
     pub meta: Meta,
@@ -31,7 +31,7 @@ pub fn from_user_to_user_dto(user: User)->UserDTO {
         address: user.address,
         credentials: get_credentials_dto_from_credentials(user.credentials),
         meta: user.meta,
-        personal_information: user.personal_information,
+        personal_information: from_personal_info_to_dto(user.personal_information),
         roles: map_roles_to_role_dto(user.role),
         state: user.state,
     }

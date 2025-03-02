@@ -16,8 +16,7 @@ pub enum Gender {
     None,
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(PartialEq, Debug, Clone)]
 pub struct PersonalInformation {
     pub first_name: String,
     pub last_name: String,
