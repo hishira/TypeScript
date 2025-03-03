@@ -1,4 +1,4 @@
-use super::contactdto::{convert_to_co_contacts_dto, ContactDTO};
+use super::{contactdto::{convert_to_co_contacts_dto, ContactDTO}, genderdto::{convert_gender_to_gender_dto, GenderDTO}};
 use crate::core::user::personalinformation::{Gender, PersonalInformation};
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
@@ -12,7 +12,7 @@ pub struct PersolanInformationDTO {
     pub brithday: OffsetDateTime,
     #[validate(email)]
     pub email: Option<String>,
-    pub gender: Gender,
+    pub gender: GenderDTO,
     pub contacts: Option<ContactDTO>,
 }
 
@@ -22,7 +22,7 @@ pub fn from_personal_info_to_dto(personla_info: PersonalInformation)-> PersolanI
         last_name: personla_info.last_name,
         brithday: personla_info.brithday,
         email: personla_info.email,
-        gender: personla_info.gender.unwrap_or(Gender::None),
+        gender: personla_info.gender.map(convert_gender_to_gender_dto).unwrap_or(GenderDTO::None),
         contacts: personla_info.contacts.map(convert_to_co_contacts_dto)
     }
 }

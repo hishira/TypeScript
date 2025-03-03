@@ -5,3 +5,4 @@ pub mod credentialsdto;
 pub mod personalinformationdto;
 pub mod contactdto;
 pub mod authenticationuserdto;
+pub mod genderdto;
