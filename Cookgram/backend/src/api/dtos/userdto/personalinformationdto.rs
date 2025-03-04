@@ -1,5 +1,5 @@
 use super::{contactdto::{convert_to_co_contacts_dto, ContactDTO}, genderdto::{convert_gender_to_gender_dto, GenderDTO}};
-use crate::core::user::personalinformation::{Gender, PersonalInformation};
+use crate::core::user::personalinformation::PersonalInformation;
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 use validator::Validate;

@@ -1,5 +1,4 @@
 use serde::Serialize;
-
 use crate::{api::dtos::roledto::roledto::RoleDto, core::{
     entity::Entity,
     state::{entitystate::EntityState, state::State},

@@ -8,7 +8,7 @@ use crate::api::dtos::userdto::userdto::UserDtos;
 
 use super::contact::Contacts;
 
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize, sqlx::Type)]
+#[derive(PartialEq, Debug, Clone, sqlx::Type)]
 #[sqlx(type_name = "Gender")]
 pub enum Gender {
     Man,
