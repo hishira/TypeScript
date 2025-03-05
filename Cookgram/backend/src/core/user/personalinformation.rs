@@ -1,5 +1,4 @@
 
-use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgRow;
 use sqlx::Row;
 use time::OffsetDateTime;

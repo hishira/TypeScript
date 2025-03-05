@@ -14,8 +14,8 @@ pub struct UserAddressDAO {
 
 
 impl UserAddressDAO {
-    const START_ADDRESS_QUERY: &str = "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code ) ";
-    const RETURN_AND_ADDRESS_CONNECTION: &str =
+    const START_ADDRESS_QUERY: &'static str = "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code ) ";
+    const RETURN_AND_ADDRESS_CONNECTION: &'static str =
         "returning id ) INSERT into ADDRESS_CONNECTION (entity_id, address_id) ";
 
     pub async fn create<'a, E>(
@@ -51,7 +51,7 @@ impl UserAddressDAO {
         );
         match executor {
             Some(exec) => create_address_builder.build().execute(exec).await,
-            None => create_address_builder.build().execute(&self.pool).await,
+            _ => create_address_builder.build().execute(&self.pool).await,
         }
     }
 }

@@ -1,10 +1,9 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::{
-    api::dtos::addressdto::createaddressdto::CreateAddressDto,
-    core::address::{address::Address, location::Location},
-};
+use crate::
+    core::address::{address::Address, location::Location}
+;
 
 #[derive(Deserialize, Validate, Serialize)]
 pub struct ComapnyAddressDto {
