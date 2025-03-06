@@ -27,7 +27,7 @@ pub struct CreateCompanyDto {
     pub address: ComapnyAddressDto,
 }
 
-pub fn convert_to_address(create_company_dto: ComapnyAddressDto) -> Address {
+pub fn _convert_to_address(create_company_dto: ComapnyAddressDto) -> Address {
     Address::new(
         create_company_dto.address.clone(),
         create_company_dto.house.clone(),

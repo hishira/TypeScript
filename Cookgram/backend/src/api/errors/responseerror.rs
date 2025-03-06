@@ -1,5 +1,4 @@
 use axum::{http::StatusCode, response::IntoResponse, Json};
-use serde::{Deserialize, Serialize};
 use serde_json::json;
 
 use crate::api::utils::password_worker::password_worker::PasswordWorkerError;

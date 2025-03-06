@@ -2,7 +2,7 @@ use crate::{
     api::{
         dtos::{
             addressdto::createaddressdto::build_address_based_on_create_dto,
-            roledto::roledto::{map_roles_to_role_dto, map_to_roles, RoleDto},
+            roledto::roledto::{map_to_roles, RoleDto},
             userdto::{
                 operationuserdto::{CreateUserDto, UpdateUserDto},
                 personalinformationdto::PersolanInformationDTO,

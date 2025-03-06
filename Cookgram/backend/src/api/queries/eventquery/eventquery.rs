@@ -23,11 +23,11 @@ impl ActionQueryBuilder<Event> for EventQuery {
         create_builder
     }
 
-    fn update(entity: Event) -> sqlx::QueryBuilder<'static, sqlx::Postgres> {
+    fn update(_: Event) -> sqlx::QueryBuilder<'static, sqlx::Postgres> {
         todo!()
     }
 
-    fn delete(entity: Event) -> QueryBuilder<'static, Postgres> {
+    fn delete(_: Event) -> QueryBuilder<'static, Postgres> {
         todo!()
     }
 }

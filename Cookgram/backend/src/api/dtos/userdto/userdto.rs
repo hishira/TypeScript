@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::{api::dtos::roledto::roledto::{map_roles_to_role_dto, RoleDto}, core::{
+use crate::{api::dtos::{addressdto::addressdto::{from_address_to_address_dto, AddressDto}, roledto::roledto::{map_roles_to_role_dto, RoleDto}}, core::{
         address::address::Address,
         meta::meta::Meta,
         state::{entitystate::EntityState, state::State},
@@ -19,7 +19,7 @@ pub struct UserDTO {
     pub id: Uuid,
     pub personal_information: PersolanInformationDTO,
     pub credentials: CredentialsDTO,
-    pub address: Option<Address>,
+    pub address: Option<AddressDto>,
     pub meta: Meta,
     pub roles: RoleDto,
     pub state: State<EntityState>,
@@ -28,7 +28,7 @@ pub struct UserDTO {
 pub fn from_user_to_user_dto(user: User)->UserDTO {
     UserDTO {
         id: user.id.get_id(),
-        address: user.address,
+        address: user.address.map(from_address_to_address_dto),
         credentials: get_credentials_dto_from_credentials(user.credentials),
         meta: user.meta,
         personal_information: from_personal_info_to_dto(user.personal_information),
@@ -50,7 +50,7 @@ pub struct UserFilterOption {
 
 impl UserFilterOption {
 
-    pub fn from_only_usernamr(username: String) -> Self {
+    pub fn _from_only_usernamr(username: String) -> Self {
         Self {
             username: Some(username),
             limit: Some(10),
@@ -69,5 +69,5 @@ pub enum UserDtos {
 
 #[derive(Debug, Deserialize)]
 pub struct UserParamsDto {
-    id: Option<uuid::Uuid>,
+    _id: Option<uuid::Uuid>,
 }

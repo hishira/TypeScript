@@ -5,7 +5,7 @@ use crate::{
         dtos::userdto::credentialsdto::CredentialsFilterOption,
         queries::{actionquery::ActionQueryBuilder, query::Query},
     },
-    core::user::{authentication::Authentication, credentials::Credentials, userid::UserId},
+    core::user::{authentication::Authentication, userid::UserId},
 };
 
 #[derive(Clone)]

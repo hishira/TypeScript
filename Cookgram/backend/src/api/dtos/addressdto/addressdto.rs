@@ -1,20 +1,30 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgRow, FromRow, Row};
 
-use crate::core::address::location::Location;
+use crate::core::address::{address::Address, location::Location};
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct AddressDto {
-    pub address: Option<String>,
+    pub address: String,
     pub house: String,
     pub door: Option<String>,
-    pub city: Option<String>,
-    pub country: Option<String>,
+    pub city: String,
+    pub country: String,
     pub location: Location,
-    pub phone: Option<String>,
     pub postal_code: String,
 }
 
+pub fn from_address_to_address_dto(address: Address) -> AddressDto {
+    AddressDto {
+        address: address.address,
+        house: address.house,
+        door: address.door,
+        city: address.city,
+        country: address.country,
+        location: address.location,
+        postal_code: address.postal_code,
+    }
+}
 impl<'r> FromRow<'r, PgRow> for AddressDto {
     fn from_row(row: &'r PgRow) -> Result<Self, sqlx::Error> {
         Ok(Self {
@@ -27,7 +37,6 @@ impl<'r> FromRow<'r, PgRow> for AddressDto {
             },
             city: row.try_get("city")?,
             country: row.try_get("country")?,
-            phone: row.try_get("phone")?,
             postal_code: row.try_get("postal_code")?,
         })
     }
