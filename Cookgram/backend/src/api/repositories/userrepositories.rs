@@ -41,7 +41,7 @@ impl UserRepositories {
             .await;
         
         let address_resp: Option<Result<PgQueryResult, Error>>;
-        if (entity.address.is_some()) {
+        if entity.address.is_some() {
             address_resp = Some(
                 self.user_address_dao
                     .create(

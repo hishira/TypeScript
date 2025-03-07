@@ -17,7 +17,7 @@ pub struct UserQuery {
 }
 
 impl UserQuery {
-    const QUERY_FIND_BY_ID:&str = "SELECT id, username, email, password, meta_id, role, current_state, previous_state  FROM users where id = ";
+    const QUERY_FIND_BY_ID:&'static str = "SELECT id, username, email, password, meta_id, role, current_state, previous_state  FROM users where id = ";
     pub fn new(id: Option<Uuid>, user_name: Option<String>, email: Option<String>) -> Self {
         UserQuery {
             id,

@@ -7,21 +7,20 @@ use validator::Validate;
 use crate::{
     api::{
         appstate::{appstate::AppState, authstate::AuthState},
-        daos::{
-            authenticationdao::AuthenticationDAO, useraddressdao::UserAddressDAO, userdao::UserDAO,
-        },
+        daos::
+            authenticationdao::AuthenticationDAO
+        ,
         dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::operationuserdto::{UserAuthDto, UserRegisterDto},
         },
         errors::{autherror::AuthError, responseerror::ResponseError},
-        queries::{eventquery::eventquery::EventQuery, userquery::userquery::UserQuery},
+        queries::eventquery::eventquery::EventQuery,
         repositories::{
             authenticationrepository::AuthenticationRepository, eventrepository::EventRepository,
-            userrepositories::UserRepositories,
         },
         services::authservice::AuthService,
-        utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},
+        utils::password_worker::password_worker::PasswordWorker,
         validators::dtovalidator::ValidateDtos,
     },
     core::user::user::User,
@@ -62,9 +61,9 @@ impl AuthRouter {
         }
     }
 
-    async fn register<T>(
-        State(state): State<AuthState>,
-        ValidateDtos(params): ValidateDtos<UserRegisterDto>,
+    async fn _register<T>(
+        State(_): State<AuthState>,
+        ValidateDtos(_): ValidateDtos<UserRegisterDto>,
     ) -> Result<Json<User>, AuthError> {
         todo!();
     }

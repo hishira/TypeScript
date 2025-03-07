@@ -52,29 +52,32 @@ impl Query<CredentialsFilterOption> for AuthenticationQuery {
             option.password,
             option.password_is_temporary,
         ) {
-            (None, None, Some(_)) => todo!(),
-            (None, Some(_), None) => todo!(),
-            (None, Some(_), Some(_)) => todo!(),
-            (Some(username), None, None) => {
-                find_query.push(" AND username = ");
-                find_query.push_bind(username);
-                find_query
-            }
-            (Some(username), None, Some(_)) => {
-                find_query.push(" AND username = ");
-                find_query.push_bind(username);
-                find_query
-            }
-            (Some(username), Some(_), None) => {
-                find_query.push(" AND username = ");
-                find_query.push_bind(username);
-                find_query
-            }
             (Some(username), Some(_), Some(_)) => {
                 find_query.push(" AND username = ");
                 find_query.push_bind(username);
                 find_query
             }
+            (_, Some(_), Some(_)) => todo!(),
+            (Some(username), _, Some(_)) => {
+                find_query.push(" AND username = ");
+                find_query.push_bind(username);
+                find_query
+            }
+            (Some(username), Some(_), _) => {
+                find_query.push(" AND username = ");
+                find_query.push_bind(username);
+                find_query
+            }
+        
+            (Some(username), _, _) => {
+                find_query.push(" AND username = ");
+                find_query.push_bind(username);
+                find_query
+            }
+            (_, __, Some(_)) => todo!(),
+            (_, Some(_), __) => todo!(),
+           
+           
             _ => todo!(),
         }
     }

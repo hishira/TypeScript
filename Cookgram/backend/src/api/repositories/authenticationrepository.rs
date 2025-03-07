@@ -1,7 +1,7 @@
 use mongodb::Database;
 use sqlx::{Pool, Postgres};
 
-use crate::{api::{daos::{authenticationdao::AuthenticationDAO, dao::DAO}, dtos::userdto::{authenticationuserdto::AuthenticationUserDto, credentialsdto::CredentialsFilterOption, userdto::UserFilterOption}}, core::user::{authentication::Authentication, user::User}};
+use crate::api::{daos::{authenticationdao::AuthenticationDAO, dao::DAO}, dtos::userdto::{authenticationuserdto::AuthenticationUserDto, credentialsdto::CredentialsFilterOption}};
 
 use super::repositories::Repository;
 
