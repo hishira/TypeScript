@@ -1,10 +1,9 @@
 #[cfg(test)]
 mod tests {
-    use serde_json::json;
     use time::{Date, OffsetDateTime};
     use uuid::Uuid;
 
-    use crate::core::{entity::{entity::IdGenerator, Entity}, meta::{meta::Meta, metaid::MetaId}, role::{role::Roles, userrole::UserRole}, state::{entitystate::EntityState, state::State}, user::{contact::Contacts, credentials::Credentials, personalinformation::PersonalInformation, user::User, userid::UserId}};
+    use crate::core::{entity::{entity::IdGenerator, Entity}, role::role::Roles, user::{contact::Contacts, credentials::Credentials, personalinformation::PersonalInformation, user::User}};
 
 
     struct MockOffsetDateTime;
@@ -34,7 +33,6 @@ mod tests {
 
     #[test]
     fn test_fields() {
-        let offset_date_time = MockOffsetDateTime::now_utc();
 
         // Create a new user
         let user = User::new(
@@ -66,7 +64,6 @@ mod tests {
     #[test]
     fn test_user_new_with_id() {
         // Set up a mock OffsetDateTime for testing
-        let offset_date_time = MockOffsetDateTime::now_utc();
 
         // Create a new user with a specific id
         let user_id = Uuid::new_v4();

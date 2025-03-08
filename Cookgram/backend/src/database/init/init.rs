@@ -63,7 +63,7 @@ impl Database {
                     }
                 };
             }
-            None => println!("There are no pool defined"),
+            _ => println!("There are no pool defined"),
         }
     }
     async fn get_optional_pool(database_url: String) -> Option<Pool<Postgres>> {

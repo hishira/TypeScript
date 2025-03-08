@@ -2,7 +2,7 @@ use axum::Json;
 use uuid::Uuid;
 
 use crate::api::daos::userdao::UserDAO;
-use crate::api::dtos::addressdto::createaddressdto::{build_address_based_on_create_dto, CreateAddressDto, CreateUserAddressDto};
+use crate::api::dtos::addressdto::createaddressdto::{build_address_based_on_create_dto, CreateUserAddressDto};
 use crate::api::dtos::roledto::roledto::{map_to_roles, RoleDto};
 use crate::api::dtos::userdto::operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto};
 use crate::api::dtos::userdto::userdto::{from_user_to_user_dto, UserDTO, UserFilterOption};

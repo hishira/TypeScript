@@ -79,7 +79,7 @@ impl UserRepositories {
                 Ok(_) => tracing::debug!("User address created"),
                 Err(error) => tracing::error!("Error occur while saving user address {}", error),
             },
-            None => {}
+            _ => {}
         }
     }
 

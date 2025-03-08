@@ -1,4 +1,3 @@
-use serde::{Deserialize, Serialize};
 
 use crate::core::{entity::{entity::IdGenerator, Entity}, usercontract::usercontract::Contract};
 

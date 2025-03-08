@@ -232,8 +232,8 @@ async fn protected(claims: Claims) -> Result<String, AuthError> {
     Ok(format!("{}", claims.user_id))
 }
 async fn pp(
-    claims: Claims,
-    State(state): State<UserState>,
+    _: Claims,
+    State(_state): State<UserState>,
     ValidateDtos(params): ValidateDtos<CreateUserDto>,
 ) -> Result<String, AuthError> {
     print!("{}", params.personal_information.email.unwrap());
