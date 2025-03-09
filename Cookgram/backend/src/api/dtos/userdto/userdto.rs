@@ -2,15 +2,12 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{api::dtos::{addressdto::addressdto::{from_address_to_address_dto, AddressDto}, roledto::roledto::{map_roles_to_role_dto, RoleDto}}, core::{
-        address::address::Address,
-        meta::meta::Meta,
         state::{entitystate::EntityState, state::State},
         user::user::User,
     }};
 
 use super::{
-    credentialsdto::{get_credentials_dto_from_credentials, CredentialsDTO},
-    operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto}, personalinformationdto::{from_personal_info_to_dto, PersolanInformationDTO},
+    credentialsdto::{get_credentials_dto_from_credentials, CredentialsDTO}, metadto::{convert_meta_to_meta_dto, MetaDto}, operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto}, personalinformationdto::{from_personal_info_to_dto, PersolanInformationDTO}
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -20,7 +17,7 @@ pub struct UserDTO {
     pub personal_information: PersolanInformationDTO,
     pub credentials: CredentialsDTO,
     pub address: Option<AddressDto>,
-    pub meta: Meta,
+    pub meta: MetaDto,
     pub roles: RoleDto,
     pub state: State<EntityState>,
 }
@@ -30,7 +27,7 @@ pub fn from_user_to_user_dto(user: User)->UserDTO {
         id: user.id.get_id(),
         address: user.address.map(from_address_to_address_dto),
         credentials: get_credentials_dto_from_credentials(user.credentials),
-        meta: user.meta,
+        meta: convert_meta_to_meta_dto(user.meta),
         personal_information: from_personal_info_to_dto(user.personal_information),
         roles: map_roles_to_role_dto(user.role),
         state: user.state,

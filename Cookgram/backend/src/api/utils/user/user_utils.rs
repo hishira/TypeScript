@@ -22,7 +22,7 @@ use crate::{
     },
 };
 use sqlx::Row;
-use sqlx::{postgres::PgRow, Error};
+use sqlx::postgres::PgRow;
 
 pub struct UserUtils {}
 

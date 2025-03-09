@@ -6,17 +6,6 @@ mod tests {
     use crate::core::{entity::{entity::IdGenerator, Entity}, role::role::Roles, user::{contact::Contacts, credentials::Credentials, personalinformation::PersonalInformation, user::User}};
 
 
-    struct MockOffsetDateTime;
-
-    impl MockOffsetDateTime {
-        fn now_utc() -> Self {
-            MockOffsetDateTime
-        }
-
-        fn date(&self) -> Date {
-            Date::from_iso_week_date(2024, 10, time::Weekday::Monday).expect("Invalid date")
-        }
-    }
     #[test]
     fn generate_id_test() {
         let id = User::generate_id().get_id();

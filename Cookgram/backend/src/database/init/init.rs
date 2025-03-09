@@ -26,7 +26,7 @@ impl Database {
         };
         let  mongo_db_client_res = ClientOptions::parse(mongo_string)
             .await;
-        let mut mongo_db_client = match mongo_db_client_res {
+        let mongo_db_client = match mongo_db_client_res {
             Ok(mongo_client) =>mongo_client,
             Err(error) => {
                 tracing::error!("Cannot connect to mongo db, {}", error);

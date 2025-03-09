@@ -1,6 +1,6 @@
 use crate::{
     api::{
-        daos::{authenticationdao::AuthenticationDAO, dao::DAO, useraddressdao::UserAddressDAO, userdao::UserDAO},
+        daos::{dao::DAO, useraddressdao::UserAddressDAO, userdao::UserDAO},
         dtos::userdto::userdto::UserFilterOption,
         queries::{
             actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery,
