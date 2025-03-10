@@ -5,6 +5,7 @@ use crate::core::entity::{entity::IdGenerator, Entity};
 
 use super::eventId::EventId;
 
+
 #[derive(Clone, Serialize, Deserialize)]
 pub enum EventEntity {
     User,

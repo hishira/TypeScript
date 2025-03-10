@@ -5,14 +5,11 @@ use crate::api::{
         tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
         userdto::{
             authenticationuserdto::AuthenticationUserDto, credentialsdto::CredentialsFilterOption,
-            operationuserdto::UserAuthDto, userdto::UserFilterOption,
+            operationuserdto::UserAuthDto,
         },
     },
     errors::{autherror::AuthError, responseerror::ResponseError},
-    repositories::{
-        authenticationrepository::AuthenticationRepository, repositories::Repository,
-        userrepositories::UserRepositories,
-    },
+    repositories::{authenticationrepository::AuthenticationRepository, repositories::Repository},
     router::authrouter::AuthDTO,
     services::tokenservice::TokenService,
     utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},

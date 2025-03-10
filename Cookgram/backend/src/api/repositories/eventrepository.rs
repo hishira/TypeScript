@@ -1,5 +1,5 @@
 use mongodb::Database;
-use sqlx::{Pool, Postgres, QueryBuilder};
+use sqlx::{Pool, Postgres};
 
 use crate::{
     api::queries::{actionquery::ActionQueryBuilder, eventquery::eventquery::EventQuery},

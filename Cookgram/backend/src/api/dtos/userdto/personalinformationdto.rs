@@ -9,6 +9,7 @@ use validator::Validate;
 pub struct PersolanInformationDTO {
     pub first_name: String,
     pub last_name: String,
+    #[serde(with = "time::serde::rfc3339")]
     pub brithday: OffsetDateTime,
     #[validate(email)]
     pub email: Option<String>,

@@ -52,7 +52,6 @@ impl Entity for Meta {
 
 #[cfg(test)]
 mod tests {
-    use serde_test::{assert_tokens, Token};
     use time::{Date, Month};
 
     use super::*;
