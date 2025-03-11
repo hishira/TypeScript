@@ -3,7 +3,7 @@ import {
   ControlEvent,
   TouchedChangeEvent,
 } from '@angular/forms';
-import { EventHandlerFunction } from '../input.utils';
+import { EventHandlerFunction } from '../types';
 
 export const TouchChangeEventControl: EventHandlerFunction<
   TouchedChangeEvent
