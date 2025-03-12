@@ -20,7 +20,7 @@ impl Default for Director {
     }
 }
 impl Role for Director {
-    fn has_access(&self, access: impl Access) -> bool {
+    fn has_access(&self, _access: impl Access) -> bool {
         true
     }
 
