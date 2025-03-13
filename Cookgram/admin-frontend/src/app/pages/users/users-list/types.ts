@@ -1,3 +1,4 @@
+import { Gender, Role } from '../../../shared/types/enums';
 import { Optional } from '../../../shared/types/shared';
 
 export type UserAddressList = {
@@ -8,11 +9,22 @@ export type UserAddressList = {
 };
 
 export type UserList = {
-  username: string;
-  lastName: Optional<string>;
+  personalInformation: {
+    firstName: string;
+    lastName: string;
+    brithday: string;
+    email: string;
+    gender: Gender;
+    contacts: {
+      email: string;
+      phone: string;
+      fax: string;
+    }
+  },
+  credentials: {
+    username: string;
+  }
   id: string;
-  firstName: Optional<string>;
-  email: string;
-  contractId: Optional<string>;
   address: UserAddressList;
+  roles: Role,
 };
