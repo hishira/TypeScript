@@ -2,7 +2,7 @@ import { Directive, inject } from '@angular/core';
 import { BaseComponent } from '../components/base-component/base-component';
 import { ModalService } from '../services/modal.service';
 
-@Directive({ providers: [ModalService] })
+@Directive({ standalone: true })
 export class AbstractModalComponent extends BaseComponent {
   activeIndex: number = 0;
 

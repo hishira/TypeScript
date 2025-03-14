@@ -38,6 +38,7 @@ import { preparePersonalInformation } from './utils';
   templateUrl: './create-user-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
+  providers: [ModalService],
   imports: [
     StepsModule,
     ButtonModule,

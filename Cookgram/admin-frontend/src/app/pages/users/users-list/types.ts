@@ -8,23 +8,25 @@ export type UserAddressList = {
   phone: Optional<string>;
 };
 
-export type UserList = {
-  personalInformation: {
-    firstName: string;
-    lastName: string;
-    brithday: string;
+export type UserPersonaInformation = {
+  firstName: string;
+  lastName: string;
+  brithday: string;
+  email: string;
+  gender: Gender;
+  contacts: {
     email: string;
-    gender: Gender;
-    contacts: {
-      email: string;
-      phone: string;
-      fax: string;
-    }
-  },
+    phone: string;
+    fax: string;
+  };
+};
+
+export type UserList = {
+  personalInformation: UserPersonaInformation;
   credentials: {
     username: string;
-  }
+  };
   id: string;
   address: UserAddressList;
-  roles: Role,
+  roles: Role;
 };
