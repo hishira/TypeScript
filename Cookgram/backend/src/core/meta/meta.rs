@@ -52,7 +52,7 @@ impl Entity for Meta {
 
 #[cfg(test)]
 mod tests {
-    use time::{Date, Month};
+    use time::Month;
 
     use super::*;
     #[test]

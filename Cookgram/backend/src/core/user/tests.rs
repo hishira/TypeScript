@@ -1,10 +1,16 @@
 #[cfg(test)]
 mod tests {
-    use time::{Date, OffsetDateTime};
+    use time::OffsetDateTime;
     use uuid::Uuid;
 
-    use crate::core::{entity::{entity::IdGenerator, Entity}, role::role::Roles, user::{contact::Contacts, credentials::Credentials, personalinformation::PersonalInformation, user::User}};
-
+    use crate::core::{
+        entity::{entity::IdGenerator, Entity},
+        role::role::Roles,
+        user::{
+            contact::Contacts, credentials::Credentials, personalinformation::PersonalInformation,
+            user::User,
+        },
+    };
 
     #[test]
     fn generate_id_test() {
@@ -22,7 +28,6 @@ mod tests {
 
     #[test]
     fn test_fields() {
-
         // Create a new user
         let user = User::new(
             None,
@@ -150,6 +155,4 @@ mod tests {
 
         // Check if the meta field is initialized correctly
     }
-
-
 }
