@@ -1,24 +1,18 @@
 <ng-container>
   <p-steps [activeIndex]="activeIndex" [model]="steps"></p-steps>
-  <ng-container [ngSwitch]="activeIndex">
-    <ng-container *ngSwitchCase="CreateUserStepsStrategy.GeneralInformation">
-      <app-user-create-general-information-step
-        [form]="generalInformationGroup" />
-    </ng-container>
-    <ng-container *ngSwitchCase="CreateUserStepsStrategy.AccessConfiguration">
-      <app-access-configuration-step
-        [form]="accessConfigurationGroup"></app-access-configuration-step>
-    </ng-container>
-    <ng-container *ngSwitchCase="CreateUserStepsStrategy.Address">
-      <app-address-step [form]="addressGroup"></app-address-step>
-    </ng-container>
-    <ng-container *ngSwitchCase="CreateUserStepsStrategy.Summary">
-      <app-create-user-summary
-        [form]="null"
-        [generalFormValue]="GeneralInformationValue"
-        [accessConfigurationValue]="AccessConfigurationValue"
-        [addressValue]="AddressValue"
-        (createEvent)="create()"></app-create-user-summary>
-    </ng-container>
-  </ng-container>
+  @switch(activeIndex){ @case(CreateUserStepsStrategy.GeneralInformation){
+  <app-user-create-general-information-step [form]="generalInformationGroup" />
+  } @case(CreateUserStepsStrategy.AccessConfiguration){
+  <app-access-configuration-step [form]="accessConfigurationGroup" />
+  } @case(CreateUserStepsStrategy.Address){
+  <app-address-step [form]="addressGroup"></app-address-step>
+
+  } @case(CreateUserStepsStrategy.Summary){
+  <app-create-user-summary
+    [form]="null"
+    [generalFormValue]="GeneralInformationValue"
+    [accessConfigurationValue]="AccessConfigurationValue"
+    [addressValue]="AddressValue"
+    (createEvent)="create()" />
+  } }
 </ng-container>
