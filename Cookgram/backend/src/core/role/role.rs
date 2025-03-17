@@ -148,7 +148,7 @@ impl Roles {
         }
     }
 
-    pub fn is_manager(&self) -> bool {
+    pub fn _is_manager(&self) -> bool {
         match self {
             Roles::Manager(_) => true,
             _ => false,
