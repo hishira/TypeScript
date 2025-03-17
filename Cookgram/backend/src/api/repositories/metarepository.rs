@@ -12,23 +12,23 @@ pub struct MetaRepository {
 #[derive(Clone)]
 pub struct MetaFilterOption {}
 impl Repository<Meta, MetaFilterOption, sqlx::Error> for MetaRepository {
-    async fn create(&self, entity: Meta) -> Meta {
+    async fn create(&self, _entity: Meta) -> Meta {
         todo!()
     }
 
-    async fn find(&self, option: MetaFilterOption) -> Result<Vec<Meta>, sqlx::Error> {
+    async fn find(&self, _option: MetaFilterOption) -> Result<Vec<Meta>, sqlx::Error> {
         todo!()
     }
 
-    async fn find_by_id(&self, id: uuid::Uuid) -> Meta {
+    async fn find_by_id(&self, _id: uuid::Uuid) -> Meta {
         todo!()
     }
 
-    async fn delete(&self, option: Meta) -> Meta {
+    async fn delete(&self, _option: Meta) -> Meta {
         todo!()
     }
 
-    async fn update(&self, update_entity: Meta) -> Meta {
+    async fn update(&self, _update_entity: Meta) -> Meta {
         todo!()
     }
 }

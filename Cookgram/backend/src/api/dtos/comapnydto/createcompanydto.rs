@@ -1,10 +1,9 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-use crate::{
-    api::dtos::addressdto::createaddressdto::CreateAddressDto,
-    core::address::{address::Address, location::Location},
-};
+use crate::
+    core::address::{address::Address, location::Location}
+;
 
 #[derive(Deserialize, Validate, Serialize)]
 pub struct ComapnyAddressDto {
@@ -28,7 +27,7 @@ pub struct CreateCompanyDto {
     pub address: ComapnyAddressDto,
 }
 
-pub fn convert_to_address(create_company_dto: ComapnyAddressDto) -> Address {
+pub fn _convert_to_address(create_company_dto: ComapnyAddressDto) -> Address {
     Address::new(
         create_company_dto.address.clone(),
         create_company_dto.house.clone(),

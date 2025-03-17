@@ -12,7 +12,6 @@ import {
 } from '../../../../../api/types/user.types';
 import { UserApiSerivce } from '../../../../../api/user.api';
 import { AddressValue } from '../../../../shared/components/address/types';
-import { Destroyer } from '../../../../shared/decorators/destroy';
 import { AbstractModalComponent } from '../../../../shared/directives/abstract-modal.component';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { ExtractFormControl } from '../../../../shared/types/shared';
@@ -38,6 +37,7 @@ import { preparePersonalInformation } from './utils';
   templateUrl: './create-user-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
+  providers: [ModalService],
   imports: [
     StepsModule,
     ButtonModule,
@@ -79,13 +79,13 @@ export class CreateUserModalComponent extends AbstractModalComponent {
     return this.addressGroup.value;
   }
 
-  create() {
+  create(): void {
     this.subscription.add(
       this.userApi.createUser(this.prepareCreateUserObject()).subscribe()
     );
   }
 
-  close() {
+  close(): void {
     this.dialogRef.close();
   }
 

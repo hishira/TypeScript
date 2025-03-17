@@ -34,7 +34,7 @@ impl Serialize for ContractId {
     where
         S: serde::Serializer,
     {
-        let mut state = serializer.serialize_str(&self.0.to_string().to_owned());
+        let state = serializer.serialize_str(&self.0.to_string().to_owned());
         state
     }
 }

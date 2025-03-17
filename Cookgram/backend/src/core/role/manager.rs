@@ -23,7 +23,7 @@ impl Default for Manager {
 }
 
 impl Role for Manager {
-    fn has_access(&self, access: impl Access) -> bool {
+    fn has_access(&self, _: impl Access) -> bool {
         true
     }
 

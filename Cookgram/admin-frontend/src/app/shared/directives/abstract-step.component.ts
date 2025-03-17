@@ -12,6 +12,7 @@ export class AbstractStepComponent<
   T extends Controlable = null
 > extends BaseComponent {
   readonly form = input.required<CheckType<T>>();
+
   protected readonly dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
   protected readonly modalService: ModalService = inject(ModalService);
 

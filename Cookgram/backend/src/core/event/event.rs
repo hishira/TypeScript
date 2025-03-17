@@ -5,6 +5,7 @@ use crate::core::entity::{entity::IdGenerator, Entity};
 
 use super::eventId::EventId;
 
+
 #[derive(Clone, Serialize, Deserialize)]
 pub enum EventEntity {
     User,
@@ -15,12 +16,14 @@ pub enum EventEntity {
     Contact,
 
 }
+
 #[derive(Clone, Serialize, Deserialize)]
 pub enum EventType {
     Create,
     Delete,
     Update,
 }
+
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Event {
     pub id: EventId,

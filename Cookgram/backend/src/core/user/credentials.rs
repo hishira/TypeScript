@@ -1,8 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 use crate::api::{
-    dtos::userdto::operationuserdto::UserCreditionalDto, utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError}
+    dtos::userdto::operationuserdto::UserCreditionalDto,
+    utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError},
 };
+
+use super::{authentication::Authentication, userid::UserId};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -19,6 +22,15 @@ impl Credentials {
             username,
             password,
             password_is_temporary,
+        }
+    }
+
+    pub fn get_authentication(&self, user_id: UserId) -> Authentication {
+        Authentication {
+            user_id,
+            password: self.password.clone(),
+            password_is_temporary: Some(self.password_is_temporary),
+            username: self.username.clone(),
         }
     }
 

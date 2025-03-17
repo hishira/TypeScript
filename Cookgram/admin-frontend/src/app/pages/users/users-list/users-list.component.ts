@@ -12,6 +12,7 @@ import { BaseComponent } from '../../../shared/components/base-component/base-co
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
 import { UserList } from './types';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-users-list',
@@ -25,6 +26,7 @@ import { UserList } from './types';
     EmptyListComponent,
     PanelModule,
     ButtonModule,
+    AsyncPipe,
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',

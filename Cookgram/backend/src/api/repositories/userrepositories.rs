@@ -3,10 +3,9 @@ use crate::{
         daos::{dao::DAO, useraddressdao::UserAddressDAO, userdao::UserDAO},
         dtos::userdto::userdto::UserFilterOption,
         queries::{
-            actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery, query::Query,
+            actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery,
             userquery::userquery::UserQuery,
         },
-        services::userservice::UserService,
     },
     core::{
         address::address::Address, event::userevent::UserEvent, meta::meta::Meta, user::user::User,
@@ -26,6 +25,7 @@ pub struct UserRepositories {
     pub db_context: Database,
     pub user_dao: UserDAO,
     pub user_address_dao: UserAddressDAO,
+
 }
 impl UserRepositories {
     async fn create_user_using_transaction(
@@ -39,13 +39,18 @@ impl UserRepositories {
             .user_dao
             .create(entity.clone(), Some(transaction.deref_mut()))
             .await;
-        let address_resp:Option<Result<PgQueryResult, Error>>;
-        if (entity.address.is_some()) {
-            address_resp = Some(self.user_address_dao.create(
-                entity.clone().address.unwrap(),
-                entity.clone().id.get_id(),
-                Some(transaction.deref_mut())
-            ).await);
+        
+        let address_resp: Option<Result<PgQueryResult, Error>>;
+        if entity.address.is_some() {
+            address_resp = Some(
+                self.user_address_dao
+                    .create(
+                        entity.clone().address.unwrap(),
+                        entity.clone().id.get_id(),
+                        Some(transaction.deref_mut()),
+                    )
+                    .await,
+            );
         } else {
             address_resp = None;
         }
@@ -61,7 +66,7 @@ impl UserRepositories {
     fn user_create_errors_handler(
         re: Result<PgQueryResult, Error>,
         meta_response: Result<PgQueryResult, Error>,
-        address_resp:Option<Result<PgQueryResult, Error>>
+        address_resp: Option<Result<PgQueryResult, Error>>,
     ) {
         match (re, meta_response) {
             (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
@@ -70,13 +75,11 @@ impl UserRepositories {
             (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
         }
         match address_resp {
-            Some(resp) => {
-                match resp  {
-                    Ok(_) => tracing::debug!("User address created"),
-                    Err(error) =>tracing::error!("Error occur while saving user address {}", error),
-                }
+            Some(resp) => match resp {
+                Ok(_) => tracing::debug!("User address created"),
+                Err(error) => tracing::error!("Error occur while saving user address {}", error),
             },
-            None => {},
+            _ => {}
         }
     }
 

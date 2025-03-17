@@ -3,13 +3,17 @@ use axum_extra::{
     headers::{authorization::Bearer, Authorization},
     TypedHeader,
 };
-use jsonwebtoken::{ Algorithm, Validation};
+use jsonwebtoken::{Algorithm, Validation};
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    api::{ dtos::userdto::operationuserdto::UserAuthDto, errors::autherror::AuthError},
-    core::{role::role::Roles, user::user::User},
-};
+use crate::
+    api::{
+        dtos::{roledto::roledto::RoleDto, userdto::{
+            authenticationuserdto::AuthenticationUserDto, operationuserdto::UserAuthDto,
+        }},
+        errors::autherror::AuthError,
+    }
+;
 
 use super::keys::Keys;
 
@@ -17,7 +21,7 @@ use super::keys::Keys;
 pub struct Claims {
     pub user_id: uuid::Uuid,
     pub user_info: String,
-    pub role: Option<Roles>,
+    pub role: Option<RoleDto>,
     pub exp: u64,
 }
 
@@ -34,19 +38,19 @@ impl Claims {
         Ok(Keys::encode(&token_data.claims)?)
     }
 
-    pub fn refresh_token(params: &UserAuthDto, user: User, exp: u64) -> Self {
+    pub fn refresh_token(params: &UserAuthDto, user: AuthenticationUserDto, exp: u64) -> Self {
         Self::new(&params, user, exp)
     }
 
-    pub fn access_token(params: &UserAuthDto, user: User, exp: u64) -> Self {
+    pub fn access_token(params: &UserAuthDto, user: AuthenticationUserDto, exp: u64) -> Self {
         Self::new(&params, user, exp)
     }
-    
-    pub fn new(params: &UserAuthDto, user: User, exp: u64) -> Self {
+
+    pub fn new(params: &UserAuthDto, user: AuthenticationUserDto, exp: u64) -> Self {
         match (params.email.clone(), params.username.clone()) {
             (None, None) => Self {
                 user_id: user.id.get_id(),
-                user_info: "TEst".to_string(),
+                user_info: "Test".to_string(),
                 exp,
                 role: Some(user.role),
             },

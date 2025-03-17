@@ -1,5 +1,6 @@
 import { Directive, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Base } from './base';
 
 @Directive({})
 export class BaseComponent implements OnDestroy, OnInit, Base {

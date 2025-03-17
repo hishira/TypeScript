@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use validator::{Validate, ValidationError};
 
-use crate::{api::dtos::addressdto::createaddressdto::CreateAddressDto, core::role::role::Roles};
+use crate::api::dtos::{addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto};
 
 use super::personalinformationdto::PersolanInformationDTO;
 
@@ -18,15 +18,15 @@ pub struct UserCreditionalDto {
 #[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserDto {
-    pub role: Option<Roles>,
+    pub role: Option<RoleDto>,
     pub personal_information: PersolanInformationDTO,
     pub creditionals: UserCreditionalDto,
     pub address: Option<CreateAddressDto>,
 }
 
-#[derive(Debug, Validate, Deserialize)]
+#[derive(Debug, Validate, Deserialize, Clone)]
 pub struct UpdateUserDto {
-    pub role: Option<Roles>,
+    pub role: Option<RoleDto>,
     pub personal_information: PersolanInformationDTO,
     pub creditionals: UserCreditionalDto,
     pub address: Option<CreateAddressDto>,
@@ -57,9 +57,8 @@ pub struct UserRegisterDto {
 
 pub fn validatete_auth(user_auth_dto: &UserAuthDto) -> Result<(), ValidationError> {
     match (user_auth_dto.username.clone(), user_auth_dto.email.clone()) {
-        (None, None) => Err(ValidationError::new("Username or email should be giver")),
-        (None, Some(_)) => Ok(()),
-        (Some(_), None) => Ok(()),
-        (Some(_), Some(_)) => Ok(()),
+        (_, Some(_)) => Ok(()),
+        (Some(_), __) => Ok(()),
+        (_, __) => Err(ValidationError::new("Username or email should be giver")),
     }
 }

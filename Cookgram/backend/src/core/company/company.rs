@@ -1,7 +1,8 @@
+use crate::core::{
+    address::address::Address, metaobject::metaobject::MetaObject, state::state::State,
+};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-
-use crate::core::{address::address::Address, metaobject::metaobject::MetaObject, state::state::State};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum CompanyState {
@@ -21,7 +22,7 @@ pub struct Company {
 }
 
 impl Company {
-    pub fn append_employeed(& mut self, user_id: Uuid) {
+    pub fn append_employeed(&mut self, user_id: Uuid) {
         self.employees.push(user_id);
     }
 }

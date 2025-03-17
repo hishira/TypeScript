@@ -4,7 +4,6 @@ use crate::core::{
     state::state::State,
 };
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 use super::notificationid::NotificationId;
 
@@ -35,7 +34,7 @@ pub enum NotificationState {
 }
 
 impl NotificationState {
-    pub fn default() -> State<NotificationState> {
+    pub fn _default() -> State<NotificationState> {
         State {
             current: NotificationState::Draft,
             previous: None,
@@ -59,7 +58,7 @@ impl Entity for Notification {
 }
 
 impl Notification {
-    pub fn new(
+    pub fn _new(
         title: String,
         content: Option<String>,
         notification_type: Option<NotificationType>,

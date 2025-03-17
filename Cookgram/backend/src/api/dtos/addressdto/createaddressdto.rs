@@ -28,7 +28,6 @@ pub struct CreateUserAddressDto {
     pub address: CreateAddressDto,
 }
 
-
 pub fn build_address_based_on_create_dto(create_dto: CreateAddressDto) -> Address {
     Address::new(
         create_dto.address,
@@ -41,13 +40,11 @@ pub fn build_address_based_on_create_dto(create_dto: CreateAddressDto) -> Addres
             longitude: create_dto.longitude,
         },
         create_dto.postal_code,
-
     )
 }
 #[cfg(test)]
 mod tests {
     use super::*;
-    use uuid::Uuid;
     use validator::Validate;
 
     #[test]
@@ -179,6 +176,5 @@ mod tests {
         assert_eq!(address.location.latitude, copy_dto.latitude);
         assert_eq!(address.location.longitude, copy_dto.longitude);
         assert_eq!(address.postal_code, copy_dto.postal_code);
-
     }
 }

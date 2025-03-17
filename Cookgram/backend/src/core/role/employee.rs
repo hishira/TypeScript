@@ -22,7 +22,7 @@ impl Default for Employee {
 }
 
 impl Role for Employee {
-    fn has_access(&self, access: impl Access) -> bool {
+    fn has_access(&self, _access: impl Access) -> bool {
         true
     }
     fn has_access_to(&self, query_action: QueriesActions) -> bool {

@@ -1,5 +1,4 @@
 
-use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgRow;
 use sqlx::Row;
 use time::OffsetDateTime;
@@ -8,7 +7,7 @@ use crate::api::dtos::userdto::userdto::UserDtos;
 
 use super::contact::Contacts;
 
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize, sqlx::Type)]
+#[derive(PartialEq, Debug, Clone, sqlx::Type)]
 #[sqlx(type_name = "Gender")]
 pub enum Gender {
     Man,
@@ -16,8 +15,7 @@ pub enum Gender {
     None,
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(PartialEq, Debug, Clone)]
 pub struct PersonalInformation {
     pub first_name: String,
     pub last_name: String,

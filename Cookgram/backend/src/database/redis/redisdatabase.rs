@@ -1,4 +1,4 @@
-use bb8::{Pool, PooledConnection};
+use bb8::Pool;
 use bb8_redis::RedisConnectionManager;
 
 use bb8_redis::bb8;

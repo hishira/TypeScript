@@ -2,7 +2,8 @@ use axum::Json;
 use uuid::Uuid;
 
 use crate::api::daos::userdao::UserDAO;
-use crate::api::dtos::addressdto::createaddressdto::{build_address_based_on_create_dto, CreateAddressDto, CreateUserAddressDto};
+use crate::api::dtos::addressdto::createaddressdto::{build_address_based_on_create_dto, CreateUserAddressDto};
+use crate::api::dtos::roledto::roledto::{map_to_roles, RoleDto};
 use crate::api::dtos::userdto::operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto};
 use crate::api::dtos::userdto::userdto::{from_user_to_user_dto, UserDTO, UserFilterOption};
 use crate::api::errors::autherror::AuthError;
@@ -129,10 +130,10 @@ impl UserService {
     pub async fn user_list(
         &self,
         user_id: Uuid,
-        user_role: Option<Roles>,
+        user_role: Option<RoleDto>,
         params: UserFilterOption,
     ) -> Result<Json<Vec<UserDTO>>, ResponseError> {
-        let is_admin = Self::check_is_admin_role(user_role)?;
+        let is_admin = Self::check_is_admin_role(user_role.map(map_to_roles))?;
         let params = Some(params)
             .map(|params| Self::map_merge_params_with_owner(params, is_admin, user_id))
             .unwrap();

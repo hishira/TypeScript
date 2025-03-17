@@ -28,7 +28,7 @@ impl ActionQueryBuilder<Meta> for MetaQuery {
         update_builder
     }
 
-    fn delete(entity: Meta) -> QueryBuilder<'static, Postgres> {
+    fn delete(_: Meta) -> QueryBuilder<'static, Postgres> {
         todo!()
     }
 }

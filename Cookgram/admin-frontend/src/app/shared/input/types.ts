@@ -1,4 +1,5 @@
 import { AbstractControl, ControlEvent } from '@angular/forms';
+
 export type EventHandlerFunction<T extends ControlEvent> = (
   event: T,
   control: AbstractControl

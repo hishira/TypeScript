@@ -1,4 +1,4 @@
-use axum::{extract::rejection::JsonRejection, http::StatusCode, response::{IntoResponse, Response}, Json};
+use axum::{extract::rejection::JsonRejection, http::StatusCode, response::{IntoResponse, Response}};
 use thiserror::Error;
 
 

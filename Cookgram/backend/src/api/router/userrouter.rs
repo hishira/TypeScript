@@ -16,7 +16,6 @@ use crate::{
             userdto::{
                 operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
                 userdto::{from_user_to_user_dto, UserDTO, UserFilterOption},
-                userlistdto::UserListDto,
             },
         },
         errors::{autherror::AuthError, responseerror::ResponseError},
@@ -30,7 +29,7 @@ use crate::{
         utils::jwt::jwt::Claims,
         validators::dtovalidator::ValidateDtos,
     },
-    core::{event::eventTask::EventTask, user::user::User},
+    core::event::eventTask::EventTask,
     database::{init::Database, redis::redisdatabase::RedisDatabase},
 };
 
@@ -71,6 +70,7 @@ impl UserRouter {
             send: send.clone(),
         }
     }
+    
     async fn user_create(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
@@ -116,8 +116,8 @@ impl UserRouter {
                     ..params
                 })
                 .await
-                .iter()
-                .map(|user| from_user_to_user_dto(user.to_owned()))
+                .into_iter()
+                .map(from_user_to_user_dto)
                 .collect(),
         ))
     }
@@ -191,7 +191,7 @@ impl UserRouter {
     }
 
     async fn event_test(State(state): State<UserState>) -> Result<Json<bool>, ResponseError> {
-        state.send.send(EventTask("Ok".to_string())).await;
+        let _ = state.send.send(EventTask("Ok".to_string())).await;
         return Ok(Json(true));
     }
 }
@@ -232,8 +232,8 @@ async fn protected(claims: Claims) -> Result<String, AuthError> {
     Ok(format!("{}", claims.user_id))
 }
 async fn pp(
-    claims: Claims,
-    State(state): State<UserState>,
+    _: Claims,
+    State(_state): State<UserState>,
     ValidateDtos(params): ValidateDtos<CreateUserDto>,
 ) -> Result<String, AuthError> {
     print!("{}", params.personal_information.email.unwrap());

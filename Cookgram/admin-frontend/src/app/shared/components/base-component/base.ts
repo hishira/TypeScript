@@ -1,4 +1,4 @@
-interface Base {
+export interface Base {
   destroy?(): void;
   initialize?(): void;
 }

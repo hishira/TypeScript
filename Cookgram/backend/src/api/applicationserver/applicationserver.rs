@@ -1,11 +1,3 @@
-use axum::{
-    extract::{DefaultBodyLimit, MatchedPath, Request},
-    middleware, Router,
-};
-use tokio::{net::TcpListener, signal, sync::mpsc};
-use tower_http::trace::TraceLayer;
-use tracing::info_span;
-
 use crate::{
     api::{
         logs::applicationlog::ApplicationLog,
@@ -17,18 +9,20 @@ use crate::{
     core::event::eventTask::EventTask,
     database::{self, init::Database},
 };
+use axum::{
+    extract::{DefaultBodyLimit, MatchedPath, Request},
+    middleware, Router,
+};
+use tokio::{net::TcpListener, signal, sync::mpsc};
+use tower_http::trace::TraceLayer;
+use tracing::info_span;
 
 pub struct ApplicationServer {}
 
 impl ApplicationServer {
     async fn create_router(database: &Database) -> Router {
-        let (tx,  rx) = mpsc::channel::<EventTask>(64);
+        let (tx, rx) = mpsc::channel::<EventTask>(64);
         EventService { event_reciver: rx }.run_loop().await;
-        // tokio::spawn(async move {
-        //     while let Some(task) = rx.recv().await {
-        //         println!("{}", task.0);
-        //     }
-        // });
         Router::new()
             .nest("/user", UserRouter::new(&database, &tx).get_router())
             .nest("/auth", AuthRouter::new(&database).get_router())
@@ -72,7 +66,7 @@ impl ApplicationServer {
     }
     pub async fn start_main_app() {
         match ApplicationLog::register_tracing() {
-            Ok(ok) => {
+            Ok(_) => {
                 tracing::info!("Tracing successfull created");
             }
             Err(err) => {

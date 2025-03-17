@@ -111,9 +111,8 @@ impl<'de> Deserialize<'de> for EntityState {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use sqlx::postgres::{PgArgumentBuffer, PgTypeInfo, Postgres};
-    use sqlx::Encode;
-    use serde_json::{json, Value};
+    use sqlx::postgres::PgArgumentBuffer;
+    use serde_json::json;
     use std::str::FromStr;
 
     #[test]

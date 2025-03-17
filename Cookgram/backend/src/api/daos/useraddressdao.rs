@@ -1,13 +1,10 @@
-use std::any::Any;
 
-use async_trait::async_trait;
 use mongodb::Database;
 use sqlx::{postgres::PgQueryResult, Executor, Pool, Postgres, QueryBuilder};
 use uuid::Uuid;
 
 use crate::core::address::address::Address;
 
-use super::dao::DAO;
 
 #[derive(Clone)]
 pub struct UserAddressDAO {
@@ -15,11 +12,10 @@ pub struct UserAddressDAO {
     pub db_context: Database,
 }
 
-pub struct AddressFilterOption {}
 
 impl UserAddressDAO {
-    const START_ADDRESS_QUERY: &str = "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code ) ";
-    const RETURN_AND_ADDRESS_CONNECTION: &str =
+    const START_ADDRESS_QUERY: &'static str = "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code ) ";
+    const RETURN_AND_ADDRESS_CONNECTION: &'static str =
         "returning id ) INSERT into ADDRESS_CONNECTION (entity_id, address_id) ";
 
     pub async fn create<'a, E>(
@@ -55,7 +51,7 @@ impl UserAddressDAO {
         );
         match executor {
             Some(exec) => create_address_builder.build().execute(exec).await,
-            None => create_address_builder.build().execute(&self.pool).await,
+            _ => create_address_builder.build().execute(&self.pool).await,
         }
     }
 }

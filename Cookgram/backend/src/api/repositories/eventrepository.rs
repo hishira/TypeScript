@@ -1,5 +1,5 @@
 use mongodb::Database;
-use sqlx::{Pool, Postgres, QueryBuilder};
+use sqlx::{Pool, Postgres};
 
 use crate::{
     api::queries::{actionquery::ActionQueryBuilder, eventquery::eventquery::EventQuery},
@@ -39,19 +39,19 @@ impl Repository<Event, EventFilterOption, sqlx::Error> for EventRepository {
         entity
     }
 
-    async fn find(&self, option: EventFilterOption) -> Result<Vec<Event>, sqlx::Error> {
+    async fn find(&self, _: EventFilterOption) -> Result<Vec<Event>, sqlx::Error> {
         todo!()
     }
 
-    async fn find_by_id(&self, id: uuid::Uuid) -> Event {
+    async fn find_by_id(&self, _: uuid::Uuid) -> Event {
         todo!()
     }
 
-    async fn delete(&self, option: Event) -> Event {
+    async fn delete(&self, _: Event) -> Event {
         todo!()
     }
 
-    async fn update(&self, update_entity: Event) -> Event {
+    async fn update(&self, _: Event) -> Event {
         todo!()
     }
 }
