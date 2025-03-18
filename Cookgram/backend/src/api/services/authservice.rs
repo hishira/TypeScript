@@ -1,5 +1,3 @@
-use axum::Json;
-
 use crate::api::{
     dtos::{
         tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
@@ -14,6 +12,7 @@ use crate::api::{
     services::tokenservice::TokenService,
     utils::{jwt::tokens::JwtTokens, password_worker::password_worker::PasswordWorker},
 };
+use axum::Json;
 
 #[derive(Clone)]
 pub struct AuthService {

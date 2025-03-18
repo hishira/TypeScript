@@ -1,6 +1,5 @@
-use tokio::sync::mpsc::Receiver;
-
 use crate::core::event::eventTask::EventTask;
+use tokio::sync::mpsc::Receiver;
 
 pub struct EventService {
     pub event_reciver: Receiver<EventTask>,
