@@ -1,6 +1,3 @@
-use axum::Json;
-use jsonwebtoken::get_current_timestamp;
-
 use crate::api::{
     dtos::{
         tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
@@ -10,6 +7,8 @@ use crate::api::{
     router::authrouter::AuthDTO,
     utils::jwt::{jwt::Claims, tokens::JwtTokens},
 };
+use axum::Json;
+use jsonwebtoken::get_current_timestamp;
 
 pub struct TokenService {}
 
