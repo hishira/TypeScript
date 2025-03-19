@@ -1,13 +1,21 @@
+use crate::{
+    api::dtos::{
+        addressdto::addressdto::{from_address_to_address_dto, AddressDto},
+        roledto::roledto::{map_roles_to_role_dto, RoleDto},
+    },
+    core::{
+        state::{entitystate::EntityState, state::State},
+        user::user::User,
+    },
+};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::{api::dtos::{addressdto::addressdto::{from_address_to_address_dto, AddressDto}, roledto::roledto::{map_roles_to_role_dto, RoleDto}}, core::{
-        state::{entitystate::EntityState, state::State},
-        user::user::User,
-    }};
-
 use super::{
-    credentialsdto::{get_credentials_dto_from_credentials, CredentialsDTO}, metadto::{convert_meta_to_meta_dto, MetaDto}, operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto}, personalinformationdto::{from_personal_info_to_dto, PersolanInformationDTO}
+    credentialsdto::{get_credentials_dto_from_credentials, CredentialsDTO},
+    metadto::{convert_meta_to_meta_dto, MetaDto},
+    operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
+    personalinformationdto::{from_personal_info_to_dto, PersolanInformationDTO},
 };
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
@@ -22,7 +30,7 @@ pub struct UserDTO {
     pub state: State<EntityState>,
 }
 
-pub fn from_user_to_user_dto(user: User)->UserDTO {
+pub fn from_user_to_user_dto(user: User) -> UserDTO {
     UserDTO {
         id: user.id.get_id(),
         address: user.address.map(from_address_to_address_dto),
@@ -46,7 +54,6 @@ pub struct UserFilterOption {
 }
 
 impl UserFilterOption {
-
     pub fn _from_only_usernamr(username: String) -> Self {
         Self {
             username: Some(username),

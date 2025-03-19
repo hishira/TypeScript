@@ -1,8 +1,6 @@
 use axum::{http::StatusCode, response::IntoResponse, Json};
 use serde_json::json;
-
 use crate::api::utils::password_worker::password_worker::PasswordWorkerError;
-
 use super::autherror::AuthError;
 
 #[derive(Debug)]

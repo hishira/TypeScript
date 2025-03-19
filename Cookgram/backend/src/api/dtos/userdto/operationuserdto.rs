@@ -1,9 +1,7 @@
+use super::personalinformationdto::PersolanInformationDTO;
+use crate::api::dtos::{addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto};
 use serde::Deserialize;
 use validator::{Validate, ValidationError};
-
-use crate::api::dtos::{addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto};
-
-use super::personalinformationdto::PersolanInformationDTO;
 
 #[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
