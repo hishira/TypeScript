@@ -1,17 +1,13 @@
-
+use crate::core::address::address::Address;
 use mongodb::Database;
 use sqlx::{postgres::PgQueryResult, Executor, Pool, Postgres, QueryBuilder};
 use uuid::Uuid;
-
-use crate::core::address::address::Address;
-
 
 #[derive(Clone)]
 pub struct UserAddressDAO {
     pub pool: Pool<Postgres>,
     pub db_context: Database,
 }
-
 
 impl UserAddressDAO {
     const START_ADDRESS_QUERY: &'static str = "WITH first_insert as ( INSERT INTO ADDRESS(id, address, house, door, city, country, lat, long, postal_code ) ";
