@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
-
 use crate::core::user::contact::Contacts;
+use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Debug, Clone, Deserialize, Serialize)]
 pub struct ContactDTO {
