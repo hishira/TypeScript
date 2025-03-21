@@ -4,7 +4,6 @@ use crate::{api::dtos::roledto::roledto::RoleDto, core::{
     state::{entitystate::EntityState, state::State},
     user::userid::UserId,
 }};
-
 use super::credentialsdto::CredentialsDTO;
 
 #[derive(PartialEq, Debug, Clone, Serialize)]

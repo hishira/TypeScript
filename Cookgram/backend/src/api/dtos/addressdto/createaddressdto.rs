@@ -1,7 +1,6 @@
+use crate::core::address::{address::Address, location::Location};
 use serde::Deserialize;
 use validator::Validate;
-
-use crate::core::address::{address::Address, location::Location};
 
 #[derive(Debug, Validate, Deserialize, Clone)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
