@@ -34,7 +34,7 @@ pub enum NotificationState {
 }
 
 impl NotificationState {
-    pub fn _default() -> State<NotificationState> {
+    pub fn default() -> State<NotificationState> {
         State {
             current: NotificationState::Draft,
             previous: None,

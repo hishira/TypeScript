@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { UserList } from '../app/pages/users/users-list/types';
 import { ContextUser } from '../app/shared/types/shared';
 import { BaseApi } from './base.api';

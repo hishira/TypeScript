@@ -1,4 +1,4 @@
-import { Gender, Role } from '../../../shared/types/enums';
+import { Gender, Role, State } from '../../../shared/types/enums';
 import { Optional } from '../../../shared/types/shared';
 
 export type UserAddressList = {
@@ -15,9 +15,9 @@ export type UserPersonaInformation = {
   email: string;
   gender: Gender;
   contacts: {
-    email: string;
-    phone: string;
-    fax: string;
+    email: string | null;
+    phone: string | null;
+    fax: string | null;
   };
 };
 
@@ -28,5 +28,13 @@ export type UserList = {
   };
   id: string;
   address: UserAddressList;
+  meta: {
+    id: string;
+    crateDate: string;
+    editDate: string;
+  }
   roles: Role;
+  state: {
+    current: State
+  }
 };
