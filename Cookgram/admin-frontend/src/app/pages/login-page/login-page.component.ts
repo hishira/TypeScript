@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -6,7 +6,14 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
-import { take } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  pipe,
+  Subject,
+  take,
+  tap,
+} from 'rxjs';
 import { AuthenticationApiService } from '../../../api/authentication.api';
 import { LoginPayload, TokenResponse } from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
@@ -17,6 +24,8 @@ import { ToastService } from '../../shared/services/toast.service';
 import { Optional } from '../../shared/types/shared';
 import { LoginFormGroup } from './types';
 import { EmptyLoginForm, chckIfUserExistsBasedOnResponse } from './utils';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { BlockUIModule } from 'primeng/blockui';
 
 @Component({
   selector: 'app-login-page',
@@ -28,6 +37,8 @@ import { EmptyLoginForm, chckIfUserExistsBasedOnResponse } from './utils';
     InputTextModule,
     ReactiveFormsModule,
     InputComponent,
+    ProgressSpinnerModule,
+    BlockUIModule
   ],
   providers: [AuthenticationApiService],
   templateUrl: './login-page.component.html',
@@ -35,6 +46,18 @@ import { EmptyLoginForm, chckIfUserExistsBasedOnResponse } from './utils';
 })
 export class LoginPageComponent extends BaseComponent {
   readonly loginFormGroup: FormGroup<LoginFormGroup> = EmptyLoginForm();
+  loading: boolean = false;
+  private readonly debounceTime = 300;
+  private readonly enterPress: Subject<void> = new Subject();
+
+  private readonly handleEnterPressPipe = pipe(
+    debounceTime(this.debounceTime),
+    tap(() => this.signIn())
+  );
+  @HostListener('window:keydown.enter', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    this.enterPress.next();
+  }
 
   get loginPayload(): LoginPayload {
     return {
@@ -50,10 +73,14 @@ export class LoginPageComponent extends BaseComponent {
     private readonly store: Store<MainStore>
   ) {
     super();
+    this.subscription.add(
+      this.enterPress.pipe(this.handleEnterPressPipe).subscribe()
+    );
   }
 
   signIn(): void {
     if (!this.validateForm()) return;
+    this.loading = true;
     this.subscription.add(
       this.authenticationService
         .login(this.loginPayload)
@@ -71,6 +98,7 @@ export class LoginPageComponent extends BaseComponent {
   }
 
   private handleLoginResponse(response: Optional<TokenResponse>): void {
+    this.loading = false;
     const userNotExists = chckIfUserExistsBasedOnResponse(response);
     if (userNotExists) {
       this.toastService.showWarning('User not exists');

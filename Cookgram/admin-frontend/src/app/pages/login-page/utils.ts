@@ -10,6 +10,7 @@ import { LoginFormGroup } from './types';
 
 const responseHasEmptyTokens = (response: Tokens): boolean =>
   isEmptyString(response.accessToken) && isEmptyString(response.refreshToken);
+
 export const chckIfUserExistsBasedOnResponse = (
   response: Optional<TokenResponse>
 ): boolean => {
