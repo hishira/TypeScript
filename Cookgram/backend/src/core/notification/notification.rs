@@ -1,11 +1,10 @@
+use super::notificationid::NotificationId;
 use crate::core::{
     entity::{entity::IdGenerator, Entity},
     metaobject::metaobject::MetaObject,
     state::state::State,
 };
 use serde::{Deserialize, Serialize};
-
-use super::notificationid::NotificationId;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EmailValue(String);
