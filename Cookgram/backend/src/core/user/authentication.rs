@@ -1,8 +1,6 @@
-use serde::{Deserialize, Serialize};
-
-use crate::core::entity::Entity;
-
 use super::{credentials::Credentials, userid::UserId};
+use crate::core::entity::Entity;
+use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -55,7 +53,6 @@ impl Authentication {
             password: credentials.password,
             password_is_temporary: Some(credentials.password_is_temporary),
             username: credentials.username,
-
         }
     }
 }
