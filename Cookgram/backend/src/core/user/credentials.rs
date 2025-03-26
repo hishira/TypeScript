@@ -1,11 +1,9 @@
-use serde::{Deserialize, Serialize};
-
+use super::{authentication::Authentication, userid::UserId};
 use crate::api::{
     dtos::userdto::operationuserdto::UserCreditionalDto,
     utils::password_worker::password_worker::{PasswordWorker, PasswordWorkerError},
 };
-
-use super::{authentication::Authentication, userid::UserId};
+use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
