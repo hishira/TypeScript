@@ -1,6 +1,5 @@
-use sqlx::{Postgres, QueryBuilder};
-
 use crate::{api::queries::actionquery::ActionQueryBuilder, core::meta::meta::Meta};
+use sqlx::{Postgres, QueryBuilder};
 
 pub struct MetaQuery {}
 

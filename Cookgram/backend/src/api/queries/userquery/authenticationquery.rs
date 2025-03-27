@@ -1,5 +1,3 @@
-use sqlx::{Postgres, QueryBuilder};
-
 use crate::{
     api::{
         dtos::userdto::credentialsdto::CredentialsFilterOption,
@@ -7,6 +5,7 @@ use crate::{
     },
     core::user::{authentication::Authentication, userid::UserId},
 };
+use sqlx::{Postgres, QueryBuilder};
 
 #[derive(Clone)]
 pub struct AuthenticationQuery {
@@ -68,7 +67,7 @@ impl Query<CredentialsFilterOption> for AuthenticationQuery {
                 find_query.push_bind(username);
                 find_query
             }
-        
+
             (Some(username), _, _) => {
                 find_query.push(" AND username = ");
                 find_query.push_bind(username);
@@ -76,8 +75,7 @@ impl Query<CredentialsFilterOption> for AuthenticationQuery {
             }
             (_, __, Some(_)) => todo!(),
             (_, Some(_), __) => todo!(),
-           
-           
+
             _ => todo!(),
         }
     }
