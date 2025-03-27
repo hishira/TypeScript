@@ -10,21 +10,25 @@
     <p-table [value]="users" [rows]="users.length" [paginator]="true">
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="name" style="width: 25%">
-            Email <p-sortIcon field="name" />
+          <th style="width: 25%">
+            Email 
           </th>
-          <th pSortableColumn="country" style="width: 25%">
-            Username <p-sortIcon field="country.name" />
+          <th style="width: 25%">
+            Username 
           </th>
-          <th pSortableColumn="representative.name" style="width: 25%">
-            Status <p-sortIcon field="status" />
+          <th style="width: 25%">
+            Full name
+          </th>
+          <th style="width: 25%">
+            Status
           </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-customer>
         <tr>
           <td>{{ customer.personalInformation.email }}</td>
-          <td>{{ customer.credentials.username }}</td>
+          <td>  {{ customer.credentials.username }}</td>
+          <td><app-read-only>{{ customer.fullName }}</app-read-only></td>
           <td>{{ customer.state.current }}</td>
         </tr>
       </ng-template>

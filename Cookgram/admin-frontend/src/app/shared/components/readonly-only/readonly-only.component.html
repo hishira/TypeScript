@@ -1,4 +1,11 @@
 <div class="inline-flex flex-column gap-1">
+  @if(title()){
   <span class="text-400 font-medium">{{ title() }}</span>
-  <span><ng-content></ng-content></span>
+
+  }
+  <span #ref><ng-content></ng-content></span>
+  
 </div>
+@if(check(ref)) {
+  <span class="text-center">-</span>
+}

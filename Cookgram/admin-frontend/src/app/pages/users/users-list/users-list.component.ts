@@ -13,6 +13,7 @@ import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
 import { UserList } from './types';
 import { CommonModule } from '@angular/common';
+import { ReadoOnlyComponent } from "../../../shared/components/readonly-only/readonly-only.component";
 
 @Component({
   selector: 'app-users-list',
@@ -27,7 +28,8 @@ import { CommonModule } from '@angular/common';
     PanelModule,
     ButtonModule,
     CommonModule,
-  ],
+    ReadoOnlyComponent
+],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
 })

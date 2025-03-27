@@ -23,6 +23,7 @@ export type UserPersonaInformation = {
 
 export type UserList = {
   personalInformation: UserPersonaInformation;
+  fullName: string;
   credentials: {
     username: string;
   };
