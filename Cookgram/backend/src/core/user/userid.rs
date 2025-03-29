@@ -1,7 +1,6 @@
+use crate::core::entity::entity::IdGenerator;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-
-use crate::core::entity::entity::IdGenerator;
 
 #[derive(PartialEq, Debug, Clone, Deserialize)]
 pub struct UserId(Uuid);
