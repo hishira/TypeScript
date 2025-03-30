@@ -1,11 +1,9 @@
-use tokio::sync::mpsc::Sender;
-
+use super::appstate::AppState;
 use crate::{
     api::{repositories::userrepositories::UserRepositories, services::userservice::UserService},
     core::event::eventTask::EventTask,
 };
-
-use super::appstate::AppState;
+use tokio::sync::mpsc::Sender;
 
 #[derive(Clone)]
 pub struct UserState {

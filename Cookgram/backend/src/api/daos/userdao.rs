@@ -1,10 +1,4 @@
-use std::ops::DerefMut;
-
-use async_trait::async_trait;
-use mongodb::Database;
-use sqlx::{postgres::PgQueryResult, Acquire, Executor, Pool, Postgres, QueryBuilder};
-use uuid::Uuid;
-
+use super::dao::DAO;
 use crate::{
     api::{
         dtos::userdto::userdto::UserFilterOption,
@@ -17,8 +11,11 @@ use crate::{
     },
     core::user::{authentication::Authentication, user::User},
 };
-
-use super::dao::DAO;
+use async_trait::async_trait;
+use mongodb::Database;
+use sqlx::{postgres::PgQueryResult, Acquire, Executor, Pool, Postgres, QueryBuilder};
+use std::ops::DerefMut;
+use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct UserDAO {
