@@ -1,9 +1,6 @@
+use crate::core::address::{address::Address, location::Location};
 use serde::{Deserialize, Serialize};
 use validator::Validate;
-
-use crate::
-    core::address::{address::Address, location::Location}
-;
 
 #[derive(Deserialize, Validate, Serialize)]
 pub struct ComapnyAddressDto {

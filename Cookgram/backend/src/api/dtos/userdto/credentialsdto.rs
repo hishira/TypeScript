@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
-
 use crate::core::user::credentials::Credentials;
+use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
