@@ -93,6 +93,7 @@ export class CreateUserModalComponent extends AbstractModalComponent {
     const { address } = this.createUserGroup.value;
 
     return {
+      role: this.createUserGroup.value.accessConfiguration?.role,
       credentials: this.prepareCredentials(),
       personalInformation: preparePersonalInformation(
         this.createUserGroup.value as ExtractFormControl<CreateModalGroup>
