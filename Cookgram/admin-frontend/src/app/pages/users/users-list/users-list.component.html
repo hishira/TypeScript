@@ -36,31 +36,6 @@
   </app-empty-list>
   }
   @else {
-  <p-table [value]="[0,0,0,0]" [rows]="5">
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="width: 25%">
-          Email
-        </th>
-        <th style="width: 25%">
-          Username
-        </th>
-        <th style="width: 25%">
-          Full name
-        </th>
-        <th style="width: 25%">
-          Status
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-skeleton>
-      <tr>
-        <td><p-skeleton /></td>
-        <td><p-skeleton /></td>
-        <td><p-skeleton /></td>
-        <td><p-skeleton /></td>
-      </tr>
-    </ng-template>
-  </p-table>
+    <app-table-skeleton [skeletonRows]="skeletonRows"/>
   }
 </p-panel>

@@ -13,8 +13,9 @@ import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
 import { UserList } from './types';
 import { CommonModule } from '@angular/common';
-import { ReadoOnlyComponent } from "../../../shared/components/readonly-only/readonly-only.component";
+import { ReadoOnlyComponent } from '../../../shared/components/readonly-only/readonly-only.component';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TableSkeletonComponent } from "../../../shared/components/skeletons/table-skeleton/table-skeleton.component";
 
 @Component({
   selector: 'app-users-list',
@@ -30,14 +31,20 @@ import { SkeletonModule } from 'primeng/skeleton';
     ButtonModule,
     CommonModule,
     ReadoOnlyComponent,
-    SkeletonModule
+    SkeletonModule,
+    TableSkeletonComponent
 ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent extends BaseComponent {
   users$!: Observable<UserList[]>;
-
+  readonly skeletonRows = [
+    { style: 'width: 25%', placeholder: 'Email' },
+    { style: 'width: 25%', placeholder: 'Username' },
+    { style: 'width: 25%', placeholder: 'Full name' },
+    { style: 'width: 25%', placeholder: 'Status' },
+  ];
   constructor(
     private readonly userApi: UserApiSerivce,
     private readonly dialogService: DialogService
