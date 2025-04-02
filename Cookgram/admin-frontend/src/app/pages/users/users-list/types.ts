@@ -37,5 +37,6 @@ export type UserList = {
   roles: Role;
   state: {
     current: State
+    previousState: State
   }
 };

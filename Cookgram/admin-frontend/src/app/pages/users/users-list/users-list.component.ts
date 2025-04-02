@@ -6,7 +6,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { BaseComponent } from '../../../shared/components/base-component/base-component';
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
@@ -14,6 +14,7 @@ import { CreateUserModalComponent } from '../modals/create-user-modal/create-use
 import { UserList } from './types';
 import { CommonModule } from '@angular/common';
 import { ReadoOnlyComponent } from "../../../shared/components/readonly-only/readonly-only.component";
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-users-list',
@@ -28,7 +29,8 @@ import { ReadoOnlyComponent } from "../../../shared/components/readonly-only/rea
     PanelModule,
     ButtonModule,
     CommonModule,
-    ReadoOnlyComponent
+    ReadoOnlyComponent,
+    SkeletonModule
 ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
@@ -44,7 +46,7 @@ export class UsersListComponent extends BaseComponent {
   }
 
   override initialize(): void {
-    this.users$ = this.userApi.userLists();
+    this.users$ = this.userApi.userLists().pipe(delay(1500));
   }
 
   createUser() {
