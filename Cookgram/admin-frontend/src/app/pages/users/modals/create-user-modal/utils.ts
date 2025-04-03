@@ -10,6 +10,6 @@ export const preparePersonalInformation = (
   lastName: formValue.generalInformation.secondName,
   brithday: formValue.generalInformation.birthDate,
   gender: formValue.generalInformation.gender as unknown as Gender,
-  contacts: {},
+  contacts: null,
   email: formValue.accessConfiguration.email,
 });

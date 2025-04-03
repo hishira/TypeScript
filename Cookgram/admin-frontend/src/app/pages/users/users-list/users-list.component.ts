@@ -15,7 +15,8 @@ import { UserList } from './types';
 import { CommonModule } from '@angular/common';
 import { ReadoOnlyComponent } from '../../../shared/components/readonly-only/readonly-only.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { TableSkeletonComponent } from "../../../shared/components/skeletons/table-skeleton/table-skeleton.component";
+import { TableSkeletonComponent } from '../../../shared/components/skeletons/table-skeleton/table-skeleton.component';
+import { skeletonRows } from './consts';
 
 @Component({
   selector: 'app-users-list',
@@ -32,19 +33,15 @@ import { TableSkeletonComponent } from "../../../shared/components/skeletons/tab
     CommonModule,
     ReadoOnlyComponent,
     SkeletonModule,
-    TableSkeletonComponent
-],
+    TableSkeletonComponent,
+  ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent extends BaseComponent {
   users$!: Observable<UserList[]>;
-  readonly skeletonRows = [
-    { style: 'width: 25%', placeholder: 'Email' },
-    { style: 'width: 25%', placeholder: 'Username' },
-    { style: 'width: 25%', placeholder: 'Full name' },
-    { style: 'width: 25%', placeholder: 'Status' },
-  ];
+  readonly skeletonRows = skeletonRows;
+  
   constructor(
     private readonly userApi: UserApiSerivce,
     private readonly dialogService: DialogService
@@ -53,7 +50,7 @@ export class UsersListComponent extends BaseComponent {
   }
 
   override initialize(): void {
-    this.users$ = this.userApi.userLists().pipe(delay(1500));
+    this.users$ = this.userApi.userLists();
   }
 
   createUser() {
