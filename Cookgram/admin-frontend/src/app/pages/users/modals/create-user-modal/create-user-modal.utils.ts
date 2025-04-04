@@ -1,5 +1,13 @@
-import { FormControl, FormGroup } from '@angular/forms';
-import { DefaultNonNullabeOption, NonNullable } from '../../../../shared/consts/form.consts';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+} from '@angular/forms';
+import {
+  DefaultNonNullabeOption,
+  NonNullable,
+} from '../../../../shared/consts/form.consts';
 import { Role } from '../../../../shared/types/enums';
 import {
   AccessConfigurationStepGroup,
@@ -26,6 +34,14 @@ export const EmptyGeneralInformationGroup =
       gender: new FormControl<Gender>(Gender.Men, NonNullable),
     });
 
+const accessGroupValidation = (
+  accessGroup: FormGroup<AccessConfigurationStepGroup>
+): ValidationErrors | null => {
+  const password = accessGroup.value.password;
+  const confirmPassword = accessGroup.value.confirmPassword;
+
+  return password !== confirmPassword ? { passwordsNotMatch: true } : null;
+};
 export const EmptyAccessConfigurationGroup =
   (): FormGroup<AccessConfigurationStepGroup> =>
     new FormGroup<AccessConfigurationStepGroup>({

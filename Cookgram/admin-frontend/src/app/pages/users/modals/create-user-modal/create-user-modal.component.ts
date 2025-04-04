@@ -60,6 +60,7 @@ export class CreateUserModalComponent extends AbstractModalComponent {
   readonly steps: MenuItem[] = CreateUserSteps;
   readonly CreateUserStepsStrategy = CreateUserStepsStrategy;
   readonly isLoading = signal(false);
+
   constructor(
     private readonly dialogRef: DynamicDialogRef,
     private readonly userApi: UserApiSerivce
