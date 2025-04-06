@@ -31,6 +31,7 @@ export class AbstractStepComponent<
   }
 
   protected next(): void {
+    console.log(this.form());
     if (!this.validate()) return;
     this.modalService.nextStepChange.next();
   }

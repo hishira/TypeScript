@@ -41,6 +41,7 @@ export class ErrorsComponent extends BaseComponent {
   }
 
   private getEventObservable(): Observable<string[]> {
+    console.log(this.control())
     return this.control().events.pipe(
       map((e) => {
         if (!(e instanceof TouchedChangeEvent)) return [];

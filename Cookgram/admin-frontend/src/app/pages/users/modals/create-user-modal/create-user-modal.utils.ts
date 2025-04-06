@@ -3,6 +3,7 @@ import {
   FormControl,
   FormGroup,
   ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
 import {
   DefaultNonNullabeOption,
@@ -34,27 +35,32 @@ export const EmptyGeneralInformationGroup =
       gender: new FormControl<Gender>(Gender.Men, NonNullable),
     });
 
-const accessGroupValidation = (
-  accessGroup: FormGroup<AccessConfigurationStepGroup>
-): ValidationErrors | null => {
-  const password = accessGroup.value.password;
-  const confirmPassword = accessGroup.value.confirmPassword;
-
-  return password !== confirmPassword ? { passwordsNotMatch: true } : null;
-};
+const accessGroupValidation: ValidatorFn =
+  () =>
+  (
+    accessGroup: FormGroup<AccessConfigurationStepGroup>
+  ): ValidationErrors | null => {
+    const password = accessGroup.value.password;
+    const confirmPassword = accessGroup.value.confirmPassword;
+    console.log(password, confirmPassword)
+    return password !== confirmPassword ? { passwordsNotMatch: true } : null;
+  };
 export const EmptyAccessConfigurationGroup =
   (): FormGroup<AccessConfigurationStepGroup> =>
-    new FormGroup<AccessConfigurationStepGroup>({
-      username: new FormControl<string>('', DefaultNonNullabeOption),
-      email: new FormControl<string>('', DefaultNonNullabeOption),
-      password: new FormControl<string>('', DefaultNonNullabeOption),
-      confirmPassword: new FormControl<string>('', DefaultNonNullabeOption),
-      temporaryPassword: new FormControl<boolean>(
-        false,
-        DefaultNonNullabeOption
-      ),
-      role: new FormControl<Role>(Role.User, DefaultNonNullabeOption),
-    });
+    new FormGroup<AccessConfigurationStepGroup>(
+      {
+        username: new FormControl<string>('', DefaultNonNullabeOption),
+        email: new FormControl<string>('', DefaultNonNullabeOption),
+        password: new FormControl<string>('', DefaultNonNullabeOption),
+        confirmPassword: new FormControl<string>('', DefaultNonNullabeOption),
+        temporaryPassword: new FormControl<boolean>(
+          false,
+          DefaultNonNullabeOption
+        ),
+        role: new FormControl<Role>(Role.User, DefaultNonNullabeOption),
+      },
+      { validators: [accessGroupValidation] }
+    );
 
 export const EmptyAddressControl = (): FormControl<AddressControl> =>
   new FormControl<AddressControl>(

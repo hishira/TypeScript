@@ -15,7 +15,7 @@ import { InputComponent } from '../../../../../shared/input/input.component';
 import { Role } from '../../../../../shared/types/enums';
 import { AccessConfigurationStepGroup } from '../create-user-model.types';
 import { PrepareRoles } from './access-configuration-step.utils';
-import { ErrorsComponent } from "../../../../../shared/errors/errors.component";
+import { ErrorsComponent } from '../../../../../shared/errors/errors.component';
 
 @Component({
   selector: 'app-access-configuration-step',
@@ -30,8 +30,8 @@ import { ErrorsComponent } from "../../../../../shared/errors/errors.component";
     ButtonModule,
     DropdownModule,
     AsyncPipe,
-    ErrorsComponent
-],
+    ErrorsComponent,
+  ],
   styleUrl: './access-configuration.scss',
 })
 export class AccessConfigurationStep extends AbstractStepComponent<AccessConfigurationStepGroup> {
