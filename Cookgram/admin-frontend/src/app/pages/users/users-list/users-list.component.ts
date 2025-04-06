@@ -41,7 +41,7 @@ import { skeletonRows } from './consts';
 export class UsersListComponent extends BaseComponent {
   users$!: Observable<UserList[]>;
   readonly skeletonRows = skeletonRows;
-  
+
   constructor(
     private readonly userApi: UserApiSerivce,
     private readonly dialogService: DialogService

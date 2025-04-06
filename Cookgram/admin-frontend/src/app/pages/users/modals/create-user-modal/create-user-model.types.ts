@@ -1,9 +1,6 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { Role } from '../../../../shared/types/enums';
-import {
-  ExtractFormControl,
-  Nullable
-} from '../../../../shared/types/shared';
+import { ExtractFormControl, Nullable } from '../../../../shared/types/shared';
 
 export type CreateModalGroup = {
   generalInformation: FormGroup<GeneralInformationStepGroup>;

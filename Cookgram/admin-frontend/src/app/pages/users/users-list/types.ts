@@ -33,10 +33,10 @@ export type UserList = {
     id: string;
     crateDate: string;
     editDate: string;
-  }
+  };
   roles: Role;
   state: {
-    current: State
-    previousState: State
-  }
+    current: State;
+    previousState: State;
+  };
 };
