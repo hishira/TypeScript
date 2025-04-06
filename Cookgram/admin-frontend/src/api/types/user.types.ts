@@ -16,7 +16,7 @@ export type PersonalInformation = {
   brithday?: string;
   email?: string;
   gender: Gender;
-  contacts?: Contact;
+  contacts?: Contact | null;
 };
 
 export type Contact = {

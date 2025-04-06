@@ -23,9 +23,10 @@ export class SummaryStepComponent extends AbstractStepComponent {
     input.required<AccessConfigurationValue>();
   readonly addressValue: InputSignal<AddressValue> =
     input.required<AddressValue>();
+  readonly isLoading: InputSignal<boolean> = input.required<boolean>();
 
   readonly createEvent = output<void>();
-  
+
   create(): void {
     this.createEvent.emit();
   }

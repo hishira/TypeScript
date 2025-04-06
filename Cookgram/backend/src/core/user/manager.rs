@@ -1,7 +1,5 @@
-
-use crate::core::usercontract::usercontract::Contract;
-
 use super::{employee::Employee, user::User};
+use crate::core::usercontract::usercontract::Contract;
 
 #[derive(PartialEq, Debug, Clone)]
 pub struct Manager {

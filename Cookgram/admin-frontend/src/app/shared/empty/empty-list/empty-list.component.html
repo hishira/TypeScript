@@ -1,21 +1,13 @@
 @if(isEmpty()){
-<div
-  class="w-full h-25rem flex justify-content-center gap-4 flex-column align-content-center">
+<div class="w-full h-25rem flex justify-content-center gap-4 flex-column align-content-center">
   <span class="font-bold text-5xl align-self-center text-black-alpha-60">{{
     text()
-  }}</span>
-  <ng-container *ngIf="withRefreshButton()">
-    <p-button
-      (onClick)="refreshData()"
-      label="Refresh"
-      class="align-self-center"
-      size="large"
-      [rounded]="true"></p-button>
-  </ng-container>
+    }}</span>
+  @if(withRefreshButton()){
+  <p-button (onClick)="refreshData()" label="Refresh" class="align-self-center" size="large"
+    [rounded]="true"></p-button>
+  }
 </div>
 } @else {
-
-<ng-template #content>
   <ng-content></ng-content>
-</ng-template>
 }

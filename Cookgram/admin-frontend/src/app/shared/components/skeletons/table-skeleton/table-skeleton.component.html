@@ -1,0 +1,16 @@
+<p-table [value]="emptyValues()">
+    <ng-template pTemplate="header">
+        <tr>
+            @for (row of skeletonRows(); track $index) {
+            <th [style]="row.style" [id]="$index"> {{row.placeholder}}</th>
+            }
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer>
+        <tr>
+            @for (item of emptyValues(); track $index) {
+            <td><p-skeleton /></td>
+            }
+        </tr>
+    </ng-template>
+</p-table>

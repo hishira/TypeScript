@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
-
 use crate::core::user::personalinformation::Gender;
+use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize, sqlx::Type)]
 pub enum GenderDTO {

@@ -22,7 +22,10 @@ where
         let result = value.validate();
         match result {
             Ok(_) =>  Ok(ValidateDtos(value)),
-            Err(error) => Err(ServerError::ValidationError(error)),
+            Err(error) => {
+                tracing::error!("Error in validation: {}", error);
+                Err(ServerError::ValidationError(error))
+            }
         }
     }
 }

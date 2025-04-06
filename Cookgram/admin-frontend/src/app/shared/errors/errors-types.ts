@@ -1,4 +1,5 @@
 export enum ErrorsTypes {
     Required = 'required',
-    Email = 'email'   
+    Email = 'email',
+    PasswordsConfirm = 'passwordsNotMatch'  
 }

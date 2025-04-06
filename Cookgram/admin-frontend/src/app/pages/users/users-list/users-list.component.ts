@@ -6,13 +6,17 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { BaseComponent } from '../../../shared/components/base-component/base-component';
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
 import { CreateUserModalComponent } from '../modals/create-user-modal/create-user-modal.component';
 import { UserList } from './types';
-import { AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { ReadoOnlyComponent } from '../../../shared/components/readonly-only/readonly-only.component';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TableSkeletonComponent } from '../../../shared/components/skeletons/table-skeleton/table-skeleton.component';
+import { skeletonRows } from './consts';
 
 @Component({
   selector: 'app-users-list',
@@ -26,14 +30,18 @@ import { AsyncPipe } from '@angular/common';
     EmptyListComponent,
     PanelModule,
     ButtonModule,
-    AsyncPipe,
+    CommonModule,
+    ReadoOnlyComponent,
+    SkeletonModule,
+    TableSkeletonComponent,
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent extends BaseComponent {
   users$!: Observable<UserList[]>;
-
+  readonly skeletonRows = skeletonRows;
+  
   constructor(
     private readonly userApi: UserApiSerivce,
     private readonly dialogService: DialogService

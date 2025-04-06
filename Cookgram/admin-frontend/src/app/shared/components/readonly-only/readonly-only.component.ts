@@ -15,4 +15,9 @@ import {
 })
 export class ReadoOnlyComponent {
   readonly title: InputSignal<string | undefined> = input<string>();
+
+  check(ref: HTMLSpanElement): boolean {
+    // Now only for text
+    return ref.textContent?.trim()?.length === 0;
+  }
 }

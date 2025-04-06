@@ -1,8 +1,8 @@
-import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   input,
+  OnInit,
   output,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
@@ -12,16 +12,20 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './empty-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgIf, ButtonModule],
+  imports: [ButtonModule],
 })
-export class EmptyListComponent {
-  readonly text = input<string>('There are no data to show');
-  readonly isEmpty = input<boolean>(false);
-  readonly withRefreshButton = input<boolean>(false);
+export class EmptyListComponent implements OnInit {
+   text = input<string>('There are no data to show');
+   isEmpty = input.required<boolean>();
+   withRefreshButton = input<boolean>(false);
 
-  readonly refreshEmit = output<void>();
+  refreshEmit = output<void>();
 
   refreshData(): void {
     this.refreshEmit.emit();
+  }
+
+  ngOnInit(): void {
+      console.log(this.isEmpty())
   }
 }

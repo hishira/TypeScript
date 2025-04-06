@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { AbstractControl, TouchedChangeEvent } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, TouchedChangeEvent } from '@angular/forms';
 import { Observable, combineLatest, map, of, startWith } from 'rxjs';
 import { BaseComponent } from '../components/base-component/base-component';
-import { EMAIL_ERROR, REQUIRED_ERROR } from './consts';
+import { EMAIL_ERROR, PASSWORDS_NOT_MATCH, REQUIRED_ERROR } from './consts';
 import { ErrorsTypes } from './errors-types';
 
 @Component({
@@ -14,7 +14,7 @@ import { ErrorsTypes } from './errors-types';
   styleUrl: './errors.component.scss',
 })
 export class ErrorsComponent extends BaseComponent {
-  readonly control = input.required<AbstractControl>();
+  readonly control = input.required<AbstractControl | FormGroup | FormControl | any>();
 
   errorsChange$: Observable<string[]> = of([]);
 
@@ -41,6 +41,7 @@ export class ErrorsComponent extends BaseComponent {
   }
 
   private getEventObservable(): Observable<string[]> {
+    console.log(this.control())
     return this.control().events.pipe(
       map((e) => {
         if (!(e instanceof TouchedChangeEvent)) return [];
@@ -56,6 +57,7 @@ export class ErrorsComponent extends BaseComponent {
 
     errors && ErrorsTypes.Required in errors && errorsList.push(REQUIRED_ERROR);
     errors && ErrorsTypes.Email in errors && errorsList.push(EMAIL_ERROR);
+    errors && ErrorsTypes.PasswordsConfirm in errors && errorsList.push(PASSWORDS_NOT_MATCH);
 
     return errorsList;
   }

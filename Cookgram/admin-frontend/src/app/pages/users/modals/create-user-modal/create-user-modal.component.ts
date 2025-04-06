@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -59,6 +59,7 @@ export class CreateUserModalComponent extends AbstractModalComponent {
     this.createUserGroup.controls.address;
   readonly steps: MenuItem[] = CreateUserSteps;
   readonly CreateUserStepsStrategy = CreateUserStepsStrategy;
+  readonly isLoading = signal(false);
 
   constructor(
     private readonly dialogRef: DynamicDialogRef,
@@ -80,8 +81,12 @@ export class CreateUserModalComponent extends AbstractModalComponent {
   }
 
   create(): void {
+    this.isLoading.set(true);
     this.subscription.add(
-      this.userApi.createUser(this.prepareCreateUserObject()).subscribe()
+      this.userApi.createUser(this.prepareCreateUserObject()).subscribe({
+        error: () => this.isLoading.set(false),
+        complete: () => this.isLoading.set(false),
+      })
     );
   }
 
@@ -93,6 +98,7 @@ export class CreateUserModalComponent extends AbstractModalComponent {
     const { address } = this.createUserGroup.value;
 
     return {
+      role: this.createUserGroup.value.accessConfiguration?.role,
       credentials: this.prepareCredentials(),
       personalInformation: preparePersonalInformation(
         this.createUserGroup.value as ExtractFormControl<CreateModalGroup>

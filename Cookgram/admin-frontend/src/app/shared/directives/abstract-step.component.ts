@@ -31,14 +31,20 @@ export class AbstractStepComponent<
   }
 
   protected next(): void {
-    this.validate();
+    console.log(this.form());
+    if (!this.validate()) return;
     this.modalService.nextStepChange.next();
   }
 
-  protected validate(): void {
+  protected validate(): boolean {
     const control = this.form();
-    if (!hasProperty<AbstractControl>('markAllAsTouched', control)) return;
+    if (!hasProperty<AbstractControl>('markAllAsTouched', control))
+      return false;
     control.markAllAsTouched();
-    this.showFormHasErrors();
+    if (control.invalid) {
+      this.showFormHasErrors();
+      return false;
+    }
+    return true;
   }
 }

@@ -1,9 +1,8 @@
+use super::appstate::AppState;
 use crate::api::{
     repositories::authenticationrepository::AuthenticationRepository,
     services::authservice::AuthService,
 };
-
-use super::appstate::AppState;
 
 #[derive(Clone)]
 pub struct AuthState {

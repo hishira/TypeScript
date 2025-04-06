@@ -14,9 +14,9 @@ export class AbstractModalComponent extends BaseComponent {
   constructor(max_step: number) {
     super();
     this.max_step = max_step;
-    if (this.max_step < this.min_step) {
+    if (this.max_step < this.min_step)
       throw new Error('Step must be greater than 0');
-    }
+
     this.handleNextStepChange();
     this.handleBackStepChange();
   }

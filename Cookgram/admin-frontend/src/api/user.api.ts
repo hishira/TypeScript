@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { UserList } from '../app/pages/users/users-list/types';
 import { ContextUser } from '../app/shared/types/shared';
 import { BaseApi } from './base.api';
@@ -13,10 +13,16 @@ export class UserApiSerivce extends BaseApi {
   }
 
   userLists(): Observable<Readonly<UserList>[]> {
-    return this.httpService.post<UserList[]>(
-      this.prepareLink(UserLinks.List),
-      {}
-    );
+    return this.httpService
+      .post<UserList[]>(this.prepareLink(UserLinks.List), {})
+      .pipe(
+        map((response) =>
+          response.map((user) => ({
+            ...user,
+            fullName: `${user.personalInformation.firstName} ${user.personalInformation.lastName}`,
+          }))
+        )
+      );
   }
 
   currentUserInfo(): Observable<Readonly<ContextUser>> {

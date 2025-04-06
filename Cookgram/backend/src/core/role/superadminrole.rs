@@ -1,9 +1,8 @@
-use serde::{Deserialize, Serialize};
-
 use super::{
     access::{Access, Action, Queries, QueriesActions},
     role::Role,
 };
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct SuperAdminRole {

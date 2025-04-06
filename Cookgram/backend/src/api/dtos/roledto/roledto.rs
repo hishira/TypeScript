@@ -1,8 +1,7 @@
-use std::str::FromStr;
-use std::fmt;
-use serde::{Deserialize, Serialize};
-
 use crate::core::role::role::Roles;
+use serde::{Deserialize, Serialize};
+use std::fmt;
+use std::str::FromStr;
 
 #[derive(sqlx::Type, PartialEq, Debug, Clone)]
 #[sqlx(type_name = "Role")]
@@ -12,7 +11,7 @@ pub enum RoleDto {
     SuperAdmin,
     Employee,
     Manager,
-    Director
+    Director,
 }
 
 pub fn map_roles_to_role_dto(role: Roles) -> RoleDto {
@@ -92,7 +91,7 @@ impl<'de> Deserialize<'de> for RoleDto {
         match r_string {
             Ok(role_string) => match RoleDto::from_str(role_string.as_str()) {
                 Ok(role) => Ok(role),
-                Err(error) => Err(serde::de::Error::custom(error))
+                Err(error) => Err(serde::de::Error::custom(error)),
             },
             Err(error) => Err(error),
         }
