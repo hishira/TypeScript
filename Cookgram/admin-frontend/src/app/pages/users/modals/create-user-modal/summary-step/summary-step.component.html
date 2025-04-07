@@ -10,22 +10,22 @@
       <div class="col-3">
         <app-read-only i18n-title title="First name">{{
           generalFormValue().firstName
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="Second name">{{
           generalFormValue().secondName
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="Birth date">{{
           generalFormValue().birthDate
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="Gender">{{
           generalFormValue().gender
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
     </div>
     <div class="grid mt-2">
@@ -35,12 +35,12 @@
       <div class="col-3">
         <app-read-only i18n-title title="Email">{{
           accessConfigurationValue().email
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="Username">{{
           accessConfigurationValue().username
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
     </div>
     <div class="grid mt-2">
@@ -50,7 +50,7 @@
       <div class="col-3">
         <app-read-only i18n-title title="Is password temporary">{{
           accessConfigurationValue().temporaryPassword ? "Yes" : "No"
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
     </div>
     <div class="grid mt-2">
@@ -60,44 +60,39 @@
       <div class="col-3">
         <app-read-only i18n-title title="Address">{{
           addressValue().address
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="House">{{
           addressValue().house
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="Door">{{
           addressValue().door
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
     </div>
     <div class="grid">
       <div class="col-3">
         <app-read-only i18n-title title="Postal code">{{
           addressValue().postalCode
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="City">{{
           addressValue().city
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="Country">{{
           addressValue().country
-        }}</app-read-only>
+          }}</app-read-only>
       </div>
     </div>
   </ng-container>
   <ng-container ngProjectAs="footer">
-    <p-button
-      i18n-label
-      label="Back"
-      back
-      [rounded]="true"
-      (onClick)="back()" />
+    <p-button i18n-label label="Back" back [rounded]="true" (onClick)="back()" />
     <p-button i18n-label label="Cancel" (onClick)="cancel()" [rounded]="true" />
     <p-button i18n-label label="Create" [loading]="isLoading()" [rounded]="true" (onClick)="create()" />
   </ng-container>
