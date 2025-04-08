@@ -1,6 +1,5 @@
-use crate::core::usercontract::usercontract::Contract;
-
 use super::user::User;
+use crate::core::usercontract::usercontract::Contract;
 
 // IF we need it? using composition?
 pub enum UserTypes {

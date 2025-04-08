@@ -1,12 +1,4 @@
-use axum::{
-    extract::{Path, State},
-    routing::{delete, get, post},
-    Json, Router,
-};
-use sqlx::{Pool, Postgres};
-use tokio::sync::mpsc::Sender;
-use uuid::Uuid;
-
+use super::router::ApplicationRouter;
 use crate::{
     api::{
         appstate::{appstate::AppState, userstate::UserState},
@@ -32,8 +24,14 @@ use crate::{
     core::event::eventTask::EventTask,
     database::{init::Database, redis::redisdatabase::RedisDatabase},
 };
-
-use super::router::ApplicationRouter;
+use axum::{
+    extract::{Path, State},
+    routing::{delete, get, post},
+    Json, Router,
+};
+use sqlx::{Pool, Postgres};
+use tokio::sync::mpsc::Sender;
+use uuid::Uuid;
 
 pub struct UserRouter {
     user_repo: UserRepositories,
@@ -70,7 +68,7 @@ impl UserRouter {
             send: send.clone(),
         }
     }
-    
+
     async fn user_create(
         State(state): State<UserState>,
         ValidateDtos(params): ValidateDtos<CreateUserDto>,
