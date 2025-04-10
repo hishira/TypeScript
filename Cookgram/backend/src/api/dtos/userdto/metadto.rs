@@ -1,8 +1,7 @@
+use crate::core::meta::meta::Meta;
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 use uuid::Uuid;
-
-use crate::core::meta::meta::Meta;
 
 #[derive(PartialEq, Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
