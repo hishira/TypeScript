@@ -22,3 +22,5 @@ export const CreateUserSteps: MenuItem[] = [
   AddressConfiguration,
   Summary,
 ];
+
+export const CreateUserMaxStep: number = 4;
