@@ -9,12 +9,13 @@ import {
   AccessConfigurationValue,
   GeneralInformationValue,
 } from '../create-user-model.types';
+import { YesNoPipe } from '../../../../../shared/pipes/yesNo.pipe';
 
 @Component({
   selector: 'app-create-user-summary',
   templateUrl: './summary-step.component.html',
   standalone: true,
-  imports: [CommonModule, DialogComponent, ReadoOnlyComponent, ButtonModule],
+  imports: [CommonModule, DialogComponent, ReadoOnlyComponent, ButtonModule, YesNoPipe],
 })
 export class SummaryStepComponent extends AbstractStepComponent {
   readonly generalFormValue: InputSignal<GeneralInformationValue> =

@@ -49,7 +49,7 @@
       </div>
       <div class="col-3">
         <app-read-only i18n-title title="Is password temporary">{{
-          accessConfigurationValue().temporaryPassword ? "Yes" : "No"
+          accessConfigurationValue().temporaryPassword | yesNo
           }}</app-read-only>
       </div>
     </div>

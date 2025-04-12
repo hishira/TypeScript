@@ -13,19 +13,8 @@
       <div class="col-3">
         <app-input i18n-label [withErrors]="true" [required]="true" label="Second name" formControlName="secondName" />
       </div>
-
       <div class="col-3 gap-2 flex flex-column">
-        <app-date-input i18n-label label="Brith day" [required]="true"
-          [control]="form().controls.birthDate" />
-        <!-- <label i18n class="block text-900 font-medium" for="buttondisplay">
-          Birth day <app-required-dot />
-        </label>
-        <p-calendar
-          class="w-full max-w-full"
-          formControlName="birthDate"
-          [showIcon]="true"
-          [showOnFocus]="false"
-          inputId="buttondisplay" /> -->
+        <app-date-input i18n-label label="Brith day" [required]="true" [control]="form().controls.birthDate" />
       </div>
       <div class="col-3 gap-2 flex flex-column">
         <label for="genderdropdown" class="block text-900 font-medium" i18n>
