@@ -15,7 +15,13 @@ import { YesNoPipe } from '../../../../../shared/pipes/yesNo.pipe';
   selector: 'app-create-user-summary',
   templateUrl: './summary-step.component.html',
   standalone: true,
-  imports: [CommonModule, DialogComponent, ReadoOnlyComponent, ButtonModule, YesNoPipe],
+  imports: [
+    CommonModule,
+    DialogComponent,
+    ReadoOnlyComponent,
+    ButtonModule,
+    YesNoPipe,
+  ],
 })
 export class SummaryStepComponent extends AbstractStepComponent {
   readonly generalFormValue: InputSignal<GeneralInformationValue> =
