@@ -1,10 +1,13 @@
-use serde::Serialize;
-use crate::{api::dtos::roledto::roledto::RoleDto, core::{
-    entity::Entity,
-    state::{entitystate::EntityState, state::State},
-    user::userid::UserId,
-}};
 use super::credentialsdto::CredentialsDTO;
+use crate::{
+    api::dtos::roledto::roledto::RoleDto,
+    core::{
+        entity::Entity,
+        state::{entitystate::EntityState, state::State},
+        user::userid::UserId,
+    },
+};
+use serde::Serialize;
 
 #[derive(PartialEq, Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]

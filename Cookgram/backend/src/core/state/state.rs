@@ -1,6 +1,5 @@
 use serde::{Deserialize, Serialize};
 
-
 #[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub struct State<T> {
     pub current: T,
