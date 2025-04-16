@@ -17,49 +17,45 @@ pub struct UserQuery {
 }
 
 impl UserQuery {
-    const QUERY_FIND_BY_ID:&'static str = "SELECT id, username, email, password, meta_id, role, current_state, previous_state  FROM ADDRESSUSERS where id = ";
-    pub fn new(id: Option<Uuid>, user_name: Option<String>, email: Option<String>) -> Self {
-        UserQuery {
-            id,
-            username: user_name,
-            email: email,
+    const QUERY_FIND_BY_ID: &'static str = "SELECT id, username, email, password, meta_id, role, current_state, previous_state FROM ADDRESSUSERS WHERE id = ";
+
+    pub fn new(id: Option<Uuid>, username: Option<String>, email: Option<String>) -> Self {
+        Self { id, username, email }
+    }
+
+    fn prepare_filter(
+        user_query: &mut QueryBuilder<Postgres>,
+        mut count: i8,
+        field: &str,
+        value: Option<String>,
+    ) -> i8 {
+        if let Some(value) = value {
+            if count > 0 {
+                user_query.push(format!(" AND {} = ", field));
+            } else {
+                user_query.push(format!(" WHERE {} = ", field));
+            }
+            user_query.push_bind(value);
+            count + 1
+        } else {
+            count
         }
     }
 
     fn prepare_username(
         user_query: &mut QueryBuilder<Postgres>,
-        mut count: i8,
+        count: i8,
         username: Option<String>,
-    ) {
-        if let Some(user_name) = username {
-            if count > 0 {
-                user_query.push(" AND username = ");
-                user_query.push_bind(user_name);
-                count += 1;
-            } else {
-                user_query.push(" where username = ");
-                user_query.push_bind(user_name);
-                count += 1;
-            }
-        }
+    ) -> i8 {
+        Self::prepare_filter(user_query, count, "username", username)
     }
 
     fn prepare_email(
         user_query: &mut QueryBuilder<Postgres>,
-        mut count: i8,
+        count: i8,
         email: Option<String>,
-    ) {
-        if let Some(email) = email {
-            if count > 0 {
-                user_query.push(" AND email = ");
-                user_query.push_bind(email);
-                count += 1;
-            } else {
-                user_query.push(" email = ");
-                user_query.push_bind(email);
-                count += 1;
-            }
-        }
+    ) -> i8 {
+        Self::prepare_filter(user_query, count, "email", email)
     }
 }
 
@@ -112,9 +108,10 @@ impl Query<UserFilterOption> for UserQuery {
 
 impl ActionQueryBuilder<User> for UserQuery {
     fn create(entity: User) -> QueryBuilder<'static, Postgres> {
-        let mut create_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO USERS(id, email, meta_id, role, first_name, last_name) ");
-        create_builder.push_values(vec![entity], |mut b, user| {
+        let mut create_builder = QueryBuilder::new(
+            "INSERT INTO USERS(id, username, password, email, meta_id, role, first_name, last_name) ",
+        );
+        create_builder.push_values(std::iter::once(entity), |mut b, user| {
             b.push_bind(user.id.get_id())
                 .push_bind(user.credentials.username)
                 .push_bind(user.credentials.password)
@@ -129,29 +126,30 @@ impl ActionQueryBuilder<User> for UserQuery {
     }
 
     fn update(entity: User) -> QueryBuilder<'static, Postgres> {
-        let mut update_query: QueryBuilder<Postgres> =
-            QueryBuilder::new("UPDATE USERS SET username = ");
-        update_query.push_bind(entity.credentials.username);
-        update_query.push(", email = ");
-        update_query.push_bind(entity.personal_information.email);
-        update_query.push(", password = ");
-        update_query.push_bind(entity.credentials.password);
-        update_query.push(", role = ");
-        update_query.push_bind(entity.role);
-        update_query.push(" WHERE id = ");
-        update_query.push_bind(entity.id.get_id());
-
+        let mut update_query = QueryBuilder::new("UPDATE USERS SET ");
+        update_query
+            .push("username = ")
+            .push_bind(entity.credentials.username)
+            .push(", email = ")
+            .push_bind(entity.personal_information.email)
+            .push(", password = ")
+            .push_bind(entity.credentials.password)
+            .push(", role = ")
+            .push_bind(entity.role)
+            .push(" WHERE id = ")
+            .push_bind(entity.id.get_id());
         update_query
     }
 
     fn delete(entity: User) -> QueryBuilder<'static, Postgres> {
-        let mut delete_query: QueryBuilder<Postgres> =
-            QueryBuilder::new("UPDATE USERS SET current_state = ");
-        delete_query.push_bind(entity.state.current);
-        delete_query.push(", previous_state = ");
-        delete_query.push_bind(entity.state.previous);
-        delete_query.push("WHERE id = ");
-        delete_query.push_bind(entity.id.get_id());
+        let mut delete_query = QueryBuilder::new("UPDATE USERS SET ");
+        delete_query
+            .push("current_state = ")
+            .push_bind(entity.state.current)
+            .push(", previous_state = ")
+            .push_bind(entity.state.previous)
+            .push(" WHERE id = ")
+            .push_bind(entity.id.get_id());
         delete_query
     }
 }

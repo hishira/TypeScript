@@ -1,7 +1,6 @@
+use crate::core::address::{address::Address, location::Location};
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgRow, FromRow, Row};
-
-use crate::core::address::{address::Address, location::Location};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct AddressDto {

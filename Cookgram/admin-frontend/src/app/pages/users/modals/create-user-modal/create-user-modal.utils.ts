@@ -1,5 +1,4 @@
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
   ValidationErrors,
@@ -42,7 +41,7 @@ const accessGroupValidation: ValidatorFn =
   ): ValidationErrors | null => {
     const password = accessGroup.value.password;
     const confirmPassword = accessGroup.value.confirmPassword;
-    console.log(password, confirmPassword)
+
     return password !== confirmPassword ? { passwordsNotMatch: true } : null;
   };
 export const EmptyAccessConfigurationGroup =

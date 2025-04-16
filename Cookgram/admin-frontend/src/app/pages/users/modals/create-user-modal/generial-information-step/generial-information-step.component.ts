@@ -6,9 +6,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { AbstractStepComponent } from '../../../../../shared/directives/abstract-step.component';
 import { InputComponent } from '../../../../../shared/input/input.component';
-import { RequiredDot } from '../../../../../shared/required-dot/required-dot.componen';
 import { PossibleGenders } from '../create-user-modal.utils';
 import { GeneralInformationStepGroup } from '../create-user-model.types';
+import { DateInputComponent } from "../../../../../shared/components/date-input/date-input.component";
 
 @Component({
   selector: 'app-user-create-general-information-step',
@@ -23,8 +23,8 @@ import { GeneralInformationStepGroup } from '../create-user-model.types';
     ReactiveFormsModule,
     CalendarModule,
     DropdownModule,
-    RequiredDot,
-  ],
+    DateInputComponent
+],
 })
 export class GeneralInformationStep extends AbstractStepComponent<GeneralInformationStepGroup> {
   readonly genders: string[] = PossibleGenders();

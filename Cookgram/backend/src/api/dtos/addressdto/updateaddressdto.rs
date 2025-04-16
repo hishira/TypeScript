@@ -1,7 +1,6 @@
+use crate::core::address::{address::Address, location::Location};
 use serde::Deserialize;
 use validator::Validate;
-
-use crate::core::address::{address::Address, location::Location};
 
 #[derive(Debug, Validate, Deserialize)]
 pub struct UpdateAddressDto {
@@ -17,7 +16,10 @@ pub struct UpdateAddressDto {
     pub postal_code: Option<String>,
 }
 
-pub fn build_address_based_on_update_dto_and_address(update_dto: UpdateAddressDto, address: Address) -> Address {
+pub fn build_address_based_on_update_dto_and_address(
+    update_dto: UpdateAddressDto,
+    address: Address,
+) -> Address {
     Address::new(
         update_dto.address.unwrap_or(address.address),
         update_dto.house.unwrap_or(address.house),
@@ -49,7 +51,6 @@ mod tests {
                 longitude: Some(-74.0060),
             },
             "10001".to_string(),
-
         );
 
         let update_dto = UpdateAddressDto {
@@ -63,7 +64,6 @@ mod tests {
             latitude: Some(34.0522),
             longitude: Some(-118.2437),
             postal_code: Some("90001".to_string()),
-
         };
 
         let updated_address = build_address_based_on_update_dto_and_address(update_dto, address);

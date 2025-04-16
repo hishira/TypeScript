@@ -1,11 +1,10 @@
-use serde::Serialize;
-use sqlx::{postgres::PgRow, FromRow, Row};
-use uuid::Uuid;
-
 use crate::{
     api::dtos::addressdto::addressdto::AddressDto,
     core::state::{entitystate::EntityState, state::State},
 };
+use serde::Serialize;
+use sqlx::{postgres::PgRow, FromRow, Row};
+use uuid::Uuid;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -20,7 +19,9 @@ pub struct UserListDto {
     pub address: Option<AddressDto>,
 }
 
-pub fn try_to_retrive_address_from_row<'r>(row: &'r PgRow) -> Result<Option<AddressDto>, sqlx::Error> {
+pub fn try_to_retrive_address_from_row<'r>(
+    row: &'r PgRow,
+) -> Result<Option<AddressDto>, sqlx::Error> {
     let city = row.try_column("city");
     match city {
         Ok(_) => match AddressDto::from_row(&row) {

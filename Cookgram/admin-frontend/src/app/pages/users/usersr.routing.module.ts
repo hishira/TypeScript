@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UsersComponent } from './users.component';
 
+const EMPTY_STRING = '';
+
 const routes: Routes = [
   {
-    path: '',
+    path: EMPTY_STRING,
     component: UsersComponent,
   },
 ];

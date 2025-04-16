@@ -1,15 +1,8 @@
-use axum::{extract::State, routing::post, Json, Router};
-
-use serde::{Deserialize, Serialize};
-use sqlx::{Pool, Postgres};
-use validator::Validate;
-
+use super::router::ApplicationRouter;
 use crate::{
     api::{
         appstate::{appstate::AppState, authstate::AuthState},
-        daos::
-            authenticationdao::AuthenticationDAO
-        ,
+        daos::authenticationdao::AuthenticationDAO,
         dtos::{
             tokendto::tokendto::{AccessTokenDto, RefreshTokenDto},
             userdto::operationuserdto::{UserAuthDto, UserRegisterDto},
@@ -26,8 +19,10 @@ use crate::{
     core::user::user::User,
     database::{init::Database, redis::redisdatabase::RedisDatabase},
 };
-
-use super::router::ApplicationRouter;
+use axum::{extract::State, routing::post, Json, Router};
+use serde::{Deserialize, Serialize};
+use sqlx::{Pool, Postgres};
+use validator::Validate;
 
 #[derive(Debug, Validate, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]

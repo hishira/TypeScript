@@ -1,8 +1,10 @@
 import { SkeletonRowInfo } from '../../../shared/components/skeletons/table-skeleton/types';
 
+const rownWith = 'width: 25%';
+
 export const skeletonRows: SkeletonRowInfo[] = [
-  { style: 'width: 25%', placeholder: 'Email' },
-  { style: 'width: 25%', placeholder: 'Username' },
-  { style: 'width: 25%', placeholder: 'Full name' },
-  { style: 'width: 25%', placeholder: 'Status' },
+  { style: rownWith, placeholder: 'Email' },
+  { style: rownWith, placeholder: 'Username' },
+  { style: rownWith, placeholder: 'Full name' },
+  { style: rownWith, placeholder: 'Status' },
 ];

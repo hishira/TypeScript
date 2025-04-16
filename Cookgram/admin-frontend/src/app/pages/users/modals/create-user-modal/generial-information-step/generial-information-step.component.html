@@ -7,43 +7,20 @@
     </div>
     <div class="row-gap-0 mt-3" [formGroup]="form()">
       <div class="col-3">
-        <app-input
-          i18n-label
-          [required]="true"
-          label="First name"
-          formControlName="firstName"
-          class="w-full"
+        <app-input i18n-label [required]="true" label="First name" formControlName="firstName" class="w-full"
           [withErrors]="true" />
       </div>
       <div class="col-3">
-        <app-input
-          i18n-label
-          [withErrors]="true"
-          [required]="true"
-          label="Second name"
-          formControlName="secondName" />
+        <app-input i18n-label [withErrors]="true" [required]="true" label="Second name" formControlName="secondName" />
       </div>
-
       <div class="col-3 gap-2 flex flex-column">
-        <label i18n class="block text-900 font-medium" for="buttondisplay">
-          Birth day <app-required-dot />
-        </label>
-        <p-calendar
-          class="w-full max-w-full"
-          formControlName="birthDate"
-          [showIcon]="true"
-          [showOnFocus]="false"
-          inputId="buttondisplay" />
+        <app-date-input i18n-label label="Brith day" [required]="true" [control]="form().controls.birthDate" />
       </div>
       <div class="col-3 gap-2 flex flex-column">
         <label for="genderdropdown" class="block text-900 font-medium" i18n>
           Gender
         </label>
-        <p-dropdown
-          class="w-full"
-          formControlName="gender"
-          [options]="genders"
-          inputId="genderdropdown">
+        <p-dropdown class="w-full" formControlName="gender" [options]="genders" inputId="genderdropdown">
         </p-dropdown>
       </div>
     </div>

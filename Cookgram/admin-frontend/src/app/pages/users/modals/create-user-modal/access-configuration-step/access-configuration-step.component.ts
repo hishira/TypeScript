@@ -11,11 +11,11 @@ import { CurrentUserSelector } from '../../../../../../store/currentUser/selecto
 import { MainStore } from '../../../../../../store/main.store';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { AbstractStepComponent } from '../../../../../shared/directives/abstract-step.component';
+import { ErrorsComponent } from '../../../../../shared/errors/errors.component';
 import { InputComponent } from '../../../../../shared/input/input.component';
 import { Role } from '../../../../../shared/types/enums';
 import { AccessConfigurationStepGroup } from '../create-user-model.types';
 import { PrepareRoles } from './access-configuration-step.utils';
-import { ErrorsComponent } from '../../../../../shared/errors/errors.component';
 
 @Component({
   selector: 'app-access-configuration-step',
