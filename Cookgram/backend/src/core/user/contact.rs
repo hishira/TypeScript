@@ -8,7 +8,7 @@ pub struct Contacts {
 }
 
 impl Contacts {
-    pub fn empty() -> Self{
+    pub fn empty() -> Self {
         Self {
             email: None,
             fax: None,
