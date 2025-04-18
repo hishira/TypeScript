@@ -1,15 +1,13 @@
-use serde::{Deserialize, Serialize};
-use time::serde::rfc3339;
-use time::OffsetDateTime;
-use uuid::Uuid;
-
+use super::contractid::ContractId;
 use crate::core::{
     entity::{entity::IdGenerator, Entity},
     metaobject::metaobject::MetaObject,
     state::{entitystate::EntityState, state::State},
 };
-
-use super::contractid::ContractId;
+use serde::{Deserialize, Serialize};
+use time::serde::rfc3339;
+use time::OffsetDateTime;
+use uuid::Uuid;
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub enum AdditionalFieldKey {

@@ -16,6 +16,7 @@ impl Entity for Authentication {
         UserId::default()
     }
 }
+
 impl Authentication {
     pub fn new(
         user_id: UserId,
