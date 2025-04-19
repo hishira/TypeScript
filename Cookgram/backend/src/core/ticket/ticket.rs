@@ -1,10 +1,11 @@
+use super::ticketid::TicketId;
+use crate::core::{
+    entity::{entity::IdGenerator, Entity},
+    state::state::State,
+};
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 use uuid::Uuid;
-
-use crate::core::{entity::{entity::IdGenerator, Entity}, state::state::State};
-
-use super::ticketid::TicketId;
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub enum TicketState {

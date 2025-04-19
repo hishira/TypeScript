@@ -1,4 +1,4 @@
-use uuid::Uuid;
+use super::{credentials::Credentials, personalinformation::PersonalInformation, userid::UserId};
 use crate::core::{
     address::address::Address,
     entity::{entity::IdGenerator, Entity},
@@ -6,7 +6,7 @@ use crate::core::{
     role::role::Roles,
     state::{entitystate::EntityState, state::State},
 };
-use super::{credentials::Credentials, personalinformation::PersonalInformation, userid::UserId};
+use uuid::Uuid;
 
 #[derive(PartialEq, Debug, Clone)]
 pub struct User {
@@ -70,4 +70,3 @@ impl User {
         }
     }
 }
-
