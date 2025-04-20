@@ -1,8 +1,5 @@
 #[cfg(test)]
 mod tests {
-    use time::OffsetDateTime;
-    use uuid::Uuid;
-
     use crate::core::{
         entity::{entity::IdGenerator, Entity},
         role::role::Roles,
@@ -11,6 +8,8 @@ mod tests {
             user::User,
         },
     };
+    use time::OffsetDateTime;
+    use uuid::Uuid;
 
     #[test]
     fn generate_id_test() {

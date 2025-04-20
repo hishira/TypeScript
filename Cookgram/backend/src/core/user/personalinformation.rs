@@ -1,9 +1,8 @@
-
+use super::contact::Contacts;
+use crate::api::dtos::userdto::userdto::UserDtos;
 use sqlx::postgres::PgRow;
 use sqlx::Row;
 use time::OffsetDateTime;
-use crate::api::dtos::userdto::userdto::UserDtos;
-use super::contact::Contacts;
 
 #[derive(PartialEq, Debug, Clone, sqlx::Type)]
 #[sqlx(type_name = "Gender")]
