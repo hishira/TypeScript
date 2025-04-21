@@ -1,8 +1,8 @@
 use crate::core::address::{address::Address, location::Location};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-#[derive(Debug, Validate, Deserialize, Clone)]
+#[derive(Debug, Validate, Deserialize, Clone, Serialize)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct CreateAddressDto {
     //pub user_id: uuid::Uuid,

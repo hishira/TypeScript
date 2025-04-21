@@ -13,7 +13,7 @@ import {
 import { noop } from 'rxjs';
 import { InputComponent } from '../../input/input.component';
 import { BaseComponent } from '../base-component/base-component';
-import { EmptyAddressRequiredMap, EmptyAddressStep } from './address.utils';
+import { EMPTY_ADDRESS_REQUIRED_MAP, createEmptyAddressStep } from './address.utils';
 import { AddressRequiredMap } from './types';
 
 @Component({
@@ -35,9 +35,9 @@ export class AddressComponent
   implements ControlValueAccessor
 {
   readonly addressRequiredMap = input<AddressRequiredMap>(
-    EmptyAddressRequiredMap
+    EMPTY_ADDRESS_REQUIRED_MAP
   );
-  readonly form: FormGroup = EmptyAddressStep();
+  readonly form: FormGroup = createEmptyAddressStep();
 
   onChange: (v: unknown) => void = noop;
 

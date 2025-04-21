@@ -5,7 +5,7 @@ use crate::{
             roledto::roledto::{map_to_roles, RoleDto},
             userdto::{
                 operationuserdto::{CreateUserDto, UpdateUserDto},
-                personalinformationdto::PersolanInformationDTO,
+                personalinformationdto::PersonalInformationDTO,
                 userdto::UserDtos,
             },
         },
@@ -32,7 +32,7 @@ impl UserUtils {
             PersonalInformation::create_based_on_user_dto(UserDtos::Create(user.clone()));
         let role = user.role.map(map_to_roles);
         let credentials =
-            Credentials::new_with_hashed_password_using_creditional_dto(user.creditionals).await?;
+            Credentials::new_with_hashed_password_using_creditional_dto(user.credentials).await?;
         Ok(User::new(
             None,
             personal_information,
@@ -61,7 +61,7 @@ impl UserUtils {
             .clone()
             .email
             .or(user_from_db.personal_information.email);
-        let personal_info = PersolanInformationDTO {
+        let personal_info = PersonalInformationDTO {
             email: update_email,
             ..user.personal_information.clone()
         };

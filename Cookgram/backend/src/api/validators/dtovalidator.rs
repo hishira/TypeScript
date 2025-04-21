@@ -18,14 +18,23 @@ where
     type Rejection = ServerError;
 
     async fn from_request(req: Request, state: &S) -> Result<Self, Self::Rejection>{
-        let Json(value) = Json::<T>::from_request(req, state).await?;
-        let result = value.validate();
-        match result {
-            Ok(_) =>  Ok(ValidateDtos(value)),
-            Err(error) => {
-                tracing::error!("Error in validation: {}", error);
-                Err(ServerError::ValidationError(error))
+        let value = Json::<T>::from_request(req, state).await;
+        match value {
+            Ok(Json(value)) => {
+                let result = value.validate();
+                match result {
+                    Ok(_) =>  Ok(ValidateDtos(value)),
+                    Err(error) => {
+                        tracing::error!("Error in validation: {}", error);
+                        Err(ServerError::ValidationError(error))
+                    }
+                }
+            },
+            Err(err) => {
+                tracing::error!("Error in deserialization: {}", err.body_text());
+                return Err(ServerError::AxumFormRejection((err)));
             }
         }
+       
     }
 }

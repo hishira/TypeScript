@@ -1,9 +1,9 @@
-use super::personalinformationdto::PersolanInformationDTO;
+use super::personalinformationdto::PersonalInformationDTO;
 use crate::api::dtos::{addressdto::createaddressdto::CreateAddressDto, roledto::roledto::RoleDto};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use validator::{Validate, ValidationError};
 
-#[derive(Debug, Validate, Deserialize, Clone)]
+#[derive(Debug, Validate, Deserialize, Clone, Serialize)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct UserCreditionalDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
@@ -13,19 +13,19 @@ pub struct UserCreditionalDto {
     pub password_is_temporary: Option<bool>,
 }
 
-#[derive(Debug, Validate, Deserialize, Clone)]
+#[derive(Debug, Validate, Deserialize, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserDto {
     pub role: Option<RoleDto>,
-    pub personal_information: PersolanInformationDTO,
-    pub creditionals: UserCreditionalDto,
+    pub personal_information: PersonalInformationDTO,
+    pub credentials: UserCreditionalDto,
     pub address: Option<CreateAddressDto>,
 }
 
 #[derive(Debug, Validate, Deserialize, Clone)]
 pub struct UpdateUserDto {
     pub role: Option<RoleDto>,
-    pub personal_information: PersolanInformationDTO,
+    pub personal_information: PersonalInformationDTO,
     pub creditionals: UserCreditionalDto,
     pub address: Option<CreateAddressDto>,
 }

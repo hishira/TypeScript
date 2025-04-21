@@ -8,8 +8,8 @@ use time::OffsetDateTime;
 use validator::Validate;
 
 #[derive(PartialEq, Debug, Clone, Deserialize, Validate, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PersolanInformationDTO {
+#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
+pub struct PersonalInformationDTO {
     pub first_name: String,
     pub last_name: String,
     #[serde(with = "time::serde::rfc3339")]
@@ -20,8 +20,8 @@ pub struct PersolanInformationDTO {
     pub contacts: Option<ContactDTO>,
 }
 
-pub fn from_personal_info_to_dto(personla_info: PersonalInformation) -> PersolanInformationDTO {
-    PersolanInformationDTO {
+pub fn from_personal_info_to_dto(personla_info: PersonalInformation) -> PersonalInformationDTO {
+    PersonalInformationDTO {
         first_name: personla_info.first_name,
         last_name: personla_info.last_name,
         brithday: personla_info.brithday,
