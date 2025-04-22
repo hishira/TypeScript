@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use validator::Validate;
 
 #[derive(Debug, Validate, Deserialize, Clone, Serialize)]
-#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
+#[serde(rename_all = "camelCase")]
 pub struct CreateAddressDto {
     //pub user_id: uuid::Uuid,
     #[validate(length(min = 1, message = "Address can not be empty"))]

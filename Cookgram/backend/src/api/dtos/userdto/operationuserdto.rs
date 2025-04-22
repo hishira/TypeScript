@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use validator::{Validate, ValidationError};
 
 #[derive(Debug, Validate, Deserialize, Clone, Serialize)]
-#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
+#[serde(rename_all = "camelCase")]
 pub struct UserCreditionalDto {
     #[validate(length(min = 1, message = "Can not be empty"))]
     pub username: String,

@@ -8,7 +8,7 @@ use time::OffsetDateTime;
 use validator::Validate;
 
 #[derive(PartialEq, Debug, Clone, Deserialize, Validate, Serialize)]
-#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
+#[serde(rename_all = "camelCase")]
 pub struct PersonalInformationDTO {
     pub first_name: String,
     pub last_name: String,
