@@ -25,7 +25,6 @@ pub struct UserRepositories {
     pub db_context: Database,
     pub user_dao: UserDAO,
     pub user_address_dao: UserAddressDAO,
-
 }
 impl UserRepositories {
     async fn create_user_using_transaction(
@@ -39,7 +38,7 @@ impl UserRepositories {
             .user_dao
             .create(entity.clone(), Some(transaction.deref_mut()))
             .await;
-        
+
         let address_resp: Option<Result<PgQueryResult, Error>>;
         if entity.address.is_some() {
             address_resp = Some(
@@ -70,9 +69,17 @@ impl UserRepositories {
     ) {
         match (re, meta_response) {
             (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
-            (Ok(_), Err(_)) => tracing::debug!("User created, meta not created"),
-            (Err(_), Ok(_)) => tracing::debug!("User not created, meta created"),
-            (Err(_), Err(_)) => tracing::debug!("Meta and user not created"),
+            (Ok(_), Err(error)) => {
+                tracing::error!("User created, meta not created, error: {}", error)
+            }
+            (Err(error), Ok(_)) => {
+                tracing::error!("User not created, meta created => error: {}", error)
+            }
+            (Err(erroruser), Err(errormeta)) => tracing::error!(
+                "Meta and user not created, error: user : {}, meta: {}",
+                erroruser,
+                errormeta
+            ),
         }
         match address_resp {
             Some(resp) => match resp {

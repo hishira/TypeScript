@@ -109,12 +109,10 @@ impl Query<UserFilterOption> for UserQuery {
 impl ActionQueryBuilder<User> for UserQuery {
     fn create(entity: User) -> QueryBuilder<'static, Postgres> {
         let mut create_builder = QueryBuilder::new(
-            "INSERT INTO USERS(id, username, password, email, meta_id, role, first_name, last_name) ",
+            "INSERT INTO USERS(id, email, meta_id, role, first_name, last_name) ",
         );
         create_builder.push_values(std::iter::once(entity), |mut b, user| {
             b.push_bind(user.id.get_id())
-                .push_bind(user.credentials.username)
-                .push_bind(user.credentials.password)
                 .push_bind(user.personal_information.email)
                 .push_bind(user.meta.id.get_id())
                 .push_bind(user.role)

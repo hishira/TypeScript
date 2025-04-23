@@ -1,8 +1,7 @@
-use axum::Json;
-use uuid::Uuid;
-
 use crate::api::daos::userdao::UserDAO;
-use crate::api::dtos::addressdto::createaddressdto::{build_address_based_on_create_dto, CreateUserAddressDto};
+use crate::api::dtos::addressdto::createaddressdto::{
+    build_address_based_on_create_dto, CreateUserAddressDto,
+};
 use crate::api::dtos::roledto::roledto::{map_to_roles, RoleDto};
 use crate::api::dtos::userdto::operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto};
 use crate::api::dtos::userdto::userdto::{from_user_to_user_dto, UserDTO, UserFilterOption};
@@ -14,8 +13,9 @@ use crate::api::utils::user::user_utils::UserUtils;
 use crate::core::role::role::Roles;
 use crate::core::state::entitystate::EntityState;
 use crate::core::state::state::State;
-
 use crate::{api::dtos::userdto::userdto::UserDtos, core::user::user::User};
+use axum::Json;
+use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct UserService {
@@ -61,6 +61,7 @@ impl UserService {
     ) -> Result<Json<UserDTO>, ResponseError> {
         let user = UserUtils::get_from_dto(UserDtos::Create(params), None).await?;
         let ids_touples = (owner_id, user.id.get_id());
+        tracing::debug!("User add, owner_id, user_id {:?}", ids_touples);
         self.user_repo.create(user.clone()).await;
         let result = self.user_dao.create_user_connection(ids_touples).await;
         match result {
