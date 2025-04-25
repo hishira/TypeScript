@@ -1,11 +1,12 @@
 use core::fmt;
-use std::str::FromStr;
-use std::error::Error;
-
 use serde::{Deserialize, Serialize};
 use sqlx::{
-    encode::IsNull, postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef}, Decode, Encode, Postgres, Type
+    encode::IsNull,
+    postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef},
+    Decode, Encode, Postgres, Type,
 };
+use std::error::Error;
+use std::str::FromStr;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityState {
@@ -111,8 +112,8 @@ impl<'de> Deserialize<'de> for EntityState {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use sqlx::postgres::PgArgumentBuffer;
     use serde_json::json;
+    use sqlx::postgres::PgArgumentBuffer;
     use std::str::FromStr;
 
     #[test]
