@@ -18,3 +18,11 @@ export const ErrorToastObject = (message: string): Message => ({
   detail: message,
   ...DefaultObjectMessage,
 });
+
+
+export const SuccessToastObject = (message: string): Message => ({
+  severity: 'success',
+  summary: 'Success',
+  detail: message,
+  ...DefaultObjectMessage,
+})

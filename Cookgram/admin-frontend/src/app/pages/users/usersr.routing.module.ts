@@ -8,6 +8,15 @@ const routes: Routes = [
   {
     path: EMPTY_STRING,
     component: UsersComponent,
+    children: [
+      {
+        path: ':id/details',
+        loadComponent: () =>
+          import('./user-details/user-details.component').then(
+            (a) => a.UserDetailsComponent
+          ),
+      },
+    ],
   },
 ];
 

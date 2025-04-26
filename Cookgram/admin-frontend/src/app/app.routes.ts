@@ -19,6 +19,13 @@ export const routes: Routes = [
           import('./pages/users/users.component').then((a) => a.UsersComponent),
       },
       { path: '', redirectTo: 'users', pathMatch: 'full' },
+      {
+        path: 'user/:id/details',
+        loadComponent: () =>
+          import('./pages/users/user-details/user-details.component').then(
+            (a) => a.UserDetailsComponent
+          ),
+      },
     ],
   },
   {

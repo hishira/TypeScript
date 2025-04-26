@@ -58,7 +58,6 @@ export class ErrorsComponent extends BaseComponent {
     errors && ErrorsTypes.Required in errors && errorsList.push(REQUIRED_ERROR);
     errors && ErrorsTypes.Email in errors && errorsList.push(EMAIL_ERROR);
     errors && ErrorsTypes.PasswordsConfirm in errors && errorsList.push(PASSWORDS_NOT_MATCH);
-
     return errorsList;
   }
 }

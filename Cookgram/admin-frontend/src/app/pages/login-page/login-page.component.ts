@@ -38,7 +38,7 @@ import { BlockUIModule } from 'primeng/blockui';
     ReactiveFormsModule,
     InputComponent,
     ProgressSpinnerModule,
-    BlockUIModule
+    BlockUIModule,
   ],
   providers: [AuthenticationApiService],
   templateUrl: './login-page.component.html',
@@ -46,7 +46,9 @@ import { BlockUIModule } from 'primeng/blockui';
 })
 export class LoginPageComponent extends BaseComponent {
   readonly loginFormGroup: FormGroup<LoginFormGroup> = EmptyLoginForm();
+
   loading: boolean = false;
+
   private readonly debounceTime = 300;
   private readonly enterPress: Subject<void> = new Subject();
 
@@ -54,8 +56,9 @@ export class LoginPageComponent extends BaseComponent {
     debounceTime(this.debounceTime),
     tap(() => this.signIn())
   );
+
   @HostListener('window:keydown.enter', ['$event'])
-  handleKeyDown(event: KeyboardEvent) {
+  handleKeyDown(_: KeyboardEvent) {
     this.enterPress.next();
   }
 

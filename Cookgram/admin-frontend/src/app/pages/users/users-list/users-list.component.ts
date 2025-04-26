@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { PrimeTemplate } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -17,7 +17,8 @@ import { ReadoOnlyComponent } from '../../../shared/components/readonly-only/rea
 import { SkeletonModule } from 'primeng/skeleton';
 import { TableSkeletonComponent } from '../../../shared/components/skeletons/table-skeleton/table-skeleton.component';
 import { skeletonRows } from './consts';
-
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-users-list',
   standalone: true,
@@ -39,18 +40,20 @@ import { skeletonRows } from './consts';
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent extends BaseComponent {
-  users$!: Observable<UserList[]>;
+  users!: Signal<UserList[]>;
   readonly skeletonRows = skeletonRows;
 
   constructor(
     private readonly userApi: UserApiSerivce,
-    private readonly dialogService: DialogService
+    private readonly dialogService: DialogService,
+    private readonly route: Router,
+    private readonly activeRoute: ActivatedRoute
   ) {
     super();
-  }
-
-  override initialize(): void {
-    this.users$ = this.userApi.userLists();
+    this.users = toSignal(this.userApi.userLists(), { initialValue: [] });
+    this.route.events.subscribe((event) => {
+      console.log(event);
+    });
   }
 
   createUser() {
@@ -60,6 +63,13 @@ export class UsersListComponent extends BaseComponent {
       modal: true,
       height: '100%',
       styleClass: 'customModal',
+    });
+  }
+
+  onRowSelect(customer: UserList): void {
+    console.log('Selected customer:', customer);
+    this.route.navigate(['../user',customer.id, 'details'], {
+      relativeTo: this.activeRoute,
     });
   }
 }

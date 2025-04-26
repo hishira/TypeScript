@@ -1,8 +1,10 @@
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   ValidationErrors,
   ValidatorFn,
+  Validators,
 } from '@angular/forms';
 import {
   DefaultNonNullabeOption,
@@ -34,22 +36,25 @@ export const EmptyGeneralInformationGroup =
       gender: new FormControl<Gender>(Gender.Men, NonNullable),
     });
 
-const accessGroupValidation: ValidatorFn =
-  () =>
-  (
-    accessGroup: FormGroup<AccessConfigurationStepGroup>
-  ): ValidationErrors | null => {
-    const password = accessGroup.value.password;
-    const confirmPassword = accessGroup.value.confirmPassword;
+const accessGroupValidation: ValidatorFn = (
+  accessGroup: AbstractControl
+): ValidationErrors | null => {
+  const password = accessGroup.get('password')?.value;
+  const confirmPassword = accessGroup.get('confirmPassword')?.value;
 
-    return password !== confirmPassword ? { passwordsNotMatch: true } : null;
-  };
+  // Return validation error if passwords do not match
+  return password !== confirmPassword ? { passwordsNotMatch: true } : null;
+};
+
 export const EmptyAccessConfigurationGroup =
   (): FormGroup<AccessConfigurationStepGroup> =>
     new FormGroup<AccessConfigurationStepGroup>(
       {
         username: new FormControl<string>('', DefaultNonNullabeOption),
-        email: new FormControl<string>('', DefaultNonNullabeOption),
+        email: new FormControl<string>('', {
+          nonNullable: true,
+          validators: [Validators.required, Validators.email],
+        }),
         password: new FormControl<string>('', DefaultNonNullabeOption),
         confirmPassword: new FormControl<string>('', DefaultNonNullabeOption),
         temporaryPassword: new FormControl<boolean>(

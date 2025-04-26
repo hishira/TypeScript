@@ -5,9 +5,9 @@
       <p-button (onClick)="createUser()" [rounded]="true">Create user</p-button>
     </div>
   </ng-template>
-  @if(users$ | async; as users) {
-  <app-empty-list [withRefreshButton]="true" [isEmpty]="users.length <= 0">
-    <p-table [value]="users" [rows]="users.length" [paginator]="true">
+  @if(users().length > 0) {
+  <app-empty-list [withRefreshButton]="true" [isEmpty]="users().length <= 0">
+    <p-table [value]="users()" [rows]="users().length" [paginator]="true">
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 25%">
@@ -20,15 +20,19 @@
             Full name
           </th>
           <th style="width: 25%">
+            Role
+          </th>
+          <th style="width: 25%">
             Status
           </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-customer>
-        <tr>
+        <tr (click)="onRowSelect(customer)" [style.cursor]="'pointer'">
           <td>{{ customer.personalInformation.email }}</td>
           <td> {{ customer.credentials.username }}</td>
           <td><app-read-only>{{ customer.fullName }}</app-read-only></td>
+          <td><app-read-only>{{ customer.roles }}</app-read-only></td>
           <td>{{ customer.state.current }}</td>
         </tr>
       </ng-template>

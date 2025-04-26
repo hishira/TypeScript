@@ -31,6 +31,7 @@ import {
 import { GeneralInformationStep } from './generial-information-step/generial-information-step.component';
 import { SummaryStepComponent } from './summary-step/summary-step.component';
 import { preparePersonalInformation } from './utils';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-user-create-modal',
@@ -63,7 +64,8 @@ export class CreateUserModalComponent extends AbstractModalComponent {
 
   constructor(
     private readonly dialogRef: DynamicDialogRef,
-    private readonly userApi: UserApiSerivce
+    private readonly userApi: UserApiSerivce,
+    private readonly toastService: ToastService
   ) {
     super(CreateUserMaxStep);
   }
@@ -84,8 +86,19 @@ export class CreateUserModalComponent extends AbstractModalComponent {
     this.isLoading.set(true);
     this.subscription.add(
       this.userApi.createUser(this.prepareCreateUserObject()).subscribe({
-        error: () => this.isLoading.set(false),
-        complete: () => this.isLoading.set(false),
+        next: () => {
+          this.isLoading.set(false);
+          this.close();
+          this.toastService.showSuccess('User created successfully');
+        },
+        error: () => {
+          this.isLoading.set(false);
+          this.toastService.showError('User creation failed');
+        },
+        complete: () => {
+          this.isLoading.set(false);
+          this.close();
+        },
       })
     );
   }
