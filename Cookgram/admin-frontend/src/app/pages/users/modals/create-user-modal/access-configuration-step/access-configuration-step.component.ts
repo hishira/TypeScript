@@ -1,5 +1,5 @@
-import { AsyncPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ButtonModule } from 'primeng/button';
@@ -29,13 +29,14 @@ import { PrepareRoles } from './access-configuration-step.utils';
     TooltipModule,
     ButtonModule,
     DropdownModule,
-    AsyncPipe,
     ErrorsComponent,
   ],
   styleUrl: './access-configuration.scss',
 })
 export class AccessConfigurationStep extends AbstractStepComponent<AccessConfigurationStepGroup> {
-  roles: Observable<Role[]> = this.prepareProperRoles();
+  roles: Signal<Role[]> = toSignal(this.prepareProperRoles(), {
+    initialValue: [],
+  });
 
   constructor(private readonly store: Store<MainStore>) {
     super();

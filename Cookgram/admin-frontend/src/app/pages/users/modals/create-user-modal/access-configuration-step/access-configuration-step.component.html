@@ -62,7 +62,7 @@
             </label>
             <p-dropdown
               inputId="role"
-              [options]="(roles | async) ?? []"
+              [options]="roles()"
               formControlName="role"></p-dropdown>
           </div>
         </div>
