@@ -1,9 +1,7 @@
-use std::{process::exit, time::Duration};
-
+use crate::database::redis::redisdatabase::RedisDatabase;
 use mongodb::{options::ClientOptions, Client, Database as MongoDatabase};
 use sqlx::{postgres::PgPoolOptions, Executor, Pool, Postgres};
-
-use crate::database::redis::redisdatabase::RedisDatabase;
+use std::{process::exit, time::Duration};
 
 pub struct Database {
     url: String,
@@ -22,26 +20,25 @@ impl Database {
             Err(_) => {
                 tracing::error!("cannot retrive mongo db string");
                 exit(0)
-            },
+            }
         };
-        let  mongo_db_client_res = ClientOptions::parse(mongo_string)
-            .await;
+        let mongo_db_client_res = ClientOptions::parse(mongo_string).await;
         let mongo_db_client = match mongo_db_client_res {
-            Ok(mongo_client) =>mongo_client,
+            Ok(mongo_client) => mongo_client,
             Err(error) => {
                 tracing::error!("Cannot connect to mongo db, {}", error);
                 exit(0);
-            },
+            }
         };
         let mongo_client = Client::with_options(mongo_db_client).unwrap();
         let mongo_database_name = dotenv::var("MONGO_DATABASE_NAME").unwrap();
-        let redis =  RedisDatabase::connect().await;
+        let redis = RedisDatabase::connect().await;
         Self {
             url: db_connection_string.to_string(),
             pool: psg_pool,
             mongo_client: mongo_client,
             mongo_database_name,
-            redis
+            redis,
         }
     }
 

@@ -1,10 +1,7 @@
+use super::eventId::EventId;
+use crate::core::entity::{entity::IdGenerator, Entity};
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
-
-use crate::core::entity::{entity::IdGenerator, Entity};
-
-use super::eventId::EventId;
-
 
 #[derive(Clone, Serialize, Deserialize)]
 pub enum EventEntity {
@@ -14,7 +11,6 @@ pub enum EventEntity {
     Company,
     Address,
     Contact,
-
 }
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -34,8 +30,8 @@ pub struct Event {
     pub completed: bool,
 }
 
-impl Entity for Event{
-    fn generate_id() ->impl IdGenerator {
+impl Entity for Event {
+    fn generate_id() -> impl IdGenerator {
         EventId::default()
     }
 }
@@ -62,7 +58,7 @@ impl Event {
             create_date: OffsetDateTime::now_utc(),
             related_entity: related_entity_id,
             completed,
-            entity
+            entity,
         }
     }
 }
