@@ -1,3 +1,9 @@
+use super::{
+    credentialsdto::{get_credentials_dto_from_credentials, CredentialsDTO},
+    metadto::{convert_meta_to_meta_dto, MetaDto},
+    operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
+    personalinformationdto::{from_personal_info_to_dto, PersonalInformationDTO},
+};
 use crate::{
     api::dtos::{
         addressdto::addressdto::{from_address_to_address_dto, AddressDto},
@@ -10,13 +16,6 @@ use crate::{
 };
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-
-use super::{
-    credentialsdto::{get_credentials_dto_from_credentials, CredentialsDTO},
-    metadto::{convert_meta_to_meta_dto, MetaDto},
-    operationuserdto::{CreateUserDto, DeleteUserDto, UpdateUserDto},
-    personalinformationdto::{from_personal_info_to_dto, PersonalInformationDTO},
-};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

@@ -1,12 +1,14 @@
-use axum::{extract::rejection::JsonRejection, http::StatusCode, response::{IntoResponse, Response}};
+use axum::{
+    extract::rejection::JsonRejection,
+    http::StatusCode,
+    response::{IntoResponse, Response},
+};
 use thiserror::Error;
-
 
 #[derive(Debug, Error)]
 pub enum ServerError {
     #[error(transparent)]
     ValidationError(#[from] validator::ValidationErrors),
-
     #[error(transparent)]
     AxumFormRejection(#[from] JsonRejection),
 }
