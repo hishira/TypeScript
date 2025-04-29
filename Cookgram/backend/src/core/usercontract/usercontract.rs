@@ -59,9 +59,8 @@ impl Entity for Contract {
 #[cfg(test)]
 mod tests {
 
-    use crate::core::state::entitystate::EntityState;
-
     use super::*;
+    use crate::core::state::entitystate::EntityState;
     use serde_json;
     use time::macros::datetime;
     use uuid::Uuid;

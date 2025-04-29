@@ -1,12 +1,3 @@
-use std::error::Error;
-use std::fmt;
-use std::str::FromStr;
-
-use serde::{Deserialize, Serialize};
-use sqlx::encode::IsNull;
-use sqlx::postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef};
-use sqlx::{Decode, Encode, Postgres, Type};
-
 use super::access::{Access, QueriesActions};
 use super::adminrole::AdminRole;
 use super::director::Director;
@@ -14,6 +5,11 @@ use super::employee::Employee;
 use super::manager::Manager;
 use super::superadminrole::SuperAdminRole;
 use super::userrole::UserRole;
+use sqlx::encode::IsNull;
+use sqlx::postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef};
+use sqlx::{Decode, Encode, Postgres, Type};
+use std::error::Error;
+use std::fmt;
 
 pub trait Role {
     fn has_access(&self, access: impl Access) -> bool;
@@ -123,8 +119,8 @@ impl Roles {
     pub fn is_administration_role(&self) -> bool {
         match self {
             Roles::Admin(_) => true,
-            Roles::SuperAdmin(_)=>true,
-            _ => false
+            Roles::SuperAdmin(_) => true,
+            _ => false,
         }
     }
     pub fn is_admin(&self) -> bool {
