@@ -2,11 +2,11 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ErrorStruct {
-    message: String
+    message: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub enum ErrorBody<T>{
+pub enum ErrorBody<T> {
     Ok(T),
-    Error(ErrorStruct)
+    Error(ErrorStruct),
 }

@@ -4,7 +4,7 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 pub enum UserError {
     #[error(transparent)]
-    CreateError(sqlx::Error)
+    CreateError(sqlx::Error),
 }
 
 impl IntoResponse for UserError {
@@ -12,8 +12,9 @@ impl IntoResponse for UserError {
         match self {
             UserError::CreateError(_) => {
                 let message = format!("Error occur while user create");
-                (StatusCode::BAD_REQUEST ,message)
+                (StatusCode::BAD_REQUEST, message)
             }
-        }.into_response()
+        }
+        .into_response()
     }
 }
