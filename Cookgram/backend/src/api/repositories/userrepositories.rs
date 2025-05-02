@@ -6,6 +6,7 @@ use crate::{
             actionquery::ActionQueryBuilder, metaquery::metaquery::MetaQuery,
             userquery::userquery::UserQuery,
         },
+        utils::messages::userrepomessages::UserRepoMessages,
     },
     core::{
         address::address::Address, event::userevent::UserEvent, meta::meta::Meta, user::user::User,
@@ -26,6 +27,7 @@ pub struct UserRepositories {
     pub user_dao: UserDAO,
     pub user_address_dao: UserAddressDAO,
 }
+
 impl UserRepositories {
     async fn create_user_using_transaction(
         &self,
@@ -68,23 +70,26 @@ impl UserRepositories {
         address_resp: Option<Result<PgQueryResult, Error>>,
     ) {
         match (re, meta_response) {
-            (Ok(_), Ok(_)) => tracing::debug!("Meta and user created"),
+            (Ok(_), Ok(_)) => tracing::debug!("{}", UserRepoMessages::MetaAndUserCreate),
             (Ok(_), Err(error)) => {
-                tracing::error!("User created, meta not created, error: {}", error)
+                tracing::error!("{}: {}", UserRepoMessages::UserCreateMetaNot, error)
             }
             (Err(error), Ok(_)) => {
-                tracing::error!("User not created, meta created => error: {}", error)
+                tracing::error!("{}: {}", UserRepoMessages::UserNotCreateMetaCreate, error)
             }
             (Err(erroruser), Err(errormeta)) => tracing::error!(
-                "Meta and user not created, error: user : {}, meta: {}",
+                "{}: user : {}, meta: {}",
+                UserRepoMessages::UserAndMetaNotCreate,
                 erroruser,
                 errormeta
             ),
         }
         match address_resp {
             Some(resp) => match resp {
-                Ok(_) => tracing::debug!("User address created"),
-                Err(error) => tracing::error!("Error occur while saving user address {}", error),
+                Ok(_) => tracing::debug!("{}", UserRepoMessages::UserAddressCreate),
+                Err(error) => {
+                    tracing::error!("{} {}", UserRepoMessages::UserAddressNotCreate, error)
+                }
             },
             _ => {}
         }
@@ -96,8 +101,8 @@ impl UserRepositories {
             .create(address.clone(), user.id.get_id(), Some(&self.pool))
             .await;
         match result {
-            Ok(_) => tracing::debug!("Address created"),
-            Err(error) => tracing::error!("error while address create: {}", error),
+            Ok(_) => tracing::debug!("{}", UserRepoMessages::AddressCreate),
+            Err(error) => tracing::error!("{}: {}", UserRepoMessages::AddressNotCreate, error),
         }
         EventRepository::create_later(
             self.db_context.clone(),
@@ -112,7 +117,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
         match transaction_res {
             Ok(tranaction) => self.create_user_using_transaction(tranaction, entity).await,
             Err(error) => {
-                tracing::error!("Error occur while user create, {}", error);
+                tracing::error!("{}, {}", UserRepoMessages::UserNotCreate, error);
                 entity
             }
         }
@@ -136,7 +141,7 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
                 return entity;
             }
             Err(error) => {
-                tracing::error!("error while user delete: {}", error);
+                tracing::error!("{}: {}", UserRepoMessages::UserNotDelete, error);
                 entity
             }
         }
@@ -151,8 +156,8 @@ impl Repository<User, UserFilterOption, sqlx::Error> for UserRepositories {
         let mut update_query = UserQuery::update(update_entity.clone());
         let resp = update_query.build().execute(&self.pool).await;
         match resp {
-            Ok(_) => tracing::debug!("User with id updated"),
-            Err(error) => tracing::error!("Problem with user create, {}", error),
+            Ok(_) => tracing::debug!("{}", UserRepoMessages::UserWithIDUpdate),
+            Err(error) => tracing::error!("{}, {}", UserRepoMessages::UserWithIDNotUpdate, error),
         }
         meta_update(self.pool.clone(), update_entity.clone());
         EventRepository::create_later(
@@ -169,9 +174,9 @@ pub fn mete_create(postgres_pool: Pool<Postgres>, entity: User) {
         let mut meta_query = MetaQuery::create(entity.meta.clone());
         let meta_query_result = meta_query.build().fetch_one(&postgres_pool).await;
         match meta_query_result {
-            Ok(_) => tracing::debug!("Meta object created"),
+            Ok(_) => tracing::debug!("{}", UserRepoMessages::MetaObjectCreate),
             Err(error) => {
-                tracing::debug!("Meta object not created, {}", error);
+                tracing::debug!("{}, {}", UserRepoMessages::MetaObjectNotCreate, error);
             }
         };
     });
@@ -185,9 +190,9 @@ pub fn meta_update(postgres_pool: Pool<Postgres>, entity: User) {
         ));
         let meta_query_result = meta_query.build().execute(&postgres_pool).await;
         match meta_query_result {
-            Ok(_) => tracing::debug!("Meta object update"),
+            Ok(_) => tracing::debug!("{}", UserRepoMessages::MetaObjectUpdate),
             Err(error) => {
-                tracing::debug!("Meta object not update, {}", error);
+                tracing::debug!("{}, {}", UserRepoMessages::MetaObjectNotUpdate, error);
             }
         };
     });
