@@ -1,9 +1,8 @@
-use sqlx::{Postgres, QueryBuilder};
-
 use crate::{
     api::{dtos::eventdto::eventdto::convert_from_event, queries::actionquery::ActionQueryBuilder},
     core::event::event::Event,
 };
+use sqlx::{Postgres, QueryBuilder};
 
 #[derive(Clone)]
 pub struct EventQuery {}

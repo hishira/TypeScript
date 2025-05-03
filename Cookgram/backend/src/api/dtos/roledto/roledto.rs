@@ -46,7 +46,6 @@ pub struct ParseFromStringRoleError;
 impl fmt::Display for ParseFromStringRoleError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Problem with role conversion")
-        // ...
     }
 }
 
