@@ -1,7 +1,5 @@
-use crate::api::errors::autherror::AuthError;
-
 use super::{jwt::Claims, keys::Keys};
-
+use crate::api::errors::autherror::AuthError;
 pub struct AccessToken(pub String);
 pub struct RefreshToken(pub String);
 pub struct JwtTokens(pub AccessToken, pub RefreshToken);

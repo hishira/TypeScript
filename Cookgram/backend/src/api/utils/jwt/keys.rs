@@ -1,11 +1,12 @@
+use super::{
+    consts::{JWT_EXPECT_MESSAGE, JWT_SECRET},
+    jwt::Claims,
+};
+use crate::api::{errors::autherror::AuthError, utils::jwt::consts::ERROR_TOKEN_CREATION};
 use jsonwebtoken::{
     decode, encode, errors::ErrorKind, DecodingKey, EncodingKey, Header, TokenData, Validation,
 };
 use once_cell::sync::Lazy;
-
-use crate::api::errors::autherror::AuthError;
-
-use super::jwt::Claims;
 
 pub struct Keys {
     pub encoding: EncodingKey,
@@ -22,7 +23,7 @@ impl Keys {
 
     pub fn encode(claims: &Claims) -> Result<String, AuthError> {
         encode(&Header::default(), &claims, &KEYS.encoding).map_err(|e| {
-            tracing::error!("Error occur while token creation, {}", e);
+            tracing::error!("{}, {}", ERROR_TOKEN_CREATION, e);
             return AuthError::TokenCreation;
         })
     }
@@ -35,6 +36,6 @@ impl Keys {
     }
 }
 pub static KEYS: Lazy<Keys> = Lazy::new(|| {
-    let secret = dotenv::var("JWT_SECRET").expect("JWT_SECRET must be set");
+    let secret = dotenv::var(JWT_SECRET).expect(JWT_EXPECT_MESSAGE);
     Keys::new(secret.as_bytes())
 });

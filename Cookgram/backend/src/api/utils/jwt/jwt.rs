@@ -1,3 +1,11 @@
+use super::keys::Keys;
+use crate::api::{
+    dtos::{
+        roledto::roledto::RoleDto,
+        userdto::{authenticationuserdto::AuthenticationUserDto, operationuserdto::UserAuthDto},
+    },
+    errors::autherror::AuthError,
+};
 use axum::{async_trait, extract::FromRequestParts, http::request::Parts, RequestPartsExt};
 use axum_extra::{
     headers::{authorization::Bearer, Authorization},
@@ -5,17 +13,6 @@ use axum_extra::{
 };
 use jsonwebtoken::{Algorithm, Validation};
 use serde::{Deserialize, Serialize};
-
-use crate::
-    api::{
-        dtos::{roledto::roledto::RoleDto, userdto::{
-            authenticationuserdto::AuthenticationUserDto, operationuserdto::UserAuthDto,
-        }},
-        errors::autherror::AuthError,
-    }
-;
-
-use super::keys::Keys;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
