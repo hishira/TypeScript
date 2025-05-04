@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use sqlx::{Execute, Postgres, QueryBuilder};
 use uuid::Uuid;
 
@@ -8,6 +10,8 @@ use crate::{
     },
     core::user::user::User,
 };
+
+use super::userquerytypes::UserQueryType;
 
 #[derive(Clone)]
 pub struct UserQuery {
@@ -20,7 +24,11 @@ impl UserQuery {
     const QUERY_FIND_BY_ID: &'static str = "SELECT id, username, email, password, meta_id, role, current_state, previous_state FROM ADDRESSUSERS WHERE id = ";
 
     pub fn new(id: Option<Uuid>, username: Option<String>, email: Option<String>) -> Self {
-        Self { id, username, email }
+        Self {
+            id,
+            username,
+            email,
+        }
     }
 
     fn prepare_filter(
@@ -61,7 +69,7 @@ impl UserQuery {
 
 impl Query<UserFilterOption> for UserQuery {
     fn build(&self) -> String {
-        let mut user_query: QueryBuilder<Postgres> = QueryBuilder::new("SELECT * FROM users where");
+        let mut user_query: QueryBuilder<Postgres> = QueryBuilder::new(UserQueryType::SelectWhere);
         let mut count: i8 = 0;
         if let Some(id) = self.id {
             user_query.push(" id = ");
@@ -75,11 +83,10 @@ impl Query<UserFilterOption> for UserQuery {
 
     fn find(option: UserFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut user_query: QueryBuilder<Postgres> =
-            QueryBuilder::new("SELECT * FROM ADDRESSUSERS");
+            QueryBuilder::new(UserQueryType::SeleFromAddressUsers);
         let mut count: i8 = 0;
         if let Some(owner_id) = option.owner_id {
-            user_query
-                .push(" WHERE id in (select user_id from EMPLOYEE_CONNECTION where owner_id = ");
+            user_query.push(UserQueryType::WhereInCondition);
             user_query.push_bind(owner_id);
             user_query.push(") ");
             count += 1;
@@ -87,14 +94,14 @@ impl Query<UserFilterOption> for UserQuery {
         UserQuery::prepare_username(&mut user_query, count, option.username.clone());
         if !option.with_admin.unwrap_or(false) {
             if count > 0 {
-                user_query.push(" AND role not in ('Admin', 'SuperAdmin') ");
+                user_query.push(UserQueryType::AndRoneNotInCondition);
             } else {
-                user_query.push(" where role not in ('Admin', 'SuperAdmin') ");
+                user_query.push(UserQueryType::WheReoleNotInCondition);
             }
         }
-        user_query.push(" limit ");
+        user_query.push(UserQueryType::Limit);
         user_query.push_bind(option.limit.unwrap_or(10));
-        user_query.push(" offset ");
+        user_query.push(UserQueryType::Offset);
         user_query.push_bind(option.offset.unwrap_or(0));
         user_query
     }
@@ -108,9 +115,7 @@ impl Query<UserFilterOption> for UserQuery {
 
 impl ActionQueryBuilder<User> for UserQuery {
     fn create(entity: User) -> QueryBuilder<'static, Postgres> {
-        let mut create_builder = QueryBuilder::new(
-            "INSERT INTO USERS(id, email, meta_id, role, first_name, last_name) ",
-        );
+        let mut create_builder = QueryBuilder::new(UserQueryType::InsertIntoUsers);
         create_builder.push_values(std::iter::once(entity), |mut b, user| {
             b.push_bind(user.id.get_id())
                 .push_bind(user.personal_information.email)

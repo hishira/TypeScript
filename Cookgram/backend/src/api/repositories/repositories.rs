@@ -1,6 +1,5 @@
-use uuid::Uuid;
-
 use crate::core::entity::Entity;
+use uuid::Uuid;
 
 pub trait Repository<E: Entity, ActionOption, Error>: Send + Sync {
     async fn create(&self, entity: E) -> E;

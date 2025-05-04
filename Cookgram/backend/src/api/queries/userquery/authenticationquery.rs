@@ -7,6 +7,8 @@ use crate::{
 };
 use sqlx::{Postgres, QueryBuilder};
 
+use super::authenticationquerytypes::AuthenticationQueryTypes;
+
 #[derive(Clone)]
 pub struct AuthenticationQuery {
     user_id: UserId,
@@ -18,7 +20,7 @@ pub struct AuthenticationQuery {
 impl ActionQueryBuilder<Authentication> for AuthenticationQuery {
     fn create(entity: Authentication) -> sqlx::QueryBuilder<'static, sqlx::Postgres> {
         let mut create_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO AUTHENTICATION(user_id, username, password, passowrd_is_temporary) ",
+            AuthenticationQueryTypes::InsertIntoAuthentication,
         );
         create_builder.push_values(vec![entity], |mut b, auth| {
             b.push_bind(auth.user_id.get_id())
@@ -45,7 +47,7 @@ impl Query<CredentialsFilterOption> for AuthenticationQuery {
 
     fn find(option: CredentialsFilterOption) -> QueryBuilder<'static, Postgres> {
         let mut find_query: QueryBuilder<'static, Postgres> =
-            QueryBuilder::new("SELECT * FROM USERLOGIN WHERE current_state = 'Active'");
+            QueryBuilder::new(AuthenticationQueryTypes::SelectFromUserLogin);
         match (
             option.username,
             option.password,
@@ -83,7 +85,7 @@ impl Query<CredentialsFilterOption> for AuthenticationQuery {
     fn find_by_id(id: uuid::Uuid) -> QueryBuilder<'static, Postgres> {
         // Find only by user_id, table not has id
         let mut find_query: QueryBuilder<'static, Postgres> =
-            QueryBuilder::new("SELECT * FROM USERLOGIN WHERE id =  ");
+            QueryBuilder::new(AuthenticationQueryTypes::SelectFromUserLoginWhereId);
         find_query.push_bind(id);
         find_query
     }

@@ -33,28 +33,22 @@ impl DAO<User, UserFilterOption> for UserDAO {
     where
         E: Executor<'a, Database = Postgres> + Send,
     {
-        //TODO: Check if can be refactor
         let mut create_user_query = UserQuery::create(entity.clone());
         let auth: Authentication =
             Authentication::from_credentials(entity.id.clone(), entity.credentials);
         let mut auth_query = AuthenticationQuery::create(auth);
-        let response = match executor {
-            Some(exec) => {
-                create_user_query.build().execute(exec).await?;
-                let mut conn = self.pool.acquire().await?;
-                let mut tx = conn.begin().await?;
-                let res = auth_query.build().execute(tx.deref_mut()).await?;
-                tx.commit().await?;
-                Ok(res)
+
+        let response = {
+            let mut conn = self.pool.acquire().await?;
+            let mut tx = conn.begin().await?;
+            if let Some(exec) = executor {
+            create_user_query.build().execute(exec).await?;
+            } else {
+            create_user_query.build().execute(tx.deref_mut()).await?;
             }
-            None => {
-                let mut conn = self.pool.acquire().await?;
-                let mut tx = conn.begin().await?;
-                create_user_query.build().execute(tx.deref_mut()).await?;
-                let res = auth_query.build().execute(tx.deref_mut()).await?;
-                tx.commit().await?;
-                Ok(res)
-            }
+            let res = auth_query.build().execute(tx.deref_mut()).await?;
+            tx.commit().await?;
+            Ok(res)
         };
         response
     }
