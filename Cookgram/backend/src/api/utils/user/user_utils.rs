@@ -21,8 +21,8 @@ use crate::{
         },
     },
 };
-use sqlx::Row;
 use sqlx::postgres::PgRow;
+use sqlx::Row;
 
 pub struct UserUtils {}
 

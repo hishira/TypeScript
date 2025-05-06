@@ -1,9 +1,8 @@
+use crate::api::errors::autherror::AuthError;
 use bcrypt::{hash, verify};
 use rayon::ThreadPoolBuilder;
 use thiserror::Error;
 use tokio::sync::oneshot;
-
-use crate::api::errors::autherror::AuthError;
 
 /// Errors that can occur in the `PasswordWorker`.
 #[derive(Debug, Error)]
