@@ -1,10 +1,8 @@
-use time::OffsetDateTime;
-use uuid::Uuid;
-
+use super::metaid::MetaId;
 use crate::core::entity::entity::IdGenerator;
 use crate::core::entity::Entity;
-
-use super::metaid::MetaId;
+use time::OffsetDateTime;
+use uuid::Uuid;
 
 #[derive(PartialEq, Debug, Clone)]
 pub struct Meta {
@@ -43,7 +41,6 @@ impl Meta {
     }
 }
 
-
 impl Entity for Meta {
     fn generate_id() -> impl IdGenerator {
         MetaId::default()
@@ -57,7 +54,6 @@ mod tests {
     use super::*;
     #[test]
     fn test_meta_new() {
-
         let meta: Meta = Meta {
             id: MetaId::default(),
             create_date: OffsetDateTime::now_utc(),

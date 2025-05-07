@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 pub struct Employee {
     access: Vec<QueriesActions>,
 }
+
 impl Default for Employee {
     fn default() -> Self {
         Self {
