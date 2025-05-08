@@ -1,12 +1,10 @@
-use mongodb::Database;
-use sqlx::{Pool, Postgres};
-
+use super::repositories::Repository;
 use crate::{
     api::queries::{actionquery::ActionQueryBuilder, eventquery::eventquery::EventQuery},
     core::event::event::Event,
 };
-
-use super::repositories::Repository;
+use mongodb::Database;
+use sqlx::{Pool, Postgres};
 
 #[derive(Clone)]
 pub struct EventRepository {

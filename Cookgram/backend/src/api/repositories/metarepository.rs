@@ -1,8 +1,6 @@
-use sqlx::{Pool, Postgres};
-
-use crate::core::meta::meta::Meta;
-
 use super::repositories::Repository;
+use crate::core::meta::meta::Meta;
+use sqlx::{Pool, Postgres};
 
 #[derive(Clone)]
 pub struct MetaRepository {

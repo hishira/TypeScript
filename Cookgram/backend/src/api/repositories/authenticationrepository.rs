@@ -1,26 +1,33 @@
+use super::repositories::Repository;
+use crate::api::{
+    daos::{authenticationdao::AuthenticationDAO, dao::DAO},
+    dtos::userdto::{
+        authenticationuserdto::AuthenticationUserDto, credentialsdto::CredentialsFilterOption,
+    },
+};
 use mongodb::Database;
 use sqlx::{Pool, Postgres};
 
-use crate::api::{daos::{authenticationdao::AuthenticationDAO, dao::DAO}, dtos::userdto::{authenticationuserdto::AuthenticationUserDto, credentialsdto::CredentialsFilterOption}};
-
-use super::repositories::Repository;
-
 #[derive(Clone)]
-pub struct AuthenticationRepository{
+pub struct AuthenticationRepository {
     pub db: Pool<Postgres>,
     pub db_context: Database,
-    pub auth_dao: AuthenticationDAO
-
+    pub auth_dao: AuthenticationDAO,
 }
 
 impl AuthenticationRepository {}
 
-impl Repository<AuthenticationUserDto, CredentialsFilterOption, sqlx::Error> for AuthenticationRepository {
+impl Repository<AuthenticationUserDto, CredentialsFilterOption, sqlx::Error>
+    for AuthenticationRepository
+{
     async fn create(&self, _entity: AuthenticationUserDto) -> AuthenticationUserDto {
         todo!()
     }
 
-    async fn find(&self, option: CredentialsFilterOption) -> Result<Vec<AuthenticationUserDto>, sqlx::Error> {
+    async fn find(
+        &self,
+        option: CredentialsFilterOption,
+    ) -> Result<Vec<AuthenticationUserDto>, sqlx::Error> {
         self.auth_dao.find(option).await
     }
 
