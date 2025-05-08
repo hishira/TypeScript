@@ -10,6 +10,9 @@ use crate::api::{
 use axum::Json;
 use jsonwebtoken::get_current_timestamp;
 
+const ACCESS_TOKEN_EXPIRATION: u64 = 10000; // TODO only for test
+const REFRESH_TOKEN_EXPIRATION: u64 = 10000;
+
 pub struct TokenService {}
 
 impl TokenService {
@@ -26,8 +29,8 @@ impl TokenService {
     ) -> (Claims, Claims) {
         let time_stamp = get_current_timestamp();
         (
-            Claims::access_token(&params, user.clone(), time_stamp + 10000), //TODO only for test
-            Claims::refresh_token(&params, user.clone(), 10000 + time_stamp),
+            Claims::access_token(&params, user.clone(), time_stamp + ACCESS_TOKEN_EXPIRATION),
+            Claims::refresh_token(&params, user.clone(), REFRESH_TOKEN_EXPIRATION + time_stamp),
         )
     }
     pub async fn refresh_token(

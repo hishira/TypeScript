@@ -8,6 +8,15 @@ use sqlx::{
 use std::error::Error;
 use std::str::FromStr;
 
+const STATE_DRAFT: &str = "Draft";
+const STATE_ACTIVE: &str = "Active";
+const STATE_SUSPEND: &str = "Suspend";
+const STATE_FROZEN: &str = "Frozen";
+const STATE_RETIRED: &str = "Retired";
+const STATE_DELETED: &str = "Deleted";
+const INVALID_STATE_ERROR: &str = "Invalid state: ";
+const ENTITY_STATE_CONVERSION_ERROR: &str = "Problem with EntityState conversion";
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum EntityState {
     Draft,
@@ -27,12 +36,12 @@ impl Type<Postgres> for EntityState {
 impl<'q> Encode<'q, Postgres> for EntityState {
     fn encode_by_ref(&self, buf: &mut PgArgumentBuffer) -> IsNull {
         let value = match self {
-            EntityState::Draft => "Draft",
-            EntityState::Active => "Active",
-            EntityState::Suspend => "Suspend",
-            EntityState::Frozen => "Frozen",
-            EntityState::Retired => "Retired",
-            EntityState::Deleted => "Deleted",
+            EntityState::Draft => STATE_DRAFT,
+            EntityState::Active => STATE_ACTIVE,
+            EntityState::Suspend => STATE_SUSPEND,
+            EntityState::Frozen => STATE_FROZEN,
+            EntityState::Retired => STATE_RETIRED,
+            EntityState::Deleted => STATE_DELETED,
         };
         Encode::<Postgres>::encode(value, buf)
     }
@@ -42,13 +51,13 @@ impl<'r> Decode<'r, Postgres> for EntityState {
     fn decode(value: PgValueRef<'r>) -> Result<Self, Box<dyn Error + Send + Sync>> {
         let s = <&str as Decode<Postgres>>::decode(value).unwrap();
         match s {
-            "Draft" => Ok(EntityState::Draft),
-            "Active" => Ok(EntityState::Active),
-            "Suspend" => Ok(EntityState::Suspend),
-            "Frozen" => Ok(EntityState::Frozen),
-            "Retired" => Ok(EntityState::Retired),
-            "Deleted" => Ok(EntityState::Deleted),
-            _ => Err(format!("Invalid state: {}", s).into()),
+            STATE_DRAFT => Ok(EntityState::Draft),
+            STATE_ACTIVE => Ok(EntityState::Active),
+            STATE_SUSPEND => Ok(EntityState::Suspend),
+            STATE_FROZEN => Ok(EntityState::Frozen),
+            STATE_RETIRED => Ok(EntityState::Retired),
+            STATE_DELETED => Ok(EntityState::Deleted),
+            _ => Err(format!("{}{}", INVALID_STATE_ERROR, s).into()),
         }
     }
 }
@@ -58,7 +67,7 @@ pub struct ParseFromStringEntityStateError;
 
 impl fmt::Display for ParseFromStringEntityStateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Problem with EntityState conversion")
+        write!(f, "{}", ENTITY_STATE_CONVERSION_ERROR)
     }
 }
 
@@ -67,28 +76,29 @@ impl FromStr for EntityState {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "Draft" => Ok(EntityState::Draft),
-            "Active" => Ok(EntityState::Active),
-            "Suspend" => Ok(EntityState::Suspend),
-            "Frozen" => Ok(EntityState::Frozen),
-            "Retired" => Ok(EntityState::Retired),
-            "Deleted" => Ok(EntityState::Deleted),
+            STATE_DRAFT => Ok(EntityState::Draft),
+            STATE_ACTIVE => Ok(EntityState::Active),
+            STATE_SUSPEND => Ok(EntityState::Suspend),
+            STATE_FROZEN => Ok(EntityState::Frozen),
+            STATE_RETIRED => Ok(EntityState::Retired),
+            STATE_DELETED => Ok(EntityState::Deleted),
             _ => Err(ParseFromStringEntityStateError),
         }
     }
 }
+
 impl Serialize for EntityState {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
         match self {
-            EntityState::Draft => serializer.serialize_str("Draft"),
-            EntityState::Active => serializer.serialize_str("Active"),
-            EntityState::Suspend => serializer.serialize_str("Suspend"),
-            EntityState::Frozen => serializer.serialize_str("Frozen"),
-            EntityState::Retired => serializer.serialize_str("Retired"),
-            EntityState::Deleted => serializer.serialize_str("Deleted"),
+            EntityState::Draft => serializer.serialize_str(STATE_DRAFT),
+            EntityState::Active => serializer.serialize_str(STATE_ACTIVE),
+            EntityState::Suspend => serializer.serialize_str(STATE_SUSPEND),
+            EntityState::Frozen => serializer.serialize_str(STATE_FROZEN),
+            EntityState::Retired => serializer.serialize_str(STATE_RETIRED),
+            EntityState::Deleted => serializer.serialize_str(STATE_DELETED),
         }
     }
 }
@@ -118,11 +128,20 @@ mod tests {
 
     #[test]
     fn test_from_str() {
-        assert_eq!(EntityState::from_str("Active"), Ok(EntityState::Active));
-        assert_eq!(EntityState::from_str("Suspend"), Ok(EntityState::Suspend));
-        assert_eq!(EntityState::from_str("Frozen"), Ok(EntityState::Frozen));
-        assert_eq!(EntityState::from_str("Retired"), Ok(EntityState::Retired));
-        assert_eq!(EntityState::from_str("Deleted"), Ok(EntityState::Deleted));
+        assert_eq!(EntityState::from_str(STATE_ACTIVE), Ok(EntityState::Active));
+        assert_eq!(
+            EntityState::from_str(STATE_SUSPEND),
+            Ok(EntityState::Suspend)
+        );
+        assert_eq!(EntityState::from_str(STATE_FROZEN), Ok(EntityState::Frozen));
+        assert_eq!(
+            EntityState::from_str(STATE_RETIRED),
+            Ok(EntityState::Retired)
+        );
+        assert_eq!(
+            EntityState::from_str(STATE_DELETED),
+            Ok(EntityState::Deleted)
+        );
         assert!(EntityState::from_str("Unknown").is_err());
     }
 
@@ -130,7 +149,7 @@ mod tests {
     fn test_encode() {
         let mut buffer = PgArgumentBuffer::default();
         let state = EntityState::Active;
-        let expected_encoded_value = "Active";
+        let expected_encoded_value = STATE_ACTIVE;
         let encoded_value = std::str::from_utf8(&buffer).unwrap();
         assert_eq!(encoded_value, expected_encoded_value);
     }
@@ -139,12 +158,12 @@ mod tests {
     fn test_serialize() {
         let state = EntityState::Active;
         let serialized = serde_json::to_string(&state).unwrap();
-        assert_eq!(serialized, "\"Active\"");
+        assert_eq!(serialized, format!("\"{}\"", STATE_ACTIVE));
     }
 
     #[test]
     fn test_deserialize() {
-        let json_data = json!("Active");
+        let json_data = json!(STATE_ACTIVE);
         let state: EntityState = serde_json::from_value(json_data).unwrap();
         assert_eq!(state, EntityState::Active);
 
@@ -156,6 +175,6 @@ mod tests {
     #[test]
     fn test_display() {
         let error = ParseFromStringEntityStateError;
-        assert_eq!(format!("{}", error), "Problem with EntityState conversion");
+        assert_eq!(format!("{}", error), ENTITY_STATE_CONVERSION_ERROR);
     }
 }
