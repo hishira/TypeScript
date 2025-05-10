@@ -1,5 +1,6 @@
-export enum UserLinks  {
+export enum UserLinks {
     List = 'user/user-list',
     Current = 'user/current-user',
-    Create = 'user/add-user'
+    Create = 'user/add-user',
+    User = 'user/user'
 }

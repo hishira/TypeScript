@@ -6,7 +6,6 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
-import { delay, Observable } from 'rxjs';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { BaseComponent } from '../../../shared/components/base-component/base-component';
 import { EmptyListComponent } from '../../../shared/empty/empty-list/empty-list.component';
@@ -67,7 +66,6 @@ export class UsersListComponent extends BaseComponent {
   }
 
   onRowSelect(customer: UserList): void {
-    console.log('Selected customer:', customer);
     this.route.navigate(['../user',customer.id, 'details'], {
       relativeTo: this.activeRoute,
     });

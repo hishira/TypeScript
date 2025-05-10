@@ -1,0 +1,19 @@
+/* Ensure the component takes 100% width */
+:host {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  margin-right: 12px;
+}
+
+:host ::ng-deep {
+  .p-panel-header {
+    display: none;
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
