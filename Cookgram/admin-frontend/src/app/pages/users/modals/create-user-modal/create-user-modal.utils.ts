@@ -42,7 +42,6 @@ const accessGroupValidation: ValidatorFn = (
   const password = accessGroup.get('password')?.value;
   const confirmPassword = accessGroup.get('confirmPassword')?.value;
 
-  // Return validation error if passwords do not match
   return password !== confirmPassword ? { passwordsNotMatch: true } : null;
 };
 

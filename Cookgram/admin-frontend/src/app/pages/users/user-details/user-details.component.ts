@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ChipModule } from 'primeng/chip';
+import { SkeletonModule } from 'primeng/skeleton';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { BaseComponent } from '../../../shared/components/base-component/base-component';
 import { UserDetails } from './types';
@@ -14,7 +15,14 @@ import { UserDetails } from './types';
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss'],
-  imports: [CommonModule, PanelModule, ButtonModule, ProgressSpinnerModule, ChipModule],
+  imports: [
+    CommonModule,
+    PanelModule,
+    ButtonModule,
+    ProgressSpinnerModule,
+    ChipModule,
+    SkeletonModule,
+  ],
   standalone: true,
   providers: [UserApiSerivce],
 })
@@ -29,6 +37,8 @@ export class UserDetailsComponent extends BaseComponent {
 
   override initialize(): void {
     const userId = this.route.snapshot.paramMap.get('id');
-    this.user = toSignal(this.userService.userDetails(userId!), {initialValue: null});
+    this.user = toSignal(this.userService.userDetails(userId!), {
+      initialValue: null,
+    });
   }
 }
