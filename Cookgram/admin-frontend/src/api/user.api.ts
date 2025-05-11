@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { UserList } from '../app/pages/users/users-list/types';
 import { ContextUser } from '../app/shared/types/shared';
 import { BaseApi } from './base.api';
 import { CreateUserObject } from './types/user.types';
 import { UserLinks } from './consts/user.consts';
+import { UserDetails } from '../app/pages/users/user-details/types';
 
 @Injectable()
 export class UserApiSerivce extends BaseApi {
@@ -38,9 +39,9 @@ export class UserApiSerivce extends BaseApi {
     );
   }
 
-  userDetails(userId: string): Observable<Readonly<UserList>> {
-    return this.httpService.get<UserList>(
+  userDetails(userId: string): Observable<Readonly<UserDetails>> {
+    return this.httpService.get<UserDetails>(
       this.prepareLink(`${UserLinks.User}/${userId}`)
-    );
+    ).pipe(tap((response) => console.log(response)));
   }
 }

@@ -50,9 +50,6 @@ export class UsersListComponent extends BaseComponent {
   ) {
     super();
     this.users = toSignal(this.userApi.userLists(), { initialValue: [] });
-    this.route.events.subscribe((event) => {
-      console.log(event);
-    });
   }
 
   createUser() {

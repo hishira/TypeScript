@@ -4,19 +4,22 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ChipModule } from 'primeng/chip';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { BaseComponent } from '../../../shared/components/base-component/base-component';
+import { UserDetails } from './types';
 
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss'],
-  imports: [CommonModule, PanelModule, ButtonModule],
+  imports: [CommonModule, PanelModule, ButtonModule, ProgressSpinnerModule, ChipModule],
   standalone: true,
   providers: [UserApiSerivce],
 })
 export class UserDetailsComponent extends BaseComponent {
-  user!: Signal<unknown>;
+  user!: Signal<UserDetails | null>;
   constructor(
     private readonly route: ActivatedRoute,
     private readonly userService: UserApiSerivce
@@ -26,6 +29,6 @@ export class UserDetailsComponent extends BaseComponent {
 
   override initialize(): void {
     const userId = this.route.snapshot.paramMap.get('id');
-    this.user = toSignal(this.userService.userDetails(userId!));
+    this.user = toSignal(this.userService.userDetails(userId!), {initialValue: null});
   }
 }

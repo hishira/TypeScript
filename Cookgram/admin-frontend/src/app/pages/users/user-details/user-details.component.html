@@ -3,20 +3,40 @@
         <div class="button-container">
             <p-button type="button" label="Edit" icon="pi pi-pencil" class="p-button-primary"></p-button>
         </div>
-        <div class="p-grid">
+        <div *ngIf="!user()" class="loader-container">
+            <p-progressSpinner></p-progressSpinner>
+        </div>
+        <div *ngIf="user()" class="p-grid">
             <div class="p-col-12 p-md-6">
-                <p><strong>Name:</strong> John Doe</p>
+                <p><strong>Name:</strong> {{ user()?.personalInformation?.firstName || 'N/A' }} {{ user()?.personalInformation?.lastName || 'N/A' }}</p>
             </div>
             <div class="p-col-12 p-md-6">
-                <p><strong>Email:</strong> john.doe&#64;example.com</p>
+                <p><strong>Email:</strong> {{ user()?.personalInformation?.email || 'N/A' }}</p>
             </div>
             <div class="p-col-12 p-md-6">
-                <p><strong>Phone:</strong> +123456789</p>
+                <p><strong>Phone:</strong> {{ user()?.personalInformation?.contacts?.phone || 'N/A' }}</p>
             </div>
             <div class="p-col-12 p-md-6">
-                <p><strong>Address:</strong> 123 Main St, City, Country</p>
+                <p><strong>Address:</strong> {{ user()?.address || 'N/A' }}</p>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <p><strong>Gender:</strong> {{ user()?.personalInformation?.gender || 'N/A' }}</p>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <p><strong>Role:</strong> <p-chip label="{{ user()?.roles || 'N/A' }}"></p-chip></p>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <p><strong>State:</strong> <p-chip label="{{ user()?.state?.current || 'N/A' }}"></p-chip></p>
             </div>
         </div>
-
     </p-panel>
 </div>
+
+<style>
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+</style>
