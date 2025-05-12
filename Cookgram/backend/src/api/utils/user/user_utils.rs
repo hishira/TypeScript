@@ -12,16 +12,13 @@ use crate::{
         utils::password_worker::password_worker::PasswordWorkerError,
     },
     core::{
-        meta::meta::Meta,
-        role::role::Roles,
-        state::state::State,
-        user::{
+        address::address::Address, meta::meta::Meta, role::role::Roles, state::state::State, user::{
             credentials::Credentials, personalinformation::PersonalInformation, user::User,
             userid::UserId,
-        },
+        }
     },
 };
-use sqlx::postgres::PgRow;
+use sqlx::{postgres::PgRow, FromRow};
 use sqlx::Row;
 
 pub struct UserUtils {}
@@ -130,7 +127,7 @@ impl UserUtils {
             ),
             meta: Meta::meta_based_on_id(pg_row.get("meta_id")), //Meta::new(), //TODO: Inner join table to retrieve,
             role: map_to_roles(Self::retrive_role_from_row(&pg_row).unwrap()),
-            address: None,
+            address: Address::from_row(&pg_row).ok(),
             state: State {
                 current: pg_row.get("current_state"),
                 previous: pg_row.get("previous_state"),

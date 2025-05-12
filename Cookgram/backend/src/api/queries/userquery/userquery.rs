@@ -1,8 +1,4 @@
-use std::fmt::Display;
-
-use sqlx::{Execute, Postgres, QueryBuilder};
-use uuid::Uuid;
-
+use super::userquerytypes::UserQueryType;
 use crate::{
     api::{
         dtos::userdto::userdto::UserFilterOption,
@@ -10,8 +6,8 @@ use crate::{
     },
     core::user::user::User,
 };
-
-use super::userquerytypes::UserQueryType;
+use sqlx::{Execute, Postgres, QueryBuilder};
+use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct UserQuery {
@@ -21,7 +17,7 @@ pub struct UserQuery {
 }
 
 impl UserQuery {
-    const QUERY_FIND_BY_ID: &'static str = "SELECT id, username, email, password, meta_id, role, current_state, previous_state FROM ADDRESSUSERS WHERE id = ";
+    const QUERY_FIND_BY_ID: &'static str = "SELECT id, username, email, password, meta_id, role, current_state, previous_state, address, house, door, city, country, lat, long, postal_code FROM ADDRESSUSERS WHERE id = ";
 
     pub fn new(id: Option<Uuid>, username: Option<String>, email: Option<String>) -> Self {
         Self {

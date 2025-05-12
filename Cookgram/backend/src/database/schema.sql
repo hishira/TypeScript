@@ -169,6 +169,7 @@ CREATE view ADDRESSUSERS as (
         addr.door,
         addr.city,
         addr.country,
+        addr.postal_code,
         addr.lat,
         addr.long
     from users
