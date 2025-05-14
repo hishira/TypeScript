@@ -1,6 +1,5 @@
-use serde::{Deserialize, Serialize};
-
 use crate::core::valueObject::value_object::ValueObject;
+use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize, Copy)]
 #[serde(rename_all = "camelCase")]

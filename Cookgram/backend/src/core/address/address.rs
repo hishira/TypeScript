@@ -1,9 +1,7 @@
+use super::location::Location;
+use crate::core::valueObject::value_object::ValueObject;
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgRow, FromRow, Row};
-
-use crate::core::valueObject::value_object::ValueObject;
-
-use super::location::Location;
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -101,7 +99,6 @@ mod tests {
             country: String::from("Poland"),
             location,
             postal_code: String::from("00-001"),
-           
         };
 
         assert_eq!(address.address, "123 Main St");
