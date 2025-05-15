@@ -15,9 +15,19 @@ import {
 })
 export class ReadoOnlyComponent {
   readonly title: InputSignal<string | undefined> = input<string>();
-
+  private readonly infinitiLoopBorder: number = 1000;
+  private deep: number = 0;
+  
   check(ref: HTMLSpanElement): boolean {
     // Now only for text
+    if(this.deep > this.infinitiLoopBorder) {
+      console.warn('Infinite loop detected');
+      return false;
+    }
+    if(ref.hasChildNodes()){
+      this.deep++;
+      return this.check(ref.firstChild as HTMLSpanElement);
+    }
     return ref.textContent?.trim()?.length === 0;
   }
 }

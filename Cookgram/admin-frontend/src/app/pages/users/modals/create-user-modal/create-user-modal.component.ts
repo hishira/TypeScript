@@ -88,7 +88,7 @@ export class CreateUserModalComponent extends AbstractModalComponent {
       this.userApi.createUser(this.prepareCreateUserObject()).subscribe({
         next: () => {
           this.isLoading.set(false);
-          this.close();
+          this.close(true);
           this.toastService.showSuccess('User created successfully');
         },
         error: () => {
@@ -97,14 +97,14 @@ export class CreateUserModalComponent extends AbstractModalComponent {
         },
         complete: () => {
           this.isLoading.set(false);
-          this.close();
+          this.close(true);
         },
       })
     );
   }
 
-  close(): void {
-    this.dialogRef.close();
+  close(value?: boolean): void {
+    this.dialogRef.close(value);
   }
 
   private prepareCreateUserObject(): CreateUserObject {

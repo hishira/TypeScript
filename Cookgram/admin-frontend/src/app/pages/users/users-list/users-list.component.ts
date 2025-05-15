@@ -1,4 +1,9 @@
-import { Component, Signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { PrimeTemplate } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -18,6 +23,7 @@ import { TableSkeletonComponent } from '../../../shared/components/skeletons/tab
 import { skeletonRows } from './consts';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-users-list',
   standalone: true,
@@ -39,7 +45,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent extends BaseComponent {
-  users!: Signal<UserList[]>;
+  users!: WritableSignal<UserList[]>;
+  refetch: WritableSignal<boolean> = signal(false);
   readonly skeletonRows = skeletonRows;
 
   constructor(
@@ -49,21 +56,33 @@ export class UsersListComponent extends BaseComponent {
     private readonly activeRoute: ActivatedRoute
   ) {
     super();
-    this.users = toSignal(this.userApi.userLists(), { initialValue: [] });
+    this.users = signal(
+      toSignal(this.userApi.userLists(), { initialValue: [] })()
+    );
+    effect(() => {
+      this.refetch();
+      this.users.set([]);
+      firstValueFrom(this.userApi.userLists()).then((response) =>
+        this.users.set(response)
+      );
+    }, {allowSignalWrites: true});
   }
 
   createUser() {
-    this.dialogService.open(CreateUserModalComponent, {
+    const ref = this.dialogService.open(CreateUserModalComponent, {
       header: 'Create user',
       width: '100%',
       modal: true,
       height: '100%',
       styleClass: 'customModal',
     });
+    firstValueFrom(ref.onClose).then(
+      (response) => response && this.refetch.update((r) => !r)
+    );
   }
 
   onRowSelect(customer: UserList): void {
-    this.route.navigate(['../user',customer.id, 'details'], {
+    this.route.navigate(['../user', customer.id, 'details'], {
       relativeTo: this.activeRoute,
     });
   }

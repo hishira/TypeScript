@@ -10,6 +10,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { UserApiSerivce } from '../../../../api/user.api';
 import { BaseComponent } from '../../../shared/components/base-component/base-component';
 import { UserDetails } from './types';
+import { ReadoOnlyComponent } from '../../../shared/components/readonly-only/readonly-only.component';
 
 @Component({
   selector: 'app-user-details',
@@ -22,6 +23,7 @@ import { UserDetails } from './types';
     ProgressSpinnerModule,
     ChipModule,
     SkeletonModule,
+    ReadoOnlyComponent,
   ],
   standalone: true,
   providers: [UserApiSerivce],

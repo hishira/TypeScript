@@ -22,6 +22,19 @@ export enum Roles {
   Director = "Director"
 }
 
+export interface UserAddress {
+  address: string;
+  house: string;
+  door: string;
+  city: string;
+  country: string;
+  location: {
+    latitude: number | null;
+    longitude: number | null;
+  };
+  postal_code: string;
+}
+
 export interface UserDetails {
   id: string;
   personalInformation: {
@@ -39,7 +52,7 @@ export interface UserDetails {
   credentials: {
     username: string;
   };
-  address: string | null;
+  address: UserAddress | null;
   meta: {
     id: string;
     createDate: string;
