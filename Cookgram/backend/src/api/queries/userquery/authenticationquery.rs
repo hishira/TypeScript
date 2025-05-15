@@ -1,3 +1,4 @@
+use super::authenticationquerytypes::AuthenticationQueryTypes;
 use crate::{
     api::{
         dtos::userdto::credentialsdto::CredentialsFilterOption,
@@ -6,8 +7,6 @@ use crate::{
     core::user::{authentication::Authentication, userid::UserId},
 };
 use sqlx::{Postgres, QueryBuilder};
-
-use super::authenticationquerytypes::AuthenticationQueryTypes;
 
 #[derive(Clone)]
 pub struct AuthenticationQuery {
@@ -19,9 +18,8 @@ pub struct AuthenticationQuery {
 
 impl ActionQueryBuilder<Authentication> for AuthenticationQuery {
     fn create(entity: Authentication) -> sqlx::QueryBuilder<'static, sqlx::Postgres> {
-        let mut create_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            AuthenticationQueryTypes::InsertIntoAuthentication,
-        );
+        let mut create_builder: QueryBuilder<Postgres> =
+            QueryBuilder::new(AuthenticationQueryTypes::InsertIntoAuthentication);
         create_builder.push_values(vec![entity], |mut b, auth| {
             b.push_bind(auth.user_id.get_id())
                 .push_bind(auth.username)

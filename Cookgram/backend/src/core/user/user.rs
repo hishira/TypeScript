@@ -1,11 +1,11 @@
 use super::{credentials::Credentials, personalinformation::PersonalInformation, userid::UserId};
-use crate::{api::appstate::userstate::UserState, core::{
+use crate::core::{
     address::address::Address,
     entity::{entity::IdGenerator, Entity},
     meta::meta::Meta,
     role::role::Roles,
     state::{entitystate::EntityState, state::State},
-}};
+};
 use uuid::Uuid;
 
 #[derive(PartialEq, Debug, Clone)]
@@ -43,7 +43,7 @@ impl User {
                 meta: meta.unwrap_or(Meta::new()),
                 role: user_role,
                 address: address,
-                state: Self::active_state()
+                state: Self::active_state(),
             },
             None => Self {
                 id: UserId::from_id(User::generate_id().get_id()),
@@ -52,12 +52,12 @@ impl User {
                 meta: Meta::new(),
                 role: user_role,
                 address: address,
-                state: Self::active_state()
+                state: Self::active_state(),
             },
         }
     }
 
-    fn active_state()-> State<EntityState> {
+    fn active_state() -> State<EntityState> {
         State {
             current: EntityState::Active,
             previous: None,

@@ -54,7 +54,7 @@ impl Ticket {
         self.state.current = TicketState::CannotResolve;
         self.set_resolve_time();
     }
-    
+
     fn set_resolve_time(&mut self) {
         self.resolve_time = OffsetDateTime::now_utc();
         self.edit_date = OffsetDateTime::now_utc();
