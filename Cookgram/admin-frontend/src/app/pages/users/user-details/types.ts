@@ -32,7 +32,7 @@ export interface UserAddress {
     latitude: number | null;
     longitude: number | null;
   };
-  postal_code: string;
+  postalCode: string;
 }
 
 export interface UserDetails {

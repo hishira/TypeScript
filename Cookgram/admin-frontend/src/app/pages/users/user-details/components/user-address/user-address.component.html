@@ -1,0 +1,54 @@
+@if(loading()) {
+    <div>
+        <p-skeleton styleClass="mb-2" />
+        <p-skeleton width="10rem" styleClass="mb-2" />
+        <p-skeleton width="5rem" styleClass="mb-2" />
+    </div>
+} @else {
+    <div class="flex align-items-start justify-content-between mb-3">
+        <div class="grid flex-grow-1">
+            <div class="col-4">
+                <app-read-only [title]="'Address'">
+                    {{ address()?.address }}
+                </app-read-only>
+            </div>
+            <div class="col-4">
+                <app-read-only [title]="'House'">
+                    {{ address()?.house }}
+                </app-read-only>
+            </div>
+            <div class="col-4">
+                <app-read-only [title]="'Door'">
+                    {{ address()?.door }}
+                </app-read-only>
+            </div>
+            <div class="col-4">
+                <app-read-only [title]="'City'">
+                    {{ address()?.city }}
+                </app-read-only>
+            </div>
+            <div class="col-4">
+                <app-read-only [title]="'Country'">
+                    {{ address()?.country }}
+                </app-read-only>
+            </div>
+            <div class="col-4">
+                <app-read-only [title]="'Postal Code'">
+                    {{ address()?.postalCode }}
+                </app-read-only>
+            </div>
+            <div class="col-4">
+                <app-read-only [title]="'Location'">
+                    <ng-container>
+                        @if(address()?.location?.latitude !== null && address()?.location?.longitude !== null) {
+                            Lat: {{ address()?.location?.latitude }}, Lng: {{ address()?.location?.longitude }}
+                        }
+                    </ng-container>
+                </app-read-only>
+            </div>
+        </div>
+        <div>
+            <p-button label="Edit" icon="pi pi-pencil" styleClass="p-button-text"></p-button>
+        </div>
+    </div>
+}

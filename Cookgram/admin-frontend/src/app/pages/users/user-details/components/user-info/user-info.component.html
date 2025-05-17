@@ -1,0 +1,47 @@
+@if(loading()) {
+    <div>
+        <p-skeleton styleClass="mb-2" />
+        <p-skeleton width="10rem" styleClass="mb-2" />
+        <p-skeleton width="5rem" styleClass="mb-2" />
+        <p-skeleton height="2rem" styleClass="mb-2" />
+        <p-skeleton width="10rem" height="4rem" />
+    </div>
+} @else {
+    <div class="flex align-items-start justify-content-between mb-3">
+        <div class="grid flex-grow-1">
+            <div class="col-3">
+                <app-read-only [title]="'Name'">
+                    {{ user()?.personalInformation?.firstName + ' ' + user()?.personalInformation?.lastName }}
+                </app-read-only>
+            </div>
+            <div class="col-3">
+                <app-read-only [title]="'Email'">
+                    {{ user()?.personalInformation?.email }}
+                </app-read-only>
+            </div>
+            <div class="col-3">
+                <app-read-only [title]="'Phone'">
+                    {{ user()?.personalInformation?.contacts?.phone }}
+                </app-read-only>
+            </div>
+            <div class="col-3">
+                <app-read-only [title]="'Gender'">
+                    {{ user()?.personalInformation?.gender }}
+                </app-read-only>
+            </div>
+            <div class="col-3">
+                <app-read-only [title]="'Role'">
+                    <p-chip [label]="user()?.roles"></p-chip>
+                </app-read-only>
+            </div>
+            <div class="col-3">
+                <app-read-only [title]="'State'">
+                    <p-chip [label]="user()?.state?.current"></p-chip>
+                </app-read-only>
+            </div>
+        </div>
+        <div>
+            <p-button label="Edit" icon="pi pi-pencil" styleClass="p-button-text"></p-button>
+        </div>
+    </div>
+}

@@ -11,6 +11,8 @@ import { UserApiSerivce } from '../../../../api/user.api';
 import { BaseComponent } from '../../../shared/components/base-component/base-component';
 import { UserDetails } from './types';
 import { ReadoOnlyComponent } from '../../../shared/components/readonly-only/readonly-only.component';
+import { UserAddressComponent } from './components/user-address/user-address.component';
+import { UserInfoComponent } from './components/user-info/user-info.component';
 
 @Component({
   selector: 'app-user-details',
@@ -24,6 +26,8 @@ import { ReadoOnlyComponent } from '../../../shared/components/readonly-only/rea
     ChipModule,
     SkeletonModule,
     ReadoOnlyComponent,
+    UserAddressComponent,
+    UserInfoComponent,
   ],
   standalone: true,
   providers: [UserApiSerivce],
