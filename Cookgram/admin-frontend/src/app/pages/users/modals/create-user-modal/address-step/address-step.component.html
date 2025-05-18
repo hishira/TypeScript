@@ -5,7 +5,11 @@
         Address configuration
       </div>
     </div>
-    <ca-address [formControl]="form()" [addressRequiredMap]="addressMap"></ca-address>
+    <div class="grid">
+      <div class="col-3">
+        <ca-address [formControl]="form()" [addressRequiredMap]="addressMap"></ca-address>
+      </div>
+    </div>
   </ng-container>
   <ng-container ngProjectAs="footer">
     <p-button i18n-label label="Back" back [rounded]="true" (onClick)="back()" />

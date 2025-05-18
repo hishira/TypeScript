@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgRow, FromRow, Row};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AddressDto {
     pub address: String,
     pub house: String,

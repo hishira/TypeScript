@@ -1,0 +1,14 @@
+<app-dialog>
+  <ng-container ngProjectAs="content">
+    <div class="row-gap-0">
+      <div class="col-3 text-xl text-900 font-bold" i18n>
+        Change address
+      </div>
+    </div>
+    <ca-address [formControl]="addressControl" [addressRequiredMap]="addressMap"></ca-address>
+  </ng-container>
+  <ng-container ngProjectAs="footer">
+    <p-button i18n-label label="Cancel" (onClick)="cancel()" [rounded]="true" />
+    <p-button i18n-label label="Save" [rounded]="true" (onClick)="save()" />
+  </ng-container>
+</app-dialog>

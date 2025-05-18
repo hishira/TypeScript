@@ -1,5 +1,5 @@
 <div class="row-gap-0 mt-3" [formGroup]="form">
-  <div class="col-3">
+  <div class="col">
     <app-input
       i18-label
       [required]="addressRequiredMap().Address"
@@ -8,7 +8,7 @@
       class="w-full"
       [withErrors]="true" />
   </div>
-  <div class="col-3 flex gap-2">
+  <div class="col flex gap-2">
     <app-input
       i18-label
       label="House"
@@ -22,7 +22,7 @@
       formControlName="door"
       [withErrors]="true" />
   </div>
-  <div class="col-3 flex gap-2">
+  <div class="col flex gap-2">
     <app-input
       i18-label
       label="Postal code"
@@ -36,7 +36,7 @@
       [required]="addressRequiredMap().City"
       [withErrors]="true" />
   </div>
-  <div class="col-3">
+  <div class="col">
     <app-input
       i18-label
       label="Country"

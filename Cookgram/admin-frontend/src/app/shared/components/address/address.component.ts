@@ -55,11 +55,11 @@ export class AddressComponent
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: unknown): void {
+  registerOnTouched(_: unknown): void {
     /* TODO document why this method 'registerOnTouched' is empty */
   }
 
-  setDisabledState?(isDisabled: boolean): void {
+  setDisabledState?(_: boolean): void {
     /* TODO document why this method 'setDisabledState' is empty */
   }
 }

@@ -8,6 +8,7 @@ export type AddressGroup = {
   city: FormControl<string>;
   country: FormControl<string>;
   postalCode: FormControl<string>;
+  location?: FormControl<string>;
 };
 
 export enum AddressFields {

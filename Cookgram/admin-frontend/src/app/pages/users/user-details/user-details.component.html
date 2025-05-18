@@ -2,7 +2,7 @@
     <p-panel [style]="{width: '100%'}">
         <app-user-info [user]="user()" [loading]="!user()"></app-user-info>
     </p-panel>
-    <p-panel header="Address Details" [style]="{width: '100%', marginTop: '1rem'}">
+    <p-panel header="Address Details" class="mt-4" [style]="{width: '100%', marginTop: '1rem'}">
         <app-user-address [address]="user()?.address" [loading]="!user()"></app-user-address>
     </p-panel>
 </div>

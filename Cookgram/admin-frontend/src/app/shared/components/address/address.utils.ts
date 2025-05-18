@@ -12,6 +12,7 @@ export const createEmptyAddressStep = (): FormGroup<AddressGroup> =>
     city: new FormControl<string>(EMPTY_STRING, DefaultNonNullabeOption),
     country: new FormControl<string>(EMPTY_STRING, DefaultNonNullabeOption),
     postalCode: new FormControl<string>(EMPTY_STRING, DefaultNonNullabeOption),
+    location: new FormControl<string>(EMPTY_STRING, DefaultNonNullabeOption),
   });
 
 export const EMPTY_ADDRESS_REQUIRED_MAP: AddressRequiredMap = {
