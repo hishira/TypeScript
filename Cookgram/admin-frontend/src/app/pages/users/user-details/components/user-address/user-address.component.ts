@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { DialogService } from 'primeng/dynamicdialog';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ReadoOnlyComponent } from '../../../../../shared/components/readonly-only/readonly-only.component';
-import { UserAddress } from '../../types';
-import { DialogService } from 'primeng/dynamicdialog';
 import { AddressChangeModalComponent } from '../../../modals/address-change-modal/address-change-modal.component';
 import { AddressControl } from '../../../modals/create-user-modal/create-user-model.types';
+import { UserAddress } from '../../types';
 
 @Component({
   selector: 'app-user-address',

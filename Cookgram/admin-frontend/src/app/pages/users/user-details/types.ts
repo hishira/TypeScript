@@ -1,25 +1,25 @@
 export enum UserState {
-  Draft = "Draft",
-  Active = "Active",
-  Suspend = "Suspend",
-  Frozen = "Frozen",
-  Retired = "Retired",
-  Deleted = "Deleted"
+  Draft = 'Draft',
+  Active = 'Active',
+  Suspend = 'Suspend',
+  Frozen = 'Frozen',
+  Retired = 'Retired',
+  Deleted = 'Deleted',
 }
 
 export enum Gender {
-  Man = "Man",
-  Woman = "Woman",
-  None = "None"
+  Man = 'Man',
+  Woman = 'Woman',
+  None = 'None',
 }
 
 export enum Roles {
-  User = "User",
-  Admin = "Admin",
-  SuperAdmin = "SuperAdmin",
-  Employee = "Employee",
-  Manager = "Manager",
-  Director = "Director"
+  User = 'User',
+  Admin = 'Admin',
+  SuperAdmin = 'SuperAdmin',
+  Employee = 'Employee',
+  Manager = 'Manager',
+  Director = 'Director',
 }
 
 export interface UserAddress {
