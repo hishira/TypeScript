@@ -10,12 +10,12 @@ import { JWTSetAction } from '../store/jwt/action';
 import { GetRefreshTokenSelectors } from '../store/jwt/selectors';
 import { MainStore } from '../store/main.store';
 import { BaseApi } from './base.api';
+import { AuthenticationLinks } from './consts/authentication.consts';
 import {
   AccessTokeResponse,
   LoginPayload,
   TokenResponse,
 } from './types/api.types';
-import { AuthenticationLinks } from './consts/authentication.consts';
 
 @Injectable()
 export class AuthenticationApiService extends BaseApi {
