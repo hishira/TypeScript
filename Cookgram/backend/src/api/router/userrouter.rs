@@ -138,6 +138,21 @@ impl UserRouter {
         Ok(Json(state.user_service.add_user_address(params).await))
     }
 
+    async fn upadate_address(
+        claims: Claims,
+        State(state): State<UserState>,
+        Path(entity_id): Path<Uuid>,
+        ValidateDtos(params): ValidateDtos<CreateUserAddressDto>,
+    ) -> Result<Json<UserDTO>, ResponseError> {
+        ClaimsGuard::user_update_guard(claims.clone())?;
+        Ok(Json(
+            state
+                .user_service
+                .update_user_address(entity_id, params)
+                .await,
+        ))
+    }
+
     async fn update_user(
         claims: Claims,
         State(state): State<UserState>,
@@ -220,6 +235,7 @@ impl ApplicationRouter for UserRouter {
             .route("/get-managed-users", get(UserRouter::get_managed_users))
             .route("/test-protected", post(pp))
             .route("/address-create", post(UserRouter::add_user_address))
+            .route("/address-update/:entity_id", post(UserRouter::upadate_address))
             .route("/user-list", post(UserRouter::user_list))
             .route("/test-event", get(UserRouter::event_test))
             .with_state(user_state)

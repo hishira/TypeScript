@@ -154,4 +154,12 @@ impl UserService {
         self.user_repo.delete(user.clone()).await;
         return Ok(Json(from_user_to_user_dto(user)));
     }
+    
+    pub async fn update_user_address(&self, entity_id: Uuid, params: CreateUserAddressDto) -> UserDTO {
+        let user = self.user_repo.find_by_id(entity_id).await;
+        let address = build_address_based_on_create_dto(params.address);
+        let updated_user = User::create_base_on_user_and_address(user, address);
+        self.user_repo.update(updated_user.clone()).await;
+        from_user_to_user_dto(updated_user)
+    }
 }
