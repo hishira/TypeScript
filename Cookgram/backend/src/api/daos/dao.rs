@@ -21,7 +21,7 @@ pub trait DAO<T: Entity, O> {
 }
 
 #[async_trait]
-pub trait SmallDAO<T, O> {
+pub trait SmallDAO<T, O = ()> {
     async fn create<'a, E>(
         &self,
         entity: T,

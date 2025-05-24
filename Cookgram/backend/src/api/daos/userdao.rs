@@ -42,9 +42,9 @@ impl DAO<User, UserFilterOption> for UserDAO {
             let mut conn = self.pool.acquire().await?;
             let mut tx = conn.begin().await?;
             if let Some(exec) = executor {
-            create_user_query.build().execute(exec).await?;
+                create_user_query.build().execute(exec).await?;
             } else {
-            create_user_query.build().execute(tx.deref_mut()).await?;
+                create_user_query.build().execute(tx.deref_mut()).await?;
             }
             let res = auth_query.build().execute(tx.deref_mut()).await?;
             tx.commit().await?;
