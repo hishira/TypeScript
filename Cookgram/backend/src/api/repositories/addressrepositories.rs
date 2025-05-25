@@ -1,13 +1,13 @@
+use crate::api::daos::addressdao::AddressDAO;
+use crate::api::errors::responseerror::ResponseError;
+use crate::api::queries::actionquery::ActionQuery;
+use crate::api::repositories::repositories::Repository;
 use crate::core::address::address::Address;
 use crate::core::entity::Entity;
-use crate::api::queries::actionquery::ActionQuery;
-use crate::api::errors::responseerror::ResponseError;
-use crate::api::repositories::repositories::Repository;
-use crate::api::daos::addressdao::AddressDAO;
+use async_trait::async_trait;
 use mongodb::Database;
 use sqlx::{Pool, Postgres};
 use uuid::Uuid;
-use async_trait::async_trait;
 
 #[derive(Clone)]
 pub struct AddressRepository {
@@ -19,7 +19,7 @@ pub struct AddressRepository {
 impl AddressRepository {
     pub fn new(pool: Pool<Postgres>, db_context: Database) -> Self {
         let address_dao = AddressDAO::new(pool.clone(), db_context.clone());
-        Self { 
+        Self {
             pool,
             db_context,
             address_dao,
@@ -30,7 +30,11 @@ impl AddressRepository {
 #[async_trait]
 impl Repository<Address, ActionQuery, ResponseError> for AddressRepository {
     async fn create(&self, entity: Address) -> Address {
-        match self.address_dao.create(entity.clone(), Some(&self.pool)).await {
+        match self
+            .address_dao
+            .create(entity.clone(), Some(&self.pool))
+            .await
+        {
             Ok(_) => {
                 tracing::debug!("Address created successfully");
                 entity

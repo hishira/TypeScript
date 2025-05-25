@@ -1,5 +1,5 @@
-use crate::{api::dtos::userdto::userdto::UserFilterOption, core::address::address::Address};
-use super::dao::{SmallDAO, DAO};
+use crate::core::address::address::Address;
+use super::dao::SmallDAO;
 use mongodb::Database;
 use sqlx::{postgres::PgQueryResult, Executor, Pool, Postgres, QueryBuilder};
 use uuid::Uuid;
@@ -12,7 +12,7 @@ pub struct AddressDAO {
     pub db_context: Database,
 }
 
-// Move UserFilterOption to AddressFilterOption
+// TODO: Move UserFilterOption to AddressFilterOption
 
 #[async_trait]
 impl SmallDAO<Address> for AddressDAO {

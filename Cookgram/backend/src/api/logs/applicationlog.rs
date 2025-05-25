@@ -1,5 +1,4 @@
 use std::process;
-
 use tracing_loki::url::Url;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
