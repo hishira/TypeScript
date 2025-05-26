@@ -18,7 +18,7 @@ use crate::{
             userrepositories::UserRepositories,
         },
         services::userservice::UserService,
-        utils::jwt::jwt::Claims,
+        utils::{jwt::jwt::Claims, routes::userroutes::UserRoutes},
         validators::dtovalidator::ValidateDtos,
     },
     core::event::eventTask::EventTask,
@@ -223,21 +223,21 @@ impl ApplicationRouter for UserRouter {
         };
         Router::new()
             .route(
-                "/users",
+                UserRoutes::USERS,
                 get(UserRouter::user_find).post(UserRouter::user_create),
             )
-            .route("/protected", get(protected))
-            .route("/update-user", post(UserRouter::update_user))
-            .route("/user/:id", get(UserRouter::user_details))
-            .route("/delete-user", delete(UserRouter::user_delete))
-            .route("/add-user", post(UserRouter::create_managed_users))
-            .route("/current-user", get(UserRouter::get_current_user))
-            .route("/get-managed-users", get(UserRouter::get_managed_users))
-            .route("/test-protected", post(pp))
-            .route("/address-create", post(UserRouter::add_user_address))
-            .route("/address-update/:entity_id", post(UserRouter::upadate_address))
-            .route("/user-list", post(UserRouter::user_list))
-            .route("/test-event", get(UserRouter::event_test))
+            .route(UserRoutes::PROTECTED, get(protected))
+            .route(UserRoutes::UPDATE_USER, post(UserRouter::update_user))
+            .route(UserRoutes::USER_DETAILS, get(UserRouter::user_details))
+            .route(UserRoutes::DELETE_USER, delete(UserRouter::user_delete))
+            .route(UserRoutes::ADD_USER, post(UserRouter::create_managed_users))
+            .route(UserRoutes::CURRENT_USER, get(UserRouter::get_current_user))
+            .route(UserRoutes::GET_MANAGED_USERS, get(UserRouter::get_managed_users))
+            .route(UserRoutes::TEST_PROTECTED, post(pp))
+            .route(UserRoutes::ADDRESS_CREATE, post(UserRouter::add_user_address))
+            .route(UserRoutes::ADDRESS_UPDATE, post(UserRouter::upadate_address))
+            .route(UserRoutes::USER_LIST, post(UserRouter::user_list))
+            .route(UserRoutes::TEST_EVENT, get(UserRouter::event_test))
             .with_state(user_state)
     }
 }

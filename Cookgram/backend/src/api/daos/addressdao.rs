@@ -1,7 +1,7 @@
 use crate::core::address::address::Address;
 use super::dao::SmallDAO;
 use mongodb::Database;
-use sqlx::{postgres::PgQueryResult, Executor, Pool, Postgres, QueryBuilder};
+use sqlx::{postgres::PgQueryResult, Executor, FromRow, Pool, Postgres, QueryBuilder};
 use uuid::Uuid;
 use async_trait::async_trait;
 use sqlx::Row;
@@ -57,18 +57,7 @@ impl SmallDAO<Address> for AddressDAO {
 
         Ok(result
             .into_iter()
-            .map(|row| Address::new(
-                row.get("address"),
-                row.get("house"),
-                row.get("door"),
-                row.get("city"),
-                row.get("country"),
-                crate::core::address::location::Location {
-                    latitude: row.get("lat"),
-                    longitude: row.get("long"),
-                },
-                row.get("postal_code"),
-            ))
+            .map(|row| Address::from_row(&row).unwrap())
             .collect())
     }
 
@@ -83,18 +72,7 @@ impl SmallDAO<Address> for AddressDAO {
             .fetch_one(&self.pool)
             .await?;
 
-        Ok(Address::new(
-            row.get("address"),
-            row.get("house"),
-            row.get("door"),
-            row.get("city"),
-            row.get("country"),
-            crate::core::address::location::Location {
-                latitude: row.get("lat"),
-                longitude: row.get("long"),
-            },
-            row.get("postal_code"),
-        ))
+        Ok(Address::from_row(&row)?)
     }
 
     async fn delete(&self, entity: Address) -> Result<PgQueryResult, sqlx::Error> {
