@@ -13,7 +13,7 @@ use crate::{
             authenticationrepository::AuthenticationRepository, eventrepository::EventRepository,
         },
         services::authservice::AuthService,
-        utils::password_worker::password_worker::PasswordWorker,
+        utils::{password_worker::password_worker::PasswordWorker, routes::authroutes::AuthRoutes},
         validators::dtovalidator::ValidateDtos,
     },
     core::user::user::User,
@@ -89,8 +89,8 @@ impl ApplicationRouter for AuthRouter {
             redis_database: self.redis.clone(),
         };
         Router::new()
-            .route("/login", post(AuthRouter::login))
-            .route("/refresh-token", post(AuthRouter::token_refresh))
+            .route(AuthRoutes::LOGIN, post(AuthRouter::login))
+            .route(AuthRoutes::REFRESH_TOKEN, post(AuthRouter::token_refresh))
             .with_state(AuthState {
                 app_state,
                 auth_service: AuthService {
