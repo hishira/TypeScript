@@ -36,6 +36,9 @@ pub struct AuthRouter {
     redis: RedisDatabase,
 }
 
+const SALT_LENGTH: u32 = 10;
+const MAX_THREADS: usize = 4;
+
 impl AuthRouter {
     pub fn new(database: &Database) -> Self {
         Self {
@@ -81,6 +84,7 @@ impl AuthRouter {
     }
 }
 
+
 impl ApplicationRouter for AuthRouter {
     fn get_router(&self) -> axum::Router {
         let app_state = AppState {
@@ -95,7 +99,7 @@ impl ApplicationRouter for AuthRouter {
                 app_state,
                 auth_service: AuthService {
                     auth_repo: self.auth_repo.clone(),
-                    pass_worker: PasswordWorker::new(10, 4).unwrap(),
+                    pass_worker: PasswordWorker::new(SALT_LENGTH, MAX_THREADS).unwrap(),
                 },
             })
     }

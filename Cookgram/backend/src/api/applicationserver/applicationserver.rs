@@ -19,15 +19,24 @@ use tracing::info_span;
 
 pub struct ApplicationServer {}
 
+const EVENT_CHANNEL_CAPACITY: usize = 64;
+const MAX_BODY_SIZE: usize = 104857000; // 100MB in bytes
+const SERVER_ADDRESS: &str = "127.0.0.1:3000";
+const USER_ROUTE_PREFIX: &str = "/user";
+const AUTH_ROUTE_PREFIX: &str = "/auth";
+
 impl ApplicationServer {
     async fn create_router(database: &Database) -> Router {
-        let (tx, rx) = mpsc::channel::<EventTask>(64);
+        let (tx, rx) = mpsc::channel::<EventTask>(EVENT_CHANNEL_CAPACITY);
         EventService { event_reciver: rx }.run_loop().await;
         Router::new()
-            .nest("/user", UserRouter::new(&database, &tx).get_router())
-            .nest("/auth", AuthRouter::new(&database).get_router())
+            .nest(
+                USER_ROUTE_PREFIX,
+                UserRouter::new(&database, &tx).get_router(),
+            )
+            .nest(AUTH_ROUTE_PREFIX, AuthRouter::new(&database).get_router())
             .route_layer(middleware::from_fn(MetricsServer::track_metrics))
-            .layer(DefaultBodyLimit::max(104857000))
+            .layer(DefaultBodyLimit::max(MAX_BODY_SIZE))
             .layer(CORS::default())
             .layer(
                 TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
@@ -75,7 +84,7 @@ impl ApplicationServer {
         }
         let database = Self::prepare_database().await;
         let app = Self::create_router(&database).await;
-        let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
+        let listener = TcpListener::bind(SERVER_ADDRESS).await.unwrap();
         tracing::debug!("listening on {}", listener.local_addr().unwrap());
         axum::serve(listener, app)
             .with_graceful_shutdown(Self::shutdown())

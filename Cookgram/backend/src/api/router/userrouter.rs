@@ -232,10 +232,19 @@ impl ApplicationRouter for UserRouter {
             .route(UserRoutes::DELETE_USER, delete(UserRouter::user_delete))
             .route(UserRoutes::ADD_USER, post(UserRouter::create_managed_users))
             .route(UserRoutes::CURRENT_USER, get(UserRouter::get_current_user))
-            .route(UserRoutes::GET_MANAGED_USERS, get(UserRouter::get_managed_users))
+            .route(
+                UserRoutes::GET_MANAGED_USERS,
+                get(UserRouter::get_managed_users),
+            )
             .route(UserRoutes::TEST_PROTECTED, post(pp))
-            .route(UserRoutes::ADDRESS_CREATE, post(UserRouter::add_user_address))
-            .route(UserRoutes::ADDRESS_UPDATE, post(UserRouter::upadate_address))
+            .route(
+                UserRoutes::ADDRESS_CREATE,
+                post(UserRouter::add_user_address),
+            )
+            .route(
+                UserRoutes::ADDRESS_UPDATE,
+                post(UserRouter::upadate_address),
+            )
             .route(UserRoutes::USER_LIST, post(UserRouter::user_list))
             .route(UserRoutes::TEST_EVENT, get(UserRouter::event_test))
             .with_state(user_state)
