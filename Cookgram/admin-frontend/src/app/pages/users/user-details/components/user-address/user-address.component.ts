@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -18,7 +18,13 @@ import { UserAddress } from '../../types';
 export class UserAddressComponent {
   readonly address = input<UserAddress | null | undefined>();
   readonly loading = input<boolean>(false);
+  readonly isLocationAvailable = computed(
+    () =>
+      this.address()?.location?.latitude !== null &&
+      this.address()?.location?.longitude !== null
+  );
   private readonly dialogService = inject(DialogService);
+
   addressChange() {
     const ref = this.dialogService.open(AddressChangeModalComponent, {
       header: 'Change address',

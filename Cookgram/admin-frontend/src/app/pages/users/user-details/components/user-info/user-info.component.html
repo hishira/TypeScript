@@ -11,22 +11,22 @@
     <div class="grid flex-grow-1">
         <div class="col-3">
             <app-read-only [title]="'Name'">
-                {{ user()?.personalInformation?.firstName + ' ' + user()?.personalInformation?.lastName }}
+                {{ fullName() }}
             </app-read-only>
         </div>
         <div class="col-3">
             <app-read-only [title]="'Email'">
-                {{ user()?.personalInformation?.email }}
+                {{ personalInformarion()?.email }}
             </app-read-only>
         </div>
         <div class="col-3">
             <app-read-only [title]="'Phone'">
-                {{ user()?.personalInformation?.contacts?.phone }}
+                {{ personalInformarion()?.contacts?.phone }}
             </app-read-only>
         </div>
         <div class="col-3">
             <app-read-only [title]="'Gender'">
-                {{ user()?.personalInformation?.gender }}
+                {{ personalInformarion()?.gender }}
             </app-read-only>
         </div>
         <div class="col-3">

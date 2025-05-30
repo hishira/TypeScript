@@ -17,6 +17,7 @@ import { UserDetails } from './types';
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     PanelModule,
@@ -27,7 +28,6 @@ import { UserDetails } from './types';
     UserAddressComponent,
     UserInfoComponent,
   ],
-  standalone: true,
   providers: [UserApiSerivce],
 })
 export class UserDetailsComponent extends BaseComponent {

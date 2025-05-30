@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -21,4 +21,13 @@ import { UserDetails } from '../../types';
 export class UserInfoComponent {
   readonly user = input.required<UserDetails | null | undefined>();
   readonly loading = input<boolean>(false);
+  readonly personalInformarion = computed(
+    () => this.user()?.personalInformation
+  );
+  readonly fullName = computed(
+    () =>
+      this.personalInformarion()?.firstName +
+      ' ' +
+      this.personalInformarion()?.lastName
+  );
 }

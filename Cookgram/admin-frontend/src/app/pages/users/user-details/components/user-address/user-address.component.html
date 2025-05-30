@@ -40,7 +40,7 @@
         <div class="col-4">
             <app-read-only [title]="'Location'">
                 <ng-container>
-                    @if(address()?.location?.latitude !== null && address()?.location?.longitude !== null) {
+                    @if(isLocationAvailable()) {
                     Lat: {{ address()?.location?.latitude }}, Lng: {{ address()?.location?.longitude }}
                     }
                 </ng-container>
