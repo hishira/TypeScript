@@ -14,9 +14,9 @@ export class AddressApiService extends BaseApi {
     );
   }
 
-  updateAddress(addressId: string, address: AddressControl): Observable<void> {
+  updateAddress(context_id: string, address: AddressControl): Observable<void> {
     return this.httpService.put<void>(
-      this.prepareLink(`${AddressLinks.Update}/${addressId}`),
+      this.prepareLink(`${AddressLinks.Update}/${context_id}`),
       address
     );
   }

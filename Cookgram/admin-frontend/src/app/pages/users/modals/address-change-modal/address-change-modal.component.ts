@@ -37,7 +37,7 @@ export class AddressChangeModalComponent extends AbstractModalComponent {
     private readonly dialogRef: DynamicDialogRef,
     private readonly config: DynamicDialogConfig
   ) {
-    super(1); // Only one step
+    super(1);
     const initialAddress = this.config.data?.address as AddressControl;
     if (initialAddress) {
       this.addressControl.setValue(initialAddress);

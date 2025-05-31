@@ -41,7 +41,7 @@
             <app-read-only [title]="'Location'">
                 <ng-container>
                     @if(isLocationAvailable()) {
-                    Lat: {{ address()?.location?.latitude }}, Lng: {{ address()?.location?.longitude }}
+                        {{locationComputedString()}}
                     }
                 </ng-container>
             </app-read-only>

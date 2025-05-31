@@ -3,6 +3,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SkeletonModule } from 'primeng/skeleton';
+import { AddressApiService } from '../../../../../../api/address.api';
 import { ReadoOnlyComponent } from '../../../../../shared/components/readonly-only/readonly-only.component';
 import { AddressChangeModalComponent } from '../../../modals/address-change-modal/address-change-modal.component';
 import { AddressControl } from '../../../modals/create-user-modal/create-user-model.types';
@@ -23,7 +24,15 @@ export class UserAddressComponent {
       this.address()?.location?.latitude !== null &&
       this.address()?.location?.longitude !== null
   );
+  readonly locationComputedString = computed(
+    () =>
+      `Lat: ${this.address()?.location?.latitude}, Lng: ${
+        this.address()?.location?.longitude
+      }`
+  );
+
   private readonly dialogService = inject(DialogService);
+  private readonly addressApi = inject(AddressApiService);
 
   addressChange() {
     const ref = this.dialogService.open(AddressChangeModalComponent, {
