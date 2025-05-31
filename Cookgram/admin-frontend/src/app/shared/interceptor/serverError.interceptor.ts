@@ -8,6 +8,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { ToastService } from '../services/toast.service';
+import { ServerErrorMessage } from './consts';
 
 @Injectable()
 export class ServerErrorInterceptor implements HttpInterceptor {
@@ -20,7 +21,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         console.error(error);
-        this.toastService.showError('Server errror occur, please wait while');
+        this.toastService.showError(ServerErrorMessage);
         throw new Error(error.message);
       })
     );

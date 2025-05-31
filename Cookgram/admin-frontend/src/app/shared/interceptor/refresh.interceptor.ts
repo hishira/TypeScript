@@ -24,7 +24,7 @@ import { JWTSetAccessToken } from '../../../store/jwt/action';
 import { MainStore } from '../../../store/main.store';
 import { Nullable } from '../types/shared';
 import { isNill } from '../utils';
-import { ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
+import { BarearTokenString, ForbiddenRefreshUrlString, RefreshTokenError } from './consts';
 
 @Injectable()
 export class RefreshInterceptor implements HttpInterceptor {
@@ -67,7 +67,7 @@ export class RefreshInterceptor implements HttpInterceptor {
 
     return req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`,
+        Authorization: BarearTokenString(token),
       },
     });
   }

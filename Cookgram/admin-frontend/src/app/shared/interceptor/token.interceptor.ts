@@ -9,12 +9,16 @@ import { Store } from '@ngrx/store';
 import { Observable, switchMap } from 'rxjs';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
 import { MainStore } from '../../../store/main.store';
-
+import { BarearTokenString } from './consts';
+enum UrlForNotRefresh {
+  Login = 'login',
+  RefreshToken = 'refresh-token',
+}
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   static readonly urlNotForRefreshToken: readonly string[] = [
-    'login',
-    'refresh-token',
+    UrlForNotRefresh.Login,
+    UrlForNotRefresh.RefreshToken,
   ];
 
   constructor(private readonly store: Store<MainStore>) {}
@@ -40,7 +44,7 @@ export class TokenInterceptor implements HttpInterceptor {
     return this.store.select(GetAccessTokenSelectors).pipe(
       switchMap((accessToken) => {
         return next.handle(
-          req.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } })
+          req.clone({ setHeaders: { Authorization: BarearTokenString(accessToken) } })
         );
       })
     );
