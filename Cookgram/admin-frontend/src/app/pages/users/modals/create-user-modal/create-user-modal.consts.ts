@@ -24,3 +24,7 @@ export const CreateUserSteps: MenuItem[] = [
 ];
 
 export const CreateUserMaxStep: number = 4;
+
+export const CreateUserSuccessMessage = 'User created successfully';
+
+export const CreateUserErrorMessage = 'User creation failed';

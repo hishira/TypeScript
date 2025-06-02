@@ -32,6 +32,7 @@ import { UserDetails } from './types';
 })
 export class UserDetailsComponent extends BaseComponent {
   user!: Signal<UserDetails | null>;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly userService: UserApiSerivce

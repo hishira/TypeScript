@@ -17,7 +17,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { ExtractFormControl } from '../../../../shared/types/shared';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
 import { AddressStepComponent } from './address-step/address-step.component';
-import { CreateUserMaxStep, CreateUserSteps } from './create-user-modal.consts';
+import { CreateUserErrorMessage, CreateUserMaxStep, CreateUserSteps, CreateUserSuccessMessage } from './create-user-modal.consts';
 import { EmptyCreateUserFormGroup } from './create-user-modal.utils';
 import {
   AccessConfigurationStepGroup,
@@ -89,11 +89,11 @@ export class CreateUserModalComponent extends AbstractModalComponent {
         next: () => {
           this.isLoading.set(false);
           this.close(true);
-          this.toastService.showSuccess('User created successfully');
+          this.toastService.showSuccess(CreateUserSuccessMessage);
         },
         error: () => {
           this.isLoading.set(false);
-          this.toastService.showError('User creation failed');
+          this.toastService.showError(CreateUserErrorMessage);
         },
         complete: () => {
           this.isLoading.set(false);
