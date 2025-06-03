@@ -13,7 +13,7 @@
     type="text"
     pInputText
     class="w-full" />
-  <ng-container *ngIf="withErrors()">
-    <app-errors [control]="control"></app-errors>
-  </ng-container>
+    @if(withErrors()){
+      <app-errors [control]="control"></app-errors>
+    }
 </div>
