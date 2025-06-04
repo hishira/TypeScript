@@ -1,6 +1,8 @@
 import {
   Component,
+  computed,
   effect,
+  Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -45,7 +47,8 @@ import { firstValueFrom } from 'rxjs';
   styleUrl: './users-list.component.scss',
 })
 export class UsersListComponent extends BaseComponent {
-  users!: WritableSignal<UserList[]>;
+  users: WritableSignal<UserList[]> = signal([]);
+  userExists: Signal<boolean> = computed(()=> this.users()?.length > 0);
   refetch: WritableSignal<boolean> = signal(false);
   readonly skeletonRows = skeletonRows;
 
@@ -61,7 +64,6 @@ export class UsersListComponent extends BaseComponent {
     );
     effect(() => {
       this.refetch();
-      this.users.set([]);
       firstValueFrom(this.userApi.userLists()).then((response) =>
         this.users.set(response)
       );
