@@ -2,8 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   input,
-  OnInit,
-  output,
+  output
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 
@@ -14,18 +13,14 @@ import { ButtonModule } from 'primeng/button';
   standalone: true,
   imports: [ButtonModule],
 })
-export class EmptyListComponent implements OnInit {
-   text = input<string>('There are no data to show');
-   isEmpty = input.required<boolean>();
-   withRefreshButton = input<boolean>(false);
+export class EmptyListComponent {
+  readonly text = input<string>('There are no data to show');
+  readonly isEmpty = input.required<boolean>();
+  readonly withRefreshButton = input<boolean>(false);
 
   refreshEmit = output<void>();
 
   refreshData(): void {
     this.refreshEmit.emit();
-  }
-
-  ngOnInit(): void {
-      console.log(this.isEmpty())
   }
 }
