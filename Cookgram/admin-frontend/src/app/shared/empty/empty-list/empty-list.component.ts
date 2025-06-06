@@ -17,8 +17,7 @@ export class EmptyListComponent {
   readonly text = input<string>('There are no data to show');
   readonly isEmpty = input.required<boolean>();
   readonly withRefreshButton = input<boolean>(false);
-
-  refreshEmit = output<void>();
+  readonly refreshEmit = output<void>();
 
   refreshData(): void {
     this.refreshEmit.emit();

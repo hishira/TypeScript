@@ -1,7 +1,5 @@
 import { inject } from '@angular/core';
-import {
-  ResolveFn
-} from '@angular/router';
+import { ResolveFn } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { tap } from 'rxjs';
 import { UserApiSerivce } from '../../../api/user.api';
