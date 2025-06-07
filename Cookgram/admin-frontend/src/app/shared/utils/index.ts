@@ -2,7 +2,7 @@ export const isNill: (value: unknown) => value is null | undefined = (
   value: unknown
 ): value is null | undefined => value === null || value === undefined;
 
-export const hasProperty = <T extends Object>(
+export const hasProperty = <T extends object>(
   propertyName: string,
   object: T | any
 ): object is T & { [propertyName: string]: any } => {

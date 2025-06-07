@@ -16,7 +16,7 @@ export const chckIfUserExistsBasedOnResponse = (
 ): boolean => {
   return (
     isNill(response) ||
-    hasProperty<ErrorResponse>('error', response as any) ||
+    hasProperty<ErrorResponse>('error', response as never) ||
     (hasProperty<Tokens>('accessToken', response) &&
       responseHasEmptyTokens(response))
   );

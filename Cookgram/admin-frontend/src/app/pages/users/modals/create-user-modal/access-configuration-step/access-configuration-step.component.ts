@@ -34,7 +34,7 @@ import { PrepareRoles } from './access-configuration-step.utils';
   styleUrl: './access-configuration.scss',
 })
 export class AccessConfigurationStep extends AbstractStepComponent<AccessConfigurationStepGroup> {
-  roles: Signal<Role[]> = toSignal(this.prepareProperRoles(), {
+  readonly roles: Signal<Role[]> = toSignal(this.prepareProperRoles(), {
     initialValue: [],
   });
 

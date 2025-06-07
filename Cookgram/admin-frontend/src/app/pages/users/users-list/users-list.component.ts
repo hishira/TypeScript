@@ -48,8 +48,8 @@ import { firstValueFrom } from 'rxjs';
 })
 export class UsersListComponent extends BaseComponent {
   users: WritableSignal<UserList[]> = signal([]);
-  userExists: Signal<boolean> = computed(()=> this.users()?.length > 0);
-  refetch: WritableSignal<boolean> = signal(false);
+  readonly userExists: Signal<boolean> = computed(()=> this.users()?.length > 0);
+  readonly refetch: WritableSignal<boolean> = signal(false);
   readonly skeletonRows = skeletonRows;
 
   constructor(
