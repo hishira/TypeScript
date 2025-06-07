@@ -29,15 +29,13 @@
                 {{ personalInformarion()?.gender }}
             </app-read-only>
         </div>
-        <div class="col-3">
-            <app-read-only [title]="'Role'">
-                <p-chip [label]="user()?.roles"></p-chip>
-            </app-read-only>
+        <div class="col-3 flex align-items-center gap-2">
+            <app-read-only title="Role" i18n-title [empty]="true" />
+            <p-chip [label]="user()?.roles"></p-chip>
         </div>
-        <div class="col-3">
-            <app-read-only [title]="'State'">
-                <p-chip [label]="user()?.state?.current"></p-chip>
-            </app-read-only>
+        <div class="col-3 flex align-items-center gap-2">
+            <app-read-only title="Status" [empty]="true" i18n-title />
+            <p-chip [label]="user()?.state?.current"></p-chip>
         </div>
     </div>
     <div>

@@ -15,6 +15,7 @@ import {
 })
 export class ReadoOnlyComponent {
   readonly title: InputSignal<string | undefined> = input<string>();
+  readonly empty: InputSignal<boolean> = input<boolean>(false);
   private readonly infinitiLoopBorder: number = 1000;
   private deep: number = 0;
   

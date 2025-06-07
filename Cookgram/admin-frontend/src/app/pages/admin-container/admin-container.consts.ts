@@ -7,6 +7,7 @@ export const MenuItems: MenuItem[] = [
     items: [
       {
         label: 'List',
+        url: '/admin/users',
       },
     ],
   },

@@ -37,15 +37,15 @@
                 {{ address()?.postalCode }}
             </app-read-only>
         </div>
-        <div class="col-4">
-            <app-read-only [title]="'Location'">
-                <ng-container>
-                    @if(isLocationAvailable()) {
+        @if(isLocationAvailable()){
+            <div class="col-4">
+                <app-read-only [title]="'Location'">
+                    <ng-container>
                         {{locationComputedString()}}
-                    }
-                </ng-container>
-            </app-read-only>
-        </div>
+                    </ng-container>
+                </app-read-only>
+            </div>
+        }
     </div>
     <div>
         <p-button label="Edit" icon="pi pi-pencil" (onClick)="addressChange()" styleClass="p-button-text"></p-button>

@@ -5,7 +5,7 @@
       <p-panelMenu [model]="menuItems" class="w-full h-full md:w-20rem">
         <ng-template pTemplate="item" let-item>
           <ng-container>
-            <div pRipple class="flex align-items-center cursor-pointer text-color px-3 py-3">
+            <div pRipple [routerLink]="item.url" class="flex align-items-center cursor-pointer text-color px-3 py-3">
               <i [class]="item.icon + ' text-primary'"></i>
               <span class="ml-2 text-color">{{ item.label }}</span>
             </div>

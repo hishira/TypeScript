@@ -1,11 +1,23 @@
-<div class="inline-flex flex-column gap-1">
-  @if(title()){
-  <span class="text-400 font-medium">{{ title() }}</span>
+@if(empty()){
+  <div class="inline-flex flex-column gap-1">
+      @if(title()){
+      <span class="text-400 font-medium">{{ title() }}</span>
 
+      }
+      <span #ref><ng-content></ng-content></span>
+
+    </div>
+}
+@else {
+  <div class="inline-flex flex-column gap-1">
+    @if(title()){
+    <span class="text-400 font-medium">{{ title() }}</span>
+
+    }
+    <span #ref><ng-content></ng-content></span>
+
+  </div>
+  @if(check(ref)) {
+  <div><span class="text-center">-</span></div>
   }
-  <span #ref><ng-content></ng-content></span>
-
-</div>
-@if(check(ref)) {
-<div><span class="text-center">-</span></div>
 }

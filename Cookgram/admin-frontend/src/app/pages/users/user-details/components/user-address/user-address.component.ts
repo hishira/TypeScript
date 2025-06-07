@@ -14,7 +14,7 @@ import { UserAddress } from '../../types';
   templateUrl: './user-address.component.html',
   standalone: true,
   imports: [CommonModule, ReadoOnlyComponent, SkeletonModule, ButtonModule],
-  providers: [DialogService],
+  providers: [DialogService, AddressApiService],
 })
 export class UserAddressComponent {
   readonly address = input<UserAddress | null | undefined>();
