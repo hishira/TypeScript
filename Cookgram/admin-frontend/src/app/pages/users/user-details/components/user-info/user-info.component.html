@@ -15,17 +15,17 @@
             </app-read-only>
         </div>
         <div class="col-3">
-            <app-read-only [title]="'Email'">
+            <app-read-only i18n-title [title]="'Email'">
                 {{ personalInformarion()?.email }}
             </app-read-only>
         </div>
         <div class="col-3">
-            <app-read-only [title]="'Phone'">
+            <app-read-only i18n-title [title]="'Phone'">
                 {{ personalInformarion()?.contacts?.phone }}
             </app-read-only>
         </div>
         <div class="col-3">
-            <app-read-only [title]="'Gender'">
+            <app-read-only i18n-title [title]="'Gender'">
                 {{ personalInformarion()?.gender }}
             </app-read-only>
         </div>
@@ -39,7 +39,7 @@
         </div>
     </div>
     <div>
-        <p-button label="Edit" icon="pi pi-pencil" styleClass="p-button-text"></p-button>
+        <p-button i18n-label label="Edit" icon="pi pi-pencil" styleClass="p-button-text"></p-button>
     </div>
 </div>
 }

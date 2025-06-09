@@ -8,38 +8,38 @@
 <div class="flex align-items-start justify-content-between mb-3">
     <div class="grid flex-grow-1">
         <div class="col-4">
-            <app-read-only [title]="'Address'">
+            <app-read-only i18n-title [title]="'Address'">
                 {{ address()?.address }}
             </app-read-only>
         </div>
         <div class="col-4">
-            <app-read-only [title]="'House'">
+            <app-read-only i18n-title [title]="'House'">
                 {{ address()?.house }}
             </app-read-only>
         </div>
         <div class="col-4">
-            <app-read-only [title]="'Door'">
+            <app-read-only i18n-title [title]="'Door'">
                 {{ address()?.door }}
             </app-read-only>
         </div>
         <div class="col-4">
-            <app-read-only [title]="'City'">
+            <app-read-only i18n-title [title]="'City'">
                 {{ address()?.city }}
             </app-read-only>
         </div>
         <div class="col-4">
-            <app-read-only [title]="'Country'">
+            <app-read-only i18n-title [title]="'Country'">
                 {{ address()?.country }}
             </app-read-only>
         </div>
         <div class="col-4">
-            <app-read-only [title]="'Postal Code'">
+            <app-read-only i18n-title [title]="'Postal Code'">
                 {{ address()?.postalCode }}
             </app-read-only>
         </div>
         @if(isLocationAvailable()){
             <div class="col-4">
-                <app-read-only [title]="'Location'">
+                <app-read-only i18n-title  [title]="'Location'">
                     <ng-container>
                         {{locationComputedString()}}
                     </ng-container>
@@ -48,7 +48,7 @@
         }
     </div>
     <div>
-        <p-button label="Edit" icon="pi pi-pencil" (onClick)="addressChange()" styleClass="p-button-text"></p-button>
+        <p-button i18n-label label="Edit" icon="pi pi-pencil" (onClick)="addressChange()" styleClass="p-button-text"></p-button>
     </div>
 </div>
 }
