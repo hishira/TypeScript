@@ -40,9 +40,7 @@
         @if(isLocationAvailable()){
             <div class="col-4">
                 <app-read-only i18n-title  [title]="'Location'">
-                    <ng-container>
                         {{locationComputedString()}}
-                    </ng-container>
                 </app-read-only>
             </div>
         }

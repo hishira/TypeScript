@@ -1,8 +1,8 @@
 <p-panel class="w-full">
   <ng-template pTemplate="header">
     <div class="flex justify-content-between align-content-center w-full">
-      <span class="text-2xl align-content-center">User list</span>
-      <p-button (onClick)="createUser()" [rounded]="true">Create user</p-button>
+      <span i18n class="text-2xl align-content-center">User list</span>
+      <p-button i18n (onClick)="createUser()" [rounded]="true">Create user</p-button>
     </div>
   </ng-template>
   @if(userExists()) {
@@ -10,19 +10,19 @@
     <p-table [value]="users()" [rows]="users().length" [paginator]="true">
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 25%">
+          <th i18n style="width: 25%">
             Email
           </th>
-          <th style="width: 25%">
+          <th i18n style="width: 25%">
             Username
           </th>
-          <th style="width: 25%">
+          <th i18n style="width: 25%">
             Full name
           </th>
-          <th style="width: 25%">
+          <th i18n style="width: 25%">
             Role
           </th>
-          <th style="width: 25%">
+          <th i18n style="width: 25%">
             Status
           </th>
         </tr>
