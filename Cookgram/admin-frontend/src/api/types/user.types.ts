@@ -11,11 +11,11 @@ export type CreateUserObject = {
 };
 
 export type PersonalInformation = {
+  gender: Gender;
   firstName?: string;
   lastName?: string;
   brithday?: string;
   email?: string;
-  gender: Gender;
   contacts?: Contact | null;
 };
 
