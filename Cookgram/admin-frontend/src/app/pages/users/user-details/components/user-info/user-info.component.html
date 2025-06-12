@@ -1,45 +1,45 @@
 @if(loading()) {
-<div>
-    <p-skeleton styleClass="mb-2" />
-    <p-skeleton width="10rem" styleClass="mb-2" />
-    <p-skeleton width="5rem" styleClass="mb-2" />
-    <p-skeleton height="2rem" styleClass="mb-2" />
-    <p-skeleton width="10rem" height="4rem" />
-</div>
-} @else {
-<div class="flex align-items-start justify-content-between mb-3">
-    <div class="grid flex-grow-1">
-        <div class="col-3">
-            <app-read-only i18n-title [title]="'Name'">
-                {{ fullName() }}
-            </app-read-only>
-        </div>
-        <div class="col-3">
-            <app-read-only i18n-title [title]="'Email'">
-                {{ personalInformarion()?.email }}
-            </app-read-only>
-        </div>
-        <div class="col-3">
-            <app-read-only i18n-title [title]="'Phone'">
-                {{ personalInformarion()?.contacts?.phone }}
-            </app-read-only>
-        </div>
-        <div class="col-3">
-            <app-read-only i18n-title [title]="'Gender'">
-                {{ personalInformarion()?.gender }}
-            </app-read-only>
-        </div>
-        <div class="col-3 flex align-items-center gap-2">
-            <app-read-only title="Role" i18n-title [empty]="true" />
-            <p-chip [label]="user()?.roles"></p-chip>
-        </div>
-        <div class="col-3 flex align-items-center gap-2">
-            <app-read-only title="Status" [empty]="true" i18n-title />
-            <p-chip [label]="user()?.state?.current"></p-chip>
-        </div>
-    </div>
     <div>
-        <p-button i18n-label label="Edit" icon="pi pi-pencil" styleClass="p-button-text"></p-button>
+        <p-skeleton styleClass="mb-2" />
+        <p-skeleton width="10rem" styleClass="mb-2" />
+        <p-skeleton width="5rem" styleClass="mb-2" />
+        <p-skeleton height="2rem" styleClass="mb-2" />
+        <p-skeleton width="10rem" height="4rem" />
     </div>
-</div>
+} @else {
+    <div class="flex align-items-start justify-content-between mb-3">
+        <div class="grid flex-grow-1">
+            <div class="col-3">
+                <app-read-only i18n-title [title]="'Name'">
+                    {{ fullName() }}
+                </app-read-only>
+            </div>
+            <div class="col-3">
+                <app-read-only i18n-title [title]="'Email'">
+                    {{ personalInformarion()?.email }}
+                </app-read-only>
+            </div>
+            <div class="col-3">
+                <app-read-only i18n-title [title]="'Phone'">
+                    {{ personalInformarion()?.contacts?.phone }}
+                </app-read-only>
+            </div>
+            <div class="col-3">
+                <app-read-only i18n-title [title]="'Gender'">
+                    {{ personalInformarion()?.gender }}
+                </app-read-only>
+            </div>
+            <div class="col-3 flex align-items-center gap-2">
+                <app-read-only title="Role" i18n-title [empty]="true" />
+                <p-chip [label]="user()?.roles"></p-chip>
+            </div>
+            <div class="col-3 flex align-items-center gap-2">
+                <app-read-only title="Status" [empty]="true" i18n-title />
+                <p-chip [label]="user()?.state?.current"></p-chip>
+            </div>
+        </div>
+        <div>
+            <p-button i18n-label label="Edit" icon="pi pi-pencil" styleClass="p-button-text"></p-button>
+        </div>
+    </div>
 }

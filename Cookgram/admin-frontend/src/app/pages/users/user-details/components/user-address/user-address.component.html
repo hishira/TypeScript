@@ -39,14 +39,15 @@
         </div>
         @if(isLocationAvailable()){
             <div class="col-4">
-                <app-read-only i18n-title  [title]="'Location'">
-                        {{locationComputedString()}}
+                <app-read-only i18n-title [title]="'Location'">
+                    {{locationComputedString()}}
                 </app-read-only>
             </div>
         }
     </div>
     <div>
-        <p-button i18n-label label="Edit" icon="pi pi-pencil" (onClick)="addressChange()" styleClass="p-button-text"></p-button>
+        <p-button i18n-label label="Edit" icon="pi pi-pencil" (onClick)="addressChange()"
+            styleClass="p-button-text"></p-button>
     </div>
 </div>
 }

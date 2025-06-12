@@ -48,7 +48,9 @@ import { firstValueFrom } from 'rxjs';
 })
 export class UsersListComponent extends BaseComponent {
   users: WritableSignal<UserList[]> = signal([]);
-  readonly userExists: Signal<boolean> = computed(()=> this.users()?.length > 0);
+  readonly userExists: Signal<boolean> = computed(
+    () => this.users()?.length > 0
+  );
   readonly refetch: WritableSignal<boolean> = signal(false);
   readonly skeletonRows = skeletonRows;
 
@@ -62,12 +64,15 @@ export class UsersListComponent extends BaseComponent {
     this.users = signal(
       toSignal(this.userApi.userLists(), { initialValue: [] })()
     );
-    effect(() => {
-      this.refetch();
-      firstValueFrom(this.userApi.userLists()).then((response) =>
-        this.users.set(response)
-      );
-    }, {allowSignalWrites: true});
+    effect(
+      () => {
+        this.refetch();
+        firstValueFrom(this.userApi.userLists()).then((response) =>
+          this.users.set(response)
+        );
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   createUser() {
