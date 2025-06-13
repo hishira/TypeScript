@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, Signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -24,7 +24,7 @@ export class UserInfoComponent {
   readonly personalInformarion = computed(
     () => this.user()?.personalInformation
   );
-  readonly fullName = computed(
+  readonly fullName: Signal<string> = computed(
     () =>
       this.personalInformarion()?.firstName +
       ' ' +

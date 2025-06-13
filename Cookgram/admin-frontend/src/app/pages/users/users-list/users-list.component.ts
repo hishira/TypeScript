@@ -75,7 +75,7 @@ export class UsersListComponent extends BaseComponent {
     );
   }
 
-  createUser() {
+  createUser(): void {
     const ref = this.dialogService.open(CreateUserModalComponent, {
       header: 'Create user',
       width: '100%',
