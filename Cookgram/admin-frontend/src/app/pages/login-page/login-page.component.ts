@@ -2,18 +2,13 @@ import { Component, HostListener } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { BlockUIModule } from 'primeng/blockui';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RippleModule } from 'primeng/ripple';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  pipe,
-  Subject,
-  take,
-  tap,
-} from 'rxjs';
+import { debounceTime, pipe, Subject, take, tap } from 'rxjs';
 import { AuthenticationApiService } from '../../../api/authentication.api';
 import { LoginPayload, TokenResponse } from '../../../api/types/api.types';
 import { GetAccessTokenSelectors } from '../../../store/jwt/selectors';
@@ -23,9 +18,7 @@ import { InputComponent } from '../../shared/input/input.component';
 import { ToastService } from '../../shared/services/toast.service';
 import { Optional } from '../../shared/types/shared';
 import { LoginFormGroup } from './types';
-import { EmptyLoginForm, chckIfUserExistsBasedOnResponse } from './utils';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { BlockUIModule } from 'primeng/blockui';
+import { chckIfUserExistsBasedOnResponse, EmptyLoginForm } from './utils';
 
 @Component({
   selector: 'app-login-page',
@@ -58,7 +51,7 @@ export class LoginPageComponent extends BaseComponent {
   );
 
   @HostListener('window:keydown.enter', ['$event'])
-  handleKeyDown(_: KeyboardEvent) {
+  handleKeyDown(): void {
     this.enterPress.next();
   }
 

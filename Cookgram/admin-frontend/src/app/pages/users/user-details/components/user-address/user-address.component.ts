@@ -34,7 +34,7 @@ export class UserAddressComponent {
   private readonly dialogService = inject(DialogService);
   private readonly addressApi = inject(AddressApiService);
 
-  addressChange() {
+  addressChange(): void {
     const ref = this.dialogService.open(AddressChangeModalComponent, {
       header: 'Change address',
       width: '65%',

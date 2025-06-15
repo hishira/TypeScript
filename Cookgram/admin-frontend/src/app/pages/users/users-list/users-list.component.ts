@@ -26,6 +26,7 @@ import { skeletonRows } from './consts';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { SkeletonRowInfo } from '../../../shared/components/skeletons/table-skeleton/types';
 @Component({
   selector: 'app-users-list',
   standalone: true,
@@ -52,7 +53,7 @@ export class UsersListComponent extends BaseComponent {
     () => this.users()?.length > 0
   );
   readonly refetch: WritableSignal<boolean> = signal(false);
-  readonly skeletonRows = skeletonRows;
+  readonly skeletonRows: SkeletonRowInfo[] = skeletonRows;
 
   constructor(
     private readonly userApi: UserApiSerivce,
