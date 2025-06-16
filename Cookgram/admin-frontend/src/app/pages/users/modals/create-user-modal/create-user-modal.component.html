@@ -1,19 +1,19 @@
 <ng-container>
   <p-steps [activeIndex]="activeIndex" [model]="steps"></p-steps>
   @switch(activeIndex){
-  @case(CreateUserStepsStrategy.GeneralInformation){
-  <app-user-create-general-information-step [form]="generalInformationGroup" />
-  }
-  @case(CreateUserStepsStrategy.AccessConfiguration){
-  <app-access-configuration-step [form]="accessConfigurationGroup" />
-  }
-  @case(CreateUserStepsStrategy.Address){
-  <app-address-step [form]="addressGroup"></app-address-step>
-  }
-  @case(CreateUserStepsStrategy.Summary){
-  <app-create-user-summary [form]="null" [generalFormValue]="GeneralInformationValue"
-    [accessConfigurationValue]="AccessConfigurationValue" [addressValue]="AddressValue" [isLoading]="isLoading()"
-    (createEvent)="create()" />
-  }
+    @case(CreateUserStepsStrategy.GeneralInformation){
+      <app-user-create-general-information-step [form]="generalInformationGroup" />
+    }
+    @case(CreateUserStepsStrategy.AccessConfiguration){
+      <app-access-configuration-step [form]="accessConfigurationGroup" />
+    }
+    @case(CreateUserStepsStrategy.Address){
+      <app-address-step [form]="addressGroup"></app-address-step>
+    }
+    @case(CreateUserStepsStrategy.Summary){
+      <app-create-user-summary [form]="null" [generalFormValue]="GeneralInformationValue"
+        [accessConfigurationValue]="AccessConfigurationValue" [addressValue]="AddressValue" [isLoading]="isLoading()"
+        (createEvent)="create()" />
+      }
   }
 </ng-container>
