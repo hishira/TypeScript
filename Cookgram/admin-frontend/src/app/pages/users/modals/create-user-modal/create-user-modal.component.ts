@@ -17,7 +17,12 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { ExtractFormControl } from '../../../../shared/types/shared';
 import { AccessConfigurationStep } from './access-configuration-step/access-configuration-step.component';
 import { AddressStepComponent } from './address-step/address-step.component';
-import { CreateUserErrorMessage, CreateUserMaxStep, CreateUserSteps, CreateUserSuccessMessage } from './create-user-modal.consts';
+import {
+  CreateUserErrorMessage,
+  CreateUserMaxStep,
+  CreateUserSteps,
+  CreateUserSuccessMessage,
+} from './create-user-modal.consts';
 import { EmptyCreateUserFormGroup } from './create-user-modal.utils';
 import {
   AccessConfigurationStepGroup,

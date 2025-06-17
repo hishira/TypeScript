@@ -6,4 +6,7 @@ const CurrentUserStoreFunction = (store: MainStore) => store.currentUser;
 
 const GetUserFromStore = (user: ContextUser): ContextUser => user;
 
-export const CurrentUserSelector = createSelector(CurrentUserStoreFunction, GetUserFromStore);
+export const CurrentUserSelector = createSelector(
+  CurrentUserStoreFunction,
+  GetUserFromStore
+);
