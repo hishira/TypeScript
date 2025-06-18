@@ -84,7 +84,6 @@ impl AuthRouter {
     }
 }
 
-
 impl ApplicationRouter for AuthRouter {
     fn get_router(&self) -> axum::Router {
         let app_state = AppState {
