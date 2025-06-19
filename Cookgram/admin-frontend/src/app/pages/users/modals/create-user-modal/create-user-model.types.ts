@@ -44,6 +44,7 @@ export type AddressControl = {
 export enum Gender {
   Men = 'Man',
   Woman = 'Woman',
+  None = 'None',
 }
 
 export enum CreateUserStepsStrategy {
