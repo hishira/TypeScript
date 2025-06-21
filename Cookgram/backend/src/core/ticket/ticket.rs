@@ -10,13 +10,16 @@ use uuid::Uuid;
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub enum TicketState {
     New,
-    Bug,
+    InProgress,
+    Duplicate,
     CannotResolve,
     Resolved,
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
 pub enum TicketType {
+    AccountError,
+    ContractError,
     Bug,
     ServerError,
     ProblemWithAccount,

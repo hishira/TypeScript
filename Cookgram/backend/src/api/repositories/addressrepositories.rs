@@ -1,6 +1,5 @@
-use crate::api::daos::addressdao::AddressDAO;
+use crate::api::{daos::addressdao::AddressDAO, dtos::addressdto::addressdto::AddressDto};
 use crate::api::errors::responseerror::ResponseError;
-use crate::api::queries::actionquery::ActionQuery;
 use crate::api::repositories::repositories::Repository;
 use crate::api::utils::messages::addressrepomessages::AddressRepoMessages;
 use crate::core::address::address::Address;
@@ -29,7 +28,7 @@ impl AddressRepository {
 }
 
 #[async_trait]
-impl Repository<Address, ActionQuery, ResponseError> for AddressRepository {
+impl Repository<Address, AddressDto, ResponseError> for AddressRepository {
     async fn create(&self, entity: Address) -> Address {
         match self
             .address_dao
@@ -49,7 +48,7 @@ impl Repository<Address, ActionQuery, ResponseError> for AddressRepository {
         }
     }
 
-    async fn find(&self, _option: ActionQuery) -> Result<Vec<Address>, ResponseError> {
+    async fn find(&self, _option: AddressDto) -> Result<Vec<Address>, ResponseError> {
         match self.address_dao.find(()).await {
             Ok(addresses) => {
                 tracing::debug!("{}", AddressRepoMessages::ADDRESS_FIND_SUCCESS);
