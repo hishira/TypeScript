@@ -21,7 +21,7 @@ import { CalendarModule } from 'primeng/calendar';
   templateUrl: './date-input.component.html',
 })
 export class DateInputComponent {
-  label = input.required<string>();
-  required = input.required<boolean>();
-  control = input.required<FormControl>();
+  readonly label = input.required<string>();
+  readonly required = input.required<boolean>();
+  readonly control = input.required<FormControl>();
 }

@@ -13,7 +13,7 @@ import { Base } from './base';
 export class BaseComponent implements OnDestroy, OnInit, Base {
   protected readonly subscription: Subscription = new Subscription();
   protected injector: Injector = inject(Injector);
-  
+
   destroy?(): void;
 
   initialize?(): void;

@@ -11,9 +11,9 @@ import { SkeletonRowInfo } from './types';
   imports: [SkeletonModule, TableModule],
 })
 export class TableSkeletonComponent extends BaseComponent {
-  skeletonRows: InputSignal<SkeletonRowInfo[]> = input.required();
-  rowsCount = computed(() => this.skeletonRows().length);
-  emptyValues = computed(() =>
+  readonly skeletonRows: InputSignal<SkeletonRowInfo[]> = input.required();
+  readonly rowsCount = computed(() => this.skeletonRows().length);
+  readonly emptyValues = computed(() =>
     Array.from({ length: this.rowsCount() }).fill({})
   );
 }
