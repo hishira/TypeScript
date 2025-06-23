@@ -8,4 +8,5 @@ pub mod contact;
 pub mod userid;
 pub mod available_laguages;
 pub mod authentication;
+pub mod gender;
 mod tests;

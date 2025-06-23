@@ -1,16 +1,9 @@
 use super::contact::Contacts;
 use crate::api::dtos::userdto::userdto::UserDtos;
+use crate::core::user::gender::Gender;
 use sqlx::postgres::PgRow;
 use sqlx::Row;
 use time::OffsetDateTime;
-
-#[derive(PartialEq, Debug, Clone, sqlx::Type)]
-#[sqlx(type_name = "Gender")]
-pub enum Gender {
-    Man,
-    Woman,
-    None,
-}
 
 #[derive(PartialEq, Debug, Clone)]
 pub struct PersonalInformation {

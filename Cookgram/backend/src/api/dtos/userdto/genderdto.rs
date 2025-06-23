@@ -1,4 +1,4 @@
-use crate::core::user::personalinformation::Gender;
+use crate::core::user::gender::Gender;
 use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize, sqlx::Type)]

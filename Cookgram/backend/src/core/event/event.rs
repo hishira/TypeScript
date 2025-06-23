@@ -11,6 +11,7 @@ pub enum EventEntity {
     Company,
     Address,
     Contact,
+    Contract,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
