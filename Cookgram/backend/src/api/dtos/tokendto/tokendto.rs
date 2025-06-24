@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-#[derive(Debug, Deserialize,Validate)]
+#[derive(Debug, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
 pub struct RefreshTokenDto {
     pub refresh_token: String,
@@ -12,4 +12,3 @@ pub struct RefreshTokenDto {
 pub struct AccessTokenDto {
     pub access_token: String,
 }
-
