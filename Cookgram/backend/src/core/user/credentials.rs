@@ -5,6 +5,9 @@ use crate::api::{
 };
 use serde::{Deserialize, Serialize};
 
+const COST: u32 = 10;
+const MAX_THREADS: usize = 4;
+
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Credentials {
@@ -37,7 +40,7 @@ impl Credentials {
         password: String,
         password_is_temporary: bool,
     ) -> Result<Self, PasswordWorkerError> {
-        let pass_worker = PasswordWorker::new(10, 4)?;
+        let pass_worker = PasswordWorker::new(COST, MAX_THREADS)?;
         let hashed_password = pass_worker.hash(password).await;
         match hashed_password {
             Ok(password_hashed) => Ok(Self {

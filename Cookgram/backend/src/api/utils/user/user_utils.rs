@@ -12,14 +12,18 @@ use crate::{
         utils::password_worker::password_worker::PasswordWorkerError,
     },
     core::{
-        address::address::Address, meta::meta::Meta, role::role::Roles, state::state::State, user::{
+        address::address::Address,
+        meta::meta::Meta,
+        role::role::Roles,
+        state::state::State,
+        user::{
             credentials::Credentials, personalinformation::PersonalInformation, user::User,
             userid::UserId,
-        }
+        },
     },
 };
-use sqlx::{postgres::PgRow, FromRow};
 use sqlx::Row;
+use sqlx::{postgres::PgRow, FromRow};
 
 pub struct UserUtils {}
 
